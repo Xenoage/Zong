@@ -1,4 +1,4 @@
-Zong
-====
+Zong!
+=====
 
-Zong! Music Notation
+Public source repository for the Zong! Music Notation project
