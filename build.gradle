@@ -1,0 +1,11 @@
+defaultTasks 'dist'
+
+
+task dist {
+	dependsOn 'buildUtils'
+}
+
+
+task buildUtils(type: GradleBuild) {
+	buildFile = 'utils/build.gradle'
+}
