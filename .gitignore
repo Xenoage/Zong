@@ -6,4 +6,7 @@
 *.ear
 
 # Directories #
+.metadata
 .gradle
+bin
+build

@@ -1,11 +1,66 @@
 defaultTasks 'dist'
 
+//definition of subprojects
+subprojects {
+	apply plugin: 'java'
+	
+	sourceCompatibility = 6
+	
+	repositories {
+		mavenCentral()
+	}
+	
+	//additional configurations for compile classpaths
+	configurations {
+		compileOnly
+		testCompileOnly { extendsFrom compileOnly }
+	}
+	
+	dependencies {
+		compile files('../utils/build/dist/onejar/utils.jar')
+		compileOnly group: "org.projectlombok", name: "lombok", version: "0.12.0"
+		testCompile group: 'junit', name: 'junit', version: '4.+'
+	}
 
-task dist {
-	dependsOn 'buildUtils'
+	sourceSets {
+		main {
+			java { srcDir 'src' }
+			compileClasspath += configurations.compileOnly
+		}
+		test {
+			java { srcDir 'test' }
+			compileClasspath += configurations.compileOnly + configurations.testCompileOnly
+		}
+	}
+
+	jar {
+		from 'license.txt'
+		from 'readme.txt'
+		manifest.attributes 'Created-By': 'Xenoage Software'
+	}
 }
 
+//build dist of Zong!
+task dist {
+	//first, build utils
+	dependsOn 'buildUtils'
+	//then, build the subprojects
+	dependsOn subprojects*.build
+}
 
+//clean Zong!
+task clean {
+	//also clean Xenoage Utils
+	dependsOn 'cleanUtils'
+}
+
+//build dist of Xenoage Utils
 task buildUtils(type: GradleBuild) {
 	buildFile = 'utils/build.gradle'
+}
+
+//build dist of Xenoage Utils
+task cleanUtils(type: GradleBuild) {
+	buildFile = 'utils/build.gradle'
+	tasks = ['clean']
 }
