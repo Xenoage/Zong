@@ -10,3 +10,8 @@
 .gradle
 bin
 build
+
+# Libraries #
+lib/*.jar
+lib/*.txt
+lib/.externalToolBuilders
