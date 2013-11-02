@@ -5,7 +5,7 @@ import static com.xenoage.zong.core.music.util.BeatE.beatE;
 import static com.xenoage.zong.core.position.MP.atElement;
 import static com.xenoage.zong.core.position.MP.atMeasure;
 import static com.xenoage.zong.core.position.MP.mpe0;
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 

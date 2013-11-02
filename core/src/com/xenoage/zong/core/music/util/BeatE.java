@@ -31,7 +31,7 @@ import com.xenoage.utils.math.Fraction;
 	 * Returns the latest of the given elements. If none are given or
 	 * no items with beats are given, null is returned.
 	 */
-	public static <T2> BeatE<T2> selectLatest(BeatE<T2>... elements) {
+	@SafeVarargs public static <T2> BeatE<T2> selectLatest(BeatE<T2>... elements) {
 		BeatE<T2> ret = null;
 		for (BeatE<T2> element : elements) {
 			if (ret == null || (element != null && element.beat.compareTo(ret.beat) > 0))

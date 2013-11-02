@@ -1,7 +1,7 @@
 package com.xenoage.zong.commands.core.music;
 
 import static com.xenoage.utils.math.Fraction.fr;
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 

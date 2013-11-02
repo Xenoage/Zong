@@ -238,7 +238,7 @@ public final class Score
 	 * none, a default C major time signature is returned.
 	 * Private keys (in measure) override public keys (in measure column header). 
 	 */
-	@SuppressWarnings("unchecked") public MPE<? extends Key> getKey(MP mp, Interval interval) {
+	public MPE<? extends Key> getKey(MP mp, Interval interval) {
 		if (!interval.isPrecedingOrAt()) {
 			throw new IllegalArgumentException("Illegal interval for this method");
 		}
