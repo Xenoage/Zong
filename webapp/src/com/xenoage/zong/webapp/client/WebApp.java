@@ -29,6 +29,7 @@ public class WebApp
 		//Range r = Range.range(5);
 		//Label hello = new Label("Result: " + t); //"Aha "+r.getCount() + " " + Defaults.defaultFont.getSize() + " " + t);
 		RootPanel container = RootPanel.get("container");
+		container.add(new Label("If you see some text with musical data, it works:"));
 		container.add(new Label(findAClef(score, MP.atBeat(0, 1, 0, _0))));
 		container.add(new Label(findAClef(score, MP.atBeat(1, 1, 0, _0))));
 		MP mp = MP.atBeat(0, 1, 0, _0);
