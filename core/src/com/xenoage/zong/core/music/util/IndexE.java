@@ -3,7 +3,7 @@ package com.xenoage.zong.core.music.util;
 import lombok.Data;
 import lombok.Getter;
 
-import com.xenoage.utils.base.annotations.NonNull;
+import com.xenoage.utils.annotations.NonNull;
 
 
 /**

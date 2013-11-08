@@ -1,6 +1,6 @@
 package com.xenoage.zong.commands.core.music;
 
-import static com.xenoage.utils.base.iterators.ReverseIterator.reverseIt;
+import static com.xenoage.utils.iterators.ReverseIterator.reverseIt;
 import static com.xenoage.utils.kernel.Range.rangeReverse;
 import static com.xenoage.zong.core.position.MP.atElement;
 

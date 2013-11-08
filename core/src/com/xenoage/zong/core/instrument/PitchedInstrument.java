@@ -3,9 +3,9 @@ package com.xenoage.zong.core.instrument;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import com.xenoage.utils.base.annotations.Const;
-import com.xenoage.utils.base.annotations.MaybeNull;
-import com.xenoage.utils.base.annotations.NonNull;
+import com.xenoage.utils.annotations.Const;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.zong.core.music.Pitch;
 
 

@@ -1,6 +1,6 @@
 package com.xenoage.zong.core.header;
 
-import static com.xenoage.utils.base.collections.CollectionUtils.setExtend;
+import static com.xenoage.utils.collections.CollectionUtils.setExtend;
 import static com.xenoage.utils.kernel.Range.rangeReverse;
 
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import java.util.List;
 import lombok.Data;
 import lombok.NonNull;
 
-import com.xenoage.utils.base.annotations.MaybeNull;
+import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.format.Break;
 import com.xenoage.zong.core.format.StaffLayout;

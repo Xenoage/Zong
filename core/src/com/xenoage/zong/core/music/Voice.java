@@ -17,8 +17,8 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
-import com.xenoage.utils.base.annotations.MaybeEmpty;
-import com.xenoage.utils.base.collections.SortedList;
+import com.xenoage.utils.annotations.MaybeEmpty;
+import com.xenoage.utils.collections.SortedList;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.util.FirstOrLast;

@@ -1,9 +1,9 @@
 package com.xenoage.zong.core.music;
 
-import static com.xenoage.utils.base.collections.ArrayUtils.indexOf;
+import static com.xenoage.utils.collections.ArrayUtils.indexOf;
+import static com.xenoage.utils.collections.CList.ilist;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Fraction.fr;
-import static com.xenoage.utils.pdlib.PVector.pvec;
 import static com.xenoage.zong.core.music.Pitch.pi;
 import static com.xenoage.zong.core.music.util.FirstOrLast.First;
 import static com.xenoage.zong.core.music.util.FirstOrLast.Last;
@@ -45,7 +45,7 @@ public class VoiceTest {
 		Rest n = null, a = new Rest(fr(2)), b = new Rest(fr(1)), c = new Rest(fr(1));
 		Chord g1 = grace(1), g2 = grace(2), g3 = grace(3), g4 = grace(4);
 		VoiceElement[] elementsPool = { a, b, c, g1, g2, g3, g4 };
-		Voice voice = new Voice(pvec(g1, a, g2, g3, b, c, g4));
+		Voice voice = new Voice(ilist(g1, a, g2, g3, b, c, g4));
 		//expected solutions
 		int sideCount = FirstOrLast.values().length;
 		int borderCount = StartOrStop.values().length;
@@ -114,7 +114,7 @@ public class VoiceTest {
 		//Checked:     x        x     x           x     x    x
 		Rest a = new Rest(fr(2)), b = new Rest(fr(1)), c = new Rest(fr(1));
 		Chord g1 = grace(1), g2 = grace(2), g3 = grace(3), g4 = grace(4);
-		Voice voice = new Voice(pvec(g1, a, g2, g3, b, c, g4));
+		Voice voice = new Voice(ilist(g1, a, g2, g3, b, c, g4));
 		assertEquals(1, voice.getElementIndex(fr(0)));
 		assertEquals(1, voice.getElementIndex(fr(1)));
 		assertEquals(4, voice.getElementIndex(fr(2)));

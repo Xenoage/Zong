@@ -1,6 +1,6 @@
 package com.xenoage.zong.io.selection;
 
-import static com.xenoage.utils.base.NullUtils.throwNullArg;
+import static com.xenoage.utils.CheckUtils.checkArgsNotNull;
 import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.zong.core.music.beam.Beam.beam;
 import static com.xenoage.zong.core.position.MP.mp;
@@ -274,7 +274,7 @@ public final class Cursor
 	public void openCurvedLine(SlurType type) {
 		if (openSlurWaypoints != null)
 			throw new IllegalStateException("Slur is already open");
-		throwNullArg(type);
+		checkArgsNotNull(type);
 		openSlurWaypoints = new ArrayList<SlurWaypoint>();
 		openSlurType = type;
 	}

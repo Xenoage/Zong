@@ -1,6 +1,6 @@
 package com.xenoage.zong.core.format;
 
-import com.xenoage.utils.base.annotations.Const;
+import com.xenoage.utils.annotations.Const;
 
 import lombok.Data;
 import lombok.experimental.Wither;

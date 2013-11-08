@@ -2,7 +2,7 @@ package com.xenoage.zong.core.info;
 
 import lombok.Data;
 
-import com.xenoage.utils.base.annotations.Const;
+import com.xenoage.utils.annotations.Const;
 
 
 /**

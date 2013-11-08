@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import lombok.Data;
 
-import com.xenoage.utils.base.annotations.Const;
-import com.xenoage.utils.base.annotations.NonNull;
+import com.xenoage.utils.annotations.Const;
+import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.zong.core.music.Pitch;
 
 

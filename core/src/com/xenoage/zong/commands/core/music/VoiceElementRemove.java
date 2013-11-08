@@ -1,13 +1,12 @@
 package com.xenoage.zong.commands.core.music;
 
-import static com.xenoage.utils.base.CastUtils.as;
-import static com.xenoage.utils.base.iterators.ReverseIterator.reverseIt;
+import static com.xenoage.utils.iterators.ReverseIterator.reverseIt;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.xenoage.utils.base.annotations.Untested;
-import com.xenoage.utils.base.collections.NullableList;
+import com.xenoage.utils.annotations.Untested;
+import com.xenoage.utils.collections.NullableList;
 import com.xenoage.utils.document.command.Command;
 import com.xenoage.utils.document.command.Undoability;
 import com.xenoage.zong.commands.core.music.beam.BeamRemove;
@@ -50,8 +49,8 @@ import com.xenoage.zong.core.music.tuplet.Tuplet;
 			throw new IllegalStateException("element is not part of a voice");
 		
 		//remove slurs, beam and tuplet, if it is a chord
-		Chord chord = as(element, Chord.class);
-		if (chord != null) {
+		if (element instanceof Chord) {
+			Chord chord = (Chord) element;
 			//remove slurs
 			for (Slur slur : NullableList.it(chord.getSlurs()))
 				executeAndRemember(new SlurRemove(slur));

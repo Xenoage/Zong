@@ -6,7 +6,7 @@ import java.util.Map;
 import lombok.Data;
 import lombok.NonNull;
 
-import com.xenoage.utils.base.annotations.Const;
+import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.music.chord.Accidental;
 import com.xenoage.zong.core.music.clef.Clef;
 import com.xenoage.zong.core.music.clef.ClefType;

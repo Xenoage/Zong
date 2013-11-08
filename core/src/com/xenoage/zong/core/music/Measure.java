@@ -1,7 +1,7 @@
 package com.xenoage.zong.core.music;
 
-import static com.xenoage.utils.base.NullUtils.throwNullArg;
-import static com.xenoage.utils.base.collections.CollectionUtils.alist;
+import static com.xenoage.utils.CheckUtils.checkArgsNotNull;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.zong.core.music.Voice.voice;
 import static com.xenoage.zong.core.music.util.BeatEList.beatEList;
 import static com.xenoage.zong.core.music.util.Interval.At;
@@ -16,9 +16,9 @@ import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 
-import com.xenoage.utils.base.annotations.NonEmpty;
-import com.xenoage.utils.base.annotations.Untested;
-import com.xenoage.utils.base.collections.SortedList;
+import com.xenoage.utils.annotations.NonEmpty;
+import com.xenoage.utils.annotations.Untested;
+import com.xenoage.utils.collections.SortedList;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.chord.Chord;
@@ -65,7 +65,7 @@ public class Measure
 
 	public Measure(List<Voice> voices, BeatEList<Clef> clefs, BeatEList<Key> privateKeys, BeatEList<Direction> directions,
 		BeatEList<InstrumentChange> instrumentChanges) {
-		throwNullArg(voices);
+		checkArgsNotNull(voices);
 		if (voices.size() == 0)
 			throw new IllegalArgumentException("A measure must have at least one voice");
 		for (Voice voice : voices)

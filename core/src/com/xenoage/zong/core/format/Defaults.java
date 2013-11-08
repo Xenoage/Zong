@@ -1,7 +1,7 @@
 package com.xenoage.zong.core.format;
 
-import com.xenoage.utils.graphics.font.FontInfo;
-import com.xenoage.utils.graphics.font.FontStyle;
+import com.xenoage.utils.font.FontInfo;
+import com.xenoage.utils.font.FontStyle;
 
 
 /**

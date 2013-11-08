@@ -2,8 +2,8 @@ package com.xenoage.zong.core.instrument;
 
 import lombok.Data;
 
-import com.xenoage.utils.base.annotations.Const;
-import com.xenoage.utils.base.annotations.MaybeNull;
+import com.xenoage.utils.annotations.Const;
+import com.xenoage.utils.annotations.MaybeNull;
 
 
 /**

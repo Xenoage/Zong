@@ -1,10 +1,10 @@
 package com.xenoage.zong.core.music.direction;
 
-import static com.xenoage.utils.base.NullUtils.throwNullArg;
+import static com.xenoage.utils.CheckUtils.checkArgsNotNull;
 import lombok.Getter;
 import lombok.Setter;
 
-import com.xenoage.utils.base.annotations.NonNull;
+import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.header.ColumnHeader;
 import com.xenoage.zong.core.music.ColumnElement;
@@ -36,7 +36,7 @@ public final class Tempo
 
 
 	public Tempo(Fraction baseBeat, int beatsPerMinute) {
-		throwNullArg(baseBeat);
+		checkArgsNotNull(baseBeat);
 		this.baseBeat = baseBeat;
 		this.beatsPerMinute = beatsPerMinute;
 	}

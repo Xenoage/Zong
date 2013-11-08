@@ -1,16 +1,15 @@
 package com.xenoage.zong.core.format;
 
-import static com.xenoage.utils.base.NullUtils.notNull;
+import static com.xenoage.utils.NullUtils.notNull;
 import static com.xenoage.zong.core.format.Defaults.defaultFont;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.experimental.Wither;
 
-import com.xenoage.utils.base.annotations.Const;
-import com.xenoage.utils.base.annotations.MaybeNull;
-import com.xenoage.utils.graphics.font.FontInfo;
-import com.xenoage.utils.pdlib.Vector;
-
+import com.xenoage.utils.annotations.Const;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.collections.IList;
+import com.xenoage.utils.font.FontInfo;
 
 /**
  * Default formats to be used in a score.
@@ -26,7 +25,7 @@ import com.xenoage.utils.pdlib.Vector;
 	/** The default layout information for systems. */
 	@NonNull private final SystemLayout systemLayout;
 	/** Default staff layout information (may also be or contain null). */
-	@MaybeNull public final Vector<StaffLayout> staffLayouts;
+	@MaybeNull public final IList<StaffLayout> staffLayouts;
 	/** The default layout information for staves which have no own default layout. */
 	@NonNull public final StaffLayout staffLayoutOther;
 	/** The default font used for lyrics. */
@@ -35,8 +34,8 @@ import com.xenoage.utils.pdlib.Vector;
 	@NonNull public final MeasureNumbering measureNumbering;
 
 	/** Default score format. */
-	public static final ScoreFormat defaultValue = new ScoreFormat(1.6f, 15, SystemLayout.defaultValue,
-		null, StaffLayout.defaultValue, defaultFont, MeasureNumbering.System);
+	public static final ScoreFormat defaultValue = new ScoreFormat(1.6f, 15,
+		SystemLayout.defaultValue, null, StaffLayout.defaultValue, defaultFont, MeasureNumbering.System);
 
 
 	/**
@@ -45,12 +44,12 @@ import com.xenoage.utils.pdlib.Vector;
 	public StaffLayout getStaffLayout(int staff) {
 		if (staffLayouts != null && staff < staffLayouts.size()) {
 			return staffLayouts.get(staff);
-		} else {
+		}
+		else {
 			return null;
 		}
 	}
-	
-	
+
 	/**
 	 * Gets the default layout information for the given staff, or
 	 * the default information for all other staves if unknown.

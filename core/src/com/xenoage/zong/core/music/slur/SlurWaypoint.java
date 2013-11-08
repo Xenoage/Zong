@@ -1,9 +1,9 @@
 package com.xenoage.zong.core.music.slur;
 
-import static com.xenoage.utils.base.NullUtils.throwNullArg;
+import static com.xenoage.utils.CheckUtils.checkArgsNotNull;
 import lombok.Data;
 
-import com.xenoage.utils.base.annotations.NonNull;
+import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.format.BezierPoint;
 
@@ -36,7 +36,7 @@ import com.xenoage.zong.core.music.format.BezierPoint;
 	 * Creates a new waypoint with the given formatting.
 	 */
 	public SlurWaypoint(Chord chord, Integer noteIndex, BezierPoint bezierPoint) {
-		throwNullArg(chord);
+		checkArgsNotNull(chord);
 		this.chord = chord;
 		this.noteIndex = noteIndex;
 		this.bezierPoint = bezierPoint;

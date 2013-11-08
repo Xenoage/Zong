@@ -1,10 +1,10 @@
 package com.xenoage.zong.core.music.lyric;
 
-import static com.xenoage.utils.base.NullUtils.throwNullArg;
+import static com.xenoage.utils.CheckUtils.checkArgsNotNull;
 import lombok.Getter;
 import lombok.Setter;
 
-import com.xenoage.utils.base.annotations.NonNull;
+import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.zong.core.music.TextElement;
 import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.core.text.Text;
@@ -30,7 +30,7 @@ public class Lyric
 
 
 	public Lyric(Text text, SyllableType syllableType, int verse) {
-		throwNullArg(syllableType);
+		checkArgsNotNull(syllableType);
 		
 		this.syllableType = syllableType;
 		this.verse = verse;
@@ -47,7 +47,7 @@ public class Lyric
 
 	@Override public void setText(Text text) {
 		if (syllableType != SyllableType.Extend)
-			throwNullArg(text);
+			checkArgsNotNull(text);
 		this.text = text;
 	}
 

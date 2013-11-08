@@ -1,5 +1,6 @@
 package com.xenoage.zong.core.music.chord;
 
+import static com.xenoage.utils.CheckUtils.checkArgsNotNull;
 import static com.xenoage.utils.kernel.Range.range;
 
 import java.util.ArrayList;
@@ -7,10 +8,9 @@ import java.util.ArrayList;
 import lombok.Getter;
 import lombok.Setter;
 
-import com.xenoage.utils.base.NullUtils;
-import com.xenoage.utils.base.annotations.MaybeNull;
-import com.xenoage.utils.base.annotations.NonEmpty;
-import com.xenoage.utils.base.annotations.NonNull;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.annotations.NonEmpty;
+import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.music.Voice;
@@ -76,7 +76,7 @@ public class Chord
 	 * Creates a chord with the given note and duration.
 	 */
 	public Chord(Note note, Fraction duration) {
-		NullUtils.throwNullArg(note, duration);
+		checkArgsNotNull(note, duration);
 		this.notes = new ArrayList<Note>(1);
 		this.notes.add(note);
 		this.duration = duration;
@@ -89,7 +89,7 @@ public class Chord
 	 * end with the highest notated pitch), otherwise an {@link IllegalArgumentException} is thrown.
 	 */
 	public Chord(ArrayList<Note> notes, Fraction duration) {
-		NullUtils.throwNullArg(notes, duration);
+		checkArgsNotNull(notes, duration);
 		checkNotesOrder(notes);
 		boolean durationIs0 = !duration.isGreater0();
 		if ((durationIs0 && grace == null) || (!durationIs0 && grace != null))

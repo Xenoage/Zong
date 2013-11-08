@@ -2,7 +2,7 @@ package com.xenoage.zong.commands.core.music.chord;
 
 import lombok.AllArgsConstructor;
 
-import com.xenoage.utils.base.collections.NullableList;
+import com.xenoage.utils.collections.NullableList;
 import com.xenoage.utils.document.command.Command;
 import com.xenoage.utils.document.command.Undoability;
 import com.xenoage.zong.core.music.chord.Chord;

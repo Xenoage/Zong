@@ -1,15 +1,15 @@
 package com.xenoage.zong.core.info;
 
-import static com.xenoage.utils.base.NullUtils.notNull;
+import static com.xenoage.utils.NullUtils.notNull;
 import lombok.Data;
 import lombok.experimental.Wither;
 
-import com.xenoage.utils.base.annotations.Const;
-import com.xenoage.utils.base.annotations.MaybeEmpty;
-import com.xenoage.utils.base.annotations.MaybeNull;
-import com.xenoage.utils.base.annotations.NonNull;
-import com.xenoage.utils.pdlib.IVector;
-import com.xenoage.utils.pdlib.Vector;
+import com.xenoage.utils.annotations.Const;
+import com.xenoage.utils.annotations.MaybeEmpty;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.collections.CList;
+import com.xenoage.utils.collections.IList;
 
 
 /**
@@ -29,13 +29,13 @@ import com.xenoage.utils.pdlib.Vector;
 	/** Number of the movement. */
 	@MaybeNull private final String movementNumber;
 	/** List of creators (composers, arrangers, ...). */
-	@NonNull @MaybeEmpty private final Vector<Creator> creators;
+	@NonNull @MaybeEmpty private final IList<Creator> creators;
 	/** List of rights. */
-	@NonNull @MaybeEmpty private final Vector<Rights> rights;
+	@NonNull @MaybeEmpty private final IList<Rights> rights;
 
 	/** Empty instance. */
-	public static final ScoreInfo empty = new ScoreInfo(null, null, null, null, new IVector<Creator>().close(),
-		new IVector<Rights>().close());
+	public static final ScoreInfo empty = new ScoreInfo(null, null, null, null, CList.<Creator>ilist(),
+		CList.<Rights>ilist());
 
 
 	/**

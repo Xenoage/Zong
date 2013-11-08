@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.xenoage.utils.base.annotations.Unneeded;
+import com.xenoage.utils.annotations.Unneeded;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.utils.math.MathUtils;
 import com.xenoage.zong.core.Score;

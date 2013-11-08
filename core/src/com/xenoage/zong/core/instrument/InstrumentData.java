@@ -2,10 +2,10 @@ package com.xenoage.zong.core.instrument;
 
 import lombok.Data;
 
-import com.xenoage.utils.base.annotations.Const;
-import com.xenoage.utils.base.annotations.MaybeNull;
-import com.xenoage.utils.base.annotations.NonNull;
-import com.xenoage.utils.pdlib.Vector;
+import com.xenoage.utils.annotations.Const;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.collections.IList;
 
 
 /**
@@ -23,14 +23,14 @@ import com.xenoage.utils.pdlib.Vector;
 	@MaybeNull private final String abbreviation;
 	/** The groups in which the instrument is listed (e.g. woodwinds,
 	 * percussion etc.), or null if undefined. */
-	@MaybeNull private final Vector<InstrumentGroup> groups;
+	@MaybeNull private final IList<InstrumentGroup> groups;
 	/** The volume between 0 (silent) and 1 (full). */
 	@MaybeNull private final Float volume;
 	/** The panning between -1 (left) and 1 (right). */
 	@MaybeNull private final Float pan;
 
 
-	public InstrumentData(String name, String abbreviation, Vector<InstrumentGroup> groups, Float volume, Float pan) {
+	public InstrumentData(String name, String abbreviation, IList<InstrumentGroup> groups, Float volume, Float pan) {
 		if (volume != null && (volume < 0 || volume > 1))
 			throw new IllegalArgumentException("Illegal volume value: " + volume);
 		if (pan != null && (pan < -1 || pan > 1))

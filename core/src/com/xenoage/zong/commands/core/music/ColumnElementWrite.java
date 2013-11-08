@@ -1,6 +1,6 @@
 package com.xenoage.zong.commands.core.music;
 
-import com.xenoage.utils.base.annotations.MaybeNull;
+import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.document.command.Command;
 import com.xenoage.utils.document.command.Undoability;
 import com.xenoage.utils.math.Fraction;

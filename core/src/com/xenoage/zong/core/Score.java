@@ -19,8 +19,8 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 
-import com.xenoage.utils.base.annotations.Unneeded;
-import com.xenoage.utils.base.collections.SortedList;
+import com.xenoage.utils.annotations.Unneeded;
+import com.xenoage.utils.collections.SortedList;
 import com.xenoage.utils.document.Document;
 import com.xenoage.utils.document.command.CommandPerformer;
 import com.xenoage.utils.document.io.SupportedFormats;

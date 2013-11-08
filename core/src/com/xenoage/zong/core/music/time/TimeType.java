@@ -3,7 +3,7 @@ package com.xenoage.zong.core.music.time;
 import static com.xenoage.utils.math.Fraction.fr;
 import lombok.Data;
 
-import com.xenoage.utils.base.annotations.Const;
+import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.math.Fraction;
 
 

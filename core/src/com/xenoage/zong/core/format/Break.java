@@ -2,7 +2,7 @@ package com.xenoage.zong.core.format;
 
 import lombok.Data;
 
-import com.xenoage.utils.base.annotations.Const;
+import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.header.ColumnHeader;
 import com.xenoage.zong.core.music.ColumnElement;
 import com.xenoage.zong.core.music.layout.PageBreak;

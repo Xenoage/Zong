@@ -1,18 +1,19 @@
 package com.xenoage.zong.core.header;
 
-import static com.xenoage.utils.base.NullUtils.throwNullArg;
-import static com.xenoage.utils.base.exceptions.ThrowableUtils.unsupportedClass;
+import static com.xenoage.utils.CheckUtils.checkArgsNotNull;
+import static com.xenoage.utils.CheckUtils.checkNotNull;
+import static com.xenoage.utils.collections.CList.clist;
 import static com.xenoage.utils.math.Fraction._0;
-import static com.xenoage.utils.pdlib.IVector.ivec;
 import static com.xenoage.zong.core.position.MP.atColumnBeat;
 import lombok.Data;
 
-import com.xenoage.utils.base.annotations.MaybeEmpty;
-import com.xenoage.utils.base.annotations.MaybeNull;
-import com.xenoage.utils.base.annotations.NonNull;
+import com.xenoage.utils.annotations.MaybeEmpty;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.collections.CList;
+import com.xenoage.utils.collections.IList;
+import com.xenoage.utils.exceptions.UnsupportedClassException;
 import com.xenoage.utils.math.Fraction;
-import com.xenoage.utils.pdlib.IVector;
-import com.xenoage.utils.pdlib.Vector;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.format.Break;
 import com.xenoage.zong.core.music.ColumnElement;
@@ -128,7 +129,7 @@ import com.xenoage.zong.core.position.MPElement;
 	 * If there is already one at the given beat, it is replaced and returned (otherwise null).
 	 */
 	public Barline setMiddleBarline(@NonNull Barline middleBarline, Fraction beat) {
-		throwNullArg(middleBarline);
+		checkArgsNotNull(middleBarline);
 		middleBarline.setParent(this);
 		return middleBarlines.set(middleBarline, beat);
 	}
@@ -160,7 +161,7 @@ import com.xenoage.zong.core.position.MPElement;
 	 * If there is already one at the given beat, it is replaced and returned (otherwise null).
 	 */
 	public Key setKey(@NonNull Key key, Fraction beat) {
-		throwNullArg(key);
+		checkArgsNotNull(key);
 		key.setParent(this);
 		return keys.set(key, beat);
 	}
@@ -180,7 +181,7 @@ import com.xenoage.zong.core.position.MPElement;
 	 * If there is already one at the given beat, it is replaced and returned (otherwise null).
 	 */
 	public Tempo setTempo(@NonNull Tempo tempo, Fraction beat) {
-		throwNullArg(tempo);
+		checkArgsNotNull(tempo);
 		tempo.setParent(this);
 		return tempos.set(tempo, beat);
 	}
@@ -247,18 +248,18 @@ import com.xenoage.zong.core.position.MPElement;
 			else if (side == MeasureSide.Right)
 				return setEndBarline(barline);
 			//middle barline
-			throwNullArg(beat);
+			checkNotNull(beat);
 			return setMiddleBarline(barline, beat);
 		}
 		else if (element instanceof Break) {
 			return setBreak((Break) element);
 		}
 		else if (element instanceof Key) {
-			throwNullArg(beat);
+			checkNotNull(beat);
 			return setKey((Key) element, beat);
 		}
 		else if (element instanceof Tempo) {
-			throwNullArg(beat);
+			checkNotNull(beat);
 			return setTempo((Tempo) element, beat);
 		}
 		else if (element instanceof Time)
@@ -266,7 +267,7 @@ import com.xenoage.zong.core.position.MPElement;
 		else if (element instanceof Volta)
 			return setVolta((Volta) element);
 		else
-			throw unsupportedClass(element);
+			throw new UnsupportedClassException(element);
 	}
 
 
@@ -302,7 +303,7 @@ import com.xenoage.zong.core.position.MPElement;
 			volta = null;
 		}
 		else {
-			throw unsupportedClass(element);
+			throw new UnsupportedClassException(element);
 		}
 	}
 
@@ -359,7 +360,7 @@ import com.xenoage.zong.core.position.MPElement;
 			setVolta((Volta) newElement);
 		}
 		else {
-			throw unsupportedClass(newElement);
+			throw new UnsupportedClassException(newElement);
 		}
 	}
 
@@ -381,9 +382,9 @@ import com.xenoage.zong.core.position.MPElement;
 	 * Gets a list of all {@link ColumnElement}s in this column, which
 	 * are not assigned to a beat (time, start and end barline, volta, measure break).
 	 */
-	public Vector<ColumnElement> getColumnElementsWithoutBeats() {
+	public IList<ColumnElement> getColumnElementsWithoutBeats() {
 		//elements with beats
-		IVector<ColumnElement> ret = ivec();
+		CList<ColumnElement> ret = clist();
 		if (time != null)
 			ret.add(time);
 		if (startBarline != null)
@@ -401,8 +402,8 @@ import com.xenoage.zong.core.position.MPElement;
 	/**
 	 * Gets a list of all {@link ColumnElement}s in this column.
 	 */
-	public Vector<ColumnElement> getColumnElements() {
-		IVector<ColumnElement> ret = ivec();
+	public IList<ColumnElement> getColumnElements() {
+		CList<ColumnElement> ret = clist();
 		if (time != null)
 			ret.add(time);
 		if (startBarline != null)

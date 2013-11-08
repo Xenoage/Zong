@@ -1,6 +1,6 @@
 package com.xenoage.zong.util.demo;
 
-import static com.xenoage.utils.base.collections.CollectionUtils.alist;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.music.Pitch.A;
@@ -15,7 +15,7 @@ import static com.xenoage.zong.core.music.format.SP.sp;
 import static com.xenoage.zong.core.position.MP.mp;
 import static com.xenoage.zong.core.text.UnformattedText.ut;
 
-import com.xenoage.utils.base.collections.NullableList;
+import com.xenoage.utils.collections.NullableList;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.commands.core.music.ColumnElementWrite;
 import com.xenoage.zong.commands.core.music.PartAdd;

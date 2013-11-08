@@ -1,10 +1,10 @@
 package com.xenoage.zong.core.music.barline;
 
-import static com.xenoage.utils.base.NullUtils.throwNullArg;
+import static com.xenoage.utils.CheckUtils.checkArgsNotNull;
 import lombok.Getter;
 import lombok.Setter;
 
-import com.xenoage.utils.base.annotations.NonNull;
+import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.zong.core.header.ColumnHeader;
 import com.xenoage.zong.core.music.ColumnElement;
 import com.xenoage.zong.core.music.Measure;
@@ -83,7 +83,7 @@ public final class Barline
 	
 	
 	private Barline(BarlineStyle style, BarlineRepeat repeat, int repeatTimes) {
-		throwNullArg(style, repeat);
+		checkArgsNotNull(style, repeat);
 		this.style = style;
 		this.repeat = repeat;
 		this.repeatTimes = repeatTimes;

@@ -1,9 +1,9 @@
 package com.xenoage.zong.core.music.beam;
 
-import static com.xenoage.utils.base.NullUtils.throwNullArg;
+import static com.xenoage.utils.CheckUtils.checkArgsNotNull;
 import lombok.Data;
 
-import com.xenoage.utils.base.annotations.NonNull;
+import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.zong.core.music.chord.Chord;
 
 
@@ -34,7 +34,7 @@ import com.xenoage.zong.core.music.chord.Chord;
 
 
 	public BeamWaypoint(Chord chord, boolean subdivision) {
-		throwNullArg(chord);
+		checkArgsNotNull(chord);
 		this.chord = chord;
 		this.subdivision = subdivision;
 	}

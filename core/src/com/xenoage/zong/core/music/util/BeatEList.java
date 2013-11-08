@@ -1,8 +1,8 @@
 package com.xenoage.zong.core.music.util;
 
-import static com.xenoage.utils.base.iterators.ReverseIterator.reverseIt;
+import static com.xenoage.utils.collections.CList.clist;
+import static com.xenoage.utils.iterators.ReverseIterator.reverseIt;
 import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.utils.pdlib.IVector.ivec;
 import static com.xenoage.zong.core.music.util.BeatE.beatE;
 
 import java.util.ArrayList;
@@ -11,9 +11,9 @@ import java.util.LinkedList;
 
 import lombok.Data;
 
+import com.xenoage.utils.collections.CList;
+import com.xenoage.utils.collections.IList;
 import com.xenoage.utils.math.Fraction;
-import com.xenoage.utils.pdlib.IVector;
-
 
 /**
  * This is a wrapper class to combine a list of objects with
@@ -32,18 +32,14 @@ import com.xenoage.utils.pdlib.IVector;
 		return new BeatEList<T>();
 	}
 
-
 	public BeatEList() {
 		this.elements = new ArrayList<BeatE<T>>(0); //start with a capacity of 0 to save memory
 	}
-	
-	
-	private void checkNotNull(BeatE<? extends T> element)
-	{
+
+	private void checkNotNull(BeatE<? extends T> element) {
 		if (element.getElement() == null)
 			throw new IllegalArgumentException("Element must be assigned to a beat");
 	}
-
 
 	/**
 	 * Gets the first element at the given beat, or null if there is none.
@@ -55,7 +51,6 @@ import com.xenoage.utils.pdlib.IVector;
 		}
 		return null;
 	}
-
 
 	/**
 	 * Gets all elements at the given beat, or an empty list if there are none.
@@ -72,7 +67,6 @@ import com.xenoage.utils.pdlib.IVector;
 		return ret;
 	}
 
-
 	/**
 	 * Adds the given positioned element. If there is already
 	 * one, it is added before the existing one, but nothing is removed.
@@ -88,7 +82,6 @@ import com.xenoage.utils.pdlib.IVector;
 		elements.add(element);
 	}
 
-
 	/**
 	 * Adds the given positioned element. If there is already
 	 * one, it is added before the existing one, but nothing is removed.
@@ -96,7 +89,6 @@ import com.xenoage.utils.pdlib.IVector;
 	public void add(T element, Fraction beat) {
 		add(beatE(element, beat));
 	}
-
 
 	/**
 	 * Adds the given positioned elements. If there are already
@@ -107,7 +99,6 @@ import com.xenoage.utils.pdlib.IVector;
 		for (BeatE<? extends T> e : list)
 			add(e.getElement(), e.getBeat());
 	}
-
 
 	/**
 	 * Adds the given element at the given beat. If there is already
@@ -131,7 +122,6 @@ import com.xenoage.utils.pdlib.IVector;
 		return null;
 	}
 
-
 	/**
 	 * Adds the given element at the given beat. If there is already
 	 * a element, it is replaced by the given one and returned (otherwise null).
@@ -139,7 +129,6 @@ import com.xenoage.utils.pdlib.IVector;
 	public T set(T element, Fraction beat) {
 		return set(beatE(element, beat));
 	}
-
 
 	/**
 	 * Removes the first occurrence of the given element.
@@ -152,7 +141,6 @@ import com.xenoage.utils.pdlib.IVector;
 			}
 		}
 	}
-
 
 	/**
 	 * Removes and returns the first element at the given beat (if there is any).
@@ -167,7 +155,6 @@ import com.xenoage.utils.pdlib.IVector;
 		return null;
 	}
 
-
 	/**
 	 * Gets the first element, or null if the list is empty.
 	 */
@@ -178,7 +165,6 @@ import com.xenoage.utils.pdlib.IVector;
 			return null;
 	}
 
-
 	/**
 	 * Gets the last element, or null if the list is empty.
 	 */
@@ -188,7 +174,6 @@ import com.xenoage.utils.pdlib.IVector;
 		else
 			return null;
 	}
-
 
 	/**
 	 * Returns the last element at or before the given beat.
@@ -202,7 +187,6 @@ import com.xenoage.utils.pdlib.IVector;
 		return null;
 	}
 
-
 	/**
 	 * Gets the number of elements in this list.
 	 */
@@ -210,21 +194,18 @@ import com.xenoage.utils.pdlib.IVector;
 		return elements.size();
 	}
 
-
 	@Override public Iterator<BeatE<T>> iterator() {
 		return elements.iterator();
 	}
 
-
 	/**
 	 * Gets all data elements.
 	 */
-	public IVector<T> getDataElements() {
-		IVector<T> ret = ivec();
+	public IList<T> getDataElements() {
+		CList<T> ret = clist();
 		for (BeatE<T> element : elements)
 			ret.add(element.getElement());
 		return ret.close();
 	}
-
 
 }

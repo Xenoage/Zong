@@ -1,7 +1,7 @@
 package com.xenoage.zong.core.music.slur;
 
-import static com.xenoage.utils.base.NullUtils.throwNullArg;
-import static com.xenoage.utils.base.collections.CollectionUtils.alist;
+import static com.xenoage.utils.CheckUtils.checkArgsNotNull;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
 
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ import com.xenoage.zong.core.music.chord.Chord;
 	 * @param stop   the right end point of the curved line
 	 */
 	public Slur(SlurType type, SlurWaypoint start, SlurWaypoint stop, VSide side) {
-		throwNullArg(type, start, stop);
+		checkArgsNotNull(type, start, stop);
 		this.type = type;
 		this.waypoints = alist(start, stop);
 		this.side = side;

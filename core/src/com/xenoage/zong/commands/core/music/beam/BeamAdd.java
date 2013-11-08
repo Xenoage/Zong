@@ -1,6 +1,6 @@
 package com.xenoage.zong.commands.core.music.beam;
 
-import static com.xenoage.utils.base.iterators.ReverseIterator.reverseIt;
+import static com.xenoage.utils.iterators.ReverseIterator.reverseIt;
 
 import java.util.ArrayList;
 import java.util.List;

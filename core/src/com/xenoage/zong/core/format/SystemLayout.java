@@ -2,10 +2,9 @@ package com.xenoage.zong.core.format;
 
 import lombok.Data;
 
-import com.xenoage.utils.base.annotations.Const;
-import com.xenoage.utils.base.annotations.MaybeNull;
-import com.xenoage.utils.pdlib.Vector;
-
+import com.xenoage.utils.annotations.Const;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.collections.IList;
 
 /**
  * Layout information for a system.
@@ -25,7 +24,7 @@ import com.xenoage.utils.pdlib.Vector;
 	/** The distance between the right side of the staves and the left page margin. */
 	private final float marginRight;
 	/** The layouts of the staves of the system (may also be or contain null). */
-	@MaybeNull public final Vector<StaffLayout> staffLayouts;
+	@MaybeNull public final IList<StaffLayout> staffLayouts;
 
 	/** Default system layout. */
 	public static final SystemLayout defaultValue = new SystemLayout(30f, 5f, 5f, null);
@@ -41,6 +40,5 @@ import com.xenoage.utils.pdlib.Vector;
 		else
 			return null;
 	}
-
 
 }

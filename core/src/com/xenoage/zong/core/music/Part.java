@@ -1,6 +1,6 @@
 package com.xenoage.zong.core.music;
 
-import static com.xenoage.utils.base.NullUtils.assertNotNull;
+import static com.xenoage.utils.CheckUtils.checkArgsNotNull;
 
 import java.util.List;
 
@@ -36,7 +36,7 @@ import com.xenoage.zong.core.instrument.Instrument;
 	
 	public Part(String name, String abbreviation, int stavesCount, List<Instrument> instruments) {
 		//check arguments
-		assertNotNull(name);
+		checkArgsNotNull(name);
 		if (stavesCount < 0)
 			throw new IllegalArgumentException("at least 1 staff is required");
 		this.name = name;

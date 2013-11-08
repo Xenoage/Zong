@@ -7,8 +7,8 @@ import static com.xenoage.zong.core.music.Staff.staff;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.xenoage.utils.base.annotations.MaybeNull;
-import com.xenoage.utils.base.annotations.Untested;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.annotations.Untested;
 import com.xenoage.utils.document.command.Command;
 import com.xenoage.utils.document.command.Undoability;
 import com.xenoage.zong.core.Score;

@@ -1,6 +1,6 @@
 package com.xenoage.zong.commands.core.music.tuplet;
 
-import com.xenoage.utils.base.annotations.Untested;
+import com.xenoage.utils.annotations.Untested;
 import com.xenoage.utils.document.command.Command;
 import com.xenoage.utils.document.command.Undoability;
 import com.xenoage.zong.core.music.chord.Chord;

@@ -1,10 +1,10 @@
 package com.xenoage.zong.core.music.volta;
 
-import static com.xenoage.utils.base.NullUtils.throwNullArg;
+import static com.xenoage.utils.CheckUtils.checkArgsNotNull;
 import lombok.Getter;
 import lombok.Setter;
 
-import com.xenoage.utils.base.annotations.NonNull;
+import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.kernel.Range;
 import com.xenoage.zong.core.header.ColumnHeader;
 import com.xenoage.zong.core.music.ColumnElement;
@@ -46,7 +46,7 @@ public final class Volta
 	
   public Volta(int length, Range numbers, String caption, boolean rightHook)
   {
-  	throwNullArg(numbers);
+  	checkArgsNotNull(numbers);
   	if (length < 1)
   		throw new IllegalArgumentException("Volta must span at least 1 measure");
   	this.length = length;
