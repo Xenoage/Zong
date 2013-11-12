@@ -1,13 +1,18 @@
 package com.xenoage.zong.layout;
 
-import static com.xenoage.utils.pdlib.PVector.pvec;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static com.xenoage.utils.kernel.Range.rangeReverse;
 
+import java.util.ArrayList;
+
+import lombok.Data;
+
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.kernel.Range;
 import com.xenoage.utils.math.geom.Point2f;
-import com.xenoage.utils.pdlib.PVector;
 import com.xenoage.zong.core.format.PageFormat;
 import com.xenoage.zong.layout.frames.Frame;
-import com.xenoage.zong.layout.frames.FramePosition;
-
+import com.xenoage.zong.layout.frames.FP;
 
 /**
  * One page within a page layout.
@@ -15,78 +20,72 @@ import com.xenoage.zong.layout.frames.FramePosition;
  * @author Andreas Wenger
  * @author Uli Teschemacher
  */
-public final class Page
-{
-  
+@Data public final class Page
+	implements LayoutContainer {
+
+	/** The parent layout of the page, or null if not part of a layout. */
+	@MaybeNull private Layout parentLayout;
 	/** The format of the page. */
-	public final PageFormat format;
-  
-  /** The list of frames. */
-  public final PVector<Frame> frames;
-  
-  
-  public Page(PageFormat format)
-  {
-    this.format = format;
-    this.frames = pvec();
-  }
-  
-  
-  private Page(PageFormat format, PVector<Frame> frames)
-  {
-    this.format = format;
-    this.frames = frames;
-  }
-  
-  
-  /**
-   * Adds the given frame.
-   */
-  public Page plusFrame(Frame frame)
-  {
-    return new Page(format, frames.plus(frame));
-  }
-  
-  
-  /**
-   * Replaces the given frame, or deletes it if the given
-   * new one is null.
-   */
-  public Page replaceFrame(Frame oldFrame, Frame newFrame)
-  {
-  	return new Page(format, frames.replaceOrMinus(oldFrame, newFrame));
-  }
-  
-  
-  /**
-   * Changes the format of this page.
-   */
-  public Page withFormat(PageFormat format)
-  {
-  	return new Page(format, frames);
-  }
-  
-  
-  /**
-   * Transforms the given coordinates in page space to
-   * a frame position.
-   * If there is no frame, null is returned.
-   */
-  public FramePosition computeFramePosition(Point2f p, Layout layout)
-  {
-    //since frames are painted in forward direction,
-    //the last one is the highest one. so we have to
-    //check for clicks in reverse order.
-    for (int i = frames.size() - 1; i >= 0; i--)
-    {
-      FramePosition fp = frames.get(i).computeFramePosition(p, layout);
-      if (fp != null)
-      {
-        return fp;
-      }
-    }
-    return null;
-  }
-  
-  
+	private PageFormat format;
+	/** The list of frames. */
+	private ArrayList<Frame> frames;
+
+
+	public Page(Layout parentLayout, PageFormat format) {
+		this.parentLayout = parentLayout;
+		this.format = format;
+		this.frames = alist();
+	}
+
+	/**
+	 * Gets the index of this page, or -1 if this page is not part of a layout.
+	 */
+	public int getIndex() {
+		if (parentLayout != null)
+			return parentLayout.getPages().indexof(this);
+		else
+			return -1;
+	}
+
+	/**
+	 * Adds the given frame.
+	 */
+	public void addFrame(Frame frame) {
+		frames.add(frame);
+	}
+
+	/**
+	 * Transforms the given coordinates in page space to
+	 * a frame position.
+	 * If there is no frame, null is returned.
+	 */
+	public FP getFramePosition(Point2f p) {
+		//since frames are painted in forward direction,
+		//the last one is the highest one. so we have to
+		//check for clicks in reverse order.
+		for (int i : rangeReverse(frames)) {
+			FP fp = frames.get(i).getFramePosition(p);
+			if (fp != null) {
+				return fp;
+			}
+		}
+		return null;
+	}
+
+	@Override public Page getParentPage() {
+		return this;
+	}
+
+	@Override public float getAbsoluteRotation() {
+		return 0;
+	}
+
+	@Override public Point2f getAbsolutePosition() {
+		return Point2f.origin;
+	}
+
+	@Override public Point2f getPagePosition(Point2f p) {
+		return p;
+	}
+
 }

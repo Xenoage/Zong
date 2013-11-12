@@ -23,6 +23,9 @@ import com.xenoage.zong.core.text.Text;
  */
 @EqualsAndHashCode public class FormattedText
 	implements Text {
+	
+	/** An empty text. */
+	public static final FormattedText empty = fText(); 
 
 	/** The list of paragraphs */
 	@Getter private final IList<FormattedTextParagraph> paragraphs;

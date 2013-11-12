@@ -1,105 +1,81 @@
 package com.xenoage.zong.layout.frames;
 
-import static com.xenoage.utils.pdlib.PVector.pvec;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 
-import com.xenoage.utils.pdlib.PVector;
+import java.util.ArrayList;
 
+import lombok.Getter;
 
 /**
- * A list of connected score frames.
+ * A list of connected {@link ScoreFrame}s.
  * 
  * This class is also used for unconnected, single score frames.
  * 
  * @author Andreas Wenger
  */
-public final class ScoreFrameChain
-{
+public class ScoreFrameChain {
 
 	/** The list of frames */
-	public final PVector<ScoreFrame> frames;
+	@Getter private ArrayList<ScoreFrame> frames = alist();
 
-
-	/**
-	 * Creates a new list of conntected score frames, beginning with the given frame.
-	 */
-	public static ScoreFrameChain create(ScoreFrame firstFrame)
-	{
-		return new ScoreFrameChain(pvec(firstFrame));
-	}
 	
-	
-	public ScoreFrameChain(PVector<ScoreFrame> frames)
-	{
-		if (frames.size() == 0)
-			throw new IllegalArgumentException("A score frame chain must have at least one frame");
-		this.frames = frames;
-	}
-
-
 	/**
 	 * Adds the given frame to the end of the chain, if it is not already part
 	 * of the chain.
+	 * If the frame was already part of another chain, it is unregistered there.
+	 * It is registered for this chain.
 	 */
-	public ScoreFrameChain plusFrame(ScoreFrame frame)
-	{
-		if (frames.contains(frame))
-		{
-			throw new IllegalArgumentException(
-				"Score frame is already part of the chain!");
+	public void add(ScoreFrame frame) {
+		if (frames.contains(frame)) {
+			throw new IllegalArgumentException("Score frame is already part of the chain!");
 		}
-		return new ScoreFrameChain(frames.plus(frame));
+		registerFrame(frame);
+		frames.add(frame);
 	}
 
-
 	/**
-	 * Adds the given frame in the middle of the chain, after the given Frame.
-	 * If the Frame is already part of the chain, it is moved to the new
+	 * Adds the given frame in the middle of the chain, after the given frame.
+	 * If the frame is already part of the chain, it is moved to the new
 	 * position.
+	 * If the frame was already part of another chain, it is unregistered there.
+	 * It is registered for this chain.
 	 */
-	public ScoreFrameChain plusFrame(ScoreFrame atFrame, ScoreFrame newFrame)
-	{
-		if (!frames.contains(atFrame))
-		{
+	public void add(ScoreFrame atFrame, ScoreFrame newFrame) {
+		if (!frames.contains(atFrame)) {
 			throw new IllegalArgumentException("Anchor frame does not exist!");
 		}
 		int pos = frames.indexOf(atFrame);
-		return addFrame(newFrame, pos + 1);
+		add(newFrame, pos + 1);
 	}
-
 
 	/**
 	 * Adds the givenframe at the given position.
 	 * If the frame is already part of the chain, it is moved to the new
 	 * position.
+	 * If the frame was already part of another chain, it is unregistered there.
+	 * It is registered for this chain.
 	 */
-	public ScoreFrameChain addFrame(ScoreFrame newFrame, int position)
-	{
-		PVector<ScoreFrame> frames = this.frames.minus(newFrame).plus(position, newFrame);
-		return new ScoreFrameChain(frames);
+	public void add(ScoreFrame newFrame, int position) {
+		frames.remove(newFrame);
+		frames.add(position, newFrame);
 	}
-	
 	
 	/**
-	 * Replaces the given {@link ScoreFrame} by the other given one
-	 * or null to remove it.
-	 * If the chain is empty then, null is returned.
+	 * Removes the given frame from this chain and unregisters the chain from the frame.
 	 */
-	public ScoreFrameChain replaceFrame(ScoreFrame oldFrame, ScoreFrame newFrame)
-	{
-		PVector<ScoreFrame> oldFrames = this.frames;
-		PVector<ScoreFrame> newFrames = oldFrames.replaceOrMinus(oldFrame, newFrame);
-		if (oldFrames != newFrames)
-		{
-			if (newFrames.size() > 0)
-				return new ScoreFrameChain(newFrames);
-			else
-				return null;
-		}
-		else
-		{
-			return this;
-		}
+	private void remove(ScoreFrame frame) {
+		frames.remove(frame);
+		frame.setScoreFrameChain(null);
 	}
-
+	
+	/**
+	 * If the frame was already part of another chain, it is unregistered there.
+	 * It is registered for this chain.
+	 */
+	private void registerFrame(ScoreFrame frame) {
+		if (frame.getScoreFrameChain() != null)
+			frame.getScoreFrameChain().remove(frame);
+		frame.setScoreFrameChain(this);
+	}
 
 }

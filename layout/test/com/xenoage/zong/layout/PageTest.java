@@ -16,7 +16,7 @@ import com.xenoage.zong.core.format.PageFormat;
 import com.xenoage.zong.core.format.PageMargins;
 import com.xenoage.zong.layout.frames.Frame;
 import com.xenoage.zong.layout.frames.FrameData;
-import com.xenoage.zong.layout.frames.FramePosition;
+import com.xenoage.zong.layout.frames.FP;
 import com.xenoage.zong.layout.frames.GroupFrame;
 import com.xenoage.zong.layout.frames.ScoreFrame;
 import com.xenoage.zong.layout.frames.background.ColorBackground;
@@ -47,7 +47,7 @@ public class PageTest
     
     //Test 1
 		Point2f p = new Point2f(113,122);
-		FramePosition fp = page.computeFramePosition(p, layout);
+		FP fp = page.computeFramePosition(p, layout);
     assertNotNull(fp);
     assertEquals(frm2, fp.getFrame());
 		assertEquals(23, fp.getPosition().x, Delta.DELTA_FLOAT);
@@ -76,7 +76,7 @@ public class PageTest
   {
   	Layout layout = createPageWithRotatedFrames();
     Page page = layout.pages.get(0);
-    FramePosition fp;
+    FP fp;
     float delta = 1;
     
     //Test 1 (yellow)

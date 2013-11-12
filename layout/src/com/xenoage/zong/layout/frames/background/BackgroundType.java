@@ -1,6 +1,5 @@
 package com.xenoage.zong.layout.frames.background;
 
-
 /**
  * List of types of backgrounds.
  * 
@@ -9,7 +8,7 @@ package com.xenoage.zong.layout.frames.background;
  * 
  * @author Andreas Wenger
  */
-public enum BackgroundType
-{
-	ColorBackground
+public enum BackgroundType {
+	/** Background with a solid color. */
+	Color
 }

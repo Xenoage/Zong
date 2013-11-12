@@ -1,6 +1,5 @@
 package com.xenoage.zong.layout.frames;
 
-
 /**
  * List of types of frames.
  * 
@@ -9,12 +8,16 @@ package com.xenoage.zong.layout.frames;
  * 
  * @author Andreas Wenger
  */
-public enum FrameType
-{
+public enum FrameType {
+	/** {@link GroupFrame} frame. */
 	GroupFrame,
+	/** {@link ImageFrame} frame. */
 	ImageFrame,
+	/** {@link ScoreFrame} frame. */
 	ScoreFrame,
+	/** Template frame. */
 	TemplateFrame,
+	/** {@link TextFrame} frame. */
 	TextFrame,
 	/** For frame handles (selected frames) */
 	FrameHandles;

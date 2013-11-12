@@ -1,139 +1,86 @@
 package com.xenoage.zong.layout.frames;
 
+import lombok.Getter;
+
 import com.xenoage.zong.text.FormattedText;
 
-
 /**
- * A text frame is a frame that contains a
- * formatted text.
+ * A {@link TextFrame} is a frame that contains a {@link FormattedText}.
  * 
- * It may use multiple fonts, colors and
- * styles and may contain several paragraphs.
+ * It may use multiple fonts, colors and  styles and may contain
+ * several paragraphs.
  * 
  * @author Andreas Wenger
  */
 public class TextFrame
-	extends Frame
-{
-	
-	private final FormattedText text;
-	
+	extends Frame {
+
 	
 	/**
-	 * Line breaks: Manual means, that if there is no line break in the formatted text,
-	 * the text will continue beyond the borders of the frame. Automatic means, that
-	 * pragraphs are automatically broken into lines fitting into the borders of the frame.
+	 * Line break style.
 	 */
-	public enum LineBreakStyle { Manual, Automatic };
-	private final LineBreakStyle lineBreakStyle;
+	public enum LineBreakStyle {
+		/** If there is no line break in the formatted text,
+		 * the text will continue beyond the borders of the frame. */
+		Manual,
+		/** Pragraphs are automatically broken into lines fitting
+		 * into the borders of the frame. */
+		Automatic
+	};
 	
-	private FormattedText cacheTextLineBreak = null;
+	/** The text content of this frame. */
+	@Getter private FormattedText text = FormattedText.empty;
+	/** Line break style in this frame. */
+	@Getter private LineBreakStyle lineBreakStyle = LineBreakStyle.Manual;
+	
+	/** The formatted text, including line breaks. */
+	private transient FormattedText cacheTextLineBreak = null;
 
 
 	/**
-	 * Creates a new {@link TextFrame}.
+	 * Sets the text content of this frame.
 	 */
-	public TextFrame(FrameData data, FormattedText text)
-	{
-		this(data, text, LineBreakStyle.Manual);
-	}
-	
-
-	private TextFrame(FrameData data, FormattedText text, LineBreakStyle lineBreakStyle)
-	{
-		super(data);
+	public void setText(FormattedText text) {
 		this.text = text;
+		updateCache();
+	}
+
+	/**
+	 * Gets the text content of this frame with automatic line breaks,
+	 * if enabled, otherwise the original text.
+	 */
+	public FormattedText getTextWithLineBreaks() {
+		if (lineBreakStyle == LineBreakStyle.Automatic) {
+			return cacheTextLineBreak;
+		}
+		else {
+			return text;
+		}
+	}
+
+	/**
+	 * Sets the type of line breaks.
+	 */
+	public void setLineBreakStyle(LineBreakStyle lineBreakStyle) {
 		this.lineBreakStyle = lineBreakStyle;
 		updateCache();
 	}
 
+	@Override public FrameType getType() {
+		return FrameType.TextFrame;
+	}
 
 	/**
-   * Gets the text content of this frame.
-   */
-  public FormattedText getText()
-  {
-  	return text;
-  }
-  
-  
-  /**
-   * Sets the text content of this frame.
-   */
-  public TextFrame withText(FormattedText text)
-  {
-  	return new TextFrame(data, text, lineBreakStyle);
-  }
-  
-  
-  /**
-   * Gets the text content of this frame with automatic line breaks,
-   * if enabled, otherwise the original text.
-   */
-  public FormattedText getTextWithLineBreaks()
-  {
-  	if (lineBreakStyle == LineBreakStyle.Automatic)
-  	{
-  		return cacheTextLineBreak;
-  	}
-  	else
-  	{
-  		return text;
-  	}
-  }
-  
-  
-  /**
-   * Gets the type of line breaks.
-   */
-  public LineBreakStyle getLineBreakStyle()
-	{
-		return lineBreakStyle;
+	 * Updates the cache:
+	 * Text with line breaks for text frame with automatic line break.
+	 */
+	private void updateCache() {
+		if (lineBreakStyle == LineBreakStyle.Automatic) {
+			cacheTextLineBreak = text.lineBreak(size.width);
+		}
+		else {
+			cacheTextLineBreak = null;
+		}
 	}
 
-
-  /**
-   * Sets the type of line breaks.
-   */
-	public TextFrame withLineBreakStyle(LineBreakStyle lineBreakStyle)
-	{
-		return new TextFrame(data, text, lineBreakStyle);
-	}
-  
-  
-  /**
-   * Gets the type of this frame.
-   */
-  @Override public FrameType getType()
-  {
-  	return FrameType.TextFrame;
-  }
-  
-  
-  /**
-   * Updates the cache:
-   * Text with line breaks for text frame with automatic line break.
-   */
-  private void updateCache()
-  {
-  	if (lineBreakStyle == LineBreakStyle.Automatic)
-  	{
-  		cacheTextLineBreak = text.lineBreak(data.size.width);
-  	}
-  	else
-  	{
-  		cacheTextLineBreak = null;
-  	}
-  }
-  
-  
-  /**
-   * Changes the basic data of this frame.
-   */
-  @Override public TextFrame withData(FrameData data)
-  {
-  	return new TextFrame(data, text, lineBreakStyle);
-  }
-	
-	
 }

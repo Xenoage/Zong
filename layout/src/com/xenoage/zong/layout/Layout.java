@@ -18,7 +18,7 @@ import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.format.LayoutFormat;
 import com.xenoage.zong.core.position.BMP;
 import com.xenoage.zong.layout.frames.Frame;
-import com.xenoage.zong.layout.frames.FramePosition;
+import com.xenoage.zong.layout.frames.FP;
 import com.xenoage.zong.layout.frames.GroupFrame;
 import com.xenoage.zong.layout.frames.ScoreFrame;
 import com.xenoage.zong.layout.frames.ScoreFrameChain;
@@ -104,7 +104,7 @@ public class Layout
 	 * reference to a frame and the position within that frame in mm. If there
 	 * is no frame, null is returned.
 	 */
-	public FramePosition computeFramePosition(LP layoutPosition)
+	public FP computeFramePosition(LP layoutPosition)
 	{
 		if (layoutPosition == null)
 			return null;

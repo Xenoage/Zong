@@ -1,55 +1,26 @@
 package com.xenoage.zong.layout.frames;
 
+import com.xenoage.zong.musiclayout.layouter.horizontalsystemfilling.HorizontalSystemFillingStrategy;
+import com.xenoage.zong.musiclayout.layouter.verticalframefilling.VerticalFrameFillingStrategy;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
- * A image frame is a frame that contains
+ * An {@link ImageFrame} is a frame that contains
  * a bitmap image.
  * 
  * @author Andreas Wenger
  */
-public class ImageFrame
-  extends Frame
-{
-  
-  private String imagePath;
-  
-  
-  /**
-   * Creates a new image frame.
-   */
-  public ImageFrame(FrameData data, String imagePath)
-  {
-    super(data);
-    this.imagePath = imagePath;
-  }
+@Data @EqualsAndHashCode(callSuper = true) public class ImageFrame
+	extends Frame {
+
+	/** The path of the image. */
+	private String imagePath;
 
 
-  /**
-   * Gets the path of this image.
-   */
-  public String getImagePath()
-  {
-    return imagePath;
-  }
-  
-  
-  /**
-   * Changes the basic data of this frame.
-   */
-  @Override public ImageFrame withData(FrameData data)
-  {
-  	return new ImageFrame(data, imagePath);
-  }
-  
-  
-  /**
-   * Gets the type of this frame.
-   */
-  @Override public FrameType getType()
-  {
-  	return FrameType.ImageFrame;
-  }
-  
+	@Override public FrameType getType() {
+		return FrameType.ImageFrame;
+	}
 
 }
