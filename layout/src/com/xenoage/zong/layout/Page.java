@@ -59,12 +59,12 @@ import com.xenoage.zong.layout.frames.FP;
 	 * a frame position.
 	 * If there is no frame, null is returned.
 	 */
-	public FP getFramePosition(Point2f p) {
+	public FP getFP(Point2f p) {
 		//since frames are painted in forward direction,
 		//the last one is the highest one. so we have to
 		//check for clicks in reverse order.
 		for (int i : rangeReverse(frames)) {
-			FP fp = frames.get(i).getFramePosition(p);
+			FP fp = frames.get(i).getFP(p);
 			if (fp != null) {
 				return fp;
 			}

@@ -9,8 +9,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import com.xenoage.utils.math.geom.Point2f;
-import com.xenoage.zong.musiclayout.layouter.horizontalsystemfilling.HorizontalSystemFillingStrategy;
-import com.xenoage.zong.musiclayout.layouter.verticalframefilling.VerticalFrameFillingStrategy;
+import com.xenoage.zong.layout.LayoutContainer;
 
 /**
  * A group frame is a frame that contains
@@ -19,7 +18,8 @@ import com.xenoage.zong.musiclayout.layouter.verticalframefilling.VerticalFrameF
  * @author Andreas Wenger
  */
 @Data @EqualsAndHashCode(callSuper = true) public class GroupFrame
-	extends Frame {
+	extends Frame
+	implements LayoutContainer {
 
 	/** The list of child frames. */
 	public final ArrayList<Frame> children = alist();

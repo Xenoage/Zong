@@ -6,6 +6,9 @@ import java.util.ArrayList;
 
 import lombok.Getter;
 
+import com.xenoage.zong.core.Score;
+import com.xenoage.zong.musiclayout.ScoreLayout;
+
 /**
  * A list of connected {@link ScoreFrame}s.
  * 
@@ -17,6 +20,10 @@ public class ScoreFrameChain {
 
 	/** The list of frames */
 	@Getter private ArrayList<ScoreFrame> frames = alist();
+	/** The score. */
+	@Getter private Score score; //GOON
+	/** The score layouts in the frames. */
+	@Getter private ScoreLayout scoreLayout; //GOON
 
 	
 	/**
@@ -76,6 +83,14 @@ public class ScoreFrameChain {
 		if (frame.getScoreFrameChain() != null)
 			frame.getScoreFrameChain().remove(frame);
 		frame.setScoreFrameChain(this);
+	}
+	
+	/**
+	 * Returns true, if the given {@link ScoreFrame} is the first one in this
+	 * score frame chain.
+	 */
+	public boolean isLeadingScoreFrame(ScoreFrame scoreFrame) {
+		return frames.get(0) == scoreFrame;
 	}
 
 }
