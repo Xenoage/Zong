@@ -1,14 +1,12 @@
 package com.xenoage.zong.musiclayout.layouter;
 
-import static com.xenoage.utils.base.NullUtils.throwNullArg;
-import static com.xenoage.zong.core.position.BMP.atStaff;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-import com.xenoage.utils.pdlib.PVector;
+import com.xenoage.utils.collections.IList;
 import com.xenoage.zong.core.Score;
-import com.xenoage.zong.io.score.ScoreController;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.symbols.SymbolPool;
-
 
 /**
  * This class can be used as a parameter in all {@link ScoreLayouterStrategy}
@@ -17,91 +15,49 @@ import com.xenoage.zong.symbols.SymbolPool;
  * 
  * @author Andreas Wenger
  */
-public final class ScoreLayouterContext
-{
-	
-	public final Score score;
-	public final SymbolPool symbolPool;
-	public final LayoutSettings layoutSettings;
-	public final boolean isCompleteLayout;
-	
-	public final PVector<ScoreLayoutArea> areas;
-	public final ScoreLayoutArea additionalArea;
-	
+@RequiredArgsConstructor public final class ScoreLayouterContext {
+
+	/** The score which is layouted. */
+	@Getter private final Score score;
+	/** The pool of musical symbols. */
+	@Getter private final SymbolPool symbolPool;
+	/** General layout preferences. */
+	@Getter private final LayoutSettings layoutSettings;
+	/** True to layout the whole score, false to layout
+	 * only the frames of the score frame chain. */
+	@Getter private final boolean isCompleteLayout;
+
+	/** Information about the score frames in which to layout. */
+	@Getter private final IList<ScoreLayoutArea> areas;
+	/** If the given areas are not enough, additional areas with this settings are used. */
+	@Getter private final ScoreLayoutArea additionalArea;
+
 	//cache
-	private final float maxInterlineSpace;
-	
-	
-	/**
-	 * Creates a new {@link ScoreLayouterContext}.
-	 * @param score             the score to layout
-	 * @param symbolPool        the pool of musical symbols
-	 * @param layoutSettings    general layout preferences
-	 * @param isCompleteLayout  true to layout the whole score, false to layout
-	 *                          only the frames of the score frame chain
-	 * @param areas             information about the score frames in which to layout
-	 * @param additionalArea    if the given areas are not enough, additional areas with
-	 *                          this settings are used
-	 */
-	public ScoreLayouterContext(Score score, 
-		SymbolPool symbolPool, LayoutSettings layoutSettings,
-		boolean isCompleteLayout, PVector<ScoreLayoutArea> areas, ScoreLayoutArea additionalArea)
-	{
-		throwNullArg(score, areas, symbolPool, layoutSettings);
-		this.score = score;
-		this.symbolPool = symbolPool;
-		this.layoutSettings = layoutSettings;
-		this.isCompleteLayout = isCompleteLayout;
-		this.areas = areas;
-		this.additionalArea = additionalArea;
-		//cache
-		float maxInterlineSpace = 0;
-		for (int staff = 0; staff < score.getStavesCount(); staff++)
-		{
-			maxInterlineSpace = Math.max(maxInterlineSpace,
-				ScoreController.getInterlineSpace(score, atStaff(staff)));
-		}
-		this.maxInterlineSpace = maxInterlineSpace;
-	}
-	
-	
-	/**
-	 * Gets the score which is layouted.
-	 */
-	public Score getScore()
-	{
-		return score;
-	}
-	
-	
-	/**
-	 * Gets the used symbol style.
-	 */
-	public SymbolPool getSymbolPool()
-	{
-		return symbolPool;
-	}
-	
-	
+	private float maxInterlineSpace = Float.NaN;
+
+
 	/**
 	 * Gets the biggest interline space of the score.
 	 */
-	public float getMaxInterlineSpace()
-	{
+	public float getMaxInterlineSpace() {
+		if (maxInterlineSpace == Float.NaN) {
+			for (int staff = 0; staff < score.getStavesCount(); staff++) {
+				maxInterlineSpace = Math.max(maxInterlineSpace, score.getInterlineSpace(staff));
+			}
+		}
 		return maxInterlineSpace;
 	}
-	
-	
+
 	/**
 	 * Gets a {@link ScoreLayoutArea} for the area with the given index.
+	 * If it is an area after the last explicitly known are, the additional area
+	 * is returned.
 	 */
-	public ScoreLayoutArea getArea(int index)
-	{
+	public ScoreLayoutArea getArea(int index) {
 		if (index < areas.size())
 			return areas.get(index);
 		else
 			return additionalArea;
 	}
-	
 
 }

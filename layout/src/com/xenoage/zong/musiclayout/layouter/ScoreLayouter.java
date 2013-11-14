@@ -3,12 +3,11 @@ package com.xenoage.zong.musiclayout.layouter;
 import static com.xenoage.utils.lang.VocByString.voc;
 import static com.xenoage.utils.log.Log.log;
 import static com.xenoage.utils.log.Report.warning;
-import static com.xenoage.utils.pdlib.PVector.pvec;
-import static com.xenoage.zong.musiclayout.layouter.ScoreLayoutArea.area;
 
+import com.xenoage.utils.collections.CList;
+import com.xenoage.utils.collections.IList;
 import com.xenoage.utils.lang.Lang;
 import com.xenoage.utils.math.geom.Size2f;
-import com.xenoage.utils.pdlib.PVector;
 import com.xenoage.zong.Zong;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.musiclayout.ScoreLayout;
@@ -42,7 +41,6 @@ import com.xenoage.zong.musiclayout.layouter.voicenotation.VoiceStemDirectionNot
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.symbols.SymbolPool;
 
-
 /**
  * A score layouter creates the content for
  * score frames from a given score.
@@ -52,20 +50,20 @@ import com.xenoage.zong.symbols.SymbolPool;
  * 
  * @author Andreas Wenger
  */
-public class ScoreLayouter
-{
-  
-  //the score layout created by this layouter
-  private ScoreLayout layout = null;
-  
-  //strategy for the layouter and its context
-  private ScoreLayoutStrategy strategy;
-  private ScoreLayouterContext context;
-  
-  
-  /**
-   * Creates a new ScoreLayouter.
-   * @param score             the score to layout
+public class ScoreLayouter {
+
+	//strategy for the layouter and its context
+	private ScoreLayoutStrategy strategy;
+	private ScoreLayouterContext context;
+
+	//the score layout created by this layouter
+	private ScoreLayout layout = null;
+
+
+	/**
+	 * Computes the whole layout and returns it.
+	 * If something fails, an error layout is returned.
+	 * @param score             the score to layout
 	 * @param symbolPool        the pool of musical symbols
 	 * @param layoutSettings    general layout preferences
 	 * @param isCompleteLayout  true to layout the whole score, false to layout
@@ -74,147 +72,95 @@ public class ScoreLayouter
 	 * @param additionalArea    if the given areas are not enough, additional areas with
 	 *                          this settings are used
 	 */
-	public ScoreLayouter(Score score, 
-		SymbolPool symbolPool, LayoutSettings layoutSettings,
-		boolean isCompleteLayout, PVector<ScoreLayoutArea> areas, ScoreLayoutArea additionalArea)
-	{
-    this.context = new ScoreLayouterContext(score, symbolPool, layoutSettings,
-    	isCompleteLayout, areas, additionalArea);
-    this.strategy = createStrategyTree();
-  }
-	
-	
+	public static ScoreLayout createScoreLayout(Score score, SymbolPool symbolPool,
+		LayoutSettings layoutSettings, boolean isCompleteLayout, IList<ScoreLayoutArea> areas,
+		ScoreLayoutArea additionalArea) {
+		ScoreLayouterContext context = new ScoreLayouterContext(score, symbolPool, layoutSettings,
+			isCompleteLayout, areas, additionalArea);
+		return new ScoreLayouter(context).createScoreLayout();
+	}
+
 	/**
-   * Creates a new ScoreLayouter.
-   * @param score             the score to layout
+	 * Computes the whole layout and returns it.
+	 * If something fails, an error layout is returned.
+	 * @param score             the score to layout
 	 * @param symbolPool        the pool of musical symbols
 	 * @param layoutSettings    general layout preferences
 	 * @param isCompleteLayout  true to layout the whole score, false to layout
 	 *                          only the frames of the score frame chain
 	 * @param areaSize          size of all score frames
 	 */
-	public ScoreLayouter(Score score, 
-		SymbolPool symbolPool, LayoutSettings layoutSettings,
-		boolean isCompleteLayout, Size2f areaSize)
-	{
-    this.context = new ScoreLayouterContext(score, symbolPool, layoutSettings,
-    	isCompleteLayout, pvec(area(areaSize)), area(areaSize));
-    this.strategy = createStrategyTree();
-  }
-  
-  
-  /**
-   * Recomputes the whole layout and returns it.
-   * If something fails, an error layout is returned.
-   */
-  public ScoreLayout createLayout()
-  {
-  	try
-  	{
-  		long startTime = System.currentTimeMillis();
-  		layout = createLayoutWithExceptions();
-  		long duration = System.currentTimeMillis() - startTime;
-  		System.out.println(this.getClass().getSimpleName() + ": " + duration);
-  	}
-  	catch (Exception ex)
-  	{
-  		//exception during the layouting process.
-  		//show error page, but still allow saving or other things
-  		log(warning("Layouting failed", ex));
-  		layout = ScoreLayout.createErrorLayout(context.getScore(), context.getSymbolPool());
-  	}
-    return layout;
-  }
-  
-  
-  /**
-   * Recomputes the whole layout and returns it.
-   * If something fails, an exception is thrown.
-   */
-  ScoreLayout createLayoutWithExceptions()
-  {
-  	return strategy.computeScoreLayout(context);
-  }
-  
-  
-  /**
-   * Gets the score this layouter is working with.
-   */
-  public Score getScore()
-  {
-    return context.getScore();
-  }
-  
-  
-  /**
-   * Gets the current layout.
-   */
-  public ScoreLayout getLayout()
-  {
-    return layout;
-  }
-  
-  
-  /**
-   * Creates the strategy tree.
-   * See "Dokumentation/Skizzen/Layoutengine-12-2008/Baum.odg"
-   */
-  ScoreLayoutStrategy createStrategyTree()
-  {
-  	//notation subtree
-  	NotationStrategy notationStrategy = new NotationStrategy(
-			new StemDirectionStrategy(),
-			new NotesAlignmentStrategy(),
-			new AccidentalsAlignmentStrategy(),
-			new StemAlignmentStrategy(),
-			new ArticulationsAlignmentStrategy());
-  	//measure column subtree
-  	ColumnSpacingStrategy measureColumnSpacingStrategy = new ColumnSpacingStrategy(
-			new SeparateVoiceSpacingStrategy(),
-			new MeasureElementsSpacingsStrategy(),
-			new BeatOffsetsStrategy(),
-			new BarlinesBeatOffsetsStrategy(),
-			new BeatOffsetBasedVoiceSpacingStrategy(),
-			new LeadingSpacingStrategy(
-				notationStrategy));
-  	//complete tree
-  	return new ScoreLayoutStrategy(
-  		notationStrategy,
-  		new BeamedStemDirectionNotationsStrategy(
-  			notationStrategy),
-  		new VoiceStemDirectionNotationsStrategy(
-  			notationStrategy),
-  		measureColumnSpacingStrategy,
-  		new FrameArrangementStrategy(
-  			new SystemArrangementStrategy(
-  				measureColumnSpacingStrategy)),
-  		new BeamedStemAlignmentNotationsStrategy(),
-  		new ScoreFrameLayoutStrategy(
-  			new StaffStampingsStrategy(),
-  			new MusicElementStampingStrategy(),
-  			new BeamStampingStrategy(),
-  			new CurvedLineStampingStrategy(),
-  			new LyricStampingStrategy(),
-  			new VoltaStampingStrategy(),
-  			new DirectionStampingStrategy(),
-  			new TupletStampingStrategy()));
-  }
-  
-  
-  
-  /**
-   * Gets the localized name of the given layouter strategy class, e.g.
-   * "Empty staff lines over the whole page".
-   * 
-   * TIDY: move elsewhere
-   */
-  public static String getName(Class<?> strategyClass)
-  {
-  	String className = strategyClass.getName();
-    if (className.startsWith(Zong.PACKAGE + "."))
-      className = className.substring((Zong.PACKAGE + ".").length());
-    return Lang.get(voc(className));
-  }
-  
+	public ScoreLayouter(Score score, SymbolPool symbolPool, LayoutSettings layoutSettings,
+		boolean isCompleteLayout, Size2f areaSize) {
+		ScoreLayouterContext context = new ScoreLayouterContext(score, symbolPool, layoutSettings,
+			isCompleteLayout, CList.<ScoreLayoutArea>ilist(), new ScoreLayoutArea(areaSize));
+		this.strategy = createStrategyTree();
+	}
+
+	private ScoreLayouter(ScoreLayouterContext context) {
+		this.context = context;
+		this.strategy = createStrategyTree();
+	}
+
+	private ScoreLayout createScoreLayout() {
+		try {
+			long startTime = System.currentTimeMillis();
+			layout = createLayoutWithExceptions();
+			long duration = System.currentTimeMillis() - startTime;
+			System.out.println(this.getClass().getSimpleName() + ": " + duration);
+		} catch (Exception ex) {
+			//exception during the layouting process.
+			//show error page, but still allow saving or other things
+			log(warning("Layouting failed", ex));
+			layout = ScoreLayout.createErrorLayout(context.getScore(), context.getSymbolPool());
+		}
+		return layout;
+	}
+
+	/**
+	 * Computes the whole layout and returns it.
+	 * If something fails, an exception is thrown.
+	 */
+	ScoreLayout createLayoutWithExceptions() {
+		return strategy.computeScoreLayout(context);
+	}
+
+	/**
+	 * Creates the strategy tree.
+	 * See "Dokumentation/Skizzen/Layoutengine-12-2008/Baum.odg" //GOON
+	 */
+	ScoreLayoutStrategy createStrategyTree() {
+		//notation subtree
+		NotationStrategy notationStrategy = new NotationStrategy(new StemDirectionStrategy(),
+			new NotesAlignmentStrategy(), new AccidentalsAlignmentStrategy(),
+			new StemAlignmentStrategy(), new ArticulationsAlignmentStrategy());
+		//measure column subtree
+		ColumnSpacingStrategy measureColumnSpacingStrategy = new ColumnSpacingStrategy(
+			new SeparateVoiceSpacingStrategy(), new MeasureElementsSpacingsStrategy(),
+			new BeatOffsetsStrategy(), new BarlinesBeatOffsetsStrategy(),
+			new BeatOffsetBasedVoiceSpacingStrategy(), new LeadingSpacingStrategy(notationStrategy));
+		//complete tree
+		return new ScoreLayoutStrategy(notationStrategy, new BeamedStemDirectionNotationsStrategy(
+			notationStrategy), new VoiceStemDirectionNotationsStrategy(notationStrategy),
+			measureColumnSpacingStrategy, new FrameArrangementStrategy(new SystemArrangementStrategy(
+				measureColumnSpacingStrategy)), new BeamedStemAlignmentNotationsStrategy(),
+			new ScoreFrameLayoutStrategy(new StaffStampingsStrategy(),
+				new MusicElementStampingStrategy(), new BeamStampingStrategy(),
+				new CurvedLineStampingStrategy(), new LyricStampingStrategy(), new VoltaStampingStrategy(),
+				new DirectionStampingStrategy(), new TupletStampingStrategy()));
+	}
+
+	/**
+	 * Gets the localized name of the given layouter strategy class, e.g.
+	 * "Empty staff lines over the whole page".
+	 * 
+	 * TIDY: move elsewhere
+	 */
+	public static String getName(Class<?> strategyClass) {
+		String className = strategyClass.getName();
+		if (className.startsWith(Zong.PACKAGE + "."))
+			className = className.substring((Zong.PACKAGE + ".").length());
+		return Lang.get(voc(className));
+	}
 
 }

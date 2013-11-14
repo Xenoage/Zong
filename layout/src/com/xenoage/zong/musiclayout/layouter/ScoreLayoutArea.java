@@ -1,43 +1,30 @@
 package com.xenoage.zong.musiclayout.layouter;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.layout.frames.ScoreFrame;
 import com.xenoage.zong.musiclayout.layouter.horizontalsystemfilling.HorizontalSystemFillingStrategy;
 import com.xenoage.zong.musiclayout.layouter.verticalframefilling.VerticalFrameFillingStrategy;
-
 
 /**
  * An area in which a score should be layouted.
  * 
  * @author Andreas Wenger
  */
-public class ScoreLayoutArea
-{
+@Const @Data @AllArgsConstructor public class ScoreLayoutArea {
+
+	private final Size2f size;
+	private final HorizontalSystemFillingStrategy hFill;
+	private final VerticalFrameFillingStrategy vFill;
 	
-	public final Size2f size;
-	public final HorizontalSystemFillingStrategy hFill;
-	public final VerticalFrameFillingStrategy vFill;
 	
-	
-	private ScoreLayoutArea(Size2f size,
-		HorizontalSystemFillingStrategy hFill, VerticalFrameFillingStrategy vFill)
-	{
+	public ScoreLayoutArea(Size2f size) {
 		this.size = size;
-		this.hFill = hFill;
-		this.vFill = vFill;
+		this.hFill = ScoreFrame.defaultHFill;
+		this.vFill = ScoreFrame.defaultVFill;
 	}
-	
-	
-	public static ScoreLayoutArea area(Size2f size,
-		HorizontalSystemFillingStrategy hFill, VerticalFrameFillingStrategy vFill)
-	{
-		return new ScoreLayoutArea(size, hFill, vFill);
-	}
-	
-	
-	public static ScoreLayoutArea area(Size2f size)
-	{
-		return new ScoreLayoutArea(size, ScoreFrame.defaultHFill, ScoreFrame.defaultVFill);
-	}
-	
+
 }

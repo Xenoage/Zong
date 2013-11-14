@@ -163,195 +163,33 @@ import com.xenoage.zong.util.event.ScoreChangedEvent;
 	}
 
 	/**
-	 * Gets the parent {@link GroupFrame} of the given frame, or null, if there is none.
+	 * Updates the {@link ScoreLayout}s belonging to the given {@link Score}.
 	 */
-	public GroupFrame getParentGroupFrame(Frame frame) {
-		if (parentFrames == null)
-			updateCache();
-		return parentFrames.get(frame);
-	}
-
-	/**
-	 * Gets the parent {@link Page} of the given frame, or null, if it is not
-	 * part of this layout.
-	 */
-	public Page getPage(Frame frame) {
-		if (parentPages == null)
-			updateCache();
-		Page page = parentPages.get(frame);
-		if (page != null)
-			return page;
-		GroupFrame parent = getParentGroupFrame(frame);
-		if (parent != null)
-			return getPage(parent);
-		return null;
-	}
-
-	/**
-	 * Adds the given {@link Frame} to the page with the given index.
-	 */
-	public Layout plusFrame(Frame frame, int pageIndex) {
-		Page page = pages.get(pageIndex).plusFrame(frame);
-		return new Layout(defaults, pages.with(pageIndex, page), scoreFrameChains, scoreLayouts,
-			selectedFrames);
-	}
-
-	/**
-	 * Adds the given {@link Frame} as a child to the given parent {@link GroupFrame}.
-	 * If it was placed elsewhere, it is removed there.
-	 * @param recomputeScoreLayout  true, if the score layout should be recomputed
-	 *                              if necessary, otherwise false
-	 */
-	public Layout plusChildFrame(Frame child, GroupFrame parent, boolean recomputeScoreLayout) {
-		//first remove it
-		Layout ret = this.removeFrame(child, false);
-		//now add it
-		GroupFrame groupFrame = parent.plusChildFrame(child);
-		ret = ret.replaceFrame(parent, groupFrame, recomputeScoreLayout);
-		return ret;
-	}
-
-	/**
-	 * Removes the given {@link Frame}.
-	 */
-	public Layout removeFrame(Frame frame, boolean recomputeScoreLayout) {
-		return replaceFrame(frame, null, recomputeScoreLayout);
-	}
-
-	/**
-	 * Replaces the given old page with the given new one.
-	 */
-	private Layout replacePage(Page oldPage, Page newPage) {
-		PVector<Page> pages = this.pages.replace(oldPage, newPage);
-		return new Layout(defaults, pages, scoreFrameChains, scoreLayouts, selectedFrames);
-	}
-
-	/**
-	 * Replaces the given old frame with the given new one (or null to delete it).
-	 * @param oldFrame              the frame to replace
-	 * @param newFrame              the frame to insert
-	 * @param recomputeScoreLayout  true, if the score layout should be recomputed
-	 *                              if necessary, otherwise false
-	 */
-	public Layout replaceFrame(Frame oldFrame, Frame newFrame, boolean recomputeScoreLayout) {
-		Layout layout = this;
-		//easy case: frame on page
-		if (parentPages == null)
-			updateCache();
-		Page oldPage = parentPages.get(oldFrame);
-		if (oldPage != null) {
-			Page newPage = oldPage.replaceFrame(oldFrame, newFrame);
-			layout = layout.replacePage(oldPage, newPage);
-		}
-		//recursive case: frame within group frame
-		GroupFrame oldGroupFrame = parentFrames.get(oldFrame);
-		if (oldGroupFrame != null) {
-			GroupFrame newGroupFrame = oldGroupFrame.replaceChildFrame(oldFrame, newFrame);
-			layout = layout.replaceFrame(oldGroupFrame, newGroupFrame, recomputeScoreLayout);
-		}
-		if (layout == null)
-			throw new IllegalArgumentException("Unknown old frame");
-		//replace in score frame chains
-		PMap<Score, ScoreFrameChain> scoreFrameChains = this.scoreFrameChains;
-		PMap<ScoreFrameChain, ScoreLayout> scoreLayouts = this.scoreLayouts;
-		Score scoreToRecompute = null;
-		if (oldFrame instanceof ScoreFrame) {
-			ScoreFrame oldScoreFrame = (ScoreFrame) oldFrame;
-			ScoreFrame newScoreFrame = (ScoreFrame) newFrame;
-			for (Score score : scoreFrameChains.keySet()) {
-				ScoreFrameChain oldChain = scoreFrameChains.get(score);
-				ScoreFrameChain newChain = oldChain.replaceFrame(oldScoreFrame, newScoreFrame);
-				if (newChain == null) {
-					//score frame chain is empty now. remove it.
-					scoreFrameChains = scoreFrameChains.minus(score);
-					scoreLayouts = scoreLayouts.minus(oldChain);
-				}
-				else if (oldChain != newChain) {
-					scoreFrameChains = scoreFrameChains.plus(score, newChain);
-					//if the new frame has the same size as the old frame, the
-					//musical layout can be reused. otherwise, it has to be recomputed (if requested)
-					ScoreLayout oldScoreLayout = scoreLayouts.get(oldChain);
-					ScoreLayout newScoreLayout = oldScoreLayout;
-					if (recomputeScoreLayout && !oldFrame.data.size.equals(newFrame.data.size)) {
-						newScoreLayout = null;
-						scoreToRecompute = score;
-					}
-					scoreLayouts = scoreLayouts.minus(oldChain).plus(newChain, newScoreLayout);
-				}
-			}
-		}
-		//replace in selected frames
-		PVector<Frame> selectedFrames = this.selectedFrames.replaceOrMinus(oldFrame, newFrame);
-		Layout ret = new Layout(layout.defaults, layout.pages, scoreFrameChains, scoreLayouts,
-			selectedFrames);
-		//recompute score layout, if needed
-		if (scoreToRecompute != null) {
-			ret = ret.updateScoreLayouts(scoreToRecompute, scoreToRecompute);
-		}
-		return ret;
-	}
-
-	/**
-	 * Adds a {@link Score} to this layout, shown in the given {@link ScoreFrameChain}.
-	 */
-	public Layout plusScore(Score score, ScoreFrameChain chain) {
-		Layout layout = new Layout(defaults, pages, scoreFrameChains.plus(score, chain), scoreLayouts,
-			selectedFrames);
-		return layout.updateScoreLayouts(score, score);
-	}
-
-	void updateCache() {
-		//parent pages and group frames
-		parentPages = new HashMap<Frame, Page>();
-		parentFrames = new HashMap<Frame, GroupFrame>();
-		for (Page page : pages) {
-			for (Frame frame : page.frames) {
-				parentPages.put(frame, page);
-				if (frame instanceof GroupFrame) {
-					addGroupFrameToCache((GroupFrame) frame);
-				}
-			}
-		}
-	}
-
-	private void addGroupFrameToCache(GroupFrame groupFrame) {
-		for (Frame frame : groupFrame.children) {
-			parentFrames.put(frame, groupFrame);
-			if (frame instanceof GroupFrame) {
-				addGroupFrameToCache((GroupFrame) frame);
-			}
-		}
-	}
-
-	/**
-	 * Updates the {@link ScoreLayout}s belonging to the given old {@link Score}
-	 * using the given new {@link Score} and returns the updated {@link Layout}.
-	 */
-	public Layout updateScoreLayouts(Score oldScore, Score newScore) {
-		Layout layout = this;
-		ScoreFrameChain chain = scoreFrameChains.get(oldScore);
-		ScoreLayout oldScoreLayout = scoreLayouts.get(chain);
+	public Layout updateScoreLayouts(Score score) {
+		ScoreFrameChain chain = getScoreFrameChain(score);
+		if (chain == null)
+			return null;
+		ScoreLayout oldScoreLayout = chain.getScoreLayout();
 
 		//select symbol pool and layout settings
-		SymbolPool symbolPool = oldScoreLayout != null ? oldScoreLayout.symbolPool : defaults
-			.getSymbolPool();
-		LayoutSettings layoutSettings = oldScoreLayout != null ? oldScoreLayout.layoutSettings
-			: defaults.getLayoutSettings();
+		SymbolPool symbolPool = oldScoreLayout != null ?
+			oldScoreLayout.symbolPool : defaults.getSymbolPool();
+		LayoutSettings layoutSettings = oldScoreLayout != null ?
+			oldScoreLayout.layoutSettings : defaults.getLayoutSettings();
 
-		if (chain != null) {
-			PVector<ScoreLayoutArea> areas = pvec();
-			for (ScoreFrame scoreFrame : chain.frames) {
-				areas = areas.plus(area(scoreFrame.data.size, scoreFrame.hFill, scoreFrame.vFill));
-			}
-			ScoreLayout scoreLayout = new ScoreLayouter(newScore, symbolPool, layoutSettings, false,
-				areas, areas.getLast()).createLayout();
-
-			//create updated layout
-			PMap<ScoreFrameChain, ScoreLayout> scoreLayouts = this.scoreLayouts.plus(chain, scoreLayout);
-			PMap<Score, ScoreFrameChain> scoreFrameChains = this.scoreFrameChains.minus(oldScore).plus(
-				newScore, chain);
-			return new Layout(defaults, pages, scoreFrameChains, scoreLayouts, selectedFrames);
+		ArrayList<ScoreLayoutArea> areas = alist();
+		for (ScoreFrame scoreFrame : chain.getFrames()) {
+			areas.add(new ScoreLayoutArea(scoreFrame.getSize(), scoreFrame.getHFill(), scoreFrame.getVFill()));
 		}
+		ScoreLayout scoreLayout = new ScoreLayouter(score, symbolPool, layoutSettings, false,
+			areas, areas.getLast()).createLayout();
+
+		//create updated layout
+		PMap<ScoreFrameChain, ScoreLayout> scoreLayouts = this.scoreLayouts.plus(chain, scoreLayout);
+		PMap<Score, ScoreFrameChain> scoreFrameChains = this.scoreFrameChains.minus(oldScore).plus(
+			newScore, chain);
+		return new Layout(defaults, pages, scoreFrameChains, scoreLayouts, selectedFrames);
+			
 		return layout;
 	}
 
@@ -426,7 +264,7 @@ import com.xenoage.zong.util.event.ScoreChangedEvent;
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Gets the {@link ScoreFrameChain} for the given {@link Score}, or null
 	 * if it can not be found.
@@ -448,7 +286,7 @@ import com.xenoage.zong.util.event.ScoreChangedEvent;
 
 			@Override public Iterator<ScoreFrame> iterator() {
 				return new Iterator<ScoreFrame>() {
-					
+
 					@Override public boolean hasNext() {
 						return false;
 					}
@@ -464,6 +302,5 @@ import com.xenoage.zong.util.event.ScoreChangedEvent;
 			}
 		};
 	}
-	
-	
+
 }
