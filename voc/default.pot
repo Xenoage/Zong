@@ -1,0 +1,496 @@
+# Zong! Vocabulary p0.5.62 ALPHA
+# Copyright © 2006-2012 by Andreas Wenger, Uli Teschemacher, Xenoage Software
+msgid ""
+msgstr ""
+"Project-Id-Version: Zong! Vocabulary p0.5.62 ALPHA\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Andreas Wenger <andi@xenoage.com>\n"
+"Language-Team: Xenoage Software <info@xenoage.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgctxt "About"
+msgid "About"
+msgstr ""
+
+msgctxt "AllPictures"
+msgid "All pictures"
+msgstr ""
+
+msgctxt "AttachFile"
+msgid "Attach the score document ({1})"
+msgstr ""
+
+msgctxt "Audio"
+msgid "Audio"
+msgstr ""
+
+msgctxt "AudioSettings"
+msgid "Audio settings"
+msgstr ""
+
+msgctxt "AttachLog"
+msgid "Attach log file"
+msgstr ""
+
+msgctxt "Beta"
+msgid "Beta"
+msgstr ""
+
+msgctxt "Bits"
+msgid "Bits"
+msgstr ""
+
+msgctxt "Blog"
+msgid "Blog"
+msgstr ""
+
+msgctxt "Bottom"
+msgid "Bottom"
+msgstr ""
+
+msgctxt "Cancel"
+msgid "Cancel"
+msgstr ""
+
+msgctxt "CancelAtFirstError"
+msgid "Cancel at first error"
+msgstr ""
+
+msgctxt "Channels"
+msgid "Channels"
+msgstr ""
+
+msgctxt "CleanUpMemory"
+msgid "Clean up memory"
+msgstr ""
+
+msgctxt "Close"
+msgid "Close"
+msgstr ""
+
+msgctxt "CloseDocument"
+msgid "Close document"
+msgstr ""
+
+msgctxt "CommandFailed"
+msgid "Could not perform the action."
+msgstr ""
+
+msgctxt "CouldNotCreateBitmaps"
+msgid "Could not create the bitmaps."
+msgstr ""
+
+msgctxt "CouldNotFindLAME"
+msgid "Zong! supports saving scores in MP3 format, but requires the installation of the LAME encoder, which is not included in Zong! for legal reasons.\nPlease take 5 minutes to read &lt;a href=&quot;{1}&quot;&gt;how to install LAME&lt;/a&gt;."
+msgstr ""
+
+msgctxt "CouldNotLoadImages"
+msgid "Could not load the images."
+msgstr ""
+
+msgctxt "CouldNotLoadSymbolPool"
+msgid "Could not load the music symbols."
+msgstr ""
+
+msgctxt "CouldNotSaveDocument"
+msgid "An error occurred while saving the document."
+msgstr ""
+
+msgctxt "Convert"
+msgid "Convert"
+msgstr ""
+
+msgctxt "Copyright"
+msgid "Copyright"
+msgstr ""
+
+msgctxt "Creators"
+msgid "Creators"
+msgstr ""
+
+msgctxt "Cubic"
+msgid "Cubic"
+msgstr ""
+
+msgctxt "CurrentMemoryUsage"
+msgid "Current memory usage"
+msgstr ""
+
+msgctxt "Default"
+msgid "Default"
+msgstr ""
+
+msgctxt "Description"
+msgid "Description"
+msgstr ""
+
+msgctxt "Details"
+msgid "Details"
+msgstr ""
+
+msgctxt "DeviceName"
+msgid "Device name"
+msgstr ""
+
+msgctxt "DirectoryConversionResult"
+msgid "Conversion complete.\nConverted files: {1}\nErrors: {2}"
+msgstr ""
+
+msgctxt "DirToMidi"
+msgid "Directory to Midi"
+msgstr ""
+
+msgctxt "Distance"
+msgid "Distance"
+msgstr ""
+
+msgctxt "Document"
+msgid "Document"
+msgstr ""
+
+msgctxt "DownloadError"
+msgid "An error occurred while downloading the file."
+msgstr ""
+
+msgctxt "EditFrameSettings"
+msgid "Change frame settings"
+msgstr ""
+
+msgctxt "Error"
+msgid "Error"
+msgstr ""
+
+msgctxt "ErrorMessage"
+msgid "Please click on &quot;{voc:Buttons_ReportError}&quot; to inform the developer team about the error. This allows the developers to remove the error in future versions."
+msgstr ""
+
+msgctxt "ErrorReportOrFeatureRequest"
+msgid "Error report or feature request"
+msgstr ""
+
+msgctxt "ErrorSavingFile"
+msgid "Error while saving the file."
+msgstr ""
+
+msgctxt "ErrorWhilePrinting"
+msgid "Error while printing."
+msgstr ""
+
+msgctxt "Exit"
+msgid "Exit"
+msgstr ""
+
+msgctxt "FatalError"
+msgid "Fatal Error"
+msgstr ""
+
+msgctxt "FatalErrorMessage"
+msgid "The program must be closed down. Please click on &quot;{voc:Buttons_ReportError}&quot; to inform the developer team about the error. This allows the developers to remove the error in future versions. Sorry for the inconvenience!"
+msgstr ""
+
+msgctxt "FeedbackDescription"
+msgid "Did you find an error or do you miss a specific feature? Please tell us."
+msgstr ""
+
+msgctxt "FeedbackTitle"
+msgid "Feedback"
+msgstr ""
+
+msgctxt "FileToMidi"
+msgid "File to Midi"
+msgstr ""
+
+msgctxt "ForMoreInfoSeeWebsite"
+msgid "For more information, questions or suggestions visit our homepage."
+msgstr ""
+
+msgctxt "FrameSettings"
+msgid "Frame settings"
+msgstr ""
+
+msgctxt "Height"
+msgid "Height"
+msgstr ""
+
+msgctxt "Help"
+msgid "Help"
+msgstr ""
+
+msgctxt "IncludeSubdirectories"
+msgid "Include subdirectories"
+msgstr ""
+
+msgctxt "Info"
+msgid "Info"
+msgstr ""
+
+msgctxt "InterpolationMode"
+msgid "Interpolation mode"
+msgstr ""
+
+msgctxt "Language"
+msgid "Language"
+msgstr ""
+
+msgctxt "LatencyMs"
+msgid "Latency (msec)"
+msgstr ""
+
+msgctxt "Left"
+msgid "Left"
+msgstr ""
+
+msgctxt "License"
+msgid "License"
+msgstr ""
+
+msgctxt "Linear"
+msgid "Linear"
+msgstr ""
+
+msgctxt "MailForFurtherQuestions"
+msgid "Your e-mail for further questions"
+msgstr ""
+
+msgctxt "MaxMemory"
+msgid "Maximum memory"
+msgstr ""
+
+msgctxt "MaxPolyphony"
+msgid "Max polyphony"
+msgstr ""
+
+msgctxt "MemoryUsage"
+msgid "Memory usage"
+msgstr ""
+
+msgctxt "MidiNotAvailable"
+msgid "The MIDI device is not available. Playback will not work."
+msgstr ""
+
+msgctxt "MinStaffHeightMessage"
+msgid "The staves must be at least {1} mm high."
+msgstr ""
+
+msgctxt "MovementNumber"
+msgid "Movement number"
+msgstr ""
+
+msgctxt "MovementTitle"
+msgid "Movement title"
+msgstr ""
+
+msgctxt "NoDocumentsAvailable"
+msgid "There are no documents available."
+msgstr ""
+
+msgctxt "NoFileLoaded"
+msgid "No file loaded."
+msgstr ""
+
+msgctxt "NoValidMusicXMLFile"
+msgid "This is no valid MusicXML file."
+msgstr ""
+
+msgctxt "OK"
+msgid "OK"
+msgstr ""
+
+msgctxt "Open"
+msgid "Open"
+msgstr ""
+
+msgctxt "OpenDocument"
+msgid "Open document"
+msgstr ""
+
+msgctxt "OpenFileInvalidFormat"
+msgid "Could not open the document, since its format is not supported by {app.name}."
+msgstr ""
+
+msgctxt "OpenFileIOError"
+msgid "Could not open the document, since the file could not be read."
+msgstr ""
+
+msgctxt "OpenFileNotFound"
+msgid "Could not open the document, since the file does not exist."
+msgstr ""
+
+msgctxt "PageFormat"
+msgid "Page format"
+msgstr ""
+
+msgctxt "PageMargins"
+msgid "Page margins"
+msgstr ""
+
+msgctxt "PageSettings"
+msgid "Page settings"
+msgstr ""
+
+msgctxt "Parts"
+msgid "Parts"
+msgstr ""
+
+msgctxt "PlayerDescription"
+msgid "This program plays MusicXML files and converts them into different audio formats."
+msgstr ""
+
+msgctxt "Point"
+msgid "Point"
+msgstr ""
+
+msgctxt "Position"
+msgid "Position"
+msgstr ""
+
+msgctxt "Print"
+msgid "Print"
+msgstr ""
+
+msgctxt "ProblemDescription"
+msgid "Description of the problem/idea"
+msgstr ""
+
+msgctxt "ProgramInfo"
+msgid "Program Info"
+msgstr ""
+
+msgctxt "Readme"
+msgid "Readme"
+msgstr ""
+
+msgctxt "ReportError"
+msgid "Report error via internet"
+msgstr ""
+
+msgctxt "Right"
+msgid "Right"
+msgstr ""
+
+msgctxt "Rights"
+msgid "Rights"
+msgstr ""
+
+msgctxt "Rotation"
+msgid "Rotation"
+msgstr ""
+
+msgctxt "SampleRateHz"
+msgid "Sample rate (Hz)"
+msgstr ""
+
+msgctxt "SaveAs"
+msgid "Save as"
+msgstr ""
+
+msgctxt "SaveFileUnknownOrigin"
+msgid "Could not download the document, since its origin is unknown."
+msgstr ""
+
+msgctxt "ScoreInfo"
+msgid "Score Info"
+msgstr ""
+
+msgctxt "SecurityError"
+msgid "The current security settings don't allow performing this action."
+msgstr ""
+
+msgctxt "Select"
+msgid "Select"
+msgstr ""
+
+msgctxt "SelectColor"
+msgid "Select color"
+msgstr ""
+
+msgctxt "SelectDocument"
+msgid "Please select a document"
+msgstr ""
+
+msgctxt "Send"
+msgid "Submit"
+msgstr ""
+
+msgctxt "SendFailed"
+msgid "The feedback form could not be submitted.\nEither the server is offline or you have no internet connection."
+msgstr ""
+
+msgctxt "SendOK"
+msgid "The feedback form was sent.\nThank you for your support."
+msgstr ""
+
+msgctxt "Settings"
+msgid "Settings"
+msgstr ""
+
+msgctxt "ShowInfo"
+msgid "Show information"
+msgstr ""
+
+msgctxt "Sinc"
+msgid "Sinc"
+msgstr ""
+
+msgctxt "Size"
+msgid "Size"
+msgstr ""
+
+msgctxt "Soundbank"
+msgid "Soundbank"
+msgstr ""
+
+msgctxt "Staves"
+msgid "Staves"
+msgstr ""
+
+msgctxt "Top"
+msgid "Top"
+msgstr ""
+
+msgctxt "UnknownError"
+msgid "Unknown error."
+msgstr ""
+
+msgctxt "UnnamedScore"
+msgid "Unnamed score"
+msgstr ""
+
+msgctxt "UseBugtracker"
+msgid "Experienced users should use our bugtracker instead."
+msgstr ""
+
+msgctxt "Used"
+msgid "Used"
+msgstr ""
+
+msgctxt "UseDefault"
+msgid "Use default"
+msgstr ""
+
+msgctxt "Version"
+msgid "Version"
+msgstr ""
+
+msgctxt "Warning"
+msgid "Warning"
+msgstr ""
+
+msgctxt "Website"
+msgid "Website"
+msgstr ""
+
+msgctxt "Width"
+msgid "Width"
+msgstr ""
+
+msgctxt "WorkNumber"
+msgid "Work number"
+msgstr ""
+
+msgctxt "WorkTitle"
+msgid "Work title"
+msgstr ""
