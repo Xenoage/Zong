@@ -42,7 +42,7 @@ import com.xenoage.zong.layout.frames.FP;
 	 */
 	public int getIndex() {
 		if (parentLayout != null)
-			return parentLayout.getPages().indexof(this);
+			return parentLayout.getPages().indexOf(this);
 		else
 			return -1;
 	}

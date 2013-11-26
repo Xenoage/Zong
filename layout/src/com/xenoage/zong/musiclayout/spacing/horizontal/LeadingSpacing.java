@@ -1,8 +1,11 @@
 package com.xenoage.zong.musiclayout.spacing.horizontal;
 
-import com.xenoage.utils.pdlib.Vector;
+import java.util.Vector;
 
+import lombok.Getter;
 
+import com.xenoage.utils.annotations.Const;
+import com.xenoage.utils.collections.IList;
 
 /**
  * This class contains the leading spacing
@@ -13,40 +16,20 @@ import com.xenoage.utils.pdlib.Vector;
  *
  * @author Andreas Wenger
  */
-public final class LeadingSpacing
-{
-  
-  private final Vector<SpacingElement> leadingSpacing;
-  private final float width;
-  
-  
-  /**
-   * Creates a leading spacing for an empty measure.
-   */
-  public LeadingSpacing(Vector<SpacingElement> leadingSpacing, float width)
-  {
-    this.leadingSpacing = leadingSpacing;
-    this.width = width;
-  }
-  
-  
-  /**
-   * Gets the spacing elements of this measure leading.
-   */
-  public Vector<SpacingElement> getSpacingElements()
-  {
-    return leadingSpacing;
-  }
-  
-  
-  /**
-   * Gets the width of this leading spacing
-   * in interline spaces.
-   */
-  public float getWidth()
-  {
-    return width;
-  }
-  
+@Const @Getter public final class LeadingSpacing {
+
+	/** The spacing elements of this measure leading. */
+	private final IList<SpacingElement> leadingSpacing;
+	/** The width of this leading spacing in interline spaces. */
+	private final float width;
+
+
+	/**
+	 * Creates a leading spacing for an empty measure.
+	 */
+	public LeadingSpacing(IList<SpacingElement> leadingSpacing, float width) {
+		this.leadingSpacing = leadingSpacing;
+		this.width = width;
+	}
 
 }

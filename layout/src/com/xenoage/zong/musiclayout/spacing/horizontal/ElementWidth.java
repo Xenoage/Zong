@@ -1,7 +1,10 @@
 package com.xenoage.zong.musiclayout.spacing.horizontal;
 
-import com.xenoage.zong.core.music.MusicElement;
+import lombok.Getter;
 
+import com.xenoage.utils.annotations.Const;
+import com.xenoage.utils.collections.IList;
+import com.xenoage.zong.core.music.MusicElement;
 
 /**
  * This class stores the width of a {@link MusicElement},
@@ -36,92 +39,58 @@ import com.xenoage.zong.core.music.MusicElement;
  *
  * @author Andreas Wenger
  */
-public final class ElementWidth
-{
-  
-  private final float frontGap;
-  private final float symbolWidth;
-  private final float rearGap;
-  private final float lyricWidth;
-  
+@Const @Getter public final class ElementWidth {
 
-  /**
-   * Creates a new {@link ElementWidth}.
-   */
-  public ElementWidth(float frontGap, float symbolWidth, float rearGap, float lyricWidth)
-  {
-    this.frontGap = frontGap;
-    this.symbolWidth = symbolWidth;
-    this.rearGap = rearGap;
-    this.lyricWidth = lyricWidth;
-  }
-  
-  
-  /**
-   * Creates a new {@link ElementWidth}, which only has a
-   * symbol width but no front and rear gap and no lyric.
-   */
-  public ElementWidth(float symbolWidth)
-  {
-  	this(0, symbolWidth, 0, 0);
-  }
-  
-  
-  /**
-   * Creates a new {@link ElementWidth}, which has no lyric.
-   */
-  public ElementWidth(float frontGap, float symbolWidth, float rearGap)
-  {
-  	this(frontGap, symbolWidth, rearGap, 0);
-  }
-   
-  
-	public float getFrontGap()
-	{
-		return frontGap;
-	}
+	/** The front gap in IS, or 0 if there is none. */
+	private final float frontGap;
+	/** The width of the symbol in IS. */
+	private final float symbolWidth;
+	/** The rear gap in IS, or 0 if there is none. */
+	private final float rearGap;
+	/** The width of the lyric in IS, or 0 if there is none. */
+	private final float lyricWidth;
 
-	
-	public float getSymbolWidth()
-	{
-		return symbolWidth;
-	}
 
-	
-	public float getRearGap()
-	{
-		return rearGap;
-	}
-
-	
 	/**
-	 * Gets the width of the lyric, or 0 if there is none.
+	 * Creates a new {@link ElementWidth}.
 	 */
-	public float getLyricWidth()
-	{
-		return lyricWidth;
+	public ElementWidth(float frontGap, float symbolWidth, float rearGap, float lyricWidth) {
+		this.frontGap = frontGap;
+		this.symbolWidth = symbolWidth;
+		this.rearGap = rearGap;
+		this.lyricWidth = lyricWidth;
 	}
 
+	/**
+	 * Creates a new {@link ElementWidth}, which only has a
+	 * symbol width but no front and rear gap and no lyric.
+	 */
+	public ElementWidth(float symbolWidth) {
+		this(0, symbolWidth, 0, 0);
+	}
+
+	/**
+	 * Creates a new {@link ElementWidth}, which has no lyric.
+	 */
+	public ElementWidth(float frontGap, float symbolWidth, float rearGap) {
+		this(frontGap, symbolWidth, rearGap, 0);
+	}
 
 	/**
 	 * Gets the overall width. This is the front gap plus the symbol's width
 	 * plus the rear gap.
 	 * Notice, that the lyric's width may be greater than this value.
 	 */
-	public float getWidth()
-  {
-    return frontGap + symbolWidth + rearGap;
-  }
-	
-	
+	public float getWidth() {
+		return frontGap + symbolWidth + rearGap;
+	}
+
 	/**
 	 * Gets the used width. This is the front gap plus the symbol's width.
 	 * Notice, that the lyric's width may be greater than this value.
 	 */
-	public float getUsedWidth()
-  {
-    return frontGap + symbolWidth;
-  }
-	
+	public float getUsedWidth() {
+		return frontGap + symbolWidth;
+	}
 
 }
