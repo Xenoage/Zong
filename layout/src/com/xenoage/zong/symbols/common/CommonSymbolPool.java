@@ -1,5 +1,11 @@
 package com.xenoage.zong.symbols.common;
 
+import static com.xenoage.utils.collections.CollectionUtils.alist;
+
+import java.util.List;
+
+import lombok.Getter;
+
 import com.xenoage.zong.symbols.Symbol;
 import com.xenoage.zong.symbols.SymbolPool;
 import com.xenoage.zong.symbols.WarningSymbol;
@@ -11,29 +17,31 @@ import com.xenoage.zong.symbols.WarningSymbol;
  * 
  * @author Andreas Wenger
  */
-public class CommonSymbolPool {
+public class CommonSymbolPool<Shape> {
 
-	private Symbol[] symbols = new Symbol[0];
+	private List<Symbol<Shape>> symbols;
+	
+	/** The warning symbol. */
+	@Getter private WarningSymbol<Shape> warningSymbol;
 
 
-	public CommonSymbolPool(SymbolPool pool) {
-		symbols = new Symbol[CommonSymbol.values().length];
-		int i = 0;
+	public CommonSymbolPool(SymbolPool<Shape> pool) {
+		symbols = alist();
 		for (CommonSymbol commonSymbol : CommonSymbol.values()) {
-			symbols[i] = pool.getSymbol(commonSymbol.getID());
-			i++;
+			symbols.add(pool.getSymbol(commonSymbol.getID()));
 		}
+		warningSymbol = new WarningSymbol<Shape>();
 	}
 
 	/**
 	 * Gets the symbol belonging to the given CommonSymbol.
 	 */
-	public Symbol getSymbol(CommonSymbol commonSymbol) {
-		if (commonSymbol.ordinal() < symbols.length) {
-			return symbols[commonSymbol.ordinal()];
+	public Symbol<Shape> getSymbol(CommonSymbol commonSymbol) {
+		if (commonSymbol.ordinal() < symbols.size()) {
+			return symbols.get(commonSymbol.ordinal());
 		}
 		else {
-			return WarningSymbol.instance;
+			return warningSymbol;
 		}
 	}
 

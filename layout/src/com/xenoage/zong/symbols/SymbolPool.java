@@ -1,12 +1,9 @@
 package com.xenoage.zong.symbols;
 
-import static com.xenoage.utils.collections.CollectionUtils.map;
-
-import java.util.HashMap;
+import java.util.Map;
 
 import lombok.Getter;
 
-import com.xenoage.zong.io.symbols.SVGPathReader;
 import com.xenoage.zong.symbols.common.CommonSymbol;
 import com.xenoage.zong.symbols.common.CommonSymbolPool;
 
@@ -16,95 +13,46 @@ import com.xenoage.zong.symbols.common.CommonSymbolPool;
  *
  * @author Andreas Wenger
  */
-public final class SymbolPool {
+public final class SymbolPool<Shape> {
 
 	/** The id of this symbol pool. */
 	@Getter private final String id;
 
-	/** The symbols in this pool. */
-	private HashMap<String, Symbol> symbols = map();
-	
+	//the symbols in this pool
+	private Map<String, Symbol<Shape>> symbols;
+
 	//special pool for very fast access
-	private CommonSymbolPool commonSymbolPool = new CommonSymbolPool(this);
+	private CommonSymbolPool<Shape> commonSymbolPool;
 
 
 	/**
-	 * Loads and returns the default symbol pool or reports an
-	 * error if not possible.
-	 * Before a {@link SymbolPool} can be used, the {@link SymbolPoolUtils} class
-	 * must have been initialized.
+	 * Creates a {@link SymbolPool} with the given ID and symbols.
 	 */
-	public SymbolPool() {
-		this("default");
-	}
-
-	/**
-	 * Loads and returns the symbol pool with the given ID or reports an
-	 * error if not possible.
-	 * GOON: move into converter.
-	 */
-	public SymbolPool(String id) {
-		if (SymbolPoolUtils.isInitialized() == false)
-			throw new IllegalStateException(SVGPathReader.class.getSimpleName() + " is not initialized");
-
+	public SymbolPool(String id, Map<String, Symbol<Shape>> symbols) {
 		this.id = id;
-		/* GOON
-		HashMap<String, Symbol> symbols = map();
-
-		//load symbols from data/symbols/<id>/
-		String dir = "data/symbols/" + id;
-		if (!IO.existsDataDirectory(dir)) {
-			handle(fatal(Voc.CouldNotLoadSymbolPool, new FileNotFoundException(dir)));
-		}
-		try {
-			Set<String> files = IO.listDataFiles(dir, FileUtils.getSVGFilter());
-			SVGSymbolReader loader = new SVGSymbolReader();
-			LinkedList<String> symbolsWithErrors = new LinkedList<String>();
-			for (String file : files) {
-				try {
-					String symbolPath = "data/symbols/" + id + "/" + file;
-					Symbol symbol = loader.loadSymbol(symbolPath);
-					symbols.put(symbol.id, symbol);
-				} catch (IllegalStateException ex) {
-					symbolsWithErrors.add(file);
-				}
-			}
-			if (symbolsWithErrors.size() > 0) {
-				handle(createReport(Warning, true, Voc.CouldNotLoadSymbolPool, null, null,
-					symbolsWithErrors));
-			}
-		} catch (Exception ex) {
-			handle(fatal(Voc.CouldNotLoadSymbolPool, ex));
-		}
-
-		this.setSymbols(symbols);
-		*/
-	}
-
-	/**
-	 * Sets the symbols.
-	 */
-	public void setSymbols(HashMap<String, Symbol> symbols) {
 		this.symbols = symbols;
-		this.commonSymbolPool = new CommonSymbolPool(this);
+		this.commonSymbolPool = new CommonSymbolPool<Shape>(this);
 	}
 
 	/**
-	 * Gets the symbol with the given ID, or null if not found.
-	 * TODO: if the symbol is not found, return a warning symbol!
+	 * Gets the symbol with the given ID.
+	 * If the symbol is not found, a warning symbol is returned.
 	 */
-	public Symbol getSymbol(String id) {
-		return symbols.get(id);
+	public Symbol<Shape> getSymbol(String id) {
+		Symbol<Shape> ret = symbols.get(id);
+		if (ret == null)
+			ret = commonSymbolPool.getWarningSymbol();
+		return ret;
 	}
 
 	/**
 	 * Gets the given common symbol in constant time.
 	 * If the symbol is not found, a warning symbol is returned.
 	 */
-	public Symbol getSymbol(CommonSymbol commonSymbol) {
-		Symbol ret = commonSymbolPool.getSymbol(commonSymbol);
+	public Symbol<Shape> getSymbol(CommonSymbol commonSymbol) {
+		Symbol<Shape> ret = commonSymbolPool.getSymbol(commonSymbol);
 		if (ret == null)
-			ret = WarningSymbol.instance;
+			ret = commonSymbolPool.getWarningSymbol();
 		return ret;
 	}
 
@@ -121,7 +69,7 @@ public final class SymbolPool {
 		int len = s.length();
 		for (int i = 0; i < len; i++) {
 			char d = s.charAt(i);
-			Symbol symbol = getSymbol("digit-" + d);
+			Symbol<Shape> symbol = getSymbol("digit-" + d);
 			if (symbol != null) {
 				ret += symbol.boundingRect.size.width;
 				if (i < len - 1)

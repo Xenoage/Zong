@@ -12,11 +12,10 @@ import org.w3c.dom.Element;
 import com.xenoage.utils.io.IO;
 import com.xenoage.utils.xml.XMLReader;
 
-
 /**
  * Settings for the musical layout.
  * 
- * One instance of this class is used throughout the
+ * GOON: move to converter project: One instance of this class is used throughout the
  * whole application, and is loaded on demand from
  * "data/layout/default.xml".
  * 
@@ -27,42 +26,37 @@ import com.xenoage.utils.xml.XMLReader;
  * 
  * @author Andreas Wenger
  */
-public final class LayoutSettings
-{
-	
+public final class LayoutSettings {
+
 	//chord settings
 	public final ChordWidths chordWidths;
 	public final ChordWidths graceChordWidths;
-	
+
 	//spacings
 	public final Spacings spacings;
-	
+
 	//scalings
 	public final float scalingClefInner; //clef in the middle of a staff
 	public final float scalingGrace;
-	
+
 	//offsets
 	public final float offsetMeasureStart; //offset of the first element in a measure
 	public final float offsetBeatsMinimal; //minimal offset between to different beats
-	
+
 	private static final String file = "data/layout/default.xml";
-	
-	
-	public static LayoutSettings loadDefault()
-	{
+
+
+	public static LayoutSettings loadDefault() {
 		return load(file);
 	}
-	
-	
-	public static LayoutSettings load(String file)
-	{
+
+	public static LayoutSettings load(String file) {
 		ChordWidths chordWidths, graceChordWidths;
 		Spacings spacings;
 		float scalingClefInner, scalingGrace;
 		float offsetMeasureStart;
 		float offsetBeatsMinimal;
-		try
-		{
+		try {
 			Document doc = XMLReader.readFile(IO.openInputStream(file));
 			//load the chord layout settings
 			Element eChordWidths = elementNotNull(root(doc), "chordwidths");
@@ -82,9 +76,7 @@ public final class LayoutSettings
 			offsetMeasureStart = Float.parseFloat(attributeNotNull(e, "start"));
 			e = elementNotNull(eOffset, "beats");
 			offsetBeatsMinimal = Float.parseFloat(attributeNotNull(e, "minimal"));
-		}
-		catch (Exception ex)
-		{
+		} catch (Exception ex) {
 			log(error("Could not read the file \"" + file + "\":", ex));
 			throw new RuntimeException(ex);
 			/*
@@ -104,14 +96,12 @@ public final class LayoutSettings
 		}
 		//compute grace chord widths
 		graceChordWidths = chordWidths.scale(scalingGrace);
-		return new LayoutSettings(chordWidths, graceChordWidths, spacings,
-			scalingClefInner, scalingGrace, offsetMeasureStart, offsetBeatsMinimal);
+		return new LayoutSettings(chordWidths, graceChordWidths, spacings, scalingClefInner,
+			scalingGrace, offsetMeasureStart, offsetBeatsMinimal);
 	}
-	
 
 	public LayoutSettings(ChordWidths chordWidths, ChordWidths graceChordWidths, Spacings spacings,
-		float scalingClefInner, float scalingGrace, float offsetMeasureStart, float offsetBeatsMinimal)
-	{
+		float scalingClefInner, float scalingGrace, float offsetMeasureStart, float offsetBeatsMinimal) {
 		this.chordWidths = chordWidths;
 		this.graceChordWidths = graceChordWidths;
 		this.spacings = spacings;
@@ -120,6 +110,5 @@ public final class LayoutSettings
 		this.offsetMeasureStart = offsetMeasureStart;
 		this.offsetBeatsMinimal = offsetBeatsMinimal;
 	}
-	
 
 }

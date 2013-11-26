@@ -1,6 +1,5 @@
 package com.xenoage.zong.symbols;
 
-
 /**
  * List of types of symbols.
  * 
@@ -9,8 +8,7 @@ package com.xenoage.zong.symbols;
  * 
  * @author Andreas Wenger
  */
-public enum SymbolType
-{
+public enum SymbolType {
 	/** A symbol, where the geometrical path is known. */
 	PathSymbol,
 	/** The warning symbol used for showing problems or missing symbols. */
