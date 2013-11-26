@@ -175,7 +175,7 @@ public class FormattedTextUtilsTest
 		//create a formatted text with one paragraph and three adjacent strings
 		//with the same style: "Hallo "{style1}, "An"{style2}, "dr"{style2}"ea"{style2}
 		FormattedTextStyle style1 = new FormattedTextStyle(12);
-		FormattedTextStyle style2 = new FormattedTextStyle(14, ColorInfo.blue);
+		FormattedTextStyle style2 = new FormattedTextStyle(14, Color.blue);
 		return fText(fPara(
 			new PVector<FormattedTextElement>(
 				new FormattedTextString("Hallo ", style1),
@@ -193,7 +193,7 @@ public class FormattedTextUtilsTest
 		//"Second Line and"
 		//"a }{Third}{ Line}"
 		FormattedTextStyle style1 = new FormattedTextStyle(12);
-		FormattedTextStyle style2 = new FormattedTextStyle(14, ColorInfo.blue);
+		FormattedTextStyle style2 = new FormattedTextStyle(14, Color.blue);
 		return fText(pvec(
 			fPara(new PVector<FormattedTextElement>(
 				new FormattedTextString("First ", style1),

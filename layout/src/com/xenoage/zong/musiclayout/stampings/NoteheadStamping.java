@@ -30,7 +30,7 @@ public final class NoteheadStamping
   public static final int SIDE_RIGHT = 2;
   
   
-  public NoteheadStamping(Chord chord, int notehead, ColorInfo color,
+  public NoteheadStamping(Chord chord, int notehead, Color color,
     StaffStamping parentStaff, SP position, float scaling,
     SymbolPool symbolPool)
   {

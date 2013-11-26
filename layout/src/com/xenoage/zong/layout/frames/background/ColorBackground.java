@@ -2,7 +2,7 @@ package com.xenoage.zong.layout.frames.background;
 
 import lombok.Data;
 
-import com.xenoage.utils.color.ColorInfo;
+import com.xenoage.utils.color.Color;
 
 /**
  * A single color background for a frame.
@@ -12,13 +12,13 @@ import com.xenoage.utils.color.ColorInfo;
 @Data public final class ColorBackground
 	implements Background {
 
-	private ColorInfo color;
+	private Color color;
 
 
 	/**
 	 * Creates a background with the given color.
 	 */
-	public ColorBackground(ColorInfo color) {
+	public ColorBackground(Color color) {
 		this.color = color;
 	}
 

@@ -146,24 +146,24 @@ public class PageTest
     Page page = new Page(pf);
     
     //Frame 1
-    frm1 = new ScoreFrame(new FrameData(p(120,120), s(60,80), 0, new ColorBackground(ColorInfo.blue)));
+    frm1 = new ScoreFrame(new FrameData(p(120,120), s(60,80), 0, new ColorBackground(Color.blue)));
     page = page.plusFrame(frm1);
 
     //Frame 2
-    frm2 = new GroupFrame(new FrameData(p(90,110), s(60,40), 0, new ColorBackground(ColorInfo.green)));
+    frm2 = new GroupFrame(new FrameData(p(90,110), s(60,40), 0, new ColorBackground(Color.green)));
     
     //Childframe 2.a
-    frm2a = new ScoreFrame(new FrameData(p(30,0), s(10,10), 0, new ColorBackground(ColorInfo.yellow)));
+    frm2a = new ScoreFrame(new FrameData(p(30,0), s(10,10), 0, new ColorBackground(Color.yellow)));
     frm2 = frm2.plusChildFrame(frm2a);
     
     //Childframe 2.b
-    frm2b = new ScoreFrame(new FrameData(p(-10,-20), s(10,10), 0, new ColorBackground(ColorInfo.lightGray)));
+    frm2b = new ScoreFrame(new FrameData(p(-10,-20), s(10,10), 0, new ColorBackground(Color.lightGray)));
     frm2 = frm2.plusChildFrame(frm2b);
     
     page = page.plusFrame(frm2);
     
     //Frame 3
-    frm3 = new ScoreFrame(new FrameData(p(30,80), s(30,60), 0, new ColorBackground(ColorInfo.red)));
+    frm3 = new ScoreFrame(new FrameData(p(30,80), s(30,60), 0, new ColorBackground(Color.red)));
     page = page.plusFrame(frm3);
     
     ret = ret.plusPage(page);
@@ -183,24 +183,24 @@ public class PageTest
     Page page = new Page(pf);
     
     //Frame 1
-    frm1 = new ScoreFrame(new FrameData(p(120,120), s(60,80), -30, new ColorBackground(ColorInfo.blue)));
+    frm1 = new ScoreFrame(new FrameData(p(120,120), s(60,80), -30, new ColorBackground(Color.blue)));
     page = page.plusFrame(frm1);
 
     //Frame 2
-    frm2 = new GroupFrame(new FrameData(p(90,110), s(60,40), 70, new ColorBackground(ColorInfo.green)));
+    frm2 = new GroupFrame(new FrameData(p(90,110), s(60,40), 70, new ColorBackground(Color.green)));
     
     //Childframe 2.a
-    frm2a = new ScoreFrame(new FrameData(p(20,10), s(10,10), 0, new ColorBackground(ColorInfo.yellow)));
+    frm2a = new ScoreFrame(new FrameData(p(20,10), s(10,10), 0, new ColorBackground(Color.yellow)));
     frm2 = frm2.plusChildFrame(frm2a);
     
     //Childframe 2.b
-    frm2b = new ScoreFrame(new FrameData(p(-10,-5), s(20,20), 70, new ColorBackground(ColorInfo.lightGray)));
+    frm2b = new ScoreFrame(new FrameData(p(-10,-5), s(20,20), 70, new ColorBackground(Color.lightGray)));
     frm2 = frm2.plusChildFrame(frm2b);
     
     page = page.plusFrame(frm2);
     
     //Frame 3
-    frm3 = new ScoreFrame(new FrameData(p(95,155), s(80,40), 30, new ColorBackground(ColorInfo.red)));
+    frm3 = new ScoreFrame(new FrameData(p(95,155), s(80,40), 30, new ColorBackground(Color.red)));
     page = page.plusFrame(frm3);
     
     ret = ret.plusPage(page);

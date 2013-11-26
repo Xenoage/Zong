@@ -18,9 +18,11 @@ import com.xenoage.zong.core.music.chord.Chord;
  * A slur or tie connecting two notes,
  * represented by two {@link SlurWaypoint}s.
  * 
- * The name "curved line" was inspired by Wikipedia,
+ * Formerly, this class was called "curved line", inspired by Wikipedia,
  * which states that "a slur is denoted with a curved line",
- * see http://en.wikipedia.org/wiki/Slur_(music)
+ * see http://en.wikipedia.org/wiki/Slur_(music) .
+ * But "slur" seems to be a more intuitive naming, even if this
+ * class represents both slurs and ties.
  * 
  * @author Andreas Wenger
  */

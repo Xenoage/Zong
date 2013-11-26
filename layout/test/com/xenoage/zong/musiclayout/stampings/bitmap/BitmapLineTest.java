@@ -23,7 +23,7 @@ public class BitmapLineTest
     //1px line. Should result in 1 px, opaque.
   	for (float scaling = 0.1f; scaling < 5; scaling *= 1.5f)
   	{
-	    ColorInfo color = ColorInfo.black;
+	    Color color = Color.black;
 	    BitmapLine sl = new BitmapLine(Units.pxToMm(1, scaling), color, scaling);
 	    assertEquals(Units.pxToMm(1, scaling), sl.widthMm, Delta.DELTA_FLOAT);
 	    assertEquals(255, sl.color.a);
@@ -36,7 +36,7 @@ public class BitmapLineTest
     //0.5px line. Should result in 1 px with transparency.
   	for (float scaling = 0.1f; scaling < 5; scaling *= 1.5f)
   	{
-	    ColorInfo color = ColorInfo.black;
+	    Color color = Color.black;
 	    BitmapLine sl = new BitmapLine(Units.pxToMm(0.5f, scaling), color, scaling);
 	    assertEquals(Units.pxToMm(1, scaling), sl.widthMm, Delta.DELTA_FLOAT);
 	    int alpha = sl.color.a;
@@ -50,7 +50,7 @@ public class BitmapLineTest
   	//3px line. Should result in 3 px, opaque.
   	for (float scaling = 0.1f; scaling < 5; scaling *= 1.5f)
   	{
-	    ColorInfo color = ColorInfo.black;
+	    Color color = Color.black;
 	    BitmapLine sl = new BitmapLine(Units.pxToMm(3, scaling), color, scaling);
 	    assertEquals(Units.pxToMm(3, scaling), sl.widthMm, Delta.DELTA_FLOAT);
 	    assertEquals(255, sl.color.a);

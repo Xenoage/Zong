@@ -2,15 +2,17 @@ package com.xenoage.zong.musiclayout.stampings;
 
 import javax.rmi.CORBA.Tie;
 
-import com.xenoage.zong.core.music.curvedline.CurvedLine;
+import lombok.Getter;
+
 import com.xenoage.zong.core.music.format.SP;
+import com.xenoage.zong.core.music.slur.Slur;
 
 
 /**
- * Class for a curved line stamping, that represents a slur
+ * Class for {@link Slur} stamping, that represents a slur
  * or a tie (both have the same shape).
  * 
- * A curved line has a horizontal start and end position in mm,
+ * A slur has a horizontal start and end position in mm,
  * and a vertical start and end position as a line position.
  * 
  * Additionally, there are two control points to form
@@ -21,25 +23,25 @@ import com.xenoage.zong.core.music.format.SP;
  *
  * @author Andreas Wenger
  */
-public final class CurvedLineStamping
+public final class SlurStamping
   extends Stamping
 {
   
 	/** The start position (left). */
-  public final SP p1;
+  @Getter private final SP p1;
   
   /** The end position (right). */
-  public final SP p2;
+  @Getter private final SP p2;
   
   /** The offset of the first control point relative to the start point. */
-  public final SP c1;
+  @Getter private final SP c1;
   
   /** The offset of the second control point relative to the end point. */
-  public final SP c2;
+  @Getter private final SP c2;
   
   
   /**
-   * Creates a new {@link CurvedLineStamping} belonging to the given staff.
+   * Creates a new {@link SlurStamping} belonging to the given staff.
    * @param parentStaff  the staff stamping this element belongs to
    * @param curvedLine   the musical element (a {@link Tie} or a {@link Slur})
    * @param p1           t
@@ -47,9 +49,9 @@ public final class CurvedLineStamping
    * @param c1           t
    * @param c2           t
    */
-  public CurvedLineStamping(StaffStamping parentStaff, CurvedLine curvedLine, SP p1, SP p2, SP c1, SP c2)
+  public SlurStamping(StaffStamping parentStaff, Slur slur, SP p1, SP p2, SP c1, SP c2)
   {
-    super(parentStaff, Level.Music, curvedLine, null);
+    super(parentStaff, Level.Music, slur, null);
     this.p1 = p1;
     this.p2 = p2;
     this.c1 = c1;

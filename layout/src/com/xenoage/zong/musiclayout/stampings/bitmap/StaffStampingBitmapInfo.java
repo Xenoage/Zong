@@ -38,7 +38,7 @@ public final class StaffStampingBitmapInfo
    * Gets the {@link BitmapLine} instance for nice rendering for the given scaling.
    * @param scaling  the current scaling factor. e.g. 1 means 72 dpi, 2 means 144 dpi.
    */
-  public BitmapLine getBitmapLine(float scaling, float widthMm, ColorInfo color)
+  public BitmapLine getBitmapLine(float scaling, float widthMm, Color color)
   {
     if (bitmapLine == null || scaling != lastBitmapLineScaling)
     {

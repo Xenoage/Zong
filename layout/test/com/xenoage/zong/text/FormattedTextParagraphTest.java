@@ -34,7 +34,7 @@ public class FormattedTextParagraphTest
 	@Test public void testFormattedTextParagraph()
   {
     FormattedTextStyle style = new FormattedTextStyle(
-    	new FontInfo((String) null, null, FontStyle.create(FontStyle.Bold)), ColorInfo.red, Superscript.Super);
+    	new FontInfo((String) null, null, FontStyle.create(FontStyle.Bold)), Color.red, Superscript.Super);
     FormattedTextParagraph paragraph = fPara(fString("This is a formatted text.", style));
     assertEquals("This is a formatted text.", paragraph.getText());
     style = ((FormattedTextString) paragraph.elements.getFirst()).getStyle();
@@ -42,7 +42,7 @@ public class FormattedTextParagraphTest
     assertEquals(false, style.fontInfo.getStyle().isSet(FontStyle.Italic));
     assertEquals(false, style.fontInfo.getStyle().isSet(FontStyle.Underline));
     assertEquals(false, style.fontInfo.getStyle().isSet(FontStyle.Strikethrough));
-    assertEquals(ColorInfo.red, style.color);
+    assertEquals(Color.red, style.color);
     assertEquals(Superscript.Super, style.superscript);
   }
 	
@@ -59,7 +59,7 @@ public class FormattedTextParagraphTest
     style = ((FormattedTextString) elements.get(1)).getStyle();
     assertEquals(true, style.fontInfo.getStyle().isSet(FontStyle.Bold));
     assertEquals(true, style.fontInfo.getStyle().isSet(FontStyle.Strikethrough));
-    assertEquals(ColorInfo.green, style.color);
+    assertEquals(Color.green, style.color);
   }
 
 	
@@ -71,7 +71,7 @@ public class FormattedTextParagraphTest
     FormattedTextStyle style2 = new FormattedTextStyle(
     	new FontInfo(new JLabel().getFont().getName(), 14f,
     		FontStyle.create(FontStyle.Bold, FontStyle.Italic, FontStyle.Underline, FontStyle.Strikethrough)),
-    		ColorInfo.green, null);
+    		Color.green, null);
     FormattedTextParagraph paragraph = new FormattedTextParagraph(
     	new PVector<FormattedTextElement>(
     		new FormattedTextString("This is ", style1),

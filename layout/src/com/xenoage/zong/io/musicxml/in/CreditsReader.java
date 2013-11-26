@@ -175,7 +175,7 @@ public final class CreditsReader
 					FontInfo fontInfo = readFontInfo(mxlFormattedText.getPrintStyle().getFont(),
 						defaultFont);
 					//color
-					ColorInfo color = null;
+					Color color = null;
 					MxlColor mxlColor = mxlFormattedText.getPrintStyle().getColor();
 					if (mxlColor != null)
 						color = mxlColor.getValue();

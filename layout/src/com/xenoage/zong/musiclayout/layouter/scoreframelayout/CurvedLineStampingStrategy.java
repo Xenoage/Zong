@@ -15,7 +15,7 @@ import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.layouter.cache.util.CurvedLineCache;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
 import com.xenoage.zong.musiclayout.notations.chord.StemAlignment;
-import com.xenoage.zong.musiclayout.stampings.CurvedLineStamping;
+import com.xenoage.zong.musiclayout.stampings.SlurStamping;
 import com.xenoage.zong.musiclayout.stampings.NoteheadStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 
@@ -53,13 +53,13 @@ public class CurvedLineStampingStrategy
 	
 	
 	/**
-	 * Creates a {@link CurvedLineStamping} for the first part (or only part,
+	 * Creates a {@link SlurStamping} for the first part (or only part,
 	 * if simple slur without system breaks) of a slur or tie.
 	 * 
 	 * If the slur continues to another system, the second return value is true,
 	 * otherwise false.
 	 */
-	public Tuple2<CurvedLineStamping, Boolean> createCurvedLineStampingStart(
+	public Tuple2<SlurStamping, Boolean> createCurvedLineStampingStart(
 		CurvedLineCache curvedLineInfo)
 	{
 		NoteheadStamping n1 = curvedLineInfo.getStartNoteheadStamping();
@@ -68,17 +68,17 @@ public class CurvedLineStampingStrategy
 		if (n1 != null && n2 != null && n1.parentStaff == n2.parentStaff)
 		{
 			//simple case. just create it.
-			CurvedLineStamping cls = createSingle(curvedLineInfo);
-			return new Tuple2<CurvedLineStamping, Boolean>(cls, false);
+			SlurStamping cls = createSingle(curvedLineInfo);
+			return new Tuple2<SlurStamping, Boolean>(cls, false);
 		}
 		else if (n1 != null)
 		{
 			//we need at least two staves.
 			//first staff: begin at the notehead, go to the end of the system
-			CurvedLineStamping cls = createStart(n1, curvedLineInfo.getStartDistanceIS(),
+			SlurStamping cls = createStart(n1, curvedLineInfo.getStartDistanceIS(),
 				curvedLineInfo.getCurvedLine(), curvedLineInfo.getSide());
 			//remember this curved line to be continued
-			return new Tuple2<CurvedLineStamping, Boolean>(cls, true);
+			return new Tuple2<SlurStamping, Boolean>(cls, true);
 		}
 		else
 		{
@@ -89,12 +89,12 @@ public class CurvedLineStampingStrategy
 	
 	
 	/**
-	 * Creates a {@link CurvedLineStamping} for a middle part of a slur
+	 * Creates a {@link SlurStamping} for a middle part of a slur
 	 * that spans at least three systems (ties never do that).
 	 * 
 	 * The appropriate staff stamping must be given.
 	 */
-	public CurvedLineStamping createCurvedLineStampingMiddle(
+	public SlurStamping createCurvedLineStampingMiddle(
 		ContinuedCurvedLine continuedCurvedLine, StaffStamping staffStamping)
 	{
 		return createMiddle(staffStamping, continuedCurvedLine.curvedLine,
@@ -103,10 +103,10 @@ public class CurvedLineStampingStrategy
 	
 	
 	/**
-	 * Creates a {@link CurvedLineStamping} for a last part of a slur or tie
+	 * Creates a {@link SlurStamping} for a last part of a slur or tie
 	 * that spans at least two systems.
 	 */
-	public CurvedLineStamping createCurvedLineStampingStop(CurvedLineCache curvedLineInfo)
+	public SlurStamping createCurvedLineStampingStop(CurvedLineCache curvedLineInfo)
 	{
 		NoteheadStamping n = curvedLineInfo.getStopNoteheadStamping();
 		if (n != null)
@@ -123,10 +123,10 @@ public class CurvedLineStampingStrategy
 	
 	
 	/**
-	 * Creates a {@link CurvedLineStamping} for a curved line that
+	 * Creates a {@link SlurStamping} for a curved line that
 	 * uses only a single staff.
 	 */
-	CurvedLineStamping createSingle(CurvedLineCache tiedChords)
+	SlurStamping createSingle(CurvedLineCache tiedChords)
 	{
 		StaffStamping staff = tiedChords.getStartNoteheadStamping().parentStaff;
 		CurvedLine cl = tiedChords.getCurvedLine();
@@ -150,15 +150,15 @@ public class CurvedLineStampingStrategy
 			b2.control : //custom formatting
 			computeRightControlPoint(cl, p1, p2, side, staff)); //default formatting
   	
-		return new CurvedLineStamping(staff, cl, p1, p2, c1, c2);
+		return new SlurStamping(staff, cl, p1, p2, c1, c2);
 	}
 	
 	
 	/**
-	 * Creates a {@link CurvedLineStamping} for a curved line that
+	 * Creates a {@link SlurStamping} for a curved line that
 	 * starts at this staff but spans at least one other staff.
 	 */
-	CurvedLineStamping createStart(NoteheadStamping startNotehead, float startAdditionalDistanceIS,
+	SlurStamping createStart(NoteheadStamping startNotehead, float startAdditionalDistanceIS,
 		CurvedLine cl, VSide side)
 	{
 		StaffStamping staff = startNotehead.parentStaff;
@@ -175,16 +175,16 @@ public class CurvedLineStampingStrategy
 			computeLeftControlPoint(cl, p1, p2, side, staff)); //default formatting
 		SP c2 = computeRightControlPoint(cl, p1, p2, side, staff); //default formatting
   	
-		return new CurvedLineStamping(staff, cl, p1, p2, c1, c2);
+		return new SlurStamping(staff, cl, p1, p2, c1, c2);
 	}
 	
 	
 	/**
-	 * Creates a {@link CurvedLineStamping} for a curved line that
+	 * Creates a {@link SlurStamping} for a curved line that
 	 * starts at an earlier staff and ends at a later staff, but
 	 * spans also the given staff.
 	 */
-	CurvedLineStamping createMiddle(StaffStamping staff, CurvedLine cl, VSide side)
+	SlurStamping createMiddle(StaffStamping staff, CurvedLine cl, VSide side)
 	{
 		if (cl.getType() == Type.Tie)
 		{
@@ -211,15 +211,15 @@ public class CurvedLineStampingStrategy
   	SP c1 = computeLeftControlPoint(cl, p1, p2, side, staff); //default formatting
 		SP c2 = computeRightControlPoint(cl, p1, p2, side, staff); //default formatting
   	
-  	return new CurvedLineStamping(staff, cl, p1, p2, c1, c2);
+  	return new SlurStamping(staff, cl, p1, p2, c1, c2);
 	}
 	
 	
 	/**
-	 * Creates a {@link CurvedLineStamping} for a last part of a slur or tie
+	 * Creates a {@link SlurStamping} for a last part of a slur or tie
 	 * that spans at least two systems.
 	 */
-	CurvedLineStamping createStop(NoteheadStamping stopNotehead, float stopAdditionalDistanceIS,
+	SlurStamping createStop(NoteheadStamping stopNotehead, float stopAdditionalDistanceIS,
 		CurvedLine cl, VSide side)
 	{
 		StaffStamping staff = stopNotehead.parentStaff;
@@ -237,7 +237,7 @@ public class CurvedLineStampingStrategy
 			b2.control : //custom formatting
 			computeRightControlPoint(cl, p1, p2, side, staff)); //default formatting
 		
-		return new CurvedLineStamping(staff, cl, p1, p2, c1, c2);
+		return new SlurStamping(staff, cl, p1, p2, c1, c2);
 	}
 	
 	

@@ -18,11 +18,11 @@ import com.xenoage.utils.math.geom.Size2f;
 
   public final Point2f position;
   public final Size2f size;
-  public final ColorInfo color;
+  public final Color color;
   
   
   public TestStamping(Point2f position,
-    Size2f size, ColorInfo color)
+    Size2f size, Color color)
   {
     super(null, Level.Music, null, null);
     this.position = position;

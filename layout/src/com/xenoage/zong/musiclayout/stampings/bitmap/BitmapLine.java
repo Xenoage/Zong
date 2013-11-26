@@ -24,7 +24,7 @@ public final class BitmapLine
 	/** The width in mm, that fits best to the bitmap */
   public final float widthMm;
   /** The color, that fits best to the bitmap */
-  public final ColorInfo color;
+  public final Color color;
   
   
   /**
@@ -32,7 +32,7 @@ public final class BitmapLine
    * the given color at the given scaling factor.
    * @param scaling  the current scaling factor. e.g. 1 means 72 dpi, 2 means 144 dpi.
    */
-  public BitmapLine(float widthMm, ColorInfo color, float scaling)
+  public BitmapLine(float widthMm, Color color, float scaling)
   {
   	//width
     float widthPxFloat = Units.mmToPx(widthMm, scaling);
@@ -40,7 +40,7 @@ public final class BitmapLine
     this.widthMm = Units.pxToMm(widthPx, scaling);
     //color
     if (widthPxFloat < 1)
-    	this.color = new ColorInfo(color.r, color.g, color.b, (int) (color.a * widthPxFloat));
+    	this.color = new Color(color.r, color.g, color.b, (int) (color.a * widthPxFloat));
     else
     	this.color = color;
   }

@@ -87,7 +87,7 @@ import com.xenoage.zong.musiclayout.spacing.horizontal.SpacingElement;
 import com.xenoage.zong.musiclayout.spacing.horizontal.VoiceSpacing;
 import com.xenoage.zong.musiclayout.stampings.BarlineStamping;
 import com.xenoage.zong.musiclayout.stampings.BracketStamping;
-import com.xenoage.zong.musiclayout.stampings.CurvedLineStamping;
+import com.xenoage.zong.musiclayout.stampings.SlurStamping;
 import com.xenoage.zong.musiclayout.stampings.FrameTextStamping;
 import com.xenoage.zong.musiclayout.stampings.NoteheadStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
@@ -737,10 +737,10 @@ public class ScoreFrameLayoutStrategy
 	 * All closed slurs are removed from the cache. The unclosed slurs (which have to
 	 * be continued on the next frame) remain in the cache.
 	 */
-	private LinkedList<CurvedLineStamping> createTiesAndSlurs(OpenCurvedLinesCache openCurvedLinesCache,
+	private LinkedList<SlurStamping> createTiesAndSlurs(OpenCurvedLinesCache openCurvedLinesCache,
 		StaffStampings staffStampings, int systemsCount)
 	{
-		LinkedList<CurvedLineStamping> ret = new LinkedList<CurvedLineStamping>();
+		LinkedList<SlurStamping> ret = new LinkedList<SlurStamping>();
 	  for (Iterator<CurvedLineCache> itCL = openCurvedLinesCache.iterator(); itCL.hasNext();)
 	  {
 	  	boolean simpleLine = false; //current curved line simple (within one staff)?
@@ -749,7 +749,7 @@ public class ScoreFrameLayoutStrategy
 	  	//if the start is known, begin (and if possible end) the slur in its staff
 	  	if (cl.isStartKnown())
 	  	{
-	  		Tuple2<CurvedLineStamping, Boolean> startCLS =
+	  		Tuple2<SlurStamping, Boolean> startCLS =
 	  			curvedLineStampingStrategy.createCurvedLineStampingStart(cl);
 	  		ret.add(startCLS.get1());
 	  		if (startCLS.get2() == false)
@@ -776,7 +776,7 @@ public class ScoreFrameLayoutStrategy
 		  	}
 		  	for (int iSystem = middleSlurStartIndex; iSystem <= middleSlurStopIndex; iSystem++)
 		  	{
-		  		CurvedLineStamping cls = curvedLineStampingStrategy.createCurvedLineStampingMiddle(
+		  		SlurStamping cls = curvedLineStampingStrategy.createCurvedLineStampingMiddle(
 		  			cl.getContinuedCurvedLine(), staffStampings.get(iSystem, cl.getStaffIndex()));
 		  		if (cls != null)
 		  			ret.add(cls);

@@ -3,7 +3,7 @@ package com.xenoage.zong.text;
 import lombok.Data;
 
 import com.xenoage.utils.annotations.Const;
-import com.xenoage.utils.color.ColorInfo;
+import com.xenoage.utils.color.Color;
 import com.xenoage.utils.font.TextMetrics;
 import com.xenoage.utils.math.Units;
 import com.xenoage.zong.symbols.Symbol;
@@ -34,7 +34,7 @@ import com.xenoage.zong.symbols.Symbol;
 	 *                 height defined in the symbol)
 	 * @param color    the color of the symbol
 	 */
-	public FormattedTextSymbol(Symbol symbol, float sizePt, ColorInfo color) {
+	public FormattedTextSymbol(Symbol symbol, float sizePt, Color color) {
 		this.symbol = symbol;
 		this.style = new FormattedTextStyle(sizePt, color);
 		//compute scaling

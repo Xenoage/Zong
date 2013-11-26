@@ -179,7 +179,7 @@ public class MusicElementStampingStrategy
     {
       NoteAlignment na = cna.getNoteAlignment(iNote);
       
-      ColorInfo color = ColorInfo.black;
+      Color color = Color.black;
       //TEST: draw chords that are not part of voice 0 in blue
       //color = (chord.getMusicElement().getVoice().getMeasure().getVoices().get(0) ==
       //	chord.getMusicElement().getVoice() ? Color.black : Color.blue);

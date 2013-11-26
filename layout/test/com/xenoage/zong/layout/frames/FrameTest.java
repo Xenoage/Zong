@@ -57,13 +57,13 @@ public class FrameTest
   {
     //frame
     GroupFrame frame = new GroupFrame(new FrameData(new Point2f(50, 75), new Size2f(80, 50),
-    	30, new ColorBackground(ColorInfo.red)));
+    	30, new ColorBackground(Color.red)));
     //child frame
     GroupFrame child = new GroupFrame(new FrameData(new Point2f(20, 10), new Size2f(30, 20),
-    	30, new ColorBackground(ColorInfo.green)));
+    	30, new ColorBackground(Color.green)));
     //child frame of child frame
     ImageFrame child2 = new ImageFrame(new FrameData(new Point2f(-15, -10), new Size2f(5, 5),
-    	45, new ColorBackground(ColorInfo.blue)), "data/test/images/flag6.png");
+    	45, new ColorBackground(Color.blue)), "data/test/images/flag6.png");
     child = child.plusChildFrame(child2);
     frame = frame.plusChildFrame(child);
     return frame;

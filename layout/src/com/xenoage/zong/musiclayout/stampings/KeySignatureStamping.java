@@ -1,6 +1,7 @@
 package com.xenoage.zong.musiclayout.stampings;
 
 import static com.xenoage.zong.core.music.key.TraditionalKey.getLinePosition;
+import lombok.Getter;
 
 import com.xenoage.utils.math.geom.Rectangle2f;
 import com.xenoage.utils.math.geom.Shape;
@@ -15,8 +16,7 @@ import com.xenoage.zong.symbols.common.CommonSymbol;
  * Class for a key signature stamping.
  * It consists of a number of flats and/or sharps.
  * 
- * At the moment this stamping can only
- * be created for a TraditionalKey.
+ * At the moment this stamping can only be created for a {@link TraditionalKey}.
  *
  * @author Andreas Wenger
  */
@@ -25,19 +25,19 @@ public final class KeySignatureStamping
 {
  
 	/** The horizontal position in mm. */
-  public final float positionX;
+  @Getter private final float positionX;
   
   /** The key signature. */
-  public final TraditionalKey traditionalKey;
+  @Getter private final TraditionalKey traditionalKey;
   
   /** The line position of a C4. */
-  public final int linePositionC4;
+  @Getter private final int linePositionC4;
   
   /** The minimal line position for a sharp/flat. */
-  public final int linePositionMin;
+  @Getter private final int linePositionMin;
   
   /** General layout preferences, containing the widths for sharps and flats */
-  public final LayoutSettings layoutSettings;
+  @Getter private final LayoutSettings layoutSettings;
   
   
   
@@ -60,7 +60,7 @@ public final class KeySignatureStamping
   	StaffStamping parentStaff, int linePositionC4, int linePositionMin, float positionX,
   	SymbolPool symbolPool, LayoutSettings layoutSettings)
   {
-    int fifth = traditionalKey.fifth;
+    int fifth = traditionalKey.getFifth();
     if (fifth == 0)
       return null;
     boolean useSharps = (fifth > 0);
