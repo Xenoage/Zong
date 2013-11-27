@@ -11,14 +11,14 @@ import com.xenoage.utils.math.geom.Rectangle2f;
  *
  * @author Andreas Wenger
  */
-public final class PathSymbol<Shape>
-	extends Symbol<Shape> {
+public final class PathSymbol<Path>
+	extends Symbol<Path> {
 
 	/** The geometric path describing this symbol. */
-	public final Shape path;
+	public final Path path;
 
 
-	public PathSymbol(String id, Shape path, Rectangle2f boundingRect, Float baselineOffset,
+	public PathSymbol(String id, Path path, Rectangle2f boundingRect, Float baselineOffset,
 		Float ascentHeight, Float leftBorder, Float rightBorder) {
 		super(id, boundingRect, baselineOffset, ascentHeight, leftBorder, rightBorder);
 		this.path = path;
@@ -34,7 +34,7 @@ public final class PathSymbol<Shape>
 	/**
 	 * Gets the shape of this symbol, whose type is dependent on the graphics library.
 	 */
-	@Override public Shape getShape() {
+	@Override public Path getShape() {
 		return path;
 	}
 

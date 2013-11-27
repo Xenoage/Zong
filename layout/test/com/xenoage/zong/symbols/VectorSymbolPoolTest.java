@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import com.xenoage.utils.io.TestIO;
 import com.xenoage.utils.math.Delta;
-import com.xenoage.zong.io.symbols.AWTSVGPathReader;
+import com.xenoage.zong.desktop.io.symbols.AWTSVGPathReader;
 
 
 /**

@@ -1,6 +1,6 @@
 package com.xenoage.zong.symbols;
 
-import com.xenoage.zong.io.symbols.SVGPathReader;
+import com.xenoage.zong.io.symbols.SvgPathReader;
 
 /**
  * Useful methods to work with {@link SymbolPool}s.
@@ -10,16 +10,16 @@ import com.xenoage.zong.io.symbols.SVGPathReader;
 public class SymbolPoolUtils {
 
 	private static boolean init = false;
-	private static SVGPathReader svgPathReader = null;
+	private static SvgPathReader svgPathReader = null;
 	private static SymbolPool defaultSymbolPool = null;
 
 
 	/**
 	 * Initializes this class, which must be done before creating a {@link SymbolPool}.
-	 * @param svgPathReader  the {@link SVGPathReader} implementation for the
+	 * @param svgPathReader  the {@link SvgPathReader} implementation for the
 	 *                       graphics library used in this app
 	 */
-	public static void init(SVGPathReader svgPathReader) {
+	public static void init(SvgPathReader svgPathReader) {
 		SymbolPoolUtils.svgPathReader = svgPathReader;
 		init = true;
 	}
@@ -32,10 +32,10 @@ public class SymbolPoolUtils {
 	}
 
 	/**
-	 * Gets the {@link SVGPathReader} implementation for the
+	 * Gets the {@link SvgPathReader} implementation for the
 	 * graphics library used in this app.
 	 */
-	public static SVGPathReader getSVGPathReader() {
+	public static SvgPathReader getSVGPathReader() {
 		return svgPathReader;
 	}
 

@@ -1,4 +1,4 @@
-package com.xenoage.zong.io.symbols;
+package com.xenoage.zong.desktop.io.symbols;
 
 import static com.xenoage.utils.collections.CollectionUtils.map;
 import static com.xenoage.utils.error.Err.handle;
@@ -7,6 +7,7 @@ import static com.xenoage.utils.log.Level.Warning;
 import static com.xenoage.utils.log.Report.createReport;
 import static com.xenoage.utils.log.Report.fatal;
 
+import java.awt.geom.GeneralPath;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -15,8 +16,7 @@ import java.util.Set;
 import com.xenoage.utils.jse.io.DesktopIO;
 import com.xenoage.utils.jse.io.FileUtils;
 import com.xenoage.zong.Voc;
-import com.xenoage.zong.io.symbols.SVGPathReader;
-import com.xenoage.zong.io.symbols.SVGSymbolReader;
+import com.xenoage.zong.io.symbols.SvgPathReader;
 import com.xenoage.zong.symbols.Symbol;
 import com.xenoage.zong.symbols.SymbolPool;
 import com.xenoage.zong.symbols.SymbolPoolUtils;
@@ -38,11 +38,11 @@ public class SymbolPoolReader {
 	 * Loads and returns the {@link SymbolPool} with the given ID from
 	 * {@value symbolPoolPath} or reports an error if not possible.
 	 */
-	public static SymbolPool readSymbolPool(String id) {
+	public static SymbolPool<GeneralPath> readSymbolPool(String id) {
 		if (SymbolPoolUtils.isInitialized() == false)
-			throw new IllegalStateException(SVGPathReader.class.getSimpleName() + " is not initialized");
+			throw new IllegalStateException(SvgPathReader.class.getSimpleName() + " is not initialized");
 
-		HashMap<String, Symbol> symbols = map();
+		HashMap<String, Symbol<GeneralPath>> symbols = map();
 
 		//load symbols
 		String dir = symbolPoolPath + id;
@@ -51,13 +51,13 @@ public class SymbolPoolReader {
 		}
 		try {
 			Set<String> files = desktopIO().listFiles(dir, FileUtils.getSVGFilter());
-			SVGSymbolReader loader = new SVGSymbolReader();
+			SvgSymbolReader loader = new SvgSymbolReader();
 			LinkedList<String> symbolsWithErrors = new LinkedList<String>();
 			for (String file : files) {
 				try {
 					String symbolPath = "data/symbols/" + id + "/" + file;
-					Symbol symbol = loader.loadSymbol(symbolPath);
-					symbols.put(symbol.id, symbol);
+					Symbol<GeneralPath> symbol = loader.loadSymbol(symbolPath);
+					symbols.put(symbol.getId(), symbol);
 				} catch (IllegalStateException ex) {
 					symbolsWithErrors.add(file);
 				}
@@ -70,7 +70,7 @@ public class SymbolPoolReader {
 			handle(fatal(Voc.CouldNotLoadSymbolPool, ex));
 		}
 
-		return new SymbolPool(id, symbols);
+		return new SymbolPool<GeneralPath>(id, symbols);
 	}
 
 }
