@@ -1,7 +1,5 @@
 package com.xenoage.zong.musiclayout.stampings;
 
-import lombok.Getter;
-
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.music.group.BracketGroup;
 
@@ -17,16 +15,16 @@ import com.xenoage.zong.core.music.group.BracketGroup;
 	extends Stamping {
 
 	/** The first staff stamping this bracket embraces. */
-	@Getter private final StaffStamping firstStaff;
+	public final StaffStamping firstStaff;
 
 	/** The last staff stamping this bracket embraces. */
-	@Getter private final StaffStamping lastStaff;
+	public final StaffStamping lastStaff;
 
 	/** The horizontal position of the bracket in mm. */
-	@Getter private final float positionX;
+	public final float positionX;
 
 	/** The style of the bracket. */
-	@Getter private final BracketGroup.Style groupStyle;
+	public final BracketGroup.Style groupStyle;
 
 
 	public BracketStamping(StaffStamping firstStaff, StaffStamping lastStaff, float positionX,

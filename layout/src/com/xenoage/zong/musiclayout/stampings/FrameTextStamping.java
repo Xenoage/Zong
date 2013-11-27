@@ -19,7 +19,7 @@ import com.xenoage.zong.text.FormattedText;
 	extends TextStamping {
 
 	/** The position, relative to the top left corner of the score frame. */
-	@Getter private final Point2f position;
+	public final Point2f position;
 
 
 	public FrameTextStamping(FormattedText text, Point2f position) {

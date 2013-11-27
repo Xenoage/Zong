@@ -1,7 +1,5 @@
 package com.xenoage.zong.musiclayout.stampings;
 
-import lombok.Getter;
-
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.collections.IList;
 import com.xenoage.zong.core.music.barline.Barline;
@@ -24,16 +22,16 @@ import com.xenoage.zong.core.music.group.BarlineGroup;
 	extends Stamping {
 
 	/** The musical element, including the repeat and line style. */
-	@Getter private final Barline barline;
+	public final Barline barline;
 
 	/** The list of staves this barline is spanning. */
-	@Getter private final IList<StaffStamping> staves;
+	public final IList<StaffStamping> staves;
 
 	/** The horizontal position in mm, relative to the parent frame. */
-	@Getter private final float xPosition;
+	public final float xPosition;
 
 	/** The grouping style of the barline. */
-	@Getter private final BarlineGroup.Style groupStyle;
+	public final BarlineGroup.Style groupStyle;
 
 
 	public BarlineStamping(Barline barline, IList<StaffStamping> staves, float xPosition,

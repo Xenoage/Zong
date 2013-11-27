@@ -18,13 +18,13 @@ public abstract class Symbol<Shape> {
 	public static float DEFAULT_ASCENT = 2f;
 
 	/** The ID of the symbol */
-	@Getter protected final String id;
+	@Getter public final String id;
 	/** The minimal bounding rectangle of this symbol */
-	@Getter protected final Rectangle2f boundingRect;
+	@Getter public final Rectangle2f boundingRect;
 	/** The vertical offset of the baseline (e.g. needed for dynamics letters) */
-	@Getter protected final float baselineOffset;
+	@Getter public final float baselineOffset;
 	/** The height of the ascent (e.g. needed for dynamics letters) */
-	@Getter protected final float ascentHeight;
+	@Getter public final float ascentHeight;
 
 	private final Float leftBorder;
 	private final Float rightBorder;

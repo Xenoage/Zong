@@ -1,7 +1,5 @@
 package com.xenoage.zong.musiclayout.stampings;
 
-import lombok.Getter;
-
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.math.geom.Rectangle2f;
 import com.xenoage.utils.math.geom.Shape;
@@ -29,19 +27,19 @@ import com.xenoage.zong.symbols.common.CommonSymbol;
 	}
 
 	/** The direction of this flag. This is usually the opposite stem direction. */
-	@Getter private final FlagsDirection flagsDirection;
+	public final FlagsDirection flagsDirection;
 	/** The number of flags. */
-	@Getter private final int flagsCount;
+	public final int flagsCount;
 	/** The scaling of the flags. This is 1 for full chords and < 1 for grace/cue chords */
-	@Getter private final float scaling;
+	public final float scaling;
 	/** The position of the flag. The vertical coordinate is the LP where the flag starts.
 	 * This should always be the end position of the stem.
 	 */
-	@Getter private final SP position;
+	public final SP position;
 
 
 	public FlagsStamping(FlagsDirection flagsDirection, int flagsCount, float scaling,
-		StaffStamping parentStaff, Chord chord, SP position, SymbolPool symbolPool) {
+		StaffStamping parentStaff, Chord chord, SP position, SymbolPool<?> symbolPool) {
 		super(parentStaff, Level.Music, chord, createBoundingShape(flagsDirection, flagsCount, scaling,
 			parentStaff, position, symbolPool));
 		this.flagsDirection = flagsDirection;
@@ -51,13 +49,13 @@ import com.xenoage.zong.symbols.common.CommonSymbol;
 	}
 
 	private static Shape createBoundingShape(FlagsDirection flagsDirection, int flagsCount,
-		float scaling, StaffStamping parentStaff, SP position, SymbolPool symbolPool) {
-		Symbol symbol = symbolPool.getSymbol(CommonSymbol.NoteFlag);
+		float scaling, StaffStamping parentStaff, SP position, SymbolPool<?> symbolPool) {
+		Symbol<?> symbol = symbolPool.getSymbol(CommonSymbol.NoteFlag);
 		float flagsDistance = getFlagsDistance(flagsDirection, scaling);
 		float interlineSpace = parentStaff.is;
 		Rectangle2f flagsBounds = null;
 		for (int i = 0; i < flagsCount; i++) {
-			Rectangle2f bounds = symbol.boundingRect.scale(scaling * interlineSpace);
+			Rectangle2f bounds = symbol.getBoundingRect().scale(scaling * interlineSpace);
 			if (flagsDirection == FlagsDirection.Up) {
 				bounds = bounds.move(0, -bounds.size.height);
 			}

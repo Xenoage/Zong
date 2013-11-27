@@ -1,7 +1,7 @@
 package com.xenoage.zong.musiclayout.stampings;
 
+import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.music.chord.Chord;
-
 
 /**
  * Class for a leger line stamping.
@@ -12,31 +12,27 @@ import com.xenoage.zong.core.music.chord.Chord;
  *
  * @author Andreas Wenger
  */
-public final class LegerLineStamping
-  extends Stamping
-{
+@Const public final class LegerLineStamping
+	extends Stamping {
 
 	/** The horizontal position of this leger line in mm. */
-  public final float x;
-  
-  /** The line position of this leger line. */
-  public final int lp;
-  
-  
-  public LegerLineStamping(StaffStamping parentStaff, Chord chord, float x, int lp)
-  {
-    super(parentStaff, Level.Music, chord, null);
-    this.x = x;
-    this.lp = lp;
-  }
-  
-  
-  /**
-   * Gets the type of this stamping.
-   */
-  @Override public StampingType getType()
-  {
-  	return StampingType.LegerLineStamping;
-  }
-  
+	public final float x;
+
+	/** The line position of this leger line. */
+	public final int lp;
+
+
+	public LegerLineStamping(StaffStamping parentStaff, Chord chord, float x, int lp) {
+		super(parentStaff, Level.Music, chord, null);
+		this.x = x;
+		this.lp = lp;
+	}
+
+	/**
+	 * Gets the type of this stamping.
+	 */
+	@Override public StampingType getType() {
+		return StampingType.LegerLineStamping;
+	}
+
 }

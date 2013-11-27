@@ -36,7 +36,7 @@ import com.xenoage.zong.musiclayout.stampings.CommonTimeStamping;
 import com.xenoage.zong.musiclayout.stampings.FlagsStamping;
 import com.xenoage.zong.musiclayout.stampings.KeySignatureStamping;
 import com.xenoage.zong.musiclayout.stampings.LegerLineStamping;
-import com.xenoage.zong.musiclayout.stampings.NormalTimeStamping;
+import com.xenoage.zong.musiclayout.stampings.TimeStamping;
 import com.xenoage.zong.musiclayout.stampings.NoteheadStamping;
 import com.xenoage.zong.musiclayout.stampings.ProlongationDotStamping;
 import com.xenoage.zong.musiclayout.stampings.RestStamping;
@@ -296,7 +296,7 @@ public class MusicElementStampingStrategy
   	}
   	else
   	{
-	    return new NormalTimeStamping(
+	    return new TimeStamping(
 	      time.getMusicElement(), positionX, staff,
 	      time.getNumeratorOffset(), time.getDenominatorOffset(), time.getDigitGap());
   	}

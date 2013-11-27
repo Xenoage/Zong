@@ -16,7 +16,7 @@ import com.xenoage.zong.core.music.clef.Clef;
 	extends StaffSymbolStamping {
 
 	public ClefStamping(Clef clef, StaffStamping parentStaff, float xPosition, float scaling,
-		SymbolPool symbolPool) {
+		SymbolPool<?> symbolPool) {
 		super(parentStaff, clef, symbolPool.getSymbol(CommonSymbol.getClef(clef.getType())), null, sp(
 			xPosition, clef.getType().getLine()), scaling, false);
 	}

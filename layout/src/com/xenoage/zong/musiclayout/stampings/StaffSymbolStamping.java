@@ -1,7 +1,5 @@
 package com.xenoage.zong.musiclayout.stampings;
 
-import lombok.Getter;
-
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.color.Color;
 import com.xenoage.utils.math.geom.Rectangle2f;
@@ -24,22 +22,22 @@ import com.xenoage.zong.symbols.Symbol;
 	extends Stamping {
 
 	/** The musical symbol. */
-	@Getter protected final Symbol symbol;
+	public final Symbol<?> symbol;
 
 	/** The color of the stamping, or null for default color. */
-	@Getter protected final Color color;
+	public final Color color;
 
 	/** The position of the symbol. */
-	@Getter protected final SP position;
+	public final SP position;
 
 	/** The scaling; e.g. 1 means, that it fits perfect to the staff size. */
-	@Getter protected final float scaling;
+	public final float scaling;
 
 	/** True for vertically mirroring the symbol, otherwise false. */
-	@Getter protected final boolean mirrorV;
+	public final boolean mirrorV;
 
 
-	public StaffSymbolStamping(StaffStamping parentStaff, MusicElement musicElement, Symbol symbol,
+	public StaffSymbolStamping(StaffStamping parentStaff, MusicElement musicElement, Symbol<?> symbol,
 		Color color, SP position, float scaling, boolean mirrorV) {
 		super(parentStaff, Level.Music, musicElement, createBoundingShape(symbol, scaling, parentStaff,
 			position));
@@ -53,9 +51,9 @@ import com.xenoage.zong.symbols.Symbol;
 	/**
 	 * Creates the bounding geometry.
 	 */
-	private static Shape createBoundingShape(Symbol symbol, float scaling, StaffStamping parentStaff,
+	private static Shape createBoundingShape(Symbol<?> symbol, float scaling, StaffStamping parentStaff,
 		SP position) {
-		Rectangle2f bounds = symbol.boundingRect;
+		Rectangle2f bounds = symbol.getBoundingRect();
 		bounds = bounds.scale(scaling * parentStaff.is);
 		bounds = bounds.move(position.xMm, parentStaff.computeYMm(position.lp));
 		return bounds;

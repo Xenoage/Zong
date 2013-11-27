@@ -1,11 +1,8 @@
 package com.xenoage.zong.musiclayout.stampings;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 import com.xenoage.utils.annotations.Const;
-import com.xenoage.utils.annotations.MaybeNull;
-import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.math.geom.Shape;
 import com.xenoage.zong.core.music.MusicElement;
 
@@ -19,7 +16,7 @@ import com.xenoage.zong.core.music.MusicElement;
  *
  * @author Andreas Wenger
  */
-@Const @Getter @AllArgsConstructor public abstract class Stamping {
+@Const @AllArgsConstructor public abstract class Stamping {
 
 	/**
 	 * The musical level to which a stamping belongs to.
@@ -42,10 +39,10 @@ import com.xenoage.zong.core.music.MusicElement;
 	 * information from the parent staff of this element.
 	 * But the stamping may also belong to more than only this staff.
 	 */
-	@MaybeNull protected final StaffStamping parentStaff;
+	public final StaffStamping parentStaff;
 
 	/** The musical level to which this stamping belongs to. */
-	@NonNull protected final Level level;
+	public final Level level;
 
 	/**
 	 * The musical element for which this stamping was created,
@@ -53,12 +50,12 @@ import com.xenoage.zong.core.music.MusicElement;
 	 * This may be another element than expected, e.g. an accidental layout
 	 * element may refer to a chord musical element.
 	 */
-	@MaybeNull protected final MusicElement musicElement;
+	public final MusicElement musicElement;
 
 	/**
 	 * Bounding geometry, or null if unknown or not needed.
 	 */
-	@MaybeNull protected final Shape boundingShape;
+	public final Shape boundingShape;
 
 
 	/**

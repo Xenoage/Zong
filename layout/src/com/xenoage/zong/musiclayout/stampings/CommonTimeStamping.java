@@ -18,7 +18,7 @@ import com.xenoage.zong.symbols.common.CommonSymbol;
 	extends StaffSymbolStamping {
 
 	public CommonTimeStamping(Time commonTime, float positionX, StaffStamping parentStaff,
-		SymbolPool symbolPool) {
+		SymbolPool<?> symbolPool) {
 		super(parentStaff, commonTime, symbolPool.getSymbol(CommonSymbol.TimeCommon), null, sp(
 			positionX, parentStaff.linesCount - 1), 1f, false);
 	}

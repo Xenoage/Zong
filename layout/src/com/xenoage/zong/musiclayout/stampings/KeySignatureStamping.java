@@ -1,7 +1,6 @@
 package com.xenoage.zong.musiclayout.stampings;
 
 import static com.xenoage.zong.core.music.key.TraditionalKey.getLinePosition;
-import lombok.Getter;
 
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.math.geom.Rectangle2f;
@@ -24,23 +23,23 @@ import com.xenoage.zong.symbols.common.CommonSymbol;
 	extends Stamping {
 
 	/** The horizontal position in mm. */
-	@Getter private final float positionX;
+	public final float positionX;
 
 	/** The key signature. */
-	@Getter private final TraditionalKey traditionalKey;
+	public final TraditionalKey traditionalKey;
 
 	/** The line position of a C4. */
-	@Getter private final int linePositionC4;
+	public final int linePositionC4;
 
 	/** The minimal line position for a sharp/flat. */
-	@Getter private final int linePositionMin;
+	public final int linePositionMin;
 
 	/** General layout preferences, containing the widths for sharps and flats */
-	@Getter private final LayoutSettings layoutSettings;
+	public final LayoutSettings layoutSettings;
 
 
 	public KeySignatureStamping(TraditionalKey traditionalKey, int linePositionC4,
-		int linePositionMin, float positionX, StaffStamping parentStaff, SymbolPool symbolPool,
+		int linePositionMin, float positionX, StaffStamping parentStaff, SymbolPool<?> symbolPool,
 		LayoutSettings layoutSettings) {
 		super(parentStaff, Level.Music, null, createBoundingShape(traditionalKey, parentStaff,
 			linePositionC4, linePositionMin, positionX, symbolPool, layoutSettings));
@@ -53,14 +52,14 @@ import com.xenoage.zong.symbols.common.CommonSymbol;
 
 	private static Shape createBoundingShape(TraditionalKey traditionalKey,
 		StaffStamping parentStaff, int linePositionC4, int linePositionMin, float positionX,
-		SymbolPool symbolPool, LayoutSettings layoutSettings) {
+		SymbolPool<?> symbolPool, LayoutSettings layoutSettings) {
 		int fifth = traditionalKey.getFifth();
 		if (fifth == 0)
 			return null;
 		boolean useSharps = (fifth > 0);
 		float distance = (useSharps ? layoutSettings.spacings.widthSharp
 			: layoutSettings.spacings.widthFlat);
-		Symbol symbol = symbolPool.getSymbol(useSharps ? CommonSymbol.AccidentalSharp
+		Symbol<?> symbol = symbolPool.getSymbol(useSharps ? CommonSymbol.AccidentalSharp
 			: CommonSymbol.AccidentalFlat);
 		//create bounding shape
 		Rectangle2f shape = null;
@@ -68,7 +67,7 @@ import com.xenoage.zong.symbols.common.CommonSymbol;
 		float interlineSpace = parentStaff.is;
 		for (int i = 0; i < fifth; i++) {
 			int linePosition = getLinePosition(i, useSharps, linePositionC4, linePositionMin);
-			Rectangle2f bounds = symbol.boundingRect;
+			Rectangle2f bounds = symbol.getBoundingRect();
 			bounds = bounds.scale(interlineSpace);
 			bounds = bounds.move(positionX + i * distance * interlineSpace,
 				parentStaff.computeYMm(linePosition));

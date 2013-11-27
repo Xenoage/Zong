@@ -1,7 +1,5 @@
 package com.xenoage.zong.musiclayout.stampings;
 
-import lombok.Getter;
-
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.music.beam.Beam;
 
@@ -22,22 +20,22 @@ import com.xenoage.zong.core.music.beam.Beam;
 	public static final float beamGap = 0.3f; //gap between lines in interline spaces
 
 	/** The {@link StaffStamping} of the start position. */
-	@Getter private final StaffStamping staff1;
+	public final StaffStamping staff1;
 
 	/** The {@link StaffStamping} of the end position. */
-	@Getter private final StaffStamping staff2;
+	public final StaffStamping staff2;
 
 	/** The horizontal start coordinate of the beam in mm. */
-	@Getter private final float x1;
+	public final float x1;
 
 	/** The horizontal end coordinate of the beam in mm. */
-	@Getter private final float x2;
+	public final float x2;
 
 	/** The end line position at the start position. */
-	@Getter private final float lp1;
+	public final float lp1;
 
 	/** The end line position at the end position. */
-	@Getter private final float lp2;
+	public final float lp2;
 
 
 	public BeamStamping(Beam beam, StaffStamping staff1, StaffStamping staff2, float x1, float x2,
