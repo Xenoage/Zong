@@ -55,6 +55,13 @@ public final class SymbolPool<Shape> {
 			ret = commonSymbolPool.getWarningSymbol();
 		return ret;
 	}
+	
+	/**
+	 * Gets the WarningSymbol.
+	 */
+	public WarningSymbol<Shape> getWarningSymbol() {
+		return commonSymbolPool.getWarningSymbol();
+	}
 
 	/**
 	 * Computes and returns the width of the given number, e.g. 1733.

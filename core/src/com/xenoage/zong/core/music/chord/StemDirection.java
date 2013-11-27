@@ -2,7 +2,6 @@ package com.xenoage.zong.core.music.chord;
 
 import com.xenoage.utils.math.VSide;
 
-
 /**
  * Direction of a chord stem.
  *
@@ -15,7 +14,6 @@ public enum StemDirection {
 	Up,
 	/** Downward stem. */
 	Down;
-
 
 	/**
 	 * Gets the direction of the stem as its signum:
@@ -32,13 +30,11 @@ public enum StemDirection {
 		}
 	}
 
-
 	/**
 	 * Returns if the given {@link VSide} has the same side as this stem.
 	 */
 	public boolean equalsSide(VSide side) {
 		return ((this == Up && side == VSide.Top) || (this == Down && side == VSide.Bottom));
 	}
-
 
 }

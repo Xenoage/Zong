@@ -1,5 +1,6 @@
 package com.xenoage.zong.musiclayout.stampings;
 
+import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.music.direction.Wedge;
 
 
@@ -14,7 +15,7 @@ import com.xenoage.zong.core.music.direction.Wedge;
  *
  * @author Andreas Wenger
  */
-public final class WedgeStamping
+@Const public final class WedgeStamping
 	extends Stamping
 {
 

@@ -1,6 +1,5 @@
 package com.xenoage.zong.musiclayout.stampings;
 
-
 /**
  * List of types of stampings.
  * 
@@ -9,17 +8,15 @@ package com.xenoage.zong.musiclayout.stampings;
  * 
  * @author Andreas Wenger
  */
-public enum StampingType
-{
+public enum StampingType {
 	BarlineStamping,
 	BeamStamping,
 	BracketStamping,
-	CurvedLineStamping,
 	EmptySpaceStamping,
 	KeySignatureStamping,
 	FlagsStamping,
 	LegerLineStamping,
-	NormalTimeStamping,
+	SlurStamping,
 	StaffCursorStamping,
 	StaffStamping,
 	StaffSymbolStamping,
@@ -27,6 +24,7 @@ public enum StampingType
 	SystemCursorStamping,
 	TestStamping,
 	TextStamping,
+	TimeStamping,
 	TupletStamping,
 	VoltaStamping,
 	WedgeStamping

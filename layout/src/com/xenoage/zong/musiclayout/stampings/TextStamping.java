@@ -29,9 +29,6 @@ import com.xenoage.zong.text.FormattedText;
 		this.text = checkNotNull(text);
 	}
 
-	/**
-	 * Gets the type of this stamping.
-	 */
 	@Override public StampingType getType() {
 		return StampingType.TextStamping;
 	}

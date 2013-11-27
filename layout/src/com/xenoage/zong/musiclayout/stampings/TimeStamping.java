@@ -42,7 +42,7 @@ import com.xenoage.zong.core.music.time.Time;
 	 * Gets the type of this stamping.
 	 */
 	@Override public StampingType getType() {
-		return StampingType.NormalTimeStamping;
+		return StampingType.TimeStamping;
 	}
 
 }
