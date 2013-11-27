@@ -25,24 +25,6 @@ public class ChordSpacings {
 	private Map<Fraction, Float> durationWidthsCache = map();
 
 
-	/* GOON: move to converter project
-	public static ChordSpacings fromXML(Element e)
-		throws IOException {
-		HashMap<Fraction, Float> durationWidths = map();
-
-		//load the duration-to-width mapping
-		List<Element> listChords = XMLReader.elements(e, "chord");
-		for (Element el : listChords) {
-			//duration format: x/y, e.g. "1/4"
-			Fraction duration = Fraction.fromString(XMLReader.attributeNotNull(el, "duration"));
-			//width format: x+y/z, eg. "3+1/2"
-			float width = Fraction.fromString(XMLReader.attributeNotNull(el, "width")).toFloat();
-			durationWidths.put(duration, width);
-		}
-
-		return new ChordSpacings(durationWidths);
-	} */
-
 	public ChordSpacings(Map<Fraction, Float> durationWidths) {
 		this.durationWidths = durationWidths;
 
