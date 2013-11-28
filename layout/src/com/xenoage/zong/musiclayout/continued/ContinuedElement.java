@@ -2,7 +2,6 @@ package com.xenoage.zong.musiclayout.continued;
 
 import com.xenoage.zong.core.music.MusicElement;
 
-
 /**
  * Interface for a continued element.
  * 
@@ -22,18 +21,16 @@ import com.xenoage.zong.core.music.MusicElement;
  * 
  * @author Andreas Wenger
  */
-public interface ContinuedElement
-{
+public interface ContinuedElement {
 
 	/**
 	 * Gets the MusicElement which is continued.
 	 */
 	public MusicElement getMusicElement();
-	
-	
+
 	/**
 	 * Gets the staff index of the continued element.
 	 */
 	public int getStaffIndex();
-	
+
 }

@@ -1,7 +1,9 @@
 package com.xenoage.zong.musiclayout;
 
-import com.xenoage.zong.musiclayout.stampings.StaffStamping;
+import lombok.AllArgsConstructor;
 
+import com.xenoage.utils.annotations.Const;
+import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 
 /**
  * A {@link StaffStampingPosition} is a reference
@@ -10,38 +12,10 @@ import com.xenoage.zong.musiclayout.stampings.StaffStamping;
  * 
  * @author Andreas Wenger
  */
-public final class StaffStampingPosition
-{
-  
-  private final StaffStamping staff;
-  private final int frameIndex;
-  private final float positionX;
-  
-  
-  public StaffStampingPosition(StaffStamping staff, int frameIndex, float positionX)
-  {
-    this.staff = staff;
-    this.frameIndex = frameIndex;
-    this.positionX = positionX;
-  }
+@Const @AllArgsConstructor public final class StaffStampingPosition {
 
-
-  public StaffStamping getStaff()
-  {
-    return staff;
-  }
-  
-  
-  public int getFrameIndex()
-  {
-    return frameIndex;
-  }
-  
-  
-  public float getPositionX()
-  {
-    return positionX;
-  }
-  
+	public final StaffStamping staff;
+	public final int frameIndex;
+	public final float positionX;
 
 }

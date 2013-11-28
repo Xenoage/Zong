@@ -51,7 +51,7 @@ public class StaffStampingsStrategy
 			float yOffset = system.getOffsetY();
 			for (int iStaff = 0; iStaff < stavesCount; iStaff++) {
 				yOffset += system.getStaffDistance(iStaff);
-				StaffStamping staff = new StaffStamping(new Point2f(systemXOffset, yOffset), system.getWidth(), 5,
+				StaffStamping staff = new StaffStamping(new Point2f(systemXOffset, yOffset), system.width, 5,
 					score.getInterlineSpace(iStaff), null);
 				systemStaves[iStaff] = staff;
 				yOffset += system.getStaffHeight(iStaff);

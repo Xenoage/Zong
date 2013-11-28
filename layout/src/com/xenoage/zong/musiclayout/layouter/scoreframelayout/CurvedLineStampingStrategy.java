@@ -10,7 +10,7 @@ import com.xenoage.zong.core.music.curvedline.CurvedLineWaypoint;
 import com.xenoage.zong.core.music.curvedline.CurvedLine.Type;
 import com.xenoage.zong.core.music.format.BezierPoint;
 import com.xenoage.zong.core.music.format.SP;
-import com.xenoage.zong.musiclayout.continued.ContinuedCurvedLine;
+import com.xenoage.zong.musiclayout.continued.ContinuedSlur;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.layouter.cache.util.CurvedLineCache;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
@@ -95,7 +95,7 @@ public class CurvedLineStampingStrategy
 	 * The appropriate staff stamping must be given.
 	 */
 	public SlurStamping createCurvedLineStampingMiddle(
-		ContinuedCurvedLine continuedCurvedLine, StaffStamping staffStamping)
+		ContinuedSlur continuedCurvedLine, StaffStamping staffStamping)
 	{
 		return createMiddle(staffStamping, continuedCurvedLine.curvedLine,
 			continuedCurvedLine.side);

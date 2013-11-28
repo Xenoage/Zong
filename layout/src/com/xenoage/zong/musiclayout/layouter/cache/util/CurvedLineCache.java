@@ -2,7 +2,7 @@ package com.xenoage.zong.musiclayout.layouter.cache.util;
 
 import com.xenoage.utils.math.VSide;
 import com.xenoage.zong.core.music.curvedline.CurvedLine;
-import com.xenoage.zong.musiclayout.continued.ContinuedCurvedLine;
+import com.xenoage.zong.musiclayout.continued.ContinuedSlur;
 import com.xenoage.zong.musiclayout.stampings.NoteheadStamping;
 
 
@@ -17,7 +17,7 @@ import com.xenoage.zong.musiclayout.stampings.NoteheadStamping;
 public class CurvedLineCache
 {
 	
-	private final ContinuedCurvedLine continuedCurvedLine; //use this class to save information
+	private final ContinuedSlur continuedCurvedLine; //use this class to save information
 	private final NoteheadStamping startNotehead; 
 	private final float startDistanceIS;
 	private final int startSystem;
@@ -36,7 +36,7 @@ public class CurvedLineCache
   	int staffIndex, NoteheadStamping startNotehead, float startDistanceIS, int startSystem)
 	{
   	return new CurvedLineCache(
-  		new ContinuedCurvedLine(curvedLine, side, staffIndex, 1), //1: TODO
+  		new ContinuedSlur(curvedLine, side, staffIndex, 1), //1: TODO
   		startNotehead, startDistanceIS, startSystem);
 	}
   
@@ -44,7 +44,7 @@ public class CurvedLineCache
   /**
    * Creates a {@link CurvedLineCache} instance for a continued slur.
    */
-  public static CurvedLineCache createContinued(ContinuedCurvedLine continuedCurvedLine)
+  public static CurvedLineCache createContinued(ContinuedSlur continuedCurvedLine)
 	{
   	return new CurvedLineCache(continuedCurvedLine, null, 0, -1);
 	}
@@ -57,7 +57,7 @@ public class CurvedLineCache
    * together with additional distance in IS (e.g. because there are articulations
    * or a stem) and index of the start system (if known, otherwise -1).
    */
-  private CurvedLineCache(ContinuedCurvedLine continuedCurvedLine,
+  private CurvedLineCache(ContinuedSlur continuedCurvedLine,
   	NoteheadStamping startNotehead, float startDistanceIS, int startSystem)
   {
     this.continuedCurvedLine = continuedCurvedLine;
@@ -170,10 +170,10 @@ public class CurvedLineCache
 	
 	
 	/**
-	 * Gets the {@link ContinuedCurvedLine} of this cache, which can be used
+	 * Gets the {@link ContinuedSlur} of this cache, which can be used
 	 * to indicate that a continuation of this curved line is needed.
 	 */
-	public ContinuedCurvedLine getContinuedCurvedLine()
+	public ContinuedSlur getContinuedCurvedLine()
 	{
 		return continuedCurvedLine;
 	}

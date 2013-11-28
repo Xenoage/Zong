@@ -57,7 +57,7 @@ import com.xenoage.zong.core.text.Alignment;
 import com.xenoage.zong.musiclayout.FrameArrangement;
 import com.xenoage.zong.musiclayout.ScoreFrameLayout;
 import com.xenoage.zong.musiclayout.SystemArrangement;
-import com.xenoage.zong.musiclayout.continued.ContinuedCurvedLine;
+import com.xenoage.zong.musiclayout.continued.ContinuedSlur;
 import com.xenoage.zong.musiclayout.continued.ContinuedElement;
 import com.xenoage.zong.musiclayout.continued.ContinuedVolta;
 import com.xenoage.zong.musiclayout.continued.ContinuedWedge;
@@ -177,9 +177,9 @@ public class ScoreFrameLayoutStrategy
     //add continued elements
     for (ContinuedElement ce : unclosedElements)
 	  {
-    	if (ce instanceof ContinuedCurvedLine)
+    	if (ce instanceof ContinuedSlur)
     	{
-    		openCurvedLinesCache.add(CurvedLineCache.createContinued((ContinuedCurvedLine) ce));
+    		openCurvedLinesCache.add(CurvedLineCache.createContinued((ContinuedSlur) ce));
     	}
     	else if (ce instanceof ContinuedVolta)
     	{

@@ -1,10 +1,10 @@
 package com.xenoage.zong.musiclayout;
 
-import static com.xenoage.utils.base.collections.CollectionUtils.containsNull;
+import static com.xenoage.utils.collections.CollectionUtils.containsNull;
 
+import com.xenoage.utils.annotations.Const;
+import com.xenoage.utils.collections.IList;
 import com.xenoage.utils.math.geom.Size2f;
-import com.xenoage.utils.pdlib.Vector;
-
 
 /**
  * This class contains the arrangement
@@ -12,67 +12,41 @@ import com.xenoage.utils.pdlib.Vector;
  *
  * @author Andreas Wenger
  */
-public final class FrameArrangement
-{
+@Const public final class FrameArrangement {
 
-  private final Vector<SystemArrangement> systems;
-  private final Size2f usableSize;
-  
-  
-  /**
-   * Creates a new FrameArrangement, containing
-   * the given systems.
-   */
-  public FrameArrangement(Vector<SystemArrangement> systems, Size2f usableSize)
-  {
-  	//null values are not allowed
-  	if (containsNull(systems) || usableSize == null)
-  		throw new IllegalArgumentException("Systems and size may not be null");
-  	this.systems = systems;
-  	this.usableSize = usableSize;
-  }
-  
-  
-  /**
-   * Gets the systems.
-   */
-  public Vector<SystemArrangement> getSystems()
-  {
-    return systems;
-  }
+	/** The systems on this frame. */
+	public final IList<SystemArrangement> systems;
+	/** The size in mm this frame arrangement may use. */
+	public final Size2f usableSize;
 
 
-  /**
-   * Gets the size in mm this frame arrangement may use.
-   */
-  public Size2f getUsableSize()
-  {
-    return usableSize;
-  }
+	//LOMBOK
+	public FrameArrangement(IList<SystemArrangement> systems, Size2f usableSize) {
+		//null values are not allowed
+		if (containsNull(systems) || usableSize == null)
+			throw new IllegalArgumentException("Systems and size may not be null");
+		this.systems = systems;
+		this.usableSize = usableSize;
+	}
 
-  
-  /**
-   * Gets the index of the first measure, or -1 if there are no measures.
-   */
-  public int getStartMeasureIndex()
-  {
-  	if (systems.size() == 0)
-  		return -1;
-  	else
-  		return systems.getFirst().getStartMeasureIndex();
-  }
-  
-  
-  /**
-   * Gets the index of the last measure, or -1 if there are no measures.
-   */
-  public int getEndMeasureIndex()
-  {
-  	if (systems.size() == 0)
-  		return -1;
-  	else
-  		return systems.getLast().getEndMeasureIndex();
-  }
-  
-  
+	/**
+	 * Gets the index of the first measure, or -1 if there are no measures.
+	 */
+	public int getStartMeasureIndex() {
+		if (systems.size() == 0)
+			return -1;
+		else
+			return systems.getFirst().startMeasureIndex;
+	}
+
+	/**
+	 * Gets the index of the last measure, or -1 if there are no measures.
+	 */
+	public int getEndMeasureIndex() {
+		if (systems.size() == 0)
+			return -1;
+		else
+			return systems.getLast().endMeasureIndex;
+	}
+
 }

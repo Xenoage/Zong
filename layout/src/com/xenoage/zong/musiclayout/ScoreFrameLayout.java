@@ -1,20 +1,21 @@
 package com.xenoage.zong.musiclayout;
 
-import static com.xenoage.utils.pdlib.IVector.ivec;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 
-import java.util.List;
+import java.util.ArrayList;
 
-import com.xenoage.utils.base.iterators.MultiIt;
+import lombok.Getter;
+import lombok.Setter;
+
+import com.xenoage.utils.iterators.MultiIt;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Rectangle2f;
-import com.xenoage.utils.pdlib.Vector;
 import com.xenoage.zong.core.music.MusicElement;
-import com.xenoage.zong.core.position.BMP;
+import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.musiclayout.continued.ContinuedElement;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import com.xenoage.zong.musiclayout.stampings.Stamping;
 import com.xenoage.zong.musiclayout.stampings.TextStamping;
-
 
 /**
  * A score frame layout contains the musical layout of a
@@ -24,39 +25,33 @@ import com.xenoage.zong.musiclayout.stampings.TextStamping;
  * selection and playback stampings. A list of continued elements
  * (e.g. slurs or voltas) to the following frame is also saved.
  * 
- * While the musical stampings are final in this class, the
- * selection and playback stampings are mutable.
- * 
  * @author Andreas Wenger
  */
-public final class ScoreFrameLayout
-{
+public final class ScoreFrameLayout {
 
-	//information about the systems in this frame
-	private final FrameArrangement frameArrangement;
+	/** Information about the systems in this frame. */
+	@Getter private FrameArrangement frameArrangement;
 
-	//for quicker lookup: divided into staff stampings and other stampings
-	private final Vector<StaffStamping> staffStampings;
-	private final Vector<Stamping> otherStampings;
+	/** The list of all staff stampings of this frame. Staff stampings and
+	 * other stampings are divided for performance reasons. */
+	@Getter private ArrayList<StaffStamping> staffStampings;
+	/** The list of all other stampings of this frame. Staff stampings and
+	 * other stampings are divided for performance reasons.*/
+	@Getter private ArrayList<Stamping> otherStampings;
 
-	//continued elements to the following frame
-	private final Vector<ContinuedElement> continuedElements;
+	/** The list of continued elements, that means the unclosed elements
+	 * that must also be painted on the next frame. */
+	@Getter private ArrayList<ContinuedElement> continuedElements;
 
-	//mutable stampings
-	private List<? extends Stamping> selectionStampings = ivec();
-	private List<? extends Stamping> playbackStampings = ivec();
+	//TODO: move into other class
+	/** The list of the selection stampings of this frame. */
+	@Getter @Setter private ArrayList<Stamping> selectionStampings = alist();
+	/** The list of the playback stampings of this frame. */
+	@Getter @Setter private ArrayList<Stamping> playbackStampings = alist();
 
-
-	/**
-	 * Creates a new layout for a score frame with no selections.
-	 * @param frameArrangement   information about the systems in this frame
-	 * @param staffStampings     the list of staff stampings
-	 * @param otherStampings     the list of all other stampings
-	 * @param continuedElements  unclosed elements of this frame that have to be continued
-	 *                           on the next frame
-	 */
-	public ScoreFrameLayout(FrameArrangement frameArrangement, Vector<StaffStamping> staffStampings,
-		Vector<Stamping> otherStampings, Vector<ContinuedElement> continuedElements)
+	
+	public ScoreFrameLayout(FrameArrangement frameArrangement, ArrayList<StaffStamping> staffStampings,
+		ArrayList<Stamping> otherStampings, ArrayList<ContinuedElement> continuedElements)
 	{
 		this.frameArrangement = frameArrangement;
 		this.staffStampings = staffStampings;
@@ -66,69 +61,28 @@ public final class ScoreFrameLayout
 
 
 	/**
-	 * Gets information about the systems in this frame.
-	 */
-	public FrameArrangement getFrameArrangement()
-	{
-		return frameArrangement;
-	}
-
-
-	/**
-	 * Gets a list of all staff stampings of this frame.
-	 */
-	public Vector<StaffStamping> getStaffStampings()
-	{
-		return staffStampings;
-	}
-
-
-	/**
-	 * Gets a list of all other stampings of this frame.
-	 */
-	public Vector<Stamping> getOtherStampings()
-	{
-		return otherStampings;
-	}
-
-
-	/**
-	 * Gets the list of continued elements, that means the unclosed elements
-	 * that must also be painted on the next frame.
-	 */
-	public Vector<ContinuedElement> getContinuedElements()
-	{
-		return continuedElements;
-	}
-
-
-	/**
 	 * Gets all musical stampings (staves, notes, ...) of this frame,
 	 * but not selections or playback stampings.
 	 */
-	@SuppressWarnings("unchecked") public Iterable<Stamping> getMusicalStampings()
-	{
+	public Iterable<Stamping> getMusicalStampings() {
 		return new MultiIt<Stamping>(staffStampings, otherStampings);
 	}
-
 
 	/**
 	 * Gets all stampings of this frame, including both the musical
 	 * and the status stampings (selection, playback).
 	 */
-	@SuppressWarnings("unchecked") public Iterable<Stamping> getAllStampings()
-	{
-		return new MultiIt<Stamping>(staffStampings, otherStampings, selectionStampings, playbackStampings);
+	public Iterable<Stamping> getAllStampings() {
+		return new MultiIt<Stamping>(staffStampings, otherStampings, selectionStampings,
+			playbackStampings);
 	}
-
 
 	/**
 	 * Returns the {@link Stamping} under the given position
 	 * in score layout coordinates (mm relative to the
 	 * upper left corner) or null, if there is none.
 	 */
-	public Stamping getStampingAt(Point2f point)
-	{
+	public Stamping getStampingAt(Point2f point) {
 		Stamping ret = null;
 		int highestLevel = -1;
 		for (Stamping s : getMusicalStampings()) {
@@ -140,13 +94,11 @@ public final class ScoreFrameLayout
 		return ret;
 	}
 
-
 	/**
 	 * Returns the {@link StaffStamping} under the given position
 	 * in score layout coordinates, or null, if there is none.
 	 */
-	public StaffStamping getStaffStampingAt(Point2f point)
-	{
+	public StaffStamping getStaffStampingAt(Point2f point) {
 		for (StaffStamping s : staffStampings) {
 			if (s.boundingShape.contains(point))
 				return (StaffStamping) s;
@@ -154,14 +106,12 @@ public final class ScoreFrameLayout
 		return null;
 	}
 
-
 	/**
 	 * Returns the {@link Stamping} (not a {@link StaffStamping}) which is instance
 	 * of the given class under the given position in score layout coordinates,
 	 * or null, if there is none.
 	 */
-	public Stamping getOtherStampingAt(Point2f point, Class<?> stampingClass)
-	{
+	public Stamping getOtherStampingAt(Point2f point, Class<?> stampingClass) {
 		for (Stamping s : otherStampings) {
 			if (s.boundingShape != null && s.boundingShape.contains(point) && stampingClass.isInstance(s))
 				return s;
@@ -169,13 +119,11 @@ public final class ScoreFrameLayout
 		return null;
 	}
 
-
 	/**
 	 * Returns the first {@link Stamping} which belongs to the given {@link MusicElement},
 	 * or null if there is none.
 	 */
-	public Stamping getStampingFor(MusicElement element)
-	{
+	public Stamping getStampingFor(MusicElement element) {
 		for (Stamping s : otherStampings) {
 			if (s.musicElement == element)
 				return s;
@@ -183,13 +131,11 @@ public final class ScoreFrameLayout
 		return null;
 	}
 
-
 	/**
 	 * Computes and returns the appropriate musical position
 	 * to the given position in score layout coordinates, or null, if unknown.
 	 */
-	public BMP computeMP(Point2f point)
-	{
+	public MP computeMP(Point2f point) {
 		if (point == null)
 			return null;
 		//first test, if there is a staff element.
@@ -205,24 +151,20 @@ public final class ScoreFrameLayout
 		}
 	}
 
-
 	/**
 	 * Computes and returns the text stamping to the given
 	 * position in score layout coordinates, or null, if unknown.
 	 */
-	public TextStamping computeTextStamping(Point2f point)
-	{
+	public TextStamping computeTextStamping(Point2f point) {
 		if (point == null)
 			return null;
 		return (TextStamping) getOtherStampingAt(point, TextStamping.class);
 	}
 
-
 	/**
 	 * Gets the staff stamping containing the given measure, or null if not found.
 	 */
-	public StaffStamping getStaffStamping(int staff, int measure)
-	{
+	public StaffStamping getStaffStamping(int staff, int measure) {
 		for (StaffStamping s : staffStampings) {
 			if (s.getStaffIndex() == staff && measure >= s.getStartMeasureIndex() &&
 				measure <= s.getEndMeasureIndex()) {
@@ -232,15 +174,13 @@ public final class ScoreFrameLayout
 		return null;
 	}
 
-
 	/**
 	 * Computes and returns the bounding rectangle of the system with the given index
 	 * (relative to the frame). Only the staves are regarded, not text around them
 	 * or notes over the top staff or notes below the bottom staff.
 	 * If there are no staves in this system, null is returned.
 	 */
-	public Rectangle2f getSystemBoundaries(int systemIndex)
-	{
+	public Rectangle2f getSystemBoundaries(int systemIndex) {
 		boolean found = false;
 		float minX = Float.MAX_VALUE;
 		float minY = Float.MAX_VALUE;
@@ -261,14 +201,12 @@ public final class ScoreFrameLayout
 			return null;
 	}
 
-
 	/**
 	 * Gets the horizontal position in mm of the given {@link BMP} within the given frame,
 	 * or 0 if not found (should not happen).
 	 * Only the measure and the beat of the given {@link BMP} are used.
 	 */
-	public float getPositionX(BMP bmp)
-	{
+	public float getPositionX(MP bmp) {
 		float minX = Float.MAX_VALUE;
 		//search all staves for the given musical position, beginning at the top staff
 		for (StaffStamping staff : staffStampings) {
@@ -282,41 +220,4 @@ public final class ScoreFrameLayout
 			return minX;
 	}
 	
-	
-	/**
-	 * Gets a list of the selection stampings of this frame.
-	 */
-	public List<? extends Stamping> getSelectionStampings()
-	{
-		return selectionStampings;
-	}
-
-
-	/**
-	 * Sets the list of the selection stampings of this frame.
-	 */
-	public void setSelectionStampings(List<? extends Stamping> selectionStampings)
-	{
-		this.selectionStampings = selectionStampings;
-	}
-
-
-	/**
-	 * Gets a list of the playback stampings of this frame.
-	 */
-	public List<? extends Stamping> getPlaybackStampings()
-	{
-		return playbackStampings;
-	}
-
-
-	/**
-	 * Sets the list of the playback stampings of this frame.
-	 */
-	public void setPlaybackStampings(List<? extends Stamping> playbackStampings)
-	{
-		this.playbackStampings = playbackStampings;
-	}
-
-
 }

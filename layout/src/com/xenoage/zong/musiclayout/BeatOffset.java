@@ -1,8 +1,10 @@
 package com.xenoage.zong.musiclayout;
 
+import lombok.Data;
+
+import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.musiclayout.spacing.horizontal.SpacingElement;
-
 
 /**
  * Offset of a beat in mm.
@@ -14,93 +16,30 @@ import com.xenoage.zong.musiclayout.spacing.horizontal.SpacingElement;
  * The offset is in mm and not in interline spaces, so that
  * it can be used for a whole measure column without respect
  * to the sizes of its staves.
- * 
- * This class is comparable to other instances of this
- * class by comparing the beat.
  *
  * @author Andreas Wenger
  */
-public final class BeatOffset
-{
- 
-  private final Fraction beat;
-  private final float offsetMm;
-  
-  
-  /**
-   * Creates a new {@link BeatOffset} for the given beat with
-   * the given offset in mm.
-   */
-  public BeatOffset(Fraction beat, float offsetMm)
-  {
-    this.beat = beat;
-    this.offsetMm = offsetMm;
-  }
-  
-  
-  /**
-   * Gets the beat.
-   */
-  public Fraction getBeat()
-  {
-  	return beat;
-  }
-  
-  
-  /**
-   * Gets the offset in mm.
-   */
-  public float getOffsetMm()
-  {
-  	return offsetMm;
-  }
-  
-  
-  /**
-   * Returns a copy of this {@link SpacingElement}, but using the
-   * given the offset in mm.
-   */
-  public BeatOffset withOffsetMm(float offsetMm)
-  {
-  	return new BeatOffset(beat, offsetMm);
-  }
-  
-  
-  /**
-   * Shifts the offset by the given value.
-   */
-  public BeatOffset shiftOffsetMm(float deltaMm)
-  {
-  	return new BeatOffset(beat, offsetMm + deltaMm);
-  }
-  
-  
-  /**
-   * Returns true, if the given object is a {@link BeatOffset}
-   * that is numerically equal to this one, otherwise false.
-   */
-  @Override public boolean equals(Object o)
-  {
-    if (this == o)
-    {
-      return true;
-    }
-    else if (o instanceof BeatOffset)
-    {
-    	BeatOffset bo = (BeatOffset) o;
-      return (this.beat.equals(bo.beat) && this.offsetMm == bo.offsetMm);
-    }
-    else
-    {
-      return false;
-    }
-  }
-  
-  
-  @Override public String toString()
-  {
-  	return beat.toString() + " at " + offsetMm + " mm";
-  }
-  
-  
+@Const @Data public final class BeatOffset {
+
+	/** The beat. */
+	private final Fraction beat;
+	/** The offset in mm. */
+	private final float offsetMm;
+
+
+	/**
+	 * Returns a copy of this {@link SpacingElement}, but using the
+	 * given the offset in mm.
+	 */
+	public BeatOffset withOffsetMm(float offsetMm) {
+		return new BeatOffset(beat, offsetMm);
+	}
+
+	/**
+	 * Shifts the offset by the given value.
+	 */
+	public BeatOffset shiftOffsetMm(float deltaMm) {
+		return new BeatOffset(beat, offsetMm + deltaMm);
+	}
+
 }
