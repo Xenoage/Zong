@@ -1,5 +1,8 @@
 package com.xenoage.zong.musiclayout.notations.chord;
 
+import lombok.AllArgsConstructor;
+
+import com.xenoage.utils.annotations.Const;
 
 /**
  * This class computes and stores
@@ -7,44 +10,12 @@ package com.xenoage.zong.musiclayout.notations.chord;
  *
  * @author Andreas Wenger
  */
-public final class ArticulationsAlignment
-{ 
-  
-  private final ArticulationAlignment[] articulations;
-  private final float totalHeightIS;
-  
-  
-  /**
-   * Creates a new {@link ArticulationsAlignment}.
-   * @param articulations  the positions of the articulations
-   * @param totalHeightIS  the needed height for all articulations in IS,
-   *                       including the space between the outer chord
-   *                       and the first articulation
-   */
-  public ArticulationsAlignment(ArticulationAlignment[] articulations, float totalHeightIS)
-  {
-  	this.articulations = articulations;
-  	this.totalHeightIS = totalHeightIS;
-  }
-  
-  
-  /**
-   * Gets the articulations.
-   */
-  public ArticulationAlignment[] getArticulations()
-  {
-    return articulations;
-  }
-  
-  
-  /**
-   * Gets the total height of the articulations in IS,
-   * including the space between the outer chord
-   * and the first articulation.
-   */
-  public float getTotalHeightIS()
-  {
-    return totalHeightIS;
-  }
-  
+@Const @AllArgsConstructor public final class ArticulationsAlignment {
+
+	/** The positions of the articulations. */
+	public final ArticulationAlignment[] articulations;
+	/** The total height of the articulations in IS,
+	 * including the space between the outer chord and the first articulation. */
+	public final float totalHeightIS;
+
 }
