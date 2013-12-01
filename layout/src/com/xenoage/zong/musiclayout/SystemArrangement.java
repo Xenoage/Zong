@@ -1,5 +1,7 @@
 package com.xenoage.zong.musiclayout;
 
+import static com.xenoage.utils.collections.ArrayUtils.sum;
+
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.collections.IList;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
@@ -52,10 +54,9 @@ import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 	public final float offsetY;
 
 	
-	//LOMBOK
 	public SystemArrangement(int startMeasureIndex, int endMeasureIndex,
 		IList<ColumnSpacing> columnSpacings, float marginLeft, float marginRight, float width,
-		float[] staffHeights, float[] staffDistances, float totalHeight, float offsetY) {
+		float[] staffHeights, float[] staffDistances, float offsetY) {
 		if (staffHeights.length != staffDistances.length + 1) {
 			throw new IllegalArgumentException("There must be one more staff height that staff distance");
 		}
@@ -67,7 +68,7 @@ import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 		this.width = width;
 		this.staffHeights = staffHeights;
 		this.staffDistances = staffDistances;
-		this.totalHeight = totalHeight;
+		this.totalHeight = sum(staffHeights) + sum(staffDistances);
 		this.offsetY = offsetY;
 	}
 
