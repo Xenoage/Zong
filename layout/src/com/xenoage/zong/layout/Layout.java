@@ -250,7 +250,7 @@ import com.xenoage.zong.util.event.ScoreChangedEvent;
 		ScoreFrameChain chain = scoreFrameChains.get(score);
 		if (chain != null) {
 			ScoreLayout sl = scoreLayouts.get(chain);
-			ScoreLP slp = sl.computeScoreLP(bmp, lp);
+			ScoreLP slp = sl.getScoreLP(bmp, lp);
 			if (slp != null) {
 				ScoreFrame frame = chain.frames.get(slp.frameIndex);
 				Page page = getPage(frame);

@@ -19,14 +19,14 @@ import com.xenoage.zong.core.music.slur.Slur;
 @Const @AllArgsConstructor public final class ContinuedSlur
 	implements ContinuedElement {
 
-	public final Slur curvedLine;
+	public final Slur slur;
 	public final VSide side;
 	public final int staffIndex;
 	public final int level;
 
 
 	@Override public Slur getMusicElement() {
-		return curvedLine;
+		return slur;
 	}
 
 	@Override public int getStaffIndex() {

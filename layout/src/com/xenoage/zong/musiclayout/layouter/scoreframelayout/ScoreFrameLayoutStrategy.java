@@ -65,11 +65,11 @@ import com.xenoage.zong.musiclayout.layouter.ScoreLayouterContext;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenBeamsCache;
-import com.xenoage.zong.musiclayout.layouter.cache.OpenCurvedLinesCache;
+import com.xenoage.zong.musiclayout.layouter.cache.OpenSlursCache;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenLyricsCache;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenTupletsCache;
 import com.xenoage.zong.musiclayout.layouter.cache.util.BeamedStemStampings;
-import com.xenoage.zong.musiclayout.layouter.cache.util.CurvedLineCache;
+import com.xenoage.zong.musiclayout.layouter.cache.util.SlurCache;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.ChordStampings;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.LastLyrics;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.StaffStampings;
@@ -167,7 +167,7 @@ public class ScoreFrameLayoutStrategy
     
     //caches
     OpenBeamsCache openBeamsCache = new OpenBeamsCache();
-    OpenCurvedLinesCache openCurvedLinesCache = new OpenCurvedLinesCache();
+    OpenSlursCache openCurvedLinesCache = new OpenSlursCache();
     LinkedList<ContinuedVolta> openVoltasCache = new LinkedList<ContinuedVolta>();
     LinkedList<ContinuedWedge> openWedgesCache = new LinkedList<ContinuedWedge>();
     OpenLyricsCache openLyricsCache = new OpenLyricsCache();
@@ -179,7 +179,7 @@ public class ScoreFrameLayoutStrategy
 	  {
     	if (ce instanceof ContinuedSlur)
     	{
-    		openCurvedLinesCache.add(CurvedLineCache.createContinued((ContinuedSlur) ce));
+    		openCurvedLinesCache.add(SlurCache.createContinued((ContinuedSlur) ce));
     	}
     	else if (ce instanceof ContinuedVolta)
     	{
@@ -498,7 +498,7 @@ public class ScoreFrameLayoutStrategy
 		
 		//collect elements that have to be continued on the next frame
 		PVector<ContinuedElement> continuedElements = pvec();
-		for (CurvedLineCache clc : openCurvedLinesCache)
+		for (SlurCache clc : openCurvedLinesCache)
 	  {
 			continuedElements = continuedElements.plus(clc.getContinuedCurvedLine());
 	  }
@@ -541,12 +541,12 @@ public class ScoreFrameLayoutStrategy
 	
   /**
    * Returns the stampings for the given {@link Chord}.
-   * The given {@link OpenBeamsCache}, {@link OpenCurvedLinesCache},
+   * The given {@link OpenBeamsCache}, {@link OpenSlursCache},
    * {@link OpenLyricsCache}, {@link LastLyrics} and {@link OpenTupletsCache} may be modified.
    */
   private LinkedList<Stamping> createChordStampings(ChordNotation chord, float positionX, StaffStamping staff,
   	int staffIndex, int systemIndex, FormattedTextStyle defaultLyricStyle, OpenBeamsCache openBeamsCache,
-  	OpenCurvedLinesCache openCurvedLinesCache, OpenLyricsCache openLyricsCache, LastLyrics lastLyrics,
+  	OpenSlursCache openCurvedLinesCache, OpenLyricsCache openLyricsCache, LastLyrics lastLyrics,
   	OpenTupletsCache openTupletsCache, Score score, SymbolPool symbolPool, LayoutSettings layoutSettings)
   {
   	Globals globals = score.globals;
@@ -609,14 +609,14 @@ public class ScoreFrameLayoutStrategy
   			//create start information
   			float distance = curvedLineStampingStrategy.computeAdditionalDistance(
   				chord, side);
-  			CurvedLineCache tiedChords = CurvedLineCache.createNew(
+  			SlurCache tiedChords = SlurCache.createNew(
   				cl, side, staffIndex, notehead, distance, systemIndex);
   			openCurvedLinesCache.add(tiedChords);
   		}
   		else
   		{
   			//create stop information
-  			CurvedLineCache tiedChords = openCurvedLinesCache.get(cl);
+  			SlurCache tiedChords = openCurvedLinesCache.get(cl);
   			if (tiedChords == null)
   			{
   				//start notehead of this tie is unknown (must be from some preceding frame), which was forgotten
@@ -733,18 +733,18 @@ public class ScoreFrameLayoutStrategy
 
 
 	/**
-	 * Creates the ties and slurs collected in the given {@link OpenCurvedLinesCache}.
+	 * Creates the ties and slurs collected in the given {@link OpenSlursCache}.
 	 * All closed slurs are removed from the cache. The unclosed slurs (which have to
 	 * be continued on the next frame) remain in the cache.
 	 */
-	private LinkedList<SlurStamping> createTiesAndSlurs(OpenCurvedLinesCache openCurvedLinesCache,
+	private LinkedList<SlurStamping> createTiesAndSlurs(OpenSlursCache openCurvedLinesCache,
 		StaffStampings staffStampings, int systemsCount)
 	{
 		LinkedList<SlurStamping> ret = new LinkedList<SlurStamping>();
-	  for (Iterator<CurvedLineCache> itCL = openCurvedLinesCache.iterator(); itCL.hasNext();)
+	  for (Iterator<SlurCache> itCL = openCurvedLinesCache.iterator(); itCL.hasNext();)
 	  {
 	  	boolean simpleLine = false; //current curved line simple (within one staff)?
-	  	CurvedLineCache cl = itCL.next();
+	  	SlurCache cl = itCL.next();
 	  	int middleSlurStartIndex = 0;
 	  	//if the start is known, begin (and if possible end) the slur in its staff
 	  	if (cl.isStartKnown())

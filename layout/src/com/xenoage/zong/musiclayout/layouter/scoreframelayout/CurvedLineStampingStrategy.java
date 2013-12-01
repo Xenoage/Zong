@@ -12,7 +12,7 @@ import com.xenoage.zong.core.music.format.BezierPoint;
 import com.xenoage.zong.core.music.format.SP;
 import com.xenoage.zong.musiclayout.continued.ContinuedSlur;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
-import com.xenoage.zong.musiclayout.layouter.cache.util.CurvedLineCache;
+import com.xenoage.zong.musiclayout.layouter.cache.util.SlurCache;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
 import com.xenoage.zong.musiclayout.notations.chord.StemAlignment;
 import com.xenoage.zong.musiclayout.stampings.SlurStamping;
@@ -60,7 +60,7 @@ public class CurvedLineStampingStrategy
 	 * otherwise false.
 	 */
 	public Tuple2<SlurStamping, Boolean> createCurvedLineStampingStart(
-		CurvedLineCache curvedLineInfo)
+		SlurCache curvedLineInfo)
 	{
 		NoteheadStamping n1 = curvedLineInfo.getStartNoteheadStamping();
 		NoteheadStamping n2 = curvedLineInfo.getStopNoteheadStamping();
@@ -76,7 +76,7 @@ public class CurvedLineStampingStrategy
 			//we need at least two staves.
 			//first staff: begin at the notehead, go to the end of the system
 			SlurStamping cls = createStart(n1, curvedLineInfo.getStartDistanceIS(),
-				curvedLineInfo.getCurvedLine(), curvedLineInfo.getSide());
+				curvedLineInfo.getSlur(), curvedLineInfo.getSide());
 			//remember this curved line to be continued
 			return new Tuple2<SlurStamping, Boolean>(cls, true);
 		}
@@ -97,7 +97,7 @@ public class CurvedLineStampingStrategy
 	public SlurStamping createCurvedLineStampingMiddle(
 		ContinuedSlur continuedCurvedLine, StaffStamping staffStamping)
 	{
-		return createMiddle(staffStamping, continuedCurvedLine.curvedLine,
+		return createMiddle(staffStamping, continuedCurvedLine.slur,
 			continuedCurvedLine.side);
 	}
 	
@@ -106,13 +106,13 @@ public class CurvedLineStampingStrategy
 	 * Creates a {@link SlurStamping} for a last part of a slur or tie
 	 * that spans at least two systems.
 	 */
-	public SlurStamping createCurvedLineStampingStop(CurvedLineCache curvedLineInfo)
+	public SlurStamping createCurvedLineStampingStop(SlurCache curvedLineInfo)
 	{
 		NoteheadStamping n = curvedLineInfo.getStopNoteheadStamping();
 		if (n != null)
 		{
 			return createStop(n, curvedLineInfo.getStopDistanceIS(),
-				curvedLineInfo.getCurvedLine(), curvedLineInfo.getSide());
+				curvedLineInfo.getSlur(), curvedLineInfo.getSide());
 		}
 		else
 		{
@@ -126,10 +126,10 @@ public class CurvedLineStampingStrategy
 	 * Creates a {@link SlurStamping} for a curved line that
 	 * uses only a single staff.
 	 */
-	SlurStamping createSingle(CurvedLineCache tiedChords)
+	SlurStamping createSingle(SlurCache tiedChords)
 	{
 		StaffStamping staff = tiedChords.getStartNoteheadStamping().parentStaff;
-		CurvedLine cl = tiedChords.getCurvedLine();
+		CurvedLine cl = tiedChords.getSlur();
 		CurvedLineWaypoint wp1 = cl.getStart();
 		CurvedLineWaypoint wp2 = cl.getStop();
 		
