@@ -1,6 +1,7 @@
 package com.xenoage.zong.musiclayout.notations.chord;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import com.xenoage.utils.annotations.Const;
 
@@ -9,13 +10,13 @@ import com.xenoage.utils.annotations.Const;
  *
  * @author Andreas Wenger
  */
-@Const @AllArgsConstructor public final class NotesAlignment {
+@Const @AllArgsConstructor @Getter public final class NotesAlignment {
 
 	/** The width of the chord notes and dots in spaces. */
 	public final float width;
 	/** The list of note alignments.
 	 * The notes are sorted upwards, that means, the lowest note has index 0. */
-	public final NoteAlignment[] notes;
+	public final NoteAlignment[] noteAlignments;
 	/** The offsets of the first and second column of dots (if any). */
 	public final float[] dotsOffsets;
 	/** The line positions of the dots, or an empty array, if the chord has no dots. */
@@ -31,7 +32,7 @@ import com.xenoage.utils.annotations.Const;
 	 * Gets the number of notes.
 	 */
 	public int getNotesCount() {
-		return notes.length;
+		return noteAlignments.length;
 	}
 
 	/**
@@ -40,7 +41,7 @@ import com.xenoage.utils.annotations.Const;
 	 * note has index 0.
 	 */
 	public NoteAlignment getNoteAlignment(int index) {
-		return notes[index];
+		return noteAlignments[index];
 	}
 
 	/**
@@ -54,14 +55,14 @@ import com.xenoage.utils.annotations.Const;
 	 * Gets the alignment of the top note of the chord.
 	 */
 	public NoteAlignment getTopNoteAlignment() {
-		return notes[notes.length - 1];
+		return noteAlignments[noteAlignments.length - 1];
 	}
 
 	/**
 	 * Gets the alignment of the bottom note of the chord.
 	 */
 	public NoteAlignment getBottomNoteAlignment() {
-		return notes[0];
+		return noteAlignments[0];
 	}
 
 	/**
@@ -75,9 +76,9 @@ import com.xenoage.utils.annotations.Const;
 	 * Gets the line positions of the chord (convenience method).
 	 */
 	public ChordLinePositions getLinePositions() {
-		int[] ret = new int[notes.length];
+		int[] ret = new int[noteAlignments.length];
 		for (int i = 0; i < ret.length; i++)
-			ret[i] = notes[i].linePosition;
+			ret[i] = noteAlignments[i].linePosition;
 		return new ChordLinePositions(ret);
 	}
 

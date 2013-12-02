@@ -1,9 +1,9 @@
 package com.xenoage.zong.musiclayout.layouter.beamednotation.alignment;
 
-import static com.xenoage.utils.base.iterators.It.it;
+import static com.xenoage.utils.iterators.It.it;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
 
-import com.xenoage.utils.base.iterators.It;
+import com.xenoage.utils.iterators.It;
 import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.music.beam.BeamWaypoint;
 import com.xenoage.zong.core.music.chord.Chord;
@@ -22,10 +22,9 @@ import com.xenoage.zong.musiclayout.notations.beam.BeamStemAlignments;
 import com.xenoage.zong.musiclayout.notations.chord.NotesAlignment;
 import com.xenoage.zong.musiclayout.notations.chord.StemAlignment;
 
-
 /**
- * This is an implementation of a {@link BeamedStemAlignmentNotationsStrategy}
- * which can only compute beams that are all in the same measure and in
+ * This class helps the {@link BeamedStemAlignmentNotationsStrategy}
+ * to compute beams that are all in the same measure, but in
  * two adjacent staves.
  * 
  * The strategy is quite simple: The first and the last stem have the default lengths
@@ -36,49 +35,43 @@ import com.xenoage.zong.musiclayout.notations.chord.StemAlignment;
  * @author Andreas Wenger
  */
 public class SingleMeasureTwoStavesStrategy
-	implements ScoreLayouterStrategy
-{
+	implements ScoreLayouterStrategy {
 
-	
 	/**
 	 * This strategy computes the lengths of the stems of the beamed chords.
 	 */
-	public NotationsCache computeNotations(Beam beam, NotationsCache notations)
-	{
+	public NotationsCache computeNotations(Beam beam, NotationsCache notations) {
 		NotesAlignment[] chordNa = new NotesAlignment[beam.getWaypoints().size()];
 		int beamlines = beam.getMaxBeamLinesCount();
 		int i = 0;
-		for (BeamWaypoint waypoint : beam.getWaypoints())
-		{
+		for (BeamWaypoint waypoint : beam.getWaypoints()) {
 			Chord chord = waypoint.getChord();
 			ChordNotation cn = notations.getChord(chord);
-			chordNa[i] = cn.getNotesAlignment();
+			chordNa[i] = cn.notesAlignment;
 			i++;
 		}
 		Chord firstChord = beam.getFirstWaypoint().getChord();
-		Stem firstStem = firstChord.stem;
-		StemDirection firstStemDirection = notations.getChord(firstChord).getStemDirection();
+		Stem firstStem = firstChord.getStem();
+		StemDirection firstStemDirection = notations.getChord(firstChord).stemDirection;
 		Chord lastChord = beam.getLastWaypoint().getChord();
-		Stem lastStem = lastChord.stem;
-		StemDirection lastStemDirection = notations.getChord(lastChord).getStemDirection();
-				
-		BeamStemAlignments bsa = computeStemAlignments(chordNa, beamlines,
-			firstStem, lastStem, firstStemDirection, lastStemDirection);
-		
+		Stem lastStem = lastChord.getStem();
+		StemDirection lastStemDirection = notations.getChord(lastChord).stemDirection;
+
+		BeamStemAlignments bsa = computeStemAlignments(chordNa, beamlines, firstStem, lastStem,
+			firstStemDirection, lastStemDirection);
+
 		//compute new notations
-		NotationsCache ret = NotationsCache.create();
+		NotationsCache ret = new NotationsCache();
 		It<BeamWaypoint> waypoints = it(beam.getWaypoints());
-		for (BeamWaypoint waypoint : waypoints)
-		{
+		for (BeamWaypoint waypoint : waypoints) {
 			Chord chord = waypoint.getChord();
 			ChordNotation oldCN = notations.getChord(chord);
-			ret.add(oldCN.withStemAlignment(bsa.getStemAlignments()[waypoints.getIndex()]));
+			ret.add(oldCN.withStemAlignment(bsa.stemAlignments[waypoints.getIndex()]));
 		}
-		
+
 		return ret;
 	}
-	
-	
+
 	/**
 	 * Computes the vertical positions of the first and the last stem
 	 * of the given beam. All other stem endpoints are set to null (which
@@ -92,15 +85,12 @@ public class SingleMeasureTwoStavesStrategy
 	 * @param lastStemDirection   the direction of the last chord
 	 * @return  the alignments of all stems of the given chords                        
 	 */
-	public BeamStemAlignments computeStemAlignments(NotesAlignment[] chordNa,
-		int beamLinesCount, Stem firstStem, Stem lastStem,
-		StemDirection firstStemDirection, StemDirection lastStemDirection)
-	{
+	public BeamStemAlignments computeStemAlignments(NotesAlignment[] chordNa, int beamLinesCount,
+		Stem firstStem, Stem lastStem, StemDirection firstStemDirection, StemDirection lastStemDirection) {
 		//get appropriate beam design
 		BeamDesign beamDesign;
-		switch (beamLinesCount)
-		{
-			//TIDY: we need only a small subset of the BeamDesign class. extract it?
+		switch (beamLinesCount) {
+		//TIDY: we need only a small subset of the BeamDesign class. extract it?
 			case 1:
 				beamDesign = new SingleBeamDesign(firstStemDirection, 0);
 				break;
@@ -117,47 +107,40 @@ public class SingleMeasureTwoStavesStrategy
 		//compute stem alignments
 		int chordsCount = chordNa.length;
 		StemAlignment[] stemAlignments = new StemAlignment[chordsCount];
-		for (int i = 0; i < chordsCount; i++)
-		{
+		for (int i = 0; i < chordsCount; i++) {
 			StemAlignment stemAlignment = null; //unknown
-			if (i == 0 || i == chordsCount - 1)
-			{
+			if (i == 0 || i == chordsCount - 1) {
 				Stem stem = (i == 0 ? firstStem : lastStem);
 				StemDirection stemDirection = (i == 0 ? firstStemDirection : lastStemDirection);
-				
+
 				//start LP
 				float startLP;
-				if (stemDirection == Up)
-				{
-					startLP = chordNa[i].getLinePositions().getBottom(); 
+				if (stemDirection == Up) {
+					startLP = chordNa[i].getLinePositions().getBottom();
 				}
-				else
-				{
-					startLP = chordNa[i].getLinePositions().getTop(); 
+				else {
+					startLP = chordNa[i].getLinePositions().getTop();
 				}
-				
+
 				//end LP
 				float endLP;
-				if (stem.length != null)
-				{
+				if (stem.getLength() != null) {
 					//use user-defined length
-					endLP = startLP + stemDirection.getSignum() * 2 * stem.length;
+					endLP = startLP + stemDirection.getSign() * 2 * stem.getLength();
 				}
-				else
-				{
+				else {
 					//compute length
-					endLP = startLP + stemDirection.getSignum() * 2 * beamDesign.getMinimumStemLength(); 
+					endLP = startLP + stemDirection.getSign() * 2 * beamDesign.getMinimumStemLength();
 				}
-				
+
 				stemAlignment = new StemAlignment(startLP, endLP);
 			}
 			stemAlignments[i] = stemAlignment;
 		}
 		BeamStemAlignments beamstemalignments = new BeamStemAlignments(stemAlignments,
 			BeamDesign.BEAMLINE_WIDTH, beamDesign.getDistanceBetweenBeamLines(), beamLinesCount);
-		
+
 		return beamstemalignments;
 	}
-	
-	
+
 }

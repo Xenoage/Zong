@@ -1,5 +1,7 @@
 package com.xenoage.zong.musiclayout.notations.chord;
 
+import lombok.Getter;
+
 import com.xenoage.utils.annotations.Const;
 
 /**
@@ -11,7 +13,7 @@ import com.xenoage.utils.annotations.Const;
  *
  * @author Andreas Wenger
  */
-@Const public final class AccidentalsAlignment {
+@Const @Getter public final class AccidentalsAlignment {
 
 	/** The accidentals of this chord. */
 	public final AccidentalAlignment[] accidentals;

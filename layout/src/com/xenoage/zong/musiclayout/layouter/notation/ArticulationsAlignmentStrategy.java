@@ -1,17 +1,16 @@
 package com.xenoage.zong.musiclayout.layouter.notation;
 
+import java.util.List;
+
 import com.xenoage.utils.math.VSide;
-import com.xenoage.utils.pdlib.Vector;
 import com.xenoage.zong.core.music.chord.Articulation;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.StemDirection;
-import com.xenoage.zong.core.music.chord.Articulation.Type;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.notations.chord.ArticulationAlignment;
 import com.xenoage.zong.musiclayout.notations.chord.ArticulationsAlignment;
 import com.xenoage.zong.musiclayout.notations.chord.NoteAlignment;
 import com.xenoage.zong.musiclayout.notations.chord.NotesAlignment;
-
 
 /**
  * This strategy stores the alignment of
@@ -20,66 +19,54 @@ import com.xenoage.zong.musiclayout.notations.chord.NotesAlignment;
  * @author Andreas Wenger
  */
 public class ArticulationsAlignmentStrategy
-	implements ScoreLayouterStrategy
-{
+	implements ScoreLayouterStrategy {
 
-	
 	/**
 	 * Computes the alignment of the articulations of the given chord,
 	 * using the given note alignments and the given stem direction (optional),
 	 * and returns it. If there are no articulations, null is returned.
 	 */
 	public ArticulationsAlignment computeArticulationsAlignment(Chord chord,
-		StemDirection stemDirection, NotesAlignment notesAlignment, int linesCount)
-	{
+		StemDirection stemDirection, NotesAlignment notesAlignment, int linesCount) {
 		//depending on the stem direction, place the articulation on the other side.
 		//if there is no stem direction, always place at the top
 		VSide side = (stemDirection == StemDirection.Up ? VSide.Bottom : VSide.Top);
 		//dependent on the side of the articulation, take the top or bottom note
-		NoteAlignment outerNote = (side == VSide.Top ? notesAlignment.getTopNoteAlignment() :
-			notesAlignment.getBottomNoteAlignment());
+		NoteAlignment outerNote = (side == VSide.Top ? notesAlignment.getTopNoteAlignment()
+			: notesAlignment.getBottomNoteAlignment());
 		//compute alignment of articulations
-		return computeArticulationsAlignment(chord.articulations,
-			outerNote, side, linesCount);
+		return computeArticulationsAlignment(chord.getArticulations(), outerNote, side, linesCount);
 	}
-	
-	
+
 	/**
-   * Creates a new {@link ArticulationsAlignment} for the outer chord note
-   * at the given side, or null if there are no articulations.
-   */
-	ArticulationsAlignment computeArticulationsAlignment(
-  	Vector<Articulation> articulations, NoteAlignment outerNote, VSide side, int staffLinesCount)
-  {
+	 * Creates a new {@link ArticulationsAlignment} for the outer chord note
+	 * at the given side, or null if there are no articulations.
+	 */
+	ArticulationsAlignment computeArticulationsAlignment(List<Articulation> articulations,
+		NoteAlignment outerNote, VSide side, int staffLinesCount) {
 		//if there are no accidentals, return null
-		if (articulations == null || articulations.size() == 0)
-		{
+		if (articulations == null || articulations.size() == 0) {
 			return null;
 		}
-    //special cases (which appear often): if there is only a single articulation
+		//special cases (which appear often): if there is only a single articulation
 		//which is either a staccato or tenuto, we can place it between the staff lines
 		if (articulations.size() == 1 &&
-			(articulations.getFirst().getType() == Type.Staccato ||
-				articulations.getFirst().getType() == Type.Tenuto))
-		{
-			return computeSimpleArticulation(articulations.getFirst(), outerNote, side, staffLinesCount);
+			(articulations.get(0) == Articulation.Staccato || articulations.get(0) == Articulation.Tenuto)) {
+			return computeSimpleArticulation(articulations.get(0), outerNote, side, staffLinesCount);
 		}
-    //otherwise, the articulations a placed above or below the staff
-		else
-		{
+		//otherwise, the articulations a placed above or below the staff
+		else {
 			return computeOtherArticulations(articulations, outerNote, side, staffLinesCount);
 		}
-  }
-	
-	
+	}
+
 	/**
 	 * Creates an {@link ArticulationsAlignment} for the given {@link Articulation}
 	 * at the given notehead at the given side. If possible, it is placed between
 	 * the staff lines.
 	 */
 	ArticulationsAlignment computeSimpleArticulation(Articulation articulation,
-		NoteAlignment outerNote, VSide side, int staffLinesCount)
-	{
+		NoteAlignment outerNote, VSide side, int staffLinesCount) {
 		//compute LP of the articulation: if within staff, it must be
 		//between the staff lines (LP 1, 3, 5, ...)
 		float lp = outerNote.getLinePosition() + 2 * side.getDir();
@@ -90,21 +77,18 @@ public class ArticulationsAlignmentStrategy
 		}
 		//compute ArticulationsAlignment
 		float height = 1; //1 IS
-		return new ArticulationsAlignment(
-			new ArticulationAlignment[]{
-			new ArticulationAlignment(lp, outerNote.getOffset(), articulation.getType())}, height);
+		return new ArticulationsAlignment(new ArticulationAlignment[] { new ArticulationAlignment(lp,
+			outerNote.getOffset(), articulation) }, height);
 	}
-	
-	
+
 	/**
 	 * Creates an {@link ArticulationsAlignment} for the given {@link Articulation}s
 	 * at the given notehead at the given side. The articulations are always placed
 	 * outside the staff lines. The first one is placed as the innermost articulation,
 	 * the last one as the outermost one.
 	 */
-	ArticulationsAlignment computeOtherArticulations(Vector<Articulation> articulations,
-		NoteAlignment outerNote, VSide side, int staffLinesCount)
-	{
+	ArticulationsAlignment computeOtherArticulations(List<Articulation> articulations,
+		NoteAlignment outerNote, VSide side, int staffLinesCount) {
 		//compute LP of the first articulation:
 		//if within staff, it must be moved outside
 		float lp = outerNote.getLinePosition() + 2 * side.getDir();
@@ -114,19 +98,14 @@ public class ArticulationsAlignmentStrategy
 		}
 		//collect ArticulationAlignments
 		ArticulationAlignment[] aa = new ArticulationAlignment[articulations.size()];
-		for (int i = 0; i < articulations.size(); i++)
-		{
-			aa[i] = new ArticulationAlignment(lp + 2 * i * side.getDir(),
-				outerNote.getOffset(), articulations.get(i).getType());
+		for (int i = 0; i < articulations.size(); i++) {
+			aa[i] = new ArticulationAlignment(lp + 2 * i * side.getDir(), outerNote.getOffset(),
+				articulations.get(i));
 		}
 		//total height: 1 IS for each articulation
 		float totalHeightIS = Math.abs(lp - outerNote.getLinePosition()) / 2;
 		//create ArticulationsAlignment
 		return new ArticulationsAlignment(aa, totalHeightIS);
 	}
-  
-  
-  
-	
 
 }

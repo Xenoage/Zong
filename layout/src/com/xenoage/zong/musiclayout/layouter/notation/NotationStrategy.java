@@ -5,18 +5,13 @@ import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.zong.core.music.Pitch.pi;
 import static com.xenoage.zong.core.music.util.Interval.Before;
 import static com.xenoage.zong.core.music.util.Interval.BeforeOrAt;
-import static com.xenoage.zong.io.score.ScoreController.getInterlineSpace;
-import static com.xenoage.zong.io.score.ScoreController.getMusicContext;
 import static com.xenoage.zong.text.FormattedTextUtils.styleText;
 
-import com.xenoage.utils.graphics.font.FontInfo;
-import com.xenoage.utils.graphics.font.FontUtils;
+import com.xenoage.utils.font.FontInfo;
 import com.xenoage.utils.math.Fraction;
-import com.xenoage.utils.pdlib.Vector;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.format.Break;
 import com.xenoage.zong.core.music.ColumnElement;
-import com.xenoage.zong.core.music.Globals;
 import com.xenoage.zong.core.music.InstrumentChange;
 import com.xenoage.zong.core.music.Measure;
 import com.xenoage.zong.core.music.MeasureElement;
@@ -34,11 +29,14 @@ import com.xenoage.zong.core.music.rest.Rest;
 import com.xenoage.zong.core.music.text.Lyric;
 import com.xenoage.zong.core.music.text.Lyric.SyllableType;
 import com.xenoage.zong.core.music.time.NormalTime;
+import com.xenoage.zong.core.music.time.Time;
 import com.xenoage.zong.core.music.util.BeatE;
 import com.xenoage.zong.core.music.util.Column;
 import com.xenoage.zong.core.music.util.Interval;
 import com.xenoage.zong.core.position.BMP;
 import com.xenoage.zong.core.position.IMP;
+import com.xenoage.zong.core.position.MP;
+import com.xenoage.zong.core.position.MPElement;
 import com.xenoage.zong.io.score.ScoreController;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
@@ -60,7 +58,6 @@ import com.xenoage.zong.symbols.SymbolPool;
 import com.xenoage.zong.text.FormattedText;
 import com.xenoage.zong.text.FormattedTextStyle;
 
-
 /**
  * This strategy computes information about the layout
  * of {@link MusicElement}s, e.g. the needed horizontal space
@@ -70,8 +67,7 @@ import com.xenoage.zong.text.FormattedTextStyle;
  * @author Andreas Wenger
  */
 public final class NotationStrategy
-	implements ScoreLayouterStrategy
-{
+	implements ScoreLayouterStrategy {
 
 	//used strategies
 	private final StemDirectionStrategy stemDirectionStrategy;
@@ -79,67 +75,57 @@ public final class NotationStrategy
 	private final AccidentalsAlignmentStrategy accidentalsAlignmentStrategy;
 	private final StemAlignmentStrategy stemAlignmentStrategy;
 	private final ArticulationsAlignmentStrategy articulationsAlignmentStrategy;
-	
+
 
 	/**
 	 * Creates a new instance of a {@link NotationStrategy}.
 	 */
 	public NotationStrategy(StemDirectionStrategy stemDirectionStrategy,
-		NotesAlignmentStrategy notesAlignmentStrategy, AccidentalsAlignmentStrategy accidentalsAlignmentStrategy,
-		StemAlignmentStrategy stemAlignmentStrategy, ArticulationsAlignmentStrategy articulationsAlignmentStrategy)
-	{
+		NotesAlignmentStrategy notesAlignmentStrategy,
+		AccidentalsAlignmentStrategy accidentalsAlignmentStrategy,
+		StemAlignmentStrategy stemAlignmentStrategy,
+		ArticulationsAlignmentStrategy articulationsAlignmentStrategy) {
 		this.stemDirectionStrategy = stemDirectionStrategy;
 		this.notesAlignmentStrategy = notesAlignmentStrategy;
 		this.accidentalsAlignmentStrategy = accidentalsAlignmentStrategy;
 		this.stemAlignmentStrategy = stemAlignmentStrategy;
 		this.articulationsAlignmentStrategy = articulationsAlignmentStrategy;
 	}
-	
-	
+
 	/**
 	 * Computes the {@link Notation}s of all {@link MusicElement}s
 	 * in the given {@link Score}, using the given {@link SymbolPool}.
 	 */
-	public NotationsCache computeNotations(Score score, SymbolPool symbolPool,
-		LayoutSettings layoutSettings)
-	{
-		NotationsCache ret = NotationsCache.create();
-		for (int iMeasure : range(0, score.getMeasuresCount() - 1))
-		{
-			Column measureColumn = Column.column(score, iMeasure);
-			
+	public NotationsCache computeNotations(Score score, SymbolPool<?> symbolPool,
+		LayoutSettings layoutSettings) {
+		NotationsCache ret = new NotationsCache();
+		for (int iMeasure : range(0, score.getMeasuresCount() - 1)) {
+			Column measureColumn = score.getColumn(iMeasure);
+
 			//column elements (for each staff)
-			for (ColumnElement element : score.header.getColumnHeader(iMeasure).getColumnElements())
-			{
-				for (int iStaff : range(measureColumn))
-				{
-					Notation notation = computeNotation(element,
-						iStaff, score, symbolPool, layoutSettings);
+			for (ColumnElement element : score.getHeader().getColumnHeader(iMeasure).getColumnElements()) {
+				for (int iStaff : range(measureColumn)) {
+					Notation notation = computeNotation(element, iStaff, score, symbolPool, layoutSettings);
 					if (notation != null)
 						ret.add(notation, iStaff);
 				}
 			}
-			
-			for (int iStaff : range(measureColumn))
-			{
+
+			for (int iStaff : range(measureColumn)) {
 				Measure measure = measureColumn.get(iStaff);
 				//measure elements
-				for (BeatE<MeasureElement> element : measure.getMeasureElements())
-				{
-					Notation notation = computeNotation(element.element, iStaff,
-						score, symbolPool, layoutSettings);
+				for (BeatE<MeasureElement> element : measure.getMeasureElements()) {
+					Notation notation = computeNotation(element.element, iStaff, score, symbolPool,
+						layoutSettings);
 					if (notation != null)
 						ret.add(notation);
 				}
-				for (int iVoice : range(measure.voices))
-				{
-					Voice voice = measure.voices.get(iVoice);
+				for (int iVoice : range(measure.getVoices())) {
+					Voice voice = measure.getVoice(iVoice);
 					//voice elements
 					Fraction beat = _0;
-					for (VoiceElement element : voice.elements)
-					{
-						Notation notation = computeNotation(element, iStaff,
-							score, symbolPool, layoutSettings);
+					for (VoiceElement element : voice.elements) {
+						Notation notation = computeNotation(element, iStaff, score, symbolPool, layoutSettings);
 						if (notation != null)
 							ret.add(notation);
 						beat = beat.add(element.getDuration());
@@ -150,18 +136,16 @@ public final class NotationStrategy
 		return ret;
 	}
 
-
 	/**
 	 * Computes the {@link Notation} of the given {@link MusicElement} at the
 	 * given staff in the given {@link Score}, using the given {@link SymbolPool}.
 	 */
-	private Notation computeNotation(MusicElement element, int staff, Score score,
-		SymbolPool symbolPool, LayoutSettings layoutSettings)
-	{
+	private Notation computeNotation(MPElement element, int staff, Score score,
+		SymbolPool<?> symbolPool, LayoutSettings layoutSettings) {
 		//note: we can not read the MP of the element from the score in all cases,
 		//since column elements have no single MP, but are used over the whole column.
 		//so we provide the staff as a parameter
-		
+
 		//not nice, but we want to leave the logic within this class.
 		//multiple dispatch would be needed.
 		Notation notation;
@@ -169,87 +153,76 @@ public final class NotationStrategy
 			notation = computeChord((Chord) element, null, score, layoutSettings);
 		else if (element instanceof Clef)
 			notation = computeClef((Clef) element, layoutSettings);
-		else if (element instanceof NormalTime)
-			notation = computeNormalTime((NormalTime) element, symbolPool);
+		else if (element instanceof Time)
+			notation = computeTime((Time) element, symbolPool);
 		else if (element instanceof Rest)
 			notation = computeRest((Rest) element, layoutSettings);
 		else if (element instanceof TraditionalKey)
 			notation = computeTraditionalKey((TraditionalKey) element,
-				ScoreController.getClef(score, score.getBMP(element).withStaff(staff), Interval.Before),
+				score.getClef(MP.getMP(element).withStaff(staff), Interval.Before),
 				layoutSettings);
-		else if (element instanceof Direction)
-		{
+		else if (element instanceof Direction) {
 			//directions need no notations at the moment
 			notation = null;
 		}
-		else if (element instanceof InstrumentChange)
-		{
+		else if (element instanceof InstrumentChange) {
 			//ignore instrument change
 			notation = null;
 		}
-		else if (element instanceof Barline)
-		{
+		else if (element instanceof Barline) {
 			//ignore barline
 			notation = null;
 		}
-		else if (element instanceof Break)
-		{
+		else if (element instanceof Break) {
 			//ignore break
 			notation = null;
 		}
-		else
-		{
+		else {
 			notation = computeUnsupported(element);
 		}
-		
+
 		return notation;
 	}
-	
-	
+
 	/**
 	 * Computes the {@link Notation} of the given {@link Chord} at the
 	 * given {@link IMP} ,
 	 * using the given {@link StemDirection} in the given {@link Score}.
 	 */
 	public ChordNotation computeChord(Chord chord, StemDirection stemDirection,
-		Score score, LayoutSettings layoutSettings)
-	{
-		Globals globals = score.globals;
+		Score score, LayoutSettings layoutSettings) {
 		//get the music context and the parent voice
-		BMP bmp = score.getBMP(chord);
-		MusicContext mc = getMusicContext(score, bmp, BeforeOrAt, Before);
+		MP mp = MP.getMP(chord);
+		MusicContext mc = score.getMusicContext(mp, BeforeOrAt, Before);
 		//compute the notation
-		return computeChord(chord, mc, getInterlineSpace(score, bmp),
-			score.format.lyricFont, stemDirection, globals, layoutSettings);
+		return computeChord(chord, mc, score.getInterlineSpace(mp), score.getFormat().lyricFont,
+			stemDirection, layoutSettings);
 	}
-
 
 	/**
 	 * Computes the layout of a {@link Chord}.
 	 */
 	private ChordNotation computeChord(Chord chord, MusicContext mc, float interlineSpace,
-		FontInfo lyricsFont, StemDirection stemDirection, Globals globals, LayoutSettings layoutSettings)
-	{
+		FontInfo lyricsFont, StemDirection stemDirection, LayoutSettings layoutSettings) {
 		//grace or normal chord?
-		boolean grace = (chord.grace != null);
+		boolean grace = (chord.getGrace() != null);
 		ChordWidths chordWidths = (grace ? layoutSettings.graceChordWidths : layoutSettings.chordWidths);
-		ChordSpacings spacings = (grace ? layoutSettings.spacings.graceChordSpacings :
-			layoutSettings.spacings.normalChordSpacings);
-		
+		ChordSpacings spacings = (grace ? layoutSettings.spacings.graceChordSpacings
+			: layoutSettings.spacings.normalChordSpacings);
+
 		//stem direction
-		if (stemDirection == null)
-		{
+		if (stemDirection == null) {
 			stemDirection = stemDirectionStrategy.computeStemDirection(chord, mc);
 		}
-		
+
 		//notes alignment
-		NotesAlignment notesAlignment = notesAlignmentStrategy.computeNotesAlignment(
-			chord, stemDirection, chordWidths, mc);
+		NotesAlignment notesAlignment = notesAlignmentStrategy.computeNotesAlignment(chord,
+			stemDirection, chordWidths, mc);
 		//accidentals alignment
-		AccidentalsAlignment accidentalsAlignment = accidentalsAlignmentStrategy.computeAccidentalsAlignment(
-			chord, notesAlignment, chordWidths, mc);
+		AccidentalsAlignment accidentalsAlignment = accidentalsAlignmentStrategy
+			.computeAccidentalsAlignment(chord, notesAlignment, chordWidths, mc);
 		float accidentalsWidth = (accidentalsAlignment != null ? accidentalsAlignment.getWidth() : 0);
-		
+
 		float leftSuspendedWidth = notesAlignment.getLeftSuspendedWidth();
 		//symbol's width: width of the noteheads and dots
 		float symbolWidth = notesAlignment.getWidth() - leftSuspendedWidth;
@@ -258,28 +231,24 @@ public final class NotationStrategy
 		//rear gap: empty duration-dependent space behind the chord
 		//minus the symbol's width
 		float rearGap = spacings.getWidth(chord.getDisplayedDuration()) - symbolWidth;
-		
+
 		//lyric width
 		float lyricWidth = 0;
-		Vector<Lyric> lyrics = globals.getAttachments().getLyrics(chord);
-		for (Lyric lyric : lyrics)
-		{
-			if (lyric != null && lyric.getText() != null)
-			{
+		List<Lyric> lyrics = globals.getAttachments().getLyrics(chord);
+		for (Lyric lyric : lyrics) {
+			if (lyric != null && lyric.getText() != null) {
 				//width of lyric in interline spaces
 				//OBSOLETE float l = textMeasurer(lyricsFont, lyric.getText()).getWidth() / interlineSpace;
 				FormattedText lyricText = styleText(lyric.getText(), new FormattedTextStyle(lyricsFont));
 				float l = lyricText.getWidth() / interlineSpace;
-				
+
 				//for start and end syllable, request "-" more space, for middle syllables "--"
 				//TODO: unsymmetric - start needs space on the right, end on the left, ...
 				SyllableType lyricType = lyric.getSyllableType();
-				if (lyricType == SyllableType.Begin || lyricType == SyllableType.End)
-				{
+				if (lyricType == SyllableType.Begin || lyricType == SyllableType.End) {
 					l += FontUtils.textMeasurer(lyricsFont, "-").getWidth() / interlineSpace;
 				}
-				else if (lyricType == SyllableType.Middle)
-				{
+				else if (lyricType == SyllableType.Middle) {
 					l += FontUtils.textMeasurer(lyricsFont, "--").getWidth() / interlineSpace;
 				}
 				//save width of the widest lyric
@@ -288,35 +257,30 @@ public final class NotationStrategy
 		}
 
 		//compute length of the stem (if any)
-		StemAlignment stemAlignment = stemAlignmentStrategy.computeStemAlignment(chord.stem, notesAlignment,
-			stemDirection, mc.getLinesCount(), grace ? layoutSettings.scalingGrace : 1);
-		
+		StemAlignment stemAlignment = stemAlignmentStrategy.computeStemAlignment(chord.stem,
+			notesAlignment, stemDirection, mc.getLinesCount(), grace ? layoutSettings.scalingGrace : 1);
+
 		//compute articulations
-		ArticulationsAlignment articulationsAlignment =
-			articulationsAlignmentStrategy.computeArticulationsAlignment(chord, stemDirection,
-				notesAlignment, mc.getLinesCount());
-		
+		ArticulationsAlignment articulationsAlignment = articulationsAlignmentStrategy
+			.computeArticulationsAlignment(chord, stemDirection, notesAlignment, mc.getLinesCount());
+
 		return new ChordNotation(chord, new ElementWidth(frontGap, symbolWidth, rearGap, lyricWidth),
 			notesAlignment, stemDirection, stemAlignment, accidentalsAlignment, articulationsAlignment);
 	}
-
 
 	/**
 	* Computes the layout of a {@link Clef}, which is not in a leading spacing.
 	* These clefs are usually drawn smaller.
 	*/
-	private ClefNotation computeClef(Clef clef, LayoutSettings ls)
-	{
-		return new ClefNotation(clef, new ElementWidth(0, ls.spacings.widthClef * ls.scalingClefInner, 0),
-			clef.getType().getLine(), ls.scalingClefInner);
+	private ClefNotation computeClef(Clef clef, LayoutSettings ls) {
+		return new ClefNotation(clef, new ElementWidth(0, ls.spacings.widthClef * ls.scalingClefInner,
+			0), clef.getType().getLine(), ls.scalingClefInner);
 	}
-
 
 	/**
 	* Computes the layout of a {@link NormalTime}.
 	*/
-	private NormalTimeNotation computeNormalTime(NormalTime time, SymbolPool symbolPool)
-	{
+	private NormalTimeNotation computeTime(NormalTime time, SymbolPool symbolPool) {
 		//front and rear gap: 1 space
 		float gap = 1f;
 		//gap between digits: 0.1 space
@@ -325,8 +289,7 @@ public final class NotationStrategy
 		//the width of the time signature is the width of the wider number
 		float numeratorWidth = 2;
 		float denominatorWidth = 2;
-		if (symbolPool != null)
-		{
+		if (symbolPool != null) {
 			numeratorWidth = symbolPool.computeNumberWidth(time.getNumerator(), digitGap);
 			denominatorWidth = symbolPool.computeNumberWidth(time.getDenominator(), digitGap);
 		}
@@ -334,48 +297,39 @@ public final class NotationStrategy
 		//create element layout
 		float numeratorOffset = (width - numeratorWidth) / 2;
 		float denominatorOffset = (width - denominatorWidth) / 2;
-		return new NormalTimeNotation(time, new ElementWidth(gap, width, gap),
-			numeratorOffset, denominatorOffset, digitGap);
+		return new NormalTimeNotation(time, new ElementWidth(gap, width, gap), numeratorOffset,
+			denominatorOffset, digitGap);
 	}
-
 
 	/**
 	* Computes the layout of a {@link Rest}.
 	*/
-	private RestNotation computeRest(Rest rest, LayoutSettings layoutSettings)
-	{
+	private RestNotation computeRest(Rest rest, LayoutSettings layoutSettings) {
 		float width = layoutSettings.spacings.normalChordSpacings.getWidth(rest.getDuration());
 		return new RestNotation(rest, new ElementWidth(width));
 	}
-
 
 	/**
 	* Computes the layout of a {@link TraditionalKey}.
 	*/
 	public TraditionalKeyNotation computeTraditionalKey(TraditionalKey key, Clef contextClef,
-		LayoutSettings layoutSettings)
-	{
+		LayoutSettings layoutSettings) {
 		float width = 0;
 		int fifth = key.fifth;
-		if (fifth > 0)
-		{
+		if (fifth > 0) {
 			width = fifth * layoutSettings.spacings.widthSharp;
 		}
-		else
-		{
+		else {
 			width = -fifth * layoutSettings.spacings.widthFlat;
 		}
-		return new TraditionalKeyNotation(key, new ElementWidth(0, width, 1),
-			contextClef.getType().computeLinePosition(pi(0, 0, 4)),
-			contextClef.getType().getKeySignatureLowestLine(fifth));
+		return new TraditionalKeyNotation(key, new ElementWidth(0, width, 1), contextClef.getType()
+			.computeLinePosition(pi(0, 0, 4)), contextClef.getType().getKeySignatureLowestLine(fifth));
 	}
-
 
 	/**
 	* Computes the layout of an unknown {@link MusicElement}.
 	*/
-	private Notation computeUnsupported(MusicElement element)
-	{
+	private Notation computeUnsupported(MusicElement element) {
 		throw new IllegalArgumentException("Unsupported MusicElement of type " + element.getClass());
 	}
 

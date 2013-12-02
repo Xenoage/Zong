@@ -11,7 +11,6 @@ import static com.xenoage.zong.core.music.util.MPE.mpE;
 import static com.xenoage.zong.core.position.MP.atMeasure;
 import static com.xenoage.zong.core.position.MP.mpb0;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,6 +42,7 @@ import com.xenoage.zong.core.music.key.Key;
 import com.xenoage.zong.core.music.key.TraditionalKey;
 import com.xenoage.zong.core.music.key.TraditionalKey.Mode;
 import com.xenoage.zong.core.music.util.BeatE;
+import com.xenoage.zong.core.music.util.Column;
 import com.xenoage.zong.core.music.util.Interval;
 import com.xenoage.zong.core.music.util.MPE;
 import com.xenoage.zong.core.position.MP;
@@ -369,8 +369,8 @@ public final class Score
 	/**
 	 * Gets the measures of the column with the given index.
 	 */
-	public ArrayList<Measure> getColumn(int measureIndex) {
-		ArrayList<Measure> ret = new ArrayList<Measure>(getStavesCount());
+	public Column getColumn(int measureIndex) {
+		Column ret = new Column(getStavesCount());
 		for (Staff staff : stavesList.getStaves()) {
 			ret.add(staff.getMeasure(measureIndex));
 		}

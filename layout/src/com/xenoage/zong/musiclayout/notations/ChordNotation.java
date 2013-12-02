@@ -1,6 +1,8 @@
 package com.xenoage.zong.musiclayout.notations;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.experimental.Wither;
 
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.music.chord.Chord;
@@ -17,7 +19,7 @@ import com.xenoage.zong.musiclayout.spacing.horizontal.ElementWidth;
  *
  * @author Andreas Wenger
  */
-@Const @AllArgsConstructor public class ChordNotation
+@Const @AllArgsConstructor @Getter @Wither public class ChordNotation
 	implements Notation {
 
 	public final Chord element;
