@@ -8,11 +8,11 @@ import com.xenoage.zong.musiclayout.spacing.horizontal.ElementWidth;
 
 /**
  * This class contains layout information
- * about a normal time signature.
+ * about a time signature.
  *
  * @author Andreas Wenger
  */
-@Const @AllArgsConstructor public final class NormalTimeNotation
+@Const @AllArgsConstructor public final class TimeNotation
 	implements Notation {
 
 	/** The time signature element. */

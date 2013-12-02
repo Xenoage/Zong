@@ -17,7 +17,7 @@ import com.xenoage.zong.musiclayout.layouter.cache.util.OpenBeamMiddleStem;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.ChordStampings;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
 import com.xenoage.zong.musiclayout.notations.ClefNotation;
-import com.xenoage.zong.musiclayout.notations.NormalTimeNotation;
+import com.xenoage.zong.musiclayout.notations.TimeNotation;
 import com.xenoage.zong.musiclayout.notations.RestNotation;
 import com.xenoage.zong.musiclayout.notations.TraditionalKeyNotation;
 import com.xenoage.zong.musiclayout.notations.chord.AccidentalAlignment;
@@ -286,7 +286,7 @@ public class MusicElementStampingStrategy
   /**
    * Creates a stamping for the given time signature.
    */
-  public Stamping createTimeStamping(NormalTimeNotation time, float positionX,
+  public Stamping createTimeStamping(TimeNotation time, float positionX,
   	StaffStamping staff, SymbolPool symbolPool)
   {
   	if (time.getMusicElement() instanceof CommonTime)

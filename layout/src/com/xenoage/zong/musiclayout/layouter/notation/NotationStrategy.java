@@ -1,5 +1,7 @@
 package com.xenoage.zong.musiclayout.layouter.notation;
 
+import static com.xenoage.utils.CheckUtils.checkNotNull;
+import static com.xenoage.utils.PlatformUtils.platformUtils;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.zong.core.music.Pitch.pi;
@@ -7,7 +9,10 @@ import static com.xenoage.zong.core.music.util.Interval.Before;
 import static com.xenoage.zong.core.music.util.Interval.BeforeOrAt;
 import static com.xenoage.zong.text.FormattedTextUtils.styleText;
 
+import java.util.List;
+
 import com.xenoage.utils.font.FontInfo;
+import com.xenoage.utils.font.TextMeasurer;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.format.Break;
@@ -25,26 +30,22 @@ import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.core.music.clef.Clef;
 import com.xenoage.zong.core.music.direction.Direction;
 import com.xenoage.zong.core.music.key.TraditionalKey;
+import com.xenoage.zong.core.music.lyric.Lyric;
+import com.xenoage.zong.core.music.lyric.SyllableType;
 import com.xenoage.zong.core.music.rest.Rest;
-import com.xenoage.zong.core.music.text.Lyric;
-import com.xenoage.zong.core.music.text.Lyric.SyllableType;
-import com.xenoage.zong.core.music.time.NormalTime;
 import com.xenoage.zong.core.music.time.Time;
 import com.xenoage.zong.core.music.util.BeatE;
 import com.xenoage.zong.core.music.util.Column;
 import com.xenoage.zong.core.music.util.Interval;
-import com.xenoage.zong.core.position.BMP;
-import com.xenoage.zong.core.position.IMP;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.position.MPElement;
-import com.xenoage.zong.io.score.ScoreController;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
 import com.xenoage.zong.musiclayout.notations.ClefNotation;
-import com.xenoage.zong.musiclayout.notations.NormalTimeNotation;
 import com.xenoage.zong.musiclayout.notations.Notation;
 import com.xenoage.zong.musiclayout.notations.RestNotation;
+import com.xenoage.zong.musiclayout.notations.TimeNotation;
 import com.xenoage.zong.musiclayout.notations.TraditionalKeyNotation;
 import com.xenoage.zong.musiclayout.notations.chord.AccidentalsAlignment;
 import com.xenoage.zong.musiclayout.notations.chord.ArticulationsAlignment;
@@ -75,6 +76,8 @@ public final class NotationStrategy
 	private final AccidentalsAlignmentStrategy accidentalsAlignmentStrategy;
 	private final StemAlignmentStrategy stemAlignmentStrategy;
 	private final ArticulationsAlignmentStrategy articulationsAlignmentStrategy;
+	
+	private TextMeasurer textMeasurer;
 
 
 	/**
@@ -90,6 +93,7 @@ public final class NotationStrategy
 		this.accidentalsAlignmentStrategy = accidentalsAlignmentStrategy;
 		this.stemAlignmentStrategy = stemAlignmentStrategy;
 		this.articulationsAlignmentStrategy = articulationsAlignmentStrategy;
+		this.textMeasurer = checkNotNull(platformUtils().getTextMeasurer());
 	}
 
 	/**
@@ -234,7 +238,7 @@ public final class NotationStrategy
 
 		//lyric width
 		float lyricWidth = 0;
-		List<Lyric> lyrics = globals.getAttachments().getLyrics(chord);
+		List<Lyric> lyrics = chord.getLyrics();
 		for (Lyric lyric : lyrics) {
 			if (lyric != null && lyric.getText() != null) {
 				//width of lyric in interline spaces
@@ -246,10 +250,10 @@ public final class NotationStrategy
 				//TODO: unsymmetric - start needs space on the right, end on the left, ...
 				SyllableType lyricType = lyric.getSyllableType();
 				if (lyricType == SyllableType.Begin || lyricType == SyllableType.End) {
-					l += FontUtils.textMeasurer(lyricsFont, "-").getWidth() / interlineSpace;
+					l += textMeasurer.measure(lyricsFont, "-").getWidth() / interlineSpace;
 				}
 				else if (lyricType == SyllableType.Middle) {
-					l += FontUtils.textMeasurer(lyricsFont, "--").getWidth() / interlineSpace;
+					l += textMeasurer.measure(lyricsFont, "--").getWidth() / interlineSpace;
 				}
 				//save width of the widest lyric
 				lyricWidth = Math.max(lyricWidth, l);
@@ -257,7 +261,7 @@ public final class NotationStrategy
 		}
 
 		//compute length of the stem (if any)
-		StemAlignment stemAlignment = stemAlignmentStrategy.computeStemAlignment(chord.stem,
+		StemAlignment stemAlignment = stemAlignmentStrategy.computeStemAlignment(chord.getStem(),
 			notesAlignment, stemDirection, mc.getLinesCount(), grace ? layoutSettings.scalingGrace : 1);
 
 		//compute articulations
@@ -278,9 +282,9 @@ public final class NotationStrategy
 	}
 
 	/**
-	* Computes the layout of a {@link NormalTime}.
+	* Computes the layout of a {@link Time}.
 	*/
-	private NormalTimeNotation computeTime(NormalTime time, SymbolPool symbolPool) {
+	private TimeNotation computeTime(Time time, SymbolPool<?> symbolPool) {
 		//front and rear gap: 1 space
 		float gap = 1f;
 		//gap between digits: 0.1 space
@@ -290,14 +294,14 @@ public final class NotationStrategy
 		float numeratorWidth = 2;
 		float denominatorWidth = 2;
 		if (symbolPool != null) {
-			numeratorWidth = symbolPool.computeNumberWidth(time.getNumerator(), digitGap);
-			denominatorWidth = symbolPool.computeNumberWidth(time.getDenominator(), digitGap);
+			numeratorWidth = symbolPool.computeNumberWidth(time.getType().getNumerator(), digitGap);
+			denominatorWidth = symbolPool.computeNumberWidth(time.getType().getDenominator(), digitGap);
 		}
 		float width = Math.max(numeratorWidth, denominatorWidth);
 		//create element layout
 		float numeratorOffset = (width - numeratorWidth) / 2;
 		float denominatorOffset = (width - denominatorWidth) / 2;
-		return new NormalTimeNotation(time, new ElementWidth(gap, width, gap), numeratorOffset,
+		return new TimeNotation(time, new ElementWidth(gap, width, gap), numeratorOffset,
 			denominatorOffset, digitGap);
 	}
 
@@ -315,7 +319,7 @@ public final class NotationStrategy
 	public TraditionalKeyNotation computeTraditionalKey(TraditionalKey key, Clef contextClef,
 		LayoutSettings layoutSettings) {
 		float width = 0;
-		int fifth = key.fifth;
+		int fifth = key.getFifth();
 		if (fifth > 0) {
 			width = fifth * layoutSettings.spacings.widthSharp;
 		}

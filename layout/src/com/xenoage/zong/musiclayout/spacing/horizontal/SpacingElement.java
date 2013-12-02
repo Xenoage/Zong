@@ -21,13 +21,13 @@ import com.xenoage.zong.core.music.MusicElement;
 
 	/** The corresponding music element, e.g. a chord. May be null, e.g. when this
 	 * element denotes the end point of the measure. */
-	@MaybeNull private final MusicElement element;
+	@MaybeNull public final MusicElement element;
 	/** The beat where this music element can be found in the measure */
-	@NonNull private final Fraction beat;
+	@NonNull public final Fraction beat;
 	/** The horizontal offset of the element in interline spaces */
-	private final float offset;
+	public final float offset;
 	/** True, if this is a grace element (0 duration) */
-	private final boolean grace;
+	public final boolean grace;
 
 	public SpacingElement(MusicElement element, Fraction beat, float offset) {
 		this(element, beat, offset, false);

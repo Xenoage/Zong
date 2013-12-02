@@ -75,7 +75,7 @@ import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.LastLyrics;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.StaffStampings;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
 import com.xenoage.zong.musiclayout.notations.ClefNotation;
-import com.xenoage.zong.musiclayout.notations.NormalTimeNotation;
+import com.xenoage.zong.musiclayout.notations.TimeNotation;
 import com.xenoage.zong.musiclayout.notations.Notation;
 import com.xenoage.zong.musiclayout.notations.RestNotation;
 import com.xenoage.zong.musiclayout.notations.TraditionalKeyNotation;
@@ -527,10 +527,10 @@ public class ScoreFrameLayoutStrategy
   		return musicElementStampingStrategy.createKeyStamping(
   			(TraditionalKeyNotation) notation, positionX, staff, symbolPool, layoutSettings);
   	}
-  	else if (notation instanceof NormalTimeNotation)
+  	else if (notation instanceof TimeNotation)
   	{
   		return musicElementStampingStrategy.createTimeStamping(
-  			(NormalTimeNotation) notation, positionX, staff, symbolPool);
+  			(TimeNotation) notation, positionX, staff, symbolPool);
   	}
   	else
   	{
