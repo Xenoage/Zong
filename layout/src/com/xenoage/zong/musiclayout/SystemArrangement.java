@@ -1,6 +1,7 @@
 package com.xenoage.zong.musiclayout;
 
 import static com.xenoage.utils.collections.ArrayUtils.sum;
+import lombok.Getter;
 
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.collections.IList;
@@ -19,7 +20,7 @@ import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
  *
  * @author Andreas Wenger
  */
-@Const public final class SystemArrangement {
+@Const @Getter public final class SystemArrangement {
 
 	/** The index of the first measure of the system. */
 	public final int startMeasureIndex;
@@ -40,20 +41,23 @@ import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 
 	/** The width of the system (without the horizontal offset).
 	 * It may be longer than the used width, e.g. to create empty staves.
-	 * To get the used width, call {@link #getUsedWidth()}. */ 
+	 * To get the used width, call {@link #getUsedWidth()}. */
 	public final float width;
 
 	/** The heights of the staves in mm. (#staves-1) items. */
 	public final float[] staffHeights; //
 	/** The distances between the staves in mm. (#staves-2) items. */
 	public final float[] staffDistances;
-	/** The total height of this system in mm. */
-	public final float totalHeight;
 
-	/** The vertical offset of the system in mm, relative to the top. */ 
+	/** The vertical offset of the system in mm, relative to the top. */
 	public final float offsetY;
 
-	
+	//cache
+	private transient float height = Float.NaN;
+	private transient float usedWidth = Float.NaN;
+
+
+	//LOMBOK
 	public SystemArrangement(int startMeasureIndex, int endMeasureIndex,
 		IList<ColumnSpacing> columnSpacings, float marginLeft, float marginRight, float width,
 		float[] staffHeights, float[] staffDistances, float offsetY) {
@@ -68,7 +72,6 @@ import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 		this.width = width;
 		this.staffHeights = staffHeights;
 		this.staffDistances = staffDistances;
-		this.totalHeight = sum(staffHeights) + sum(staffDistances);
 		this.offsetY = offsetY;
 	}
 
@@ -87,14 +90,39 @@ import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 	}
 
 	/**
+	 * Gets the total height of this system in mm.
+	 */
+	public float getHeight() {
+		if (height == Float.NaN)
+			height = sum(staffHeights) + sum(staffDistances);
+		return height;
+	}
+
+	/**
 	 * Gets the used width of the system.
 	 */
 	public float getUsedWidth() {
-		float ret = 0;
-		for (ColumnSpacing mcs : columnSpacings) {
-			ret += mcs.getWidth();
+		if (usedWidth == Float.NaN) {
+			usedWidth = 0;
+			for (ColumnSpacing mcs : columnSpacings) {
+				usedWidth += mcs.getWidth();
+			}
 		}
-		return ret;
+		return usedWidth;
 	}
 
+	public SystemArrangement withWidth(float width) {
+		return new SystemArrangement(startMeasureIndex, endMeasureIndex, columnSpacings,
+			marginLeft, marginRight, width, staffHeights, staffDistances, offsetY);
+	}
+	
+	public SystemArrangement withSpacings(IList<ColumnSpacing> columnSpacings, float width) {
+		return new SystemArrangement(startMeasureIndex, endMeasureIndex, columnSpacings,
+			marginLeft, marginRight, width, staffHeights, staffDistances, offsetY);
+	}
+	
+	public SystemArrangement withOffsetY(float offsetY) {
+		return new SystemArrangement(startMeasureIndex, endMeasureIndex, columnSpacings,
+			marginLeft, marginRight, width, staffHeights, staffDistances, offsetY);
+	}
 }

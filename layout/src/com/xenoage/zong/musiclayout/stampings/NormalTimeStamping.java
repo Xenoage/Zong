@@ -9,7 +9,7 @@ import com.xenoage.zong.core.music.time.Time;
  *
  * @author Andreas Wenger
  */
-@Const public final class TimeStamping
+@Const public final class NormalTimeStamping
 	extends Stamping {
 
 	/** The horizontal position in mm. */
@@ -28,7 +28,7 @@ import com.xenoage.zong.core.music.time.Time;
 	public final float digitGap;
 
 
-	public TimeStamping(Time time, float positionX, StaffStamping parentStaff,
+	public NormalTimeStamping(Time time, float positionX, StaffStamping parentStaff,
 		float numeratorOffset, float denominatorOffset, float digitGap) {
 		super(parentStaff, Level.Music, null, null);
 		this.time = time;

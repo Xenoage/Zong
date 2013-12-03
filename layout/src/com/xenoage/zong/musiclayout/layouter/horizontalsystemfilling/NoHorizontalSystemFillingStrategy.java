@@ -2,7 +2,6 @@ package com.xenoage.zong.musiclayout.layouter.horizontalsystemfilling;
 
 import com.xenoage.zong.musiclayout.SystemArrangement;
 
-
 /**
  * This horizontal system filling strategy
  * changes nothing. It simply reuses the
@@ -12,32 +11,18 @@ import com.xenoage.zong.musiclayout.SystemArrangement;
  * @author Andreas Wenger
  */
 public class NoHorizontalSystemFillingStrategy
-  implements HorizontalSystemFillingStrategy
-{
-	
-	private static NoHorizontalSystemFillingStrategy instance = null;
-	
-	
-	public static NoHorizontalSystemFillingStrategy getInstance()
-	{
-		if (instance == null)
-			instance = new NoHorizontalSystemFillingStrategy();
-		return instance;
-	}
-	
-	
-	private NoHorizontalSystemFillingStrategy()
-	{
-	}
-	
-  
+	implements HorizontalSystemFillingStrategy {
+
+	public static NoHorizontalSystemFillingStrategy instance =
+		new NoHorizontalSystemFillingStrategy();
+
+
 	/**
-   * Nothing is changed. The given system arrangement is returned.
-   */
-	@Override public SystemArrangement computeSystemArrangement(
-		SystemArrangement systemArrangement, float usableWidth)
-	{
+	 * Nothing is changed. The given system arrangement is returned.
+	 */
+	@Override public SystemArrangement computeSystemArrangement(SystemArrangement systemArrangement,
+		float usableWidth) {
 		return systemArrangement;
 	}
-	
+
 }

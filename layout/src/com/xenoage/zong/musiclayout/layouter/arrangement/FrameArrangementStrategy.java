@@ -82,7 +82,7 @@ public class FrameArrangementStrategy
 				retLeadingNotations.merge(leadingNotations);
 				//update offset and start measure index for next system
 				//add height of this system
-				offsetY += system.totalHeight;
+				offsetY += system.getHeight();
 				//add system distance of the following system
 				offsetY += getSystemDistance(systemIndex + 1, scoreFormat, scoreHeader);
 				//increase indexes

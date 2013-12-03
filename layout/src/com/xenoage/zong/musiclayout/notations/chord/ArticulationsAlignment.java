@@ -1,6 +1,7 @@
 package com.xenoage.zong.musiclayout.notations.chord;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import com.xenoage.utils.annotations.Const;
 
@@ -10,7 +11,7 @@ import com.xenoage.utils.annotations.Const;
  *
  * @author Andreas Wenger
  */
-@Const @AllArgsConstructor public final class ArticulationsAlignment {
+@Const @AllArgsConstructor @Getter public final class ArticulationsAlignment {
 
 	/** The positions of the articulations. */
 	public final ArticulationAlignment[] articulations;

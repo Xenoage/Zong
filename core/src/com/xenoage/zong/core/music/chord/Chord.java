@@ -25,7 +25,6 @@ import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.position.MPElement;
 import com.xenoage.zong.core.util.InconsistentScoreException;
 
-
 /**
  * Class for a chord.
  * 
@@ -67,11 +66,11 @@ public class Chord
 	@Getter @Setter @MaybeNull private ArrayList<Lyric> lyrics = null;
 	/** The directions attached to this chord, or null. */
 	@Getter @Setter @MaybeNull private ArrayList<Direction> directions = null;
-	
+
 	/** Back reference: the parent voice, or null if not part of a score. */
 	@Getter @Setter private Voice parent = null;
-	
-	
+
+
 	/**
 	 * Creates a chord with the given note and duration.
 	 */
@@ -81,7 +80,6 @@ public class Chord
 		this.notes.add(note);
 		this.duration = duration;
 	}
-
 
 	/**
 	 * Creates a chord with the given notes and duration.
@@ -98,7 +96,6 @@ public class Chord
 		this.duration = duration;
 	}
 
-
 	/**
 	 * Collects and returns all pitches of this chord.
 	 * Pitches that are used more times are also used more
@@ -112,14 +109,12 @@ public class Chord
 		return ret;
 	}
 
-
 	/**
 	 * Adds a pitch this chord.
 	 */
 	public void addPitch(Pitch pitch) {
 		addNote(new Note(pitch));
 	}
-
 
 	/**
 	 * Adds a note this chord.
@@ -134,7 +129,6 @@ public class Chord
 		notes.add(i, note);
 	}
 
-
 	private void checkNotesOrder(ArrayList<Note> notes) {
 		Pitch currentPitch = null;
 		Pitch lastPitch = notes.get(0).getPitch();
@@ -147,7 +141,6 @@ public class Chord
 		}
 	}
 
-
 	/**
 	 * Gets the displayed duration of this chord. For full chords, this method returns the
 	 * same value as {@link #getDuration()}. For grace notes, the value of
@@ -157,12 +150,17 @@ public class Chord
 		return (grace == null ? duration : grace.getGraceDuration());
 	}
 
+	/**
+	 * Returns true, if this chord is a grace chord.
+	 */
+	public boolean isGrace() {
+		return grace != null;
+	}
 
 	@Override public String toString() {
 		return "chord(" + notes.get(0).toString() + (notes.size() > 1 ? ",..." : "") +
 			(duration.isGreater0() ? ";dur:" + duration : ";grace") + ")";
 	}
-
 
 	@Override public MP getMP(MPElement child) {
 		//all children have the same musical position as this chord

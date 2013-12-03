@@ -29,7 +29,7 @@ import com.xenoage.zong.musiclayout.layouter.notation.NotesAlignmentStrategy;
 import com.xenoage.zong.musiclayout.layouter.notation.StemAlignmentStrategy;
 import com.xenoage.zong.musiclayout.layouter.notation.StemDirectionStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.BeamStampingStrategy;
-import com.xenoage.zong.musiclayout.layouter.scoreframelayout.CurvedLineStampingStrategy;
+import com.xenoage.zong.musiclayout.layouter.scoreframelayout.SlurStampingStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.DirectionStampingStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.LyricStampingStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.MusicElementStampingStrategy;
@@ -146,7 +146,7 @@ public class ScoreLayouter {
 				measureColumnSpacingStrategy)), new BeamedStemAlignmentNotationsStrategy(),
 			new ScoreFrameLayoutStrategy(new StaffStampingsStrategy(),
 				new MusicElementStampingStrategy(), new BeamStampingStrategy(),
-				new CurvedLineStampingStrategy(), new LyricStampingStrategy(), new VoltaStampingStrategy(),
+				new SlurStampingStrategy(), new LyricStampingStrategy(), new VoltaStampingStrategy(),
 				new DirectionStampingStrategy(), new TupletStampingStrategy()));
 	}
 

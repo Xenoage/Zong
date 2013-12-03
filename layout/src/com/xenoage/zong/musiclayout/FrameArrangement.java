@@ -1,6 +1,7 @@
 package com.xenoage.zong.musiclayout;
 
 import static com.xenoage.utils.collections.CollectionUtils.containsNull;
+import lombok.Getter;
 
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.collections.IList;
@@ -12,7 +13,7 @@ import com.xenoage.utils.math.geom.Size2f;
  *
  * @author Andreas Wenger
  */
-@Const public final class FrameArrangement {
+@Const @Getter public final class FrameArrangement {
 
 	/** The systems on this frame. */
 	public final IList<SystemArrangement> systems;

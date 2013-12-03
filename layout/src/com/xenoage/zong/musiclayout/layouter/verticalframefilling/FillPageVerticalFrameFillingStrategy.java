@@ -1,13 +1,12 @@
 package com.xenoage.zong.musiclayout.layouter.verticalframefilling;
 
+import static com.xenoage.utils.collections.CList.clist;
 import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.utils.pdlib.IVector.ivec;
 
-import com.xenoage.utils.pdlib.IVector;
+import com.xenoage.utils.collections.CList;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.musiclayout.FrameArrangement;
 import com.xenoage.zong.musiclayout.SystemArrangement;
-
 
 /**
  * This vertical frame filling strategy
@@ -19,27 +18,12 @@ import com.xenoage.zong.musiclayout.SystemArrangement;
  * @author Andreas Wenger
  */
 public class FillPageVerticalFrameFillingStrategy
-	implements VerticalFrameFillingStrategy
-{
+	implements VerticalFrameFillingStrategy {
 
-	private static FillPageVerticalFrameFillingStrategy instance = null;
-
-
-	public static FillPageVerticalFrameFillingStrategy getInstance()
-	{
-		if (instance == null)
-			instance = new FillPageVerticalFrameFillingStrategy();
-		return instance;
-	}
+	public static FillPageVerticalFrameFillingStrategy instance = new FillPageVerticalFrameFillingStrategy();
 
 
-	private FillPageVerticalFrameFillingStrategy()
-	{
-	}
-
-
-	@Override public FrameArrangement computeFrameArrangement(FrameArrangement frameArr, Score score)
-	{
+	@Override public FrameArrangement computeFrameArrangement(FrameArrangement frameArr, Score score) {
 		FrameArrangement ret = frameArr;
 		//if there is no or only one system, do nothing
 		if (frameArr.getSystems().size() > 1) {
@@ -50,7 +34,7 @@ public class FillPageVerticalFrameFillingStrategy
 			//compute additional space between the systems
 			float additionalSpace = remainingSpace / (frameArr.getSystems().size() - 1);
 			//compute new y-offsets
-			IVector<SystemArrangement> systemArrs = ivec();
+			CList<SystemArrangement> systemArrs = clist();
 			for (int i : range(frameArr.getSystems())) {
 				SystemArrangement system = frameArr.getSystems().get(i);
 				system = system.withOffsetY(system.getOffsetY() + i * additionalSpace);
@@ -60,6 +44,5 @@ public class FillPageVerticalFrameFillingStrategy
 		}
 		return ret;
 	}
-
 
 }

@@ -32,7 +32,7 @@ import com.xenoage.zong.core.text.Alignment;
 	private final Alignment alignment;
 	
 	/** The measurements of this paragraph. */
-	private transient final TextMetrics metrics;
+	private final TextMetrics metrics;
 
 	public static final Alignment defaultAlignment = Alignment.Left;
 

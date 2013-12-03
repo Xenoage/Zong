@@ -209,7 +209,7 @@ public final class NotationStrategy
 	private ChordNotation computeChord(Chord chord, MusicContext mc, float interlineSpace,
 		FontInfo lyricsFont, StemDirection stemDirection, LayoutSettings layoutSettings) {
 		//grace or normal chord?
-		boolean grace = (chord.getGrace() != null);
+		boolean grace = chord.isGrace();
 		ChordWidths chordWidths = (grace ? layoutSettings.graceChordWidths : layoutSettings.chordWidths);
 		ChordSpacings spacings = (grace ? layoutSettings.spacings.graceChordSpacings
 			: layoutSettings.spacings.normalChordSpacings);

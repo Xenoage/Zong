@@ -1,9 +1,9 @@
 package com.xenoage.zong.musiclayout;
 
-import java.util.ArrayList;
-
 import lombok.Getter;
 
+import com.xenoage.utils.annotations.Const;
+import com.xenoage.utils.collections.IList;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.utils.math.MathUtils;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
@@ -25,14 +25,14 @@ import com.xenoage.zong.musiclayout.stampings.StaffStamping;
  * 
  * @author Andreas Wenger
  */
-public class MeasureMarks {
+@Const @Getter public class MeasureMarks {
 
-	@Getter private int measure;
-	@Getter private float startMm;
-	@Getter private float leadingMm;
-	@Getter private float endMm;
+	public final int measure;
+	public final float startMm;
+	public final float leadingMm;
+	public final float endMm;
 	/** All {@link BeatOffset}s in this measure. */
-	@Getter private ArrayList<BeatOffset> beatOffsets;
+	public IList<BeatOffset> beatOffsets;
 
 
 	/**
@@ -46,7 +46,7 @@ public class MeasureMarks {
 	 * @param beatOffsets  offsets for the beats in the measure (at least one)
 	 */
 	public MeasureMarks(int measure, float startMm, float leadingMm, float endMm,
-		ArrayList<BeatOffset> beatOffsets) {
+		IList<BeatOffset> beatOffsets) {
 		if (beatOffsets.size() == 0)
 			throw new IllegalArgumentException("At least one beat must be given");
 		this.measure = measure;

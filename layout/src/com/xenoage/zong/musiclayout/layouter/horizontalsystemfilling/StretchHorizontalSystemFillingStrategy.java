@@ -1,9 +1,9 @@
 package com.xenoage.zong.musiclayout.layouter.horizontalsystemfilling;
 
-import static com.xenoage.utils.base.iterators.ReverseIterator.reverseIt;
-import static com.xenoage.utils.pdlib.IVector.ivec;
+import static com.xenoage.utils.collections.CList.clist;
+import static com.xenoage.utils.iterators.ReverseIterator.reverseIt;
 
-import com.xenoage.utils.pdlib.IVector;
+import com.xenoage.utils.collections.CList;
 import com.xenoage.zong.musiclayout.BeatOffset;
 import com.xenoage.zong.musiclayout.SystemArrangement;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
@@ -11,7 +11,6 @@ import com.xenoage.zong.musiclayout.spacing.horizontal.MeasureElementsSpacings;
 import com.xenoage.zong.musiclayout.spacing.horizontal.MeasureSpacing;
 import com.xenoage.zong.musiclayout.spacing.horizontal.SpacingElement;
 import com.xenoage.zong.musiclayout.spacing.horizontal.VoiceSpacing;
-
 
 /**
  * This horizontal system filling strategy
@@ -22,23 +21,10 @@ import com.xenoage.zong.musiclayout.spacing.horizontal.VoiceSpacing;
  * @author Andreas Wenger
  */
 public class StretchHorizontalSystemFillingStrategy
-	implements HorizontalSystemFillingStrategy
-{
+	implements HorizontalSystemFillingStrategy {
 
-	private static StretchHorizontalSystemFillingStrategy instance = null;
-
-
-	public static StretchHorizontalSystemFillingStrategy getInstance()
-	{
-		if (instance == null)
-			instance = new StretchHorizontalSystemFillingStrategy();
-		return instance;
-	}
-
-
-	private StretchHorizontalSystemFillingStrategy()
-	{
-	}
+	private static StretchHorizontalSystemFillingStrategy instance =
+		new StretchHorizontalSystemFillingStrategy();
 
 
 	/**
@@ -46,8 +32,7 @@ public class StretchHorizontalSystemFillingStrategy
 	 * it uses the whole usable width of the system.
 	 */
 	@Override public SystemArrangement computeSystemArrangement(SystemArrangement systemArrangement,
-		float usableWidth)
-	{
+		float usableWidth) {
 		//compute width of all voice spacings
 		//(leading spacings are not stretched)
 		float voicesWidth = 0;
@@ -64,38 +49,39 @@ public class StretchHorizontalSystemFillingStrategy
 
 		//stretch the voice spacings
 		//measure columns
-		IVector<ColumnSpacing> newMCSpacings = ivec();
+		CList<ColumnSpacing> newMCSpacings = clist(systemArrangement.getColumnSpacings().size());
 		for (ColumnSpacing column : systemArrangement.getColumnSpacings()) {
 			//beat offsets
-			IVector<BeatOffset> newBeatOffsets = ivec();
+			CList<BeatOffset> newBeatOffsets = clist(column.getBeatOffsets().size());
 			for (BeatOffset oldBeatOffset : column.getBeatOffsets()) {
 				//stretch the offset
 				newBeatOffsets.add(oldBeatOffset.withOffsetMm(oldBeatOffset.getOffsetMm() * stretch));
 			}
-			IVector<BeatOffset> newBarlineOffsets = ivec();
+			CList<BeatOffset> newBarlineOffsets = clist(column.getBarlineOffsets().size());
 			for (BeatOffset oldBarlineOffset : column.getBarlineOffsets()) {
 				//stretch the offset
-				newBarlineOffsets.add(oldBarlineOffset.withOffsetMm(oldBarlineOffset
-					.getOffsetMm() * stretch));
+				newBarlineOffsets.add(oldBarlineOffset.withOffsetMm(oldBarlineOffset.getOffsetMm() *
+					stretch));
 			}
 			//measures
-			IVector<MeasureSpacing> newMeasureSpacings = ivec();
+			CList<MeasureSpacing> newMeasureSpacings = clist(column.getMeasureSpacings().size());
 			for (MeasureSpacing oldMS : column.getMeasureSpacings()) {
 				//measure elements
-				IVector<SpacingElement> newMESElements = ivec();
-				for (SpacingElement oldMES : oldMS.measureElementsSpacings.elements) {
+				CList<SpacingElement> newMESElements = clist(oldMS.getMeasureElementsSpacings()
+					.getElements().size());
+				for (SpacingElement oldMES : oldMS.getMeasureElementsSpacings().getElements()) {
 					//stretch the offset
 					newMESElements.add(oldMES.withOffset(oldMES.offset * stretch));
 				}
 				MeasureElementsSpacings newMES = new MeasureElementsSpacings(newMESElements.close());
 				//voices
-				IVector<VoiceSpacing> newVSs = ivec();
-				for (VoiceSpacing oldVS : oldMS.voiceSpacings) {
+				CList<VoiceSpacing> newVSs = clist(oldMS.getVoiceSpacings().size());
+				for (VoiceSpacing oldVS : oldMS.getVoiceSpacings()) {
 					//spacing elements
 					//traverse in reverse order, so we can align grace elements correctly
 					//grace elements are not stretched, but the distance to their following full element
 					//stays the same
-					IVector<SpacingElement> newSEs = ivec();
+					CList<SpacingElement> newSEs = clist();
 					float lastOldOffset = Float.NaN;
 					float lastNewOffset = Float.NaN;
 					for (SpacingElement oldSE : reverseIt(oldVS.getSpacingElements())) {
@@ -103,7 +89,8 @@ public class StretchHorizontalSystemFillingStrategy
 							//grace element: keep distance to following element
 							float oldDistance = lastOldOffset - oldSE.offset;
 							lastNewOffset = lastNewOffset - oldDistance;
-						} else {
+						}
+						else {
 							//normal element: stretch the offset
 							lastNewOffset = oldSE.offset * stretch;
 						}
@@ -112,8 +99,8 @@ public class StretchHorizontalSystemFillingStrategy
 					}
 					newVSs.add(new VoiceSpacing(oldVS.getVoice(), oldVS.getInterlineSpace(), newSEs.close()));
 				}
-				newMeasureSpacings.add(new MeasureSpacing(oldMS.mp, newVSs.close(), newMES,
-					oldMS.leadingSpacing));
+				newMeasureSpacings.add(new MeasureSpacing(oldMS.getMp(), newVSs.close(), newMES,
+					oldMS.getLeadingSpacing()));
 			}
 
 			newMCSpacings.add(new ColumnSpacing(column.getScore(), newMeasureSpacings.close(),

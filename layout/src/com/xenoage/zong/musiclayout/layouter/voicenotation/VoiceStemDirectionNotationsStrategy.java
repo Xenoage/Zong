@@ -5,7 +5,6 @@ import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
 import com.xenoage.zong.musiclayout.layouter.notation.NotationStrategy;
 
-
 /**
  * This strategy computes the directions of the stems
  * if there is more than one voice in a staff.
@@ -20,21 +19,18 @@ import com.xenoage.zong.musiclayout.layouter.notation.NotationStrategy;
  * @author Andreas Wenger
  */
 public class VoiceStemDirectionNotationsStrategy
-	implements ScoreLayouterStrategy
-{
-	
+	implements ScoreLayouterStrategy {
+
 	//used strategies
 	@SuppressWarnings("unused") private final NotationStrategy notationStrategy;
-	
-	
+
+
 	/**
 	 * Creates a new {@link VoiceStemDirectionNotationsStrategy}.
 	 */
-	public VoiceStemDirectionNotationsStrategy(NotationStrategy notationStrategy)
-	{
+	public VoiceStemDirectionNotationsStrategy(NotationStrategy notationStrategy) {
 		this.notationStrategy = notationStrategy;
 	}
-	
 
 	/**
 	 * TODO
@@ -42,11 +38,10 @@ public class VoiceStemDirectionNotationsStrategy
 	 * @param notations  
 	 * @param lc         
 	 */
-	public NotationsCache computeNotations(int staff,
-		NotationsCache notations, ScoreLayouterContext lc)
-	{
+	public NotationsCache computeNotations(int staff, NotationsCache notations,
+		ScoreLayouterContext lc) {
 		//TEST/TODO/TEAM: do nothing. this strategy has to be revised in a team meeting
-		return NotationsCache.create();
+		return new NotationsCache();
 		/*
 		Score score = lc.getScore();
 		int numberOfMeasures = score.getMeasuresCount();
@@ -125,5 +120,4 @@ public class VoiceStemDirectionNotationsStrategy
 		//*/
 	}
 
-	
 }

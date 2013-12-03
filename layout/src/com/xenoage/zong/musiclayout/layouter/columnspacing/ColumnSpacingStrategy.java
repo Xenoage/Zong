@@ -5,10 +5,10 @@ import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.kernel.Tuple3.t3;
 import static com.xenoage.zong.core.music.util.Interval.At;
+import static com.xenoage.zong.core.position.MP.atBeat;
 import static com.xenoage.zong.core.position.MP.atMeasure;
 
 import java.util.ArrayList;
-import java.util.Vector;
 
 import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.collections.IList;
@@ -129,34 +129,32 @@ public class ColumnSpacingStrategy
 
 		//compute the spacings for the whole column, so that equal beats are aligned
 		ArrayList<MeasureElementsSpacings> alignedMeasureElementsSpacingsByStaff = alist();
-		IVector<Vector<VoiceSpacing>> alignedVoiceSpacings = ivec();
+		ArrayList<IList<VoiceSpacing>> alignedVoiceSpacings = alist();
 		for (int iStaff : range(column)) {
 			Measure measure = column.get(iStaff);
 			//voice spacings
-			IVector<VoiceSpacing> vs = ivec();
-			for (int iVoice : range(measure.voices)) {
+			CList<VoiceSpacing> vs = clist();
+			for (int iVoice : range(measure.getVoices())) {
 				vs.add(beatBasedVoiceSpacingStrategy.computeVoiceSpacing(
 					optimalVoiceSpacings.get(iStaff, iVoice), beatOffsets));
 			}
 			//measure elements, based on the aligned voice spacings
 			alignedMeasureElementsSpacingsByStaff.add(measureElementsSpacingsStrategy
 				.computeMeasureElementsSpacings(lc.getScore(), iStaff, measureIndex, createLeading, vs,
-					notations, lc.layoutSettings).get1());
+					notations, lc.getLayoutSettings()).get1());
 			alignedVoiceSpacings.add(vs.close());
 		}
-		alignedVoiceSpacings.close();
 
 		//compute spacings for each staff
-		NotationsCache leadingNotations = (createLeading ? NotationsCache.create() : null);
-		IVector<MeasureSpacing> measureSpacings = ivec();
+		NotationsCache leadingNotations = (createLeading ? new NotationsCache() : null);
+		CList<MeasureSpacing> measureSpacings = clist();
 		for (int iStaff : range(column)) {
 			//create leading spacing, if needed
 			LeadingSpacing leadingSpacing = null;
 			if (createLeading) {
-				MusicContext mc = ScoreController.getMusicContext(lc.getScore(),
-					bmp(iStaff, measureIndex, 0, Fraction._0), At, null);
+				MusicContext mc = score.getMusicContext(atBeat(iStaff, measureIndex, 0, Fraction._0), At, null);
 				Tuple2<LeadingSpacing, NotationsCache> ls = measureLeadingSpacingStrategy
-					.computeLeadingSpacing(mc, iStaff, lc.layoutSettings);
+					.computeLeadingSpacing(mc, iStaff, lc.getLayoutSettings());
 				leadingSpacing = ls.get1();
 				leadingNotations.merge(ls.get2());
 			}
@@ -164,9 +162,10 @@ public class ColumnSpacingStrategy
 			measureSpacings.add(new MeasureSpacing(atMeasure(iStaff, measureIndex), alignedVoiceSpacings
 				.get(iStaff), alignedMeasureElementsSpacingsByStaff.get(iStaff), leadingSpacing));
 		}
+		measureSpacings.close();
 
 		return t3(
-			new ColumnSpacing(lc.getScore(), measureSpacings.close(), beatOffsets, barlineOffsets),
+			new ColumnSpacing(lc.getScore(), measureSpacings, beatOffsets, barlineOffsets),
 			optimalVoiceSpacings, leadingNotations);
 	}
 

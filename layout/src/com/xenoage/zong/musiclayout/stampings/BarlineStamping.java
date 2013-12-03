@@ -1,7 +1,8 @@
 package com.xenoage.zong.musiclayout.stampings;
 
+import java.util.List;
+
 import com.xenoage.utils.annotations.Const;
-import com.xenoage.utils.collections.IList;
 import com.xenoage.zong.core.music.barline.Barline;
 import com.xenoage.zong.core.music.group.BarlineGroup;
 
@@ -25,7 +26,7 @@ import com.xenoage.zong.core.music.group.BarlineGroup;
 	public final Barline barline;
 
 	/** The list of staves this barline is spanning. */
-	public final IList<StaffStamping> staves;
+	public final List<StaffStamping> staves;
 
 	/** The horizontal position in mm, relative to the parent frame. */
 	public final float xPosition;
@@ -34,7 +35,7 @@ import com.xenoage.zong.core.music.group.BarlineGroup;
 	public final BarlineGroup.Style groupStyle;
 
 
-	public BarlineStamping(Barline barline, IList<StaffStamping> staves, float xPosition,
+	public BarlineStamping(Barline barline, List<StaffStamping> staves, float xPosition,
 		BarlineGroup.Style groupStyle) {
 		super(staves.get(0), Level.Music, barline, null);
 		this.barline = barline;

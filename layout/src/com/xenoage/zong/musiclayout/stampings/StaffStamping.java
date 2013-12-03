@@ -1,8 +1,5 @@
 package com.xenoage.zong.musiclayout.stampings;
 
-import lombok.AllArgsConstructor;
-import lombok.experimental.Wither;
-
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.utils.math.geom.Point2f;
@@ -160,6 +157,10 @@ import com.xenoage.zong.musiclayout.stampings.bitmap.StaffStampingBitmapInfo;
 	 */
 	@Override public StampingType getType() {
 		return StampingType.StaffStamping;
+	}
+	
+	public StaffStamping withStaffMarks(StaffMarks staffMarks) {
+		return new StaffStamping(position, length, linesCount, is, staffMarks);
 	}
 
 }

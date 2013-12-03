@@ -6,7 +6,6 @@ import static com.xenoage.utils.math.Fraction.fr;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.math.Fraction;
@@ -30,7 +29,7 @@ public class BeatOffsetBasedVoiceSpacingStrategy
 	 * single voice, based on the given beat offsets, that
 	 * are used for the result, and the given precomputed voice spacing.
 	 */
-	public VoiceSpacing computeVoiceSpacing(VoiceSpacing voiceSpacing, Vector<BeatOffset> beatOffsets) {
+	public VoiceSpacing computeVoiceSpacing(VoiceSpacing voiceSpacing, List<BeatOffset> beatOffsets) {
 		
 		List<SpacingElement> oldSpacingElements = voiceSpacing.getSpacingElements();
 		CList<SpacingElement> spacingElements = clist(oldSpacingElements);

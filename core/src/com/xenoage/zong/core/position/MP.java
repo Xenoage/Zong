@@ -6,6 +6,7 @@ import lombok.experimental.Wither;
 
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.Score;
+import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.core.music.Voice;
 
 
@@ -180,6 +181,18 @@ import com.xenoage.zong.core.music.Voice;
 		if (element == null || element.getParent() == null)
 			return null;
 		return element.getParent().getMP(element);
+	}
+	
+	
+	/**
+	 * Gets the {@link MP} of the given element, or null if it is no MPElement, or
+	 * if its parent is null or if the parent is not part of a score.
+	 */
+	public static MP getMP(MusicElement element) {
+		if (element instanceof MPElement)
+			return getMP((MPElement) element);
+		else
+			return null;
 	}
 
 

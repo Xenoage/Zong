@@ -3,11 +3,10 @@ package com.xenoage.zong.musiclayout;
 import static com.xenoage.utils.collections.CollectionUtils.containsNull;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.core.position.MP.atBeat;
-
-import java.util.ArrayList;
-
 import lombok.Getter;
 
+import com.xenoage.utils.annotations.Const;
+import com.xenoage.utils.collections.IList;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
@@ -29,18 +28,18 @@ import com.xenoage.zong.musiclayout.stampings.StaffStamping;
  * 
  * @author Andreas Wenger
  */
-public class StaffMarks {
+@Const @Getter public class StaffMarks {
 
 	/** The system index relative to the frame. */
-	@Getter private int systemIndex;
+	public int systemIndex;
 	/** The scorewide staff index. */
-	@Getter private int staffIndex;
+	public int staffIndex;
 	/** The global index of the first staff in the staff stamping. */
-	@Getter private int startMeasureIndex;
+	public int startMeasureIndex;
 	/** The global index of the last staff in the staff stamping. */
-	@Getter private int endMeasureIndex;
+	public int endMeasureIndex;
 	/** All {@link MeasureMarks}s. */
-	@Getter private ArrayList<MeasureMarks> measureMarks;
+	public IList<MeasureMarks> measureMarks;
 
 
 	/**
@@ -52,7 +51,7 @@ public class StaffMarks {
 	 * @param measureMarks       positioning information about each measure in the staff stamping
 	 */
 	public StaffMarks(int systemIndex, int staffIndex, int startMeasureIndex,
-		ArrayList<MeasureMarks> measureMarks) {
+		IList<MeasureMarks> measureMarks) {
 		if (measureMarks.size() == 0)
 			throw new IllegalArgumentException("At least one measure must be given");
 		if (containsNull(measureMarks))

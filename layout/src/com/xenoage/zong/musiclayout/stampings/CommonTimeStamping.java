@@ -9,8 +9,6 @@ import com.xenoage.zong.symbols.common.CommonSymbol;
 
 /**
  * Class for a C time signature stamping.
- * 
- * TODO: needed?
  *
  * @author Andreas Wenger
  */

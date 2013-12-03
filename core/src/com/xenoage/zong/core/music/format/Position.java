@@ -12,13 +12,13 @@ import lombok.Data;
 	implements Positioning {
 
 	/** The x coordinate in mm, or null for default. */
-	private final Float x;
+	public final Float x;
 	/** The y coordinate in LP, or null for default. */
-	private final Float y;
+	public final Float y;
 	/** An additional horizontal offset in mm, or null for 0. */
-	private final Float relativeX;
+	public final Float relativeX;
 	/** An additional vertical offset in LP, or null for 0. */
-	private final Float relativeY;
+	public final Float relativeY;
 	
 
 	/**

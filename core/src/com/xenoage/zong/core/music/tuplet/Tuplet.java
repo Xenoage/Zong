@@ -58,5 +58,21 @@ public final class Tuplet {
 			throw new IllegalArgumentException("Given chord is not part of this tuplet");
 		chords.set(index, newChord);
 	}
+	
+	/**
+	 * Gets the first chord.
+	 * @return
+	 */
+	public Chord getFirstChord() {
+		return chords.get(0);
+	}
+	
+	/**
+	 * Gets the last chord.
+	 * @return
+	 */
+	public Chord getLastChord() {
+		return chords.get(chords.size() - 1);
+	}
 
 }
