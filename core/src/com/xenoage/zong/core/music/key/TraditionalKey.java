@@ -8,7 +8,6 @@ import com.xenoage.utils.math.MathUtils;
 import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.position.MPContainer;
 
-
 /**
  * Traditional key signature in the circle of fifth and a mode (like major or
  * minor).
@@ -32,46 +31,39 @@ public final class TraditionalKey
 		Locrian;
 	};
 
+
 	/** The number within the circle of fifth, e.g. 1 for G major or E minor. Between -7 and +7. */
 	@Getter private int fifth;
 	/** The mode, e.g. major, or null for an unknown mode. */
 	@Getter @Setter private Mode mode;
-	
+
 	/** Back reference: the parent element, or null, if not part of a score. */
 	@Getter @Setter private MPContainer parent;
-	
+
 	//alterations for the circle of fifths (from -7 to +7, represented by the indices 0 to 14)
-	private static final int[][] alterations = {
-		{ -1, -1, -1, -1, -1, -1, -1 },
-		{ -1, -1, -1, 0, -1, -1, -1 },
-		{ 0, -1, -1, 0, -1, -1, -1 },
-		{ 0, -1, -1, 0, 0, -1, -1 },
-		{ 0, 0, -1, 0, 0, -1, -1 },
-		{ 0, 0, -1, 0, 0, 0, -1 },
-		{ 0, 0, 0, 0, 0, 0, -1 },
-		{ 0, 0, 0, 0, 0, 0, 0 },
-		{ 0, 0, 0, +1, 0, 0, 0 },
-		{ +1, 0, 0, +1, 0, 0, 0 },
-		{ +1, 0, 0, +1, +1, 0, 0 },
-		{ +1, +1, 0, +1, +1, 0, 0 },
-		{ +1, +1, 0, +1, +1, +1, 0 },
-		{ +1, +1, +1, +1, +1, +1, 0 },
-		{ +1, +1, +1, +1, +1, +1, +1 }
-	};
-	
-	
+	private static final int[][] alterations = { { -1, -1, -1, -1, -1, -1, -1 },
+		{ -1, -1, -1, 0, -1, -1, -1 }, { 0, -1, -1, 0, -1, -1, -1 }, { 0, -1, -1, 0, 0, -1, -1 },
+		{ 0, 0, -1, 0, 0, -1, -1 }, { 0, 0, -1, 0, 0, 0, -1 }, { 0, 0, 0, 0, 0, 0, -1 },
+		{ 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, +1, 0, 0, 0 }, { +1, 0, 0, +1, 0, 0, 0 },
+		{ +1, 0, 0, +1, +1, 0, 0 }, { +1, +1, 0, +1, +1, 0, 0 }, { +1, +1, 0, +1, +1, +1, 0 },
+		{ +1, +1, +1, +1, +1, +1, 0 }, { +1, +1, +1, +1, +1, +1, +1 } };
+
+
 	public TraditionalKey(int fifth, Mode mode) {
 		setFifth(fifth);
 		this.mode = mode;
 	}
-	
-	
+
+	public TraditionalKey(int fifth) {
+		setFifth(fifth);
+		this.mode = Mode.Major;
+	}
+
 	public void setFifth(int fifth) {
 		if (fifth < -7 || fifth > +7)
 			throw new IllegalArgumentException("fifth must be between -7 and +7");
 		this.fifth = fifth;
 	}
-
 
 	/**
 	 * Returns the alterations from the notes from C (0) to B (6).
@@ -79,7 +71,6 @@ public final class TraditionalKey
 	@Override public int[] getAlterations() {
 		return alterations[fifth + 7];
 	}
-
 
 	/**
 	 * Gets the step of the pitch of the flat/sharp with the given index. For
@@ -125,7 +116,6 @@ public final class TraditionalKey
 		return 0;
 	}
 
-
 	/**
 	 * Returns the nearest higher {@link Pitch} in the current key.
 	 */
@@ -135,7 +125,6 @@ public final class TraditionalKey
 		int alter = getAlterations()[step];
 		return pi(step, alter, octave);
 	}
-
 
 	/**
 	 * Returns the nearest lower {@link Pitch} in the current key.
@@ -150,17 +139,17 @@ public final class TraditionalKey
 		return pi(step, alter, octave);
 	}
 
-
 	/**
 	 * Gets the line position for the sharp or flat
 	 * with the given 0-based index, when C4 is on the given line position.
 	 */
-	public static int getLinePosition(int index, boolean sharp, int linePositionC4, int linePositionMin) {
-		int ret = linePositionC4 + 2 + (sharp ? getSharpLinePositionGKey(index) : getFlatLinePositionGKey(index));
+	public static int getLinePosition(int index, boolean sharp, int linePositionC4,
+		int linePositionMin) {
+		int ret = linePositionC4 + 2 +
+			(sharp ? getSharpLinePositionGKey(index) : getFlatLinePositionGKey(index));
 		ret = MathUtils.modMin(ret, 7, linePositionMin);
 		return ret;
 	}
-
 
 	/**
 	 * Gets the line position for the flat
@@ -187,7 +176,6 @@ public final class TraditionalKey
 		}
 	}
 
-
 	/**
 	 * Gets the line position for the sharp
 	 * with the given 0-based index when there is a normal G key.
@@ -212,7 +200,6 @@ public final class TraditionalKey
 				throw new IllegalArgumentException("Invalid index: " + index);
 		}
 	}
-
 
 	public boolean equalsValue(TraditionalKey k) {
 		return this.fifth == k.fifth && this.mode == k.mode;

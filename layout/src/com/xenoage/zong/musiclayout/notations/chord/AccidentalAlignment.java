@@ -1,6 +1,7 @@
 package com.xenoage.zong.musiclayout.notations.chord;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.music.chord.Accidental;
@@ -12,7 +13,7 @@ import com.xenoage.zong.core.music.chord.Accidental;
  *
  * @author Andreas Wenger
  */
-@Const @AllArgsConstructor public final class AccidentalAlignment {
+@Const @AllArgsConstructor @Getter public final class AccidentalAlignment {
 
 	/** The vertical position of the accidental in half-space steps,
 	 * beginning at the bottom line. Some examples:

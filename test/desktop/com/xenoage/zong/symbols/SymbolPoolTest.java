@@ -5,32 +5,33 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.awt.geom.GeneralPath;
+
 import org.junit.Before;
 import org.junit.Test;
 
-import com.xenoage.utils.io.TestIO;
+import com.xenoage.utils.PlatformUtils;
+import com.xenoage.utils.jse.JsePlatformUtils;
+import com.xenoage.utils.jse.io.DesktopIO;
 import com.xenoage.utils.math.Delta;
-import com.xenoage.zong.desktop.io.symbols.AWTSVGPathReader;
-
+import com.xenoage.zong.desktop.io.symbols.SymbolPoolReader;
 
 /**
- * Test cases for a {@link AWTSymbolPool}.
+ * Tests for {@link SymbolPool}.
  *
  * @author Andreas Wenger
  */
-public class VectorSymbolPoolTest
-{
+public class SymbolPoolTest {
 
-	private SymbolPool symbolPool = null;
+	private SymbolPool<GeneralPath> symbolPool = null;
 
 
-	@Before public void setUp()
-	{
+	@Before public void setUp() {
+		PlatformUtils.init(JsePlatformUtils.instance);
+		DesktopIO.initTest();
 		//load default symbol pool, clef-g must exist
 		try {
-			TestIO.initWithSharedDir();
-			SymbolPoolUtils.init(new AWTSVGPathReader());
-			symbolPool = new SymbolPool();
+			symbolPool = SymbolPoolReader.readSymbolPool("default");
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			fail();
@@ -38,12 +39,10 @@ public class VectorSymbolPoolTest
 		assertNotNull(symbolPool.getSymbol("clef-g"));
 	}
 
-
 	/**
 	 * Computes the width of a number.
 	 */
-	@Test public void computeNumberWidth()
-	{
+	@Test public void computeNumberWidth() {
 		//test two digits
 		float width0 = symbolPool.computeNumberWidth(0, 0);
 		float width9 = symbolPool.computeNumberWidth(9, 0);
@@ -54,6 +53,5 @@ public class VectorSymbolPoolTest
 		float width909 = symbolPool.computeNumberWidth(909, gap);
 		assertEquals(2 * width9 + width0 + 2 * gap, width909, Delta.DELTA_FLOAT_ROUGH);
 	}
-
 
 }
