@@ -56,7 +56,7 @@ public class BeamedStemDirectionNotationsStrategy
 		//choose appropriate strategy
 		if (beam.getHorizontalSpan() == HorizontalSpan.SingleMeasure) {
 			if (beam.getVerticalSpan() == VerticalSpan.SingleStaff) {
-				MP firstMP = MP.getMP(beam.getFirstWaypoint().getChord());
+				MP firstMP = MP.getMP(beam.getStart().getChord());
 				return singleMeasureSingleStaffStrategy.computeNotations(beam, notations,
 					score.getStaff(firstMP).getLinesCount(), score, layoutSettings);
 			}

@@ -20,7 +20,8 @@ import com.xenoage.zong.musiclayout.SystemArrangement;
 public class FillPageVerticalFrameFillingStrategy
 	implements VerticalFrameFillingStrategy {
 
-	public static FillPageVerticalFrameFillingStrategy instance = new FillPageVerticalFrameFillingStrategy();
+	public static final FillPageVerticalFrameFillingStrategy instance =
+		new FillPageVerticalFrameFillingStrategy();
 
 
 	@Override public FrameArrangement computeFrameArrangement(FrameArrangement frameArr, Score score) {

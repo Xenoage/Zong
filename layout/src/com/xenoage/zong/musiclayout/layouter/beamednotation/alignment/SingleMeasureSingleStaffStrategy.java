@@ -54,7 +54,7 @@ public class SingleMeasureSingleStaffStrategy
 		//collect needed information
 		NotesAlignment[] chordNa = new NotesAlignment[beam.getWaypoints().size()];
 		float[] stemX = new float[beam.getWaypoints().size()];
-		Chord firstChord = beam.getFirstWaypoint().getChord();
+		Chord firstChord = beam.getStart().getChord();
 		MP firstChordMP = getMP(firstChord);
 		int staffLinesCount = score.getStaff(firstChordMP).getLinesCount();
 		int beamLinesCount = beam.getMaxBeamLinesCount();

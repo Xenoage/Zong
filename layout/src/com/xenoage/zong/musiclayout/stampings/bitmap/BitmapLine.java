@@ -1,7 +1,5 @@
 package com.xenoage.zong.musiclayout.stampings.bitmap;
 
-import lombok.Getter;
-
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.color.Color;
 import com.xenoage.utils.math.MathUtils;

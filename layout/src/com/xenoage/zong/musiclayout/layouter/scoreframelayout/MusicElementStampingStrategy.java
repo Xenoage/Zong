@@ -122,8 +122,8 @@ public class MusicElementStampingStrategy
 				stampNow = true;
 			}
 			else {
-				if (beam.getFirstWaypoint().getChord() == chord ||
-					beam.getLastWaypoint().getChord() == chord) {
+				if (beam.getStart().getChord() == chord ||
+					beam.getStop().getChord() == chord) {
 					stampNow = true;
 				}
 			}

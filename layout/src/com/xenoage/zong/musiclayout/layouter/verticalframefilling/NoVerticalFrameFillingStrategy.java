@@ -12,7 +12,7 @@ import com.xenoage.zong.musiclayout.FrameArrangement;
 public class NoVerticalFrameFillingStrategy
 	implements VerticalFrameFillingStrategy {
 
-	public static NoVerticalFrameFillingStrategy instance = new NoVerticalFrameFillingStrategy();
+	public static final NoVerticalFrameFillingStrategy instance = new NoVerticalFrameFillingStrategy();
 
 
 	@Override public FrameArrangement computeFrameArrangement(FrameArrangement frameArr, Score score) {

@@ -3,7 +3,6 @@ package com.xenoage.zong.musiclayout.spacing.horizontal;
 import lombok.Getter;
 
 import com.xenoage.utils.annotations.Const;
-import com.xenoage.utils.collections.IList;
 import com.xenoage.zong.core.music.MusicElement;
 
 /**

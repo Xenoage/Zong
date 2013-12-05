@@ -72,7 +72,7 @@ public class ScoreLayouter {
 	 * @param additionalArea    if the given areas are not enough, additional areas with
 	 *                          this settings are used
 	 */
-	public static ScoreLayout createScoreLayout(Score score, SymbolPool symbolPool,
+	public static ScoreLayout createScoreLayout(Score score, SymbolPool<?> symbolPool,
 		LayoutSettings layoutSettings, boolean isCompleteLayout, IList<ScoreLayoutArea> areas,
 		ScoreLayoutArea additionalArea) {
 		ScoreLayouterContext context = new ScoreLayouterContext(score, symbolPool, layoutSettings,
@@ -90,9 +90,9 @@ public class ScoreLayouter {
 	 *                          only the frames of the score frame chain
 	 * @param areaSize          size of all score frames
 	 */
-	public ScoreLayouter(Score score, SymbolPool symbolPool, LayoutSettings layoutSettings,
+	public ScoreLayouter(Score score, SymbolPool<?> symbolPool, LayoutSettings layoutSettings,
 		boolean isCompleteLayout, Size2f areaSize) {
-		ScoreLayouterContext context = new ScoreLayouterContext(score, symbolPool, layoutSettings,
+		this.context = new ScoreLayouterContext(score, symbolPool, layoutSettings,
 			isCompleteLayout, CList.<ScoreLayoutArea>ilist(), new ScoreLayoutArea(areaSize));
 		this.strategy = createStrategyTree();
 	}

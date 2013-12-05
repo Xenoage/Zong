@@ -3,6 +3,7 @@ package com.xenoage.zong.musiclayout;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -45,9 +46,9 @@ public final class ScoreFrameLayout {
 
 	//TODO: move into other class
 	/** The list of the selection stampings of this frame. */
-	@Getter @Setter private ArrayList<Stamping> selectionStampings = alist();
+	@Getter @Setter private List<? extends Stamping> selectionStampings = alist();
 	/** The list of the playback stampings of this frame. */
-	@Getter @Setter private ArrayList<Stamping> playbackStampings = alist();
+	@Getter @Setter private List<? extends Stamping> playbackStampings = alist();
 
 	
 	public ScoreFrameLayout(FrameArrangement frameArrangement, ArrayList<StaffStamping> staffStampings,

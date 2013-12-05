@@ -5,7 +5,6 @@ import static com.xenoage.utils.kernel.Tuple3.t3;
 
 import java.util.HashMap;
 
-import com.xenoage.utils.collections.CollectionUtils;
 import com.xenoage.utils.iterators.It;
 import com.xenoage.utils.kernel.Tuple3;
 import com.xenoage.zong.core.music.lyric.Lyric;

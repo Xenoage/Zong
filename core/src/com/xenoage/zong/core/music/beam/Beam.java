@@ -82,12 +82,12 @@ public final class Beam
 	}
 
 
-	public BeamWaypoint getFirstWaypoint() {
+	public BeamWaypoint getStart() {
 		return waypoints.get(0);
 	}
 
 
-	public BeamWaypoint getLastWaypoint() {
+	public BeamWaypoint getStop() {
 		return waypoints.get(waypoints.size() - 1);
 	}
 

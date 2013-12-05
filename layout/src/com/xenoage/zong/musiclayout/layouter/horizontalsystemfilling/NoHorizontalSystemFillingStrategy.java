@@ -13,7 +13,7 @@ import com.xenoage.zong.musiclayout.SystemArrangement;
 public class NoHorizontalSystemFillingStrategy
 	implements HorizontalSystemFillingStrategy {
 
-	public static NoHorizontalSystemFillingStrategy instance =
+	public static final NoHorizontalSystemFillingStrategy instance =
 		new NoHorizontalSystemFillingStrategy();
 
 

@@ -23,7 +23,8 @@ import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 public class EmptySystemsVerticalFrameFillingStrategy
 	implements VerticalFrameFillingStrategy {
 
-	public static EmptySystemsVerticalFrameFillingStrategy instance = new EmptySystemsVerticalFrameFillingStrategy();
+	public static final EmptySystemsVerticalFrameFillingStrategy instance =
+		new EmptySystemsVerticalFrameFillingStrategy();
 
 
 	/**

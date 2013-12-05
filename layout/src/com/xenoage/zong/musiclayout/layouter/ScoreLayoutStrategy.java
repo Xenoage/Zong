@@ -1,18 +1,19 @@
 package com.xenoage.zong.musiclayout.layouter;
 
+import static com.xenoage.utils.collections.CList.clist;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static com.xenoage.utils.iterators.It.it;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.kernel.Tuple2.t;
-import static com.xenoage.utils.pdlib.IVector.ivec;
-import static com.xenoage.utils.pdlib.It.it;
-import static com.xenoage.zong.core.music.util.Column.column;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.xenoage.utils.collections.CList;
+import com.xenoage.utils.iterators.It;
 import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.utils.math.geom.Size2f;
-import com.xenoage.utils.pdlib.IVector;
-import com.xenoage.utils.pdlib.It;
-import com.xenoage.utils.pdlib.Vector;
 import com.xenoage.zong.core.Score;
-import com.xenoage.zong.core.music.Globals;
 import com.xenoage.zong.core.music.Measure;
 import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.core.music.Voice;
@@ -37,7 +38,6 @@ import com.xenoage.zong.musiclayout.layouter.verticalframefilling.VerticalFrameF
 import com.xenoage.zong.musiclayout.layouter.voicenotation.VoiceStemDirectionNotationsStrategy;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 
-
 /**
  * This strategy creates a {@link ScoreLayout} from a given
  * {@link Score} and a list of {@link ScoreFrame}s.
@@ -45,8 +45,7 @@ import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
  * @author Andreas Wenger
  */
 public class ScoreLayoutStrategy
-	implements ScoreLayouterStrategy
-{
+	implements ScoreLayouterStrategy {
 
 	//used strategies
 	private final NotationStrategy notationStrategy;
@@ -64,10 +63,10 @@ public class ScoreLayoutStrategy
 	public ScoreLayoutStrategy(NotationStrategy notationStrategy,
 		BeamedStemDirectionNotationsStrategy beamedStemDirectionNotationsStrategy,
 		VoiceStemDirectionNotationsStrategy voiceStemDirectionNotationsStrategy,
-		ColumnSpacingStrategy measureColumnSpacingStrategy, FrameArrangementStrategy frameArrangementStrategy,
+		ColumnSpacingStrategy measureColumnSpacingStrategy,
+		FrameArrangementStrategy frameArrangementStrategy,
 		BeamedStemAlignmentNotationsStrategy beamedStemAlignmentNotationsStrategy,
-		ScoreFrameLayoutStrategy scoreFrameLayoutStrategy)
-	{
+		ScoreFrameLayoutStrategy scoreFrameLayoutStrategy) {
 		this.notationStrategy = notationStrategy;
 		this.beamedStemDirectionNotationsStrategy = beamedStemDirectionNotationsStrategy;
 		this.voiceStemDirectionNotationsStrategy = voiceStemDirectionNotationsStrategy;
@@ -77,17 +76,15 @@ public class ScoreLayoutStrategy
 		this.scoreFrameLayoutStrategy = scoreFrameLayoutStrategy;
 	}
 
-
 	/**
 	 * Computes and returns the layout of the given score
 	 * within the given chain of score frames.
 	 */
-	public ScoreLayout computeScoreLayout(ScoreLayouterContext lc)
-	{
+	public ScoreLayout computeScoreLayout(ScoreLayouterContext lc) {
 		Score score = lc.getScore();
 		//notations of elements
 		NotationsCache notations = notationStrategy.computeNotations(lc.getScore(), lc.getSymbolPool(),
-			lc.layoutSettings);
+			lc.getLayoutSettings());
 		//update beamed notations with correct stem directions
 		notations.merge(computeBeamStemDirections(notations, lc));
 		//TODO: stem directions dependent on their voice
@@ -95,48 +92,46 @@ public class ScoreLayoutStrategy
 			notations.merge(voiceStemDirectionNotationsStrategy.computeNotations(iStaff, notations, lc));
 		}
 		//optimal measure spacings
-		Vector<ColumnSpacing> optimalMeasureColumnSpacings = computeColumnSpacings(notations, lc);
+		List<ColumnSpacing> optimalMeasureColumnSpacings = computeColumnSpacings(notations, lc);
 		//break into systems and frames
-		Tuple2<Vector<FrameArrangement>, NotationsCache> t = computeFrameArrangements(
+		Tuple2<ArrayList<FrameArrangement>, NotationsCache> t = computeFrameArrangements(
 			optimalMeasureColumnSpacings, notations, lc);
-		Vector<FrameArrangement> frameArrangements = t.get1();
+		List<FrameArrangement> frameArrangements = t.get1();
 		notations.merge(t.get2());
 		//system stretching (horizontal)
 		frameArrangements = fillSystemsHorizontally(frameArrangements, lc);
 		//frame filling (vertical)
 		frameArrangements = fillFramesVertically(frameArrangements, lc);
 		//compute beams
-		notations
-			.merge(computeBeamStemAlignments(frameArrangements, optimalMeasureColumnSpacings, notations, lc));
+		notations.merge(computeBeamStemAlignments(frameArrangements, optimalMeasureColumnSpacings,
+			notations, lc));
 		//create score layout from the collected information
-		Vector<ScoreFrameLayout> scoreFrameLayouts = createScoreFrameLayouts(frameArrangements, notations, lc);
+		List<ScoreFrameLayout> scoreFrameLayouts = createScoreFrameLayouts(frameArrangements,
+			notations, lc);
 		//create score layout
-		return new ScoreLayout(lc.score, scoreFrameLayouts, lc.symbolPool, lc.layoutSettings);
+		return new ScoreLayout(lc.getScore(), scoreFrameLayouts, lc.getSymbolPool(), lc.getLayoutSettings());
 	}
-
 
 	/**
 	 * Computes beamed notations with correct stem directions.
 	 */
-	NotationsCache computeBeamStemDirections(NotationsCache notations, ScoreLayouterContext lc)
-	{
-		NotationsCache ret = NotationsCache.create();
+	NotationsCache computeBeamStemDirections(NotationsCache notations, ScoreLayouterContext lc) {
+		NotationsCache ret = new NotationsCache();
 		//go again through all elements, finding beams, and recompute stem direction
 		Score score = lc.getScore();
-		Globals globals = score.globals;
 		for (int iMeasure : range(0, score.getMeasuresCount() - 1)) {
-			Column measureColumn = column(score, iMeasure);
+			Column measureColumn = score.getColumn(iMeasure);
 			for (int iStaff : range(measureColumn)) {
 				Measure measure = measureColumn.get(iStaff);
-				for (Voice voice : measure.voices) {
+				for (Voice voice : measure.getVoices()) {
 					for (MusicElement element : voice.elements) {
 						if (element instanceof Chord) {
 							Chord chord = (Chord) element;
 							//compute each beam only one time (when the end waypoint is found)
-							Beam beam = globals.getBeams().get(chord);
-							if (beam != null && beam.getLastWaypoint().getChord() == chord) {
+							Beam beam = chord.getBeam();
+							if (beam != null && beam.getStop().getChord() == chord) {
 								ret.merge(beamedStemDirectionNotationsStrategy.computeNotations(beam, notations,
-									lc.getScore(), lc.layoutSettings));
+									lc.getScore(), lc.getLayoutSettings()));
 							}
 						}
 					}
@@ -146,33 +141,29 @@ public class ScoreLayoutStrategy
 		return ret;
 	}
 
-
 	/**
 	 * Computes the {@link ColumnSpacing} for each measure
 	 * (without leading spacing).
 	 */
-	Vector<ColumnSpacing> computeColumnSpacings(NotationsCache notations, ScoreLayouterContext lc)
-	{
+	List<ColumnSpacing> computeColumnSpacings(NotationsCache notations, ScoreLayouterContext lc) {
 		Score score = lc.getScore();
-		IVector<ColumnSpacing> ret = ivec();
+		ArrayList<ColumnSpacing> ret = alist();
 		for (int iMeasure : range(0, score.getMeasuresCount() - 1)) {
-			ret.add(measureColumnSpacingStrategy.computeColumnSpacing(
-				iMeasure, false, notations, lc).get1()); //TODO: also save optimal voice spacings for later reuse
+			ret.add(measureColumnSpacingStrategy.computeColumnSpacing(iMeasure, false, notations, lc)
+				.get1()); //TODO: also save optimal voice spacings for later reuse
 		}
-		return ret.close();
+		return ret;
 	}
-
 
 	/**
 	 * Breaks the given measure column spacings into systems and frames.
 	 * The list of frame arrangements and the list of created leading notations
 	 * is returned.
 	 */
-	Tuple2<Vector<FrameArrangement>, NotationsCache> computeFrameArrangements(
-		Vector<ColumnSpacing> measureColumnSpacings, NotationsCache notations, ScoreLayouterContext lc)
-	{
-		IVector<FrameArrangement> ret = ivec();
-		NotationsCache retLeadingNotations = NotationsCache.create();
+	Tuple2<ArrayList<FrameArrangement>, NotationsCache> computeFrameArrangements(
+		List<ColumnSpacing> measureColumnSpacings, NotationsCache notations, ScoreLayouterContext lc) {
+		ArrayList<FrameArrangement> ret = alist();
+		NotationsCache retLeadingNotations = new NotationsCache();
 		int measuresCount = lc.getScore().getMeasuresCount();
 		int iMeasure = 0;
 		int iSystem = 0;
@@ -183,20 +174,23 @@ public class ScoreLayoutStrategy
 
 			//find score frame
 			Size2f frameSize;
-			if (iFrame < lc.areas.size()) {
+			if (iFrame < lc.getAreas().size()) {
 				//there is another existing score frame
-				frameSize = lc.areas.get(iFrame).size;
-			} else {
+				frameSize = lc.getArea(iFrame).getSize();
+			}
+			else {
 				//there is no another existing score frame
-				if (!lc.isCompleteLayout) {
+				if (false == lc.isCompleteLayout()) {
 					//we are not interested in the stuff after the last score frame. exit.
 					break;
-				} else if (iMeasure >= measuresCount) {
+				}
+				else if (iMeasure >= measuresCount) {
 					//all measures layouted. exit.
 					break;
-				} else {
+				}
+				else {
 					//still material to layout and additional frames requested. create one.
-					frameSize = lc.additionalArea.size;
+					frameSize = lc.getAdditionalArea().getSize();
 					additionalFrameIteration = true;
 				}
 			}
@@ -204,8 +198,9 @@ public class ScoreLayoutStrategy
 			//some material left to layout?
 			if (iMeasure < measuresCount) {
 				//more measures to layout
-				Tuple2<FrameArrangement, NotationsCache> t = frameArrangementStrategy.computeFrameArrangement(
-					iMeasure, iSystem, frameSize, measureColumnSpacings, notations, lc);
+				Tuple2<FrameArrangement, NotationsCache> t = frameArrangementStrategy
+					.computeFrameArrangement(iMeasure, iSystem, frameSize, measureColumnSpacings, notations,
+						lc);
 				FrameArrangement frameArr = t.get1();
 				NotationsCache leadingNotations = t.get2();
 				if (frameArr.getSystems().size() > 0) {
@@ -214,87 +209,85 @@ public class ScoreLayoutStrategy
 					retLeadingNotations.merge(leadingNotations);
 					iMeasure = frameArr.getSystems().getLast().getEndMeasureIndex() + 1;
 					iSystem += frameArr.getSystems().size();
-				} else {
+				}
+				else {
 					//no space for a measure in this frame. empty frame. but only, if existing frame.
 					//do not create endless list of empty additional frames!
 					if (!additionalFrameIteration) {
-						ret.add(new FrameArrangement(new IVector<SystemArrangement>().close(), frameSize));
-					} else {
+						ret.add(new FrameArrangement(CList.<SystemArrangement>ilist(), frameSize));
+					}
+					else {
 						break;
 					}
 				}
-			} else {
+			}
+			else {
 				//no material left. empty frame.
-				ret.add(new FrameArrangement(new IVector<SystemArrangement>().close(), frameSize));
+				ret.add(new FrameArrangement(CList.<SystemArrangement>ilist(), frameSize));
 			}
 
 			//next frame
 			iFrame++;
 		}
-		return t((Vector<FrameArrangement>) ret.close(), retLeadingNotations);
+		return t(ret, retLeadingNotations);
 	}
-
 
 	/**
 	 * Fills the systems horizontally according to the {@link HorizontalSystemFillingStrategy}
 	 * of the frame.
 	 */
-	Vector<FrameArrangement> fillSystemsHorizontally(Vector<FrameArrangement> frameArrangements,
-		ScoreLayouterContext lc)
-	{
-		IVector<FrameArrangement> ret = ivec();
+	List<FrameArrangement> fillSystemsHorizontally(List<FrameArrangement> frameArrangements,
+		ScoreLayouterContext lc) {
+		ArrayList<FrameArrangement> ret = alist();
 		for (int iFrame : range(frameArrangements)) {
 			FrameArrangement frameArr = frameArrangements.get(iFrame);
-			HorizontalSystemFillingStrategy hFill = lc.getArea(iFrame).hFill;
+			HorizontalSystemFillingStrategy hFill = lc.getArea(iFrame).getHFill();
 			if (hFill != null) {
 				//apply strategy
-				IVector<SystemArrangement> systemArrs = ivec();
+				CList<SystemArrangement> systemArrs = clist();
 				for (SystemArrangement oldSystemArr : frameArr.getSystems()) {
 					float usableWidth = frameArr.getUsableSize().width - oldSystemArr.getMarginLeft() -
 						oldSystemArr.getMarginRight();
 					systemArrs.add(hFill.computeSystemArrangement(oldSystemArr, usableWidth));
 				}
 				ret.add(new FrameArrangement(systemArrs.close(), frameArr.getUsableSize()));
-			} else {
+			}
+			else {
 				//unmodified frame
 				ret.add(frameArr);
 			}
 		}
-		return ret.close();
+		return ret;
 	}
-
 
 	/**
 	 * Fills the frames vertically according to the {@link VerticalFrameFillingStrategy}
 	 * of the frame.
 	 */
-	Vector<FrameArrangement> fillFramesVertically(Vector<FrameArrangement> frameArrs,
-		ScoreLayouterContext lc)
-	{
-		IVector<FrameArrangement> ret = ivec();
+	List<FrameArrangement> fillFramesVertically(List<FrameArrangement> frameArrs,
+		ScoreLayouterContext lc) {
+		ArrayList<FrameArrangement> ret = alist();
 		Score score = lc.getScore();
 		for (int iFrame : range(frameArrs)) {
-			VerticalFrameFillingStrategy vFill = lc.getArea(iFrame).vFill;
+			VerticalFrameFillingStrategy vFill = lc.getArea(iFrame).getVFill();
 			if (vFill != null) {
 				ret.add(vFill.computeFrameArrangement(frameArrs.get(iFrame), score));
 			}
 		}
-		return ret.close();
+		return ret;
 	}
-
 
 	/**
 	 * Computes beamed notations with correct stem alignments.
 	 */
-	NotationsCache computeBeamStemAlignments(Vector<FrameArrangement> frameArrangements,
-		Vector<ColumnSpacing> optimalMeasureColumnSpacings, NotationsCache notations, ScoreLayouterContext lc)
-	{
-		NotationsCache ret = NotationsCache.create();
+	NotationsCache computeBeamStemAlignments(List<FrameArrangement> frameArrangements,
+		List<ColumnSpacing> optimalMeasureColumnSpacings, NotationsCache notations,
+		ScoreLayouterContext lc) {
+		NotationsCache ret = new NotationsCache();
 		//collect actual measure column spacings from all frames
 		//(now also including leading spacings and possibly stretched measures)
 		Score score = lc.getScore();
-		Globals globals = score.globals;
-		IVector<ColumnSpacing> columnSpacings = ivec();
+		ArrayList<ColumnSpacing> columnSpacings = alist();
 		for (FrameArrangement frameArr : frameArrangements) {
 			for (SystemArrangement systemArr : frameArr.getSystems()) {
 				columnSpacings.addAll(systemArr.getColumnSpacings());
@@ -305,20 +298,19 @@ public class ScoreLayoutStrategy
 		for (int iMeasure = columnSpacings.size(); iMeasure < score.getMeasuresCount(); iMeasure++) {
 			columnSpacings.add(optimalMeasureColumnSpacings.get(iMeasure));
 		}
-		columnSpacings.close();
 		//go again through all elements, finding beams, and recompute stem alignment
 		for (int iMeasure : range(0, score.getMeasuresCount() - 1)) {
-			Column measureColumn = column(score, iMeasure);
+			Column measureColumn = score.getColumn(iMeasure);
 			for (Measure measure : measureColumn) {
-				for (Voice voice : measure.voices) {
+				for (Voice voice : measure.getVoices()) {
 					for (MusicElement element : voice.elements) {
 						if (element instanceof Chord) {
 							Chord chord = (Chord) element;
 							//compute each beam only one time (when the end waypoint is found)
-							Beam beam = globals.getBeams().get(chord);
-							if (beam != null && beam.getLastWaypoint().getChord() == chord) {
-								ret.merge(beamedStemAlignmentNotationsStrategy.computeNotations(lc.getScore(), beam,
-									columnSpacings, notations));
+							Beam beam = chord.getBeam();
+							if (beam != null && beam.getStop().getChord() == chord) {
+								ret.merge(beamedStemAlignmentNotationsStrategy.computeNotations(lc.getScore(),
+									beam, columnSpacings, notations));
 							}
 						}
 					}
@@ -328,15 +320,13 @@ public class ScoreLayoutStrategy
 		return ret;
 	}
 
-
 	/**
 	 * Creates all {@link ScoreFrameLayout}s.
 	 */
-	Vector<ScoreFrameLayout> createScoreFrameLayouts(Vector<FrameArrangement> frameArrs,
-		NotationsCache notations, ScoreLayouterContext lc)
-	{
-		IVector<ScoreFrameLayout> ret = ivec();
-		Vector<ContinuedElement> continuedElements = ivec();
+	List<ScoreFrameLayout> createScoreFrameLayouts(List<FrameArrangement> frameArrs,
+		NotationsCache notations, ScoreLayouterContext lc) {
+		ArrayList<ScoreFrameLayout> ret = alist();
+		ArrayList<ContinuedElement> continuedElements = alist();
 		It<FrameArrangement> itFrameArrs = it(frameArrs);
 		for (FrameArrangement frameArr : itFrameArrs) {
 			ScoreFrameLayout sfl = scoreFrameLayoutStrategy.computeScoreFrameLayout(frameArr,
@@ -344,8 +334,7 @@ public class ScoreLayoutStrategy
 			ret.add(sfl);
 			continuedElements = sfl.getContinuedElements();
 		}
-		return ret.close();
+		return ret;
 	}
-
 
 }

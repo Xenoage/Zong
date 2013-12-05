@@ -6,7 +6,6 @@ import java.util.HashMap;
 
 import lombok.Data;
 
-import com.xenoage.utils.collections.CollectionUtils;
 import com.xenoage.zong.core.music.ColumnElement;
 import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.core.music.chord.Chord;

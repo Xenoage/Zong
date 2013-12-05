@@ -5,7 +5,6 @@ import static com.xenoage.utils.collections.CollectionUtils.map;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import com.xenoage.utils.collections.CollectionUtils;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.tuplet.Tuplet;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.ChordStampings;

@@ -19,6 +19,13 @@ public class OpenBeamsCache
 
 
 	/**
+	 * Gets the number of open beams.
+	 */
+	public int size() {
+		return openBeams.size();
+	}
+
+	/**
 	 * Gets the {@link BeamedStemStampings} instance for the given {@link Beam}.
 	 * If not existing already, it is created.
 	 */

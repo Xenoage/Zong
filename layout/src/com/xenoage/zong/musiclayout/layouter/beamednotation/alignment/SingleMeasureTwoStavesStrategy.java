@@ -50,10 +50,10 @@ public class SingleMeasureTwoStavesStrategy
 			chordNa[i] = cn.notesAlignment;
 			i++;
 		}
-		Chord firstChord = beam.getFirstWaypoint().getChord();
+		Chord firstChord = beam.getStart().getChord();
 		Stem firstStem = firstChord.getStem();
 		StemDirection firstStemDirection = notations.getChord(firstChord).stemDirection;
-		Chord lastChord = beam.getLastWaypoint().getChord();
+		Chord lastChord = beam.getStop().getChord();
 		Stem lastStem = lastChord.getStem();
 		StemDirection lastStemDirection = notations.getChord(lastChord).stemDirection;
 

@@ -4,6 +4,7 @@ import static com.xenoage.utils.kernel.Range.range;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 import com.xenoage.utils.annotations.MaybeEmpty;
 import com.xenoage.utils.math.geom.Point2f;
@@ -27,7 +28,7 @@ public class ScoreLayout {
 	public final Score score;
 
 	/** The musical layouts of the frames */
-	public final ArrayList<ScoreFrameLayout> frames;
+	public final List<ScoreFrameLayout> frames;
 
 	/** The used pool of symbols */
 	public final SymbolPool<?> symbolPool;
@@ -43,7 +44,7 @@ public class ScoreLayout {
 	 * @param symbolPool      the used pool of symbols
 	 * @param layoutSettings  the used layout settings
 	 */
-	public ScoreLayout(Score score, @MaybeEmpty ArrayList<ScoreFrameLayout> frames,
+	public ScoreLayout(Score score, @MaybeEmpty List<ScoreFrameLayout> frames,
 		SymbolPool<?> symbolPool, LayoutSettings layoutSettings) {
 		this.score = score;
 		this.frames = frames;

@@ -23,7 +23,7 @@ import com.xenoage.zong.musiclayout.spacing.horizontal.VoiceSpacing;
 public class StretchHorizontalSystemFillingStrategy
 	implements HorizontalSystemFillingStrategy {
 
-	private static StretchHorizontalSystemFillingStrategy instance =
+	public static final StretchHorizontalSystemFillingStrategy instance =
 		new StretchHorizontalSystemFillingStrategy();
 
 
