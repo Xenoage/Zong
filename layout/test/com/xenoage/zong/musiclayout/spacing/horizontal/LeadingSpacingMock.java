@@ -1,8 +1,9 @@
 package com.xenoage.zong.musiclayout.spacing.horizontal;
 
+import static com.xenoage.utils.collections.CList.ilist;
 import static com.xenoage.utils.math.Fraction.fr;
-import static com.xenoage.utils.pdlib.IVector.ivec;
 
+import com.xenoage.utils.collections.CList;
 import com.xenoage.zong.core.format.ScoreFormat;
 import com.xenoage.zong.core.music.clef.Clef;
 import com.xenoage.zong.core.music.clef.ClefType;
@@ -26,11 +27,11 @@ public class LeadingSpacingMock
 	 */
 	public static LeadingSpacing createGClefSpacing(float widthMm)
 	{
-		float widthIS = widthMm / ScoreFormat.defaultValue.interlineSpace;
+		float widthIS = widthMm / ScoreFormat.defaultValue.getInterlineSpace();
 		ClefNotation notation = new ClefNotation(new Clef(ClefType.G),
 			new ElementWidth(widthIS), 0, 1);
 		SpacingElement spacing = new SpacingElement(notation.getMusicElement(), fr(0), 0);
-		return new LeadingSpacing(ivec(spacing).close(), widthIS);
+		return new LeadingSpacing(ilist(spacing), widthIS);
 	}
 	
 

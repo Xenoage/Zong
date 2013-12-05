@@ -1,6 +1,7 @@
 package com.xenoage.zong.musiclayout.notations.beam;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.music.beam.Beam;
@@ -12,7 +13,7 @@ import com.xenoage.zong.musiclayout.notations.chord.StemAlignment;
  * @author Uli Teschemacher
  * @author Andreas Wenger
  */
-@Const @AllArgsConstructor public final class BeamStemAlignments {
+@Const @AllArgsConstructor @Getter public final class BeamStemAlignments {
 
 	/** The alignments of the stems stems of all chords. */
 	public final StemAlignment[] stemAlignments;

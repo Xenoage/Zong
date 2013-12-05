@@ -25,8 +25,7 @@ public class ChordFactory {
 
 
 	public static Chord graceChord(Pitch pitch) {
-		Chord chord = new Chord(Note.createNotes(pitch), _0);
-		chord.setGrace(new Grace(true, _1$8));
+		Chord chord = new Chord(Note.createNotes(pitch), new Grace(true, _1$8));
 		return chord;
 	}
 

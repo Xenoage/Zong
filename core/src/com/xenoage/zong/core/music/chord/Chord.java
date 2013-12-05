@@ -2,6 +2,7 @@ package com.xenoage.zong.core.music.chord;
 
 import static com.xenoage.utils.CheckUtils.checkArgsNotNull;
 import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.utils.math.Fraction._0;
 
 import java.util.ArrayList;
 
@@ -89,11 +90,25 @@ public class Chord
 	public Chord(ArrayList<Note> notes, Fraction duration) {
 		checkArgsNotNull(notes, duration);
 		checkNotesOrder(notes);
-		boolean durationIs0 = !duration.isGreater0();
-		if ((durationIs0 && grace == null) || (!durationIs0 && grace != null))
-			throw new InconsistentScoreException("Iff grace chord, then it must have 0 duration");
+		if (false == duration.isGreater0())
+			throw new InconsistentScoreException("Only grace chords may not have 0 duration");
 		this.notes = notes;
 		this.duration = duration;
+	}
+	
+	/**
+	 * Creates a grace chord with the given notes.
+	 * The pitches must be sorted ascending (begin with the lowest notated pitch,
+	 * end with the highest notated pitch), otherwise an {@link IllegalArgumentException} is thrown.
+	 */
+	public Chord(ArrayList<Note> notes, Grace grace) {
+		checkArgsNotNull(notes, grace);
+		checkNotesOrder(notes);
+		if (false == grace.getGraceDuration().isGreater0())
+			throw new InconsistentScoreException("Grace duration must be greater than 0");
+		this.notes = notes;
+		this.duration = _0;
+		this.grace = grace;
 	}
 
 	/**
