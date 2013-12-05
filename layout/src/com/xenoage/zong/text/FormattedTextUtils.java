@@ -58,11 +58,12 @@ public class FormattedTextUtils {
 		for (int i : range(0, text1.getParagraphs().size() - 2))
 			ps.add(text1.getParagraphs().get(i));
 		//connection paragraph
-		FormattedTextParagraph lastP = text1.getParagraphs().getLast();
+		FormattedTextParagraph lastPText1 = text1.getParagraphs().getLast();
+		FormattedTextParagraph firstPText2 = text2.getParagraphs().getFirst();
 		CList<FormattedTextElement> middleP = clist();
-		middleP.addAll(lastP.getElements());
-		middleP.addAll(lastP.getElements());
-		ps.add(fPara(middleP.close(), lastP.getAlignment()));
+		middleP.addAll(lastPText1.getElements());
+		middleP.addAll(firstPText2.getElements());
+		ps.add(fPara(middleP.close(), lastPText1.getAlignment()));
 		//second text
 		for (int i : range(1, text2.getParagraphs().size() - 1))
 			ps.add(text2.getParagraphs().get(i));

@@ -1,58 +1,56 @@
 package com.xenoage.zong.text;
 
+import static com.xenoage.utils.collections.CList.ilist;
 import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.utils.pdlib.PVector.pvec;
 import static com.xenoage.zong.text.FormattedText.fText;
 import static com.xenoage.zong.text.FormattedTextParagraph.fPara;
 import static com.xenoage.zong.text.FormattedTextUtils.insert;
 import static com.xenoage.zong.text.FormattedTextUtils.merge;
 import static com.xenoage.zong.text.FormattedTextUtils.split;
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
+import org.junit.Before;
 import org.junit.Test;
 
-import com.xenoage.utils.graphics.color.ColorInfo;
+import com.xenoage.utils.PlatformUtils;
+import com.xenoage.utils.collections.CList;
+import com.xenoage.utils.color.Color;
+import com.xenoage.utils.jse.JsePlatformUtils;
 import com.xenoage.utils.kernel.Tuple2;
-import com.xenoage.utils.pdlib.PVector;
 import com.xenoage.zong.core.text.Alignment;
 
-
 /**
- * Test cases for the {@link FormattedTextUtils} class.
+ * Tests for {@link FormattedTextUtils}.
  * 
  * @author Andreas Wenger
  */
-public class FormattedTextUtilsTest
-{
+public class FormattedTextUtilsTest {
 	
-	@Test public void cleanTest()
-	{
+	@Before public void setup() {
+		PlatformUtils.init(new JsePlatformUtils());
+	}
+
+	@Test public void cleanTest() {
 		FormattedText text = createText1Para();
 		FormattedText textCleaned = FormattedTextUtils.clean(text);
-		assertEquals(1, textCleaned.paragraphs.size());
-		assertEquals(2, textCleaned.paragraphs.getFirst().elements.size());
-		assertEquals(new FormattedTextString("Hallo ",
-			text.paragraphs.getFirst().elements.get(0).getStyle()),
-			textCleaned.paragraphs.getFirst().elements.get(0));
-		assertEquals(new FormattedTextString("Andrea",
-			text.paragraphs.getFirst().elements.get(1).getStyle()),
-			textCleaned.paragraphs.getFirst().elements.get(1));
+		assertEquals(1, textCleaned.getParagraphs().size());
+		assertEquals(2, textCleaned.getParagraphs().getFirst().getElements().size());
+		assertEquals(new FormattedTextString("Hallo ", text.getParagraphs().getFirst().getElements().get(0)
+			.getStyle()), textCleaned.getParagraphs().getFirst().getElements().get(0));
+		assertEquals(new FormattedTextString("Andrea", text.getParagraphs().getFirst().getElements().get(1)
+			.getStyle()), textCleaned.getParagraphs().getFirst().getElements().get(1));
 	}
-	
-	
-	@Test public void mergeTest()
-	{
+
+	@Test public void mergeTest() {
 		//test case: merge some texts and see if correct strings are produced
 		FormattedText text1 = createText1Para();
 		FormattedText text2 = createText3Paras();
 		assertEquals("Hallo AndreaHallo Andrea", merge(text1, text1).toString());
-		assertEquals("Hallo AndreaFirst Line\nSecond Line and\na Third Line",
-			merge(text1, text2).toString());
+		assertEquals("Hallo AndreaFirst Line\nSecond Line and\na Third Line", merge(text1, text2)
+			.toString());
 	}
-	
-	
-	@Test public void splitTest1Para()
-	{
+
+	@Test public void splitTest1Para() {
 		//test case: split a single line text and see if correct strings are produced
 		FormattedText text = createText1Para();
 		//"Hallo A|ndrea"
@@ -64,10 +62,8 @@ public class FormattedTextUtilsTest
 		assertEquals("Hallo An", textSplit.get1().toString());
 		assertEquals("drea", textSplit.get2().toString());
 	}
-	
-	
-	@Test public void splitTest3Paras()
-	{
+
+	@Test public void splitTest3Paras() {
 		//test case: split a text with multiple lines and see if correct strings are produced
 		FormattedText text = createText3Paras();
 		//split after first line
@@ -99,10 +95,8 @@ public class FormattedTextUtilsTest
 		assertEquals("First Line\nSecond Line and\na Third Line", textSplit.get1().toString());
 		assertEquals("", textSplit.get2().toString());
 	}
-	
-	
-	@Test public void splitTestExceptions()
-	{
+
+	@Test public void splitTestExceptions() {
 		//test case: split at all possible positions
 		//(problems are only discovered by exceptions)
 		FormattedText text1 = createText1Para();
@@ -112,81 +106,63 @@ public class FormattedTextUtilsTest
 		for (int i : range(text2.toString().length() + 1))
 			split(text2, i);
 	}
-	
-	
-	@Test public void insertElementTest1()
-	{
+
+	@Test public void insertElementTest1() {
 		//test case: insert element with same style inbetween an element
 		FormattedText text = createText1Para();
 		FormattedTextString insertText = new FormattedTextString("ndi und A",
-			text.paragraphs.getFirst().elements.get(1).getStyle()); //same style
+			text.getParagraphs().getFirst().getElements().get(1).getStyle()); //same style
 		//insert at index 7: "Hallo A{ndi und A}ndrea"
 		FormattedText textInsert = insert(text, 7, insertText);
-		assertEquals(1, textInsert.paragraphs.size());
-		assertEquals(2, textInsert.paragraphs.getFirst().elements.size());
-		assertEquals(new FormattedTextString("Hallo ",
-			text.paragraphs.getFirst().elements.get(0).getStyle()),
-			textInsert.paragraphs.getFirst().elements.get(0));
-		assertEquals(new FormattedTextString("Andi und Andrea",
-			text.paragraphs.getFirst().elements.get(1).getStyle()),
-			textInsert.paragraphs.getFirst().elements.get(1));
+		assertEquals(1, textInsert.getParagraphs().size());
+		assertEquals(2, textInsert.getParagraphs().getFirst().getElements().size());
+		assertEquals(new FormattedTextString("Hallo ", text.getParagraphs().getFirst().getElements().get(0)
+			.getStyle()), textInsert.getParagraphs().getFirst().getElements().get(0));
+		assertEquals(new FormattedTextString("Andi und Andrea", text.getParagraphs().getFirst().getElements()
+			.get(1).getStyle()), textInsert.getParagraphs().getFirst().getElements().get(1));
 	}
-	
-	
-	@Test public void insertElementTest2()
-	{
+
+	@Test public void insertElementTest2() {
 		//test case: insert element with different style at the end of an element
 		FormattedText text = createText1Para();
 		FormattedTextString insertText = new FormattedTextString("di und An",
-			text.paragraphs.getFirst().elements.get(0).getStyle()); //different style
+			text.getParagraphs().getFirst().getElements().get(0).getStyle()); //different style
 		//insert at index 8: "Hallo An{di und An}drea"
 		FormattedText textInsert = insert(text, 8, insertText);
-		assertEquals(1, textInsert.paragraphs.size());
-		assertEquals(4, textInsert.paragraphs.getFirst().elements.size());
-		assertEquals(new FormattedTextString("Hallo ",
-			text.paragraphs.getFirst().elements.get(0).getStyle()),
-			textInsert.paragraphs.getFirst().elements.get(0));
-		assertEquals(new FormattedTextString("An",
-			text.paragraphs.getFirst().elements.get(1).getStyle()),
-			textInsert.paragraphs.getFirst().elements.get(1));
-		assertEquals(new FormattedTextString("di und An",
-			text.paragraphs.getFirst().elements.get(0).getStyle()),
-			textInsert.paragraphs.getFirst().elements.get(2));
-		assertEquals(new FormattedTextString("drea",
-			text.paragraphs.getFirst().elements.get(1).getStyle()),
-			textInsert.paragraphs.getFirst().elements.get(3));
+		assertEquals(1, textInsert.getParagraphs().size());
+		assertEquals(4, textInsert.getParagraphs().getFirst().getElements().size());
+		assertEquals(new FormattedTextString("Hallo ", text.getParagraphs().getFirst().getElements().get(0)
+			.getStyle()), textInsert.getParagraphs().getFirst().getElements().get(0));
+		assertEquals(new FormattedTextString("An", text.getParagraphs().getFirst().getElements().get(1)
+			.getStyle()), textInsert.getParagraphs().getFirst().getElements().get(1));
+		assertEquals(new FormattedTextString("di und An", text.getParagraphs().getFirst().getElements().get(0)
+			.getStyle()), textInsert.getParagraphs().getFirst().getElements().get(2));
+		assertEquals(new FormattedTextString("drea", text.getParagraphs().getFirst().getElements().get(1)
+			.getStyle()), textInsert.getParagraphs().getFirst().getElements().get(3));
 	}
-	
-	
-	@Test public void insertTextTest()
-	{
+
+	@Test public void insertTextTest() {
 		//test case: insert multiline text into multiline text
 		FormattedText text = createText3Paras();
 		//insert at index 14: "First Line\nSecFirst Line\nSecond Li..."
 		FormattedText textInsert = insert(text, 14, text);
-		assertEquals("First Line\nSecFirst Line\nSecond Line and\na Third Lineond Line and\na Third Line",
+		assertEquals(
+			"First Line\nSecFirst Line\nSecond Line and\na Third Lineond Line and\na Third Line",
 			textInsert.toString());
-		assertEquals(5, textInsert.paragraphs.size());
+		assertEquals(5, textInsert.getParagraphs().size());
 	}
-	
-	
-	private FormattedText createText1Para()
-	{
+
+	private FormattedText createText1Para() {
 		//create a formatted text with one paragraph and three adjacent strings
 		//with the same style: "Hallo "{style1}, "An"{style2}, "dr"{style2}"ea"{style2}
 		FormattedTextStyle style1 = new FormattedTextStyle(12);
 		FormattedTextStyle style2 = new FormattedTextStyle(14, Color.blue);
-		return fText(fPara(
-			new PVector<FormattedTextElement>(
-				new FormattedTextString("Hallo ", style1),
-				new FormattedTextString("An", style2),
-				new FormattedTextString("dr", style2),
-				new FormattedTextString("ea", style2)), Alignment.Left));
+		return fText(fPara(CList.<FormattedTextElement>ilist(new FormattedTextString("Hallo ", style1),
+			new FormattedTextString("An", style2), new FormattedTextString("dr", style2),
+			new FormattedTextString("ea", style2)), Alignment.Left));
 	}
-	
-	
-	private FormattedText createText3Paras()
-	{
+
+	private FormattedText createText3Paras() {
 		//create a formatted text with three paragraphs (styles
 		//enclosed by "{}"):
 		//"{First }{Line"
@@ -194,16 +170,14 @@ public class FormattedTextUtilsTest
 		//"a }{Third}{ Line}"
 		FormattedTextStyle style1 = new FormattedTextStyle(12);
 		FormattedTextStyle style2 = new FormattedTextStyle(14, Color.blue);
-		return fText(pvec(
-			fPara(new PVector<FormattedTextElement>(
-				new FormattedTextString("First ", style1),
+		return fText(ilist(
+			fPara(CList.<FormattedTextElement>ilist(new FormattedTextString("First ", style1),
 				new FormattedTextString("Line", style2)), Alignment.Left),
-			fPara(new PVector<FormattedTextElement>(
-					new FormattedTextString("Second Line and", style2)), Alignment.Left),
-			fPara(new PVector<FormattedTextElement>(
-				new FormattedTextString("a ", style2),
-				new FormattedTextString("Third", style1),
-				new FormattedTextString(" Line", style2)), Alignment.Left)));
+			fPara(CList.<FormattedTextElement>ilist(new FormattedTextString("Second Line and", style2)),
+				Alignment.Left),
+			fPara(CList.<FormattedTextElement>ilist(new FormattedTextString("a ", style2),
+				new FormattedTextString("Third", style1), new FormattedTextString(" Line", style2)),
+				Alignment.Left)));
 	}
 
 }
