@@ -1,4 +1,4 @@
-package com.xenoage.zong.io.musicxml.in;
+package com.xenoage.zong.desktop.io.musicxml.in;
 
 import java.io.IOException;
 import java.io.InputStream;

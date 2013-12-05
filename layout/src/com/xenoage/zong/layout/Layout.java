@@ -1,33 +1,26 @@
 package com.xenoage.zong.layout;
 
+import static com.xenoage.utils.collections.CList.clist;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.utils.pdlib.PMap.pmap;
 import static com.xenoage.zong.layout.LP.lp;
-import static com.xenoage.zong.musiclayout.layouter.ScoreLayoutArea.area;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import org.pcollections.PVector;
-
 import com.xenoage.utils.annotations.Untested;
-import com.xenoage.utils.collections.CollectionUtils;
-import com.xenoage.utils.kernel.Tuple2;
+import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.math.geom.Point2f;
-import com.xenoage.utils.math.geom.Rectangle2f;
-import com.xenoage.utils.pdlib.PMap;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.format.LayoutFormat;
+import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.layout.frames.FP;
 import com.xenoage.zong.layout.frames.Frame;
-import com.xenoage.zong.layout.frames.GroupFrame;
 import com.xenoage.zong.layout.frames.ScoreFrame;
 import com.xenoage.zong.layout.frames.ScoreFrameChain;
-import com.xenoage.zong.musiclayout.ScoreFrameLayout;
 import com.xenoage.zong.musiclayout.ScoreLP;
 import com.xenoage.zong.musiclayout.ScoreLayout;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayoutArea;
@@ -44,7 +37,7 @@ import com.xenoage.zong.util.event.ScoreChangedEvent;
  * @author Andreas Wenger
  * @author Uli Teschemacher
  */
-@Data public class Layout {
+@Data @AllArgsConstructor public class Layout {
 
 	/** Default settings */
 	private LayoutDefaults defaults;
@@ -87,7 +80,7 @@ import com.xenoage.zong.util.event.ScoreChangedEvent;
 	 * Call this method when the given score has been changed.
 	 */
 	public void scoreChanged(ScoreChangedEvent event) {
-		updateScoreLayouts(event.oldScore, event.newScore);
+		updateScoreLayouts(event.getScore());
 	}
 
 	/**
@@ -165,99 +158,64 @@ import com.xenoage.zong.util.event.ScoreChangedEvent;
 	/**
 	 * Updates the {@link ScoreLayout}s belonging to the given {@link Score}.
 	 */
-	public Layout updateScoreLayouts(Score score) {
+	public void updateScoreLayouts(Score score) {
 		ScoreFrameChain chain = getScoreFrameChain(score);
 		if (chain == null)
-			return null;
+			return;
 		ScoreLayout oldScoreLayout = chain.getScoreLayout();
 
 		//select symbol pool and layout settings
-		SymbolPool symbolPool = oldScoreLayout != null ?
+		SymbolPool<?> symbolPool = oldScoreLayout != null ?
 			oldScoreLayout.symbolPool : defaults.getSymbolPool();
 		LayoutSettings layoutSettings = oldScoreLayout != null ?
 			oldScoreLayout.layoutSettings : defaults.getLayoutSettings();
 
-		ArrayList<ScoreLayoutArea> areas = alist();
+		CList<ScoreLayoutArea> areas = clist();
 		for (ScoreFrame scoreFrame : chain.getFrames()) {
 			areas.add(new ScoreLayoutArea(scoreFrame.getSize(), scoreFrame.getHFill(), scoreFrame.getVFill()));
 		}
-		ScoreLayout scoreLayout = new ScoreLayouter(score, symbolPool, layoutSettings, false,
-			areas, areas.getLast()).createLayout();
+		areas.close();
+		ScoreLayout scoreLayout = ScoreLayouter.createScoreLayout(score, symbolPool, layoutSettings, false,
+			areas, areas.get(areas.size() - 1));
 
-		//create updated layout
-		PMap<ScoreFrameChain, ScoreLayout> scoreLayouts = this.scoreLayouts.plus(chain, scoreLayout);
-		PMap<Score, ScoreFrameChain> scoreFrameChains = this.scoreFrameChains.minus(oldScore).plus(
-			newScore, chain);
-		return new Layout(defaults, pages, scoreFrameChains, scoreLayouts, selectedFrames);
-			
-		return layout;
-	}
-
-	public Layout withDefaults(LayoutDefaults defaults) {
-		return new Layout(defaults, pages, scoreFrameChains, scoreLayouts, selectedFrames);
+		//set updated layout
+		chain.setScoreLayout(scoreLayout);
 	}
 
 	/**
 	 * Sets all pages to the given format.
 	 * The defaults values are not changed.
 	 */
-	public Layout withLayoutFormat(LayoutFormat layoutFormat) {
-		PVector<Page> pages = this.pages;
+	public void setLayoutFormat(LayoutFormat layoutFormat) {
 		for (int i : range(pages)) {
-			pages = pages.with(i, pages.get(i).withFormat(layoutFormat.getPageFormat(i)));
+			pages.get(i).setFormat(layoutFormat.getPageFormat(i));
 		}
-		return new Layout(defaults, pages, scoreFrameChains, scoreLayouts, selectedFrames);
 	}
 
-	public Layout withSelectedFrames(PVector<Frame> selectedFrames) {
-		return new Layout(defaults, pages, scoreFrameChains, scoreLayouts, selectedFrames);
-	}
-
-	public Layout chainUpScoreFrame(ScoreFrame frameFrom, ScoreFrame frameTo) {
+	public void chainUpScoreFrame(ScoreFrame frameFrom, ScoreFrame frameTo) {
 		if (frameFrom == frameTo)
 			throw new IllegalArgumentException("Same frames");
-		PMap<Score, ScoreFrameChain> scoreFrameChains = this.scoreFrameChains;
-		//score layouts have to be recomputed
-		PMap<ScoreFrameChain, ScoreLayout> scoreLayouts = this.scoreLayouts;
-
-		//remove target frame from other chain, if there is one
-		Score toOldScore = getScore(frameTo);
-		if (toOldScore != null) {
-			ScoreFrameChain toOldChain = scoreFrameChains.get(toOldScore);
-			scoreLayouts = scoreLayouts.minus(toOldChain);
-			toOldChain = toOldChain.replaceFrame(frameTo, null);
-			if (toOldChain != null)
-				scoreFrameChains = scoreFrameChains.plus(toOldScore, toOldChain);
-			else
-				scoreFrameChains = scoreFrameChains.minus(toOldScore);
-		}
-
-		//add target frame to the chain of the the source frame
-		Score fromScore = getScore(frameFrom);
-		ScoreFrameChain fromChain = scoreFrameChains.get(fromScore);
-		scoreLayouts = scoreLayouts.minus(fromChain);
-		fromChain = fromChain.plusFrame(frameFrom, frameTo);
-		scoreFrameChains = scoreFrameChains.plus(fromScore, fromChain);
-
-		return new Layout(defaults, pages, scoreFrameChains, scoreLayouts, selectedFrames);
+		
+		ScoreFrameChain fromChain = frameFrom.getScoreFrameChain();
+		fromChain.add(frameFrom, frameTo);
 	}
 
 	/**
-	 * Returns the {@link LP} of the given {@link BMP} within the given {@link Score}
+	 * Returns the {@link LP} of the given {@link MP} within the given {@link Score}
 	 * at the given line position, or null if unknown.
 	 */
-	public LP computeLP(Score score, BMP bmp, float lp) {
-		ScoreFrameChain chain = scoreFrameChains.get(score);
+	public LP computeLP(Score score, MP mp, float lp) {
+		ScoreFrameChain chain = getScoreFrameChain(score);
 		if (chain != null) {
-			ScoreLayout sl = scoreLayouts.get(chain);
-			ScoreLP slp = sl.getScoreLP(bmp, lp);
+			ScoreLayout sl = chain.getScoreLayout();
+			ScoreLP slp = sl.getScoreLP(mp, lp);
 			if (slp != null) {
-				ScoreFrame frame = chain.frames.get(slp.frameIndex);
-				Page page = getPage(frame);
+				ScoreFrame frame = chain.getFrames().get(slp.frameIndex);
+				Page page = frame.getParentPage();
 				if (page != null) {
 					Point2f frameP = slp.pMm.sub(frame.getSize().width / 2, frame.getSize().height / 2);
 					int pageIndex = pages.indexOf(page);
-					Point2f pMm = frame.computePagePosition(frameP, this);
+					Point2f pMm = frame.getPagePosition(frameP);
 					return lp(this, pageIndex, pMm);
 				}
 			}
@@ -269,7 +227,7 @@ import com.xenoage.zong.util.event.ScoreChangedEvent;
 	 * Gets the {@link ScoreFrameChain} for the given {@link Score}, or null
 	 * if it can not be found.
 	 */
-	private ScoreFrameChain getScoreFrameChain(Score score) {
+	public ScoreFrameChain getScoreFrameChain(Score score) {
 		for (ScoreFrame frame : iterateScoreFrames()) {
 			ScoreFrameChain chain = frame.getScoreFrameChain();
 			if (chain != null && chain.getScore() == score)

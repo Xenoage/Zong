@@ -1,12 +1,15 @@
 package com.xenoage.zong.documents;
 
+import lombok.Getter;
+
+import com.xenoage.utils.document.Document;
+import com.xenoage.utils.document.command.CommandPerformer;
+import com.xenoage.utils.document.io.SupportedFormats;
 import com.xenoage.zong.core.Score;
-import com.xenoage.zong.core.format.LayoutFormat;
 import com.xenoage.zong.layout.Layout;
 import com.xenoage.zong.layout.LayoutDefaults;
 import com.xenoage.zong.layout.frames.ScoreFrameChain;
 import com.xenoage.zong.musiclayout.ScoreLayout;
-import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 
 /**
  * Class for a score document.
@@ -17,30 +20,27 @@ import com.xenoage.zong.musiclayout.settings.LayoutSettings;
  *
  * @author Andreas Wenger
  */
-public class ScoreDoc {
+public class ScoreDoc
+	implements Document {
 
-	//the score
-	Score score;
-
-	//layout
-	Layout layout;
+	/** The score. */
+	private Score score;
+	/** The layout of the document. */
+	private Layout layout;
+	
+	/** Performs commands on this score document and supports undo. */
+	@Getter private CommandPerformer commandPerformer = new CommandPerformer(this);
+	/** Supported formats for reading score documents from files and writing them to files. */
+	@Getter private SupportedFormats<ScoreDoc> supportedFormats = null;
 
 
 	/**
 	 * Creates a score document with the given score and an empty layout.
 	 */
-	public ScoreDoc(Score score) {
+	public ScoreDoc(Score score, LayoutDefaults layoutDefaults) {
 		this.score = score;
 		//create an empty layout
-		this.layout = new Layout(new LayoutDefaults(LayoutFormat.defaultValue, null,
-			LayoutSettings.loadDefault()));
-	}
-
-	/**
-	 * Gets the score.
-	 */
-	public Score getScore() {
-		return score;
+		this.layout = new Layout(layoutDefaults);
 	}
 
 	/**
@@ -49,47 +49,36 @@ public class ScoreDoc {
 	 */
 	public void setScoreAndLayout(Score score, Layout layout) {
 		//check consistency
-		for (Score sfcScore : layout.scoreFrameChains.keySet()) {
+		/* for (Score sfcScore : layout.scoreFrameChains.keySet()) {
 			if (sfcScore != score)
 				throw new IllegalArgumentException("Unknown score");
-		}
+		} */
 		//save score and layout
-		Layout oldLayout = this.layout;
 		this.score = score;
 		this.layout = layout;
-		layoutChanged(oldLayout, this.layout);
+		layoutChanged();
 	}
 
 	/**
-	 * This method is called when the layout was replaced.
-	 * @param oldLayout  the layout before the change
-	 * @param newLayout  the layout after the change
+	 * This method is called when the layout was changed.
 	 */
-	void layoutChanged(Layout oldLayout, Layout newLayout) {
-	}
-
-	/**
-	 * Gets the layout of the document.
-	 */
-	public Layout getLayout() {
-		return layout;
+	void layoutChanged() {
 	}
 
 	/**
 	 * Sets the layout of the document.
 	 */
 	public void setLayout(Layout layout) {
-		Layout oldLayout = this.layout;
 		this.layout = layout;
-		layoutChanged(oldLayout, layout);
+		layoutChanged();
 	}
 
 	/**
 	 * Gets the {@link ScoreLayout}.
 	 */
 	public ScoreLayout getScoreLayout() {
-		ScoreFrameChain chain = layout.scoreFrameChains.get(score);
-		return layout.scoreLayouts.get(chain);
+		ScoreFrameChain chain = layout.getScoreFrameChain(score);
+		return chain.getScoreLayout();
 	}
 
 }

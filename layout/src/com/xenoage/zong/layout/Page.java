@@ -8,11 +8,10 @@ import java.util.ArrayList;
 import lombok.Data;
 
 import com.xenoage.utils.annotations.MaybeNull;
-import com.xenoage.utils.kernel.Range;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.zong.core.format.PageFormat;
-import com.xenoage.zong.layout.frames.Frame;
 import com.xenoage.zong.layout.frames.FP;
+import com.xenoage.zong.layout.frames.Frame;
 
 /**
  * One page within a page layout.

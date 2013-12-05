@@ -1,8 +1,5 @@
 package com.xenoage.zong.layout.frames;
 
-import com.xenoage.zong.musiclayout.layouter.horizontalsystemfilling.HorizontalSystemFillingStrategy;
-import com.xenoage.zong.musiclayout.layouter.verticalframefilling.VerticalFrameFillingStrategy;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

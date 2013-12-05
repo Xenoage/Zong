@@ -1,4 +1,4 @@
-package com.xenoage.zong.test;
+package com.xenoage.zong.desktop.test;
 
 import static com.xenoage.utils.jse.io.FileUtils.listFilesDeep;
 
@@ -10,8 +10,8 @@ import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.IO;
 import com.xenoage.utils.jse.io.DesktopIO;
 import com.xenoage.utils.jse.io.FileUtils;
 import com.xenoage.utils.log.Log;
+import com.xenoage.zong.desktop.io.musicxml.in.MusicXMLScoreDocFileInput;
 import com.xenoage.zong.documents.ScoreDoc;
-import com.xenoage.zong.io.musicxml.in.MusicXMLScoreDocFileInput;
 
 /**
  * This program can process a large number of MusicXML files

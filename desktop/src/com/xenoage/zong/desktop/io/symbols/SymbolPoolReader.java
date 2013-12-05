@@ -16,10 +16,8 @@ import java.util.Set;
 import com.xenoage.utils.jse.io.DesktopIO;
 import com.xenoage.utils.jse.io.FileUtils;
 import com.xenoage.zong.Voc;
-import com.xenoage.zong.io.symbols.SvgPathReader;
 import com.xenoage.zong.symbols.Symbol;
 import com.xenoage.zong.symbols.SymbolPool;
-import com.xenoage.zong.symbols.SymbolPoolUtils;
 
 /**
  * This class reads a {@link SymbolPool} from the file system.
@@ -39,9 +37,7 @@ public class SymbolPoolReader {
 	 * {@value symbolPoolPath} or reports an error if not possible.
 	 */
 	public static SymbolPool<GeneralPath> readSymbolPool(String id) {
-		if (SymbolPoolUtils.isInitialized() == false)
-			throw new IllegalStateException(SvgPathReader.class.getSimpleName() + " is not initialized");
-
+		
 		HashMap<String, Symbol<GeneralPath>> symbols = map();
 
 		//load symbols

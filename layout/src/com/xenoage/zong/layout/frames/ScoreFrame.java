@@ -30,10 +30,10 @@ import com.xenoage.zong.musiclayout.layouter.verticalframefilling.VerticalFrameF
 	private VerticalFrameFillingStrategy vFill = defaultVFill;
 
 	//default values
-	public static final HorizontalSystemFillingStrategy defaultHFill = StretchHorizontalSystemFillingStrategy
-		.getInstance();
-	public static final VerticalFrameFillingStrategy defaultVFill = NoVerticalFrameFillingStrategy
-		.getInstance();
+	public static final HorizontalSystemFillingStrategy defaultHFill =
+		StretchHorizontalSystemFillingStrategy.instance;
+	public static final VerticalFrameFillingStrategy defaultVFill =
+		NoVerticalFrameFillingStrategy.instance;
 
 
 	/**

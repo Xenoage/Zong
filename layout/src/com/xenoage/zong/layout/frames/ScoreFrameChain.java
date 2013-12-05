@@ -5,6 +5,7 @@ import static com.xenoage.utils.collections.CollectionUtils.alist;
 import java.util.ArrayList;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.musiclayout.ScoreLayout;
@@ -23,7 +24,7 @@ public class ScoreFrameChain {
 	/** The score. */
 	@Getter private Score score; //GOON
 	/** The score layouts in the frames. */
-	@Getter private ScoreLayout scoreLayout; //GOON
+	@Getter @Setter private ScoreLayout scoreLayout; //GOON
 
 	
 	/**
@@ -63,6 +64,7 @@ public class ScoreFrameChain {
 	 * It is registered for this chain.
 	 */
 	public void add(ScoreFrame newFrame, int position) {
+		registerFrame(newFrame);
 		frames.remove(newFrame);
 		frames.add(position, newFrame);
 	}
@@ -70,7 +72,7 @@ public class ScoreFrameChain {
 	/**
 	 * Removes the given frame from this chain and unregisters the chain from the frame.
 	 */
-	private void remove(ScoreFrame frame) {
+	public void remove(ScoreFrame frame) {
 		frames.remove(frame);
 		frame.setScoreFrameChain(null);
 	}

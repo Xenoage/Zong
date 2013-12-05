@@ -90,7 +90,7 @@ public class ScoreLayouter {
 	 *                          only the frames of the score frame chain
 	 * @param areaSize          size of all score frames
 	 */
-	public ScoreLayouter(Score score, SymbolPool<?> symbolPool, LayoutSettings layoutSettings,
+	private ScoreLayouter(Score score, SymbolPool<?> symbolPool, LayoutSettings layoutSettings,
 		boolean isCompleteLayout, Size2f areaSize) {
 		this.context = new ScoreLayouterContext(score, symbolPool, layoutSettings,
 			isCompleteLayout, CList.<ScoreLayoutArea>ilist(), new ScoreLayoutArea(areaSize));
