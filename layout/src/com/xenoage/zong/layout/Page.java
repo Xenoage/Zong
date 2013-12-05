@@ -5,7 +5,8 @@ import static com.xenoage.utils.kernel.Range.rangeReverse;
 
 import java.util.ArrayList;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.math.geom.Point2f;
@@ -19,21 +20,19 @@ import com.xenoage.zong.layout.frames.Frame;
  * @author Andreas Wenger
  * @author Uli Teschemacher
  */
-@Data public final class Page
+@Getter @Setter public final class Page
 	implements LayoutContainer {
 
 	/** The parent layout of the page, or null if not part of a layout. */
-	@MaybeNull private Layout parentLayout;
+	@MaybeNull private Layout parentLayout = null;
 	/** The format of the page. */
 	private PageFormat format;
 	/** The list of frames. */
-	private ArrayList<Frame> frames;
+	private ArrayList<Frame> frames = alist();
 
 
-	public Page(Layout parentLayout, PageFormat format) {
-		this.parentLayout = parentLayout;
+	public Page(PageFormat format) {
 		this.format = format;
-		this.frames = alist();
 	}
 
 	/**
@@ -50,7 +49,22 @@ import com.xenoage.zong.layout.frames.Frame;
 	 * Adds the given frame.
 	 */
 	public void addFrame(Frame frame) {
+		if (frames.contains(frame))
+			throw new IllegalArgumentException("frame is already a child of this page");
+		if (frame.getParent() != null)
+			throw new IllegalArgumentException("frame is still a child of another parent");
+		frame.setParent(this);
 		frames.add(frame);
+	}
+	
+	/**
+	 * Removes the given frame.
+	 */
+	public void removeFrame(Frame frame) {
+		if (false == frames.contains(frame))
+			throw new IllegalArgumentException("frame is not a child of this page");
+		frame.setParent(null);
+		frames.remove(frame);
 	}
 
 	/**

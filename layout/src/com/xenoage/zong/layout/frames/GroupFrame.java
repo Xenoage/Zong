@@ -26,11 +26,25 @@ import com.xenoage.zong.layout.LayoutContainer;
 
 
 	/**
-	 * Adds a child frame to this group frame, if not already a child.
+	 * Adds a child frame to this group frame.
 	 */
 	public void addChildFrame(Frame child) {
+		if (children.contains(child))
+			throw new IllegalArgumentException("frame is already a child of this page");
+		if (child.getParent() != null)
+			throw new IllegalArgumentException("frame is still a child of another parent");
+		child.setParent(this);
+		children.add(child);
+	}
+	
+	/**
+	 * Removes the given child frame from this group frame.
+	 */
+	public void removeChildFrame(Frame child) {
 		if (false == children.contains(child))
-			children.add(child);
+			throw new IllegalArgumentException("frame is not a child of this page");
+		child.setParent(null);
+		children.remove(child);
 	}
 
 	/**

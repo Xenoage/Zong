@@ -62,6 +62,7 @@ import com.xenoage.zong.util.event.ScoreChangedEvent;
 	 * Adds a new page to this layout.
 	 */
 	public void addPage(Page page) {
+		page.setParentLayout(this);
 		pages.add(page);
 	}
 
