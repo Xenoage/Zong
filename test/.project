@@ -14,11 +14,4 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>core</name>
-			<type>2</type>
-			<location>C:/Users/andi/Werkstatt/Zong-github/core/test</location>
-		</link>
-	</linkedResources>
 </projectDescription>

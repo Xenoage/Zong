@@ -40,6 +40,10 @@ subprojects {
 	}
 }
 
+//project dependencies
+project(':desktop') { dependencies { compile project(':layout') } }
+project(':layout') { dependencies { compile project(':core') } }
+
 //build dist of Zong!
 task dist {
 	//first, build utils
