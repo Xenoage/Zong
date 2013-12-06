@@ -1,6 +1,5 @@
 package com.xenoage.zong.core.music.chord;
 
-import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.utils.math.Fraction._1$8;
 
 import com.xenoage.utils.math.Fraction;

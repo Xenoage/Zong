@@ -1,21 +1,13 @@
 package com.xenoage.zong.musiclayout.layouter;
 
-import static org.junit.Assert.fail;
-
-import java.io.FileInputStream;
-
-import org.junit.Test;
-
-import com.xenoage.utils.math.geom.Size2f;
-import com.xenoage.zong.core.Score;
+import com.xenoage.utils.PlatformUtils;
+import com.xenoage.utils.jse.JsePlatformUtils;
 import com.xenoage.zong.musiclayout.layouter.notation.AccidentalsAlignmentStrategy;
 import com.xenoage.zong.musiclayout.layouter.notation.ArticulationsAlignmentStrategy;
 import com.xenoage.zong.musiclayout.layouter.notation.NotationStrategy;
 import com.xenoage.zong.musiclayout.layouter.notation.NotesAlignmentStrategy;
 import com.xenoage.zong.musiclayout.layouter.notation.StemAlignmentStrategy;
 import com.xenoage.zong.musiclayout.layouter.notation.StemDirectionStrategy;
-import com.xenoage.zong.musiclayout.settings.LayoutSettings;
-import com.xenoage.zong.symbols.SymbolPool;
 
 /**
  * Test cases for the {@link ScoreLayouter} class.
@@ -23,6 +15,10 @@ import com.xenoage.zong.symbols.SymbolPool;
  * @author Andreas Wenger
  */
 public class ScoreLayouterTest {
+	
+	static {
+		PlatformUtils.init(JsePlatformUtils.instance);
+	}
 
 	/**
 	 * Try to layout all official MusicXML 1.1 and 2.0 sample files.
