@@ -4,14 +4,10 @@ import static com.xenoage.zong.core.music.chord.StemDirection.Down;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Before;
 import org.junit.Test;
 
-import com.xenoage.utils.PlatformUtils;
-import com.xenoage.utils.jse.JsePlatformUtils;
 import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterTest;
-import com.xenoage.zong.musiclayout.layouter.beamednotation.direction.SingleMeasureSingleStaffStrategy;
 import com.xenoage.zong.musiclayout.notations.beam.BeamStemDirections;
 import com.xenoage.zong.musiclayout.notations.chord.ChordLinePositions;
 

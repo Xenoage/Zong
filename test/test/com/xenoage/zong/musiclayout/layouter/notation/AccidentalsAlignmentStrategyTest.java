@@ -8,14 +8,12 @@ import static org.junit.Assert.assertNull;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.xenoage.utils.collections.CollectionUtils;
 import com.xenoage.utils.math.Delta;
 import com.xenoage.zong.core.music.MusicContext;
 import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.music.clef.Clef;
 import com.xenoage.zong.core.music.clef.ClefType;
 import com.xenoage.zong.core.music.key.TraditionalKey;
-import com.xenoage.zong.core.music.key.TraditionalKey.Mode;
 import com.xenoage.zong.musiclayout.notations.chord.AccidentalsAlignment;
 import com.xenoage.zong.musiclayout.notations.chord.NoteAlignment;
 import com.xenoage.zong.musiclayout.notations.chord.NoteSuspension;
