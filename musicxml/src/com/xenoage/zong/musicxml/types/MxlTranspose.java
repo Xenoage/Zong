@@ -1,14 +1,14 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.xml.Parse.parseChildInt;
-import static com.xenoage.utils.xml.Parse.parseChildIntNull;
-import static com.xenoage.utils.xml.XMLReader.element;
-import static com.xenoage.utils.xml.XMLWriter.addElement;
+import static com.xenoage.utils.Parser.parseInt;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.MaybeNull;
-import com.xenoage.utils.base.annotations.NeverNull;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 
 
 /**
@@ -16,67 +16,47 @@ import com.xenoage.utils.base.annotations.NeverNull;
  * 
  * @author Andreas Wenger
  */
-public final class MxlTranspose
-{
-	
-	public static final String ELEM_NAME = "transpose";
-	
-	@MaybeNull private final Integer diatonic;
-	private final int chromatic;
-	@MaybeNull private final Integer octaveChange;
-	private final boolean doubleValue;
+@AllArgsConstructor @Getter @Setter
+public final class MxlTranspose {
 
-	
-	public MxlTranspose(Integer diatonic, int chromatic, Integer octaveChange,
-		boolean doubleValue)
-	{
-		this.diatonic = diatonic;
-		this.chromatic = chromatic;
-		this.octaveChange = octaveChange;
-		this.doubleValue = doubleValue;
-	}
-	
-	
-	@MaybeNull public Integer getDiatonic()
-	{
-		return diatonic;
-	}
+	public static final String elemName = "transpose";
 
-	
-	public int getChromatic()
-	{
-		return chromatic;
-	}
-	
-
-	@MaybeNull public Integer getOctaveChange()
-	{
-		return octaveChange;
-	}
+	@MaybeNull private Integer diatonic;
+	private int chromatic;
+	@MaybeNull private Integer octaveChange;
+	private boolean doubleValue;
 
 
-	
-	public boolean getDouble()
-	{
-		return doubleValue;
+	@NonNull public static MxlTranspose read(XmlReader reader) {
+		Integer diatonic = null;
+		Integer chromatic = null;
+		Integer octaveChange= null;
+		boolean doubleValue = false;
+		while (reader.openNextChildElement()) {
+			String eName = reader.getElementName();
+			if (eName.equals("diatonic"))
+				diatonic = parseInt(reader.getText());
+			else if (eName.equals("chromatic"))
+				chromatic = parseInt(reader.getText());
+			else if (eName.equals("octave-change"))
+				octaveChange = parseInt(reader.getText());
+			else if (eName.equals("double"))
+				doubleValue = true;
+			reader.closeElement();
+		}
+		if (chromatic == null)
+			reader.throwDataException("chromatic not found");
+		return new MxlTranspose(diatonic, chromatic, octaveChange, doubleValue);
 	}
-	
-	
-	@NeverNull public static MxlTranspose read(Element e)
-	{
-		return new MxlTranspose(parseChildIntNull(e, "diatonic"),
-			parseChildInt(e, "chromatic"), parseChildIntNull(e, "octave-change"),
-			element(e, "double") != null);
-	}
-	
-	
-	public void write(Element parent)
-	{
-		Element e = addElement(ELEM_NAME, parent);
-		addElement("diatonic", diatonic, e);
-		addElement("chromatic", chromatic, e);
-		addElement("octave-change", octaveChange, e);
-		if (doubleValue) addElement("double", e);
+
+	public void write(XmlWriter writer) {
+		writer.writeElementStart(elemName);
+		writer.writeElementText("diatonic", diatonic);
+		writer.writeElementText("chromatic", chromatic);
+		writer.writeElementText("octave-change", octaveChange);
+		if (doubleValue)
+			writer.writeElementEmpty("double");
+		writer.writeElementEnd();
 	}
 
 }

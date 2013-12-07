@@ -52,7 +52,7 @@ public final class MxlDirectionType
 		switch (n.charAt(0))	
 		{
 			case 'd':
-				if (n.equals(MxlDynamics.ELEM_NAME))
+				if (n.equals(MxlDynamics.elemName))
 					content = MxlDynamics.read(firstChild);
 				break;
 			case 'i':
@@ -68,7 +68,7 @@ public final class MxlDirectionType
 					content = MxlMetronome.read(firstChild);
 				break;
 			case 'w':
-				if (n.equals(MxlWedge.ELEM_NAME))
+				if (n.equals(MxlWedge.elemName))
 					content = MxlWedge.read(firstChild);
 				else if (n.equals(MxlWords.ELEM_NAME))
 					content = MxlWords.read(firstChild);

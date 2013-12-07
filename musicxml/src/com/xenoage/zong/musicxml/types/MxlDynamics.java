@@ -1,20 +1,20 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.xml.XmlDataException.throwNull;
-import static com.xenoage.utils.xml.XMLReader.elements;
-import static com.xenoage.utils.xml.XMLWriter.addElement;
+import static com.xenoage.utils.EnumUtils.getEnumValue;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.MaybeNull;
-import com.xenoage.utils.base.annotations.NeverNull;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.core.music.direction.DynamicsType;
 import com.xenoage.zong.musicxml.types.attributes.MxlPrintStyle;
 import com.xenoage.zong.musicxml.types.choice.MxlDirectionTypeContent;
 import com.xenoage.zong.musicxml.types.choice.MxlNotationsContent;
 import com.xenoage.zong.musicxml.types.enums.MxlPlacement;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
-
 
 /**
  * MusicXML dynamics.
@@ -24,91 +24,51 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
  * 
  * @author Andreas Wenger
  */
-@IncompleteMusicXML(partly="")
+@IncompleteMusicXML(partly = "")
+@AllArgsConstructor @Getter @Setter
 public final class MxlDynamics
-	implements MxlNotationsContent, MxlDirectionTypeContent
-{
-	
-	public static final String ELEM_NAME = "dynamics";
-	
-	@NeverNull private final DynamicsType element;
-	@NeverNull private final MxlPrintStyle printStyle;
-	@MaybeNull private final MxlPlacement placement;
+	implements MxlNotationsContent, MxlDirectionTypeContent {
 
-	
-	public MxlDynamics(DynamicsType element, MxlPrintStyle printStyle, MxlPlacement placement)
-	{
-		this.element = element;
-		this.printStyle = printStyle;
-		this.placement = placement;
-	}
+	public static final String elemName = "dynamics";
 
-	
-	@NeverNull public DynamicsType getElement()
-	{
-		return element;
-	}
-	
-	
-	@NeverNull public MxlPrintStyle getPrintStyle()
-	{
-		return printStyle;
-	}
+	@NonNull private DynamicsType element;
+	@MaybeNull private MxlPrintStyle printStyle;
+	@MaybeNull private MxlPlacement placement;
 
 
-	@MaybeNull public MxlPlacement getPlacement()
-	{
-		return placement;
-	}
-
-
-	@Override public MxlNotationsContentType getNotationsContentType()
-	{
+	@Override public MxlNotationsContentType getNotationsContentType() {
 		return MxlNotationsContentType.Dynamics;
 	}
-	
-	
-	@Override public MxlDirectionTypeContentType getDirectionTypeContentType()
-	{
+
+	@Override public MxlDirectionTypeContentType getDirectionTypeContentType() {
 		return MxlDirectionTypeContentType.Dynamics;
 	}
-	
-	
+
 	/**
 	 * Reads the given element and returns it, or returns null if
 	 * the element is not supported.
 	 */
-	@MaybeNull public static MxlDynamics read(Element e)
-	{
-		String childText = throwNull(elements(e), e).get(0).getTagName();
-		DynamicsType element = null;
-		for (DynamicsType type : DynamicsType.values())
-		{
-			if (type.name().equals(childText))
-			{
-				element = type;
-				break;
-			}
-		}
+	@MaybeNull public static MxlDynamics read(XmlReader reader) {
+		//get first element
+		if (false == reader.openNextChildElement())
+			reader.throwDataException("no child element found");
+		String childText = reader.getElementName();
+		reader.closeElement();
+		DynamicsType element = getEnumValue(childText, DynamicsType.values());
 		if (element != null)
-		{
-			return new MxlDynamics(element, MxlPrintStyle.read(e), MxlPlacement.read(e));
-		}
+			return new MxlDynamics(element, MxlPrintStyle.read(reader), MxlPlacement.read(reader));
 		else
-		{
 			return null;
-		}
 	}
-	
-	
-	@Override public void write(Element parent)
-	{
-		Element e = addElement(ELEM_NAME, parent);
-		addElement(element.name(), e);
-		printStyle.write(e);
+
+	@Override public void write(XmlWriter writer) {
+		writer.writeElementStart(elemName);
+		if (printStyle != null)
+			printStyle.write(writer);
 		if (placement != null)
-			placement.write(e);
+			placement.write(writer);
+		writer.writeElementEmpty(element.name());
+		writer.writeElementEnd();
 	}
-	
 
 }

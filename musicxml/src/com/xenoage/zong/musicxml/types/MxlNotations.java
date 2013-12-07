@@ -8,8 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import com.xenoage.utils.collections.CollectionUtils;
 import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.choice.MxlNotationsContent;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 
@@ -29,31 +29,31 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 
 	public static MxlNotations read(XmlReader reader) {
 		List<MxlNotationsContent> elements = alist();
-		while (reader.moveToNextElement()) {
+		while (reader.openNextChildElement()) {
 			String childName = reader.getElementName();
 			MxlNotationsContent element = null;
 			if (childName.equals(MxlArticulations.elemName)) {
-				element = MxlArticulations.read(child);
+				element = MxlArticulations.read(reader);
 			}
-			else if (childName.equals(MxlDynamics.ELEM_NAME)) {
-				element = MxlDynamics.read(child);
+			else if (childName.equals(MxlDynamics.elemName)) {
+				element = MxlDynamics.read(reader);
 			}
 			else if (childName.equals(MxlSlurOrTied.elemNameSlur) ||
 				childName.equals(MxlSlurOrTied.elemNameTied)) {
-				element = MxlSlurOrTied.read(child);
+				element = MxlSlurOrTied.read(reader);
 			}
-			if (element != null) {
-				elements = elements.plus(element);
-			}
+			reader.closeElement();
+			if (element != null)
+				elements.add(element);
 		}
 		return new MxlNotations(elements);
 	}
 
-	public void write(Element parent) {
-		Element e = addElement(elemName, parent);
-		for (MxlNotationsContent element : elements) {
-			element.write(e);
-		}
+	public void write(XmlWriter writer) {
+		writer.writeElementStart(elemName);
+		for (MxlNotationsContent element : elements)
+			element.write(writer);
+		writer.writeElementEnd();
 	}
 
 }

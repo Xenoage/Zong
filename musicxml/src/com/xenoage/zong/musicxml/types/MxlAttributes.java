@@ -70,7 +70,7 @@ public final class MxlAttributes
 			switch (n.charAt(0))
 			{
 				case 'c':
-					if (MxlClef.ELEM_NAME.equals(n))
+					if (MxlClef.elemName.equals(n))
 						clefs = clefs.plus(MxlClef.read(child));
 					break;
 				case 'd':
@@ -78,7 +78,7 @@ public final class MxlAttributes
 						divisions = parseInt(child);
 					break;
 				case 'k':
-					if (MxlKey.ELEM_NAME.equals(n))
+					if (MxlKey.elemName.equals(n))
 						key = MxlKey.read(child);
 					break;
 				case 's':
@@ -88,7 +88,7 @@ public final class MxlAttributes
 				case 't':
 					if (MxlTime.ELEM_NAME.equals(n))
 						time = MxlTime.read(child);
-					else if (MxlTranspose.ELEM_NAME.equals(n))
+					else if (MxlTranspose.elemName.equals(n))
 						transpose = MxlTranspose.read(child);
 					break;
 			}

@@ -1,7 +1,6 @@
 package com.xenoage.zong.musicxml.types.choice;
 
-import org.w3c.dom.Element;
-
+import com.xenoage.utils.xml.XmlWriter;
 
 /**
  * Interface for all types of content that may appear within
@@ -9,15 +8,13 @@ import org.w3c.dom.Element;
  * 
  * @author Andreas Wenger
  */
-public interface MxlDirectionTypeContent
-{
-	
+public interface MxlDirectionTypeContent {
+
 	/**
 	 * This enum allows using quick switch-case statements
 	 * for finding out the type of the content.
 	 */
-	public enum MxlDirectionTypeContentType
-	{
+	public enum MxlDirectionTypeContentType {
 		Words,
 		Wedge,
 		Dynamics,
@@ -25,11 +22,10 @@ public interface MxlDirectionTypeContent
 		Metronome,
 		Image;
 	}
-	
-	
+
+
 	public MxlDirectionTypeContentType getDirectionTypeContentType();
-	
-	
-	public void write(Element e);
+
+	public void write(XmlWriter writer);
 
 }

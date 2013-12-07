@@ -60,7 +60,7 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 		else
 			reader.throwDataException("slur or tied expected");
 		//type
-		MxlStartStopContinue type = MxlStartStopContinue.read(reader.getAttributeValue("type"), reader);
+		MxlStartStopContinue type = MxlStartStopContinue.read(reader.getAttributeString("type"), reader);
 		if (type == MxlStartStopContinue.Continue && elementType == MxlElementType.Tied)
 			reader.throwDataException("tied can not be continued");
 		//other members
@@ -74,7 +74,7 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 	}
 
 	@Override public void write(XmlWriter writer) {
-		writer.writeStartElement(elementType == MxlElementType.Slur ? elemNameSlur : elemNameTied);
+		writer.writeElementStart(elementType == MxlElementType.Slur ? elemNameSlur : elemNameTied);
 		writer.writeAttribute("type", type.write());
 		writer.writeAttribute("number", number);
 		if (position != null)
@@ -83,7 +83,7 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 			placement.write(writer);
 		if (bezier != null)
 			bezier.write(writer);
-		writer.writeEndElement();
+		writer.writeElementEnd();
 	}
 
 }

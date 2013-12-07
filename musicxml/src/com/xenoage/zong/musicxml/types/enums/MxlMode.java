@@ -1,16 +1,11 @@
 package com.xenoage.zong.musicxml.types.enums;
 
-import static com.xenoage.utils.xml.XmlDataException.throwNull;
-import static com.xenoage.utils.xml.Parse.getEnumValueNamed;
-import static com.xenoage.utils.xml.XMLReader.text;
-import static com.xenoage.utils.xml.XMLWriter.addElement;
+import static com.xenoage.utils.EnumUtils.getEnumValue;
 
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.NeverNull;
+import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.EnumWithXmlNames;
-
-
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 
 /**
  * MusicXML mode.
@@ -18,9 +13,8 @@ import com.xenoage.utils.xml.EnumWithXmlNames;
  * @author Andreas Wenger
  */
 public enum MxlMode
-	implements EnumWithXmlNames
-{
-	
+	implements EnumWithXmlNames {
+
 	Major("major"),
 	Minor("minor"),
 	Dorian("dorian"),
@@ -30,35 +24,30 @@ public enum MxlMode
 	Aeolian("aeolian"),
 	Ionian("ionian"),
 	Locrian("locrian");
-	
-	
-	public static final String ELEM_NAME = "mode";
-	
+
+	public static final String elemName = "mode";
+
 	private final String xmlName;
-	
-	
-	private MxlMode(String xmlName)
-	{
+
+
+	private MxlMode(String xmlName) {
 		this.xmlName = xmlName;
 	}
-	
-	
-	@Override public String getXmlName()
-	{
+
+	@Override public String getXmlName() {
 		return xmlName;
 	}
-	
-	
-	@NeverNull public static MxlMode read(Element e)
-	{
-		return throwNull(getEnumValueNamed(text(e), values()), e);
+
+	@NonNull public static MxlMode read(XmlReader reader) {
+		String s = reader.getText();
+		MxlMode mode = getEnumValue(s, values());
+		if (mode == null)
+			reader.throwDataException(elemName + " = " + s);
+		return mode;
 	}
-	
-	
-	public void write(Element parent)
-	{
-		addElement(ELEM_NAME, xmlName, parent);
+
+	public void write(XmlWriter writer) {
+		writer.writeElementText(elemName, xmlName);
 	}
-	
 
 }

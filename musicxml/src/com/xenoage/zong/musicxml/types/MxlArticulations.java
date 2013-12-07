@@ -5,10 +5,13 @@ import static com.xenoage.utils.collections.CollectionUtils.alist;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import com.xenoage.utils.annotations.MaybeEmpty;
-import com.xenoage.utils.collections.CollectionUtils;
+import com.xenoage.utils.annotations.NonEmpty;
 import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.choice.MxlArticulationsContent;
 import com.xenoage.zong.musicxml.types.choice.MxlNotationsContent;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
@@ -33,36 +36,30 @@ public final class MxlArticulations
 		return MxlNotationsContentType.Articulations;
 	}
 
-	public static MxlArticulations read(XmlReader reader) {
+	@NonEmpty public static MxlArticulations read(XmlReader reader) {
 		List<MxlArticulationsContent> content = alist();
-		while (reader.moveToNextElement()) {
+		while (reader.moveToNextElementStart()) {
 			String n = reader.getElementName();
-			switch (n.charAt(0)) { //switch start letter for performance
-				case 'a':
-					if (n.equals(MxlAccent.elemName))
-						content = content.plus(MxlAccent.read(c));
-					break;
-				case 's':
-					if (n.equals(MxlStrongAccent.ELEM_NAME))
-						content = content.plus(MxlStrongAccent.read(c));
-					else if (n.equals(MxlStaccato.ELEM_NAME))
-						content = content.plus(MxlStaccato.read(c));
-					else if (n.equals(MxlStaccatissimo.ELEM_NAME))
-						content = content.plus(MxlStaccatissimo.read(c));
-					break;
-				case 't':
-					if (n.equals(MxlTenuto.ELEM_NAME))
-						content = content.plus(MxlTenuto.read(c));
-					break;
-			}
+			if (n.equals(MxlAccent.elemName))
+				content.add(MxlAccent.read(reader));
+			else if (n.equals(MxlStrongAccent.elemName))
+				content.add(MxlStrongAccent.read(reader));
+			else if (n.equals(MxlStaccato.elemName))
+				content.add(MxlStaccato.read(reader));
+			else if (n.equals(MxlStaccatissimo.elemName))
+				content.add(MxlStaccatissimo.read(reader));
+			else if (n.equals(MxlTenuto.elemName))
+				content.add(MxlTenuto.read(reader));
+			reader.moveToNextElementEnd();
 		}
 		return new MxlArticulations(content);
 	}
 
-	@Override public void write(Element parent) {
-		Element e = addElement(elemName, parent);
+	@Override public void write(XmlWriter writer) {
+		writer.writeElementStart(elemName);
 		for (MxlArticulationsContent item : content)
-			item.write(e);
+			item.write(writer);
+		writer.writeElementEnd();
 	}
 
 }

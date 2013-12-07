@@ -1,79 +1,55 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.base.NullUtils.notNull;
-import static com.xenoage.utils.xml.XMLReader.attribute;
-import static com.xenoage.utils.xml.XMLWriter.addAttribute;
-import static com.xenoage.utils.xml.XMLWriter.addElement;
+import static com.xenoage.utils.NullUtils.notNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.NeverNull;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.attributes.MxlEmptyPlacement;
 import com.xenoage.zong.musicxml.types.choice.MxlArticulationsContent;
 import com.xenoage.zong.musicxml.types.enums.MxlUpDown;
-
 
 /**
  * MusicXML strong-accent.
  * 
  * @author Andreas Wenger
  */
+@AllArgsConstructor @Getter @Setter
 public final class MxlStrongAccent
-	implements MxlArticulationsContent
-{
-	
-	public static final String ELEM_NAME = "strong-accent";
-	
-	@NeverNull private final MxlEmptyPlacement emptyPlacement;
-	@NeverNull private final MxlUpDown type;
-	
+	implements MxlArticulationsContent {
+
+	public static final String elemName = "strong-accent";
+
+	@MaybeNull private MxlEmptyPlacement emptyPlacement;
+	@MaybeNull private MxlUpDown type;
+
 	private static final MxlUpDown defaultType = MxlUpDown.Up;
-	public static final MxlStrongAccent defaultInstance = new MxlStrongAccent(
-		MxlEmptyPlacement.empty, defaultType);
+	public static final MxlStrongAccent defaultInstance = new MxlStrongAccent(null, defaultType);
 
-	
-	public MxlStrongAccent(MxlEmptyPlacement emptyPlacement, MxlUpDown type)
-	{
-		this.emptyPlacement = emptyPlacement;
-		this.type = type;
-	}
 
-	
-	@NeverNull public MxlEmptyPlacement getEmptyPlacement()
-	{
-		return emptyPlacement;
-	}
-
-	
-	@NeverNull  public MxlUpDown getType()
-	{
-		return type;
-	}
-	
-	
-	@Override public MxlArticulationsContentType getArticulationsContentType()
-	{
+	@Override public MxlArticulationsContentType getArticulationsContentType() {
 		return MxlArticulationsContentType.StrongAccent;
 	}
-	
-	
-	@NeverNull public static MxlStrongAccent read(Element e)
-	{
-		MxlEmptyPlacement emptyPlacement = MxlEmptyPlacement.read(e);
-		MxlUpDown type = notNull(MxlUpDown.read(attribute(e, "type")), defaultType);
-		if (emptyPlacement != MxlEmptyPlacement.empty || type != defaultType)
+
+	@NonNull public static MxlStrongAccent read(XmlReader reader) {
+		MxlEmptyPlacement emptyPlacement = MxlEmptyPlacement.read(reader);
+		MxlUpDown type = notNull(MxlUpDown.read(reader.getAttributeString("type")), defaultType);
+		if (emptyPlacement != null || type != defaultType)
 			return new MxlStrongAccent(emptyPlacement, type);
 		else
 			return defaultInstance;
 	}
 
-	
-	@Override public void write(Element parent)
-	{
-		Element e = addElement(ELEM_NAME, parent);
-		emptyPlacement.write(e);
-		addAttribute(e, "type", type.write());
+	@Override public void write(XmlWriter writer) {
+		writer.writeElementStart(elemName);
+		if (emptyPlacement != null)
+			emptyPlacement.write(writer);
+		writer.writeAttribute("type", type.write());
+		writer.writeElementEnd();
 	}
-	
 
 }

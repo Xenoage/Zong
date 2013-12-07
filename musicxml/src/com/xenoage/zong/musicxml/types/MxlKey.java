@@ -1,16 +1,15 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.xml.XMLWriter.addElement;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.MaybeNull;
-import com.xenoage.utils.xml.Parse;
-import com.xenoage.utils.xml.XMLReader;
-import com.xenoage.utils.xml.XMLWriter;
+import com.xenoage.utils.Parser;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.enums.MxlMode;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
-
 
 /**
  * MusicXML key.
@@ -19,49 +18,45 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
  * 
  * @author Andreas Wenger
  */
-@IncompleteMusicXML(missing="non-traditional-key,key-octave,number,print-style,print-object",
-	partly="traditional-key")
-public final class MxlKey
-{
-	
-	public static final String ELEM_NAME = "key";
-	
-	public final int fifths;
-	@MaybeNull public final MxlMode mode;
+@IncompleteMusicXML(missing = "non-traditional-key,key-octave,number,print-style,print-object",
+	partly = "traditional-key")
+@AllArgsConstructor @Getter @Setter
+public final class MxlKey {
 
-	
-	public MxlKey(int fifths, MxlMode mode)
-	{
-		this.fifths = fifths;
-		this.mode = mode;
-	}
-	
-	
+	public static final String elemName = "key";
+
+	public int fifths;
+	@MaybeNull public MxlMode mode;
+
+
 	/**
 	 * Returns null, if the key is unsupported.
 	 */
-	@MaybeNull public static MxlKey read(Element e)
-	{
-		Integer fifths = Parse.parseChildIntNull(e, "fifths");
-		if (fifths != null)
-		{
-			MxlMode mode = null;
-			Element eMode = XMLReader.element(e, MxlMode.ELEM_NAME);
-			if (eMode != null)
-				mode = MxlMode.read(eMode);
-			return new MxlKey(fifths, mode);
+	@MaybeNull public static MxlKey read(XmlReader reader) {
+		Integer fifths = null;
+		MxlMode mode = null;
+		while (reader.openNextChildElement()) {
+			String eName = reader.getElementName();
+			if (eName.equals("fifths")) {
+				fifths = Parser.parseIntegerNull(reader.getText());
+			}
+			else if (eName.equals(MxlMode.elemName)) {
+				mode = MxlMode.read(reader);
+			}
+			reader.closeElement();
 		}
-		return null;
+		if (fifths != null)
+			return new MxlKey(fifths, mode);
+		else
+			return null;
 	}
-	
-	
-	public void write(Element parent)
-	{
-		Element e = XMLWriter.addElement(ELEM_NAME, parent);
-		addElement("fifths", fifths, e);
+
+	public void write(XmlWriter writer) {
+		writer.writeElementStart(elemName);
+		writer.writeElementText("fifths", fifths);
 		if (mode != null)
-			mode.write(e);
+			mode.write(writer);
+		writer.writeElementEnd();
 	}
-	
 
 }

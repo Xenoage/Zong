@@ -1,63 +1,49 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.xml.XMLWriter.addElement;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.NeverNull;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.attributes.MxlEmptyPlacement;
 import com.xenoage.zong.musicxml.types.choice.MxlArticulationsContent;
-
 
 /**
  * MusicXML staccatissimo.
  * 
  * @author Andreas Wenger
  */
+@AllArgsConstructor @Getter @Setter
 public final class MxlStaccatissimo
-	implements MxlArticulationsContent
-{
-	
-	public static final String ELEM_NAME = "staccatissimo";
-	
-	@NeverNull private final MxlEmptyPlacement emptyPlacement;
-	
-	public static final MxlStaccatissimo defaultInstance = new MxlStaccatissimo(MxlEmptyPlacement.empty);
+	implements MxlArticulationsContent {
 
-	
-	public MxlStaccatissimo(MxlEmptyPlacement emptyPlacement)
-	{
-		this.emptyPlacement = emptyPlacement;
-	}
+	public static final String elemName = "staccatissimo";
 
-	
-	@NeverNull public MxlEmptyPlacement getEmptyPlacement()
-	{
-		return emptyPlacement;
-	}
-	
-	
-	@Override public MxlArticulationsContentType getArticulationsContentType()
-	{
+	@MaybeNull private final MxlEmptyPlacement emptyPlacement;
+
+	public static final MxlStaccatissimo defaultInstance = new MxlStaccatissimo(null);
+
+
+	@Override public MxlArticulationsContentType getArticulationsContentType() {
 		return MxlArticulationsContentType.Staccatissimo;
 	}
-	
-	
-	@NeverNull public static MxlStaccatissimo read(Element e)
-	{
-		MxlEmptyPlacement emptyPlacement = MxlEmptyPlacement.read(e);
-		if (emptyPlacement != MxlEmptyPlacement.empty)
+
+	@NonNull public static MxlStaccatissimo read(XmlReader reader) {
+		MxlEmptyPlacement emptyPlacement = MxlEmptyPlacement.read(reader);
+		if (emptyPlacement != null)
 			return new MxlStaccatissimo(emptyPlacement);
 		else
 			return defaultInstance;
 	}
 
-	
-	@Override public void write(Element parent)
-	{
-		Element e = addElement(ELEM_NAME, parent);
-		emptyPlacement.write(e);
+	@Override public void write(XmlWriter writer) {
+		writer.writeElementStart(elemName);
+		if (emptyPlacement != null)
+			emptyPlacement.write(writer);
+		writer.writeElementEnd();
 	}
-	
 
 }
