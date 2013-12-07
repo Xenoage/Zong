@@ -1,14 +1,8 @@
 package com.xenoage.zong.musicxml.types.enums;
 
-import static com.xenoage.utils.base.EnumUtils.getEnumValue;
-import static com.xenoage.utils.xml.XmlDataException.invalid;
-import static com.xenoage.utils.xml.XmlDataException.throwNull;
-import static com.xenoage.utils.xml.XMLReader.attribute;
-
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.NeverNull;
-
+import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 
 /**
  * MusicXML backward-forward.
@@ -16,34 +10,20 @@ import com.xenoage.utils.base.annotations.NeverNull;
  * 
  * @author Andreas Wenger
  */
-public enum MxlBackwardForward
-{
-	
+public enum MxlBackwardForward {
+
 	Backward,
 	Forward;
-	
-	
-	public static final String ATTR_NAME = "direction";
-	
-	
-	@NeverNull public static MxlBackwardForward read(Element e)
-	{
-		String s = attribute(e, ATTR_NAME);
-		if (s != null)
-		{
-			return throwNull(getEnumValue(s, values()), e);
-		}
-		else
-		{
-			throw invalid(e);
-		}
+
+	public static final String attrName = "direction";
+
+
+	@NonNull public static MxlBackwardForward read(XmlReader reader) {
+		return Utils.read(attrName, reader.getAttributeString(attrName), values());
 	}
-	
-	
-	public void write(Element e)
-	{
-		e.setAttribute(ATTR_NAME, toString().toLowerCase());
+
+	public void write(XmlWriter writer) {
+		writer.writeAttribute(attrName, toString().toLowerCase());
 	}
-	
 
 }

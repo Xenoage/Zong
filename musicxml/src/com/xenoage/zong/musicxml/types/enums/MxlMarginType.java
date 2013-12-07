@@ -1,55 +1,37 @@
 package com.xenoage.zong.musicxml.types.enums;
 
-import static com.xenoage.utils.xml.Parse.getEnumValueNamed;
-import static com.xenoage.utils.xml.XMLReader.attribute;
-import static com.xenoage.utils.xml.XMLWriter.addAttribute;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.MaybeNull;
+import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.xml.EnumWithXmlNames;
-
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 
 /**
  * MusicXML margin-type.
  * 
  * @author Andreas Wenger
  */
+@AllArgsConstructor @Getter
 public enum MxlMarginType
-	implements EnumWithXmlNames
-{
-	
+	implements EnumWithXmlNames {
+
 	Odd("odd"),
 	Even("even"),
 	Both("both");
-	
-	
-	public static final String ATTR_NAME = "type";
-	
+
+	public static final String attrName = "type";
+
 	private final String xmlName;
-	
-	
-	private MxlMarginType(String xmlName)
-	{
-		this.xmlName = xmlName;
+
+
+	@MaybeNull public static MxlMarginType read(XmlReader reader) {
+		return Utils.readOrNull(attrName, reader.getAttributeString(attrName), values());
 	}
-	
-	
-	@Override public String getXmlName()
-	{
-		return xmlName;
-	}
-	
-	
-	@MaybeNull public static MxlMarginType read(Element e)
-	{
-		return getEnumValueNamed(attribute(e, ATTR_NAME), values());
-	}
-	
-	
-	public void write(Element e)
-	{
-		addAttribute(e, ATTR_NAME, xmlName);
+
+	public void write(XmlWriter writer) {
+		writer.writeAttribute(attrName, xmlName);
 	}
 
 }

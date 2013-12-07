@@ -1,6 +1,7 @@
 package com.xenoage.zong.musicxml.types.enums;
 
-import static com.xenoage.utils.EnumUtils.getEnumValue;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.EnumWithXmlNames;
@@ -12,6 +13,7 @@ import com.xenoage.utils.xml.XmlWriter;
  * 
  * @author Andreas Wenger
  */
+@AllArgsConstructor @Getter
 public enum MxlMode
 	implements EnumWithXmlNames {
 
@@ -30,20 +32,8 @@ public enum MxlMode
 	private final String xmlName;
 
 
-	private MxlMode(String xmlName) {
-		this.xmlName = xmlName;
-	}
-
-	@Override public String getXmlName() {
-		return xmlName;
-	}
-
 	@NonNull public static MxlMode read(XmlReader reader) {
-		String s = reader.getText();
-		MxlMode mode = getEnumValue(s, values());
-		if (mode == null)
-			reader.throwDataException(elemName + " = " + s);
-		return mode;
+		return Utils.read(elemName, reader.getText(), values());
 	}
 
 	public void write(XmlWriter writer) {

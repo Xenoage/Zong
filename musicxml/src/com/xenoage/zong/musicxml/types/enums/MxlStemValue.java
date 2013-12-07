@@ -1,38 +1,27 @@
 package com.xenoage.zong.musicxml.types.enums;
 
-import static com.xenoage.utils.base.EnumUtils.getEnumValue;
-import static com.xenoage.utils.xml.XmlDataException.throwNull;
-import static com.xenoage.utils.xml.XMLReader.text;
-
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.MaybeNull;
-
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 
 /**
  * MusicXML stem-value.
  * 
  * @author Andreas Wenger
  */
-public enum MxlStemValue
-{
-	
+public enum MxlStemValue {
+
 	Down,
 	Up,
 	Double,
 	None;
-	
-	
-	@MaybeNull public static MxlStemValue read(Element e)
-	{
-		String s = text(e);
-		return throwNull(getEnumValue(s, values()), e);
+
+	@MaybeNull public static MxlStemValue read(XmlReader reader) {
+		return Utils.readOrNull("stem-value", reader.getText(), values());
 	}
-	
-	
-	public void write(Element e)
-	{
-		e.setTextContent(toString().toLowerCase());
+
+	public void write(XmlWriter writer) {
+		writer.writeText(toString().toLowerCase());
 	}
 
 }

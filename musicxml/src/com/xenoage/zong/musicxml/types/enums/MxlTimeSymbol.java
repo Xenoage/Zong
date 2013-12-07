@@ -1,69 +1,38 @@
 package com.xenoage.zong.musicxml.types.enums;
 
-import static com.xenoage.utils.xml.XmlDataException.throwNull;
-import static com.xenoage.utils.xml.Parse.getEnumValueNamed;
-import static com.xenoage.utils.xml.XMLReader.attribute;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.MaybeNull;
+import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.xml.EnumWithXmlNames;
-
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 
 /**
  * MusicXML time-symbol.
  * 
  * @author Andreas Wenger
  */
+@AllArgsConstructor @Getter
 public enum MxlTimeSymbol
-	implements EnumWithXmlNames
-{
-	
+	implements EnumWithXmlNames {
+
 	Common("common"),
 	Cut("cut"),
 	SingleNumber("single-number"),
 	Normal("normal");
-	
-	public static final String ATTR_NAME = "symbol";
-	
+
+	public static final String attrName = "symbol";
+
 	private final String xmlName;
+
 	
-	
-	private MxlTimeSymbol(String xmlName)
-	{
-		this.xmlName = xmlName;
+	@MaybeNull public static MxlTimeSymbol read(XmlReader reader) {
+		return Utils.readOrNull(attrName, reader.getAttributeString(attrName), values());
 	}
-	
-	
-	@Override public String getXmlName()
-	{
-		return xmlName;
+
+	public void write(XmlWriter writer) {
+		writer.writeAttribute(attrName, xmlName);
 	}
-	
-	
-	/**
-	 * Returns the time-symbol from the attribute
-	 * or returns null, if there is none.
-	 */
-	@MaybeNull public static MxlTimeSymbol read(Element e)
-	{
-		String s = attribute(e, ATTR_NAME);
-		if (s != null)
-		{
-			MxlTimeSymbol ret = getEnumValueNamed(s, values());
-			return throwNull(ret, e);
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	
-	public void write(Element e)
-	{
-		e.setAttribute(ATTR_NAME, xmlName);
-	}
-	
 
 }

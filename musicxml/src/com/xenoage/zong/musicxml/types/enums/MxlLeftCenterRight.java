@@ -1,45 +1,26 @@
 package com.xenoage.zong.musicxml.types.enums;
 
-import static com.xenoage.utils.base.EnumUtils.getEnumValue;
-import static com.xenoage.utils.xml.XmlDataException.throwNull;
-import static com.xenoage.utils.xml.XMLReader.attribute;
-
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.MaybeNull;
-
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 
 /**
  * MusicXML left-center-right.
  * 
  * @author Andreas Wenger
  */
-public enum MxlLeftCenterRight
-{
-	
+public enum MxlLeftCenterRight {
+
 	Left,
 	Center,
 	Right;
-	
-	
-	@MaybeNull public static MxlLeftCenterRight read(Element e, String attrName)
-	{
-		String s = attribute(e, attrName);
-		if (s != null)
-		{
-			return throwNull(getEnumValue(s, values()), e);
-		}
-		else
-		{
-			return null;
-		}
+
+	@MaybeNull public static MxlLeftCenterRight read(XmlReader reader, String attrName) {
+		return Utils.readOrNull("left-center-right", reader.getAttributeString(attrName), values());
 	}
-	
-	
-	public void write(Element e, String attrName)
-	{
-		e.setAttribute(attrName, toString().toLowerCase());
+
+	public void write(XmlWriter writer, String attrName) {
+		writer.writeAttribute(attrName, toString().toLowerCase());
 	}
-	
 
 }

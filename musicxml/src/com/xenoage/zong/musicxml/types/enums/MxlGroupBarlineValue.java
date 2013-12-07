@@ -1,63 +1,35 @@
 package com.xenoage.zong.musicxml.types.enums;
 
-import static com.xenoage.utils.xml.XmlDataException.invalid;
-import static com.xenoage.utils.xml.XmlDataException.throwNull;
-import static com.xenoage.utils.xml.XMLReader.text;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.NeverNull;
+import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.EnumWithXmlNames;
-import com.xenoage.utils.xml.Parse;
-
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 
 /**
  * MusicXML group-barline-value.
  * 
  * @author Andreas Wenger
  */
+@AllArgsConstructor @Getter
 public enum MxlGroupBarlineValue
-	implements EnumWithXmlNames
-{
-	
+	implements EnumWithXmlNames {
+
 	Yes("yes"),
 	No("no"),
 	Mensurstrich("Mensurstrich");
-	
-	
+
 	private final String xmlName;
-	
-	
-	private MxlGroupBarlineValue(String xmlName)
-	{
-		this.xmlName = xmlName;
+
+
+	@NonNull public static MxlGroupBarlineValue read(XmlReader reader) {
+		return Utils.read("group-barline-value", reader.getText(), values());
 	}
-	
-	
-	@Override public String getXmlName()
-	{
-		return xmlName;
+
+	public void write(XmlWriter writer) {
+		writer.writeText(xmlName);
 	}
-	
-	
-	@NeverNull public static MxlGroupBarlineValue read(Element e)
-	{
-		String s = text(e);
-		if (s != null)
-		{
-			return throwNull(Parse.getEnumValueNamed(s, values()), e);
-		}
-		else
-		{
-			throw invalid(e);
-		}
-	}
-	
-	
-	public void write(Element e)
-	{
-		e.setTextContent(xmlName);
-	}
-	
 
 }

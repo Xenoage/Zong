@@ -1,54 +1,37 @@
 package com.xenoage.zong.musicxml.types.enums;
 
-import static com.xenoage.utils.xml.Parse.getEnumValueNamed;
-import static com.xenoage.utils.xml.XMLReader.getTextContent;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.MaybeNull;
+import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.xml.EnumWithXmlNames;
-
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 
 /**
  * MusicXML beam-value.
  * 
  * @author Andreas Wenger
  */
+@AllArgsConstructor @Getter
 public enum MxlBeamValue
-	implements EnumWithXmlNames
-{
-	
+	implements EnumWithXmlNames {
+
 	Begin("begin"),
 	Continue("continue"),
 	End("end"),
 	ForwardHook("forward hook"),
 	BackwardHook("backward hook");
-	
-	
+
 	private final String xmlName;
-	
-	
-	private MxlBeamValue(String xmlName)
-	{
-		this.xmlName = xmlName;
+
+
+	@MaybeNull public static MxlBeamValue read(XmlReader reader) {
+		return Utils.readOrNull("beam-value", reader.getText(), values());
 	}
-	
-	
-	@Override public String getXmlName()
-	{
-		return xmlName;
-	}
-	
-	
-	@MaybeNull public static MxlBeamValue read(Element e)
-	{
-		return getEnumValueNamed(getTextContent(e), values());
-	}
-	
-	
-	public void write(Element e)
-	{
-		e.setTextContent(xmlName);
+
+	public void write(XmlWriter writer) {
+		writer.writeText(xmlName);
 	}
 
 }

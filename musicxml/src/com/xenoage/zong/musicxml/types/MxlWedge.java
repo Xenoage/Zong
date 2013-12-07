@@ -1,98 +1,58 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.base.NullUtils.notNull;
-import static com.xenoage.utils.xml.Parse.parseAttrIntNull;
-import static com.xenoage.utils.xml.XMLReader.attribute;
-import static com.xenoage.utils.xml.XMLWriter.addAttribute;
-import static com.xenoage.utils.xml.XMLWriter.addElement;
+import static com.xenoage.utils.NullUtils.notNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.MaybeNull;
-import com.xenoage.utils.base.annotations.NeverNull;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.attributes.MxlColor;
 import com.xenoage.zong.musicxml.types.attributes.MxlPosition;
 import com.xenoage.zong.musicxml.types.choice.MxlDirectionTypeContent;
 import com.xenoage.zong.musicxml.types.enums.MxlWedgeType;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 
-
 /**
  * MusicXML wedge.
  * 
  * @author Andreas Wenger
  */
-@IncompleteMusicXML(missing="spread")
+@IncompleteMusicXML(missing = "spread")
+@AllArgsConstructor @Getter @Setter
 public final class MxlWedge
-	implements MxlDirectionTypeContent
-{
-	
-	public static final String ELEM_NAME = "wedge";
-	
-	@NeverNull private final MxlWedgeType type;
-	private final int number;
-	@NeverNull private final MxlPosition position;
-	@MaybeNull private final MxlColor color;
-	
+	implements MxlDirectionTypeContent {
+
+	public static final String elemName = "wedge";
+
+	@NonNull private MxlWedgeType type;
+	private int number;
+	@MaybeNull private MxlPosition position;
+	@MaybeNull private MxlColor color;
+
 	private static final int defaultNumber = 1;
 
-	
-	public MxlWedge(MxlWedgeType type, int number, MxlPosition position, MxlColor color)
-	{
-		this.type = type;
-		this.number = number;
-		this.position = position;
-		this.color = color;
-	}
 
-	
-	@NeverNull public MxlWedgeType getType()
-	{
-		return type;
-	}
-
-	
-	public int getNumber()
-	{
-		return number;
-	}
-
-
-	@NeverNull public MxlPosition getPosition()
-	{
-		return position;
-	}
-	
-	
-	@MaybeNull public MxlColor getColor()
-	{
-		return color;
-	}
-
-
-	@Override public MxlDirectionTypeContentType getDirectionTypeContentType()
-	{
+	@Override public MxlDirectionTypeContentType getDirectionTypeContentType() {
 		return MxlDirectionTypeContentType.Wedge;
 	}
-	
-	
-	@NeverNull public static MxlWedge read(Element e)
-	{
-		return new MxlWedge(
-			MxlWedgeType.read(attribute(e, "type"), e),
-			notNull(parseAttrIntNull(e, "number"), defaultNumber),
-			MxlPosition.read(e), MxlColor.read(e));
+
+	@NonNull public static MxlWedge read(XmlReader reader) {
+		return new MxlWedge(MxlWedgeType.read(reader.getAttributeString("type"), reader),
+			notNull(reader.getAttributeInt("number"), defaultNumber),
+			MxlPosition.read(reader), MxlColor.read(reader));
 	}
-	
-	
-	@Override public void write(Element parent)
-	{
-		Element e = addElement(ELEM_NAME, parent);
-		addAttribute(e, "type", type.write());
-		addAttribute(e, "number", number);
-		position.write(e);
+
+	@Override public void write(XmlWriter writer) {
+		writer.writeElementStart(elemName);
+		writer.writeAttribute("type", type.write());
+		writer.writeAttribute("number", number);
+		if (position != null)
+			position.write(writer);
 		if (color != null)
-			color.write(e);
+			color.write(writer);
 	}
 
 }

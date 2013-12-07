@@ -1,9 +1,6 @@
 package com.xenoage.zong.musicxml.types.enums;
 
-import static com.xenoage.utils.xml.XmlDataException.invalid;
-
-import org.w3c.dom.Element;
-
+import com.xenoage.utils.xml.XmlDataException;
 
 /**
  * Reader and writer methods for MusicXML's yes-no,
@@ -11,31 +8,24 @@ import org.w3c.dom.Element;
  * 
  * @author Andreas Wenger
  */
-public class MxlYesNo
-{
-	
-	
-	public static boolean read(String s, Element e)
-	{
+public class MxlYesNo {
+
+	public static boolean read(String s) {
 		if (s.equals("yes"))
 			return true;
 		else if (s.equals("no"))
 			return false;
-		throw invalid(e);
+		throw new XmlDataException("yes-no = " + s);
 	}
-	
-	
-	public static Boolean readNull(String s, Element e)
-	{
+
+	public static Boolean readNull(String s) {
 		if (s == null)
 			return null;
 		else
-			return read(s, e);
+			return read(s);
 	}
-	
-	
-	public static String write(boolean v)
-	{
+
+	public static String write(boolean v) {
 		return v ? "yes" : "no";
 	}
 

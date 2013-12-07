@@ -60,7 +60,7 @@ public final class MxlFontSize {
 	}
 
 	public void write(XmlWriter writer) {
-		writer.writeAttribute(attrName, (valuePt != null ? "" + valuePt : valueCSS.getXmlName()));
+		writer.writeAttribute(attrName, (valuePt != null ? "" + valuePt : valueCSS.write()));
 	}
 
 }

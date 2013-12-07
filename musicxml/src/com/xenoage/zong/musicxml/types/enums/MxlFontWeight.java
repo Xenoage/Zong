@@ -1,8 +1,5 @@
 package com.xenoage.zong.musicxml.types.enums;
 
-import static com.xenoage.utils.CheckUtils.checkNotNull;
-import static com.xenoage.utils.EnumUtils.getEnumValue;
-
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
@@ -21,13 +18,7 @@ public enum MxlFontWeight {
 
 
 	@MaybeNull public static MxlFontWeight read(XmlReader reader) {
-		String s = reader.getAttributeString(attrName);
-		if (s != null) {
-			return checkNotNull(getEnumValue(s, values()), "unknown " + attrName);
-		}
-		else {
-			return null;
-		}
+		return Utils.readOrNull(attrName, reader.getAttributeString(attrName), values());
 	}
 
 	public void write(XmlWriter writer) {

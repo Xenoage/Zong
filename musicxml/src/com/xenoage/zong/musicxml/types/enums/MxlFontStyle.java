@@ -1,7 +1,5 @@
 package com.xenoage.zong.musicxml.types.enums;
 
-import static com.xenoage.utils.EnumUtils.getEnumValue;
-
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
@@ -20,7 +18,7 @@ public enum MxlFontStyle {
 
 
 	@MaybeNull public static MxlFontStyle read(XmlReader reader) {
-		return getEnumValue(reader.getAttributeValue(attrName), values());
+		return Utils.readOrNull(attrName, reader.getAttributeString(attrName), values());
 	}
 
 	public void write(XmlWriter writer) {

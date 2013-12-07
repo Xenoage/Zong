@@ -1,47 +1,27 @@
 package com.xenoage.zong.musicxml.types.enums;
 
-import static com.xenoage.utils.base.EnumUtils.getEnumValue;
-import static com.xenoage.utils.xml.XmlDataException.invalid;
-import static com.xenoage.utils.xml.XmlDataException.throwNull;
-import static com.xenoage.utils.xml.XMLReader.text;
-
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.NeverNull;
-
+import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 
 /**
  * MusicXML group-symbol-value.
  * 
  * @author Andreas Wenger
  */
-public enum MxlGroupSymbolValue
-{
-	
+public enum MxlGroupSymbolValue {
+
 	None,
 	Brace,
 	Line,
 	Bracket;
-	
-	
-	@NeverNull public static MxlGroupSymbolValue read(Element e)
-	{
-		String s = text(e);
-		if (s != null)
-		{
-			return throwNull(getEnumValue(s, values()), e);
-		}
-		else
-		{
-			throw invalid(e);
-		}
+
+	@NonNull public static MxlGroupSymbolValue read(XmlReader reader) {
+		return Utils.read("group-symbol-value", reader.getText(), values());
 	}
-	
-	
-	public void write(Element e)
-	{
-		e.setTextContent(toString().toLowerCase());
+
+	public void write(XmlWriter writer) {
+		writer.writeText(toString().toLowerCase());
 	}
-	
 
 }

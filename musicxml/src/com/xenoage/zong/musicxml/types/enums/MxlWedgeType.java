@@ -1,34 +1,24 @@
 package com.xenoage.zong.musicxml.types.enums;
 
-import static com.xenoage.utils.base.EnumUtils.getEnumValue;
-import static com.xenoage.utils.xml.XmlDataException.throwNull;
-
-import org.w3c.dom.Element;
-
+import com.xenoage.utils.annotations.NonNull;
 
 /**
  * MusicXML wedge-type.
  * 
  * @author Andreas Wenger
  */
-public enum MxlWedgeType
-{
-	
+public enum MxlWedgeType {
+
 	Crescendo,
 	Diminuendo,
 	Stop;
-	
-	
-	public static MxlWedgeType read(String s, Element parent)
-	{
-		return throwNull(getEnumValue(s, values()), parent);
+
+	@NonNull public static MxlWedgeType read(String s) {
+		return Utils.read("wedge-type", s, values());
 	}
-	
-	
-	public String write()
-	{
+
+	public String write() {
 		return toString().toLowerCase();
 	}
-	
 
 }

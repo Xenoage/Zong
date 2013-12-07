@@ -1,6 +1,7 @@
 package com.xenoage.zong.musicxml.types.enums;
 
-import static com.xenoage.utils.EnumUtils.getEnumValue;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.xml.EnumWithXmlNames;
@@ -10,6 +11,7 @@ import com.xenoage.utils.xml.EnumWithXmlNames;
  * 
  * @author Andreas Wenger
  */
+@AllArgsConstructor @Getter
 public enum MxlCSSFontSize
 	implements EnumWithXmlNames {
 
@@ -23,17 +25,12 @@ public enum MxlCSSFontSize
 
 	private final String xmlName;
 
-
-	private MxlCSSFontSize(String xmlName) {
-		this.xmlName = xmlName;
-	}
-
-	@Override public String getXmlName() {
-		return xmlName;
-	}
-
 	@MaybeNull public static MxlCSSFontSize read(String s) {
-		return getEnumValue(s, values());
+		return Utils.readOrNull("css-font-size", s, values());
+	}
+	
+	public String write() {
+		return xmlName;
 	}
 
 }

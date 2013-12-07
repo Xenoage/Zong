@@ -1,25 +1,21 @@
 package com.xenoage.zong.musicxml.types.enums;
 
-import static com.xenoage.utils.xml.XmlDataException.invalid;
-import static com.xenoage.utils.xml.XmlDataException.throwNull;
-import static com.xenoage.utils.xml.Parse.getEnumValueNamed;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.NeverNull;
+import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.EnumWithXmlNames;
-import com.xenoage.utils.xml.XMLReader;
-
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 
 /**
  * MusicXML bar-style.
  * 
  * @author Andreas Wenger
  */
-public enum MxlBarStyle
-	implements EnumWithXmlNames
-{
-	
+@AllArgsConstructor @Getter public enum MxlBarStyle
+	implements EnumWithXmlNames {
+
 	Regular("regular"),
 	Dotted("dotted"),
 	Dashed("dashed"),
@@ -31,40 +27,16 @@ public enum MxlBarStyle
 	Tick("tick"),
 	Short("short"),
 	None("none");
-	
-	
+
 	private final String xmlName;
-	
-	
-	private MxlBarStyle(String xmlName)
-	{
-		this.xmlName = xmlName;
+
+
+	@NonNull public static MxlBarStyle read(XmlReader reader) {
+		return Utils.read("bar-style", reader.getText(), values());
 	}
-	
-	
-	@Override public String getXmlName()
-	{
-		return xmlName;
+
+	public void write(XmlWriter writer) {
+		writer.writeText(xmlName);
 	}
-	
-	
-	/**
-	 * Returns the bar-style from the text of the given element.
-	 */
-	@NeverNull public static MxlBarStyle read(Element e)
-	{
-		String s = XMLReader.text(e);
-		if (s != null)
-			return throwNull(getEnumValueNamed(s, values()), e);
-		else
-			throw invalid(e);
-	}
-	
-	
-	public void write(Element e)
-	{
-		e.setTextContent(xmlName);
-	}
-	
 
 }
