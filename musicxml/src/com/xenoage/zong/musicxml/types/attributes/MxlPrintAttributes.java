@@ -1,70 +1,41 @@
 package com.xenoage.zong.musicxml.types.attributes;
 
-import static com.xenoage.utils.xml.XMLReader.attribute;
-import static com.xenoage.utils.xml.XMLWriter.addAttribute;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.MaybeNull;
-import com.xenoage.utils.base.annotations.NeverNull;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.enums.MxlYesNo;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
-
 
 /**
  * MusicXML print-attributes.
  * 
  * @author Andreas Wenger
  */
-@IncompleteMusicXML(missing="staff-spacing,blank-page,page-number")
-public class MxlPrintAttributes
-{
-	
-	@MaybeNull private final Boolean newSystem;
-	@MaybeNull private final Boolean newPage;
-	
-	public static final MxlPrintAttributes empty = new MxlPrintAttributes(null, null);
-	
+@IncompleteMusicXML(missing = "staff-spacing,blank-page,page-number")
+@AllArgsConstructor @Getter
+public class MxlPrintAttributes {
 
-	public MxlPrintAttributes(Boolean newSystem, Boolean newPage)
-	{
-		this.newSystem = newSystem;
-		this.newPage = newPage;
-	}
-	
-
-	@MaybeNull public Boolean getNewSystem()
-	{
-		return newSystem;
-	}
-	
-	
-	@MaybeNull public Boolean getNewPage()
-	{
-		return newPage;
-	}
+	@MaybeNull private Boolean newSystem;
+	@MaybeNull private Boolean newPage;
 
 
-	@NeverNull public static MxlPrintAttributes read(Element e)
-	{
-		Boolean newSystem = MxlYesNo.readNull(attribute(e, "new-system"), e);
-		Boolean newPage = MxlYesNo.readNull(attribute(e, "new-page"), e);
+	@MaybeNull public static MxlPrintAttributes read(XmlReader reader) {
+		Boolean newSystem = MxlYesNo.readNull(reader.getAttributeString("new-system"));
+		Boolean newPage = MxlYesNo.readNull(reader.getAttributeString("new-page"));
 		if (newSystem != null || newPage != null)
 			return new MxlPrintAttributes(newSystem, newPage);
 		else
-			return empty;
+			return null;
 	}
-	
-	
-	public void write(Element e)
-	{
-		if (this != empty)
-		{
-			if (newSystem != null)
-				addAttribute(e, "new-system", MxlYesNo.write(newSystem));
-			if (newPage != null)
-				addAttribute(e, "new-page", MxlYesNo.write(newPage));
-		}
+
+	public void write(XmlWriter writer) {
+		if (newSystem != null)
+			writer.writeAttribute("new-system", MxlYesNo.write(newSystem));
+		if (newPage != null)
+			writer.writeAttribute("new-page", MxlYesNo.write(newPage));
 	}
-	
+
 }

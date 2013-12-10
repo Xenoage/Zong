@@ -17,7 +17,7 @@ public final class MxlFontSize {
 
 	public static final String attrName = "font-size";
 
-	/** Gets the font-size in points. If null, {@link #getValueCSS()} returns a non-null value. */
+	/** The font-size in points. If null, {@link #getValueCSS()} returns a non-null value. */
 	@MaybeNull private final Float valuePt;
 	/** The font-size as a CSS font size. If null, {@link #getValueFloat()} returns a non-null value. */
 	@MaybeNull private final MxlCSSFontSize valueCSS;
@@ -45,14 +45,12 @@ public final class MxlFontSize {
 	 * or returns null, if there is none.
 	 */
 	@MaybeNull public static MxlFontSize read(XmlReader reader) {
-		String s = reader.getAttributeValue(attrName);
+		String s = reader.getAttributeString(attrName);
 		if (s != null) {
-			if (Character.isDigit(s.charAt(0))) {
+			if (Character.isDigit(s.charAt(0)))
 				return new MxlFontSize(Float.parseFloat(s));
-			}
-			else {
+			else
 				return new MxlFontSize(MxlCSSFontSize.read(s));
-			}
 		}
 		else {
 			return null;

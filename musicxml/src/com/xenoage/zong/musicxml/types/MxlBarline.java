@@ -75,7 +75,7 @@ public final class MxlBarline
 			String n = c.getNodeName();
 			if (n.equals(MxlBarStyleColor.ELEM_NAME))
 				barStyle = MxlBarStyleColor.read(c);
-			else if (n.equals(MxlRepeat.ELEM_NAME))
+			else if (n.equals(MxlRepeat.elemName))
 				repeat = MxlRepeat.read(c);
 		}
 		MxlRightLeftMiddle location = notNull(MxlRightLeftMiddle.read(e), defaultLocation);

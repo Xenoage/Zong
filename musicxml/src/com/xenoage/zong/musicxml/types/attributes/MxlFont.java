@@ -41,12 +41,10 @@ public final class MxlFont {
 		MxlFontStyle fontStyle = MxlFontStyle.read(reader);
 		MxlFontSize fontSize = MxlFontSize.read(reader);
 		MxlFontWeight fontWeight = MxlFontWeight.read(reader);
-		if (fontFamily.size() > 0 || fontStyle != null || fontSize != null || fontWeight != null) {
+		if (fontFamily.size() > 0 || fontStyle != null || fontSize != null || fontWeight != null)
 			return new MxlFont(fontFamily, fontStyle, fontSize, fontWeight);
-		}
-		else {
+		else
 			return null;
-		}
 	}
 
 	public void write(XmlWriter writer) {

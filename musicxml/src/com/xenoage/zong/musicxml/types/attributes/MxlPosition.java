@@ -13,7 +13,8 @@ import com.xenoage.utils.xml.XmlWriter;
  * 
  * @author Andreas Wenger
  */
-@AllArgsConstructor @Getter @Setter public final class MxlPosition {
+@AllArgsConstructor @Getter @Setter
+public final class MxlPosition {
 
 	@MaybeNull private Float defaultX, defaultY, relativeX, relativeY;
 
