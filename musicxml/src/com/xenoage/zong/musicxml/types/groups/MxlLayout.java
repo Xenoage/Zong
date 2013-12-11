@@ -1,97 +1,60 @@
 package com.xenoage.zong.musicxml.types.groups;
 
-import static com.xenoage.utils.xml.XMLReader.elements;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 
-import org.w3c.dom.Element;
+import java.util.List;
 
-import com.xenoage.utils.base.annotations.MaybeEmpty;
-import com.xenoage.utils.base.annotations.MaybeNull;
-import com.xenoage.utils.base.annotations.NeverNull;
-import com.xenoage.utils.pdlib.PVector;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+import com.xenoage.utils.annotations.MaybeEmpty;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.MxlPageLayout;
 import com.xenoage.zong.musicxml.types.MxlStaffLayout;
 import com.xenoage.zong.musicxml.types.MxlSystemLayout;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
-
 
 /**
  * MusicXML layout.
  * 
  * @author Andreas Wenger
  */
-@IncompleteMusicXML(children="page-layout")
-public final class MxlLayout
-{
-	
-	@MaybeNull private final MxlPageLayout pageLayout;
-	@MaybeNull private final MxlSystemLayout systemLayout;
-	@MaybeEmpty private final PVector<MxlStaffLayout> staffLayouts;
-	
-	public static final MxlLayout empty = new MxlLayout(null, null,
-		new PVector<MxlStaffLayout>());
-	
-	
-	public MxlLayout(MxlPageLayout pageLayout, MxlSystemLayout systemLayout,
-		PVector<MxlStaffLayout> staffLayouts)
-	{
-		this.pageLayout = pageLayout;
-		this.systemLayout = systemLayout;
-		this.staffLayouts = staffLayouts;
-	}
-	
-	
-	@MaybeNull public MxlPageLayout getPageLayout()
-	{
-		return pageLayout;
-	}
+@IncompleteMusicXML(children = "page-layout")
+@AllArgsConstructor @Getter @Setter
+public final class MxlLayout {
+
+	@NonNull private MxlPageLayout pageLayout;
+	@NonNull private MxlSystemLayout systemLayout;
+	@MaybeEmpty private List<MxlStaffLayout> staffLayouts;
 
 
-	@MaybeNull public MxlSystemLayout getSystemLayout()
-	{
-		return systemLayout;
-	}
-
-
-	@MaybeEmpty public PVector<MxlStaffLayout> getStaffLayouts()
-	{
-		return staffLayouts;
-	}
-	
-	
-	@NeverNull public static MxlLayout read(Element e)
-	{
+	@MaybeNull public static MxlLayout read(XmlReader reader) {
 		MxlPageLayout pageLayout = null;
 		MxlSystemLayout systemLayout = null;
-		PVector<MxlStaffLayout> staffLayouts = new PVector<MxlStaffLayout>();
-		for (Element c : elements(e))
-		{
-			String n = c.getNodeName();
-			if (n.equals(MxlPageLayout.ELEM_NAME))
-				pageLayout = MxlPageLayout.read(c);
-			else if (n.equals(MxlSystemLayout.ELEM_NAME))
-				systemLayout = MxlSystemLayout.read(c);
-			else if (n.equals(MxlStaffLayout.ELEM_NAME))
-				staffLayouts = staffLayouts.plus(MxlStaffLayout.read(c));
+		List<MxlStaffLayout> staffLayouts = alist();
+		while (reader.openNextChildElement()) {
+			String n = reader.getElementName();
+			if (n.equals(MxlPageLayout.elemName))
+				pageLayout = MxlPageLayout.read(reader);
+			else if (n.equals(MxlSystemLayout.elemName))
+				systemLayout = MxlSystemLayout.read(reader);
+			else if (n.equals(MxlStaffLayout.elemName))
+				staffLayouts.add(MxlStaffLayout.read(reader));
 		}
-		if (pageLayout != null || systemLayout != null || staffLayouts.size() > 0)
-			return new MxlLayout(pageLayout, systemLayout, staffLayouts);
-		else
-			return empty;
+		return new MxlLayout(pageLayout, systemLayout, staffLayouts);
 	}
-	
-	
-	public void write(Element e)
-	{
-		if (this != empty)
-		{
-			if (pageLayout != null)
-				pageLayout.write(e);
-			if (systemLayout != null)
-				systemLayout.write(e);
-			for (MxlStaffLayout staffLayout : staffLayouts)
-				staffLayout.write(e);
-		}
+
+	public void write(XmlWriter writer) {
+		if (pageLayout != null)
+			pageLayout.write(writer);
+		if (systemLayout != null)
+			systemLayout.write(writer);
+		for (MxlStaffLayout staffLayout : staffLayouts)
+			staffLayout.write(writer);
 	}
-	
 
 }

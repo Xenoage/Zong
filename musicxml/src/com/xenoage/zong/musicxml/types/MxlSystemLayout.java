@@ -1,14 +1,14 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.xml.Parse.parseFloat;
-import static com.xenoage.utils.xml.XMLReader.elements;
-import static com.xenoage.utils.xml.XMLWriter.addElement;
+import static com.xenoage.utils.Parser.parseFloatNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.MaybeNull;
-import com.xenoage.utils.base.annotations.NeverNull;
-import com.xenoage.zong.musicxml.types.groups.MxlLeftRightMargins;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 
 
 /**
@@ -16,73 +16,42 @@ import com.xenoage.zong.musicxml.types.groups.MxlLeftRightMargins;
  * 
  * @author Andreas Wenger
  */
-public final class MxlSystemLayout
-{
-	
-	public static final String ELEM_NAME = "system-layout";
-	
-	@MaybeNull private final MxlLeftRightMargins systemMargins;
+@AllArgsConstructor @Getter @Setter
+public final class MxlSystemLayout {
+
+	public static final String elemName = "system-layout";
+
+	@MaybeNull private MxlSystemMargins systemMargins;
 	@MaybeNull private final Float systemDistance;
 	@MaybeNull private final Float topSystemDistance;
 	
-	
-	public MxlSystemLayout(MxlLeftRightMargins systemMargins, Float systemDistance,
-		Float topSystemDistance)
-	{
-		this.systemMargins = systemMargins;
-		this.systemDistance = systemDistance;
-		this.topSystemDistance = topSystemDistance;
-	}
 
-
-	@MaybeNull public MxlLeftRightMargins getSystemMargins()
-	{
-		return systemMargins;
-	}
-
-
-	@MaybeNull public Float getSystemDistance()
-	{
-		return systemDistance;
-	}
-
-
-	@MaybeNull public Float getTopSystemDistance()
-	{
-		return topSystemDistance;
-	}
-	
-	
-	@NeverNull public static MxlSystemLayout read(Element e)
-	{
-		MxlLeftRightMargins systemMargins = null;
+	@NonNull public static MxlSystemLayout read(XmlReader reader) {
+		MxlSystemMargins systemMargins = null;
 		Float systemDistance = null;
 		Float topSystemDistance = null;
-		for (Element c : elements(e))
-		{
-			String n = c.getNodeName();
-			if (n.equals("system-margins"))
-				systemMargins = MxlLeftRightMargins.read(c);
+		while (reader.openNextChildElement()) {
+			String n = reader.getElementName();
+			if (n.equals(MxlSystemMargins.elemName))
+				systemMargins = MxlSystemMargins.read(reader);
 			else if (n.equals("system-distance"))
-				systemDistance = parseFloat(c);
+				systemDistance = parseFloatNull(reader.getText());
 			else if (n.equals("top-system-distance"))
-				topSystemDistance = parseFloat(c);
+				topSystemDistance = parseFloatNull(reader.getText());
+			reader.closeElement();
 		}
 		return new MxlSystemLayout(systemMargins, systemDistance, topSystemDistance);
 	}
-	
-	
-	public void write(Element parent)
-	{
-		Element e = addElement(ELEM_NAME, parent);
+
+	public void write(XmlWriter writer) {
+		writer.writeElementStart(elemName);
 		if (systemMargins != null)
-			systemMargins.write("system-margins", e);
+			systemMargins.write(writer);
 		if (systemDistance != null)
-			addElement("system-distance", systemDistance, e);
+			writer.writeElementText("system-distance", systemDistance);
 		if (topSystemDistance != null)
-			addElement("top-system-distance", topSystemDistance, e);
+			writer.writeElementText("top-system-distance", topSystemDistance);
+		writer.writeElementEnd();
 	}
-	
-	
 
 }

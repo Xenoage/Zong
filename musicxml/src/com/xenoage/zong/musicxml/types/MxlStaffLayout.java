@@ -1,77 +1,53 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.xml.Parse.parseAttrIntNull;
-import static com.xenoage.utils.xml.Parse.parseChildFloatNull;
-import static com.xenoage.utils.xml.XMLWriter.addAttribute;
-import static com.xenoage.utils.xml.XMLWriter.addElement;
+import static com.xenoage.utils.Parser.parseFloatNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.MaybeNull;
-import com.xenoage.utils.base.annotations.NeverNull;
-
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 
 /**
  * MusicXML staff-layout.
  * 
  * @author Andreas Wenger
  */
-public final class MxlStaffLayout
-{
-	
-	public static final String ELEM_NAME = "staff-layout";
-	
-	@MaybeNull private final Float staffDistance;
-	@MaybeNull private final Integer number;
-	
+@AllArgsConstructor @Getter @Setter
+public final class MxlStaffLayout {
+
+	public static final String elemName = "staff-layout";
+
+	@MaybeNull private Float staffDistance;
+	/** May be null. If within in the defaults element, this means
+	 * "for all staves". Otherwise, use {@link #getNumberNotNull()}. */
+	@MaybeNull private Integer number;
+
 	private static final int defaultNumber = 1;
 
 
-	public MxlStaffLayout(Float staffDistance, Integer number)
-	{
-		this.staffDistance = staffDistance;
-		this.number = number;
-	}
-
-	
-	@MaybeNull public Float getStaffDistance()
-	{
-		return staffDistance;
-	}
-
-	
-	/**
-	 * May return null. If within in the defaults element, this means
-	 * "for all staves". Otherwise, use getNumberNotNull.
-	 */
-	@MaybeNull public Integer getNumber()
-	{
-		return number;
-	}
-	
-	
-	@NeverNull public int getNumberNotNull()
-	{
+	@NonNull public int getNumberNotNull() {
 		return (number != null ? number : defaultNumber);
 	}
 
+	@NonNull public static MxlStaffLayout read(XmlReader reader) {
+		Float staffDistance = null;
+		Integer number = reader.getAttributeInt("number");
+		if (reader.openNextChildElement("staff-distance")) {
+			staffDistance = parseFloatNull(reader.getText());
+			reader.closeElement();
+		}
+		return new MxlStaffLayout(staffDistance, number);
+	}
 
-	@NeverNull public static MxlStaffLayout read(Element e)
-	{
-		return new MxlStaffLayout(
-			parseChildFloatNull(e, "staff-distance"),
-			parseAttrIntNull(e, "number"));
-	}
-	
-	
-	public void write(Element parent)
-	{
-		Element e = addElement(ELEM_NAME, parent);
+	public void write(XmlWriter writer) {
+		writer.writeElementStart(elemName);
+		writer.writeAttribute("number", number);
 		if (staffDistance != null)
-			addElement("staff-distance", staffDistance, e);
-		addAttribute(e, "number", number);
+			writer.writeElementText("staff-distance", staffDistance);
+		writer.writeElementEnd();
 	}
-	
-	
 
 }

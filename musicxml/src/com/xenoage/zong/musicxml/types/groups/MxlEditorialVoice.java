@@ -1,14 +1,14 @@
 package com.xenoage.zong.musicxml.types.groups;
 
-import static com.xenoage.utils.xml.XMLWriter.addElement;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.MaybeNull;
-import com.xenoage.utils.base.annotations.NeverNull;
-import com.xenoage.utils.xml.XMLReader;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
-
 
 /**
  * MusicXML editorial-voice and editorial-voice-direction
@@ -16,45 +16,26 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
  * 
  * @author Andreas Wenger
  */
-@IncompleteMusicXML(missing="footnote,level")
-public final class MxlEditorialVoice
-{
-	
-	@MaybeNull private final String voice;
-	
-	public static final MxlEditorialVoice empty = new MxlEditorialVoice(null);
-	
-	
-	public MxlEditorialVoice(String voice)
-	{
-		this.voice = voice;
-	}
-	
-	
-	@MaybeNull public String getVoice()
-	{
-		return voice;
-	}
-	
-	
-	@NeverNull public static MxlEditorialVoice read(Element e)
-	{
-		String voice = XMLReader.elementText(e, "voice");
+@IncompleteMusicXML(missing = "footnote,level")
+@AllArgsConstructor @Getter @Setter
+public final class MxlEditorialVoice {
+
+	@NonNull private final String voice;
+
+	@MaybeNull public static MxlEditorialVoice read(XmlReader reader) {
+		String voice = null;
+		if (reader.openNextChildElement("voice")) {
+			voice = reader.getText();
+			reader.closeElement();
+		}
 		if (voice != null)
 			return new MxlEditorialVoice(voice);
 		else
-			return empty;
+			return null;
 	}
-	
-	
-	public void write(Element e)
-	{
-		if (this != empty)
-		{
-			if (voice != null)
-				addElement("voice", voice, e);
-		}
+
+	public void write(XmlWriter writer) {
+		writer.writeElementText("voice", voice);
 	}
-	
 
 }

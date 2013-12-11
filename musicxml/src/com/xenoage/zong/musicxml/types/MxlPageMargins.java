@@ -1,94 +1,68 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.xml.XMLWriter.addElement;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.MaybeNull;
-import com.xenoage.utils.base.annotations.NeverNull;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.enums.MxlMarginType;
 import com.xenoage.zong.musicxml.types.groups.MxlAllMargins;
-
 
 /**
  * MusicXML page-margins.
  * 
  * @author Andreas Wenger
  */
-public final class MxlPageMargins
-{
-	
-	public static final String ELEM_NAME = "page-margins";
-	
-	@NeverNull private final MxlAllMargins value;
-	@MaybeNull private final MxlMarginType type;
-	
-	
-	public MxlPageMargins(MxlAllMargins value, MxlMarginType type)
-	{
-		this.value = value;
-		this.type = type;
+@AllArgsConstructor @Getter @Setter
+public final class MxlPageMargins {
+
+	public static final String elemName = "page-margins";
+
+	@MaybeNull private MxlAllMargins value;
+	@MaybeNull private MxlMarginType type;
+
+
+	public float getLeftMargin() {
+		return value == null ? 0 : value.getLeftMargin();
 	}
 
-	
-	@NeverNull public MxlAllMargins getValue()
-	{
-		return value;
+	public float getRightMargin() {
+		return value == null ? 0 : value.getRightMargin();
 	}
 
-	
-	@MaybeNull public MxlMarginType getType()
-	{
-		return type;
-	}
-	
-	
-	public float getLeftMargin()
-	{
-		return value.getLeftMargin();
+	public float getTopMargin() {
+		return value == null ? 0 : value.getTopMargin();
 	}
 
-	
-	public float getRightMargin()
-	{
-		return value.getRightMargin();
+	public float getBottomMargin() {
+		return value == null ? 0 : value.getBottomMargin();
 	}
 
-	
-	public float getTopMargin()
-	{
-		return value.getTopMargin();
-	}
-
-	
-	public float getBottomMargin()
-	{
-		return value.getBottomMargin();
-	}
-	
-	
 	/**
 	 * Default is {@link MxlMarginType#Both}.
 	 */
-	@NeverNull public MxlMarginType getTypeNotNull()
-	{
+	@NonNull public MxlMarginType getTypeNotNull() {
 		return (type != null ? type : MxlMarginType.Both);
 	}
 
+	@NonNull public static MxlPageMargins read(XmlReader reader) {
+		//read attributes first, before moving forward to child elements
+		MxlMarginType type = MxlMarginType.read(reader);
+		//read child elements
+		MxlAllMargins value = MxlAllMargins.read(reader);
+		return new MxlPageMargins(value, type);
+	}
 
-	@NeverNull public static MxlPageMargins read(Element e)
-	{
-		return new MxlPageMargins(MxlAllMargins.read(e), MxlMarginType.read(e));
-	}
-	
-	
-	public void write(Element parent)
-	{
-		Element e = addElement(ELEM_NAME, parent);
-		value.write(e);
+	public void write(XmlWriter writer) {
+		writer.writeElementStart(elemName);
+		if (value != null)
+			value.write(writer);
 		if (type != null)
-			type.write(e);
+			type.write(writer);
+		writer.writeElementEnd();
 	}
-	
 
 }

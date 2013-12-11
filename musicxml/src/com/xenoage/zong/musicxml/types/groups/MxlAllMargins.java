@@ -1,78 +1,55 @@
 package com.xenoage.zong.musicxml.types.groups;
 
-import static com.xenoage.utils.xml.Parse.parseChildFloat;
-import static com.xenoage.utils.xml.XMLWriter.addElement;
+import static com.xenoage.utils.Parser.parseFloat;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.NeverNull;
-
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 
 /**
- * MusicXML all-margins.
+ * MusicXML all-margins, including the left-right-margins group.
  * 
  * @author Andreas Wenger
  */
-public final class MxlAllMargins
-{
-	
-	private final float leftMargin;
-	private final float rightMargin;
-	private final float topMargin;
-	private final float bottomMargin;
-	
-	
-	public MxlAllMargins(float leftMargin, float rightMargin, float topMargin,
-		float bottomMargin)
-	{
-		this.leftMargin = leftMargin;
-		this.rightMargin = rightMargin;
-		this.topMargin = topMargin;
-		this.bottomMargin = bottomMargin;
+@AllArgsConstructor @Getter @Setter
+public final class MxlAllMargins {
+
+	private float leftMargin;
+	private float rightMargin;
+	private float topMargin;
+	private float bottomMargin;
+
+	@MaybeNull public static MxlAllMargins read(XmlReader reader) {
+		float leftMargin = 0;
+		float rightMargin = 0;
+		float topMargin = 0;
+		float bottomMargin = 0;
+		while (reader.openNextChildElement()) {
+			String eName = reader.getElementName();
+			if (eName.equals("left-margin"))
+				leftMargin = parseFloat(reader.getText());
+			else if (eName.equals("right-margin"))
+				rightMargin = parseFloat(reader.getText());
+			else if (eName.equals("top-margin"))
+				topMargin = parseFloat(reader.getText());
+			else if (eName.equals("bottom-margin"))
+				bottomMargin = parseFloat(reader.getText());
+			reader.closeElement();
+		}
+		if (leftMargin != 0 || rightMargin != 0 || topMargin != 0 || bottomMargin != 0)
+			return new MxlAllMargins(leftMargin, rightMargin, topMargin, bottomMargin);
+		else
+			return null;
 	}
 
-	
-	public float getLeftMargin()
-	{
-		return leftMargin;
+	public void write(XmlWriter writer) {
+		writer.writeElementText("left-margin", leftMargin);
+		writer.writeElementText("right-margin", rightMargin);
+		writer.writeElementText("top-margin", topMargin);
+		writer.writeElementText("bottom-margin", bottomMargin);
 	}
-
-	
-	public float getRightMargin()
-	{
-		return rightMargin;
-	}
-
-	
-	public float getTopMargin()
-	{
-		return topMargin;
-	}
-
-	
-	public float getBottomMargin()
-	{
-		return bottomMargin;
-	}
-	
-	
-	@NeverNull public static MxlAllMargins read(Element e)
-	{
-		return new MxlAllMargins(
-			parseChildFloat(e, "left-margin"),
-			parseChildFloat(e, "right-margin"),
-			parseChildFloat(e, "top-margin"),
-			parseChildFloat(e, "bottom-margin"));
-	}
-	
-	
-	public void write(Element e)
-	{
-		addElement("left-margin", leftMargin, e);
-		addElement("right-margin", rightMargin, e);
-		addElement("top-margin", topMargin, e);
-		addElement("bottom-margin", bottomMargin, e);
-	}
-
 
 }
