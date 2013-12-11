@@ -1,14 +1,15 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.xml.XMLWriter.addElement;
+import static com.xenoage.utils.Parser.parseIntegerNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.MaybeNull;
-import com.xenoage.utils.xml.Parse;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.choice.MxlTimeContent;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
-
 
 /**
  * MusicXML beats/beats-type content for a time element.
@@ -17,58 +18,41 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
  * 
  * @author Andreas Wenger
  */
-@IncompleteMusicXML(partly="beats,beat-type")
+@IncompleteMusicXML(partly = "beats,beat-type")
+@AllArgsConstructor @Getter @Setter
 public final class MxlNormalTime
-	implements MxlTimeContent
-{
-	
-	private final int beats;
-	private final int beatType;
-	
-	
-	public MxlNormalTime(int beats, int beatType)
-	{
-		this.beats = beats;
-		this.beatType = beatType;
-	}
+	implements MxlTimeContent {
 
-	
-	public int getBeats()
-	{
-		return beats;
-	}
+	private int beats;
+	private int beatType;
 
-	
-	public int getBeatType()
-	{
-		return beatType;
-	}
-	
-	
-	@Override public MxlTimeContentType getTimeContentType()
-	{
+
+	@Override public MxlTimeContentType getTimeContentType() {
 		return MxlTimeContentType.NormalTime;
 	}
-	
-	
+
 	/**
 	 * Returns null, when the time signature is not supported (e.g. 3+2/4).
 	 */
-	@MaybeNull public static MxlNormalTime read(Element e)
-	{
-		Integer beats = Parse.parseChildIntNullTry(e, "beats");
-		Integer beatType = Parse.parseChildIntNullTry(e, "beat-type");
+	@MaybeNull public static MxlNormalTime read(XmlReader reader) {
+		Integer beats = null, beatType = null;
+		while (reader.openNextChildElement()) {
+			String n = reader.getElementName();
+			if (n.equals("beats"))
+				beats = parseIntegerNull(reader.getText());
+			else if (n.equals("beat-type"))
+				beatType = parseIntegerNull(reader.getText());
+			reader.closeElement();
+		}
 		if (beats != null && beatType != null)
 			return new MxlNormalTime(beats, beatType);
 		else
 			return null;
 	}
-	
-	
-	@Override public void write(Element e)
-	{
-		addElement("beats", beats, e);
-		addElement("beat-type", beatType, e);
+
+	@Override public void write(XmlWriter writer) {
+		writer.writeElementText("beats", beats);
+		writer.writeElementText("beat-type", beatType);
 	}
 
 }

@@ -1,120 +1,102 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.pdlib.PVector.pvec;
-import static com.xenoage.utils.xml.Parse.parseInt;
-import static com.xenoage.utils.xml.XMLReader.elements;
-import static com.xenoage.utils.xml.XMLWriter.addElement;
+import static com.xenoage.utils.Parser.parseIntegerNull;
 
-import org.w3c.dom.Element;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.xenoage.utils.base.annotations.MaybeEmpty;
-import com.xenoage.utils.base.annotations.MaybeNull;
-import com.xenoage.utils.base.annotations.NeverNull;
-import com.xenoage.utils.pdlib.PVector;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.choice.MxlMusicDataContent;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
-
 
 /**
  * MusicXML attributes.
  * 
  * @author Andreas Wenger
  */
-@IncompleteMusicXML(missing="editorial,part-symbol,instruments,staff-details," +
-	"directive,measure-style", partly="time,clef", children="key,time,clef")
+@IncompleteMusicXML(missing = "editorial,part-symbol,instruments,staff-details,"
+	+ "directive,measure-style", partly = "time,clef", children = "key,time,clef")
+@AllArgsConstructor @Getter @Setter
 public final class MxlAttributes
-	implements MxlMusicDataContent
-{
+	implements MxlMusicDataContent {
+
+	public static final String elemName = "attributes";
+
+	@MaybeNull private Integer divisions;
+	@MaybeNull private MxlKey key;
+	@MaybeNull private MxlTime time;
+	@MaybeNull private Integer staves;
+	@MaybeNull private List<MxlClef> clefs;
+	@MaybeNull private MxlTranspose transpose;
+
 	
-	public static final String ELEM_NAME = "attributes";
-	
-	@MaybeNull public final Integer divisions;
-	@MaybeNull public final MxlKey key;
-	@MaybeNull public final MxlTime time;
-	@MaybeNull public final Integer staves;
-	@MaybeEmpty public final PVector<MxlClef> clefs;
-	@MaybeNull public final MxlTranspose transpose;
-	
-	private static final PVector<MxlClef> emptyClefs = pvec();
-	
-	
-	public MxlAttributes(Integer divisions, MxlKey key, MxlTime time, Integer staves,
-		PVector<MxlClef> clefs, MxlTranspose transpose)
-	{
-		this.divisions = divisions;
-		this.key = key;
-		this.time = time;
-		this.staves = staves;
-		this.clefs = clefs;
-		this.transpose = transpose;
-	}
-	
-	
-	@Override public MxlMusicDataContentType getMusicDataContentType()
-	{
+	@Override public MxlMusicDataContentType getMusicDataContentType() {
 		return MxlMusicDataContentType.Attributes;
 	}
-	
-	
-	@NeverNull public static MxlAttributes read(Element e)
-	{
+
+	@NonNull public static MxlAttributes read(XmlReader reader) {
 		Integer divisions = null;
 		MxlKey key = null;
 		MxlTime time = null;
 		Integer staves = null;
-		PVector<MxlClef> clefs = emptyClefs;
+		List<MxlClef> clefs = null;
 		MxlTranspose transpose = null;
-		for (Element child : elements(e))
-		{
-			String n = child.getNodeName();
-			switch (n.charAt(0))
-			{
+		while (reader.openNextChildElement()) {
+			String n = reader.getElementName();
+			switch (n.charAt(0)) { //switch for performance
 				case 'c':
-					if (MxlClef.elemName.equals(n))
-						clefs = clefs.plus(MxlClef.read(child));
+					if (MxlClef.elemName.equals(n)) {
+						if (clefs == null)
+							clefs = new ArrayList<MxlClef>();
+						clefs.add(MxlClef.read(reader));
+					}
 					break;
 				case 'd':
 					if ("divisions".equals(n))
-						divisions = parseInt(child);
+						divisions = parseIntegerNull(reader.getText());
 					break;
 				case 'k':
 					if (MxlKey.elemName.equals(n))
-						key = MxlKey.read(child);
+						key = MxlKey.read(reader);
 					break;
 				case 's':
 					if ("staves".equals(n))
-						staves = parseInt(child);
+						staves = parseIntegerNull(reader.getText());
 					break;
 				case 't':
-					if (MxlTime.ELEM_NAME.equals(n))
-						time = MxlTime.read(child);
+					if (MxlTime.elemName.equals(n))
+						time = MxlTime.read(reader);
 					else if (MxlTranspose.elemName.equals(n))
-						transpose = MxlTranspose.read(child);
+						transpose = MxlTranspose.read(reader);
 					break;
 			}
+			reader.closeElement();
 		}
 		return new MxlAttributes(divisions, key, time, staves, clefs, transpose);
 	}
-	
-	
-	@Override public void write(Element parent)
-	{
-		Element e = addElement(ELEM_NAME, parent);
-		addElement("divisions", divisions, e);
+
+	@Override public void write(XmlWriter writer) {
+		writer.writeElementStart(elemName);
+		writer.writeElementText("divisions", divisions);
 		if (key != null)
-			key.write(e);
+			key.write(writer);
 		if (time != null)
-			time.write(e);
-		addElement("staves", staves, e);
-		for (MxlClef clef : clefs)
-			clef.write(e);
+			time.write(writer);
+		writer.writeElementText("staves", staves);
+		if (clefs != null) {
+			for (MxlClef clef : clefs)
+				clef.write(writer);
+		}
 		if (transpose != null)
-			transpose.write(e);
+			transpose.write(writer);
+		writer.writeElementEnd();
 	}
-	
-	
-	
-	
-	
 
 }

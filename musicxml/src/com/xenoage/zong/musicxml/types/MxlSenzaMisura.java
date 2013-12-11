@@ -1,12 +1,8 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.xml.XMLWriter.addElement;
-
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.NeverNull;
+import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.choice.MxlTimeContent;
-
 
 /**
  * MusicXML senza-misura.
@@ -14,27 +10,21 @@ import com.xenoage.zong.musicxml.types.choice.MxlTimeContent;
  * @author Andreas Wenger
  */
 public final class MxlSenzaMisura
-	implements MxlTimeContent
-{
-	
-	public static final String ELEM_NAME = "senza-misura";
-	
+	implements MxlTimeContent {
 
-	@Override public MxlTimeContentType getTimeContentType()
-	{
+	public static final String elemName = "senza-misura";
+
+
+	@Override public MxlTimeContentType getTimeContentType() {
 		return MxlTimeContentType.SenzaMisura;
 	}
 
-	
-	@NeverNull public static MxlSenzaMisura read()
-	{
+	@NonNull public static MxlSenzaMisura read() {
 		return new MxlSenzaMisura();
 	}
-	
 
-	@Override public void write(Element e)
-	{
-		addElement(ELEM_NAME, e);
+	@Override public void write(XmlWriter writer) {
+		writer.writeElementEmpty(elemName);
 	}
 
 }

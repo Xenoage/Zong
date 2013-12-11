@@ -1,78 +1,58 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.xml.XMLReader.element;
-import static com.xenoage.utils.xml.XMLWriter.addElement;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.MaybeNull;
-import com.xenoage.utils.base.annotations.NeverNull;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.choice.MxlTimeContent;
 import com.xenoage.zong.musicxml.types.enums.MxlTimeSymbol;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
-
 
 /**
  * MusicXML time.
  * 
  * @author Andreas Wenger
  */
-@IncompleteMusicXML(missing="number,print-style,print-object", partly="beats,beat-type")
-public final class MxlTime
-{
-	
-	public static final String ELEM_NAME = "time";
-	
-	@NeverNull private final MxlTimeContent content;
-	@MaybeNull private final MxlTimeSymbol symbol;
-	
-	
-	public MxlTime(MxlTimeContent content, MxlTimeSymbol symbol)
-	{
-		this.content = content;
-		this.symbol = symbol;
-	}
+@IncompleteMusicXML(missing = "number,print-style,print-object", partly = "beats,beat-type")
+@AllArgsConstructor @Getter @Setter
+public final class MxlTime {
 
-	
-	@NeverNull public MxlTimeContent getContent()
-	{
-		return content;
-	}
+	public static final String elemName = "time";
 
-	
-	@MaybeNull public MxlTimeSymbol getSymbol()
-	{
-		return symbol;
-	}
-	
-	
+	@NonNull private MxlTimeContent content;
+	@MaybeNull private MxlTimeSymbol symbol;
+
+
 	/**
 	 * Returns null, if the time signature is unsupported.
 	 */
-	@MaybeNull public static MxlTime read(Element e)
-	{
+	@MaybeNull public static MxlTime read(XmlReader reader) {
+		MxlTimeSymbol symbol = MxlTimeSymbol.read(reader);
 		MxlTimeContent content = null;
-		Element firstChild = element(e);
-		String n = firstChild.getNodeName();
-		if (n.equals("beats"))
-			content = MxlNormalTime.read(e);
-		else if (n.equals("senza-misura"))
-			content = MxlSenzaMisura.read();
+		if (reader.openNextChildElement()) {
+			String n = reader.getElementName();
+			if (n.equals("beats"))
+				content = MxlNormalTime.read(reader);
+			else if (n.equals("senza-misura"))
+				content = MxlSenzaMisura.read();
+			reader.closeElement();
+		}
 		if (content != null)
-			return new MxlTime(content, MxlTimeSymbol.read(e));
+			return new MxlTime(content, symbol);
 		else
 			return null;
 	}
-	
-	
-	public void write(Element parent)
-	{
-		Element e = addElement(ELEM_NAME, parent);
-		content.write(e);
+
+	public void write(XmlWriter writer) {
+		writer.writeElementStart(elemName);
+		content.write(writer);
 		if (symbol != null)
-			symbol.write(e);
+			symbol.write(writer);
+		writer.writeElementEnd();
 	}
-	
-	
 
 }

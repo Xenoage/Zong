@@ -1,54 +1,40 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.pdlib.PVector.pvec;
-import static com.xenoage.utils.xml.XmlDataException.invalid;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 
-import org.w3c.dom.Element;
+import java.util.List;
 
-import com.xenoage.utils.base.annotations.NeverEmpty;
-import com.xenoage.utils.base.annotations.NeverNull;
-import com.xenoage.utils.pdlib.PVector;
-import com.xenoage.utils.xml.XMLReader;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+import com.xenoage.utils.annotations.NonEmpty;
+import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.collections.CollectionUtils;
+import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.zong.musicxml.types.choice.MxlMusicDataContent;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
-
 
 /**
  * MusicXML music-data.
  * 
  * @author Andreas Wenger
  */
-@IncompleteMusicXML(missing="harmony,figured-bass,sound,grouping,link,bookmark",
-	children="note,backup,forward,direction,attributes,print,barline")
-public final class MxlMusicData
-{
-	
-	@NeverEmpty private final PVector<MxlMusicDataContent> content;
+@IncompleteMusicXML(missing = "harmony,figured-bass,sound,grouping,link,bookmark", children = "note,backup,forward,direction,attributes,print,barline")
+@AllArgsConstructor @Getter @Setter
+public final class MxlMusicData {
 
-	
-	public MxlMusicData(PVector<MxlMusicDataContent> content)
-	{
-		this.content = content;
-	}
+	@NonEmpty private final List<MxlMusicDataContent> content;
 
-	
-	@NeverEmpty public PVector<MxlMusicDataContent> getContent()
-	{
-		return content;
-	}
-	
-	
-	@NeverNull public static MxlMusicData read(Element e)
-	{
-		PVector<MxlMusicDataContent> content = pvec();
-		for (Element c : XMLReader.elements(e))
-		{
+
+	@NonNull public static MxlMusicData read(XmlReader reader) {
+		List<MxlMusicDataContent> content = alist();
+		while (reader.openNextChildElement()) {
 			MxlMusicDataContent item = null;
-			String n = c.getNodeName();
-			switch (n.charAt(0))
-			{
+			String n = reader.getElementName();
+			switch (n.charAt(0)) { //switch for performance
 				case 'a':
-					if (n.equals(MxlAttributes.ELEM_NAME))
+					if (n.equals(MxlAttributes.elemName))
 						item = MxlAttributes.read(c);
 					break;
 				case 'b':
@@ -74,6 +60,7 @@ public final class MxlMusicData
 						item = MxlPrint.read(c);
 					break;
 			}
+			reader.closeElement();
 			if (item != null)
 				content = content.plus(item);
 		}
@@ -81,15 +68,11 @@ public final class MxlMusicData
 			throw invalid(e);
 		return new MxlMusicData(content);
 	}
-	
-	
-	public void write(Element e)
-	{
-		for (MxlMusicDataContent item : content)
-		{
+
+	public void write(Element e) {
+		for (MxlMusicDataContent item : content) {
 			item.write(e);
 		}
 	}
-	
 
 }

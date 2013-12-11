@@ -55,7 +55,7 @@ public final class MxlPart
 		PVector<MxlMeasure> measures = pvec();
 		for (Element c : elements(e))
 		{
-			if (c.getNodeName().equals(MxlMeasure.ELEM_NAME))
+			if (c.getNodeName().equals(MxlMeasure.elemName))
 				measures = measures.plus(MxlMeasure.read(c));
 		}
 		if (measures.size() < 1)

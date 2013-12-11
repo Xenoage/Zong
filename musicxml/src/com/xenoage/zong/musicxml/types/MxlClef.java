@@ -1,12 +1,14 @@
 package com.xenoage.zong.musicxml.types;
 
 import static com.xenoage.utils.NullUtils.notNull;
+import static com.xenoage.utils.Parser.parseIntegerNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.enums.MxlClefSign;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 
@@ -28,19 +30,32 @@ public final class MxlClef {
 	private static final int defaultClefOctaveChange = 0;
 	private static final int defaultNumber = 1;
 
+	
 	public static MxlClef read(XmlReader reader) {
-		return new MxlClef(MxlClefSign.read(throwNull(element(e, MxlClefSign.elemName), e)), notNull(
-			parseChildIntNull(e, "clef-octave-change"), defaultClefOctaveChange), notNull(
-			Parse.parseAttrIntNull(e, "number"), defaultNumber));
+		Integer number = notNull(reader.getAttributeInt("number"), defaultNumber);
+		MxlClefSign sign = null;
+		int clefOctaveChange = defaultClefOctaveChange;
+		while (reader.openNextChildElement()) {
+			String n = reader.getElementName();
+			if (n.equals(MxlClefSign.elemName))
+				sign = MxlClefSign.read(reader);
+			else if (n.equals("clef-octave-change"))
+				clefOctaveChange = parseIntegerNull(reader.getText());
+			reader.closeElement();
+		}
+		if (sign == null)
+			reader.throwDataException(MxlClefSign.elemName + " missing");
+		return new MxlClef(sign, clefOctaveChange, number);
 	}
 
-	public void write(Element parent) {
-		Element e = addElement(elemName, parent);
-		sign.write(e);
+	public void write(XmlWriter writer) {
+		writer.writeElementStart(elemName);
+		sign.write(writer);
 		if (clefOctaveChange != defaultClefOctaveChange)
-			addElement("clef-octave-change", clefOctaveChange, e);
+			writer.writeElementText("clef-octave-change", clefOctaveChange);
 		if (number != defaultNumber)
-			addAttribute(e, "number", number);
+			writer.writeAttribute("number", number);
+		writer.writeElementEnd();
 	}
 
 }
