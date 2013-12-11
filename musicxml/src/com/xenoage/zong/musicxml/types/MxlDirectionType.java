@@ -1,15 +1,14 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.xml.XMLReader.element;
-import static com.xenoage.utils.xml.XMLWriter.addElement;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.MaybeNull;
-import com.xenoage.utils.base.annotations.NeverNull;
+import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.zong.musicxml.types.choice.MxlDirectionTypeContent;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
-
 
 /**
  * MusicXML direction-type.
@@ -18,74 +17,59 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
  * 
  * @author Andreas Wenger
  */
-@IncompleteMusicXML(missing="rehearsal,segno,coda,dashes,bracket," +
-	"octave-shift,harp-pedals,damp,damp-all,eyeglasses,scordatura,accordion-registration," +
-	"other-direction")
-public final class MxlDirectionType
-{
-	
-	public static final String ELEM_NAME = "direction-type";
-	
-	@NeverNull private final MxlDirectionTypeContent content;
+@IncompleteMusicXML(missing = "rehearsal,segno,coda,dashes,bracket,"
+	+ "octave-shift,harp-pedals,damp,damp-all,eyeglasses,scordatura,accordion-registration,"
+	+ "other-direction")
+@AllArgsConstructor @Getter @Setter
+public final class MxlDirectionType {
 
-	
-	public MxlDirectionType(MxlDirectionTypeContent content)
-	{
-		this.content = content;
-	}
+	public static final String elemName = "direction-type";
 
-	
-	@NeverNull public MxlDirectionTypeContent getContent()
-	{
-		return content;
-	}
-	
-	
+	@NonNull private MxlDirectionTypeContent content;
+
+
 	/**
 	 * Returns null, if content is unsupported.
 	 */
-	@MaybeNull public static MxlDirectionType read(Element e)
-	{
+	@MaybeNull public static MxlDirectionType read(XmlReader reader) {
 		MxlDirectionTypeContent content = null;
-		Element firstChild = element(e);
-		String n = firstChild.getNodeName();
-		switch (n.charAt(0))	
-		{
-			case 'd':
-				if (n.equals(MxlDynamics.elemName))
-					content = MxlDynamics.read(firstChild);
-				break;
-			case 'i':
-				if (n.equals("image"))
-					content = MxlImage.read(firstChild);
-				break;
-			case 'p':
-				if (n.equals(MxlPedal.ELEM_NAME))
-					content = MxlPedal.read(firstChild);
-				break;
-			case 'm':
-				if (n.equals(MxlMetronome.ELEM_NAME))
-					content = MxlMetronome.read(firstChild);
-				break;
-			case 'w':
-				if (n.equals(MxlWedge.elemName))
-					content = MxlWedge.read(firstChild);
-				else if (n.equals(MxlWords.ELEM_NAME))
-					content = MxlWords.read(firstChild);
-				break;
+		if (reader.openNextChildElement()) {
+			String n = reader.getElementName();
+			switch (n.charAt(0)) { //switch for performance
+				case 'd':
+					if (n.equals(MxlDynamics.elemName))
+						content = MxlDynamics.read(reader);
+					break;
+				case 'i':
+					if (n.equals("image"))
+						content = MxlImage.read(reader);
+					break;
+				case 'p':
+					if (n.equals(MxlPedal.elemName))
+						content = MxlPedal.read(reader);
+					break;
+				case 'm':
+					if (n.equals(MxlMetronome.elemName))
+						content = MxlMetronome.read(reader);
+					break;
+				case 'w':
+					if (n.equals(MxlWedge.elemName))
+						content = MxlWedge.read(reader);
+					else if (n.equals(MxlWords.ELEM_NAME))
+						content = MxlWords.read(firstChild);
+					break;
+			}
+			reader.closeElement();
 		}
 		if (content != null)
 			return new MxlDirectionType(content);
 		else
 			return null;
 	}
-	
-	
-	public void write(Element parent)
-	{
-		Element e = addElement(ELEM_NAME, parent);
+
+	public void write(Element parent) {
+		Element e = addElement(elemName, parent);
 		content.write(e);
 	}
-	
 
 }

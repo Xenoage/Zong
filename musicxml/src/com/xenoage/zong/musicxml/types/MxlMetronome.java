@@ -1,20 +1,18 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.xml.Parse.parseChildIntNullTry;
-import static com.xenoage.utils.xml.XMLReader.elementText;
-import static com.xenoage.utils.xml.XMLReader.elements;
-import static com.xenoage.utils.xml.XMLWriter.addElement;
+import static com.xenoage.utils.Parser.parseIntegerNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.MaybeNull;
-import com.xenoage.utils.base.annotations.NeverNull;
-import com.xenoage.utils.xml.XMLWriter;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.attributes.MxlPrintStyle;
 import com.xenoage.zong.musicxml.types.choice.MxlDirectionTypeContent;
 import com.xenoage.zong.musicxml.types.enums.MxlNoteTypeValue;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
-
 
 /**
  * MusicXML metronome.
@@ -27,64 +25,61 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
  * 
  * @author Andreas Wenger
  */
-@IncompleteMusicXML(missing="metronome-note,metronome-relation,parentheses")
+@IncompleteMusicXML(missing = "metronome-note,metronome-relation,parentheses")
+@AllArgsConstructor @Getter @Setter
 public final class MxlMetronome
-	implements MxlDirectionTypeContent
-{
-	
-	public static final String ELEM_NAME = "metronome";
-	
-	@NeverNull public final MxlNoteTypeValue beatUnit;
-	@NeverNull public final int dotsCount;
-	@NeverNull public final int perMinute;
-	@NeverNull public final MxlPrintStyle printStyle;
-	
+	implements MxlDirectionTypeContent {
 
-	private MxlMetronome(MxlNoteTypeValue beatUnit, int dotsCount, int perMinute,
-		MxlPrintStyle printStyle)
-	{
-		this.beatUnit = beatUnit;
-		this.dotsCount = dotsCount;
-		this.perMinute = perMinute;
-		this.printStyle = printStyle;
-	}
-	
-	
-	@Override public MxlDirectionTypeContentType getDirectionTypeContentType()
-	{
+	public static final String elemName = "metronome";
+
+	@NonNull private MxlNoteTypeValue beatUnit;
+	private int dotsCount;
+	private int perMinute;
+	@MaybeNull private MxlPrintStyle printStyle;
+
+
+	@Override public MxlDirectionTypeContentType getDirectionTypeContentType() {
 		return MxlDirectionTypeContentType.Metronome;
 	}
-	
-	
+
 	/**
 	 * Returns null, if the given element contains an unsupported metronome type.
 	 */
-	@MaybeNull public static MxlMetronome read(Element e)
-	{
-		String sBeatUnit = elementText(e, "beat-unit");
-		int dotsCount = elements(e, "beat-unit-dot").size();
-		Integer perMinute = parseChildIntNullTry(e, "per-minute");
-		MxlPrintStyle printStyle = MxlPrintStyle.read(e);
-		if (sBeatUnit != null && perMinute != null)
-		{
+	@MaybeNull public static MxlMetronome read(XmlReader reader) {
+		//attributes
+		MxlPrintStyle printStyle = MxlPrintStyle.read(reader);
+		//elements
+		String sBeatUnit = null;
+		int dotsCount = 0;
+		Integer perMinute = null;
+		while (reader.openNextChildElement()) {
+			String n = reader.getElementName();
+			if (n.equals("beat-unit"))
+				sBeatUnit = reader.getText();
+			else if (n.equals("beat-unit-dot"))
+				dotsCount++;
+			else if (n.equals("per-minute"))
+				perMinute = parseIntegerNull(reader.getText());
+			reader.closeElement();
+		}
+		if (sBeatUnit != null && perMinute != null) {
 			MxlNoteTypeValue beatUnit = MxlNoteTypeValue.read(sBeatUnit);
 			return new MxlMetronome(beatUnit, dotsCount, perMinute, printStyle);
 		}
-		else
-		{
+		else {
 			return null;
 		}
 	}
-	
-	
-	@Override public void write(Element parent)
-	{
-		Element e = XMLWriter.addElement(ELEM_NAME, parent);
-		addElement("beat-unit", beatUnit.write(), e);
+
+	@Override public void write(XmlWriter writer) {
+		writer.writeElementStart(elemName);
+		writer.writeElementText("beat-unit", beatUnit.write());
 		for (int i = 0; i < dotsCount; i++)
-			addElement("beat-unit-dot", e);
-		addElement("per-minute", perMinute, e);
-		printStyle.write(e);
+			writer.writeElementEmpty("beat-unit-dot");
+		writer.writeElementText("per-minute", perMinute);
+		if (printStyle != null)
+			printStyle.write(writer);
+		writer.writeElementEnd();
 	}
 
 }

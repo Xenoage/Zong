@@ -1,61 +1,40 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.xml.XMLWriter.addElement;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.MaybeNull;
-import com.xenoage.utils.base.annotations.NeverNull;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.attributes.MxlColor;
 import com.xenoage.zong.musicxml.types.enums.MxlBarStyle;
-
 
 /**
  * MusicXML bar-style-color.
  * 
  * @author Andreas Wenger
  */
-public final class MxlBarStyleColor
-{
-	
-	public static final String ELEM_NAME = "bar-style";
-	
-	@NeverNull private final MxlBarStyle barStyle;
+@AllArgsConstructor @Getter @Setter
+public final class MxlBarStyleColor {
+
+	public static final String elemName = "bar-style";
+
+	@NonNull private final MxlBarStyle barStyle;
 	@MaybeNull private final MxlColor color;
-	
-	
-	public MxlBarStyleColor(MxlBarStyle barStyle, MxlColor color)
-	{
-		this.barStyle = barStyle;
-		this.color = color;
+
+
+	@NonNull public static MxlBarStyleColor read(XmlReader reader) {
+		return new MxlBarStyleColor(MxlBarStyle.read(reader), MxlColor.read(reader));
 	}
 
-	
-	@NeverNull public MxlBarStyle getBarStyle()
-	{
-		return barStyle;
-	}
-
-	
-	@MaybeNull public MxlColor getColor()
-	{
-		return color;
-	}
-	
-	
-	@NeverNull public static MxlBarStyleColor read(Element e)
-	{
-		return new MxlBarStyleColor(MxlBarStyle.read(e), MxlColor.read(e));
-	}
-	
-	
-	public void write(Element parent)
-	{
-		Element e = addElement(ELEM_NAME, parent);
-		barStyle.write(e);
+	public void write(XmlWriter writer) {
+		writer.writeElementStart(elemName);
+		barStyle.write(writer);
 		if (color != null)
-			color.write(e);
+			color.write(writer);
+		writer.writeElementEnd();
 	}
-	
 
 }

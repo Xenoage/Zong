@@ -1,98 +1,68 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.base.NullUtils.notNull;
-import static com.xenoage.utils.xml.XMLReader.elements;
-import static com.xenoage.utils.xml.XMLWriter.addElement;
+import static com.xenoage.utils.NullUtils.notNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.MaybeNull;
-import com.xenoage.utils.base.annotations.NeverNull;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.attributes.MxlRepeat;
 import com.xenoage.zong.musicxml.types.choice.MxlMusicDataContent;
 import com.xenoage.zong.musicxml.types.enums.MxlRightLeftMiddle;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
-
 
 /**
  * MusicXML barline.
  * 
  * @author Andreas Wenger
  */
-@IncompleteMusicXML(missing="editorial,wavy-line,segno,coda,fermata,ending," +
-	"segno,coda,divisions")
+@IncompleteMusicXML(missing = "editorial,wavy-line,segno,coda,fermata,ending,"
+	+ "segno,coda,divisions")
+@AllArgsConstructor @Getter @Setter
 public final class MxlBarline
-	implements MxlMusicDataContent
-{
-	
-	public static final String ELEM_NAME = "barline";
-	
-	@MaybeNull private final MxlBarStyleColor barStyle;
-	@MaybeNull private final MxlRepeat repeat;
-	@NeverNull private final MxlRightLeftMiddle location;
-	
+	implements MxlMusicDataContent {
+
+	public static final String elemName = "barline";
+
+	@MaybeNull private MxlBarStyleColor barStyle;
+	@MaybeNull private MxlRepeat repeat;
+	@NonNull private MxlRightLeftMiddle location;
+
 	private static final MxlRightLeftMiddle defaultLocation = MxlRightLeftMiddle.Right;
 
-	
-	public MxlBarline(MxlBarStyleColor barStyle, MxlRepeat repeat, MxlRightLeftMiddle location)
-	{
-		this.barStyle = barStyle;
-		this.repeat = repeat;
-		this.location = location;
-	}
 
-	
-	@MaybeNull public MxlBarStyleColor getBarStyle()
-	{
-		return barStyle;
-	}
-
-	
-	@MaybeNull public MxlRepeat getRepeat()
-	{
-		return repeat;
-	}
-
-	
-	@NeverNull public MxlRightLeftMiddle getLocation()
-	{
-		return location;
-	}
-	
-	
-	@Override public MxlMusicDataContentType getMusicDataContentType()
-	{
+	@Override public MxlMusicDataContentType getMusicDataContentType() {
 		return MxlMusicDataContentType.Barline;
 	}
-	
-	
-	public static MxlBarline read(Element e)
-	{
+
+	public static MxlBarline read(XmlReader reader) {
+		//attributes
+		MxlRightLeftMiddle location = notNull(MxlRightLeftMiddle.read(reader), defaultLocation);
+		//elements
 		MxlBarStyleColor barStyle = null;
 		MxlRepeat repeat = null;
-		for (Element c : elements(e))
-		{
-			String n = c.getNodeName();
-			if (n.equals(MxlBarStyleColor.ELEM_NAME))
-				barStyle = MxlBarStyleColor.read(c);
+		while (reader.openNextChildElement()) {
+			String n = reader.getElementName();
+			if (n.equals(MxlBarStyleColor.elemName))
+				barStyle = MxlBarStyleColor.read(reader);
 			else if (n.equals(MxlRepeat.elemName))
-				repeat = MxlRepeat.read(c);
+				repeat = MxlRepeat.read(reader);
+			reader.closeElement();
 		}
-		MxlRightLeftMiddle location = notNull(MxlRightLeftMiddle.read(e), defaultLocation);
 		return new MxlBarline(barStyle, repeat, location);
 	}
-	
-	
-	@Override public void write(Element parent)
-	{
-		Element e = addElement(ELEM_NAME, parent);
+
+	@Override public void write(XmlWriter writer) {
+		writer.writeElementStart(elemName);
+		location.write(writer);
 		if (barStyle != null)
-			barStyle.write(e);
+			barStyle.write(writer);
 		if (repeat != null)
-			repeat.write(e);
-		location.write(e);
+			repeat.write(writer);
+		writer.writeElementEnd();
 	}
-	
-	
 
 }

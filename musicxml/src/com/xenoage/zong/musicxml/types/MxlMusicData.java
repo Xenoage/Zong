@@ -35,20 +35,20 @@ public final class MxlMusicData {
 			switch (n.charAt(0)) { //switch for performance
 				case 'a':
 					if (n.equals(MxlAttributes.elemName))
-						item = MxlAttributes.read(c);
+						item = MxlAttributes.read(reader);
 					break;
 				case 'b':
-					if (n.equals(MxlBackup.ELEM_NAME))
-						item = MxlBackup.read(c);
-					else if (n.equals(MxlBarline.ELEM_NAME))
-						item = MxlBarline.read(c);
+					if (n.equals(MxlBackup.elemName))
+						item = MxlBackup.read(reader);
+					else if (n.equals(MxlBarline.elemName))
+						item = MxlBarline.read(reader);
 					break;
 				case 'd':
-					if (n.equals(MxlDirection.ELEM_NAME))
+					if (n.equals(MxlDirection.elemName))
 						item = MxlDirection.read(c);
 					break;
 				case 'f':
-					if (n.equals(MxlForward.ELEM_NAME))
+					if (n.equals(MxlForward.elemName))
 						item = MxlForward.read(c);
 					break;
 				case 'n':

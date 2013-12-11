@@ -1,70 +1,62 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.xml.Parse.parseChildInt;
-import static com.xenoage.utils.xml.XMLWriter.addElement;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.NeverNull;
+import com.xenoage.utils.Parser;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.choice.MxlMusicDataContent;
 import com.xenoage.zong.musicxml.types.groups.MxlEditorialVoice;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 
-
 /**
- * MusicXML backup.
+ * MusicXML forward.
  * 
  * @author Andreas Wenger
  */
-@IncompleteMusicXML(missing="staff", children="editorial-voice")
+@IncompleteMusicXML(missing = "staff", children = "editorial-voice")
+@AllArgsConstructor @Getter @Setter
 public final class MxlForward
-	implements MxlMusicDataContent
-{
-	
-	public static final String ELEM_NAME = "forward";
-	
+	implements MxlMusicDataContent {
+
+	public static final String elemName = "forward";
+
 	private final int duration;
-	@NeverNull private final MxlEditorialVoice editorialVoice;
+	@MaybeNull private MxlEditorialVoice editorialVoice;
 
 
-	public MxlForward(int duration, MxlEditorialVoice editorialVoice)
-	{
-		this.duration = duration;
-		this.editorialVoice = editorialVoice;
-	}
-
-	
-	public int getDuration()
-	{
-		return duration;
-	}
-	
-	
-	@NeverNull public MxlEditorialVoice getEditorialVoice()
-	{
-		return editorialVoice;
-	}
-
-	
-	@Override public MxlMusicDataContentType getMusicDataContentType()
-	{
+	@Override public MxlMusicDataContentType getMusicDataContentType() {
 		return MxlMusicDataContentType.Forward;
 	}
 	
-
-	@NeverNull public static MxlForward read(Element e)
-	{
-		int duration = parseChildInt(e, "duration");
-		MxlEditorialVoice editorialVoice = MxlEditorialVoice.read(e);
+	@NonNull public static MxlForward read(XmlReader reader) {
+		Integer duration = null;
+		MxlEditorialVoice editorialVoice = new MxlEditorialVoice();
+		while (reader.openNextChildElement()) {
+			String n = reader.getElementName();
+			if (n.equals("duration"))
+				duration = Parser.parseInt(reader.getText());
+			else
+				editorialVoice.readElement(n, reader.getText());
+			reader.closeElement();
+		}
+		if (duration == null)
+			reader.throwDataException("duration unknown");
+		if (false == editorialVoice.isUsed())
+			editorialVoice = null;
 		return new MxlForward(duration, editorialVoice);
 	}
-	
-	
-	@Override public void write(Element parent)
-	{
-		Element e = addElement(ELEM_NAME, parent);
-		addElement("duration", duration, e);
-		editorialVoice.write(e);
+
+	@Override public void write(XmlWriter writer) {
+		writer.writeElementStart(elemName);
+		writer.writeElementText("duration", duration);
+		if (editorialVoice != null)
+			editorialVoice.write(writer);
+		writer.writeElementEnd();
 	}
 
 }

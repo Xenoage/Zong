@@ -1,71 +1,50 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.xml.XMLReader.attribute;
-import static com.xenoage.utils.xml.XMLWriter.addElement;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.NeverNull;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.attributes.MxlPrintStyle;
 import com.xenoage.zong.musicxml.types.choice.MxlDirectionTypeContent;
 import com.xenoage.zong.musicxml.types.enums.MxlStartStopChange;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
-
 
 /**
  * MusicXML pedal.
  * 
  * @author Andreas Wenger
  */
-@IncompleteMusicXML(missing="line")
+@IncompleteMusicXML(missing = "line")
+@AllArgsConstructor @Getter @Setter
 public final class MxlPedal
-	implements MxlDirectionTypeContent
-{
-	
-	public static final String ELEM_NAME = "pedal";
-	
-	@NeverNull private final MxlStartStopChange type;
-	@NeverNull private final MxlPrintStyle printStyle;
+	implements MxlDirectionTypeContent {
 
-	
-	public MxlPedal(MxlStartStopChange type, MxlPrintStyle printStyle)
-	{
-		this.type = type;
-		this.printStyle = printStyle;
-	}
+	public static final String elemName = "pedal";
 
+	@NonNull private MxlStartStopChange type;
+	@MaybeNull private MxlPrintStyle printStyle;
 	
-	@NeverNull public MxlStartStopChange getType()
-	{
-		return type;
-	}
-	
-	
-	@NeverNull public MxlPrintStyle getPrintStyle()
-	{
-		return printStyle;
-	}
-	
-	
-	@Override public MxlDirectionTypeContentType getDirectionTypeContentType()
-	{
+
+	@Override public MxlDirectionTypeContentType getDirectionTypeContentType() {
 		return MxlDirectionTypeContentType.Pedal;
 	}
-	
-	
-	@NeverNull public static MxlPedal read(Element e)
-	{
-		return new MxlPedal(
-			MxlStartStopChange.read(attribute(e, "type"), e),
-			MxlPrintStyle.read(e));
+
+	@NonNull public static MxlPedal read(XmlReader reader) {
+		String type = reader.getAttributeStringNotNull("type");
+		MxlPrintStyle printStyle = MxlPrintStyle.read(reader);
+		return new MxlPedal(MxlStartStopChange.read(type), printStyle);
 	}
-	
-	
-	@Override public void write(Element parent)
-	{
-		Element e = addElement(ELEM_NAME, parent);
-		e.setAttribute("type", type.write());
-		printStyle.write(e);
+
+	@Override public void write(XmlWriter writer) {
+		writer.writeElementStart(elemName);
+		writer.writeAttribute("type", type.write());
+		if (printStyle != null)
+			printStyle.write(writer);
+		writer.writeElementEnd();
 	}
 
 }

@@ -1,12 +1,9 @@
 package com.xenoage.zong.musicxml.types.groups;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 import com.xenoage.utils.annotations.MaybeNull;
-import com.xenoage.utils.annotations.NonNull;
-import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 
@@ -17,25 +14,30 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
  * @author Andreas Wenger
  */
 @IncompleteMusicXML(missing = "footnote,level")
-@AllArgsConstructor @Getter @Setter
+@Getter @Setter
 public final class MxlEditorialVoice {
 
-	@NonNull private final String voice;
+	@MaybeNull private String voice;
+	
+	/**
+	 * Returns true, if this instance contains information.
+	 */
+	public boolean isUsed() {
+		return voice != null;
+	}
 
-	@MaybeNull public static MxlEditorialVoice read(XmlReader reader) {
-		String voice = null;
-		if (reader.openNextChildElement("voice")) {
-			voice = reader.getText();
-			reader.closeElement();
-		}
-		if (voice != null)
-			return new MxlEditorialVoice(voice);
-		else
-			return null;
+	/**
+	 * Reads information from the given element (name and value), if
+	 * relevant for this instance.
+	 */
+	public void readElement(String name, String value) {
+		if (name.equals("voice"))
+			voice = value;
 	}
 
 	public void write(XmlWriter writer) {
-		writer.writeElementText("voice", voice);
+		if (voice != null)
+			writer.writeElementText("voice", voice);
 	}
 
 }

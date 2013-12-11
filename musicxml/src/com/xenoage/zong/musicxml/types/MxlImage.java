@@ -1,116 +1,64 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.xml.XmlDataException.throwNull;
-import static com.xenoage.utils.xml.XMLReader.attribute;
-import static com.xenoage.utils.xml.XMLWriter.addAttribute;
-import static com.xenoage.utils.xml.XMLWriter.addElement;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.MaybeNull;
-import com.xenoage.utils.base.annotations.NeverNull;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.attributes.MxlPosition;
 import com.xenoage.zong.musicxml.types.choice.MxlCreditContent;
 import com.xenoage.zong.musicxml.types.choice.MxlDirectionTypeContent;
 import com.xenoage.zong.musicxml.types.enums.MxlLeftCenterRight;
 import com.xenoage.zong.musicxml.types.enums.MxlVAlignImage;
 
-
 /**
- * MusicXML image.
+ * MusicXML image or credit-image.
  * 
  * @author Andreas Wenger
  */
+@AllArgsConstructor @Getter @Setter
 public final class MxlImage
-	implements MxlCreditContent, MxlDirectionTypeContent
-{
-	
-	private final String elemName;
-	
-	@NeverNull private final String source;
-	@NeverNull private final String type;
-	@NeverNull private final MxlPosition position;
-	@MaybeNull private final MxlLeftCenterRight hAlign;
-	@MaybeNull private final MxlVAlignImage vAlign;
-	
+	implements MxlCreditContent, MxlDirectionTypeContent {
 
-	public MxlImage(String elemName, String source, String type, MxlPosition position,
-		MxlLeftCenterRight hAlign, MxlVAlignImage vAlign)
-	{
-		this.elemName = elemName;
-		this.source = source;
-		this.type = type;
-		this.position = position;
-		this.hAlign = hAlign;
-		this.vAlign = vAlign;
-	}
+	@NonNull private String elemName; //"image" or "credit-image"
 
-	
-	@NeverNull public String getSource()
-	{
-		return source;
-	}
-
-	
-	@NeverNull public String getType()
-	{
-		return type;
-	}
-
-	
-	@MaybeNull public MxlPosition getPosition()
-	{
-		return position;
-	}
-
-	
-	@MaybeNull public MxlLeftCenterRight getHAlign()
-	{
-		return hAlign;
-	}
-
-	
-	@MaybeNull public MxlVAlignImage getVAlign()
-	{
-		return vAlign;
-	}
+	@NonNull private String source;
+	@NonNull private String type;
+	@MaybeNull private MxlPosition position;
+	@MaybeNull private MxlLeftCenterRight hAlign;
+	@MaybeNull private MxlVAlignImage vAlign;
 
 
-	@Override public MxlCreditContentType getCreditContentType()
-	{
+	@Override public MxlCreditContentType getCreditContentType() {
 		return MxlCreditContentType.CreditImage;
 	}
-	
-	
-	@Override public MxlDirectionTypeContentType getDirectionTypeContentType()
-	{
+
+	@Override public MxlDirectionTypeContentType getDirectionTypeContentType() {
 		return MxlDirectionTypeContentType.Image;
 	}
-	
-	
-	@NeverNull public static MxlImage read(Element e)
-	{
-		return new MxlImage(
-			e.getNodeName(),
-			throwNull(attribute(e, "source"), e),
-			throwNull(attribute(e, "type"), e),
-			MxlPosition.read(e),
-			MxlLeftCenterRight.read(e, "halign"),
-			MxlVAlignImage.read(e));
+
+	@NonNull public static MxlImage read(XmlReader reader) {
+		String elemName = reader.getElementName();
+		String source = reader.getAttributeStringNotNull("source");
+		String type = reader.getAttributeStringNotNull("type");
+		return new MxlImage(elemName, source, type, MxlPosition.read(reader),
+			MxlLeftCenterRight.read(reader, "halign"), MxlVAlignImage.read(reader));
 	}
 
-
-	@Override public void write(Element parent)
-	{
-		Element e = addElement(elemName, parent);
-		addAttribute(e, "source", source);
-		addAttribute(e, "type", type);
+	@Override public void write(XmlWriter writer) {
+		writer.writeElementStart(elemName);
+		writer.writeAttribute("source", source);
+		writer.writeAttribute("type", type);
 		if (position != null)
-			position.write(e);
+			position.write(writer);
 		if (hAlign != null)
-			hAlign.write(e, "halign");
+			hAlign.write(writer, "halign");
 		if (vAlign != null)
-			vAlign.write(e);
+			vAlign.write(writer);
+		writer.writeElementEnd();
 	}
 
 }
