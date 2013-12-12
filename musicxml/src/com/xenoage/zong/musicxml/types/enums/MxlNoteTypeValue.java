@@ -3,6 +3,7 @@ package com.xenoage.zong.musicxml.types.enums;
 import static com.xenoage.utils.math.Fraction.fr;
 import lombok.AllArgsConstructor;
 
+import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.math.Fraction;
 

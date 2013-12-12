@@ -45,7 +45,7 @@ public final class MxlFontSize {
 	 * or returns null, if there is none.
 	 */
 	@MaybeNull public static MxlFontSize read(XmlReader reader) {
-		String s = reader.getAttributeString(attrName);
+		String s = reader.getAttribute(attrName);
 		if (s != null) {
 			if (Character.isDigit(s.charAt(0)))
 				return new MxlFontSize(Float.parseFloat(s));

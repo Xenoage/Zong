@@ -1,5 +1,7 @@
 package com.xenoage.zong.musicxml.types.enums;
 
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.XmlDataException;
 
 /**
@@ -10,7 +12,7 @@ import com.xenoage.utils.xml.XmlDataException;
  */
 public class MxlYesNo {
 
-	public static boolean read(String s) {
+	@NonNull public static boolean read(String s) {
 		if (s.equals("yes"))
 			return true;
 		else if (s.equals("no"))
@@ -18,7 +20,7 @@ public class MxlYesNo {
 		throw new XmlDataException("yes-no = " + s);
 	}
 
-	public static Boolean readNull(String s) {
+	@MaybeNull public static Boolean readNull(String s) {
 		if (s == null)
 			return null;
 		else

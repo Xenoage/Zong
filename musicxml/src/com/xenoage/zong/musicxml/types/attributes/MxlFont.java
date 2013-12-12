@@ -32,7 +32,7 @@ public final class MxlFont {
 
 	@MaybeNull public static MxlFont read(XmlReader reader) {
 		List<String> fontFamily = alist();
-		String fontFamilies = reader.getAttributeString("font-family");
+		String fontFamilies = reader.getAttribute("font-family");
 		if (fontFamilies != null) {
 			for (String s : fontFamilies.split(",")) {
 				fontFamily.add(s.trim());

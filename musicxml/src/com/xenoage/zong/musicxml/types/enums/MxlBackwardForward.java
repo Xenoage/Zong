@@ -19,7 +19,7 @@ public enum MxlBackwardForward {
 
 
 	@NonNull public static MxlBackwardForward read(XmlReader reader) {
-		return Utils.read(attrName, reader.getAttributeString(attrName), values());
+		return Utils.read(attrName, reader.getAttribute(attrName), values());
 	}
 
 	public void write(XmlWriter writer) {

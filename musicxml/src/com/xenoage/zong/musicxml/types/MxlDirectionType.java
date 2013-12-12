@@ -7,6 +7,7 @@ import lombok.Setter;
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.choice.MxlDirectionTypeContent;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 
@@ -55,8 +56,8 @@ public final class MxlDirectionType {
 				case 'w':
 					if (n.equals(MxlWedge.elemName))
 						content = MxlWedge.read(reader);
-					else if (n.equals(MxlWords.ELEM_NAME))
-						content = MxlWords.read(firstChild);
+					else if (n.equals(MxlWords.elemName))
+						content = MxlWords.read(reader);
 					break;
 			}
 			reader.closeElement();
@@ -67,9 +68,10 @@ public final class MxlDirectionType {
 			return null;
 	}
 
-	public void write(Element parent) {
-		Element e = addElement(elemName, parent);
-		content.write(e);
+	public void write(XmlWriter writer) {
+		writer.writeElementStart(elemName);
+		content.write(writer);
+		writer.writeElementEnd();
 	}
 
 }

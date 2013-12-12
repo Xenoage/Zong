@@ -2,8 +2,8 @@ package com.xenoage.zong.musicxml.types.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NonNull;
 
-import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.xml.EnumWithXmlNames;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
@@ -26,8 +26,8 @@ public enum MxlBeamValue
 	private final String xmlName;
 
 
-	@MaybeNull public static MxlBeamValue read(XmlReader reader) {
-		return Utils.readOrNull("beam-value", reader.getText(), values());
+	@NonNull public static MxlBeamValue read(XmlReader reader) {
+		return Utils.read("beam-value", reader.getText(), values());
 	}
 
 	public void write(XmlWriter writer) {

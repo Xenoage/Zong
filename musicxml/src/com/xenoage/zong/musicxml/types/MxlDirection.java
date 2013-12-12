@@ -1,5 +1,7 @@
 package com.xenoage.zong.musicxml.types;
 
+import static com.xenoage.utils.collections.CollectionUtils.alist;
+
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -9,6 +11,7 @@ import lombok.Setter;
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.choice.MxlMusicDataContent;
 import com.xenoage.zong.musicxml.types.enums.MxlPlacement;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
@@ -40,37 +43,43 @@ public final class MxlDirection
 	 * Returns null, when no supported content was found.
 	 */
 	@MaybeNull public static MxlDirection read(XmlReader reader) {
-		PVector<MxlDirectionType> directionTypes = pvec();
+		List<MxlDirectionType> directionTypes = alist();
+		Integer staff = null;
 		MxlSound sound = null;
-		for (Element child : XMLReader.elements(e)) {
-			String n = child.getNodeName();
+		while (reader.openNextChildElement()) {
+			String n = reader.getElementName();
 			if (n.equals(MxlDirectionType.elemName)) {
-				MxlDirectionType directionType = MxlDirectionType.read(child);
+				MxlDirectionType directionType = MxlDirectionType.read(reader);
 				if (directionType != null)
-					directionTypes = directionTypes.plus(directionType);
+					directionTypes.add(directionType);
 			}
-			else if (n.equals(MxlSound.ELEM_NAME)) {
-				sound = MxlSound.read(child);
+			else if (n.equals("staff")) {
+				staff = reader.getTextInt();
+			}
+			else if (n.equals(MxlSound.elemName)) {
+				sound = MxlSound.read(reader);
 			}
 		}
+		MxlPlacement placement = MxlPlacement.read(reader);
 		if (directionTypes.size() > 0) {
-			return new MxlDirection(directionTypes, parseChildIntNull(e, "staff"), sound,
-				MxlPlacement.read(e));
+			return new MxlDirection(directionTypes, staff, sound, placement);
 		}
 		else {
 			return null;
 		}
 	}
 
-	@Override public void write(Element parent) {
-		Element e = addElement(elemName, parent);
+	@Override public void write(XmlWriter writer) {
+		writer.writeElementStart(elemName);
 		for (MxlDirectionType directionType : directionTypes)
-			directionType.write(e);
-		addAttribute(e, "staff", staff);
+			directionType.write(writer);
+		if (staff != null)
+			writer.writeElementText("staff", staff);
 		if (sound != null)
-			sound.write(e);
+			sound.write(writer);
 		if (placement != null)
-			placement.write(e);
+			placement.write(writer);
+		writer.writeElementEnd();
 	}
 
 }

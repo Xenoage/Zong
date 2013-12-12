@@ -37,7 +37,7 @@ public final class MxlStrongAccent
 
 	@NonNull public static MxlStrongAccent read(XmlReader reader) {
 		MxlEmptyPlacement emptyPlacement = MxlEmptyPlacement.read(reader);
-		MxlUpDown type = notNull(MxlUpDown.read(reader.getAttributeString("type")), defaultType);
+		MxlUpDown type = notNull(MxlUpDown.read(reader.getAttribute("type")), defaultType);
 		if (emptyPlacement != null || type != defaultType)
 			return new MxlStrongAccent(emptyPlacement, type);
 		else

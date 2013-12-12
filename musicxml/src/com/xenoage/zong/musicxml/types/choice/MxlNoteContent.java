@@ -1,8 +1,10 @@
 package com.xenoage.zong.musicxml.types.choice;
 
 import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.xml.XmlDataException;
+import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
-import com.xenoage.zong.musicxml.types.MxlFullNote;
+import com.xenoage.zong.musicxml.types.groups.MxlFullNote;
 
 /**
  * Interface for all types of content that may appear within
@@ -24,8 +26,19 @@ public interface MxlNoteContent {
 
 
 	public MxlNoteContentType getNoteContentType();
-
+	
 	@NonNull public MxlFullNote getFullNote();
+	
+	/**
+	 * Reads information from the given XML element, if relevant for this instance.
+	 */
+	public void readElement(XmlReader reader);
+	
+	/**
+	 * Throws an {@link XmlDataException} if the data of the instance is not consistent.
+	 */
+	public void check(XmlReader reader)
+		throws XmlDataException;
 
 	public void write(XmlWriter writer);
 

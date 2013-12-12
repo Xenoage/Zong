@@ -42,8 +42,8 @@ public final class MxlImage
 
 	@NonNull public static MxlImage read(XmlReader reader) {
 		String elemName = reader.getElementName();
-		String source = reader.getAttributeStringNotNull("source");
-		String type = reader.getAttributeStringNotNull("type");
+		String source = reader.getAttributeNotNull("source");
+		String type = reader.getAttributeNotNull("type");
 		return new MxlImage(elemName, source, type, MxlPosition.read(reader),
 			MxlLeftCenterRight.read(reader, "halign"), MxlVAlignImage.read(reader));
 	}

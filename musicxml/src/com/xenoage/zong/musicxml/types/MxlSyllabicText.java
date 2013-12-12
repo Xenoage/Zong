@@ -1,21 +1,16 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.base.EnumUtils.getEnumValue;
-import static com.xenoage.utils.xml.XmlDataException.invalid;
-import static com.xenoage.utils.xml.XmlDataException.throwNull;
-import static com.xenoage.utils.xml.XMLReader.elements;
-import static com.xenoage.utils.xml.XMLReader.text;
-import static com.xenoage.utils.xml.XMLWriter.addElement;
+import static com.xenoage.utils.EnumUtils.getEnumValue;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.util.List;
-
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.NeverNull;
+import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.choice.MxlLyricContent;
 import com.xenoage.zong.musicxml.types.enums.MxlSyllabic;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
-
 
 /**
  * MusicXML syllabic and its text.
@@ -24,79 +19,59 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
  * 
  * @author Andreas Wenger
  */
-@IncompleteMusicXML(partly="")
+@IncompleteMusicXML(partly = "", children="text-element-data")
+@AllArgsConstructor @Getter @Setter
 public final class MxlSyllabicText
-	implements MxlLyricContent
-{
-	
-	@NeverNull private final MxlSyllabic syllabic;
-	@NeverNull private final MxlTextElementData text;
-	
+	implements MxlLyricContent {
+
+	/** The {@link MxlSyllabic} element. Never null (since missing syllabic element in MusicXML
+	 * means single, see {@link #read(XmlReader)}). */
+	@NonNull private MxlSyllabic syllabic;
+	@NonNull private MxlTextElementData text;
+
 	private static final MxlSyllabic defaultSyllabic = MxlSyllabic.Single;
-	
-	
-	public MxlSyllabicText(MxlSyllabic syllabic, MxlTextElementData text)
-	{
-		this.syllabic = syllabic;
-		this.text = text;
-	}
 
-	
-	/**
-	 * Gets the {@link MxlSyllabic} element.
-	 * Never returns null (since missing syllabic element in MusicXML
-	 * means single, see {@link #read(Element)}).
-	 */
-	@NeverNull public MxlSyllabic getSyllabic()
-	{
-		return syllabic;
-	}
 
-	
-	@NeverNull public MxlTextElementData getText()
-	{
-		return text;
-	}
-	
-	
-	@Override public MxlLyricContentType getLyricContentType()
-	{
+	@Override public MxlLyricContentType getLyricContentType() {
 		return MxlLyricContentType.SyllabicText;
 	}
-	
-	
+
 	/**
 	 * Reads the given syllabic text.
 	 * If the syllabic element is missing, it is treated as {@link MxlSyllabic#Single}
 	 * (according to MusicXML mailgroup, R. Kainhofer, 2010-04-08).
 	 */
-	public static MxlSyllabicText read(Element e)
-	{
-		List<Element> elements = elements(e);
-		int index = 0;
-		//the first element can be "syllabic"
+	public static MxlSyllabicText read(XmlReader reader) {
 		MxlSyllabic syllabic = defaultSyllabic;
-		Element firstChild = elements.get(0);
-		if (firstChild.getNodeName().equals("syllabic"))
-		{
-			syllabic = throwNull(getEnumValue(text(firstChild), MxlSyllabic.values()), firstChild);
-			index++;
+		MxlTextElementData text = null;
+		if (reader.openNextChildElement()) {
+			//the first element can be "syllabic"
+			if (reader.getElementName().equals("syllabic")) {
+				String syllabicText = reader.getText();
+				syllabic = getEnumValue(syllabicText, MxlSyllabic.values());
+				if (syllabic == null)
+					reader.throwDataException("syllabic = " + syllabicText);
+				//open next element
+				reader.closeElement();
+				if (false == reader.openNextChildElement())
+					reader.throwDataException("missing text element after syllabic");
+			}
+			//next one must be "text"
+			if (false == reader.getElementName().equals("text"))
+				reader.throwDataException("text element must follow after syllabic");
+			text = MxlTextElementData.read(reader);
+			reader.closeElement();
 		}
-		//next one must be "text"
-		Element eText = elements.get(index);
-		if (!eText.getNodeName().equals("text"))
-			throw	invalid(e);
-		MxlTextElementData text = MxlTextElementData.read(eText);
+		if (text == null)
+			reader.throwDataException("missing text element");
 		return new MxlSyllabicText(syllabic, text);
 	}
-	
-	
-	@Override public void write(Element parent)
-	{
-		syllabic.write(parent);
-		Element eText = addElement("text", parent);
-		text.write(eText);
+
+	@Override public void write(XmlWriter writer) {
+		syllabic.write(writer);
+		writer.writeElementStart("text");
+		text.write(writer);
+		writer.writeElementEnd();
 	}
-	
 
 }

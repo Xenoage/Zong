@@ -23,8 +23,8 @@ public class MxlPrintAttributes {
 
 
 	@MaybeNull public static MxlPrintAttributes read(XmlReader reader) {
-		Boolean newSystem = MxlYesNo.readNull(reader.getAttributeString("new-system"));
-		Boolean newPage = MxlYesNo.readNull(reader.getAttributeString("new-page"));
+		Boolean newSystem = MxlYesNo.readNull(reader.getAttribute("new-system"));
+		Boolean newPage = MxlYesNo.readNull(reader.getAttribute("new-page"));
 		if (newSystem != null || newPage != null)
 			return new MxlPrintAttributes(newSystem, newPage);
 		else

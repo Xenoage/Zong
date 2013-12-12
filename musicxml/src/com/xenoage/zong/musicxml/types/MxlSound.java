@@ -1,56 +1,46 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.xml.Parse.parseAttrFloatNull;
-import static com.xenoage.utils.xml.XMLWriter.addAttribute;
-import static com.xenoage.utils.xml.XMLWriter.addElement;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.MaybeNull;
-import com.xenoage.utils.base.annotations.NeverNull;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
-
 
 /**
  * MusicXML sound.
  * 
  * @author Andreas Wenger
  */
-@IncompleteMusicXML(missing="midi-instrument,offset,dynamics,dacapo,segno,dalsegno," +
-	"coda,tocoda,divisions,forward-repeat,fine,time-only,pizzicato,pan,elevation,damper-pedal," +
-	"soft-pedal,sostenuto-pedal")
-public final class MxlSound
-{
-	
-	public static final String ELEM_NAME = "sound";
-	
-	private final Float tempo;
+@IncompleteMusicXML(missing = "midi-instrument,offset,dynamics,dacapo,segno,dalsegno,"
+	+ "coda,tocoda,divisions,forward-repeat,fine,time-only,pizzicato,pan,elevation,damper-pedal,"
+	+ "soft-pedal,sostenuto-pedal")
+@AllArgsConstructor @Getter @Setter
+public final class MxlSound {
 
-	
-	public MxlSound(Float tempo)
-	{
-		this.tempo = tempo;
-	}
+	public static final String elemName = "sound";
 
-	
-	@MaybeNull public Float getTempo()
-	{
-		return tempo;
-	}
-	
-	
-	@NeverNull public static MxlSound read(Element e)
-	{
-		return new MxlSound(parseAttrFloatNull(e, "tempo"));
-	}
-	
-	
-	public void write(Element parent)
-	{
+	@MaybeNull private Float tempo;
+
+
+	/**
+	 * Returns null, if no supported data was found.
+	 */
+	@MaybeNull public static MxlSound read(XmlReader reader) {
+		Float tempo = reader.getAttributeFloat("tempo");
 		if (tempo != null)
-		{
-			Element e = addElement(ELEM_NAME, parent);
-			addAttribute(e, "tempo", tempo);
+			return new MxlSound(tempo);
+		else
+			return null;
+	}
+
+	public void write(XmlWriter writer) {
+		if (tempo != null) {
+			writer.writeElementStart(elemName);
+			writer.writeAttribute("tempo", tempo);
+			writer.writeElementEnd();
 		}
 	}
 

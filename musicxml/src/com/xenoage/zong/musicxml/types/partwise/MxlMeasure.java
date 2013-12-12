@@ -26,7 +26,7 @@ public final class MxlMeasure {
 
 
 	@NonNull public static MxlMeasure read(XmlReader reader) {
-		String number = reader.getAttributeString("number");
+		String number = reader.getAttribute("number");
 		if (number == null)
 			reader.throwDataException("number unknown");
 		return new MxlMeasure(MxlMusicData.read(reader), number);

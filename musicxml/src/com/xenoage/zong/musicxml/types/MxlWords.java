@@ -1,56 +1,42 @@
 package com.xenoage.zong.musicxml.types;
 
-import org.w3c.dom.Element;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import com.xenoage.utils.base.annotations.NeverNull;
-import com.xenoage.utils.xml.XMLWriter;
+import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.choice.MxlDirectionTypeContent;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
-
 
 /**
  * MusicXML words.
  * 
  * @author Andreas Wenger
  */
-@IncompleteMusicXML(children="formatted-text")
+@IncompleteMusicXML(children = "formatted-text")
+@AllArgsConstructor @Getter @Setter
 public final class MxlWords
-	implements MxlDirectionTypeContent
-{
-	
-	public static final String ELEM_NAME = "words";
-	
-	@NeverNull private final MxlFormattedText formattedText;
+	implements MxlDirectionTypeContent {
 
-	
-	public MxlWords(MxlFormattedText formattedText)
-	{
-		this.formattedText = formattedText;
-	}
+	public static final String elemName = "words";
 
-	
-	@NeverNull public MxlFormattedText getFormattedText()
-	{
-		return formattedText;
-	}
-	
-	
-	@Override public MxlDirectionTypeContentType getDirectionTypeContentType()
-	{
+	@NonNull private final MxlFormattedText formattedText;
+
+
+	@Override public MxlDirectionTypeContentType getDirectionTypeContentType() {
 		return MxlDirectionTypeContentType.Words;
 	}
-	
-	
-	@NeverNull public static MxlWords read(Element e)
-	{
-		return new MxlWords(MxlFormattedText.read(e));
+
+	@NonNull public static MxlWords read(XmlReader reader) {
+		return new MxlWords(MxlFormattedText.read(reader));
 	}
-	
-	
-	@Override public void write(Element parent)
-	{
-		Element e = XMLWriter.addElement(ELEM_NAME, parent);
-		formattedText.write(e);
+
+	@Override public void write(XmlWriter writer) {
+		writer.writeElementStart(elemName);
+		formattedText.write(writer);
+		writer.writeElementEnd();
 	}
 
 }

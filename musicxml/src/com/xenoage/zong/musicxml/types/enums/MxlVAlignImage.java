@@ -20,7 +20,7 @@ public enum MxlVAlignImage {
 
 
 	@MaybeNull public static MxlVAlignImage read(XmlReader reader) {
-		return Utils.readOrNull(attrName, reader.getAttributeString(attrName), values());
+		return Utils.readOrNull(attrName, reader.getAttribute(attrName), values());
 	}
 
 	public void write(XmlWriter writer) {

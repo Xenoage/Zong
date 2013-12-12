@@ -34,7 +34,7 @@ public final class MxlPedal
 	}
 
 	@NonNull public static MxlPedal read(XmlReader reader) {
-		String type = reader.getAttributeStringNotNull("type");
+		String type = reader.getAttributeNotNull("type");
 		MxlPrintStyle printStyle = MxlPrintStyle.read(reader);
 		return new MxlPedal(MxlStartStopChange.read(type), printStyle);
 	}

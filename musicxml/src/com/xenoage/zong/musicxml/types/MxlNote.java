@@ -1,168 +1,152 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.pdlib.PVector.pvec;
-import static com.xenoage.utils.xml.Parse.parseInt;
-import static com.xenoage.utils.xml.XMLReader.element;
-import static com.xenoage.utils.xml.XMLReader.elements;
-import static com.xenoage.utils.xml.XMLReader.text;
-import static com.xenoage.utils.xml.XMLWriter.addElement;
-
+import java.util.ArrayList;
 import java.util.List;
 
-import org.w3c.dom.Element;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import com.xenoage.utils.base.annotations.MaybeEmpty;
-import com.xenoage.utils.base.annotations.MaybeNull;
-import com.xenoage.utils.base.annotations.NeverNull;
-import com.xenoage.utils.pdlib.PVector;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
+import com.xenoage.zong.musicxml.types.choice.MxlCueNote;
+import com.xenoage.zong.musicxml.types.choice.MxlGraceNote;
 import com.xenoage.zong.musicxml.types.choice.MxlMusicDataContent;
+import com.xenoage.zong.musicxml.types.choice.MxlNormalNote;
 import com.xenoage.zong.musicxml.types.choice.MxlNoteContent;
 import com.xenoage.zong.musicxml.types.enums.MxlNoteTypeValue;
 import com.xenoage.zong.musicxml.types.groups.MxlEditorialVoice;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
-
 
 /**
  * MusicXML note.
  * 
  * @author Andreas Wenger
  */
-@IncompleteMusicXML(missing="accidental,time-modification,notehead," +
-	"x-position,font,color,printout,dynamics,end-dynamics,attack,release,time-only,pizzicato",
-	children="beam,editorial-voice,notations,lyric", partly="type,dot")
+@IncompleteMusicXML(missing = "accidental,time-modification,notehead,"
+	+ "x-position,font,color,printout,dynamics,end-dynamics,attack,release,time-only,pizzicato",
+	children = "beam,editorial-voice,notations,lyric", partly = "type,dot")
+@AllArgsConstructor @Getter @Setter
 public final class MxlNote
-	implements MxlMusicDataContent
-{
-	
-	public static final String ELEM_NAME = "note";
-	
-	@NeverNull public final MxlNoteContent content;
-	@MaybeNull public final MxlInstrument instrument;
-	@NeverNull public final MxlEditorialVoice editorialVoice;
-	@MaybeNull public final MxlNoteTypeValue noteType;
-	public final int dots;
-	@MaybeNull public final MxlStem stem;
-	@MaybeNull public final Integer staff;
-	@MaybeEmpty public final PVector<MxlBeam> beams;
-	@MaybeEmpty public final PVector<MxlNotations> notations;
-	@MaybeEmpty public final PVector<MxlLyric> lyrics;
-	
-	public static final PVector<MxlBeam> beamsEmpty = pvec();
-	public static final PVector<MxlNotations> notationsEmpty = pvec();
-	public static final PVector<MxlLyric> lyricsEmpty = pvec();
-	
-	
-	public MxlNote(MxlNoteContent content, MxlInstrument instrument,
-		MxlEditorialVoice editorialVoice, MxlNoteTypeValue noteType, int dots, MxlStem stem, Integer staff,
-		PVector<MxlBeam> beams, PVector<MxlNotations> notations, PVector<MxlLyric> lyrics)
-	{
-		this.content = content;
-		this.instrument = instrument;
-		this.editorialVoice = editorialVoice;
-		this.noteType = noteType;
-		this.dots = dots;
-		this.stem = stem;
-		this.staff = staff;
-		this.beams = beams;
-		this.notations = notations;
-		this.lyrics = lyrics;
-	}
-	
-	
-	@Override public MxlMusicDataContentType getMusicDataContentType()
-	{
+	implements MxlMusicDataContent {
+
+	public static final String elemName = "note";
+
+	@NonNull private MxlNoteContent content;
+	@MaybeNull private MxlInstrument instrument;
+	@MaybeNull private MxlEditorialVoice editorialVoice;
+	@MaybeNull private MxlNoteTypeValue noteType;
+	private int dots;
+	@MaybeNull private MxlStem stem;
+	@MaybeNull private Integer staff;
+	@MaybeNull private List<MxlBeam> beams;
+	@MaybeNull private List<MxlNotations> notations;
+	@MaybeNull private List<MxlLyric> lyrics;
+
+
+	@Override public MxlMusicDataContentType getMusicDataContentType() {
 		return MxlMusicDataContentType.Note;
 	}
-	
-	
-	@NeverNull public static MxlNote read(Element e)
-	{
-		MxlNoteContent content = readNoteContent(e);
+
+	@NonNull public static MxlNote read(XmlReader reader) {
+		MxlNoteContent content = null;
 		MxlInstrument instrument = null;
-		MxlEditorialVoice editorialVoice = MxlEditorialVoice.read(e);
+		MxlEditorialVoice editorialVoice = new MxlEditorialVoice();
 		MxlNoteTypeValue noteType = null;
 		int dots = 0;
-		List<Element> children = elements(e);
 		MxlStem stem = null;
 		Integer staff = null;
-		PVector<MxlBeam> beams = beamsEmpty;
-		PVector<MxlNotations> notations = notationsEmpty;
-		PVector<MxlLyric> lyrics = lyricsEmpty;
-		for (Element child : children)
-		{
-			String n = child.getNodeName();
-			switch (n.charAt(0)) //performance
+		List<MxlBeam> beams = null;
+		List<MxlNotations> notations = null;
+		List<MxlLyric> lyrics = null;
+		while (reader.openNextChildElement()) {
+			String n = reader.getElementName();
+			//first element determines note content
+			if (content == null) {
+				if (n.equals(MxlGraceNote.elemName))
+					content = MxlGraceNote.read(reader);
+				else if (n.equals(MxlCueNote.elemName))
+					content = MxlCueNote.read();
+				else
+					content = MxlNormalNote.read();
+			}
+			//read content of child elements
+			switch (n.charAt(0)) //switch for performance
 			{
 				case 's':
-					if (n.equals(MxlStem.ELEM_NAME))
-						stem = MxlStem.read(child);
+					if (n.equals(MxlStem.elemName))
+						stem = MxlStem.read(reader);
 					else if (n.equals("staff"))
-						staff = parseInt(child);
+						staff = reader.getTextIntNotNull();
 					break;
 				case 'b':
-					if (n.equals(MxlBeam.ELEM_NAME))
-						beams = beams.plus(MxlBeam.read(child));
+					if (n.equals(MxlBeam.elemName)) {
+						if (beams == null)
+							beams = new ArrayList<MxlBeam>();
+						beams.add(MxlBeam.read(reader));
+					}
 					break;
 				case 'i':
-					if (n.equals(MxlInstrument.ELEM_NAME))
-						instrument = MxlInstrument.read(child);
+					if (n.equals(MxlInstrument.elemName))
+						instrument = MxlInstrument.read(reader);
 					break;
 				case 'n':
-					if (n.equals(MxlNotations.elemName))
-						notations = notations.plus(MxlNotations.read(child));
+					if (n.equals(MxlNotations.elemName)) {
+						if (notations == null)
+							notations = new ArrayList<MxlNotations>();
+						notations.add(MxlNotations.read(reader));
+					}
 					break;
 				case 'l':
-					if (n.equals(MxlLyric.ELEM_NAME))
-						lyrics = lyrics.plus(MxlLyric.read(child));
+					if (n.equals(MxlLyric.elemName)) {
+						if (lyrics == null)
+							lyrics = new ArrayList<MxlLyric>();
+						lyrics.add(MxlLyric.read(reader));
+					}
 					break;
 				case 't':
 					if (n.equals("type"))
-						noteType = MxlNoteTypeValue.read(text(child));
+						noteType = MxlNoteTypeValue.read(reader.getText());
 					break;
 				case 'd':
 					if (n.equals("dot"))
 						dots++;
 					break;
+				case 'v':
+					editorialVoice.readElement(n, reader.getText());
+					break;
 			}
+			reader.closeElement();
 		}
-		return new MxlNote(content, instrument, editorialVoice, noteType, dots,
-			stem, staff, beams, notations, lyrics);
+		if (false == editorialVoice.isUsed())
+			editorialVoice = null;
+		return new MxlNote(content, instrument, editorialVoice, noteType, dots, stem, staff, beams,
+			notations, lyrics);
 	}
-	
-	
-	@Override public void write(Element parent)
-	{
-		Element e = addElement(ELEM_NAME, parent);
-		content.write(e);
+
+	@Override public void write(XmlWriter writer) {
+		writer.writeElementStart(elemName);
+		content.write(writer);
 		if (instrument != null)
-			instrument.write(e);
-		editorialVoice.write(e);
+			instrument.write(writer);
+		if (editorialVoice != null)
+			editorialVoice.write(writer);
 		if (noteType != null)
-			addElement("type", noteType.write(), e);
+			writer.writeElementText("type", noteType.write());
 		for (int i = 0; i < dots; i++)
-			addElement("dot",  e);
+			writer.writeElementEmpty("dot");
 		if (stem != null)
-			stem.write(e);
-		addElement("staff", staff, e);
+			stem.write(writer);
+		writer.writeElementText("staff", staff);
 		for (MxlBeam beam : beams)
-			beam.write(e);
+			beam.write(writer);
 		for (MxlNotations n : notations)
-			n.write(e);
+			n.write(writer);
 		for (MxlLyric lyric : lyrics)
-			lyric.write(e);
-	}
-	
-	
-	private static MxlNoteContent readNoteContent(Element e)
-	{
-		Element firstChild = element(e);
-		String n = firstChild.getNodeName();
-		if (n.equals("grace"))
-			return MxlGraceNote.read(e);
-		else if (n.equals("cue"))
-			return MxlCueNote.read(e);
-		else
-			return MxlNormalNote.read(e);
+			lyric.write(writer);
+		writer.writeElementEnd();
 	}
 
 }

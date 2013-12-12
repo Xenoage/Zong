@@ -1,67 +1,44 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.base.NullUtils.notNull;
-import static com.xenoage.utils.xml.Parse.parseAttrIntNull;
-import static com.xenoage.utils.xml.XMLWriter.addAttribute;
-import static com.xenoage.utils.xml.XMLWriter.addElement;
+import static com.xenoage.utils.NullUtils.notNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
 
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.NeverNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.enums.MxlBeamValue;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
-
 
 /**
  * MusicXML beam.
  * 
  * @author Andreas Wenger
  */
-@IncompleteMusicXML(missing="repeater,fan,color")
-public final class MxlBeam
-{
-	
-	public static final String ELEM_NAME = "beam";
-	
-	@NeverNull private final MxlBeamValue value;
-	private final int number;
-	
+@IncompleteMusicXML(missing = "repeater,fan,color")
+@AllArgsConstructor @Getter @Setter
+public final class MxlBeam {
+
+	public static final String elemName = "beam";
+
+	@NonNull private MxlBeamValue value;
+	private int number;
+
 	private static final int defaultNumber = 1;
-	
-	
-	public MxlBeam(MxlBeamValue value, int number)
-	{
-		this.value = value;
-		this.number = number;
-	}
 
 
-	@NeverNull public MxlBeamValue getValue()
-	{
-		return value;
+	@NonNull public static MxlBeam read(XmlReader reader) {
+		int number = notNull(reader.getAttributeInt("number"), defaultNumber);
+		MxlBeamValue value = MxlBeamValue.read(reader);
+		return new MxlBeam(value, number);
 	}
-	
 
-	public int getNumber()
-	{
-		return number;
+	public void write(XmlWriter writer) {
+		writer.writeElementStart(elemName);
+		writer.writeAttribute("number", number);
+		value.write(writer);
+		writer.writeElementEnd();
 	}
-	
-	
-	@NeverNull public static MxlBeam read(Element e)
-	{
-		return new MxlBeam(MxlBeamValue.read(e),
-			notNull(parseAttrIntNull(e, "number"), defaultNumber));
-	}
-	
-	
-	public void write(Element parent)
-	{
-		Element e = addElement(ELEM_NAME, parent);
-		value.write(e);
-		addAttribute(e, "number", number);
-	}
-	
-	
 
 }

@@ -1,9 +1,14 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.xml.XMLReader.text;
+import static com.xenoage.utils.NullUtils.notNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.w3c.dom.Element;
-
+import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
+import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 
 /**
  * MusicXML text-element-data.
@@ -13,34 +18,20 @@ import org.w3c.dom.Element;
  * 
  * @author Andreas Wenger
  */
-public final class MxlTextElementData
-{
+@IncompleteMusicXML(missing="font,color,text-decoration,text-rotation,letter-spacing,xml:lang,text-direction")
+@AllArgsConstructor @Getter @Setter
+public final class MxlTextElementData {
 
-	private final String value;
+	@NonNull private String value;
+	
 
-	
-	public MxlTextElementData(String value)
-	{
-		this.value = value;
+	public static MxlTextElementData read(XmlReader reader) {
+		String value = notNull(reader.getText(), "");
+		return new MxlTextElementData(value);
 	}
 
-	
-	public String getValue()
-	{
-		return value;
+	public void write(XmlWriter writer) {
+		writer.writeText(value);
 	}
-	
-	
-	public static MxlTextElementData read(Element e)
-	{
-		return new MxlTextElementData(text(e));
-	}
-	
-	
-	public void write(Element e)
-	{
-		e.setTextContent(value);
-	}
-	
 
 }

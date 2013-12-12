@@ -40,7 +40,7 @@ public final class MxlWedge
 	}
 
 	@NonNull public static MxlWedge read(XmlReader reader) {
-		return new MxlWedge(MxlWedgeType.read(reader.getAttributeString("type")),
+		return new MxlWedge(MxlWedgeType.read(reader.getAttribute("type")),
 			notNull(reader.getAttributeInt("number"), defaultNumber),
 			MxlPosition.read(reader), MxlColor.read(reader));
 	}

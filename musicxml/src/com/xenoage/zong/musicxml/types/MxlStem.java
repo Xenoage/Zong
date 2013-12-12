@@ -1,70 +1,47 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.xml.XMLWriter.addElement;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.MaybeNull;
-import com.xenoage.utils.base.annotations.NeverNull;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.attributes.MxlColor;
 import com.xenoage.zong.musicxml.types.attributes.MxlPosition;
 import com.xenoage.zong.musicxml.types.enums.MxlStemValue;
-
 
 /**
  * MusicXML stem.
  * 
  * @author Andreas Wenger
  */
-public final class MxlStem
-{
-	
-	public static final String ELEM_NAME = "stem";
-	
-	@NeverNull private final MxlStemValue value;
-	@NeverNull private final MxlPosition yPosition;
-	@MaybeNull private final MxlColor color;
-	
-	
-	public MxlStem(MxlStemValue value, MxlPosition yPosition, MxlColor color)
-	{
-		this.value = value;
-		this.yPosition = yPosition;
-		this.color = color;
-	}
+@AllArgsConstructor @Getter @Setter
+public final class MxlStem {
+
+	public static final String elemName = "stem";
+
+	@NonNull private MxlStemValue value;
+	@MaybeNull private MxlPosition yPosition;
+	@MaybeNull private MxlColor color;
 
 
-	@NeverNull public MxlStemValue getValue()
-	{
-		return value;
+	@NonNull public static MxlStem read(XmlReader reader) {
+		MxlPosition yPosition = MxlPosition.read(reader);
+		MxlColor color = MxlColor.read(reader);
+		MxlStemValue stem = MxlStemValue.read(reader);
+		return new MxlStem(stem, yPosition, color);
 	}
 
-
-	@NeverNull public MxlPosition getYPosition()
-	{
-		return yPosition;
-	}
-	
-	
-	@MaybeNull public MxlColor getColor()
-	{
-		return color;
-	}
-	
-	
-	@NeverNull public static MxlStem read(Element e)
-	{
-		return new MxlStem(MxlStemValue.read(e), MxlPosition.read(e), MxlColor.read(e));
-	}
-	
-	
-	public void write(Element parent)
-	{
-		Element e = addElement(ELEM_NAME, parent);
-		value.write(e);
-		yPosition.write(e);
+	public void write(XmlWriter writer) {
+		writer.writeElementStart(elemName);
+		if (yPosition != null)
+			yPosition.write(writer);
 		if (color != null)
-			color.write(e);
+			color.write(writer);
+		value.write(writer);
+		writer.writeElementEnd();
 	}
 
 }

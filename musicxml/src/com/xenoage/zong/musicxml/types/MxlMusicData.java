@@ -45,15 +45,15 @@ public final class MxlMusicData {
 					break;
 				case 'd':
 					if (n.equals(MxlDirection.elemName))
-						item = MxlDirection.read(c);
+						item = MxlDirection.read(reader);
 					break;
 				case 'f':
 					if (n.equals(MxlForward.elemName))
-						item = MxlForward.read(c);
+						item = MxlForward.read(reader);
 					break;
 				case 'n':
-					if (n.equals(MxlNote.ELEM_NAME))
-						item = MxlNote.read(c);
+					if (n.equals(MxlNote.elemName))
+						item = MxlNote.read(reader);
 					break;
 				case 'p':
 					if (n.equals(MxlPrint.ELEM_NAME))

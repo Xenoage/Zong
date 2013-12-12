@@ -26,7 +26,7 @@ public final class MxlColor {
 
 
 	@MaybeNull public static MxlColor read(XmlReader reader) {
-		String s = reader.getAttributeString(attrName);
+		String s = reader.getAttribute(attrName);
 		if (s != null) {
 			try {
 				return new MxlColor(getColor(s));

@@ -20,7 +20,8 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
  */
 @IncompleteMusicXML(missing = "tuplet,glissando,slide,ornaments,technical,fermata,"
 	+ "arpeggiate,non-arpeggiate,accidental-mark,other-notation", children = "slur,tied,articulations,dynamics")
-@AllArgsConstructor @Getter @Setter public final class MxlNotations {
+@AllArgsConstructor @Getter @Setter
+public final class MxlNotations {
 
 	public static final String elemName = "notations";
 
