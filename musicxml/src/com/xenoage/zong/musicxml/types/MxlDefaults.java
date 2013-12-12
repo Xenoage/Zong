@@ -1,90 +1,52 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.xml.XMLReader.elements;
-import static com.xenoage.utils.xml.XMLWriter.addElement;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.MaybeNull;
-import com.xenoage.utils.base.annotations.NeverNull;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.zong.musicxml.types.attributes.MxlFont;
 import com.xenoage.zong.musicxml.types.groups.MxlLayout;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
-
 
 /**
  * MusicXML defaults.
  * 
  * @author Andreas Wenger
  */
-@IncompleteMusicXML(missing="appearance,music-font,lyric-language",
-	partly="lyric-font")
-public final class MxlDefaults
-{
-	
-	public static final String ELEM_NAME = "defaults";
-	
-	@MaybeNull private final MxlScaling scaling;
-	@NeverNull private final MxlLayout layout;
-	@MaybeNull private final MxlFont wordFont;
-	@MaybeNull private final MxlLyricFont lyricFont;
-	
-	
-	public MxlDefaults(MxlScaling scaling, MxlLayout layout, MxlFont wordFont, MxlLyricFont lyricFont)
-	{
-		this.scaling = scaling;
-		this.layout = layout;
-		this.wordFont = wordFont;
-		this.lyricFont = lyricFont;
-	}
+@IncompleteMusicXML(missing = "appearance,music-font,lyric-language", partly = "lyric-font")
+@AllArgsConstructor @Getter @Setter
+public final class MxlDefaults {
 
-	
-	@MaybeNull public MxlScaling getScaling()
-	{
-		return scaling;
-	}
+	public static final String elemName = "defaults";
 
-	
-	@NeverNull public MxlLayout getLayout()
-	{
-		return layout;
-	}
+	@MaybeNull private MxlScaling scaling;
+	@MaybeNull private MxlLayout layout;
+	@MaybeNull private MxlFont wordFont;
+	@MaybeNull private MxlLyricFont lyricFont;
 
-	
-	@MaybeNull public MxlFont getWordFont()
-	{
-		return wordFont;
-	}
 
-	
-	@MaybeNull public MxlLyricFont getLyricFont()
-	{
-		return lyricFont;
-	}
-	
-	
-	@NeverNull public static MxlDefaults read(Element e)
-	{
+	@MaybeNull public static MxlDefaults read(XmlReader reader) {
 		MxlScaling scaling = null;
+		MxlLayout layout = new MxlLayout();
 		MxlFont wordFont = null;
 		MxlLyricFont lyricFont = null;
-		for (Element c : elements(e))
-		{
-			String n = c.getNodeName();
-			if (n.equals(MxlScaling.ELEM_NAME))
-				scaling = MxlScaling.read(c);
+		while (reader.openNextChildElement()) {
+			String n = reader.getElementName();
+			if (n.equals(MxlScaling.elemName))
+				scaling = MxlScaling.read(reader);
 			else if (n.equals("word-font"))
-				wordFont = MxlFont.read(c);
+				wordFont = MxlFont.read(reader);
 			else if (n.equals(MxlLyricFont.ELEM_NAME) && lyricFont == null) //read only first
 				lyricFont = MxlLyricFont.read(c);
+			reader.closeElement();
 		}
 		return new MxlDefaults(scaling, MxlLayout.read(e), wordFont, lyricFont);
 	}
-	
-	
-	public void write(Element parent)
-	{
-		Element e = addElement(ELEM_NAME, parent);
+
+	public void write(Element parent) {
+		Element e = addElement(elemName, parent);
 		if (scaling != null)
 			scaling.write(e);
 		layout.write(e);
@@ -93,7 +55,5 @@ public final class MxlDefaults
 		if (lyricFont != null)
 			lyricFont.write(e);
 	}
-	
-	
 
 }

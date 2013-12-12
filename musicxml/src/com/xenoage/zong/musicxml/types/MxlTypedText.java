@@ -1,59 +1,37 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.xml.XMLReader.attribute;
-import static com.xenoage.utils.xml.XMLReader.text;
-import static com.xenoage.utils.xml.XMLWriter.addAttribute;
-import static com.xenoage.utils.xml.XMLWriter.addElement;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.MaybeNull;
-import com.xenoage.utils.base.annotations.NeverNull;
-
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 
 /**
  * MusicXML typed-text.
  * 
  * @author Andreas Wenger
  */
-public final class MxlTypedText
-{
-	
-	@NeverNull private final String value;
-	@MaybeNull private final String type;
-	
-	
-	public MxlTypedText(String value, String type)
-	{
-		this.value = value;
-		this.type = type;
+@AllArgsConstructor @Getter @Setter
+public final class MxlTypedText {
+
+	@NonNull private String value;
+	@MaybeNull private String type;
+
+
+	@NonNull public static MxlTypedText read(XmlReader reader) {
+		String type = reader.getAttribute("type");
+		String value = reader.getTextNotNull();
+		return new MxlTypedText(value, type);
 	}
 
-	
-	@NeverNull public String getValue()
-	{
-		return value;
+	public void write(String elementName, XmlWriter writer) {
+		writer.writeElementStart(elementName);
+		writer.writeAttribute("type", type);
+		writer.writeText(value);
+		writer.writeElementEnd();
 	}
-
-	
-	@MaybeNull public String getType()
-	{
-		return type;
-	}
-	
-	
-	@NeverNull public static MxlTypedText read(Element e)
-	{
-		return new MxlTypedText(text(e), attribute(e, "type"));
-	}
-	
-	
-	public void write(String elementName, Element parent)
-	{
-		Element e = addElement(elementName, parent);
-		e.setTextContent(value);
-		addAttribute(e, "type", type);
-	}
-	
 
 }

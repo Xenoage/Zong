@@ -1,70 +1,52 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.xml.XMLReader.elementText;
-import static com.xenoage.utils.xml.XMLWriter.addElement;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.MaybeNull;
-import com.xenoage.utils.base.annotations.NeverNull;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
-
 
 /**
  * MusicXML work.
  * 
  * @author Andreas Wenger
  */
-@IncompleteMusicXML(missing="opus")
-public final class MxlWork
-{
-	
-	public static final String ELEM_NAME = "work";
-	public static final MxlWork empty = new MxlWork(null, null);
-	
-	@MaybeNull private final String workNumber;
-	@MaybeNull private final String workTitle;
-	
-	
-	public MxlWork(String workNumber, String workTitle)
-	{
-		this.workNumber = workNumber;
-		this.workTitle = workTitle;
-	}
+@IncompleteMusicXML(missing = "opus")
+@AllArgsConstructor @Getter @Setter
+public final class MxlWork {
 
-	
-	@MaybeNull public String getWorkNumber()
-	{
-		return workNumber;
-	}
+	public static final String elemName = "work";
 
-	
-	@MaybeNull public String getWorkTitle()
-	{
-		return workTitle;
-	}
-	
-	
-	@NeverNull public static MxlWork read(Element e)
-	{
-		String workNumber = elementText(e, "work-number");
-		String workTitle = elementText(e, "work-title");
+	@MaybeNull private String workNumber;
+	@MaybeNull private String workTitle;
+
+
+	@MaybeNull public static MxlWork read(XmlReader reader) {
+		String workNumber = null, workTitle = null;
+		while (reader.openNextChildElement()) {
+			String n = reader.getElementName();
+			if (n.equals("work-number"))
+				workNumber = reader.getText();
+			else if (n.equals("work-title"))
+				workTitle = reader.getText();
+			reader.closeElement();
+		}
 		if (workNumber != null || workTitle != null)
 			return new MxlWork(workNumber, workTitle);
 		else
-			return empty;
+			return null;
 	}
-	
-	
-	public void write(Element parent)
-	{
-		Element e = addElement(ELEM_NAME, parent);
-		if (this != empty)
-		{
-			addElement("work-number", workNumber, e);
-			addElement("work-title", workTitle, e);
-		}
+
+	public void write(XmlWriter writer) {
+		writer.writeElementStart(elemName);
+		if (workNumber != null)
+			writer.writeElementText("work-number", workNumber);
+		if (workTitle != null)
+			writer.writeElementText("work-title", workTitle);
+		writer.writeElementEnd();
 	}
-	
 
 }

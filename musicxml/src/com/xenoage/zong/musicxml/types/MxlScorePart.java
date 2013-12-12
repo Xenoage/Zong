@@ -107,7 +107,7 @@ public class MxlScorePart
 			switch (n.charAt(0))
 			{
 				case 'i':
-					if (n.equals(MxlIdentification.ELEM_NAME))
+					if (n.equals(MxlIdentification.elemName))
 						identification = MxlIdentification.read(c);
 					break;
 				case 'm':

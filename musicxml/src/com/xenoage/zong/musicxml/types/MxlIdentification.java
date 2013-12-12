@@ -1,74 +1,62 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.pdlib.PVector.pvec;
-import static com.xenoage.utils.xml.XMLReader.elements;
-import static com.xenoage.utils.xml.XMLWriter.addElement;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.w3c.dom.Element;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import com.xenoage.utils.base.annotations.MaybeEmpty;
-import com.xenoage.utils.pdlib.PVector;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
-
 
 /**
  * MusicXML identification.
  * 
  * @author Andreas Wenger
  */
-@IncompleteMusicXML(missing="encoding,source,relation,miscellaneous")
-public final class MxlIdentification
-{
-	
-	public static final String ELEM_NAME = "identification";
-	
-	@MaybeEmpty private final PVector<MxlTypedText> creators;
-	@MaybeEmpty private final PVector<MxlTypedText> rights;
-	
-	
-	public MxlIdentification(PVector<MxlTypedText> creators, PVector<MxlTypedText> rights)
-	{
-		this.creators = creators;
-		this.rights = rights;
-	}
+@IncompleteMusicXML(missing = "encoding,source,relation,miscellaneous")
+@AllArgsConstructor @Getter @Setter
+public final class MxlIdentification {
 
-	
-	@MaybeEmpty public PVector<MxlTypedText> getCreators()
-	{
-		return creators;
-	}
+	public static final String elemName = "identification";
 
-	
-	@MaybeEmpty public PVector<MxlTypedText> getRights()
-	{
-		return rights;
-	}
-	
-	
-	public static MxlIdentification read(Element e)
-	{
-		PVector<MxlTypedText> creators = pvec();
-		PVector<MxlTypedText> rights = pvec();
-		for (Element c : elements(e))
-		{
-			String n = c.getNodeName();
-			if (n.equals("creator"))
-				creators = creators.plus(MxlTypedText.read(c));
-			else if (n.equals("rights"))
-				rights = rights.plus(MxlTypedText.read(c));
+	@MaybeNull private List<MxlTypedText> creators;
+	@MaybeNull private List<MxlTypedText> rights;
+
+
+	@MaybeNull public static MxlIdentification read(XmlReader reader) {
+		List<MxlTypedText> creators = null;
+		List<MxlTypedText> rights = null;
+		while (reader.openNextChildElement()) {
+			String n = reader.getElementName();
+			if (n.equals("creator")) {
+				if (creators == null)
+					creators = new ArrayList<MxlTypedText>();
+				creators.add(MxlTypedText.read(reader));
+			}
+			else if (n.equals("rights")) {
+				if (rights == null)
+					rights = new ArrayList<MxlTypedText>();
+				rights.add(MxlTypedText.read(reader));
+			}
+			reader.closeElement();
 		}
-		return new MxlIdentification(creators, rights);
+		if (creators != null || rights != null)
+			return new MxlIdentification(creators, rights);
+		else
+			return null;
 	}
-	
-	
-	public void write(Element parent)
-	{
-		Element e = addElement(ELEM_NAME, parent);
+
+	public void write(XmlWriter writer) {
+		writer.writeElementStart(elemName);
 		for (MxlTypedText t : creators)
-			t.write("creator", e);
+			t.write("creator", writer);
 		for (MxlTypedText t : rights)
-			t.write("rights", e);
+			t.write("rights", writer);
+		writer.writeElementEnd();
 	}
-	
 
 }
