@@ -45,7 +45,7 @@ public final class MxlTranspose {
 			reader.closeElement();
 		}
 		if (chromatic == null)
-			reader.throwDataException("chromatic not found");
+			throw reader.dataException("chromatic not found");
 		return new MxlTranspose(diatonic, chromatic, octaveChange, doubleValue);
 	}
 

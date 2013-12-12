@@ -58,11 +58,11 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 		else if (elemNameTied.equals(eName))
 			elementType = MxlElementType.Tied;
 		else
-			reader.throwDataException("slur or tied expected");
+			throw reader.dataException("slur or tied expected");
 		//type
 		MxlStartStopContinue type = MxlStartStopContinue.read(reader.getAttribute("type"), reader);
 		if (type == MxlStartStopContinue.Continue && elementType == MxlElementType.Tied)
-			reader.throwDataException("tied can not be continued");
+			throw reader.dataException("tied can not be continued");
 		//other members
 		Integer number = reader.getAttributeInt("number");
 		if (elementType == MxlElementType.Slur)

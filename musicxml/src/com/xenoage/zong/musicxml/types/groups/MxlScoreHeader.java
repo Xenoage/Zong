@@ -1,4 +1,4 @@
-package com.xenoage.zong.musicxml.types;
+package com.xenoage.zong.musicxml.types.groups;
 
 import static com.xenoage.utils.xml.XmlDataException.throwNull;
 import static com.xenoage.utils.xml.XMLReader.elements;
@@ -11,6 +11,11 @@ import com.xenoage.utils.base.annotations.MaybeEmpty;
 import com.xenoage.utils.base.annotations.MaybeNull;
 import com.xenoage.utils.base.annotations.NeverNull;
 import com.xenoage.utils.pdlib.PVector;
+import com.xenoage.zong.musicxml.types.MxlCredit;
+import com.xenoage.zong.musicxml.types.MxlDefaults;
+import com.xenoage.zong.musicxml.types.MxlIdentification;
+import com.xenoage.zong.musicxml.types.MxlPartList;
+import com.xenoage.zong.musicxml.types.MxlWork;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 
 
@@ -19,6 +24,7 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
  * 
  * @author Andreas Wenger
  */
+//GOON
 @IncompleteMusicXML(children="work,identification,defaults,part-list")
 public final class MxlScoreHeader
 {

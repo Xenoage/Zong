@@ -31,8 +31,7 @@ public final class MxlColor {
 			try {
 				return new MxlColor(getColor(s));
 			} catch (NumberFormatException ex) {
-				reader.throwDataException(attrName + " = " + s);
-				return null;
+				throw reader.dataException(attrName + " = " + s);
 			}
 		}
 		else {

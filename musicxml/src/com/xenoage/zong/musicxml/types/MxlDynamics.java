@@ -51,7 +51,7 @@ public final class MxlDynamics
 	@MaybeNull public static MxlDynamics read(XmlReader reader) {
 		//get first element
 		if (false == reader.openNextChildElement())
-			reader.throwDataException("no child element found");
+			throw reader.dataException("no child element found");
 		String childText = reader.getElementName();
 		reader.closeElement();
 		DynamicsType element = getEnumValue(childText, DynamicsType.values());

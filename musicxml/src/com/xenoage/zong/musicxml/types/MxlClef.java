@@ -44,7 +44,7 @@ public final class MxlClef {
 			reader.closeElement();
 		}
 		if (sign == null)
-			reader.throwDataException(MxlClefSign.elemName + " missing");
+			throw reader.dataException(MxlClefSign.elemName + " missing");
 		return new MxlClef(sign, clefOctaveChange, number);
 	}
 

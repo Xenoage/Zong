@@ -1,7 +1,7 @@
 package com.xenoage.zong.musicxml.types.choice;
 
 import com.xenoage.utils.xml.XmlWriter;
-import com.xenoage.zong.musicxml.types.MxlMusicData;
+import com.xenoage.zong.musicxml.types.groups.MxlMusicData;
 
 /**
  * Interface for all types of content that may appear within

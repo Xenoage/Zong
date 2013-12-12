@@ -4,10 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import com.xenoage.utils.annotations.NeverNull;
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.XmlReader;
-import com.xenoage.zong.musicxml.types.MxlMusicData;
+import com.xenoage.utils.xml.XmlWriter;
+import com.xenoage.zong.musicxml.types.groups.MxlMusicData;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 
 /**
@@ -26,16 +26,21 @@ public final class MxlMeasure {
 
 
 	@NonNull public static MxlMeasure read(XmlReader reader) {
-		String number = reader.getAttribute("number");
-		if (number == null)
-			reader.throwDataException("number unknown");
-		return new MxlMeasure(MxlMusicData.read(reader), number);
+		String number = reader.getAttributeNotNull("number");
+		MxlMusicData musicData = new MxlMusicData();
+		while (reader.openNextChildElement()) {
+			musicData.readElement(reader);
+			reader.closeElement();
+		}
+		musicData.check(reader);
+		return new MxlMeasure(musicData, number);
 	}
 
-	public void write(Element parent) {
-		Element e = addElement(elemName, parent);
-		addAttribute(e, "number", number);
-		musicData.write(e);
+	public void write(XmlWriter writer) {
+		writer.writeElementStart(elemName);
+		writer.writeAttribute("number", number);
+		musicData.write(writer);
+		writer.writeElementEnd();
 	}
 
 }

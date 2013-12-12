@@ -1,81 +1,60 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.xml.XMLWriter.addElement;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.NeverNull;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.attributes.MxlPrintAttributes;
 import com.xenoage.zong.musicxml.types.choice.MxlMusicDataContent;
 import com.xenoage.zong.musicxml.types.groups.MxlLayout;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
-
 
 /**
  * MusicXML print.
  * 
  * @author Andreas Wenger
  */
-@IncompleteMusicXML(missing="measure-layout,measure-numbering,part-name-display," +
-	"part-abbreviation-display", children="layout,print-attributes")
+@IncompleteMusicXML(missing = "measure-layout,measure-numbering,part-name-display,"
+	+ "part-abbreviation-display", children = "layout,print-attributes")
+@AllArgsConstructor @Getter @Setter
 public final class MxlPrint
-	implements MxlMusicDataContent
-{
-	
-	public static final String ELEM_NAME = "print";
-	public static final MxlPrint empty = new MxlPrint(MxlLayout.empty, MxlPrintAttributes.empty);
-	
-	@NeverNull private final MxlLayout layout;
-	@NeverNull private final MxlPrintAttributes printAttributes;
-	
-	
-	public MxlPrint(MxlLayout layout, MxlPrintAttributes printAttributes)
-	{
-		this.layout = layout;
-		this.printAttributes = printAttributes;
-	}
+	implements MxlMusicDataContent {
 
-	
-	@NeverNull public MxlLayout getLayout()
-	{
-		return layout;
-	}
+	public static final String elemName = "print";
 
-	
-	@NeverNull public MxlPrintAttributes getPrintAttributes()
-	{
-		return printAttributes;
-	}
-	
-	
-	@Override public MxlMusicDataContentType getMusicDataContentType()
-	{
+	@MaybeNull private MxlLayout layout;
+	@MaybeNull private MxlPrintAttributes printAttributes;
+
+
+	@Override public MxlMusicDataContentType getMusicDataContentType() {
 		return MxlMusicDataContentType.Print;
 	}
-	
-	
-	@NeverNull public static MxlPrint read(Element e)
-	{
-		MxlLayout layout = MxlLayout.read(e);
-		MxlPrintAttributes printAttributes = MxlPrintAttributes.read(e);
-		if (layout != MxlLayout.empty || printAttributes != MxlPrintAttributes.empty)
+
+	@MaybeNull public static MxlPrint read(XmlReader reader) {
+		MxlLayout layout = new MxlLayout();
+		MxlPrintAttributes printAttributes = MxlPrintAttributes.read(reader);
+		while (reader.openNextChildElement()) {
+			layout.readElement(reader);
+			reader.closeElement();
+		}
+		if (false == layout.isUsed())
+			layout = null;
+		if (layout != null || printAttributes != null)
 			return new MxlPrint(layout, printAttributes);
 		else
-			return empty;
+			return null;
 	}
-	
-	
-	@Override public void write(Element parent)
-	{
-		if (this != empty)
-		{
-			Element e = addElement(ELEM_NAME, parent);
-			layout.write(e);
-			printAttributes.write(e);
-		}
+
+	@Override public void write(XmlWriter writer) {
+		writer.writeElementStart(elemName);
+		if (layout != null)
+			layout.write(writer);
+		if (printAttributes != null)
+			printAttributes.write(writer);
+		writer.writeElementEnd();
 	}
-	
-	
-	
 
 }

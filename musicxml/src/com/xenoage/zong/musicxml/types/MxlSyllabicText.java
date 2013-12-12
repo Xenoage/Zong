@@ -50,20 +50,20 @@ public final class MxlSyllabicText
 				String syllabicText = reader.getText();
 				syllabic = getEnumValue(syllabicText, MxlSyllabic.values());
 				if (syllabic == null)
-					reader.throwDataException("syllabic = " + syllabicText);
+					throw reader.dataException("syllabic = " + syllabicText);
 				//open next element
 				reader.closeElement();
 				if (false == reader.openNextChildElement())
-					reader.throwDataException("missing text element after syllabic");
+					throw reader.dataException("missing text element after syllabic");
 			}
 			//next one must be "text"
 			if (false == reader.getElementName().equals("text"))
-				reader.throwDataException("text element must follow after syllabic");
+				throw reader.dataException("text element must follow after syllabic");
 			text = MxlTextElementData.read(reader);
 			reader.closeElement();
 		}
 		if (text == null)
-			reader.throwDataException("missing text element");
+			throw reader.dataException("missing text element");
 		return new MxlSyllabicText(syllabic, text);
 	}
 

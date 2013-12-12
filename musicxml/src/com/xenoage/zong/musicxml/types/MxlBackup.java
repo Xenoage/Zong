@@ -37,7 +37,7 @@ public final class MxlBackup
 			reader.closeElement();
 		}
 		if (duration == null)
-			reader.throwDataException("duration unknown");
+			throw reader.dataException("duration unknown");
 		return new MxlBackup(duration);
 	}
 

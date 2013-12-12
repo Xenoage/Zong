@@ -45,7 +45,7 @@ public final class MxlForward
 			reader.closeElement();
 		}
 		if (duration == null)
-			reader.throwDataException("duration unknown");
+			throw reader.dataException("duration unknown");
 		if (false == editorialVoice.isUsed())
 			editorialVoice = null;
 		return new MxlForward(duration, editorialVoice);
