@@ -36,8 +36,7 @@ public final class MxlEditorialVoice {
 	}
 
 	public void write(XmlWriter writer) {
-		if (voice != null)
-			writer.writeElementText("voice", voice);
+		writer.writeElementText("voice", voice);
 	}
 
 }

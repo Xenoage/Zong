@@ -1,61 +1,42 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.xml.XMLWriter.addElement;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.MaybeNull;
-import com.xenoage.utils.base.annotations.NeverNull;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.attributes.MxlColor;
 import com.xenoage.zong.musicxml.types.enums.MxlGroupBarlineValue;
-
 
 /**
  * MusicXML group-barline.
  * 
  * @author Andreas Wenger
  */
-public final class MxlGroupBarline
-{
-	
-	public static final String ELEM_NAME = "group-barline";
-	
-	@NeverNull private final MxlGroupBarlineValue value;
+@AllArgsConstructor @Getter @Setter
+public final class MxlGroupBarline {
+
+	public static final String elemName = "group-barline";
+
+	@NonNull private final MxlGroupBarlineValue value;
 	@MaybeNull private final MxlColor color;
-	
-	
-	public MxlGroupBarline(MxlGroupBarlineValue value, MxlColor color)
-	{
-		this.value = value;
-		this.color = color;
+
+
+	@NonNull public static MxlGroupBarline read(XmlReader reader) {
+		MxlColor color = MxlColor.read(reader);
+		MxlGroupBarlineValue value = MxlGroupBarlineValue.read(reader);
+		return new MxlGroupBarline(value, color);
 	}
 
-	
-	@NeverNull public MxlGroupBarlineValue getValue()
-	{
-		return value;
-	}
-
-	
-	@MaybeNull public MxlColor getColor()
-	{
-		return color;
-	}
-	
-	
-	@NeverNull public static MxlGroupBarline read(Element e)
-	{
-		return new MxlGroupBarline(MxlGroupBarlineValue.read(e), MxlColor.read(e));
-	}
-	
-	
-	public void write(Element parent)
-	{
-		Element e = addElement(ELEM_NAME, parent);
-		value.write(e);
+	public void write(XmlWriter writer) {
+		writer.writeElementStart(elemName);
+		value.write(writer);
 		if (color != null)
-			color.write(e);
+			color.write(writer);
+		writer.writeElementEnd();
 	}
-	
 
 }

@@ -73,8 +73,7 @@ public final class MxlDirection
 		writer.writeElementStart(elemName);
 		for (MxlDirectionType directionType : directionTypes)
 			directionType.write(writer);
-		if (staff != null)
-			writer.writeElementText("staff", staff);
+		writer.writeElementText("staff", staff);
 		if (sound != null)
 			sound.write(writer);
 		if (placement != null)

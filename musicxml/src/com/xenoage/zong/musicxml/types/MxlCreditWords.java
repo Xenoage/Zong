@@ -1,18 +1,18 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.pdlib.PVector.pvec;
-import static com.xenoage.utils.xml.XmlDataException.invalid;
-import static com.xenoage.utils.xml.XMLReader.elements;
-import static com.xenoage.utils.xml.XMLWriter.addElement;
+import java.util.List;
 
-import org.w3c.dom.Element;
+import lombok.AllArgsConstructor;
+import lombok.Setter;
+import lombok.Getter;
 
-import com.xenoage.utils.base.annotations.NeverEmpty;
-import com.xenoage.utils.base.annotations.NeverNull;
-import com.xenoage.utils.pdlib.PVector;
+import com.xenoage.utils.annotations.NonEmpty;
+import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.collections.CollectionUtils;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.choice.MxlCreditContent;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
-
 
 /**
  * MusicXML credit-words content for the credit element.
@@ -23,55 +23,42 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
  * 
  * @author Andreas Wenger
  */
-@IncompleteMusicXML(missing="link,bookmark", partly="credit-words")
+@IncompleteMusicXML(missing = "link,bookmark", partly = "credit-words")
+@AllArgsConstructor @Getter @Setter
 public final class MxlCreditWords
-	implements MxlCreditContent
-{
+	implements MxlCreditContent {
 	
-	@NeverEmpty private final PVector<MxlFormattedText> items;
+	public static final String elemName = "credit-words";
 
-	
-	public MxlCreditWords(PVector<MxlFormattedText> items)
-	{
-		this.items = items;
-	}
+	@NonEmpty private final List<MxlFormattedText> items;
 
-	
-	@NeverEmpty public PVector<MxlFormattedText> getItems()
-	{
-		return items;
-	}
-	
-	
-	@Override public MxlCreditContentType getCreditContentType()
-	{
+
+	@Override public MxlCreditContentType getCreditContentType() {
 		return MxlCreditContentType.CreditWords;
 	}
-	
-	
-	@NeverNull public static MxlCreditWords read(Element parent)
-	{
-		PVector<MxlFormattedText> items = pvec();
-		for (Element e : elements(parent))
-		{
-			String n = e.getNodeName();
-			if (n.equals("credit-words"))
-				items = items.plus(MxlFormattedText.read(e));
-		}
+
+	/**
+	 * Reads the current element, and all of its following siblings.
+	 */
+	@NonNull public static MxlCreditWords read(XmlReader reader) {
+		List<MxlFormattedText> items = CollectionUtils.alist();
+		do {
+			String n = reader.getElementName();
+			if (n.equals(elemName))
+				items.add(MxlFormattedText.read(reader));
+			reader.closeElement();
+		} while (reader.openNextChildElement());
 		if (items.size() < 1)
-			throw invalid(parent);
+			throw reader.dataException("no " + elemName + " found");
 		return new MxlCreditWords(items);
 	}
-	
-	
-	@Override public void write(Element parent)
-	{
-		for (MxlFormattedText item : items)
-		{
-			Element e = addElement("credit-words", parent);
-			item.write(e);
+
+	@Override public void write(XmlWriter writer) {
+		for (MxlFormattedText item : items) {
+			writer.writeElementStart(elemName);
+			item.write(writer);
+			writer.writeElementEnd();
 		}
 	}
-
 
 }

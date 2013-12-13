@@ -1,131 +1,80 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.base.NullUtils.notNull;
-import static com.xenoage.utils.xml.XmlDataException.throwNull;
-import static com.xenoage.utils.xml.Parse.parseAttrIntNull;
-import static com.xenoage.utils.xml.XMLReader.attribute;
-import static com.xenoage.utils.xml.XMLReader.element;
-import static com.xenoage.utils.xml.XMLReader.elementText;
-import static com.xenoage.utils.xml.XMLWriter.addAttribute;
-import static com.xenoage.utils.xml.XMLWriter.addElement;
+import static com.xenoage.utils.NullUtils.notNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.MaybeNull;
-import com.xenoage.utils.base.annotations.NeverNull;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.choice.MxlPartListContent;
 import com.xenoage.zong.musicxml.types.enums.MxlStartStop;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
-
 
 /**
  * MusicXML part-group.
  * 
  * @author Andreas Wenger
  */
-@IncompleteMusicXML(missing="group-name-display,group-abbreviation-display," +
-	"group-time,editorial")
+@IncompleteMusicXML(missing = "group-name-display,group-abbreviation-display,"
+	+ "group-time,editorial")
+@AllArgsConstructor @Getter @Setter
 public final class MxlPartGroup
-	implements MxlPartListContent
-{
-	
-	public static final String ELEM_NAME = "part-group";
-	
+	implements MxlPartListContent {
+
+	public static final String elemName = "part-group";
+
 	@MaybeNull private final String groupName;
 	@MaybeNull private final String groupAbbreviation;
 	@MaybeNull private final MxlGroupSymbol groupSymbol;
 	@MaybeNull private final MxlGroupBarline groupBarline;
-	@NeverNull private final MxlStartStop type;
+	@NonNull private final MxlStartStop type;
 	private final int number;
-	
+
 	private static final int defaultNumber = 1;
 
-	
-	public MxlPartGroup(String groupName, String groupAbbreviation, MxlGroupSymbol groupSymbol,
-		MxlGroupBarline groupBarline, MxlStartStop type, int number)
-	{
-		this.groupName = groupName;
-		this.groupAbbreviation = groupAbbreviation;
-		this.groupSymbol = groupSymbol;
-		this.groupBarline = groupBarline;
-		this.type = type;
-		this.number = number;
-	}
 
-	
-	@MaybeNull public String getGroupName()
-	{
-		return groupName;
-	}
-
-	
-	@MaybeNull public String getGroupAbbreviation()
-	{
-		return groupAbbreviation;
-	}
-
-	
-	@MaybeNull public MxlGroupSymbol getGroupSymbol()
-	{
-		return groupSymbol;
-	}
-
-	
-	@MaybeNull public MxlGroupBarline getGroupBarline()
-	{
-		return groupBarline;
-	}
-
-	
-	@NeverNull public MxlStartStop getType()
-	{
-		return type;
-	}
-
-
-	public int getNumber()
-	{
-		return number;
-	}
-	
-	
-	@Override public PartListContentType getPartListContentType()
-	{
+	@Override public PartListContentType getPartListContentType() {
 		return PartListContentType.PartGroup;
 	}
-	
-	
-	@NeverNull public static MxlPartGroup read(Element e)
-	{
+
+	@NonNull public static MxlPartGroup read(XmlReader reader) {
+		//attributes
+		MxlStartStop type = MxlStartStop.read(reader.getAttributeNotNull("type"));
+		int number = notNull(reader.getAttributeInt("number"), defaultNumber);
+		//elements
+		String groupName = null;
+		String groupAbbreviation = null;
 		MxlGroupSymbol groupSymbol = null;
 		MxlGroupBarline groupBarline = null;
-		Element eGroupSymbol = element(e, "group-symbol");
-		if (eGroupSymbol != null)
-			groupSymbol = MxlGroupSymbol.read(eGroupSymbol);
-		Element eGroupBarline = element(e, "group-barline");
-		if (eGroupBarline != null)
-			groupBarline = MxlGroupBarline.read(eGroupBarline);
-		return new MxlPartGroup(
-			elementText(e, "group-name"),
-			elementText(e, "group-abbreviation"),
-			groupSymbol, groupBarline,
-			MxlStartStop.read(throwNull(attribute(e, "type"), e), e),
-			notNull(parseAttrIntNull(e, "number"), defaultNumber));
+		while (reader.openNextChildElement()) {
+			String n = reader.getElementName();
+			if (n.equals("group-name"))
+				groupName = reader.getTextNotNull();
+			else if (n.equals("group-abbreviation"))
+				groupAbbreviation = reader.getTextNotNull();
+			else if (n.equals("group-symbol"))
+				groupSymbol = MxlGroupSymbol.read(reader);
+			else if (n.equals("group-barline"))
+				groupBarline = MxlGroupBarline.read(reader);
+			reader.closeElement();
+		}
+		return new MxlPartGroup(groupName, groupAbbreviation, groupSymbol, groupBarline, type, number);
 	}
-	
-	
-	@Override public void write(Element parent)
-	{
-		Element e = addElement(ELEM_NAME, parent);
-		addElement("group-name", groupName, e);
-		addElement("group-abbreviation", groupAbbreviation, e);
+
+	@Override public void write(XmlWriter writer) {
+		writer.writeElementStart(elemName);
+		writer.writeAttribute("type", type.write());
+		writer.writeAttribute("number", number);
+		writer.writeElementText("group-name", groupName);
+		writer.writeElementText("group-abbreviation", groupAbbreviation);
 		if (groupSymbol != null)
-			groupSymbol.write(e);
+			groupSymbol.write(writer);
 		if (groupBarline != null)
-			groupBarline.write(e);
-		addAttribute(e, "type", type.write());
-		addAttribute(e, "number", number);
+			groupBarline.write(writer);
+		writer.writeElementEnd();
 	}
-	
 
 }

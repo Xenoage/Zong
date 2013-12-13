@@ -47,10 +47,8 @@ public final class MxlSystemLayout {
 		writer.writeElementStart(elemName);
 		if (systemMargins != null)
 			systemMargins.write(writer);
-		if (systemDistance != null)
-			writer.writeElementText("system-distance", systemDistance);
-		if (topSystemDistance != null)
-			writer.writeElementText("top-system-distance", topSystemDistance);
+		writer.writeElementText("system-distance", systemDistance);
+		writer.writeElementText("top-system-distance", topSystemDistance);
 		writer.writeElementEnd();
 	}
 

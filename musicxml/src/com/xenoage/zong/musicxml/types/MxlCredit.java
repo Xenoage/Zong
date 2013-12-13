@@ -1,18 +1,15 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.base.NullUtils.notNull;
-import static com.xenoage.utils.xml.XmlDataException.throwNull;
-import static com.xenoage.utils.xml.Parse.parseAttrIntNull;
-import static com.xenoage.utils.xml.XMLReader.elements;
-import static com.xenoage.utils.xml.XMLWriter.addAttribute;
-import static com.xenoage.utils.xml.XMLWriter.addElement;
+import static com.xenoage.utils.NullUtils.notNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.NeverNull;
+import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.choice.MxlCreditContent;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
-
 
 /**
  * MusicXML credit.
@@ -22,66 +19,45 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
  * 
  * @author Andreas Wenger
  */
-@IncompleteMusicXML(missing="link,bookmark", children="credit-words")
-public final class MxlCredit
-{
-	
-	public static final String ELEM_NAME = "credit";
-	
-	@NeverNull private final MxlCreditContent content;
-	private final int page;
-	
+@IncompleteMusicXML(missing = "link,bookmark", children = "credit-words")
+@AllArgsConstructor @Getter @Setter
+public final class MxlCredit {
+
+	public static final String elemName = "credit";
+
+	@NonNull private MxlCreditContent content;
+	private int page;
+
 	private static final int defaultPage = 1;
 
 	
-	public MxlCredit(MxlCreditContent content, int page)
-	{
-		this.content = content;
-		this.page = page;
-	}
-
-	
-	@NeverNull public MxlCreditContent getContent()
-	{
-		return content;
-	}
-
-	
-	public int getPage()
-	{
-		return page;
-	}
-	
-	
-	@NeverNull public static MxlCredit read(Element e)
-	{
+	@NonNull public static MxlCredit read(XmlReader reader) {
+		int page = notNull(reader.getAttributeInt("page"), defaultPage);
 		MxlCreditContent content = null;
-		for (Element c : elements(e))
-		{
-			String n = c.getNodeName();
-			if (n.equals("credit-image"))
-			{
-				content = MxlImage.read(c);
+		while (reader.openNextChildElement()) {
+			String n = reader.getElementName();
+			if (n.equals("credit-image")) {
+				content = MxlImage.read(reader);
+				reader.closeElement();
 				break;
 			}
-			else if (n.equals("credit-words"))
-			{
-				content = MxlCreditWords.read(e);
+			else if (n.equals(MxlCreditWords.elemName)) {
+				content = MxlCreditWords.read(reader);
+				//element is already closed at this point
 				break;
 			}
+			reader.closeElement();
 		}
-		return new MxlCredit(
-			throwNull(content, e),
-			notNull(parseAttrIntNull(e, "page"), defaultPage));
+		if (content == null)
+			throw reader.dataException("empty " + elemName);
+		return new MxlCredit(content, page);
 	}
-	
-	
-	public void write(Element parent)
-	{
-		Element e = addElement(ELEM_NAME, parent);
-		content.write(e);
-		addAttribute(e, "page", page);
+
+	public void write(XmlWriter writer) {
+		writer.writeElementStart(elemName);
+		writer.writeAttribute("page", page);
+		content.write(writer);
+		writer.writeElementEnd();
 	}
-	
 
 }

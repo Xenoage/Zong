@@ -45,8 +45,7 @@ public final class MxlStaffLayout {
 	public void write(XmlWriter writer) {
 		writer.writeElementStart(elemName);
 		writer.writeAttribute("number", number);
-		if (staffDistance != null)
-			writer.writeElementText("staff-distance", staffDistance);
+		writer.writeElementText("staff-distance", staffDistance);
 		writer.writeElementEnd();
 	}
 

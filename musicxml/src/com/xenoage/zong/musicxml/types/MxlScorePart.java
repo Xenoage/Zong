@@ -1,139 +1,85 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.pdlib.PVector.pvec;
-import static com.xenoage.utils.xml.XmlDataException.throwNull;
-import static com.xenoage.utils.xml.XMLReader.attribute;
-import static com.xenoage.utils.xml.XMLReader.elements;
-import static com.xenoage.utils.xml.XMLReader.getTextContent;
-import static com.xenoage.utils.xml.XMLWriter.addAttribute;
-import static com.xenoage.utils.xml.XMLWriter.addElement;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 
-import org.w3c.dom.Element;
+import java.util.List;
 
-import com.xenoage.utils.base.annotations.MaybeEmpty;
-import com.xenoage.utils.base.annotations.MaybeNull;
-import com.xenoage.utils.base.annotations.NeverNull;
-import com.xenoage.utils.pdlib.PVector;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+import com.xenoage.utils.annotations.MaybeEmpty;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.collections.CollectionUtils;
+import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.zong.musicxml.types.choice.MxlPartListContent;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
-
 
 /**
  * MusicXML score-part.
  * 
  * @author Andreas Wenger
  */
-@IncompleteMusicXML(missing="part-name-display,part-abbreviation-display," +
-	"group,midi-device", children="score-instrument,midi-instrument")
+@IncompleteMusicXML(missing = "part-name-display,part-abbreviation-display,group,midi-device",
+	children = "score-instrument,midi-instrument")
+@AllArgsConstructor @Getter @Setter
 public class MxlScorePart
-	implements MxlPartListContent
-{
-	
-	public static final String ELEM_NAME = "score-part";
-	
-	@MaybeNull private final MxlIdentification identification;
-	@NeverNull private final String partName;
-	@MaybeNull private final String partAbbreviation;
-	@MaybeEmpty private final PVector<MxlScoreInstrument> scoreInstruments;
-	@MaybeEmpty private final PVector<MxlMidiInstrument> midiInstruments;
-	@NeverNull private final String id;
-	
+	implements MxlPartListContent {
 
-	public MxlScorePart(MxlIdentification identification, String partName,
-		String partAbbreviation, PVector<MxlScoreInstrument> scoreInstruments,
-		PVector<MxlMidiInstrument> midiInstruments, String id)
-	{
-		this.identification = identification;
-		this.partName = partName;
-		this.partAbbreviation = partAbbreviation;
-		this.scoreInstruments = scoreInstruments;
-		this.midiInstruments = midiInstruments;
-		this.id = id;
-	}
+	public static final String elemName = "score-part";
 
-	
-	@MaybeNull public String getID()
-	{
-		return id;
-	}
-
-	
-	@MaybeNull public MxlIdentification getIdentification()
-	{
-		return identification;
-	}
-
-	
-	@MaybeNull public String getName()
-	{
-		return partName;
-	}
-
-	
-	@MaybeNull public String getAbbreviation()
-	{
-		return partAbbreviation;
-	}
-
-	
-	@MaybeEmpty public PVector<MxlScoreInstrument> getScoreInstruments()
-	{
-		return scoreInstruments;
-	}
+	@MaybeNull private MxlIdentification identification;
+	@NonNull private String partName;
+	@MaybeNull private String partAbbreviation;
+	@MaybeEmpty private List<MxlScoreInstrument> scoreInstruments;
+	@MaybeEmpty private List<MxlMidiInstrument> midiInstruments;
+	@NonNull private String id;
 
 
-	@MaybeEmpty public PVector<MxlMidiInstrument> getMidiInstruments()
-	{
-		return midiInstruments;
-	}
-
-
-	@Override public PartListContentType getPartListContentType()
-	{
+	@Override public PartListContentType getPartListContentType() {
 		return PartListContentType.ScorePart;
 	}
-	
-	
-	@NeverNull public static MxlScorePart read(Element e)
-	{
+
+	@NonNull public static MxlScorePart read(XmlReader reader) {
+		//attributes
+		String id = reader.getAttributeNotNull("id");
+		//elements
 		MxlIdentification identification = null;
 		String partName = null;
 		String partAbbreviation = null;
-		PVector<MxlScoreInstrument> scoreInstruments = pvec();
-		PVector<MxlMidiInstrument> midiInstruments = pvec();
-		for (Element c : elements(e))
-		{
-			String n = c.getNodeName();
-			switch (n.charAt(0))
-			{
+		List<MxlScoreInstrument> scoreInstruments = alist();
+		List<MxlMidiInstrument> midiInstruments = alist();
+		while (reader.openNextChildElement()) {
+			String n = reader.getElementName();
+			switch (n.charAt(0)) { //switch for performance
 				case 'i':
 					if (n.equals(MxlIdentification.elemName))
-						identification = MxlIdentification.read(c);
+						identification = MxlIdentification.read(reader);
 					break;
 				case 'm':
-					if (n.equals(MxlMidiInstrument.ELEM_NAME))
-						midiInstruments = midiInstruments.plus(MxlMidiInstrument.read(c));
+					if (n.equals(MxlMidiInstrument.elemName))
+						midiInstruments.add(MxlMidiInstrument.read(reader));
 					break;
 				case 'p':
 					if (n.equals("part-abbreviation"))
-						partAbbreviation = getTextContent(c);
+						partAbbreviation = reader.getTextNotNull();
 					else if (n.equals("part-name"))
-						partName = getTextContent(c);
+						partName = reader.getTextNotNull();
 					break;
 				case 's':
 					if (n.equals(MxlScoreInstrument.ELEM_NAME))
 						scoreInstruments = scoreInstruments.plus(MxlScoreInstrument.read(c));
 					break;
 			}
+			reader.closeElement();
 		}
 		return new MxlScorePart(identification, partName, partAbbreviation, scoreInstruments,
 			midiInstruments, throwNull(attribute(e, "id"), e));
 	}
 
-
-	@Override public void write(Element parent)
-	{
-		Element e = addElement(ELEM_NAME, parent);
+	@Override public void write(Element parent) {
+		Element e = addElement(elemName, parent);
 		if (identification != null)
 			identification.write(e);
 		addElement("part-name", partName, e);

@@ -42,10 +42,8 @@ public final class MxlWork {
 
 	public void write(XmlWriter writer) {
 		writer.writeElementStart(elemName);
-		if (workNumber != null)
-			writer.writeElementText("work-number", workNumber);
-		if (workTitle != null)
-			writer.writeElementText("work-title", workTitle);
+		writer.writeElementText("work-number", workNumber);
+		writer.writeElementText("work-title", workTitle);
 		writer.writeElementEnd();
 	}
 

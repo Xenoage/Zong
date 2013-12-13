@@ -133,8 +133,7 @@ public final class MxlNote
 			instrument.write(writer);
 		if (editorialVoice != null)
 			editorialVoice.write(writer);
-		if (noteType != null)
-			writer.writeElementText("type", noteType.write());
+		writer.writeElementText("type", noteType.write());
 		for (int i = 0; i < dots; i++)
 			writer.writeElementEmpty("dot");
 		if (stem != null)

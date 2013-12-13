@@ -1,49 +1,49 @@
 package com.xenoage.zong.musicxml.types;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.attributes.MxlFont;
+
 
 /**
  * MusicXML lyric-font.
  * 
  * @author Andreas Wenger
  */
-//GOON
+@AllArgsConstructor @Getter @Setter
 public final class MxlLyricFont {
 
-	public static final String ELEM_NAME = "lyric-font";
+	public static final String elemName = "lyric-font";
 
-	@MaybeNull private final String number;
-	@MaybeNull private final String name;
-	@NeverNull private final MxlFont font;
+	@MaybeNull private String number;
+	@MaybeNull private String name;
+	@MaybeNull private MxlFont font;
 
 
-	public MxlLyricFont(String number, String name, MxlFont font) {
-		this.number = number;
-		this.name = name;
-		this.font = font;
+	@MaybeNull public static MxlLyricFont read(XmlReader reader) {
+		String number = reader.getAttribute("number");
+		String name = reader.getAttribute("name");
+		MxlFont font = MxlFont.read(reader);
+		if (number != null || name != null || font != null)
+			return new MxlLyricFont(number, name, font);
+		else
+			return null;
 	}
 
-	@MaybeNull public String getNumber() {
-		return number;
-	}
-
-	@MaybeNull public String getName() {
-		return name;
-	}
-
-	@NeverNull public MxlFont getFont() {
-		return font;
-	}
-
-	@NeverNull public static MxlLyricFont read(Element e) {
-		return new MxlLyricFont(attribute(e, "number"), attribute(e, "name"), MxlFont.read(e));
-	}
-
-	public void write(Element parent) {
-		Element e = addElement(ELEM_NAME, parent);
-		addAttribute(e, "number", number);
-		addAttribute(e, "name", name);
-		font.write(e);
+	public void write(XmlWriter writer) {
+		writer.writeElementStart(elemName);
+		if (number != null)
+			writer.writeAttribute("number", number);
+		if (name != null)
+			writer.writeAttribute("name", name);
+		if (font != null)
+			font.write(writer);
+		writer.writeElementEnd();
 	}
 
 }

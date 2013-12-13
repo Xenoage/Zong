@@ -1,5 +1,7 @@
 package com.xenoage.zong.musicxml.types.groups;
 
+import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,8 +27,8 @@ public final class MxlScoreHeader {
 	@MaybeNull private String movementTitle;
 	@MaybeNull private MxlIdentification identification;
 	@MaybeNull private MxlDefaults defaults;
-	@MaybeEmpty private PVector<MxlCredit> credits;
-	@NeverNull private MxlPartList partList;
+	@MaybeNull private List<MxlCredit> credits;
+	@MaybeNull private MxlPartList partList;
 
 
 	public MxlScoreHeader(MxlWork work, String movementNumber, String movementTitle,
@@ -81,7 +83,7 @@ public final class MxlScoreHeader {
 			String n = c.getNodeName();
 			switch (n.charAt(0)) {
 				case 'c':
-					if (n.equals(MxlCredit.ELEM_NAME))
+					if (n.equals(MxlCredit.elemName))
 						credits = credits.plus(MxlCredit.read(c));
 					break;
 				case 'd':
@@ -99,7 +101,7 @@ public final class MxlScoreHeader {
 						movementTitle = getTextContent(c);
 					break;
 				case 'p':
-					if (n.equals(MxlPartList.ELEM_NAME))
+					if (n.equals(MxlPartList.elemName))
 						partList = MxlPartList.read(c);
 					break;
 				case 'w':

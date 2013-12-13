@@ -18,7 +18,7 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
  * 
  * @author Andreas Wenger
  */
-@IncompleteMusicXML(missing="solo,ensemble")
+@IncompleteMusicXML(missing="solo,ensemble") //GOON
 public final class MxlScoreInstrument
 {
 	

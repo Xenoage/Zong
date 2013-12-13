@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.attributes.MxlFont;
 import com.xenoage.zong.musicxml.types.groups.MxlLayout;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
@@ -38,22 +39,31 @@ public final class MxlDefaults {
 				scaling = MxlScaling.read(reader);
 			else if (n.equals("word-font"))
 				wordFont = MxlFont.read(reader);
-			else if (n.equals(MxlLyricFont.ELEM_NAME) && lyricFont == null) //read only first
-				lyricFont = MxlLyricFont.read(c);
+			else if (n.equals(MxlLyricFont.elemName) && lyricFont == null) //read only first
+				lyricFont = MxlLyricFont.read(reader);
+			else
+				layout.readElement(reader);
 			reader.closeElement();
 		}
-		return new MxlDefaults(scaling, MxlLayout.read(e), wordFont, lyricFont);
+		if (false == layout.isUsed())
+			layout = null;
+		if (scaling != null || layout != null || wordFont != null || lyricFont != null)
+			return new MxlDefaults(scaling, layout, wordFont, lyricFont);
+		else
+			return null;
 	}
 
-	public void write(Element parent) {
-		Element e = addElement(elemName, parent);
+	public void write(XmlWriter writer) {
+		writer.writeElementStart(elemName);
 		if (scaling != null)
-			scaling.write(e);
-		layout.write(e);
+			scaling.write(writer);
+		if (layout != null)
+			layout.write(writer);
 		if (wordFont != null)
-			wordFont.write(e);
+			wordFont.write(writer);
 		if (lyricFont != null)
-			lyricFont.write(e);
+			lyricFont.write(writer);
+		writer.writeElementEnd();
 	}
 
 }
