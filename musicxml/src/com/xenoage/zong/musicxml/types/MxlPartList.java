@@ -10,8 +10,8 @@ import lombok.Setter;
 
 import com.xenoage.utils.annotations.NonEmpty;
 import com.xenoage.utils.annotations.NonNull;
-import com.xenoage.utils.collections.CollectionUtils;
 import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.choice.MxlPartListContent;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 
@@ -38,20 +38,23 @@ public final class MxlPartList {
 				content.add(MxlPartGroup.read(reader));
 			}
 			else if (n.equals(MxlScorePart.elemName)) {
-				content = content.plus(MxlScorePart.read(c));
+				content.add(MxlScorePart.read(reader));
 				scorePartFound = true;
 			}
 			reader.closeElement();
 		}
-		if (!scorePartFound)
-			throw invalid(e);
+		if (false == scorePartFound)
+			throw reader.dataException("no " + MxlScorePart.elemName + " found");
+		if (content.size() == 0)
+			throw reader.dataException("no content");
 		return new MxlPartList(content);
 	}
 
-	public void write(Element parent) {
-		Element e = addElement(elemName, parent);
+	public void write(XmlWriter writer) {
+		writer.writeElementStart(elemName);
 		for (MxlPartListContent item : content)
-			item.write(e);
+			item.write(writer);
+		writer.writeElementEnd();
 	}
 
 }

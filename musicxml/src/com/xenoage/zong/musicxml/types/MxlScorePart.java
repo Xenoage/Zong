@@ -11,8 +11,8 @@ import lombok.Setter;
 import com.xenoage.utils.annotations.MaybeEmpty;
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.NonNull;
-import com.xenoage.utils.collections.CollectionUtils;
 import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.choice.MxlPartListContent;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 
@@ -68,27 +68,30 @@ public class MxlScorePart
 						partName = reader.getTextNotNull();
 					break;
 				case 's':
-					if (n.equals(MxlScoreInstrument.ELEM_NAME))
-						scoreInstruments = scoreInstruments.plus(MxlScoreInstrument.read(c));
+					if (n.equals(MxlScoreInstrument.elemName))
+						scoreInstruments.add(MxlScoreInstrument.read(reader));
 					break;
 			}
+			if (partName == null)
+				throw reader.dataException("part-name unknown");
 			reader.closeElement();
 		}
 		return new MxlScorePart(identification, partName, partAbbreviation, scoreInstruments,
-			midiInstruments, throwNull(attribute(e, "id"), e));
+			midiInstruments, id);
 	}
 
-	@Override public void write(Element parent) {
-		Element e = addElement(elemName, parent);
+	@Override public void write(XmlWriter writer) {
+		writer.writeElementStart(elemName);
+		writer.writeAttribute("id", id);
 		if (identification != null)
-			identification.write(e);
-		addElement("part-name", partName, e);
-		addElement("part-abbreviation", partAbbreviation, e);
+			identification.write(writer);
+		writer.writeElementText("part-name", partName);
+		writer.writeElementText("part-abbreviation", partAbbreviation);
 		for (MxlScoreInstrument scoreInstrument : scoreInstruments)
-			scoreInstrument.write(e);
+			scoreInstrument.write(writer);
 		for (MxlMidiInstrument midiInstrument : midiInstruments)
-			midiInstrument.write(e);
-		addAttribute(e, "id", id);
+			midiInstrument.write(writer);
+		writer.writeElementEnd();
 	}
 
 }

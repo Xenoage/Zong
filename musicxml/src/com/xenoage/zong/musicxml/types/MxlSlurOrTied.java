@@ -60,7 +60,7 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 		else
 			throw reader.dataException("slur or tied expected");
 		//type
-		MxlStartStopContinue type = MxlStartStopContinue.read(reader.getAttribute("type"), reader);
+		MxlStartStopContinue type = MxlStartStopContinue.read(reader.getAttribute("type"));
 		if (type == MxlStartStopContinue.Continue && elementType == MxlElementType.Tied)
 			throw reader.dataException("tied can not be continued");
 		//other members

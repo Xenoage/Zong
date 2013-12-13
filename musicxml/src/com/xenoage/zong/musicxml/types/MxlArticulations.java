@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import com.xenoage.utils.annotations.MaybeEmpty;
-import com.xenoage.utils.annotations.NonEmpty;
+import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.choice.MxlArticulationsContent;
@@ -36,9 +36,9 @@ public final class MxlArticulations
 		return MxlNotationsContentType.Articulations;
 	}
 
-	@NonEmpty public static MxlArticulations read(XmlReader reader) {
+	@MaybeNull public static MxlArticulations read(XmlReader reader) {
 		List<MxlArticulationsContent> content = alist();
-		while (reader.moveToNextElementStart()) {
+		while (reader.openNextChildElement()) {
 			String n = reader.getElementName();
 			if (n.equals(MxlAccent.elemName))
 				content.add(MxlAccent.read(reader));
@@ -50,8 +50,10 @@ public final class MxlArticulations
 				content.add(MxlStaccatissimo.read(reader));
 			else if (n.equals(MxlTenuto.elemName))
 				content.add(MxlTenuto.read(reader));
-			reader.moveToNextElementEnd();
+			reader.closeElement();
 		}
+		if (content.size() == 0)
+			return null;
 		return new MxlArticulations(content);
 	}
 

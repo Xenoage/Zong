@@ -1,76 +1,56 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.xml.XmlDataException.throwNull;
-import static com.xenoage.utils.xml.XMLReader.attribute;
-import static com.xenoage.utils.xml.XMLReader.elementText;
-import static com.xenoage.utils.xml.XMLWriter.addAttribute;
-import static com.xenoage.utils.xml.XMLWriter.addElement;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.w3c.dom.Element;
-
-import com.xenoage.utils.base.annotations.MaybeNull;
-import com.xenoage.utils.base.annotations.NeverNull;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
-
 
 /**
  * MusicXML score-instrument.
  * 
  * @author Andreas Wenger
  */
-@IncompleteMusicXML(missing="solo,ensemble") //GOON
-public final class MxlScoreInstrument
-{
-	
-	public static final String ELEM_NAME = "score-instrument";
-	
-	@NeverNull private final String instrumentName;
-	@MaybeNull private final String instrumentAbbreviation;
-	@NeverNull private final String id;
-	
-	
-	public MxlScoreInstrument(String instrumentName, String instrumentAbbreviation, String id)
-	{
-		this.instrumentName = instrumentName;
-		this.instrumentAbbreviation = instrumentAbbreviation;
-		this.id = id;
+@IncompleteMusicXML(missing = "solo,ensemble")
+@AllArgsConstructor @Getter @Setter
+public final class MxlScoreInstrument {
+
+	public static final String elemName = "score-instrument";
+
+	@NonNull private String instrumentName;
+	@MaybeNull private String instrumentAbbreviation;
+	@NonNull private String id;
+
+
+	@NonNull public static MxlScoreInstrument read(XmlReader reader) {
+		//attributes
+		String id = reader.getAttributeNotNull("id");
+		//elements
+		String instrumentName = null;
+		String instrumentAbbreviation = null;
+		while (reader.openNextChildElement()) {
+			String n = reader.getElementName();
+			if (n.equals("instrument-name"))
+				instrumentName = reader.getTextNotNull();
+			else if (n.equals("instrument-abbreviation"))
+				instrumentAbbreviation = reader.getTextNotNull();
+			reader.closeElement();
+		}
+		if (instrumentName == null)
+			throw reader.dataException("instrument-name unknown");
+		return new MxlScoreInstrument(instrumentName, instrumentAbbreviation, id);
 	}
 
-	
-	@NeverNull public String getInstrumentName()
-	{
-		return instrumentName;
+	public void write(XmlWriter writer) {
+		writer.writeElementStart(elemName);
+		writer.writeAttribute("id", id);
+		writer.writeElementText("instrument-name", instrumentName);
+		writer.writeElementText("instrument-abbreviation", instrumentAbbreviation);
+		writer.writeElementEnd();
 	}
-
-	
-	@MaybeNull public String getInstrumentAbbreviation()
-	{
-		return instrumentAbbreviation;
-	}
-
-	
-	@NeverNull public String getID()
-	{
-		return id;
-	}
-	
-	
-	@NeverNull public static MxlScoreInstrument read(Element e)
-	{
-		return new MxlScoreInstrument(
-			throwNull(elementText(e, "instrument-name"), e),
-			elementText(e, "instrument-abbreviation"),
-			throwNull(attribute(e, "id"), e));
-	}
-	
-	
-	public void write(Element parent)
-	{
-		Element e = addElement(ELEM_NAME, parent);
-		addElement("instrument-name", instrumentName, e);
-		addElement("instrument-abbreviation", instrumentAbbreviation, e);
-		addAttribute(e, "id", id);
-	}
-	
 
 }

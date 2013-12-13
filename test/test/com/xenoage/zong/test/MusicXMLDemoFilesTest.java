@@ -1,4 +1,4 @@
-package com.xenoage.zong.musicxml;
+package com.xenoage.zong.test;
 
 import static com.xenoage.utils.xml.XMLReader.readFile;
 import static com.xenoage.zong.musicxml.util.MusicXMLFilenameFilter.musicXMLFilenameFilter;
@@ -11,6 +11,7 @@ import org.w3c.dom.Document;
 
 import com.xenoage.utils.io.FileUtils;
 import com.xenoage.utils.xml.XmlDataException;
+import com.xenoage.zong.musicxml.MusicXMLDocument;
 
 
 /**
@@ -18,7 +19,7 @@ import com.xenoage.utils.xml.XmlDataException;
  * 
  * @author Andreas Wenger
  */
-public class DemoFilesTest
+public class MusicXMLDemoFilesTest
 {
 	
 	private String dirs[] = {

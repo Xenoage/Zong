@@ -1,11 +1,15 @@
 package com.xenoage.zong.musicxml.types.groups;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.MxlCredit;
 import com.xenoage.zong.musicxml.types.MxlDefaults;
 import com.xenoage.zong.musicxml.types.MxlIdentification;
@@ -28,104 +32,47 @@ public final class MxlScoreHeader {
 	@MaybeNull private MxlIdentification identification;
 	@MaybeNull private MxlDefaults defaults;
 	@MaybeNull private List<MxlCredit> credits;
-	@MaybeNull private MxlPartList partList;
+	@NonNull private MxlPartList partList;
 
 
-	public MxlScoreHeader(MxlWork work, String movementNumber, String movementTitle,
-		MxlIdentification identification, MxlDefaults defaults, PVector<MxlCredit> credits,
-		MxlPartList partList) {
-		this.work = work;
-		this.movementNumber = movementNumber;
-		this.movementTitle = movementTitle;
-		this.identification = identification;
-		this.defaults = defaults;
-		this.credits = credits;
-		this.partList = partList;
-	}
-
-	@MaybeNull public MxlWork getWork() {
-		return work;
-	}
-
-	@MaybeNull public String getMovementNumber() {
-		return movementNumber;
-	}
-
-	@MaybeNull public String getMovementTitle() {
-		return movementTitle;
-	}
-
-	@MaybeNull public MxlIdentification getIdentification() {
-		return identification;
-	}
-
-	@MaybeNull public MxlDefaults getDefaults() {
-		return defaults;
-	}
-
-	@MaybeEmpty public PVector<MxlCredit> getCredits() {
-		return credits;
-	}
-
-	@NeverNull public MxlPartList getPartList() {
-		return partList;
-	}
-
-	@NeverNull public static MxlScoreHeader read(Element e) {
-		MxlWork work = null;
-		String movementNumber = null;
-		String movementTitle = null;
-		MxlIdentification identification = null;
-		MxlDefaults defaults = null;
-		PVector<MxlCredit> credits = PVector.pvec();
-		MxlPartList partList = null;
-		for (Element c : elements(e)) {
-			String n = c.getNodeName();
-			switch (n.charAt(0)) {
-				case 'c':
-					if (n.equals(MxlCredit.elemName))
-						credits = credits.plus(MxlCredit.read(c));
-					break;
-				case 'd':
-					if (n.equals(MxlDefaults.elemName))
-						defaults = MxlDefaults.read(c);
-					break;
-				case 'i':
-					if (n.equals(MxlIdentification.elemName))
-						identification = MxlIdentification.read(c);
-					break;
-				case 'm':
-					if (n.equals("movement-number"))
-						movementNumber = getTextContent(c);
-					else if (n.equals("movement-title"))
-						movementTitle = getTextContent(c);
-					break;
-				case 'p':
-					if (n.equals(MxlPartList.elemName))
-						partList = MxlPartList.read(c);
-					break;
-				case 'w':
-					if (n.equals(MxlWork.elemName))
-						work = MxlWork.read(c);
-					break;
-			}
+	public void readElement(XmlReader reader) {
+		String n = reader.getElementName();
+		if (n.equals(MxlCredit.elemName)) {
+			if (credits == null)
+				credits = new ArrayList<MxlCredit>();
+			credits.add(MxlCredit.read(reader));
 		}
-		return new MxlScoreHeader(work, movementNumber, movementTitle, identification, defaults,
-			credits, throwNull(partList, e));
+		else if (n.equals(MxlDefaults.elemName))
+			defaults = MxlDefaults.read(reader);
+		else if (n.equals(MxlIdentification.elemName))
+			identification = MxlIdentification.read(reader);
+		else if (n.equals("movement-number"))
+			movementNumber = reader.getTextNotNull();
+		else if (n.equals("movement-title"))
+			movementTitle = reader.getTextNotNull();
+		else if (n.equals(MxlPartList.elemName))
+			partList = MxlPartList.read(reader);
+		else if (n.equals(MxlWork.elemName))
+			work = MxlWork.read(reader);
+	}
+	
+	public void check(XmlReader reader) {
+		if (partList == null)
+			throw reader.dataException(MxlPartList.elemName + " missing");
 	}
 
-	public void write(Element e) {
+	public void write(XmlWriter writer) {
 		if (work != null)
-			work.write(e);
-		addElement("movement-number", movementNumber, e);
-		addElement("movement-title", movementTitle, e);
+			work.write(writer);
+		writer.writeElementText("movement-number", movementNumber);
+		writer.writeElementText("movement-title", movementTitle);
 		if (identification != null)
-			identification.write(e);
+			identification.write(writer);
 		if (defaults != null)
-			defaults.write(e);
+			defaults.write(writer);
 		for (MxlCredit credit : credits)
-			credit.write(e);
-		partList.write(e);
+			credit.write(writer);
+		partList.write(writer);
 	}
 
 }
