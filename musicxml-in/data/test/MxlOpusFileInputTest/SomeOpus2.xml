@@ -1,0 +1,8 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE opus PUBLIC
+  "-//Recordare//DTD MusicXML 2.0 Opus//EN"
+  "http://www.musicxml.org/dtds/opus.dtd">
+<opus version="1.0">
+  <title>My second Opus</title>
+	<score xlink:href="SchbAvMaSample.xml"/>
+</opus>

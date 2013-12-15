@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. -->
+<project basedir="." default="build" name="musicxml-in">
+    <property environment="env"/>
+    <property name="util.location" value="../util"/>
+    <property name="core.location" value="../core"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.6"/>
+    <property name="source" value="1.6"/>
+    <path id="JUnit.userclasspath">
+        <pathelement location="../../../../../../../lib/dev/junit/junit-4.7.jar"/>
+    </path>
+    <path id="util.classpath">
+        <pathelement location="${util.location}/bin"/>
+        <path refid="JUnit.userclasspath"/>
+    </path>
+    <path id="core.classpath">
+        <pathelement location="${core.location}/bin"/>
+        <path refid="util.classpath"/>
+        <path refid="JUnit.userclasspath"/>
+    </path>
+    <path id="proxymusic.userclasspath">
+        <pathelement location="../../../../../../../lib/proxymusic-2.0.jar"/>
+    </path>
+    <path id="musicxml-in.classpath">
+        <pathelement location="bin"/>
+        <path refid="core.classpath"/>
+        <path refid="util.classpath"/>
+        <path refid="proxymusic.userclasspath"/>
+        <path refid="JUnit.userclasspath"/>
+    </path>
+    <target name="init">
+        <mkdir dir="bin"/>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src" excludes="**/*.launch, **/*.java"/>
+        </copy>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="test" excludes="**/*.launch, **/*.java"/>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="bin"/>
+    </target>
+    <target depends="clean" name="cleanall">
+        <ant antfile="${util.location}/build.xml" inheritAll="false" target="clean"/>
+        <ant antfile="${core.location}/build.xml" inheritAll="false" target="clean"/>
+    </target>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects">
+        <ant antfile="${util.location}/build.xml" inheritAll="false" target="build-project"/>
+        <ant antfile="${core.location}/build.xml" inheritAll="false" target="build-project"/>
+    </target>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
+            <src path="src"/>
+            <classpath refid="musicxml-in.classpath"/>
+        </javac>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
+            <src path="test"/>
+            <classpath refid="musicxml-in.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+</project>

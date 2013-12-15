@@ -2,6 +2,7 @@ package com.xenoage.zong.musicxml.types.enums;
 
 import static com.xenoage.utils.math.Fraction.fr;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.math.Fraction;
@@ -11,7 +12,7 @@ import com.xenoage.utils.math.Fraction;
  * 
  * @author Andreas Wenger
  */
-@AllArgsConstructor
+@AllArgsConstructor @Getter
 public enum MxlNoteTypeValue {
 
 	_256th(fr(1, 256)),
@@ -26,7 +27,7 @@ public enum MxlNoteTypeValue {
 	Breve(fr(1, 1)),
 	Long(fr(1, 1));
 
-	public final Fraction duration;
+	private final Fraction duration;
 
 
 	@NonNull public static MxlNoteTypeValue read(String s) {
