@@ -26,7 +26,9 @@ public final class MxlBarStyleColor {
 
 
 	@NonNull public static MxlBarStyleColor read(XmlReader reader) {
-		return new MxlBarStyleColor(MxlBarStyle.read(reader), MxlColor.read(reader));
+		MxlColor color = MxlColor.read(reader);
+		MxlBarStyle barStyle = MxlBarStyle.read(reader);
+		return new MxlBarStyleColor(barStyle, color);
 	}
 
 	public void write(XmlWriter writer) {

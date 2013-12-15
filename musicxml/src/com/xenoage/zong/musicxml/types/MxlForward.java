@@ -41,7 +41,7 @@ public final class MxlForward
 			if (n.equals("duration"))
 				duration = Parser.parseInt(reader.getText());
 			else
-				editorialVoice.readElement(n, reader.getText());
+				editorialVoice.readElement(reader);
 			reader.closeElement();
 		}
 		if (duration == null)

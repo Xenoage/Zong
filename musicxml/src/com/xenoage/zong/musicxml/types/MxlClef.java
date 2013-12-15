@@ -50,11 +50,11 @@ public final class MxlClef {
 
 	public void write(XmlWriter writer) {
 		writer.writeElementStart(elemName);
+		if (number != defaultNumber)
+			writer.writeAttribute("number", number);
 		sign.write(writer);
 		if (clefOctaveChange != defaultClefOctaveChange)
 			writer.writeElementText("clef-octave-change", clefOctaveChange);
-		if (number != defaultNumber)
-			writer.writeAttribute("number", number);
 		writer.writeElementEnd();
 	}
 

@@ -58,10 +58,10 @@ public final class MxlPageMargins {
 
 	public void write(XmlWriter writer) {
 		writer.writeElementStart(elemName);
-		if (value != null)
-			value.write(writer);
 		if (type != null)
 			type.write(writer);
+		if (value != null)
+			value.write(writer);
 		writer.writeElementEnd();
 	}
 

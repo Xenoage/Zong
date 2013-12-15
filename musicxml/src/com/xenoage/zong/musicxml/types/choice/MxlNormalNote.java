@@ -31,12 +31,15 @@ public final class MxlNormalNote
 		return new MxlNormalNote();
 	}
 
-	@Override public void readElement(XmlReader reader) {
+	@Override public boolean readElement(XmlReader reader) {
 		String n = reader.getElementName();
-		if (n.equals("duration"))
+		if (n.equals("duration")) {
 			duration = reader.getTextIntNotNull();
-		else
-			fullNote.readElement(reader);
+			return true;
+		}
+		else {
+			return fullNote.readElement(reader);
+		}
 	}
 
 	@Override public void check(XmlReader reader) {

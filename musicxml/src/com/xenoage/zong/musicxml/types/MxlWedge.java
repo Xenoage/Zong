@@ -53,6 +53,7 @@ public final class MxlWedge
 			position.write(writer);
 		if (color != null)
 			color.write(writer);
+		writer.writeElementEnd();
 	}
 
 }

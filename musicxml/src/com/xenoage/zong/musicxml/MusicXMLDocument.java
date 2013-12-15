@@ -24,6 +24,7 @@ public final class MusicXMLDocument {
 
 	public static MusicXMLDocument read(XmlReader reader)
 		throws XmlDataException {
+		reader.openNextChildElement();
 		String n = reader.getElementName();
 		if (n.equals(MxlScorePartwise.elemName))
 			return new MusicXMLDocument(MxlScorePartwise.read(reader));
@@ -35,8 +36,8 @@ public final class MusicXMLDocument {
 	
 	public void write(XmlWriter writer) {
 		writer.writeStartDocument();
-		writer.writeDTD("!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 2.0 Partwise//EN\"" + 
-    " \"http://www.musicxml.org/dtds/partwise.dtd\"");
+		writer.writeDTD("<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 2.0 Partwise//EN\"" + 
+    " \"http://www.musicxml.org/dtds/partwise.dtd\">");
 		score.write(writer);
 	}
 

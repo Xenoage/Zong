@@ -53,6 +53,7 @@ public final class MxlPart {
 	}
 
 	private void writeSeparatorComment(XmlWriter writer) {
+		writer.writeLineBreak();
 		writer.writeComment("=======================================================");
 	}
 

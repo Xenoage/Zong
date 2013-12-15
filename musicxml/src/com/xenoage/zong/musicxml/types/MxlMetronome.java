@@ -73,12 +73,12 @@ public final class MxlMetronome
 
 	@Override public void write(XmlWriter writer) {
 		writer.writeElementStart(elemName);
+		if (printStyle != null)
+			printStyle.write(writer);
 		writer.writeElementText("beat-unit", beatUnit.write());
 		for (int i = 0; i < dotsCount; i++)
 			writer.writeElementEmpty("beat-unit-dot");
 		writer.writeElementText("per-minute", perMinute);
-		if (printStyle != null)
-			printStyle.write(writer);
 		writer.writeElementEnd();
 	}
 

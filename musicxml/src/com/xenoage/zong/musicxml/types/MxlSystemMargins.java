@@ -30,6 +30,7 @@ public final class MxlSystemMargins {
 				leftMargin = parseFloat(reader.getText());
 			else if (n.equals("right-margin"))
 				rightMargin = parseFloat(reader.getText());
+			reader.closeElement();
 		}
 		return new MxlSystemMargins(leftMargin, rightMargin);
 	}

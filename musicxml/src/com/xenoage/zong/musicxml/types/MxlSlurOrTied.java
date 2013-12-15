@@ -21,7 +21,8 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
  * @author Andreas Wenger
  */
 @IncompleteMusicXML(missing = "line-type,orientation,color")
-@AllArgsConstructor @Getter @Setter public final class MxlSlurOrTied
+@AllArgsConstructor @Getter @Setter
+public final class MxlSlurOrTied
 	implements MxlNotationsContent {
 
 	public static final String elemNameSlur = "slur";
@@ -37,7 +38,7 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 	@NonNull private MxlElementType elementType;
 	@NonNull private MxlStartStopContinue type;
 	/** May be null for tied elements, but never null for slurs. */
-	@NonNull private Integer number;
+	@MaybeNull private Integer number;
 	@MaybeNull private MxlPosition position;
 	@MaybeNull private MxlPlacement placement;
 	@MaybeNull private MxlBezier bezier;

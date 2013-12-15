@@ -44,24 +44,21 @@ public final class MxlSyllabicText
 	public static MxlSyllabicText read(XmlReader reader) {
 		MxlSyllabic syllabic = defaultSyllabic;
 		MxlTextElementData text = null;
-		if (reader.openNextChildElement()) {
-			//the first element can be "syllabic"
-			if (reader.getElementName().equals("syllabic")) {
-				String syllabicText = reader.getText();
-				syllabic = getEnumValue(syllabicText, MxlSyllabic.values());
-				if (syllabic == null)
-					throw reader.dataException("syllabic = " + syllabicText);
-				//open next element
-				reader.closeElement();
-				if (false == reader.openNextChildElement())
-					throw reader.dataException("missing text element after syllabic");
-			}
-			//next one must be "text"
-			if (false == reader.getElementName().equals("text"))
-				throw reader.dataException("text element must follow after syllabic");
-			text = MxlTextElementData.read(reader);
+		//the first element can be "syllabic"
+		if (reader.getElementName().equals("syllabic")) {
+			String syllabicText = reader.getText();
+			syllabic = getEnumValue(syllabicText, MxlSyllabic.values());
+			if (syllabic == null)
+				throw reader.dataException("syllabic = " + syllabicText);
+			//open next element
 			reader.closeElement();
+			if (false == reader.openNextChildElement())
+				throw reader.dataException("missing text element after syllabic");
 		}
+		//next one must be "text"
+		if (false == reader.getElementName().equals("text"))
+			throw reader.dataException("text element must follow after syllabic");
+		text = MxlTextElementData.read(reader);
 		if (text == null)
 			throw reader.dataException("missing text element");
 		return new MxlSyllabicText(syllabic, text);

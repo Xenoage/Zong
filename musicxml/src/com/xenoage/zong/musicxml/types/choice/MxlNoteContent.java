@@ -30,9 +30,10 @@ public interface MxlNoteContent {
 	@NonNull public MxlFullNote getFullNote();
 	
 	/**
-	 * Reads information from the given XML element, if relevant for this instance.
+	 * Reads information from the given XML element, and returns true if relevant for this instance.
+	 * Returns false if no information was read.
 	 */
-	public void readElement(XmlReader reader);
+	public boolean readElement(XmlReader reader);
 	
 	/**
 	 * Throws an {@link XmlDataException} if the data of the instance is not consistent.

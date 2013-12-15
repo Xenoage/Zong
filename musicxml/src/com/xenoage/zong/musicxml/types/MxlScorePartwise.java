@@ -46,6 +46,7 @@ public final class MxlScorePartwise {
 				parts.add(MxlPart.read(reader));
 			else
 				scoreHeader.readElement(reader);
+			reader.closeElement();
 		}
 		scoreHeader.check(reader);
 		if (parts.size() < 1)
@@ -66,6 +67,7 @@ public final class MxlScorePartwise {
 	}
 
 	private void writeSeparatorComment(XmlWriter writer) {
+		writer.writeLineBreak();
 		writer.writeComment("=======================================================");
 	}
 

@@ -52,10 +52,14 @@ public final class MxlIdentification {
 
 	public void write(XmlWriter writer) {
 		writer.writeElementStart(elemName);
-		for (MxlTypedText t : creators)
-			t.write("creator", writer);
-		for (MxlTypedText t : rights)
-			t.write("rights", writer);
+		if (creators != null) {
+			for (MxlTypedText t : creators)
+				t.write("creator", writer);
+		}
+		if (rights != null) {
+			for (MxlTypedText t : rights)
+				t.write("rights", writer);
+		}
 		writer.writeElementEnd();
 	}
 

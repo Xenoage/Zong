@@ -50,10 +50,10 @@ public final class MxlPrint
 
 	@Override public void write(XmlWriter writer) {
 		writer.writeElementStart(elemName);
-		if (layout != null)
-			layout.write(writer);
 		if (printAttributes != null)
 			printAttributes.write(writer);
+		if (layout != null)
+			layout.write(writer);
 		writer.writeElementEnd();
 	}
 

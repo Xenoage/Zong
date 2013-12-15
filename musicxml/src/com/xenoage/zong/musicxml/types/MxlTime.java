@@ -37,9 +37,12 @@ public final class MxlTime {
 			String n = reader.getElementName();
 			if (n.equals("beats"))
 				content = MxlNormalTime.read(reader);
-			else if (n.equals("senza-misura"))
+			else if (n.equals("senza-misura")) {
 				content = MxlSenzaMisura.read();
-			reader.closeElement();
+				reader.closeElement();
+			}
+			else
+				reader.closeElement();
 		}
 		if (content != null)
 			return new MxlTime(content, symbol);
@@ -49,9 +52,9 @@ public final class MxlTime {
 
 	public void write(XmlWriter writer) {
 		writer.writeElementStart(elemName);
-		content.write(writer);
 		if (symbol != null)
 			symbol.write(writer);
+		content.write(writer);
 		writer.writeElementEnd();
 	}
 

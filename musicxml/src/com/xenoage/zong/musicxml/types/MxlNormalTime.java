@@ -33,17 +33,18 @@ public final class MxlNormalTime
 
 	/**
 	 * Returns null, when the time signature is not supported (e.g. 3+2/4).
+	 * The "beats" element must already be open.
 	 */
 	@MaybeNull public static MxlNormalTime read(XmlReader reader) {
 		Integer beats = null, beatType = null;
-		while (reader.openNextChildElement()) {
+		do {
 			String n = reader.getElementName();
 			if (n.equals("beats"))
 				beats = parseIntegerNull(reader.getText());
 			else if (n.equals("beat-type"))
 				beatType = parseIntegerNull(reader.getText());
 			reader.closeElement();
-		}
+		} while (reader.openNextChildElement());
 		if (beats != null && beatType != null)
 			return new MxlNormalTime(beats, beatType);
 		else

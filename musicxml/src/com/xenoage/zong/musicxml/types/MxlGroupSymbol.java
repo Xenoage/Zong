@@ -36,11 +36,11 @@ public final class MxlGroupSymbol {
 
 	public void write(XmlWriter writer) {
 		writer.writeElementStart(elemName);
-		value.write(writer);
 		if (position != null)
 			position.write(writer);
 		if (color != null)
 			color.write(writer);
+		value.write(writer);
 		writer.writeElementEnd();
 	}
 

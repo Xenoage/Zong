@@ -70,8 +70,10 @@ public final class MxlScoreHeader {
 			identification.write(writer);
 		if (defaults != null)
 			defaults.write(writer);
-		for (MxlCredit credit : credits)
-			credit.write(writer);
+		if (credits != null) {
+			for (MxlCredit credit : credits)
+				credit.write(writer);
+		}
 		partList.write(writer);
 	}
 

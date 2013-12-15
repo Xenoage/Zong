@@ -4,19 +4,19 @@ import java.io.File;
 import java.io.FilenameFilter;
 
 /**
- * Filename filter for MusicXML files: .xml and .mxl
+ * Filename filter for plaintext MusicXML files: .xml
  * 
  * @author Andreas Wenger
  */
-public class MusicXMLFilenameFilter
+public class PlainMusicXMLFilenameFilter
 	implements FilenameFilter {
 
-	public static final MusicXMLFilenameFilter musicXMLFilenameFilter = new MusicXMLFilenameFilter();
+	public static final PlainMusicXMLFilenameFilter plainMusicXMLFilenameFilter = new PlainMusicXMLFilenameFilter();
 
 
 	@Override public boolean accept(File dir, String name) {
 		String nameLC = name.toLowerCase();
-		return nameLC.endsWith(".xml") || nameLC.endsWith(".mxl");
+		return nameLC.endsWith(".xml");
 	}
 
 }

@@ -43,6 +43,9 @@ public final class MxlDirection
 	 * Returns null, when no supported content was found.
 	 */
 	@MaybeNull public static MxlDirection read(XmlReader reader) {
+		//attributes
+		MxlPlacement placement = MxlPlacement.read(reader);
+		//elements
 		List<MxlDirectionType> directionTypes = alist();
 		Integer staff = null;
 		MxlSound sound = null;
@@ -59,8 +62,8 @@ public final class MxlDirection
 			else if (n.equals(MxlSound.elemName)) {
 				sound = MxlSound.read(reader);
 			}
+			reader.closeElement();
 		}
-		MxlPlacement placement = MxlPlacement.read(reader);
 		if (directionTypes.size() > 0) {
 			return new MxlDirection(directionTypes, staff, sound, placement);
 		}
@@ -71,13 +74,13 @@ public final class MxlDirection
 
 	@Override public void write(XmlWriter writer) {
 		writer.writeElementStart(elemName);
+		if (placement != null)
+			placement.write(writer);
 		for (MxlDirectionType directionType : directionTypes)
 			directionType.write(writer);
 		writer.writeElementText("staff", staff);
 		if (sound != null)
 			sound.write(writer);
-		if (placement != null)
-			placement.write(writer);
 		writer.writeElementEnd();
 	}
 

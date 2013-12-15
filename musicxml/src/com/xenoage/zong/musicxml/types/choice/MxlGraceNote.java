@@ -38,8 +38,8 @@ public final class MxlGraceNote
 		return ret;
 	}
 
-	@Override public void readElement(XmlReader reader) {
-		fullNote.readElement(reader);
+	@Override public boolean readElement(XmlReader reader) {
+		return fullNote.readElement(reader);
 	}
 	
 	@Override public void check(XmlReader reader) {

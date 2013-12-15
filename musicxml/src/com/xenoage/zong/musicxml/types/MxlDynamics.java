@@ -49,6 +49,9 @@ public final class MxlDynamics
 	 * the element is not supported.
 	 */
 	@MaybeNull public static MxlDynamics read(XmlReader reader) {
+		//attributes
+		MxlPrintStyle printStyle = MxlPrintStyle.read(reader);
+		MxlPlacement placement = MxlPlacement.read(reader);
 		//get first element
 		if (false == reader.openNextChildElement())
 			throw reader.dataException("no child element found");
@@ -56,7 +59,7 @@ public final class MxlDynamics
 		reader.closeElement();
 		DynamicsType element = getEnumValue(childText, DynamicsType.values());
 		if (element != null)
-			return new MxlDynamics(element, MxlPrintStyle.read(reader), MxlPlacement.read(reader));
+			return new MxlDynamics(element, printStyle, placement);
 		else
 			return null;
 	}

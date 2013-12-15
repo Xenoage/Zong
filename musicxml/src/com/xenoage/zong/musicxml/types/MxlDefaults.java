@@ -59,8 +59,11 @@ public final class MxlDefaults {
 			scaling.write(writer);
 		if (layout != null)
 			layout.write(writer);
-		if (wordFont != null)
+		if (wordFont != null) {
+			writer.writeElementStart("word-font");
 			wordFont.write(writer);
+			writer.writeElementEnd();
+		}
 		if (lyricFont != null)
 			lyricFont.write(writer);
 		writer.writeElementEnd();

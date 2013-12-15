@@ -73,53 +73,39 @@ public final class MxlNote
 					content = MxlNormalNote.read();
 			}
 			//read content of child elements
-			switch (n.charAt(0)) //switch for performance
-			{
-				case 's':
-					if (n.equals(MxlStem.elemName))
-						stem = MxlStem.read(reader);
-					else if (n.equals("staff"))
-						staff = reader.getTextIntNotNull();
-					break;
-				case 'b':
-					if (n.equals(MxlBeam.elemName)) {
-						if (beams == null)
-							beams = new ArrayList<MxlBeam>();
-						beams.add(MxlBeam.read(reader));
-					}
-					break;
-				case 'i':
-					if (n.equals(MxlInstrument.elemName))
-						instrument = MxlInstrument.read(reader);
-					break;
-				case 'n':
-					if (n.equals(MxlNotations.elemName)) {
-						if (notations == null)
-							notations = new ArrayList<MxlNotations>();
-						notations.add(MxlNotations.read(reader));
-					}
-					break;
-				case 'l':
-					if (n.equals(MxlLyric.elemName)) {
-						if (lyrics == null)
-							lyrics = new ArrayList<MxlLyric>();
-						lyrics.add(MxlLyric.read(reader));
-					}
-					break;
-				case 't':
-					if (n.equals("type"))
-						noteType = MxlNoteTypeValue.read(reader.getText());
-					break;
-				case 'd':
-					if (n.equals("dot"))
-						dots++;
-					break;
-				case 'v':
-					editorialVoice.readElement(n, reader.getText());
-					break;
+			if (n.equals(MxlStem.elemName))
+				stem = MxlStem.read(reader);
+			else if (n.equals("staff"))
+				staff = reader.getTextIntNotNull();
+			else if (n.equals(MxlBeam.elemName)) {
+				if (beams == null)
+					beams = new ArrayList<MxlBeam>();
+				beams.add(MxlBeam.read(reader));
+			}
+			else if (n.equals(MxlInstrument.elemName))
+				instrument = MxlInstrument.read(reader);
+			else if (n.equals(MxlNotations.elemName)) {
+				if (notations == null)
+					notations = new ArrayList<MxlNotations>();
+				notations.add(MxlNotations.read(reader));
+			}
+			else if (n.equals(MxlLyric.elemName)) {
+				if (lyrics == null)
+					lyrics = new ArrayList<MxlLyric>();
+				lyrics.add(MxlLyric.read(reader));
+			}
+			else if (n.equals("type"))
+				noteType = MxlNoteTypeValue.read(reader.getText());
+			else if (n.equals("dot"))
+				dots++;
+			else {
+				boolean read = content.readElement(reader);
+				if (!read)
+					editorialVoice.readElement(reader);
 			}
 			reader.closeElement();
 		}
+		content.check(reader);
 		if (false == editorialVoice.isUsed())
 			editorialVoice = null;
 		return new MxlNote(content, instrument, editorialVoice, noteType, dots, stem, staff, beams,
@@ -133,18 +119,25 @@ public final class MxlNote
 			instrument.write(writer);
 		if (editorialVoice != null)
 			editorialVoice.write(writer);
-		writer.writeElementText("type", noteType.write());
+		if (noteType != null)
+			writer.writeElementText("type", noteType.write());
 		for (int i = 0; i < dots; i++)
 			writer.writeElementEmpty("dot");
 		if (stem != null)
 			stem.write(writer);
 		writer.writeElementText("staff", staff);
-		for (MxlBeam beam : beams)
-			beam.write(writer);
-		for (MxlNotations n : notations)
-			n.write(writer);
-		for (MxlLyric lyric : lyrics)
-			lyric.write(writer);
+		if (beams != null) {
+			for (MxlBeam beam : beams)
+				beam.write(writer);
+		}
+		if (notations != null) {
+			for (MxlNotations n : notations)
+				n.write(writer);
+		}
+		if (lyrics != null) {
+			for (MxlLyric lyric : lyrics)
+				lyric.write(writer);
+		}
 		writer.writeElementEnd();
 	}
 

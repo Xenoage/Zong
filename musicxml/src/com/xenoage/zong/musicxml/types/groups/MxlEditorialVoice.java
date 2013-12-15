@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 
@@ -27,12 +28,11 @@ public final class MxlEditorialVoice {
 	}
 
 	/**
-	 * Reads information from the given element (name and value), if
-	 * relevant for this instance.
+	 * Reads information from the current element, if relevant for this instance.
 	 */
-	public void readElement(String name, String value) {
-		if (name.equals("voice"))
-			voice = value;
+	public void readElement(XmlReader reader) {
+		if (reader.getElementName().equals("voice"))
+			voice = reader.getText();
 	}
 
 	public void write(XmlWriter writer) {

@@ -50,8 +50,10 @@ public final class MxlLayout {
 			pageLayout.write(writer);
 		if (systemLayout != null)
 			systemLayout.write(writer);
-		for (MxlStaffLayout staffLayout : staffLayouts)
-			staffLayout.write(writer);
+		if (staffLayouts != null) {
+			for (MxlStaffLayout staffLayout : staffLayouts)
+				staffLayout.write(writer);
+		}
 	}
 
 }
