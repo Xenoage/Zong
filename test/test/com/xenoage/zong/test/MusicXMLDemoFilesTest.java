@@ -2,9 +2,10 @@ package com.xenoage.zong.test;
 
 import static com.xenoage.zong.musicxml.util.PlainMusicXMLFilenameFilter.plainMusicXMLFilenameFilter;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 
 import org.junit.Test;
 
@@ -26,9 +27,18 @@ public class MusicXMLDemoFilesTest {
 		"../shared/data/test/scores/musicxml20" };
 
 
-	@Test public void testLoading()
+	@Test public void testRead()
 		throws Exception {
-		long totalXMLLoadingTime = 0;
+		test(false);
+	}
+
+	@Test public void testReadWriteRead()
+		throws Exception {
+		test(true);
+	}
+
+	private void test(boolean reload)
+		throws Exception {
 		long totalMusicXMLReadingTime = 0;
 		long lastTime = 0;
 		for (String dir : dirs) {
@@ -36,18 +46,19 @@ public class MusicXMLDemoFilesTest {
 				System.out.println(file);
 				lastTime = System.currentTimeMillis();
 				XmlReader reader = new JseXmlReader(new FileInputStream(file));
-				totalXMLLoadingTime += (System.currentTimeMillis() - lastTime);
 				try {
 					lastTime = System.currentTimeMillis();
+
+					//load the document
 					MusicXMLDocument doc = MusicXMLDocument.read(reader);
 
-					//TEST
-					//MusicXMLDocument score = MusicXMLDocument.read(doc);
-					//Document d = score.getScore().write();
-					//XMLWriter.writeFile(d, new FileOutputStream("test-output.xml"));
-
-					//TEST
-					doc.write(new JseXmlWriter(new FileOutputStream("test.xml")));
+					if (reload) {
+						//write the document into memory
+						ByteArrayOutputStream bos = new ByteArrayOutputStream();
+						doc.write(new JseXmlWriter(bos));
+						//reload it from memory
+						MusicXMLDocument.read(new JseXmlReader(new ByteArrayInputStream(bos.toByteArray())));
+					}
 
 					totalMusicXMLReadingTime += (System.currentTimeMillis() - lastTime);
 				} catch (XmlException ex) {
@@ -57,8 +68,7 @@ public class MusicXMLDemoFilesTest {
 			}
 		}
 		//print time
-		System.out.println("Total XML loading time:      " + totalXMLLoadingTime);
-		System.out.println("Total MusicXML reading time: " + totalMusicXMLReadingTime);
+		System.out.println("Total time for read" + (reload ? "/write/read: " : ": ") + totalMusicXMLReadingTime + " ms");
 	}
 
 }
