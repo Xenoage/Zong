@@ -6,6 +6,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 
 import org.junit.Test;
 
@@ -56,8 +57,11 @@ public class MusicXMLDemoFilesTest {
 						//write the document into memory
 						ByteArrayOutputStream bos = new ByteArrayOutputStream();
 						doc.write(new JseXmlWriter(bos));
+						bos.close();
 						//reload it from memory
-						MusicXMLDocument.read(new JseXmlReader(new ByteArrayInputStream(bos.toByteArray())));
+						ByteArrayInputStream in = new ByteArrayInputStream(bos.toByteArray());
+						MusicXMLDocument.read(new JseXmlReader(in));
+						in.close();
 					}
 
 					totalMusicXMLReadingTime += (System.currentTimeMillis() - lastTime);

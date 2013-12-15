@@ -1,1 +1,1 @@
-include "core", "desktop", "layout", "test", "voc"
+include "core", "desktop", "layout", "musicxml", "test", "voc"
