@@ -22,9 +22,9 @@ public final class OpenElements {
 
 	private List<Wedge> openWedges;
 	private List<List<Chord>> openBeams;
-	private List<OpenCurvedLine> openSlurs;
-	private List<OpenCurvedLine> openTies;
-	private Map<Pitch, OpenCurvedLine> openUnnumberedTies;
+	private List<OpenSlur> openSlurs;
+	private List<OpenSlur> openTies;
+	private Map<Pitch, OpenSlur> openUnnumberedTies;
 
 
 	@SuppressWarnings("unchecked") public OpenElements() {

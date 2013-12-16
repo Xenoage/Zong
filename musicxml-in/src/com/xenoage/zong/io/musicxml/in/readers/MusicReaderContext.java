@@ -1,45 +1,47 @@
 package com.xenoage.zong.io.musicxml.in.readers;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.utils.kernel.Tuple2.t;
 import static com.xenoage.utils.math.Fraction._0;
-import static com.xenoage.zong.core.music.beam.Beam.beam;
 import static com.xenoage.zong.core.position.MP.atBeat;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import lombok.Getter;
 import lombok.Setter;
 
-import com.xenoage.utils.collections.CollectionUtils;
-import com.xenoage.utils.kernel.Range;
-import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.utils.math.VSide;
+import com.xenoage.zong.commands.core.music.ColumnElementWrite;
+import com.xenoage.zong.commands.core.music.MeasureElementWrite;
+import com.xenoage.zong.commands.core.music.VoiceElementWrite;
+import com.xenoage.zong.commands.core.music.beam.BeamAdd;
+import com.xenoage.zong.commands.core.music.slur.SlurAdd;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.instrument.Instrument;
 import com.xenoage.zong.core.music.ColumnElement;
 import com.xenoage.zong.core.music.InstrumentChange;
 import com.xenoage.zong.core.music.MeasureElement;
 import com.xenoage.zong.core.music.MusicContext;
-import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.core.music.Part;
 import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.music.StavesList;
 import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.core.music.WaypointPosition;
+import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.direction.Wedge;
 import com.xenoage.zong.core.music.group.StavesRange;
+import com.xenoage.zong.core.music.slur.Slur;
 import com.xenoage.zong.core.music.slur.SlurType;
 import com.xenoage.zong.core.music.slur.SlurWaypoint;
 import com.xenoage.zong.core.music.util.Interval;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.util.InconsistentScoreException;
 import com.xenoage.zong.io.musicxml.in.util.MusicReaderException;
-import com.xenoage.zong.io.musicxml.in.util.OpenCurvedLine;
 import com.xenoage.zong.io.musicxml.in.util.OpenElements;
+import com.xenoage.zong.io.musicxml.in.util.OpenSlur;
 import com.xenoage.zong.util.exceptions.MeasureFullException;
 
 /**
@@ -82,8 +84,8 @@ public final class MusicReaderContext {
 	/**
 	 * Moves the current beat within the current part and measure.
 	 */
-	public MusicReaderContext moveCurrentBeat(Fraction beat) {
-		Fraction newBeat = bmp.beat.add(beat);
+	public void moveCurrentBeat(Fraction beat) {
+		Fraction newBeat = this.mp.beat.add(beat);
 		//never step back behind 0
 		if (newBeat.getNumerator() < 0) {
 			if (settings.isIgnoringErrors())
@@ -222,7 +224,7 @@ public final class MusicReaderContext {
 	 * 
 	 * For tied elements without a number, use openUnnumberedTied instead.
 	 */
-	public void registerCurvedLine(SlurType type, WaypointPosition wpPos,
+	public void registerSlur(SlurType type, WaypointPosition wpPos,
 		int number, SlurWaypoint wp, VSide side) {
 		checkNumber1to6(number);
 		//ignore continue waypoints at the moment
@@ -230,96 +232,84 @@ public final class MusicReaderContext {
 			return;
 		boolean start = (wpPos == WaypointPosition.Start);
 		boolean stop = !start;
-		List<OpenCurvedLine> openCLs = (type == SlurType.Slur ? openElements.getOpenSlurs()
+		List<OpenSlur> openSlurs = (type == SlurType.Slur ? openElements.getOpenSlurs()
 			: openElements.getOpenTies());
 		//get open slur, or create it
-		OpenCurvedLine openCL = openCLs.get(number - 1);
-		if (openCL == null) {
-			openCL = new OpenCurvedLine();
-			openCL.type = type;
+		OpenSlur openSlur = openSlurs.get(number - 1);
+		if (openSlur == null) {
+			openSlur = new OpenSlur();
+			openSlur.type = type;
 		}
 		//this point must not already be set
-		if ((start && openCL.start != null) || (stop && openCL.stop != null)) {
-			if (!settings.ignoreErrors)
+		if ((start && openSlur.start != null) || (stop && openSlur.stop != null)) {
+			if (false == settings.isIgnoringErrors())
 				throw new MusicReaderException(wpPos + " waypoint already set for " + type + " " + number,
 					this);
 		}
-		OpenCurvedLine.Waypoint wp = new OpenCurvedLine.Waypoint();
-		wp.wp = wp;
-		wp.side = side;
+		OpenSlur.Waypoint openSlurWP = new OpenSlur.Waypoint();
+		openSlurWP.wp = wp;
+		openSlurWP.side = side;
 		if (start)
-			openCL.start = wp;
+			openSlur.start = openSlurWP;
 		else
-			openCL.stop = wp;
+			openSlur.stop = openSlurWP;
 		//if complete, write it now, otherwise remember it
-		MusicReaderContext ret = this;
-		if (openCL.start != null && openCL.stop != null) {
-			ret = ret.createCurvedLine(openCL);
-			openCLs = openCLs.with(number - 1, null);
+		if (openSlur.start != null && openSlur.stop != null) {
+			createSlur(openSlur);
+			openSlurs.set(number - 1, null);
 		}
 		else {
-			openCLs = openCLs.with(number - 1, openCL);
+			openSlurs.set(number - 1, openSlur);
 		}
-		return new MusicReaderContext(ret.score, ret.bmp, ret.divisions, ret.systemIndex,
-			ret.pageIndex, ret.voiceMappings,
-			(type == Type.Slur ? ret.openElements.withOpenSlurs(openCLs) : ret.openElements
-				.withOpenTies(openCLs)), ret.instrumentID, ret.settings);
 	}
 
 	/**
-	 * Creates and writes a curved line from the given {@link OpenCurvedLine} object.
+	 * Creates and writes a slur or tie from the given {@link OpenSlur} object.
 	 */
-	private MusicReaderContext createCurvedLine(OpenCurvedLine openCurvedLine) {
-		if (openCurvedLine.start != null && openCurvedLine.stop != null) {
-			CurvedLine cl = new CurvedLine(openCurvedLine.type, pvec(openCurvedLine.start.wp,
-				openCurvedLine.stop.wp), openCurvedLine.start.side);
-			return writeCurvedLine(cl);
+	private void createSlur(OpenSlur openSlur) {
+		if (openSlur.start != null && openSlur.stop != null) {
+			Slur slur = new Slur(openSlur.type, alist(openSlur.start.wp,
+				openSlur.stop.wp), openSlur.start.side);
+			writeSlur(slur);
 		}
-		return this;
 	}
 
 	/**
 	 * Sets a start waypoint for a tied element without a number.
 	 */
-	public MusicReaderContext openUnnumberedTied(Pitch pitch, CurvedLineWaypoint clwp, VSide side) {
-		PMap<Pitch, OpenCurvedLine> openUnnumberedTies = openElements.getOpenUnnumberedTies();
-		OpenCurvedLine openCL = new OpenCurvedLine();
-		openCL.type = Type.Tie;
-		openCL.start = new OpenCurvedLine.Waypoint();
-		openCL.start.wp = clwp;
-		openCL.start.side = side;
-		openUnnumberedTies = openUnnumberedTies.plus(pitch, openCL);
-		return new MusicReaderContext(score, bmp, divisions, systemIndex, pageIndex, voiceMappings,
-			openElements.withOpenUnnumberedTies(openUnnumberedTies), instrumentID, settings);
+	public void openUnnumberedTied(Pitch pitch, SlurWaypoint wp, VSide side) {
+		Map<Pitch, OpenSlur> openUnnumberedTies = openElements.getOpenUnnumberedTies();
+		OpenSlur openTied = new OpenSlur();
+		openTied.type = SlurType.Tie;
+		openTied.start = new OpenSlur.Waypoint();
+		openTied.start.wp = wp;
+		openTied.start.side = side;
+		openUnnumberedTies.put(pitch, openTied);
 	}
 
 	/**
 	 * Closes a tied element without a number.
 	 */
-	public MusicReaderContext closeUnnumberedTied(Pitch pitch, CurvedLineWaypoint stopWP, VSide side) {
-		PMap<Pitch, OpenCurvedLine> openUnnumberedTies = openElements.getOpenUnnumberedTies();
-		OpenCurvedLine openCL = openUnnumberedTies.get(pitch);
-		if (openCL == null) {
-			if (settings.ignoreErrors)
-				return this;
+	public void closeUnnumberedTied(Pitch pitch, SlurWaypoint stopWP, VSide side) {
+		Map<Pitch, OpenSlur> openUnnumberedTies = openElements.getOpenUnnumberedTies();
+		OpenSlur openTied = openUnnumberedTies.get(pitch);
+		if (openTied == null) {
+			if (false == settings.isIgnoringErrors())
+				return;
 			else
 				throw new InconsistentScoreException("No tie open with pitch " + pitch);
 		}
-		openUnnumberedTies = openUnnumberedTies.minus(pitch);
-		openCL.stop = new OpenCurvedLine.Waypoint();
-		openCL.stop.wp = stopWP;
-		openCL.stop.side = side;
-		MusicReaderContext ret = this;
-		ret = ret.createCurvedLine(openCL);
-		return new MusicReaderContext(ret.score, ret.bmp, ret.divisions, ret.systemIndex,
-			ret.pageIndex, ret.voiceMappings,
-			ret.openElements.withOpenUnnumberedTies(openUnnumberedTies), ret.instrumentID, ret.settings);
+		openUnnumberedTies.remove(pitch);
+		openTied.stop = new OpenSlur.Waypoint();
+		openTied.stop.wp = stopWP;
+		openTied.stop.side = side;
+		createSlur(openTied);
 	}
 
 	/**
 	 * Checks if the given beam/slur/tie number is valid,
 	 * i.e. between 1 and 6. Otherwise an
-	 * IllegalArgumentException is thrown.
+	 * {@link IllegalArgumentException} is thrown.
 	 */
 	private void checkNumber1to6(int number) {
 		if (number < 1 || number > 6) {
@@ -330,23 +320,21 @@ public final class MusicReaderContext {
 	/**
 	 * Sets the beginning of a wedge with the given number.
 	 */
-	public MusicReaderContext openWedge(int number, Wedge wedge) {
+	public void openWedge(int number, Wedge wedge) {
 		checkNumber1to6(number);
-		PVector<Wedge> openWedges = openElements.getOpenWedges().with(number - 1, wedge);
-		return new MusicReaderContext(score, bmp, divisions, systemIndex, pageIndex, voiceMappings,
-			openElements.withOpenWedges(openWedges), instrumentID, settings);
+		List<Wedge> openWedges = openElements.getOpenWedges();
+		openWedges.set(number - 1, wedge);
 	}
 
 	/**
 	 * Closes the wedge with the given number and returns it.
 	 */
-	public Tuple2<MusicReaderContext, Wedge> closeWedge(int number) {
+	public Wedge closeWedge(int number) {
 		checkNumber1to6(number);
 		Wedge ret = openElements.getOpenWedges().get(number - 1);
-		PVector<Wedge> openWedges = openElements.getOpenWedges().with(number - 1, null);
-		MusicReaderContext context = new MusicReaderContext(score, bmp, divisions, systemIndex,
-			pageIndex, voiceMappings, openElements.withOpenWedges(openWedges), instrumentID, settings);
-		return t(context, ret);
+		List<Wedge> openWedges = openElements.getOpenWedges();
+		openWedges.set(number - 1, null);
+		return ret;
 	}
 
 	/**
@@ -354,8 +342,8 @@ public final class MusicReaderContext {
 	 * staff with the given part-intern index.
 	 */
 	public MusicContext getMusicContext(int staffIndexInPart) {
-		BMP bmp = this.bmp.withStaff(getPartStavesIndices().getStart() + staffIndexInPart);
-		return ScoreController.getMusicContext(score, bmp, Interval.BeforeOrAt, Interval.Before);
+		MP mp = this.mp.withStaff(getPartStaves().getStart() + staffIndexInPart);
+		return score.getMusicContext(mp, Interval.BeforeOrAt, Interval.Before);
 	}
 
 	/**
@@ -367,20 +355,18 @@ public final class MusicReaderContext {
 	 * @param mxlVoice  voice id, found in voice-element
 	 * @return the updated context and the voice index
 	 */
-	public Tuple2<MusicReaderContext, Integer> getVoice(int mxlStaff, String mxlVoice) {
+	public int getVoice(int mxlStaff, String mxlVoice) {
 		try {
 			//gets the voices list for the given staff
-			PVector<String> voices = voiceMappings.get(mxlStaff);
+			List<String> voices = voiceMappings.get(mxlStaff);
 			//look for the given MusicXML voice
 			for (int scoreVoice = 0; scoreVoice < voices.size(); scoreVoice++) {
 				if (voices.get(scoreVoice).equals(mxlVoice))
-					return t(this, scoreVoice);
+					return scoreVoice;
 			}
 			//if not existent yet, we have to create it
-			voices = voices.plus(mxlVoice);
-			MusicReaderContext context = new MusicReaderContext(score, bmp, divisions, systemIndex,
-				pageIndex, voiceMappings.with(mxlStaff, voices), openElements, instrumentID, settings);
-			return t(context, voices.size() - 1);
+			voices.add(mxlVoice);
+			return voices.size() - 1;
 		} catch (IndexOutOfBoundsException ex) {
 			throw new RuntimeException("MusicXML staff " + mxlStaff + " and voice \"" + mxlVoice +
 				"\" are invalid for the current position. Enough staves defined in attributes?");
@@ -391,97 +377,53 @@ public final class MusicReaderContext {
 	 * Writes the given {@link ColumnElement} at the
 	 * current measure and current beat.
 	 */
-	public MusicReaderContext writeColumnElement(ColumnElement element) {
-		return withScore(ScoreController.writeColumnElement(score, bmp, null, element));
+	public void writeColumnElement(ColumnElement element) {
+		new ColumnElementWrite(element, score.getColumnHeader(mp.getMeasure()), mp.getBeat(), null).execute();
 	}
 
 	/**
 	 * Writes the given {@link MeasureElement} at the given staff (index relative to first
 	 * staff in current part), current measure and current beat.
 	 */
-	public MusicReaderContext writeMeasureElement(MeasureElement element, int staffIndexInPart) {
-		int staffIndex = getPartStavesIndices().getStart() + staffIndexInPart;
-		BMP bmp = this.bmp.withStaff(staffIndex);
-		return withScore(ScoreController.writeMeasureElement(score, bmp, element));
+	public void writeMeasureElement(MeasureElement element, int staffIndexInPart) {
+		int staffIndex = getPartStaves().getStart() + staffIndexInPart;
+		MP mp = this.mp.withStaff(staffIndex);
+		new MeasureElementWrite(element, score.getMeasure(mp), mp.getBeat()).execute();
 	}
 
 	/**
 	 * Writes the given {@link VoiceElement} to the current position
 	 * without moving the cursor forward.
 	 */
-	public MusicReaderContext writeVoiceElement(VoiceElement element, int staffIndexInPart, int voice) {
-		Score score = this.score;
-		BMP bmp = this.bmp.withStaff(getPartStavesIndices().getStart() + staffIndexInPart).withVoice(
-			voice);
+	public void writeVoiceElement(VoiceElement element, int staffIndexInPart, int voice) {
+		MP mp = this.mp.withStaff(getPartStaves().getStart() + staffIndexInPart).withVoice(voice);
 		try {
-			score = ScoreController.writeVoiceElement(score, bmp, element, true);
+			new VoiceElementWrite(score.getVoice(mp), mp, element, true).execute();
 		} catch (MeasureFullException ex) {
-			if (!settings.ignoreErrors)
+			if (!settings.isIgnoringErrors())
 				throw new MusicReaderException(ex, this);
 		}
-		return new MusicReaderContext(score, bmp, divisions, systemIndex, pageIndex, voiceMappings,
-			openElements, instrumentID, settings);
 	}
 
 	/**
 	 * Moves the cursor forward by one index.
 	 */
-	public MusicReaderContext moveCursorForward(Fraction duration) {
-		BMP bmp = this.bmp.withBeat(this.bmp.beat.add(duration));
-		return new MusicReaderContext(score, bmp, divisions, systemIndex, pageIndex, voiceMappings,
-			openElements, instrumentID, settings);
+	public void moveCursorForward(Fraction duration) {
+		this.mp = this.mp.withBeat(this.mp.beat.add(duration));
 	}
 
 	/**
 	 * Creates a beam for the given chords.
 	 */
-	public MusicReaderContext writeBeam(PVector<Chord> chords) {
-		try {
-			return withScore(ScoreController.plusBeam(getScore(), beam(chords)));
-		} catch (InconsistentScoreException ex) {
-			if (!settings.ignoreErrors)
-				throw new MusicReaderException(ex, this);
-			else
-				return this; //when ignoring errors, ignore beam
-		}
+	public void writeBeam(List<Chord> chords) {
+		new BeamAdd(Beam.beamFromChords(chords)).execute();
 	}
-
+	
 	/**
-	 * Adds a curved line.
+	 * Creates the given slur or tie.
 	 */
-	public MusicReaderContext writeCurvedLine(CurvedLine cl) {
-		try {
-			return withScore(ScoreController.plusCurvedLine(getScore(), cl));
-		} catch (InconsistentScoreException ex) {
-			if (!settings.ignoreErrors)
-				throw new MusicReaderException(ex, this);
-			else
-				return this; //when ignoring errors, ignore curved line
-		}
-	}
-
-	/**
-	 * Writes an attachment to the given element.
-	 */
-	public MusicReaderContext writeAttachment(MusicElement anchor, Attachable attachment) {
-		return withScore(getScore().withGlobals(getScore().globals.plusAttachment(anchor, attachment)));
-	}
-
-	/**
-	 * Replaces the given old chord by the given new one.
-	 * It must have the same duration like the chord which was already there.
-	 * If the old chord had a beam, slur, directions or lyrics, they will be used
-	 * again.
-	 */
-	public MusicReaderContext replaceChord(Chord oldChord, Chord newChord) {
-		try {
-			return withScore(ScoreController.replaceChord(getScore(), oldChord, newChord));
-		} catch (InconsistentScoreException ex) {
-			if (settings.ignoreErrors)
-				return this;
-			else
-				throw ex;
-		}
+	public void writeSlur(Slur slur) {
+		new SlurAdd(slur).execute();
 	}
 
 	/**
@@ -495,28 +437,25 @@ public final class MusicReaderContext {
 	/**
 	 * Changes the current instrument.
 	 */
-	public MusicReaderContext writeInstrumentChange(String instrumentID) {
+	public void writeInstrumentChange(String instrumentID) {
 		//find instrument
-		Part part = getScore().stavesList.getPartByStaffIndex(bmp.staff);
+		Part part = getScore().getStavesList().getPartByStaffIndex(mp.staff);
 		Instrument newInstrument = null;
 		for (Instrument instr : part.getInstruments()) {
-			if (instr.base.id.equals(instrumentID)) {
+			if (instr.getId().equals(instrumentID)) {
 				newInstrument = instr;
 				break;
 			}
 		}
 		if (newInstrument == null) {
 			//error: instrument is unknown to this part
-			if (settings.ignoreErrors)
-				return this; //don't change instrument
+			if (settings.isIgnoringErrors())
+				return; //don't change instrument
 			else
 				throw new InconsistentScoreException("Unknown instrument: \"" + instrumentID + "\"");
 		}
 		//apply instrument change
-		MusicReaderContext ret = new MusicReaderContext(score, bmp, divisions, systemIndex, pageIndex,
-			voiceMappings, openElements, instrumentID, settings);
-		ret = ret.writeMeasureElement(new InstrumentChange(newInstrument), 0);
-		return ret;
+		new MeasureElementWrite(new InstrumentChange(newInstrument), score.getMeasure(this.mp), mp.beat).execute();
 	}
 
 	public MusicReaderSettings getSettings() {
@@ -524,7 +463,7 @@ public final class MusicReaderContext {
 	}
 
 	@Override public String toString() {
-		return "cursor at " + bmp + ", system " + systemIndex + ", page " + pageIndex;
+		return "cursor at " + mp + ", system " + systemIndex + ", page " + pageIndex;
 	}
 
 }

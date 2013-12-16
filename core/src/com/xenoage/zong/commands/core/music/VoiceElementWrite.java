@@ -62,7 +62,8 @@ public class VoiceElementWrite
 	}
 
 
-	@Override public void execute() {
+	@Override public void execute()
+		throws MeasureFullException {
 		//determine start mp and element index
 		Fraction startBeat;
 		int elementIndex;

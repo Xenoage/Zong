@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.choice.MxlNotationsContent;
@@ -25,7 +26,7 @@ public final class MxlNotations {
 
 	public static final String elemName = "notations";
 
-	private List<MxlNotationsContent> elements;
+	@NonNull private List<MxlNotationsContent> elements;
 	
 
 	public static MxlNotations read(XmlReader reader) {
