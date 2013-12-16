@@ -1,6 +1,7 @@
 package com.xenoage.zong.core.format;
 
 import lombok.Data;
+import lombok.experimental.Wither;
 
 import com.xenoage.utils.annotations.Const;
 
@@ -10,7 +11,7 @@ import com.xenoage.utils.annotations.Const;
  *
  * @author Andreas Wenger
  */
-@Const @Data public final class StaffLayout
+@Const @Data @Wither public final class StaffLayout
 {
   
   /** The distance between the bottom line of the previous staff to the top line

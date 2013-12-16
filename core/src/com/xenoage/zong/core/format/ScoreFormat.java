@@ -1,6 +1,7 @@
 package com.xenoage.zong.core.format;
 
 import static com.xenoage.utils.NullUtils.notNull;
+import static com.xenoage.utils.collections.CList.clist;
 import static com.xenoage.zong.core.format.Defaults.defaultFont;
 import lombok.Data;
 import lombok.NonNull;
@@ -8,6 +9,7 @@ import lombok.experimental.Wither;
 
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.collections.IList;
 import com.xenoage.utils.font.FontInfo;
 
@@ -57,6 +59,20 @@ import com.xenoage.utils.font.FontInfo;
 	 */
 	public StaffLayout getStaffLayoutNotNull(int staff) {
 		return notNull(getStaffLayout(staff), staffLayoutOther);
+	}
+	
+	/**
+	 * Sets the {@link StaffLayout} of the staff with the given index.
+	 */
+	public ScoreFormat withStaffLayout(int staff, StaffLayout staffLayout) {
+		CList<StaffLayout> staffLayouts = clist();
+		if (this.staffLayouts != null)
+			staffLayouts.addAll(this.staffLayouts);
+		while (staffLayouts.size() < staff + 1) {
+			staffLayouts.add(null);
+		}
+		staffLayouts.set(staff, staffLayout);
+		return withStaffLayouts(staffLayouts.close());
 	}
 
 }

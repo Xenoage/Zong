@@ -19,6 +19,7 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 public final class MxlWork {
 
 	public static final String elemName = "work";
+	public static final MxlWork empty = new MxlWork(null, null);
 
 	@MaybeNull private String workNumber;
 	@MaybeNull private String workTitle;

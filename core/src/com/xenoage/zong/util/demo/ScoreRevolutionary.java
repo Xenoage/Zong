@@ -19,7 +19,7 @@ import com.xenoage.utils.collections.NullableList;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.commands.core.music.ColumnElementWrite;
 import com.xenoage.zong.commands.core.music.PartAdd;
-import com.xenoage.zong.commands.core.music.chord.DirectionAdd;
+import com.xenoage.zong.commands.core.music.direction.DirectionAdd;
 import com.xenoage.zong.commands.core.music.group.BarlineGroupAdd;
 import com.xenoage.zong.commands.core.music.group.BracketGroupAdd;
 import com.xenoage.zong.commands.core.music.slur.SlurAdd;

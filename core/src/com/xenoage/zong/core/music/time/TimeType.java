@@ -44,6 +44,9 @@ import com.xenoage.utils.math.Fraction;
 	public static final TimeType timeSenzaMisura = new TimeType(0, 0,
 		TimeSymbol.None, new boolean[0]);
 	
+	//list of known time types with numerator/denominator
+	private static final TimeType[] knownTypes = {time_2_2, time_2_4, time_3_4, time_4_4, time_6_8};
+	
 	
 	/** The time fraction (numerator and denominator).
 	 * The beats per measure this time signature allows, e.g. (4/4) or (3/4).
@@ -58,6 +61,21 @@ import com.xenoage.utils.math.Fraction;
 	 * If there are no beats (senza misura), the array is empty. */
 	private final boolean[] beatsAccentuation;
 	
+	
+	/**
+	 * Returns a {@link TimeType} with the given numerator and denominator.
+	 */
+	public static TimeType timeType(int numerator, int denominator) {
+		//look for existing instance
+		for (TimeType t : knownTypes)
+			if (t.numerator == numerator && t.denominator == denominator)
+				return t;
+		//create new TimeType. only the first beat is accentuated.
+		boolean[] beatsAccentuation = new boolean[denominator];
+		if (denominator > 0)
+			beatsAccentuation[0] = true;
+		return new TimeType(numerator, denominator, TimeSymbol.Fractional, beatsAccentuation);
+	}
 	
 	/**
 	 * Gets the beats of a measure in this time, or null for senza misura.

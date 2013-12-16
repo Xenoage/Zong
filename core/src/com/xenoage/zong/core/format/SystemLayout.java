@@ -1,6 +1,7 @@
 package com.xenoage.zong.core.format;
 
 import lombok.Data;
+import lombok.experimental.Wither;
 
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.annotations.MaybeNull;
@@ -11,7 +12,7 @@ import com.xenoage.utils.collections.IList;
  *
  * @author Andreas Wenger
  */
-@Const @Data public final class SystemLayout {
+@Const @Data @Wither public final class SystemLayout {
 
 	/** The distance between the bottom line
 	 * of the previous system to the top line of this system in mm.

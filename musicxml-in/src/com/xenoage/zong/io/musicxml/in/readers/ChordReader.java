@@ -3,7 +3,6 @@ package com.xenoage.zong.io.musicxml.in.readers;
 import static com.xenoage.utils.NullUtils.notNull;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.iterators.It.it;
-import static com.xenoage.utils.kernel.Tuple2.t;
 import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.position.MP.getMP;
@@ -17,12 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.xenoage.utils.Parser;
-import com.xenoage.utils.collections.CollectionUtils;
-import com.xenoage.utils.iterators.It;
-import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.utils.math.VSide;
-import com.xenoage.zong.commands.core.music.chord.DirectionAdd;
+import com.xenoage.zong.commands.core.music.direction.DirectionAdd;
+import com.xenoage.zong.commands.core.music.lyric.LyricAdd;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.MusicContext;
 import com.xenoage.zong.core.music.Pitch;
@@ -42,7 +39,6 @@ import com.xenoage.zong.core.music.lyric.SyllableType;
 import com.xenoage.zong.core.music.rest.Rest;
 import com.xenoage.zong.core.music.slur.SlurType;
 import com.xenoage.zong.core.music.slur.SlurWaypoint;
-import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.musicxml.types.MxlArticulations;
 import com.xenoage.zong.musicxml.types.MxlBeam;
 import com.xenoage.zong.musicxml.types.MxlDynamics;
@@ -225,7 +221,7 @@ public final class ChordReader {
 					if (i != null)
 						verse = i - 1;
 				}
-				SyllableType syllableType;
+				SyllableType syllableType = null;
 				MxlLyricContentType mxlLCType = mxlLyric.getContent().getLyricContentType();
 				if (mxlLCType == MxlLyricContentType.SyllabicText) {
 					MxlSyllabicText mxlSyllabicText = (MxlSyllabicText) mxlLyric.getContent();
@@ -245,20 +241,18 @@ public final class ChordReader {
 							break;
 					}
 					//the next element must be the text element
-					//GOON
-					context.writeAttachment(chord, new Lyric(ut(mxlSyllabicText.getText()
-						.getValue()), syllableType, verse));
+					new LyricAdd(new Lyric(ut(mxlSyllabicText.getText().getValue()), syllableType, verse),
+						chord).execute();
 				}
 				else if (mxlLCType == MxlLyricContentType.Extend) {
 					//extend - TODO: extension to next chord!
-					context = context.writeAttachment(chord, Lyric.lyricExtend(verse));
+					new LyricAdd(Lyric.lyricExtend(verse), chord).execute();
 				}
 			}
 
 		}
 
-		context = context.moveCursorForward(duration);
-		return context;
+		context.moveCursorForward(duration);
 	}
 
 	/**

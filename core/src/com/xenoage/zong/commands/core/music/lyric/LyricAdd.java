@@ -1,4 +1,4 @@
-package com.xenoage.zong.commands.core.music.chord;
+package com.xenoage.zong.commands.core.music.lyric;
 
 import lombok.AllArgsConstructor;
 
@@ -6,23 +6,23 @@ import com.xenoage.utils.collections.NullableList;
 import com.xenoage.utils.document.command.Command;
 import com.xenoage.utils.document.command.Undoability;
 import com.xenoage.zong.core.music.chord.Chord;
-import com.xenoage.zong.core.music.direction.Direction;
+import com.xenoage.zong.core.music.lyric.Lyric;
 
 
 /**
- * Adds the given {@link Direction} to the given {@link Chord}.
+ * Adds the given {@link Lyric} to the given {@link Chord}.
  * 
  * @author Andreas Wenger
  */
-@AllArgsConstructor public class DirectionAdd
+@AllArgsConstructor public class LyricAdd
 	implements Command {
 	
 	//data
-	private Direction direction;
+	private Lyric lyric;
 	private Chord chord;
 
 	@Override public void execute() {
-		chord.setDirections(NullableList.add(chord.getDirections(), direction));
+		chord.setLyrics(NullableList.add(chord.getLyrics(), lyric));
 	}
 
 	@Override public Undoability getUndoability() {
@@ -30,7 +30,7 @@ import com.xenoage.zong.core.music.direction.Direction;
 	}
 
 	@Override public void undo() {
-		chord.setDirections(NullableList.remove(chord.getDirections(), direction));
+		chord.setLyrics(NullableList.remove(chord.getLyrics(), lyric));
 	}
 
 }

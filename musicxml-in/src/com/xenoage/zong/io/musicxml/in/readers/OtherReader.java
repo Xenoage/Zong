@@ -15,6 +15,7 @@ import com.xenoage.zong.core.music.format.SP;
 import com.xenoage.zong.core.text.Alignment;
 import com.xenoage.zong.musicxml.types.MxlBezier;
 import com.xenoage.zong.musicxml.types.attributes.MxlPosition;
+import com.xenoage.zong.musicxml.types.attributes.MxlPrintStyle;
 import com.xenoage.zong.musicxml.types.enums.MxlLeftCenterRight;
 import com.xenoage.zong.musicxml.types.enums.MxlPlacement;
 
@@ -76,6 +77,13 @@ public final class OtherReader {
 				return Placement.Below;
 		}
 		return null;
+	}
+	
+	@MaybeNull public static Position readPosition(MxlPrintStyle printStyle, float tenthsMm,
+		int staffLinesCount) {
+		if (printStyle == null)
+			return null;
+		return readPosition(printStyle.getPosition(), tenthsMm, staffLinesCount);
 	}
 
 	@MaybeNull public static Position readPosition(MxlPosition mxlPosition, float tenthsMm,
