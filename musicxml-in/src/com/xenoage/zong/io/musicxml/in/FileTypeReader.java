@@ -16,8 +16,11 @@ public class FileTypeReader {
 
 	@MaybeNull public static FileType getFileType(InputStream inputStream)
 		throws IOException {
+		//create buffered stream for reuse
+		BufferedInputStream bis = new BufferedInputStream(inputStream);
+		bis.mark(2);
 		//read first two characters. if "PK", we have a compressed MusicXML file.
-		int bytes[] = new int[] { inputStream.read(), inputStream.read() };
+		int bytes[] = new int[] { bis.read(), bis.read() };
 		if (bytes[0] == 80 && bytes[1] == 75) //P, K
 		{
 			return FileType.Compressed;
