@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import com.xenoage.utils.xml.XmlDataException;
+import com.xenoage.utils.xml.XmlException;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.MxlScorePartwise;
@@ -23,7 +23,7 @@ public final class MusicXMLDocument {
 
 
 	public static MusicXMLDocument read(XmlReader reader)
-		throws XmlDataException {
+		throws XmlException {
 		reader.openNextChildElement();
 		String n = reader.getElementName();
 		if (n.equals(MxlScorePartwise.elemName))

@@ -1,10 +1,12 @@
 package com.xenoage.zong.core.music.chord;
 
 import static com.xenoage.utils.CheckUtils.checkArgsNotNull;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Fraction._0;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -46,7 +48,7 @@ public class Chord
 	implements VoiceElement, DirectionContainer {
 
 	/** The notes within this chord, sorted ascending (begin with lowest notated pitch). */
-	@Getter @Setter @NonEmpty private ArrayList<Note> notes;
+	@Getter @Setter @NonEmpty private List<Note> notes;
 	/** The duration of this chord. */
 	@Getter @Setter @NonNull private Fraction duration;
 	/** The stem of this chord, or null if a default stem is used. */
@@ -56,17 +58,17 @@ public class Chord
 	/** The grace value of this chord, or null if it is a normal chord. */
 	@Getter @Setter @MaybeNull private Grace grace = null;
 	/** The articulations within this chord, sorted by ascending distance to the chord. */
-	@Getter @Setter @MaybeNull private ArrayList<Articulation> articulations = null;
+	@Getter @Setter @MaybeNull private List<Articulation> articulations = null;
 	/** The beam this chord is part of, or null. */
 	@Getter @Setter @MaybeNull private Beam beam = null;
 	/** The slurs which start or end at this chord, or null. */
-	@Getter @Setter @MaybeNull private ArrayList<Slur> slurs = null;
+	@Getter @Setter @MaybeNull private List<Slur> slurs = null;
 	/** The tuplet this chord is part of, or null. */
 	@Getter @Setter @MaybeNull private Tuplet tuplet = null;
 	/** The lyrics attached to this chord, or null. */
-	@Getter @Setter @MaybeNull private ArrayList<Lyric> lyrics = null;
+	@Getter @Setter @MaybeNull private List<Lyric> lyrics = null;
 	/** The directions attached to this chord, or null. */
-	@Getter @Setter @MaybeNull private ArrayList<Direction> directions = null;
+	@Getter @Setter @MaybeNull private List<Direction> directions = null;
 
 	/** Back reference: the parent voice, or null if not part of a score. */
 	@Getter @Setter private Voice parent = null;
@@ -116,8 +118,8 @@ public class Chord
 	 * Pitches that are used more times are also used more
 	 * times in the list.
 	 */
-	public ArrayList<Pitch> getPitches() {
-		ArrayList<Pitch> ret = new ArrayList<Pitch>(notes.size());
+	public List<Pitch> getPitches() {
+		List<Pitch> ret = alist(notes.size());
 		for (int i : range(notes)) {
 			ret.add(notes.get(i).getPitch());
 		}

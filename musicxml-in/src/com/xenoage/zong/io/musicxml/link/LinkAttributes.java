@@ -1,5 +1,6 @@
 package com.xenoage.zong.io.musicxml.link;
 
+import lombok.Data;
 
 /**
  * MusicXML link-attributes.
@@ -7,21 +8,9 @@ package com.xenoage.zong.io.musicxml.link;
  * 
  * @author Andreas Wenger
  */
-public class LinkAttributes
-{
-	
-	private final String href;
-	
-	
-	public LinkAttributes(String href)
-	{
-		this.href = href;
-	}
-	
-	
-	public String getHref()
-	{
-		return href;
-	}
+@Data
+public class LinkAttributes {
+
+	private String href;
 
 }

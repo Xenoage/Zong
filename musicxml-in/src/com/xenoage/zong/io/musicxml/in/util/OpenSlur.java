@@ -1,8 +1,5 @@
 package com.xenoage.zong.io.musicxml.in.util;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import com.xenoage.utils.math.VSide;
 import com.xenoage.zong.core.music.slur.SlurType;
 import com.xenoage.zong.core.music.slur.SlurWaypoint;
