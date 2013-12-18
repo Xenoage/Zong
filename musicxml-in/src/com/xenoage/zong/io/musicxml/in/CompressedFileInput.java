@@ -3,12 +3,12 @@ package com.xenoage.zong.io.musicxml.in;
 import static com.xenoage.utils.PlatformUtils.platformUtils;
 
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.UUID;
 
-import com.xenoage.utils.PlatformUtils;
 import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.collections.CollectionUtils;
+import com.xenoage.utils.exceptions.InvalidFormatException;
+import com.xenoage.utils.io.BufferedInputStream;
 import com.xenoage.utils.io.InputStream;
 import com.xenoage.utils.io.ZipReader;
 import com.xenoage.utils.xml.XmlReader;
@@ -34,6 +34,7 @@ import com.xenoage.zong.io.musicxml.opus.Score;
 public class CompressedFileInput {
 
 	private OpusItem rootItem;
+	private ZipReader zip;
 
 
 	/**
@@ -44,23 +45,23 @@ public class CompressedFileInput {
 		throws IOException {
 		
 		//load zip contents
-		ZipReader reader = platformUtils().createZipReader(inputStream);
+		zip = platformUtils().createZipReader(inputStream);
 		
 		//parse META-INF/container.xml
 		String rootfilePath = null;
 		try {
-			InputStream containerStream = reader.openFile("META-INF/container.xml");
+			InputStream containerStream = zip.openFile("META-INF/container.xml");
 			XmlReader containerReader = platformUtils().createXmlReader(containerStream);
 			rootfilePath = readRootFilePath(containerReader);
 			containerStream.close();
 		} catch (Exception ex) {
-			throw new IllegalStateException(
+			throw new IOException(
 				"Compressed MusicXML file has no (well-formed) META-INF/container.xml", ex);
 		}
 
 		//load root file
 		try {
-			InputStream rootStream = reader.openFile(rootfilePath);
+			InputStream rootStream = zip.openFile(rootfilePath);
 			FileType type = FileTypeReader.getFileType(rootStream);
 			rootStream.close();
 			if (type == null)
@@ -69,14 +70,16 @@ public class CompressedFileInput {
 				case Compressed:
 					throw new IllegalStateException("Root file may (currently) not be compressed");
 				case XMLOpus:
-					rootItem = new OpusFileInput().readOpusFile(bis);
+					rootStream = zip.openFile(rootfilePath);
+					rootItem = new OpusFileInput().readOpusFile(rootStream);
+					rootStream.close();
 					break;
 				case XMLScorePartwise:
 				case XMLScoreTimewise:
 					rootItem = new Score(new LinkAttributes(rootfilePath), null);
 			}
 		} catch (IOException ex) {
-			throw new IllegalStateException("Could not load root file", ex);
+			throw new IOException("Could not load root file", ex);
 		}
 	}
 	
@@ -124,13 +127,13 @@ public class CompressedFileInput {
 	 */
 	public List<String> getScoreFilenames()
 		throws IOException {
-		LinkedList<String> ret = new LinkedList<String>();
+		List<String> ret = CollectionUtils.alist();
 		if (isOpus()) {
 			getScoreFilenames(
-				new OpusFileInput().resolveOpusLinks((Opus) rootItem, tempFolder.getAbsolutePath()), ret);
+				new OpusFileInput().resolveOpusLinks((Opus) rootItem, zip, null), ret);
 		}
 		else {
-			ret.add(((Score) rootItem).getHref());
+			ret.add(((Score) rootItem).getLink().getHref());
 		}
 		return ret;
 	}
@@ -140,12 +143,12 @@ public class CompressedFileInput {
 	 */
 	public com.xenoage.zong.core.Score loadScore(String path)
 		throws InvalidFormatException, IOException {
-		BufferedInputStream bis = new BufferedInputStream(new FileInputStream(
-			new File(tempFolder, path)));
-		StreamUtils.markInputStream(bis);
+		BufferedInputStream bis = new BufferedInputStream(zip.openFile(path));
+		bis.mark();
 		//XML or compressed?
 		FileType fileType = FileTypeReader.getFileType(bis);
 		bis.reset();
+		bis.unmark();
 		if (fileType == null)
 			throw new InvalidFormatException("Score has invalid format: " + path);
 		switch (fileType) {
@@ -162,20 +165,23 @@ public class CompressedFileInput {
 
 	private com.xenoage.zong.core.Score loadCompressedScore(String path)
 		throws IOException {
-		CompressedFileInput zip = new CompressedFileInput(new FileInputStream(
-			new File(tempFolder, path)), osTempFolder);
-		com.xenoage.zong.core.Score ret = zip.loadScore(((Score) zip.getRootItem()).getHref());
-		zip.close();
+		CompressedFileInput zipScore = new CompressedFileInput(zip.openFile(path));
+		com.xenoage.zong.core.Score ret = zipScore.loadScore(((Score) zipScore.getRootItem()).getLink().getHref());
+		zipScore.close();
 		return ret;
 	}
 
-	private void getScoreFilenames(Opus resolvedOpus, LinkedList<String> acc) {
+	private void getScoreFilenames(Opus resolvedOpus, List<String> acc) {
 		for (OpusItem item : resolvedOpus.getItems()) {
 			if (item instanceof Score)
-				acc.add(((Score) item).getHref());
+				acc.add(((Score) item).getLink().getHref());
 			else if (item instanceof Opus)
 				getScoreFilenames((Opus) item, acc);
 		}
+	}
+	
+	public void close() {
+		zip.close();
 	}
 
 }

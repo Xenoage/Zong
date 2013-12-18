@@ -10,7 +10,7 @@ import java.io.FileOutputStream;
 
 import org.junit.Test;
 
-import com.xenoage.utils.jse.io.FileUtils;
+import com.xenoage.utils.jse.io.JseFileUtils;
 import com.xenoage.utils.jse.xml.JseXmlReader;
 import com.xenoage.utils.jse.xml.JseXmlWriter;
 import com.xenoage.utils.xml.XmlException;
@@ -43,7 +43,7 @@ public class MusicXMLDemoFilesTest {
 		long totalMusicXMLReadingTime = 0;
 		long lastTime = 0;
 		for (String dir : dirs) {
-			for (File file : FileUtils.listFiles(new File(dir), plainMusicXMLFilenameFilter, false)) {
+			for (File file : JseFileUtils.listFiles(new File(dir), plainMusicXMLFilenameFilter, false)) {
 				System.out.println(file);
 				lastTime = System.currentTimeMillis();
 				XmlReader reader = new JseXmlReader(new FileInputStream(file));

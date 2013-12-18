@@ -1,9 +1,14 @@
 package com.xenoage.zong.io.musicxml.in;
 
+import static com.xenoage.utils.PlatformUtils.platformUtils;
+
 import java.io.IOException;
 
 import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.io.BufferedInputStream;
 import com.xenoage.utils.io.InputStream;
+import com.xenoage.utils.xml.XmlException;
+import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.zong.io.musicxml.FileType;
 
 /**
@@ -18,7 +23,7 @@ public class FileTypeReader {
 		throws IOException {
 		//create buffered stream for reuse
 		BufferedInputStream bis = new BufferedInputStream(inputStream);
-		bis.mark(2);
+		bis.mark();
 		//read first two characters. if "PK", we have a compressed MusicXML file.
 		int bytes[] = new int[] { bis.read(), bis.read() };
 		if (bytes[0] == 80 && bytes[1] == 75) //P, K
@@ -26,26 +31,21 @@ public class FileTypeReader {
 			return FileType.Compressed;
 		}
 		bis.reset();
+		bis.unmark();
 		//otherwise, try to parse as XML up to the root element (using StAX)
 		try {
-			XMLInputFactory inputFactory = XMLInputFactory.newInstance();
-			inputFactory.setProperty(XMLInputFactory.SUPPORT_DTD, false); //don't resolve entities
-			XMLEventReader eventReader = inputFactory.createXMLEventReader(bis);
-			while (eventReader.hasNext()) {
-				XMLEvent event = eventReader.nextEvent();
-				if (event.isStartElement()) {
-					//document root element
-					String name = event.asStartElement().getName().getLocalPart();
-					if (name.equals("score-partwise"))
-						return FileType.XMLScorePartwise;
-					else if (name.equals("score-timewise"))
-						return FileType.XMLScoreTimewise;
-					else if (name.equals("opus"))
-						return FileType.XMLOpus;
-					break;
-				}
+			XmlReader reader = platformUtils().createXmlReader(bis);
+			if (reader.openNextChildElement()) {
+				String n = reader.getElementName();
+				if (n.equals("score-partwise"))
+					return FileType.XMLScorePartwise;
+				else if (n.equals("score-timewise"))
+					return FileType.XMLScoreTimewise;
+				else if (n.equals("opus"))
+					return FileType.XMLOpus;
+				reader.closeElement();
 			}
-		} catch (XMLStreamException ex) {
+		} catch (XmlException ex) {
 			//unknown (no XML)
 			return null;
 		}

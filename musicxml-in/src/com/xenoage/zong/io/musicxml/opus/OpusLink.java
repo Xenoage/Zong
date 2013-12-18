@@ -1,5 +1,6 @@
 package com.xenoage.zong.io.musicxml.opus;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import com.xenoage.zong.io.musicxml.link.LinkAttributes;
@@ -9,7 +10,7 @@ import com.xenoage.zong.io.musicxml.link.LinkAttributes;
  * 
  * @author Andreas Wenger
  */
-@Data
+@AllArgsConstructor @Data
 public class OpusLink
 	implements OpusItem {
 

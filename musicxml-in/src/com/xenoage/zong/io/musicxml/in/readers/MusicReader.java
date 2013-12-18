@@ -76,7 +76,6 @@ import com.xenoage.zong.musicxml.types.MxlPedal;
 import com.xenoage.zong.musicxml.types.MxlPrint;
 import com.xenoage.zong.musicxml.types.MxlScorePartwise;
 import com.xenoage.zong.musicxml.types.MxlSound;
-import com.xenoage.zong.musicxml.types.MxlStaffLayout;
 import com.xenoage.zong.musicxml.types.MxlSystemLayout;
 import com.xenoage.zong.musicxml.types.MxlTime;
 import com.xenoage.zong.musicxml.types.MxlWedge;
@@ -396,15 +395,16 @@ public final class MusicReader {
 
 		}
 
+		//GOON
+		/*
 		//staff layouts
 		for (MxlStaffLayout mxlStaffLayout : mxlPrint.getLayout().getStaffLayouts()) {
 			int staffIndex = mxlStaffLayout.getNumberNotNull() - 1;
-			
-			//GOON
-			//context = context.withScore(ScoreController.withSystemStaffLayout(context.getScore(),
-			//	context.getSystemIndex(), context.getPartStavesIndices().getStart() + staffIndex,
-			//	readStaffLayout(mxlStaffLayout, context.getTenthMm()).staffLayout));
+			context = context.withScore(ScoreController.withSystemStaffLayout(context.getScore(),
+				context.getSystemIndex(), context.getPartStavesIndices().getStart() + staffIndex,
+				readStaffLayout(mxlStaffLayout, context.getTenthMm()).staffLayout));
 		}
+		*/
 	}
 
 	/**

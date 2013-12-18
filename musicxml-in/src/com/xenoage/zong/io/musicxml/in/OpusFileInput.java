@@ -1,9 +1,18 @@
 package com.xenoage.zong.io.musicxml.in;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.LinkedList;
+import static com.xenoage.utils.PlatformUtils.platformUtils;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.List;
+
+import com.xenoage.utils.Parser;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.exceptions.InvalidFormatException;
+import com.xenoage.utils.io.InputStream;
+import com.xenoage.utils.io.ZipReader;
+import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.zong.io.musicxml.link.LinkAttributes;
 import com.xenoage.zong.io.musicxml.opus.Opus;
 import com.xenoage.zong.io.musicxml.opus.OpusItem;
@@ -23,62 +32,66 @@ public class OpusFileInput {
 	 */
 	public Opus readOpusFile(InputStream inputStream)
 		throws InvalidFormatException, IOException {
-		//parse XML file
-		Document doc;
-		try {
-			doc = XMLReader.readFile(inputStream);
-		} catch (Exception ex) {
-			throw new IOException("Opus file does not exist or has invalid format", ex);
-		}
-		//interpret XML document
-		Element root = XMLReader.root(doc);
-		if (!root.getNodeName().equals("opus"))
+		XmlReader reader = platformUtils().createXmlReader(inputStream);
+		//first element must be "opus"
+		if (false == reader.openNextChildElement() || false == reader.getElementName().equals("opus"))
 			throw new InvalidFormatException("No opus document");
-		return readOpus(root);
+		return readOpus(reader);
 	}
 
-	private Opus readOpus(Element eOpus) {
-		String title = XMLReader.elementText(eOpus, "title");
-		LinkedList<OpusItem> items = new LinkedList<OpusItem>();
-		for (Element e : XMLReader.elements(eOpus)) {
-			String name = e.getNodeName();
-			if (name.equals("opus"))
-				items.add(readOpus(e));
-			else if (name.equals("opus-link"))
-				items.add(readOpusLink(e));
-			else if (name.equals("score"))
-				items.add(readScore(e));
+	private Opus readOpus(XmlReader reader) {
+		String title = null;
+		List<OpusItem> items = alist();
+		while (reader.openNextChildElement()) {
+			String n = reader.getElementName();
+			if (reader.getElementName().equals("title"))
+				title = reader.getTextNotNull();
+			else if (n.equals("opus"))
+				items.add(readOpus(reader));
+			else if (n.equals("opus-link"))
+				items.add(readOpusLink(reader));
+			else if (n.equals("score"))
+				items.add(readScore(reader));
+			reader.closeElement();
 		}
 		return new Opus(title, items);
 	}
 
-	private OpusLink readOpusLink(Element eOpusLink) {
-		String href = eOpusLink.getAttribute("xlink:href");
+	private OpusLink readOpusLink(XmlReader reader) {
+		String href = reader.getAttributeNotNull("xlink:href");
 		return new OpusLink(new LinkAttributes(href));
 	}
 
-	private Score readScore(Element eScore) {
-		String href = eScore.getAttribute("xlink:href");
-		Boolean newPage = Parser.parseBooleanNullYesNo(eScore.getAttribute("new-page"));
+	private Score readScore(XmlReader reader) {
+		String href = reader.getAttribute("xlink:href");
+		Boolean newPage = Parser.parseBooleanNullYesNo(reader.getAttribute("new-page"));
 		return new Score(new LinkAttributes(href), newPage);
 	}
 
 	/**
 	 * Resolves all {@link OpusLink} items within the given {@link Opus} to
 	 * instances of {@link Opus} and returns the result.
-	 * Therefore, a base directory has to be given (compressed MusicXML files
-	 * have to be extracted there) where the files are placed (or the empty string
-	 * to use paths relative to the current directory).
+	 * For a compressed MusicXML file, a {@link ZipReader} has to be given, otherwise
+	 * the given base path is used.
 	 */
-	public Opus resolveOpusLinks(Opus opus, String baseDirectory)
+	public Opus resolveOpusLinks(Opus opus, @MaybeNull ZipReader zip, @MaybeNull String basePath)
 		throws InvalidFormatException, IOException {
-		LinkedList<OpusItem> resolvedItems = new LinkedList<OpusItem>();
+		List<OpusItem> resolvedItems = alist();
 		for (OpusItem item : opus.getItems()) {
 			OpusItem resolvedItem = item;
 			if (item instanceof OpusLink) {
-				Opus newOpus = readOpusFile(IO.openInputStreamPreservePath(baseDirectory + "/" +
-					((OpusLink) item).getHref()));
-				resolvedItem = resolveOpusLinks(newOpus, baseDirectory);
+				String filePath = ((OpusLink) item).getLink().getHref();
+				InputStream opusStream = null;
+				if (zip != null)
+					opusStream = zip.openFile(filePath);
+				else if (basePath != null)
+					opusStream = platformUtils().openInputStream(basePath + "/" + filePath);
+				else
+					throw new IOException("neither zip nor basePath is given");
+				if (opusStream == null)
+					throw new FileNotFoundException(filePath);
+				Opus newOpus = readOpusFile(opusStream);
+				resolvedItem = resolveOpusLinks(newOpus, zip, basePath);
 			}
 			resolvedItems.add(resolvedItem);
 		}

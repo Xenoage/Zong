@@ -14,7 +14,7 @@ import java.util.LinkedList;
 import java.util.Set;
 
 import com.xenoage.utils.jse.io.DesktopIO;
-import com.xenoage.utils.jse.io.FileUtils;
+import com.xenoage.utils.jse.io.JseFileUtils;
 import com.xenoage.zong.Voc;
 import com.xenoage.zong.symbols.Symbol;
 import com.xenoage.zong.symbols.SymbolPool;
@@ -46,7 +46,7 @@ public class SymbolPoolReader {
 			handle(fatal(Voc.CouldNotLoadSymbolPool, new FileNotFoundException(dir)));
 		}
 		try {
-			Set<String> files = desktopIO().listFiles(dir, FileUtils.getSVGFilter());
+			Set<String> files = desktopIO().listFiles(dir, JseFileUtils.getSVGFilter());
 			SvgSymbolReader loader = new SvgSymbolReader();
 			LinkedList<String> symbolsWithErrors = new LinkedList<String>();
 			for (String file : files) {

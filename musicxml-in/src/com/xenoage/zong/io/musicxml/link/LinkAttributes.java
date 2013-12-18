@@ -1,5 +1,6 @@
 package com.xenoage.zong.io.musicxml.link;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -8,7 +9,7 @@ import lombok.Data;
  * 
  * @author Andreas Wenger
  */
-@Data
+@AllArgsConstructor @Data
 public class LinkAttributes {
 
 	private String href;

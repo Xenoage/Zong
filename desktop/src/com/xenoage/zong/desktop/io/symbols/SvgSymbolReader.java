@@ -9,7 +9,7 @@ import java.io.File;
 
 import org.w3c.dom.Document;
 
-import com.xenoage.utils.jse.io.FileUtils;
+import com.xenoage.utils.jse.io.JseFileUtils;
 import com.xenoage.utils.jse.xml.XMLReader;
 import com.xenoage.zong.symbols.PathSymbol;
 import com.xenoage.zong.symbols.Symbol;
@@ -28,7 +28,7 @@ public class SvgSymbolReader {
 	 */
 	public PathSymbol<GeneralPath> loadSymbol(String svgFilepath) {
 		File svgFile = new File(svgFilepath);
-		String id = FileUtils.getNameWithoutExt(svgFile);
+		String id = JseFileUtils.getNameWithoutExt(svgFile);
 		log(remark("Loading symbol \"" + id + "\", file: \"" + svgFilepath + "\" ..."));
 
 		//open the file

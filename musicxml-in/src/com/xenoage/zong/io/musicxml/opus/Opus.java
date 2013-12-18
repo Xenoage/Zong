@@ -4,12 +4,11 @@ import static com.xenoage.utils.collections.CollectionUtils.alist;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import com.xenoage.utils.collections.CollectionUtils;
 import com.xenoage.zong.io.musicxml.in.OpusFileInput;
 
 /**
@@ -18,7 +17,7 @@ import com.xenoage.zong.io.musicxml.in.OpusFileInput;
  * 
  * @author Andreas Wenger
  */
-@Data
+@AllArgsConstructor @Data
 public class Opus
 	implements OpusItem {
 
@@ -33,7 +32,7 @@ public class Opus
 	public List<String> getScoreFilenames()
 		throws IOException {
 		ArrayList<String> ret = alist(items.size());
-		getScoreFilenames(new OpusFileInput().resolveOpusLinks(this, ""), ret);
+		getScoreFilenames(new OpusFileInput().resolveOpusLinks(this, null, ""), ret);
 		return ret;
 	}
 
