@@ -42,6 +42,7 @@ import com.xenoage.zong.core.music.key.Key;
 import com.xenoage.zong.core.music.key.TraditionalKey;
 import com.xenoage.zong.core.music.key.TraditionalKey.Mode;
 import com.xenoage.zong.core.music.util.BeatE;
+import com.xenoage.zong.core.music.util.BeatEList;
 import com.xenoage.zong.core.music.util.Column;
 import com.xenoage.zong.core.music.util.Interval;
 import com.xenoage.zong.core.music.util.MPE;
@@ -255,7 +256,8 @@ public final class Score
 			//search in the preceding measures
 			for (int iMeasure = mp.measure - 1; iMeasure >= 0; iMeasure--) {
 				columnKey = header.getColumnHeader(iMeasure).getKeys().getLast();
-				measureKey = getMeasure(atMeasure(mp.staff, iMeasure)).getPrivateKeys().getLast();
+				BeatEList<Key> privateKeys = getMeasure(atMeasure(mp.staff, iMeasure)).getPrivateKeys();
+				measureKey = (privateKeys != null ? privateKeys.getLast() : null);
 				ret = selectLatest(columnKey, measureKey);
 				if (ret != null)
 					return mpE(ret.element, mp.withMeasure(iMeasure).withBeat(ret.beat));

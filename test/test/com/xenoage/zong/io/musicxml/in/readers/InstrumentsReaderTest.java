@@ -15,27 +15,24 @@ import com.xenoage.zong.core.music.Part;
 import com.xenoage.zong.core.music.util.BeatE;
 import com.xenoage.zong.io.musicxml.in.MusicXMLScoreFileInputTest;
 
-
 /**
  * Test cases for the {@link InstrumentsReader}.
  * 
  * @author Andreas Wenger
  */
-public class InstrumentsReaderTest
-{
-	
+public class InstrumentsReaderTest {
+
 	/**
 	 * Read the file "InstrumentChanges.xml".
 	 * It must contain 3 instruments, namely a Clarinet in B, an Alto Sax in Eb
 	 * and a Trombone in C. Check also the transpositons and see if the instrument
 	 * changes happen at the right positions.
 	 */
-	@Test public void testInstrumentChanges()
-	{
+	@Test public void testInstrumentChanges() {
 		Score score = MusicXMLScoreFileInputTest.loadXMLTestScore("InstrumentChanges.xml");
 		Part part = score.stavesList.parts.getFirst();
 		assertEquals(3, part.getInstruments().size());
-		
+
 		//clarinet
 		PitchedInstrument instr0 = (PitchedInstrument) part.getInstruments().get(0);
 		assertEquals("Clarinet in Bb", instr0.base.name);
@@ -51,7 +48,7 @@ public class InstrumentsReaderTest
 		assertEquals("Trombone", instr2.base.name);
 		assertEquals(new Integer(0), instr2.transpose.diatonic);
 		assertEquals(0, instr2.transpose.chromatic);
-		
+
 		//instrument changes in measures 1, 2 and 3
 		Measure measure = score.getMeasure(atMeasure(0, 1));
 		assertEquals(instr1, getInstrumentChangeAtBeat0(measure).getInstrument());
@@ -60,18 +57,14 @@ public class InstrumentsReaderTest
 		measure = score.getMeasure(atMeasure(0, 3));
 		assertEquals(instr0, getInstrumentChangeAtBeat0(measure).getInstrument());
 	}
-	
-	
-	private static InstrumentChange getInstrumentChangeAtBeat0(Measure measure)
-	{
-		for (BeatE<InstrumentChange> ic : measure.instrumentChanges)
-		{
+
+	private static InstrumentChange getInstrumentChangeAtBeat0(Measure measure) {
+		for (BeatE<InstrumentChange> ic : measure.instrumentChanges) {
 			if (ic.beat.equals(_0))
 				return ic.element;
 		}
 		fail("Instrument change not found");
 		return null;
 	}
-	
 
 }

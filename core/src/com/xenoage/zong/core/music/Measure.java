@@ -357,7 +357,7 @@ public class Measure
 	 */
 	public Voice getVoice(MP mp) {
 		int index = mp.voice;
-		if (index >= 0 && index <= voices.size())
+		if (index >= 0 && index < voices.size())
 			return voices.get(index);
 		else
 			throw new IllegalMPException(mp);

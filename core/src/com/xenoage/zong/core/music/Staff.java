@@ -172,7 +172,13 @@ public final class Staff {
 	 * part of a score or if the measure is not part of this staff.
 	 */
 	public MP getMP(Measure measure) {
-		return null; //GOON
+		int measureIndex = measures.indexOf(measure);
+		if (parent == null || measureIndex == -1)
+			return null;
+		int staffIndex = parent.getStaves().indexOf(this);
+		if (staffIndex == -1)
+			return null;
+		return MP.atMeasure(staffIndex, measureIndex);
 	}
 
 	

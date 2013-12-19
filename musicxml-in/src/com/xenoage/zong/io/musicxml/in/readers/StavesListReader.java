@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import com.xenoage.utils.collections.ArrayUtils;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.Part;
+import com.xenoage.zong.core.music.Staff;
 import com.xenoage.zong.core.music.StavesList;
 import com.xenoage.zong.core.music.group.BarlineGroup;
 import com.xenoage.zong.core.music.group.BracketGroup;
@@ -236,6 +237,11 @@ public final class StavesListReader {
 		//add parts
 		for (Part part : parts) {
 			ret.getParts().add(part);
+			for (int i = 0; i < part.getStavesCount(); i++) {
+				Staff staff = Staff.staffMinimal();
+				staff.setParent(ret);
+				ret.getStaves().add(staff);
+			}
 		}
 		//add groups
 		for (PartsBarlineGroup barlineGroup : barlineGroups) {

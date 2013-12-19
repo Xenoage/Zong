@@ -3,6 +3,7 @@ package com.xenoage.zong.io.musicxml.in.readers;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.zong.core.position.MP.atBeat;
+import static com.xenoage.zong.io.musicxml.in.util.CommandPerformer.execute;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ import com.xenoage.utils.math.Fraction;
 import com.xenoage.utils.math.VSide;
 import com.xenoage.zong.commands.core.music.ColumnElementWrite;
 import com.xenoage.zong.commands.core.music.MeasureElementWrite;
+import com.xenoage.zong.commands.core.music.VoiceCreate;
 import com.xenoage.zong.commands.core.music.VoiceElementWrite;
 import com.xenoage.zong.commands.core.music.beam.BeamAdd;
 import com.xenoage.zong.commands.core.music.slur.SlurAdd;
@@ -22,6 +24,7 @@ import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.instrument.Instrument;
 import com.xenoage.zong.core.music.ColumnElement;
 import com.xenoage.zong.core.music.InstrumentChange;
+import com.xenoage.zong.core.music.Measure;
 import com.xenoage.zong.core.music.MeasureElement;
 import com.xenoage.zong.core.music.MusicContext;
 import com.xenoage.zong.core.music.Part;
@@ -39,6 +42,7 @@ import com.xenoage.zong.core.music.slur.SlurWaypoint;
 import com.xenoage.zong.core.music.util.Interval;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.util.InconsistentScoreException;
+import com.xenoage.zong.io.musicxml.in.util.CommandPerformer;
 import com.xenoage.zong.io.musicxml.in.util.MusicReaderException;
 import com.xenoage.zong.io.musicxml.in.util.OpenElements;
 import com.xenoage.zong.io.musicxml.in.util.OpenSlur;
@@ -398,7 +402,11 @@ public final class MusicReaderContext {
 	public void writeVoiceElement(VoiceElement element, int staffIndexInPart, int voice) {
 		MP mp = this.mp.withStaff(getPartStaves().getStart() + staffIndexInPart).withVoice(voice);
 		try {
-			new VoiceElementWrite(score.getVoice(mp), mp, element, true).execute();
+			//create voice if needed
+			Measure measure = score.getMeasure(mp);
+			if (measure.getVoices().size() < voice + 1)
+				execute(new VoiceCreate(measure, voice));
+			execute(new VoiceElementWrite(score.getVoice(mp), mp, element, true));
 		} catch (MeasureFullException ex) {
 			if (!settings.isIgnoringErrors())
 				throw new MusicReaderException(ex, this);

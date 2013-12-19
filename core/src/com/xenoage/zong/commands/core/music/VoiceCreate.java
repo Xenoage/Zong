@@ -40,8 +40,11 @@ public class VoiceCreate
 		if (measure.getVoices().size() > voiceIndex)
 			throw new UselessException();
 		lastExistingVoiceIndex = measure.getVoices().size() - 1;
-		for (int i = lastExistingVoiceIndex + 1; i <= voiceIndex; i++)
-			measure.getVoices().add(voice());
+		for (int i = lastExistingVoiceIndex + 1; i <= voiceIndex; i++) {
+			Voice voice = voice();
+			voice.setParent(measure);
+			measure.getVoices().add(voice);
+		}
 	}
 
 	

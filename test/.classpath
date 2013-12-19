@@ -12,5 +12,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/layout"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/voc"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/musicxml"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/musicxml-in"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

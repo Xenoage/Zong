@@ -132,14 +132,15 @@ import com.xenoage.utils.math.Fraction;
 
 	/**
 	 * Removes the first occurrence of the given element.
+	 * If found, it is returned, otherwise null.
 	 */
-	public void remove(T element) {
+	public T remove(T element) {
 		for (int i : range(elements)) {
 			if (elements.get(i).getElement() == element) {
-				elements.remove(i);
-				return;
+				return elements.remove(i).getElement();
 			}
 		}
+		return null;
 	}
 
 	/**

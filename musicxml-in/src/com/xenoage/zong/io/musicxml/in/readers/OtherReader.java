@@ -42,10 +42,10 @@ public final class OtherReader {
 
 	@MaybeNull public static BezierPoint readBezierPoint(MxlPosition mxlPosition,
 		MxlBezier mxlBezier, float tenthsMm, int staffLinesCount, float noteLP, Fraction chordDuration) {
-		Float px = mxlPosition.getDefaultX();
-		Float py = mxlPosition.getDefaultY();
-		Float cx = mxlBezier.getBezierX();
-		Float cy = mxlBezier.getBezierY();
+		Float px = (mxlPosition != null ? mxlPosition.getDefaultX() : null);
+		Float py = (mxlPosition != null ? mxlPosition.getDefaultY() : null);
+		Float cx = (mxlBezier != null ? mxlBezier.getBezierX() : null);
+		Float cy = (mxlBezier != null ? mxlBezier.getBezierY() : null);
 		SP point = null;
 		SP control = null;
 

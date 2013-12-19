@@ -1,0 +1,3 @@
+BeetAnGeSample.xml and BrahWiMeSample.mxl from the MusicXML 2.0 examples
+
+Copyright © 2002 Recordare LLC

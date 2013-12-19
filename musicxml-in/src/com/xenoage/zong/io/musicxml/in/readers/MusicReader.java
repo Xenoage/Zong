@@ -20,6 +20,7 @@ import static com.xenoage.zong.io.musicxml.in.readers.ChordReader.readChord;
 import static com.xenoage.zong.io.musicxml.in.readers.FontInfoReader.readFontInfo;
 import static com.xenoage.zong.io.musicxml.in.readers.OtherReader.readPosition;
 import static com.xenoage.zong.io.musicxml.in.readers.OtherReader.readPositioning;
+import static com.xenoage.zong.io.musicxml.in.util.CommandPerformer.execute;
 
 import java.util.List;
 
@@ -27,6 +28,9 @@ import com.xenoage.utils.font.FontInfo;
 import com.xenoage.utils.iterators.It;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.commands.core.music.ColumnElementWrite;
+import com.xenoage.zong.commands.core.music.MeasureAdd;
+import com.xenoage.zong.commands.core.music.MeasureAddUpTo;
+import com.xenoage.zong.commands.core.music.PartAdd;
 import com.xenoage.zong.commands.core.music.VoiceElementWrite;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.format.Break;
@@ -57,6 +61,7 @@ import com.xenoage.zong.core.music.layout.SystemBreak;
 import com.xenoage.zong.core.music.rest.Rest;
 import com.xenoage.zong.core.music.time.Time;
 import com.xenoage.zong.core.position.MP;
+import com.xenoage.zong.io.musicxml.in.util.CommandPerformer;
 import com.xenoage.zong.io.musicxml.in.util.MusicReaderException;
 import com.xenoage.zong.musicxml.types.MxlAttributes;
 import com.xenoage.zong.musicxml.types.MxlBackup;
@@ -124,6 +129,8 @@ public final class MusicReader {
 		for (MxlPart mxlPart : mxlParts) {
 			//clear part-dependent context values
 			context.beginNewPart(mxlParts.getIndex());
+			//create measures
+			execute(new MeasureAddUpTo(score, mxlPart.getMeasures().size()));
 			//read the measures
 			It<MxlMeasure> mxlMeasures = it(mxlPart.getMeasures());
 			for (MxlMeasure mxlMeasure : mxlMeasures) {
@@ -339,17 +346,21 @@ public final class MusicReader {
 	 * Reads the given print element.
 	 */
 	private static void readPrint(MusicReaderContext context, MxlPrint mxlPrint) {
-		MxlPrintAttributes mxlPA = mxlPrint.getPrintAttributes();
 
 		//system and page break
-		Boolean newSystem = mxlPA.getNewSystem();
-		SystemBreak systemBreak = (newSystem == null ? null : (newSystem ? SystemBreak.NewSystem
-			: SystemBreak.NoNewSystem));
-		Boolean newPage = mxlPA.getNewPage();
-		PageBreak pageBreak = (newPage == null ? null : (newPage ? PageBreak.NewPage
-			: PageBreak.NoNewPage));
-		if (systemBreak != null || pageBreak != null) {
-			context.writeColumnElement(new Break(pageBreak, systemBreak));
+		SystemBreak systemBreak = null;
+		PageBreak pageBreak = null;
+		MxlPrintAttributes mxlPA = mxlPrint.getPrintAttributes();
+		if (mxlPA != null) {
+			Boolean newSystem = mxlPA.getNewSystem();
+			systemBreak = (newSystem == null ? null : (newSystem ? SystemBreak.NewSystem
+				: SystemBreak.NoNewSystem));
+			Boolean newPage = mxlPA.getNewPage();
+			pageBreak = (newPage == null ? null : (newPage ? PageBreak.NewPage
+				: PageBreak.NoNewPage));
+			if (systemBreak != null || pageBreak != null) {
+				context.writeColumnElement(new Break(pageBreak, systemBreak));
+			}
 		}
 
 		//we assume that custom system layout information is just used in combination with

@@ -20,6 +20,7 @@ import com.xenoage.zong.core.music.ColumnElement;
 import com.xenoage.zong.core.music.MeasureSide;
 import com.xenoage.zong.core.music.barline.Barline;
 import com.xenoage.zong.core.music.barline.BarlineRepeat;
+import com.xenoage.zong.core.music.direction.Direction;
 import com.xenoage.zong.core.music.direction.DirectionContainer;
 import com.xenoage.zong.core.music.direction.Tempo;
 import com.xenoage.zong.core.music.key.Key;
@@ -30,7 +31,6 @@ import com.xenoage.zong.core.music.volta.Volta;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.position.MPContainer;
 import com.xenoage.zong.core.position.MPElement;
-
 
 /**
  * A {@link ColumnHeader} stores information that
@@ -46,7 +46,8 @@ import com.xenoage.zong.core.position.MPElement;
  * 
  * @author Andreas Wenger
  */
-@Data public final class ColumnHeader
+@Data
+public final class ColumnHeader
 	implements DirectionContainer, MPContainer {
 
 	/** The time signature at the beginning of this measure. */
@@ -65,13 +66,15 @@ import com.xenoage.zong.core.position.MPElement;
 	@NonNull @MaybeEmpty private BeatEList<Tempo> tempos;
 	/** The {@link Break} after this measure, or null. */
 	@MaybeNull private Break measureBreak;
-	
+	/** The other {@link Direction}s in this measure */
+	@NonNull @MaybeEmpty private BeatEList<Direction> otherDirections;
+
 	/** Back reference: parent score, or null if not part of a score. */
 	private Score parentScore = null;
 	/** Back reference: measure index, or null if not part of a score. */
 	private Integer parentMeasureIndex = null;
-	
-	
+
+
 	public ColumnHeader(Score parentScore, Integer parentMeasureIndex) {
 		this.time = null;
 		this.startBarline = null;
@@ -81,10 +84,10 @@ import com.xenoage.zong.core.position.MPElement;
 		this.keys = new BeatEList<Key>();
 		this.tempos = new BeatEList<Tempo>();
 		this.measureBreak = null;
+		this.otherDirections = new BeatEList<Direction>();
 		this.parentScore = parentScore;
 		this.parentMeasureIndex = parentMeasureIndex;
 	}
-
 
 	/**
 	 * Sets the time signature, or null if unset.
@@ -96,7 +99,6 @@ import com.xenoage.zong.core.position.MPElement;
 		this.time.setParent(this);
 		return old;
 	}
-
 
 	/**
 	 * Sets the barline at the beginning of this measure, or null if unset.
@@ -110,7 +112,6 @@ import com.xenoage.zong.core.position.MPElement;
 		return old;
 	}
 
-
 	/**
 	 * Sets the barline at the end of this measure, or null if unset.
 	 * If there is already one, it is replaced and returned (otherwise null).
@@ -123,7 +124,6 @@ import com.xenoage.zong.core.position.MPElement;
 		return old;
 	}
 
-
 	/**
 	 * Sets a barline in the middle of the measure.
 	 * If there is already one at the given beat, it is replaced and returned (otherwise null).
@@ -134,15 +134,16 @@ import com.xenoage.zong.core.position.MPElement;
 		return middleBarlines.set(middleBarline, beat);
 	}
 
-
 	/**
 	 * Removes a barline in the middle of the measure.
 	 * If found, is returned (otherwise null).
 	 */
 	public Barline removeMiddleBarline(Fraction beat) {
-		return middleBarlines.remove(beat);
+		Barline ret = middleBarlines.remove(beat);
+		if (ret != null)
+			ret.setParent(null);
+		return ret;
 	}
-
 
 	/**
 	 * Sets the volta beginning at this measure, or null if unset.
@@ -155,46 +156,47 @@ import com.xenoage.zong.core.position.MPElement;
 		return old;
 	}
 
-
 	/**
 	 * Sets a key in this measure.
 	 * If there is already one at the given beat, it is replaced and returned (otherwise null).
 	 */
-	public Key setKey(@NonNull Key key, Fraction beat) {
-		checkArgsNotNull(key);
+	public Key setKey(Key key, Fraction beat) {
+		checkArgsNotNull(key, beat);
 		key.setParent(this);
 		return keys.set(key, beat);
 	}
 
-
 	/**
 	 * Removes a key from this measure.
-	 * If found, is returned (otherwise null).
+	 * If found, it is returned (otherwise null).
 	 */
 	public Key removeKey(Fraction beat) {
-		return keys.remove(beat);
+		Key ret = keys.remove(beat);
+		if (ret != null)
+			ret.setParent(null);
+		return ret;
 	}
-
 
 	/**
 	 * Sets a tempo in this measure.
 	 * If there is already one at the given beat, it is replaced and returned (otherwise null).
 	 */
-	public Tempo setTempo(@NonNull Tempo tempo, Fraction beat) {
-		checkArgsNotNull(tempo);
+	public Tempo setTempo(Tempo tempo, Fraction beat) {
+		checkArgsNotNull(tempo, beat);
 		tempo.setParent(this);
 		return tempos.set(tempo, beat);
 	}
 
-
 	/**
 	 * Removes a tempo from this measure.
-	 * If found, is returned (otherwise null).
+	 * If found, it is returned (otherwise null).
 	 */
 	public Tempo removeTempo(Fraction beat) {
-		return tempos.remove(beat);
+		Tempo ret = tempos.remove(beat);
+		if (ret != null)
+			ret.setParent(null);
+		return ret;
 	}
-
 
 	/**
 	 * Sets the {@link Break} after this measure, or null if there is none.
@@ -207,6 +209,27 @@ import com.xenoage.zong.core.position.MPElement;
 		return old;
 	}
 
+	/**
+	 * Adds the given {@link Direction} to this measure.
+	 * For a {@link Tempo}, use {@link #setTempo(Tempo, Fraction)} with a null value instead.
+	 */
+	public void addOtherDirection(Direction direction, Fraction beat) {
+		checkArgsNotNull(direction, beat);
+		direction.setParent(this);
+		otherDirections.add(direction, beat);
+	}
+
+	/**
+	 * Removes the given {@link Direction} from this measure.
+	 * If found, it is returned (otherwise null).
+	 * For a {@link Tempo}, use {@link #removeTempo(Fraction)} instead.
+	 */
+	public Direction removeOtherDirection(Direction direction) {
+		Direction ret = otherDirections.remove(direction);
+		if (ret != null)
+			ret.setParent(null);
+		return ret;
+	}
 
 	/**
 	 * Checks the given start barline.
@@ -214,9 +237,9 @@ import com.xenoage.zong.core.position.MPElement;
 	private void checkStartBarline(Barline startBarline) {
 		//both side repeat is not allowed
 		if (startBarline != null && startBarline.getRepeat() == BarlineRepeat.Both)
-			throw new IllegalArgumentException(BarlineRepeat.Both + " is not supported for a start barline.");
+			throw new IllegalArgumentException(BarlineRepeat.Both +
+				" is not supported for a start barline.");
 	}
-
 
 	/**
 	 * Checks the given end barline.
@@ -224,22 +247,26 @@ import com.xenoage.zong.core.position.MPElement;
 	private void checkEndBarline(Barline endBarline) {
 		//both side repeat is not allowed
 		if (endBarline != null && endBarline.getRepeat() == BarlineRepeat.Both)
-			throw new IllegalArgumentException(BarlineRepeat.Both + " is not supported for an end barline.");
+			throw new IllegalArgumentException(BarlineRepeat.Both +
+				" is not supported for an end barline.");
 	}
 
-
 	/**
-	 * Sets the given {@link ColumnElement} at the given beat. If there
-	 * is already another element of this type, it is replaced and returned (otherwise null).
+	 * Sets the given {@link ColumnElement} at the given beat.
+	 * 
+	 * If there is already another element of this type, it is replaced and returned (otherwise null),
+	 * except for {@link Direction}s (except {@link Tempo}), where multiple elements on a single beat
+	 * are allowed.
 	 * 
 	 * @param element  the element to add
 	 * @param beat     the beat where to add the element. Only needed for
-	 *                 key, tempo and middle barlines
+	 *                 key, tempo, middle barlines and other directions
 	 * @param side     Only needed for barlines           
 	 * 
 	 * Tested by {@link ScoreController#writeColumnElement(Score, BMP, MeasureSide, ColumnElement)}. GOON
 	 */
-	public ColumnElement setColumnElement(ColumnElement element, @MaybeNull Fraction beat, @MaybeNull MeasureSide side) {
+	public ColumnElement setColumnElement(ColumnElement element, @MaybeNull Fraction beat,
+		@MaybeNull MeasureSide side) {
 		if (element instanceof Barline) {
 			Barline barline = (Barline) element;
 			//left or right barline
@@ -266,10 +293,13 @@ import com.xenoage.zong.core.position.MPElement;
 			return setTime((Time) element);
 		else if (element instanceof Volta)
 			return setVolta((Volta) element);
+		else if (element instanceof Direction) {
+			addOtherDirection((Direction) element, beat);
+			return null;
+		}
 		else
 			throw new UnsupportedClassException(element);
 	}
-
 
 	/**
 	 * Removes the given {@link ColumnElement}.
@@ -302,11 +332,13 @@ import com.xenoage.zong.core.position.MPElement;
 		else if (element instanceof Volta) {
 			volta = null;
 		}
+		else if (element instanceof Direction) {
+			otherDirections.remove((Direction) element);
+		}
 		else {
 			throw new UnsupportedClassException(element);
 		}
 	}
-
 
 	/**
 	 * Replaces the given {@link ColumnElement} with the other given one.
@@ -364,7 +396,6 @@ import com.xenoage.zong.core.position.MPElement;
 		}
 	}
 
-
 	/**
 	 * Gets a list of all {@link ColumnElement}s in this column, which
 	 * are assigned to a beat (middle barlines, keys and tempos).
@@ -376,7 +407,6 @@ import com.xenoage.zong.core.position.MPElement;
 		ret.addAll(tempos);
 		return ret;
 	}
-
 
 	/**
 	 * Gets a list of all {@link ColumnElement}s in this column, which
@@ -397,7 +427,6 @@ import com.xenoage.zong.core.position.MPElement;
 			ret.add(measureBreak);
 		return ret.close();
 	}
-
 
 	/**
 	 * Gets a list of all {@link ColumnElement}s in this column.
@@ -422,8 +451,7 @@ import com.xenoage.zong.core.position.MPElement;
 			ret.add(measureBreak);
 		return ret.close();
 	}
-	
-	
+
 	/**
 	 * Gets the {@link MP} of the given {@link ColumnElement}, or null if it is not part
 	 * of this column or this column is not part of a score.
@@ -446,8 +474,7 @@ import com.xenoage.zong.core.position.MPElement;
 			return getMPIn(element, tempos);
 		return null;
 	}
-	
-	
+
 	/**
 	 * Gets the {@link MP} of the given element within the given list of elements,
 	 * or null if the list of elements is null or the element could not be found.
@@ -461,7 +488,6 @@ import com.xenoage.zong.core.position.MPElement;
 		return null;
 	}
 
-	
 	/**
 	 * Gets the {@link MeasureSide} of the given element in this column. This applies only to
 	 * start and end barlines. For all other elements, null is returned.
