@@ -88,10 +88,10 @@ public final class OtherReader {
 
 	@MaybeNull public static Position readPosition(MxlPosition mxlPosition, float tenthsMm,
 		int staffLinesCount) {
-		Float x = mxlPosition.getDefaultX();
-		Float y = mxlPosition.getDefaultY();
-		Float rx = mxlPosition.getRelativeX();
-		Float ry = mxlPosition.getRelativeY();
+		Float x = (mxlPosition != null ? mxlPosition.getDefaultX() : null);
+		Float y = (mxlPosition != null ? mxlPosition.getDefaultY() : null);
+		Float rx = (mxlPosition != null ? mxlPosition.getRelativeX() : null);
+		Float ry = (mxlPosition != null ? mxlPosition.getRelativeY() : null);
 		if (x == null && y == null && rx == null && ry == null) {
 			return null;
 		}

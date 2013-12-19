@@ -80,7 +80,8 @@ public class MusicXMLScoreFileInput
 		score.setMetaData("layoutformat", scoreFormatValue.layoutFormat);
 
 		//create the list of staves
-		StavesListReader.Value stavesListValue = StavesListReader.read(mxlScore, score);
+		StavesListReader.Value stavesListValue = StavesListReader.read(mxlScore);
+		stavesListValue.stavesList.setScore(score);
 		score.setStavesList(stavesListValue.stavesList);
 
 		//read the musical contents

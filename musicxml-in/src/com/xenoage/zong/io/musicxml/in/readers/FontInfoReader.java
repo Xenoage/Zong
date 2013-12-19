@@ -4,6 +4,7 @@ import static com.xenoage.utils.collections.CList.ilist;
 
 import java.util.List;
 
+import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.collections.IList;
 import com.xenoage.utils.font.FontInfo;
@@ -22,7 +23,10 @@ import com.xenoage.zong.musicxml.types.enums.MxlFontWeight;
  */
 public final class FontInfoReader {
 
-	@NonNull public static FontInfo readFontInfo(MxlFont mxlFont, FontInfo defaultFont) {
+	@MaybeNull public static FontInfo readFontInfo(MxlFont mxlFont, FontInfo defaultFont) {
+		if (mxlFont == null)
+			return null;
+		
 		//font
 		List<String> mxlFamilies = mxlFont.getFontFamily();
 		IList<String> families = null;

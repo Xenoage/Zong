@@ -1,6 +1,7 @@
 package com.xenoage.zong.commands.core.music;
 
 import static com.xenoage.utils.iterators.ReverseIterator.reverseIt;
+import static com.xenoage.utils.kernel.Range.rangeReverse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +10,7 @@ import com.xenoage.utils.annotations.Untested;
 import com.xenoage.utils.collections.NullableList;
 import com.xenoage.utils.document.command.Command;
 import com.xenoage.utils.document.command.Undoability;
+import com.xenoage.utils.kernel.Range;
 import com.xenoage.zong.commands.core.music.beam.BeamRemove;
 import com.xenoage.zong.commands.core.music.slur.SlurRemove;
 import com.xenoage.zong.commands.core.music.tuplet.TupletRemove;
@@ -52,8 +54,10 @@ import com.xenoage.zong.core.music.tuplet.Tuplet;
 		if (element instanceof Chord) {
 			Chord chord = (Chord) element;
 			//remove slurs
-			for (Slur slur : NullableList.it(chord.getSlurs()))
-				executeAndRemember(new SlurRemove(slur));
+			if (chord.getSlurs() != null) {
+				for (int i : rangeReverse(chord.getSlurs()))
+					executeAndRemember(new SlurRemove(chord.getSlurs().get(i)));
+			}
 			//remove beam
 			if (chord.getBeam() != null)
 				executeAndRemember(new BeamRemove(chord.getBeam()));

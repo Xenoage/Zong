@@ -69,7 +69,7 @@ public final class ScoreFormatReader {
 			if (layout != null) {
 				
 				//system layout
-				MxlSystemLayout mxlSystemLayout = mxlDefaults.getLayout().getSystemLayout();
+				MxlSystemLayout mxlSystemLayout = layout.getSystemLayout();
 				if (mxlSystemLayout != null) {
 					SystemLayoutReader.Value v = SystemLayoutReader.read(mxlSystemLayout, tenthMm);
 					scoreFormat = scoreFormat.withSystemLayout(v.systemLayout);
@@ -79,13 +79,15 @@ public final class ScoreFormatReader {
 				}
 	
 				//staff layouts
-				for (MxlStaffLayout mxlStaffLayout : mxlDefaults.getLayout().getStaffLayouts()) {
-					StaffLayoutReader.Value v = readStaffLayout(mxlStaffLayout, tenthMm);
-					if (v.number == null) {
-						scoreFormat = scoreFormat.withStaffLayoutOther(v.staffLayout);
-					}
-					else {
-						scoreFormat = scoreFormat.withStaffLayout(v.number - 1, v.staffLayout);
+				if (layout.getStaffLayouts() != null) {
+					for (MxlStaffLayout mxlStaffLayout : layout.getStaffLayouts()) {
+						StaffLayoutReader.Value v = readStaffLayout(mxlStaffLayout, tenthMm);
+						if (v.number == null) {
+							scoreFormat = scoreFormat.withStaffLayoutOther(v.staffLayout);
+						}
+						else {
+							scoreFormat = scoreFormat.withStaffLayout(v.number - 1, v.staffLayout);
+						}
 					}
 				}
 			}
@@ -96,7 +98,8 @@ public final class ScoreFormatReader {
 			if (mxlLyricFont != null) {
 				FontInfo defaultLyricFont = FontInfoReader.readFontInfo(mxlLyricFont.getFont(),
 					scoreFormat.lyricFont);
-				scoreFormat = scoreFormat.withLyricFont(defaultLyricFont);
+				if (defaultLyricFont != null)
+					scoreFormat = scoreFormat.withLyricFont(defaultLyricFont);
 			}
 		}
 

@@ -24,6 +24,7 @@ import static com.xenoage.zong.io.musicxml.in.util.CommandPerformer.execute;
 
 import java.util.List;
 
+import com.xenoage.utils.NullUtils;
 import com.xenoage.utils.font.FontInfo;
 import com.xenoage.utils.iterators.It;
 import com.xenoage.utils.math.Fraction;
@@ -178,7 +179,7 @@ public final class MusicReader {
 		context.beginNewMeasure(measureIndex);
 		//list all elements
 		List<MxlMusicDataContent> content = mxlMeasure.getMusicData().getContent();
-		for (int i : range(content)) {
+		for (int i = 0; i < content.size(); i++) { //i may be modified within this loop
 			MxlMusicDataContent mxlMDC = content.get(i);
 			switch (mxlMDC.getMusicDataContentType()) {
 				case Note: {
@@ -282,14 +283,16 @@ public final class MusicReader {
 		}
 
 		//clefs
-		for (MxlClef mxlClef : mxlAttributes.getClefs()) {
-			ClefType clefType = getEnumValue(mxlClef.getSign(), ClefType.values());
-			Clef clef = (clefType != null ? new Clef(clefType) : null);
-			//staff (called "number" in MusicXML), first staff is default
-			int staff = mxlClef.getNumber() - 1;
-			//add to staff
-			if (clef != null) {
-				context.writeMeasureElement(clef, staff);
+		if (mxlAttributes.getClefs() != null) {
+			for (MxlClef mxlClef : mxlAttributes.getClefs()) {
+				ClefType clefType = getEnumValue(mxlClef.getSign(), ClefType.values());
+				Clef clef = (clefType != null ? new Clef(clefType) : null);
+				//staff (called "number" in MusicXML), first staff is default
+				int staff = mxlClef.getNumber() - 1;
+				//add to staff
+				if (clef != null) {
+					context.writeMeasureElement(clef, staff);
+				}
 			}
 		}
 
@@ -484,7 +487,8 @@ public final class MusicReader {
 					//dynamics
 					MxlDynamics mxlDynamics = (MxlDynamics) mxlDTC;
 					DynamicsType type = mxlDynamics.getElement();
-					Positioning positioning = readPositioning(mxlDynamics.getPrintStyle().getPosition(),
+					MxlPrintStyle printStyle = notNull(mxlDynamics.getPrintStyle(), MxlPrintStyle.empty);
+					Positioning positioning = readPositioning(printStyle.getPosition(),
 						mxlDynamics.getPlacement(), mxlDirection.getPlacement(), context.getTenthMm(),
 						context.getStaffLinesCount(staff));
 					Dynamics dynamics = new Dynamics(type);
@@ -564,9 +568,9 @@ public final class MusicReader {
 					if (direction == null) {
 						MxlWords mxlWords = (MxlWords) mxlDTC;
 						MxlFormattedText mxlFormattedText = mxlWords.getFormattedText();
-						FontInfo fontInfo = readFontInfo(mxlFormattedText.getPrintStyle().getFont(),
-							defaultFont);
-						Position position = readPosition(mxlFormattedText.getPrintStyle().getPosition(),
+						MxlPrintStyle mxlPrintStyle = notNull(mxlFormattedText.getPrintStyle(), MxlPrintStyle.empty);
+						FontInfo fontInfo = readFontInfo(mxlPrintStyle.getFont(), defaultFont);
+						Position position = readPosition(mxlPrintStyle.getPosition(),
 							context.getTenthMm(), context.getStaffLinesCount(staff));
 						direction = new Words(ut(mxlFormattedText.getValue()));
 						//direction.setFont(fontInfo); //TODO

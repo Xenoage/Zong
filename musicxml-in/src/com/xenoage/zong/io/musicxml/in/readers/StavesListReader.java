@@ -12,7 +12,6 @@ import java.util.Map;
 import lombok.AllArgsConstructor;
 
 import com.xenoage.utils.collections.ArrayUtils;
-import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.Part;
 import com.xenoage.zong.core.music.Staff;
 import com.xenoage.zong.core.music.StavesList;
@@ -84,7 +83,7 @@ public final class StavesListReader {
 	/**
 	 * Creates a {@link StavesList} from the given partwise MusicXML 2.0 document.
 	 */
-	public static Value read(MxlScorePartwise mxlScore, Score score) {
+	public static Value read(MxlScorePartwise mxlScore) {
 		//list of parts
 		List<Part> parts = alist();
 		Map<String, Integer> partsIDtoIndex = map();
@@ -139,7 +138,7 @@ public final class StavesListReader {
 				parts.get(partIndex).setStavesCount(partStaves);
 		}
 		//creates the final StavesList for this document
-		StavesList stavesList = createStavesList(parts, barlineGroups, bracketGroups, score);
+		StavesList stavesList = createStavesList(parts, barlineGroups, bracketGroups);
 		//return staves list and index mapping
 		return new Value(stavesList, partsIDtoIndex);
 	}
@@ -232,8 +231,8 @@ public final class StavesListReader {
 	 * Creates the (still empty) {@link StavesList} for this document.
 	 */
 	private static StavesList createStavesList(List<Part> parts,
-		List<PartsBarlineGroup> barlineGroups, List<PartsBracketGroup> bracketGroups, Score score) {
-		StavesList ret = new StavesList(score);
+		List<PartsBarlineGroup> barlineGroups, List<PartsBracketGroup> bracketGroups) {
+		StavesList ret = new StavesList();
 		//add parts
 		for (Part part : parts) {
 			ret.getParts().add(part);
@@ -247,12 +246,12 @@ public final class StavesListReader {
 		for (PartsBarlineGroup barlineGroup : barlineGroups) {
 			int startIndex = getFirstStaffIndex(barlineGroup.startPartIndex, parts);
 			int endIndex = getLastStaffIndex(barlineGroup.stopPartIndex, parts);
-			ret.getBarlineGroups().add(new BarlineGroup(new StavesRange(startIndex, endIndex), barlineGroup.style));
+			ret.addBarlineGroup(new StavesRange(startIndex, endIndex), barlineGroup.style);
 		}
 		for (PartsBracketGroup bracketGroup : bracketGroups) {
 			int startIndex = getFirstStaffIndex(bracketGroup.startPartIndex, parts);
 			int endIndex = getLastStaffIndex(bracketGroup.stopPartIndex, parts);
-			ret.getBracketGroups().add(new BracketGroup(new StavesRange(startIndex, endIndex), bracketGroup.style));
+			ret.addBracketGroup(new StavesRange(startIndex, endIndex), bracketGroup.style);
 		}
 		//add implicit brace- and barline-groups for ungrouped
 		//parts with more than one staff
@@ -260,8 +259,8 @@ public final class StavesListReader {
 			if (parts.get(i).getStavesCount() > 1 && !isPartInGroup(i, barlineGroups, bracketGroups)) {
 				int startIndex = getFirstStaffIndex(i, parts);
 				int endIndex = getLastStaffIndex(i, parts);
-				ret.getBarlineGroups().add(new BarlineGroup(new StavesRange(startIndex, endIndex), BarlineGroup.Style.Common));
-				ret.getBracketGroups().add(new BracketGroup(new StavesRange(startIndex, endIndex), BracketGroup.Style.Brace));
+				ret.addBarlineGroup(new StavesRange(startIndex, endIndex), BarlineGroup.Style.Common);
+				ret.addBracketGroup(new StavesRange(startIndex, endIndex), BracketGroup.Style.Brace);
 			}
 		}
 		return ret;

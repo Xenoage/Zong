@@ -42,7 +42,6 @@ import com.xenoage.zong.core.music.slur.SlurWaypoint;
 import com.xenoage.zong.core.music.util.Interval;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.util.InconsistentScoreException;
-import com.xenoage.zong.io.musicxml.in.util.CommandPerformer;
 import com.xenoage.zong.io.musicxml.in.util.MusicReaderException;
 import com.xenoage.zong.io.musicxml.in.util.OpenElements;
 import com.xenoage.zong.io.musicxml.in.util.OpenSlur;
@@ -145,7 +144,7 @@ public final class MusicReaderContext {
 	public StavesRange getPartStaves() {
 		StavesList stavesList = getScore().getStavesList();
 		Part part = stavesList.getPartByStaffIndex(mp.staff);
-		return stavesList.getPartStaves(part);
+		return stavesList.getPartStaffIndices(part);
 	}
 
 	/**
@@ -162,7 +161,7 @@ public final class MusicReaderContext {
 	 */
 	public void beginNewPart(int partIndex) {
 		Part part = score.getStavesList().getParts().get(partIndex);
-		this.mp = atBeat(score.getStavesList().getPartStaves(part).getStart(), 0, 0, _0);
+		this.mp = atBeat(score.getStavesList().getPartStaffIndices(part).getStart(), 0, 0, _0);
 		List<List<String>> voiceMappings = alist();
 		for (int i = 0; i < part.getStavesCount(); i++)
 			voiceMappings.add(new ArrayList<String>());

@@ -16,6 +16,8 @@ import com.xenoage.utils.xml.XmlWriter;
 @AllArgsConstructor @Getter @Setter
 public final class MxlPrintStyle {
 
+	public static final MxlPrintStyle empty = new MxlPrintStyle(null, null, null);
+	
 	@MaybeNull private MxlPosition position;
 	@MaybeNull private MxlFont font;
 	@MaybeNull private MxlColor color;

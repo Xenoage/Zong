@@ -5,20 +5,20 @@ import lombok.Data;
 
 import com.xenoage.utils.kernel.Range;
 
-
 /**
  * Range of adjacent staves.
  *
  * @author Andreas Wenger
  */
-@Data public final class StavesRange {
+@Data
+public final class StavesRange {
 
 	/** The index of the first staff of the range. */
 	private int start;
 	/** The index of the last staff of the range. */
 	private int stop;
-	
-	
+
+
 	/**
 	 * Creates a new {@link StavesRange} with at least 1 staff.
 	 */
@@ -28,16 +28,27 @@ import com.xenoage.utils.kernel.Range;
 		this.start = start;
 		this.stop = stop;
 	}
-	
-	
+
 	/**
 	 * Gets the number of staves.
 	 */
-	public int getCount()
-	{
+	public int getCount() {
 		return stop - start + 1;
 	}
 
+	/**
+	 * Returns true, if the group contains the whole given group.
+	 */
+	public boolean contains(StavesRange staves) {
+		return (staves.start >= start && staves.stop <= stop);
+	}
+	
+	/**
+	 * Returns true, if the group intersects with the given group.
+	 */
+	public boolean intersects(StavesRange staves) {
+		return staves.start <= stop && staves.stop >= start;
+	}
 
 	/**
 	 * Returns true, if the group contains the staff
@@ -46,15 +57,13 @@ import com.xenoage.utils.kernel.Range;
 	public boolean contains(int index) {
 		return (index >= start && index <= stop);
 	}
-	
-	
+
 	/**
 	 * Gets this range as a {@link Range}.
 	 */
 	public Range getRange() {
 		return range(start, stop);
 	}
-
 
 	/**
 	 * Shifts the indices by the given amount.
@@ -64,15 +73,13 @@ import com.xenoage.utils.kernel.Range;
 		stop += amount;
 	}
 
-
 	/**
 	 * Shifts the end index by the given amount.
 	 */
 	public void shiftEnd(int amount) {
 		stop += amount;
 	}
-	
-	
+
 	/**
 	 * Inserts the given number of staves at the given position.
 	 * If the position is before the start, the whole range is shifted.
@@ -86,8 +93,7 @@ import com.xenoage.utils.kernel.Range;
 		else if (index <= stop)
 			shiftEnd(stavesCount); //shift only the end
 	}
-	
-	
+
 	/**
 	 * Removes the given number of staves starting at the given position.
 	 * If true is returned, the whole range was removed. If false is returned,
@@ -97,7 +103,7 @@ import com.xenoage.utils.kernel.Range;
 		int lastIndex = index + stavesCount - 1;
 		if (index <= start && lastIndex >= stop) {
 			//whole range is removed
-			return true; 
+			return true;
 		}
 		else if (index >= start && lastIndex <= stop) {
 			//all removed staves are within this range
@@ -121,6 +127,5 @@ import com.xenoage.utils.kernel.Range;
 		}
 		return false;
 	}
-
 
 }

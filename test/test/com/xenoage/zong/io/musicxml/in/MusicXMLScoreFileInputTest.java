@@ -6,6 +6,7 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -68,11 +69,11 @@ public class MusicXMLScoreFileInputTest {
 	 */
 	public static List<String> getSampleFiles() {
 		List<String> ret = alist();
-		String[] files = new File(dir11).list(JseFileUtils.getXMLFilter());
+		Set<String> files = DesktopIO.desktopIO().listFiles(dir11, JseFileUtils.getXMLFilter());
 		for (String file : files) {
 			ret.add(dir11 + file);
 		}
-		files = new File(dir20).list(JseFileUtils.getXMLFilter());
+		files = DesktopIO.desktopIO().listFiles(dir20, JseFileUtils.getXMLFilter());
 		for (String file : files) {
 			ret.add(dir20 + file);
 		}

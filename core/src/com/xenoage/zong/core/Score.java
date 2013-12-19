@@ -65,7 +65,7 @@ public final class Score
 	/** The list of elements that are normally used in all staves, like time signatures and key signatures. */
 	@Getter @Setter @NonNull private ScoreHeader header = scoreHeader(this);
 	/** The list of staves, parts and groups. */
-	@Getter @Setter @NonNull private StavesList stavesList = new StavesList(this);
+	@Getter @Setter @NonNull private StavesList stavesList = new StavesList();
 	/** Additional meta information. This other application-dependend meta-information
 	 * can be used for example to store page layout information, which is not part
 	 * of the musical score in this project. */
@@ -75,6 +75,11 @@ public final class Score
 	@Getter private CommandPerformer commandPerformer = new CommandPerformer(this);
 	/** Supported formats for reading scores from files and writing them to files. */
 	@Getter private SupportedFormats<Score> supportedFormats = null;
+	
+	
+	public Score() {
+		stavesList.setScore(this);
+	}
 
 
 	/**

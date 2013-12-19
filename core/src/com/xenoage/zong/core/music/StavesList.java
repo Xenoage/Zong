@@ -1,13 +1,12 @@
 package com.xenoage.zong.core.music;
 
 import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.utils.kernel.Range.rangeReverse;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.Data;
 
 import com.xenoage.utils.annotations.Unneeded;
 import com.xenoage.utils.math.Fraction;
@@ -26,19 +25,19 @@ import com.xenoage.zong.util.exceptions.IllegalMPException;
  *
  * @author Andreas Wenger
  */
-@RequiredArgsConstructor
+@Data
 public final class StavesList {
 
 	/** The parent score. */
-	@Getter @NonNull private Score score;
+	private Score score = null;
 	/** The list of all staves. */
-	@Getter private List<Staff> staves = new ArrayList<Staff>();
+	private List<Staff> staves = new ArrayList<Staff>();
 	/** The list of all parts. */
-	@Getter private List<Part> parts = new ArrayList<Part>();
+	private List<Part> parts = new ArrayList<Part>();
 	/** The groups of the staves with barlines. */
-	@Getter private List<BarlineGroup> barlineGroups = new ArrayList<BarlineGroup>();
+	private List<BarlineGroup> barlineGroups = new ArrayList<BarlineGroup>();
 	/** The groups of the staves with brackets. */
-	@Getter private List<BracketGroup> bracketGroups = new ArrayList<BracketGroup>();
+	private List<BracketGroup> bracketGroups = new ArrayList<BracketGroup>();
 
 
 	/**
@@ -68,11 +67,11 @@ public final class StavesList {
 	/**
 	 * Gets the staves indices of the given part, or null if not found.
 	 */
-	public StavesRange getPartStaves(Part part) {
+	public StavesRange getPartStaffIndices(Part part) {
 		int iStaff = 0;
 		for (Part p : parts) {
 			if (p == part)
-				return new StavesRange(iStaff, iStaff + part.getStavesCount());
+				return new StavesRange(iStaff, iStaff + part.getStavesCount() - 1);
 			iStaff += p.getStavesCount();
 		}
 		return null;
@@ -170,6 +169,56 @@ public final class StavesList {
 			ret[iMeasure] = maxBeat;
 		}
 		return ret;
+	}
+	
+	/**
+	 * Adds a staff group for the given staves with the given style.
+	 * Since a staff may only have one barline group, existing barline groups
+	 * at the given positions are removed.
+	 */
+	public void addBarlineGroup(StavesRange stavesRange, BarlineGroup.Style style) {
+		if (stavesRange.getStop() >= staves.size())
+			throw new IllegalArgumentException("staves out of range");
+		
+		//if the given group is within an existing one, ignore the new group
+		//(we do not support nested barline groups)
+		for (int i : range(barlineGroups)) {
+			BarlineGroup group = barlineGroups.get(i);
+			if (group.getStaves().contains(stavesRange))
+				return;
+		}
+
+		//delete existing groups intersecting the given range
+		for (int i : rangeReverse(barlineGroups)) {
+			BarlineGroup group = barlineGroups.get(i);
+			if (group.getStaves().intersects(stavesRange)) {
+				barlineGroups.remove(i);
+			}
+		}
+
+		//add new group at the right position
+		//(the barline groups are sorted by start index)
+		int i = 0;
+		while (i < barlineGroups.size() && stavesRange.getStart() > barlineGroups.get(i).getStaves().getStart()) {
+			i++;
+		}
+		barlineGroups.add(i, new BarlineGroup(stavesRange, style));
+	}
+
+
+	/**
+	 * Adds a bracket group for the given staves with the given style.
+	 */
+	public void addBracketGroup(StavesRange stavesRange, BracketGroup.Style style) {
+		if (stavesRange.getStop() >= staves.size())
+			throw new IllegalArgumentException("staves out of range");
+		//add new group at the right position
+		//(the bracket groups are sorted by start index)
+		int i = 0;
+		while (i < bracketGroups.size() && bracketGroups.get(i).getStaves().getStart() > stavesRange.getStart()) {
+			i++;
+		}
+		bracketGroups.add(i, new BracketGroup(stavesRange, style));
 	}
 
 }
