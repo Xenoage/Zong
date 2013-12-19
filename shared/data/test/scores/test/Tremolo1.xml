@@ -1,0 +1,498 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE score-partwise PUBLIC
+	"-//Recordare//DTD MusicXML 1.1 Partwise//EN"
+	"http://www.musicxml.org/dtds/partwise.dtd">
+<score-partwise version="1.1">
+	<part-list>
+		<score-part id="P1">
+		<part-name>Test</part-name>
+	</score-part>
+	</part-list>
+	<part id="P1">
+		<measure number="1">
+			<attributes>
+				<divisions>1024</divisions>
+				<key>
+					<fifths>0</fifths>
+				</key>
+				<time>
+					<beats>4</beats>
+					<beat-type>4</beat-type>
+				</time>
+				<staves>1</staves>
+				<clef>
+					<sign>F</sign>
+					<line>4</line>
+				</clef>
+			</attributes>
+      <note default-x="41">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>4096</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <notations>
+          <ornaments>
+            <tremolo default-y="-52">3</tremolo>
+          </ornaments>
+          <dynamics default-y="-81" placement="below">
+            <p/>
+          </dynamics>
+        </notations>
+      </note>
+      <backup>
+        <duration>4096</duration>
+      </backup>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <direction placement="below">
+        <direction-type>
+          <wedge default-y="-76" spread="0" type="crescendo"/>
+        </direction-type>
+        <offset>-131</offset>
+      </direction>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <note print-object="no" print-spacing="no">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>85</duration>
+        <voice>2</voice>
+        <stem>down</stem>
+      </note>
+      <forward>
+        <duration>16</duration>
+        <voice>2</voice>
+      </forward>
+      <direction>
+        <direction-type>
+          <wedge spread="16" type="stop"/>
+        </direction-type>
+        <offset>-54</offset>
+      </direction>
+		</measure>
+	</part>
+</score-partwise>

@@ -1,9 +1,9 @@
 package com.xenoage.zong.io.musicxml.in.readers;
 
 import static com.xenoage.utils.math.Fraction._0;
-import static com.xenoage.zong.core.position.BMP.atMeasure;
-import static junit.framework.Assert.fail;
+import static com.xenoage.zong.core.position.MP.atMeasure;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
@@ -30,24 +30,24 @@ public class InstrumentsReaderTest {
 	 */
 	@Test public void testInstrumentChanges() {
 		Score score = MusicXMLScoreFileInputTest.loadXMLTestScore("InstrumentChanges.xml");
-		Part part = score.stavesList.parts.getFirst();
+		Part part = score.getStavesList().getParts().get(0);
 		assertEquals(3, part.getInstruments().size());
 
 		//clarinet
 		PitchedInstrument instr0 = (PitchedInstrument) part.getInstruments().get(0);
-		assertEquals("Clarinet in Bb", instr0.base.name);
-		assertEquals(new Integer(-1), instr0.transpose.diatonic);
-		assertEquals(-2, instr0.transpose.chromatic);
+		assertEquals("Clarinet in Bb", instr0.getData().getName());
+		assertEquals(new Integer(-1), instr0.getTranspose().getDiatonic());
+		assertEquals(-2, instr0.getTranspose().getChromatic());
 		//altosax
 		PitchedInstrument instr1 = (PitchedInstrument) part.getInstruments().get(1);
-		assertEquals("Alto Saxophone", instr1.base.name);
-		assertEquals(new Integer(-5), instr1.transpose.diatonic);
-		assertEquals(-9, instr1.transpose.chromatic);
+		assertEquals("Alto Saxophone", instr1.getData().getName());
+		assertEquals(new Integer(-5), instr1.getTranspose().getDiatonic());
+		assertEquals(-9, instr1.getTranspose().getChromatic());
 		//trombone
 		PitchedInstrument instr2 = (PitchedInstrument) part.getInstruments().get(2);
-		assertEquals("Trombone", instr2.base.name);
-		assertEquals(new Integer(0), instr2.transpose.diatonic);
-		assertEquals(0, instr2.transpose.chromatic);
+		assertEquals("Trombone", instr2.getData().getName());
+		assertEquals(new Integer(0), instr2.getTranspose().getDiatonic());
+		assertEquals(0, instr2.getTranspose().getChromatic());
 
 		//instrument changes in measures 1, 2 and 3
 		Measure measure = score.getMeasure(atMeasure(0, 1));
@@ -59,7 +59,7 @@ public class InstrumentsReaderTest {
 	}
 
 	private static InstrumentChange getInstrumentChangeAtBeat0(Measure measure) {
-		for (BeatE<InstrumentChange> ic : measure.instrumentChanges) {
+		for (BeatE<InstrumentChange> ic : measure.getInstrumentChanges()) {
 			if (ic.beat.equals(_0))
 				return ic.element;
 		}

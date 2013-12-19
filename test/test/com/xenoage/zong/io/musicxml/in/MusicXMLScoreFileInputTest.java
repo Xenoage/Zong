@@ -86,7 +86,7 @@ public class MusicXMLScoreFileInputTest {
 	 */
 	public static Score loadXMLTestScore(String filename) {
 		try {
-			String filepath = "data/test/scores/" + filename;
+			String filepath = "data/test/scores/test/" + filename;
 			return new MusicXMLScoreFileInput().read(
 				platformUtils().openInputStream(filepath), filepath);
 		} catch (Exception ex) {

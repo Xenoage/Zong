@@ -1,6 +1,7 @@
 package com.xenoage.zong.io.musicxml.in.readers;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static com.xenoage.utils.iterators.It.it;
 import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.zong.core.position.MP.atBeat;
 import static com.xenoage.zong.io.musicxml.in.util.CommandPerformer.execute;
@@ -12,6 +13,7 @@ import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 
+import com.xenoage.utils.iterators.It;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.utils.math.VSide;
 import com.xenoage.zong.commands.core.music.ColumnElementWrite;
@@ -448,7 +450,7 @@ public final class MusicReaderContext {
 		//find instrument
 		Part part = getScore().getStavesList().getPartByStaffIndex(mp.staff);
 		Instrument newInstrument = null;
-		for (Instrument instr : part.getInstruments()) {
+		for (Instrument instr : it(part.getInstruments())) {
 			if (instr.getId().equals(instrumentID)) {
 				newInstrument = instr;
 				break;
