@@ -10,9 +10,6 @@ import java.awt.geom.GeneralPath;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.xenoage.utils.PlatformUtils;
-import com.xenoage.utils.jse.JsePlatformUtils;
-import com.xenoage.utils.jse.io.DesktopIO;
 import com.xenoage.utils.math.Delta;
 import com.xenoage.zong.desktop.io.symbols.SymbolPoolReader;
 
@@ -27,8 +24,6 @@ public class SymbolPoolTest {
 
 
 	@Before public void setUp() {
-		PlatformUtils.init(JsePlatformUtils.instance);
-		DesktopIO.initTest();
 		//load default symbol pool, clef-g must exist
 		try {
 			symbolPool = SymbolPoolReader.readSymbolPool("default");

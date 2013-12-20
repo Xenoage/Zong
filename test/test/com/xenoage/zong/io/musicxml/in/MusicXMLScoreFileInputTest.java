@@ -4,15 +4,11 @@ import static com.xenoage.utils.PlatformUtils.platformUtils;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static org.junit.Assert.fail;
 
-import java.io.File;
 import java.util.List;
 import java.util.Set;
 
-import org.junit.Before;
 import org.junit.Test;
 
-import com.xenoage.utils.PlatformUtils;
-import com.xenoage.utils.jse.JsePlatformUtils;
 import com.xenoage.utils.jse.io.DesktopIO;
 import com.xenoage.utils.jse.io.JseFileUtils;
 import com.xenoage.zong.core.Score;
@@ -28,11 +24,6 @@ public class MusicXMLScoreFileInputTest {
 	public static final String dir11 = "data/test/scores/musicxml11/";
 	public static final String dir20 = "data/test/scores/musicxml20/";
 
-
-	@Before public void setUp() {
-		PlatformUtils.init(new JsePlatformUtils());
-		DesktopIO.init(MusicXMLScoreFileInputTest.class.getName());
-	}
 
 	/**
 	 * It's too hard to check the contents of a MusicXML file
@@ -87,8 +78,7 @@ public class MusicXMLScoreFileInputTest {
 	public static Score loadXMLTestScore(String filename) {
 		try {
 			String filepath = "data/test/scores/test/" + filename;
-			return new MusicXMLScoreFileInput().read(
-				platformUtils().openFile(filepath), filepath);
+			return new MusicXMLScoreFileInput().read(platformUtils().openFile(filepath), filepath);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			fail("Could not load file: " + filename);
@@ -102,8 +92,7 @@ public class MusicXMLScoreFileInputTest {
 	@Test public void testSingleFile() {
 		String file = dir20 + "BeetAnGeSample.xml";
 		try {
-			new MusicXMLScoreFileInput().read(
-				platformUtils().openFile(file), file);
+			new MusicXMLScoreFileInput().read(platformUtils().openFile(file), file);
 
 			//TEST
 			//ScoreTest.printScore(score);

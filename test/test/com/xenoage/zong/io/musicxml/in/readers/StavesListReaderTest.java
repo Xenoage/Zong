@@ -6,12 +6,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
-import org.junit.Before;
 import org.junit.Test;
 
-import com.xenoage.utils.PlatformUtils;
-import com.xenoage.utils.jse.JsePlatformUtils;
-import com.xenoage.utils.jse.io.DesktopIO;
 import com.xenoage.zong.core.music.StavesList;
 import com.xenoage.zong.core.music.group.BarlineGroup;
 import com.xenoage.zong.core.music.group.BracketGroup;
@@ -23,11 +19,6 @@ import com.xenoage.zong.musicxml.MusicXMLDocument;
  * @author Andreas Wenger
  */
 public class StavesListReaderTest {
-	
-	@Before public void setup() {
-		PlatformUtils.init(new JsePlatformUtils());
-		DesktopIO.init(StavesListReaderTest.class.getName());
-	}
 
 	/**
 	 * Reads and checks the parts and staves of the file "BeetAnGeSample.xml"

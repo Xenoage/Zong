@@ -1,7 +1,5 @@
 package com.xenoage.zong.musiclayout.layouter;
 
-import com.xenoage.utils.PlatformUtils;
-import com.xenoage.utils.jse.JsePlatformUtils;
 import com.xenoage.zong.musiclayout.layouter.notation.AccidentalsAlignmentStrategy;
 import com.xenoage.zong.musiclayout.layouter.notation.ArticulationsAlignmentStrategy;
 import com.xenoage.zong.musiclayout.layouter.notation.NotationStrategy;
@@ -15,10 +13,6 @@ import com.xenoage.zong.musiclayout.layouter.notation.StemDirectionStrategy;
  * @author Andreas Wenger
  */
 public class ScoreLayouterTest {
-	
-	static {
-		PlatformUtils.init(JsePlatformUtils.instance);
-	}
 
 	/**
 	 * Try to layout all official MusicXML 1.1 and 2.0 sample files.

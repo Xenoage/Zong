@@ -9,13 +9,10 @@ import static com.xenoage.zong.text.FormattedTextUtils.merge;
 import static com.xenoage.zong.text.FormattedTextUtils.split;
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Before;
 import org.junit.Test;
 
-import com.xenoage.utils.PlatformUtils;
 import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.color.Color;
-import com.xenoage.utils.jse.JsePlatformUtils;
 import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.zong.core.text.Alignment;
 
@@ -25,10 +22,6 @@ import com.xenoage.zong.core.text.Alignment;
  * @author Andreas Wenger
  */
 public class FormattedTextUtilsTest {
-	
-	@Before public void setup() {
-		PlatformUtils.init(new JsePlatformUtils());
-	}
 
 	@Test public void cleanTest() {
 		FormattedText text = createText1Para();

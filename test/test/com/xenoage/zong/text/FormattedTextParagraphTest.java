@@ -9,15 +9,12 @@ import java.util.List;
 
 import javax.swing.JLabel;
 
-import org.junit.Before;
 import org.junit.Test;
 
-import com.xenoage.utils.PlatformUtils;
 import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.color.Color;
 import com.xenoage.utils.font.FontInfo;
 import com.xenoage.utils.font.FontStyle;
-import com.xenoage.utils.jse.JsePlatformUtils;
 import com.xenoage.utils.math.Delta;
 
 /**
@@ -26,10 +23,6 @@ import com.xenoage.utils.math.Delta;
  * @author Andreas Wenger
  */
 public class FormattedTextParagraphTest {
-	
-	@Before public void setup() {
-		PlatformUtils.init(new JsePlatformUtils());
-	}
 
 	@Test public void testSimpleTextParagraph() {
 		FormattedTextParagraph paragraph = fPara(fString("This is a simple text.",

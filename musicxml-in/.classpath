@@ -7,6 +7,5 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/utils-kernel"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/utils-base"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/lombok"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/utils-document"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -2,12 +2,9 @@ package com.xenoage.zong.text;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Before;
 import org.junit.Test;
 
-import com.xenoage.utils.PlatformUtils;
 import com.xenoage.utils.font.FontInfo;
-import com.xenoage.utils.jse.JsePlatformUtils;
 import com.xenoage.utils.math.Units;
 
 /**
@@ -16,10 +13,6 @@ import com.xenoage.utils.math.Units;
  * @author Andreas Wenger
  */
 public class FormattedTextStringTest {
-	
-	@Before public void setup() {
-		PlatformUtils.init(new JsePlatformUtils());
-	}
 
 	@Test public void testAscentAndDescent() {
 		FormattedTextStyle style = new FormattedTextStyle(new FontInfo("Arial", 72f, null));
