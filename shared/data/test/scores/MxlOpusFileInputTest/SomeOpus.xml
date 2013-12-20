@@ -3,11 +3,11 @@
   "-//Recordare//DTD MusicXML 2.0 Opus//EN"
   "http://www.musicxml.org/dtds/opus.dtd">
 <opus version="1.0">
-  <title>My Opus</title>
+	<title>My Opus</title>
 	<score xlink:href="BeetAnGeSample.xml"/>
 	<opus version="1.0">
-	  <title>Nested Opus</title>
-	  <score xlink:href="BrahWiMeSample.mxl"/>
+		<title>Nested Opus</title>
+		<score xlink:href="BrahWiMeSample.mxl"/>
 		<score xlink:href="DebuMandSample.xml"/>
 	</opus>
 	<opus-link xlink:href="SomeOpus2.xml"/>

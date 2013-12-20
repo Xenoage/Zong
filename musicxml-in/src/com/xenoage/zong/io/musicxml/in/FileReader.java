@@ -62,7 +62,7 @@ public class FileReader {
 			List<String> filePaths = scoreFileFilter.filter(opus.getScoreFilenames());
 			for (String filePath : filePaths) {
 				String relativePath = directory + "/" + filePath;
-				List<Score> scores = loadScores(platformUtils().openInputStream(relativePath), relativePath,
+				List<Score> scores = loadScores(platformUtils().openFile(relativePath), relativePath,
 					scoreFileFilter);
 				ret.addAll(scores);
 			}

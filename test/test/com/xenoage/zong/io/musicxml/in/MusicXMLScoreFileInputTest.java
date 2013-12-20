@@ -45,7 +45,7 @@ public class MusicXMLScoreFileInputTest {
 		long startTime = System.currentTimeMillis();
 		for (String file : getSampleFiles()) {
 			try {
-				Score score = new MusicXMLScoreFileInput().read(platformUtils().openInputStream(file), file);
+				Score score = new MusicXMLScoreFileInput().read(platformUtils().openFile(file), file);
 				System.out.println("Loaded: " + file);
 			} catch (InconsistentScoreException ex) {
 				ex.printStackTrace();
@@ -88,7 +88,7 @@ public class MusicXMLScoreFileInputTest {
 		try {
 			String filepath = "data/test/scores/test/" + filename;
 			return new MusicXMLScoreFileInput().read(
-				platformUtils().openInputStream(filepath), filepath);
+				platformUtils().openFile(filepath), filepath);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			fail("Could not load file: " + filename);
@@ -103,7 +103,7 @@ public class MusicXMLScoreFileInputTest {
 		String file = dir20 + "BeetAnGeSample.xml";
 		try {
 			new MusicXMLScoreFileInput().read(
-				platformUtils().openInputStream(file), file);
+				platformUtils().openFile(file), file);
 
 			//TEST
 			//ScoreTest.printScore(score);

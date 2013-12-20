@@ -80,7 +80,7 @@ public class StavesListReaderTest {
 		MusicXMLDocument doc = null;
 		try {
 			doc = MusicXMLDocument.read(platformUtils().createXmlReader(
-				platformUtils().openInputStream(filePath)));
+				platformUtils().openFile(filePath)));
 		} catch (Exception ex) {
 			fail(ex.toString());
 		}

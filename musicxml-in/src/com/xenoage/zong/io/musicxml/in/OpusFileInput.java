@@ -58,12 +58,12 @@ public class OpusFileInput {
 	}
 
 	private OpusLink readOpusLink(XmlReader reader) {
-		String href = reader.getAttributeNotNull("xlink:href");
+		String href = reader.getAttributeNotNull("href");
 		return new OpusLink(new LinkAttributes(href));
 	}
 
 	private Score readScore(XmlReader reader) {
-		String href = reader.getAttribute("xlink:href");
+		String href = reader.getAttribute("href");
 		Boolean newPage = Parser.parseBooleanNullYesNo(reader.getAttribute("new-page"));
 		return new Score(new LinkAttributes(href), newPage);
 	}
@@ -85,7 +85,7 @@ public class OpusFileInput {
 				if (zip != null)
 					opusStream = zip.openFile(filePath);
 				else if (basePath != null)
-					opusStream = platformUtils().openInputStream(basePath + "/" + filePath);
+					opusStream = platformUtils().openFile(basePath + "/" + filePath);
 				else
 					throw new IOException("neither zip nor basePath is given");
 				if (opusStream == null)
