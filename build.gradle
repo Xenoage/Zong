@@ -41,9 +41,10 @@ subprojects {
 }
 
 //project dependencies
-project(':desktop') { dependencies { compile project(':layout'), project(':musicxml'), project(':voc') } }
+project(':desktop') { dependencies { compile project(':layout'), project(':musicxml-in'), project(':voc') } }
 project(':layout') { dependencies { compile project(':core') } }
 project(':musicxml') { dependencies { compile project(':core') } }
+project(':musicxml-in') { dependencies { compile project(':musicxml') } }
 project(':test') { dependencies { compile project(':desktop') } }
 project(':voc') { dependencies { compile project(':core') } }
 
