@@ -214,6 +214,18 @@ public final class Score
 	
 	
 	/**
+	 * Gets the used beats within the given measure column.
+	 */
+	public SortedList<Fraction> getMeasureUsedBeats(int measureIndex) {
+		SortedList<Fraction> columnBeats = new SortedList<Fraction>(false);
+		for (int iStaff : range(getStavesCount())) {
+			columnBeats = columnBeats.merge(getMeasure(atMeasure(iStaff, measureIndex)).getUsedBeats(), false);
+		}
+		return columnBeats;
+	}
+	
+	
+	/**
 	 * Clips a {@link MP} to a measure. If the {@link MP} is before or at the
 	 * beginning of the measure with measureIndex, the first beat is returned.
 	 * If it is after the measure, the last beat is returned.
@@ -400,18 +412,5 @@ public final class Score
 		}
 		return format.getInterlineSpace();
 	}
-	
-	
-	/**
-	 * Gets the used beats within the given measure column.
-	 */
-	public SortedList<Fraction> getUsedBeats(int measureIndex) {
-		SortedList<Fraction> columnBeats = new SortedList<Fraction>(false);
-		for (int iStaff : range(getStavesCount())) {
-			columnBeats = columnBeats.merge(getMeasure(atMeasure(iStaff, measureIndex)).getUsedBeats(), false);
-		}
-		return columnBeats;
-	}
-
 
 }

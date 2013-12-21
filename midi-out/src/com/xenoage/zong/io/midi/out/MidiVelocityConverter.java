@@ -1,16 +1,15 @@
 package com.xenoage.zong.io.midi.out;
 
-import static com.xenoage.utils.base.iterators.ReverseIterator.reverseIt;
+import static com.xenoage.utils.iterators.It.it;
 import static com.xenoage.utils.kernel.Tuple2.t;
 
-import com.xenoage.utils.base.settings.Settings;
+import java.util.List;
+
+import com.xenoage.utils.iterators.It;
 import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.utils.math.MathUtils;
-import com.xenoage.utils.pdlib.Vector;
 import com.xenoage.zong.core.Score;
-import com.xenoage.zong.core.music.Attachable;
-import com.xenoage.zong.core.music.Globals;
 import com.xenoage.zong.core.music.Measure;
 import com.xenoage.zong.core.music.Staff;
 import com.xenoage.zong.core.music.Voice;
@@ -20,7 +19,7 @@ import com.xenoage.zong.core.music.direction.Direction;
 import com.xenoage.zong.core.music.direction.Dynamics;
 import com.xenoage.zong.core.music.direction.DynamicsType;
 import com.xenoage.zong.core.music.util.BeatE;
-import com.xenoage.zong.core.position.BMP;
+import com.xenoage.zong.core.position.MP;
 
 /**
  * This class converts dynamics.
@@ -46,14 +45,17 @@ public final class MidiVelocityConverter {
 		return currentVelocity;
 	}
 
-	private static boolean voiceHasDynamics(Staff staff, int voiceIndex, Globals globals) {
-		for (Measure measure : staff.measures) {
-			if (measure.voices.size() > voiceIndex) {
-				Vector<VoiceElement> elements = measure.getVoice(voiceIndex).elements;
+	private static boolean voiceHasDynamics(Staff staff, int voiceIndex) {
+		for (Measure measure : staff.getMeasures()) {
+			if (measure.getVoices().size() > voiceIndex) {
+				List<VoiceElement> elements = measure.getVoice(voiceIndex).getElements();
 				for (VoiceElement element : elements) {
-					for (Attachable attachment : globals.getAttachments().get(element)) {
-						if (attachment instanceof Dynamics) {
-							return true;
+					if (element instanceof Chord) { //TODO: may also be attached to rests?
+						Chord chord = (Chord) element;
+						for (Direction direction : chord.getDirections()) {
+							if (direction instanceof Dynamics) {
+								return true;
+							}
 						}
 					}
 				}
@@ -62,11 +64,11 @@ public final class MidiVelocityConverter {
 		return false;
 	}
 
-	private static boolean[] voicesInStaffHaveDynamics(Staff staff, Globals globals) {
-		int numberOfVoices = getNumberOfVoicesInStaff(staff);
+	private static boolean[] voicesInStaffHaveDynamics(Staff staff) {
+		int numberOfVoices = staff.getVoicesCount();
 		boolean[] dyn = new boolean[numberOfVoices];
 		for (int i = 0; i < numberOfVoices; i++) {
-			dyn[i] = voiceHasDynamics(staff, i, globals);
+			dyn[i] = voiceHasDynamics(staff, i);
 		}
 		return dyn;
 	}
@@ -89,8 +91,8 @@ public final class MidiVelocityConverter {
 		return 0;
 	}
 
-	public static int[] getVoiceforDynamicsInStaff(Staff staff, Globals globals) {
-		boolean[] voicesInStaffHaveDynamics = voicesInStaffHaveDynamics(staff, globals);
+	public static int[] getVoiceforDynamicsInStaff(Staff staff) {
+		boolean[] voicesInStaffHaveDynamics = voicesInStaffHaveDynamics(staff);
 		int[] dynamicVoices = new int[voicesInStaffHaveDynamics.length];
 		// If there are no dynamics in any voice, every voice can use its own
 		// "dynamics"
@@ -121,25 +123,25 @@ public final class MidiVelocityConverter {
 	 * @return The first value is the current velocity, the second one is the
 	 * velocity of the subsequent chords.
 	 */
-	public static int[] getVelocityAtPosition(Staff staff, int voice, BMP bmp, int currentVelocity,
+	public static int[] getVelocityAtPosition(Staff staff, int voice, MP mp, int currentVelocity,
 		Score score) {
-		Tuple2<DynamicsType, Fraction> latestDynamicsType = getLatestDynamicsType(staff, voice, bmp,
+		Tuple2<DynamicsType, Fraction> latestDynamicsType = getLatestDynamicsType(staff, voice, mp,
 			score);
 		if (latestDynamicsType != null) {
 			int vel[] = new int[2];
-			int velocityFactorAtBeat = Settings.getInstance().getSetting(
-				latestDynamicsType.get1().name(), "playback-dynamics", -1);
+			int velocityFactorAtBeat = -1; /* GOON Settings.getInstance().getSetting(
+				latestDynamicsType.get1().name(), "playback-dynamics", -1); */
 			if (velocityFactorAtBeat == -1) {
 				vel[0] = currentVelocity;
 			}
 			else {
 				vel[0] = convertToMidiVelocity(velocityFactorAtBeat);
 			}
-			int subsequentVelocityFactor = Settings.getInstance()
+			int subsequentVelocityFactor = velocityFactorAtBeat; /* GOON Settings.getInstance()
 				.getSetting(latestDynamicsType.get1().name() + "_subsequent", "playback-dynamics",
-					velocityFactorAtBeat);
+					velocityFactorAtBeat); */
 
-			if (latestDynamicsType.get2().compareTo(bmp.beat) != 0) {
+			if (latestDynamicsType.get2().compareTo(mp.beat) != 0) {
 				if (subsequentVelocityFactor != -1) {
 					vel[0] = convertToMidiVelocity(subsequentVelocityFactor);
 				}
@@ -167,10 +169,10 @@ public final class MidiVelocityConverter {
 	}
 
 	private static Tuple2<DynamicsType, Fraction> getLatestDynamicsType(Staff staff, int voiceNumber,
-		BMP bmp, Score score) {
+		MP mp, Score score) {
 		Tuple2<DynamicsType, Fraction> latestDynamicsType = getLatestDynamicsBeforePosition(staff,
-			voiceNumber, bmp, score);
-		int iMeasure = bmp.measure - 1;
+			voiceNumber, mp, score);
+		int iMeasure = mp.measure - 1;
 		while (iMeasure >= 0 && latestDynamicsType == null) {
 			latestDynamicsType = getLatestDynamicsInMeasure(staff, voiceNumber, iMeasure, score);
 			iMeasure--;
@@ -179,27 +181,32 @@ public final class MidiVelocityConverter {
 	}
 
 	private static Tuple2<DynamicsType, Fraction> getLatestDynamicsBeforePosition(Staff staff,
-		int voiceNumber, BMP position, Score score) {
-		Measure measure = staff.measures.get(position.measure);
-		Voice voice = measure.voices.get(voiceNumber);
+		int voiceNumber, MP position, Score score) {
+		Measure measure = staff.getMeasure(position.measure);
+		Voice voice = measure.getVoice(voiceNumber);
 		//first look in attached elements
 		Tuple2<DynamicsType, Fraction> attached = null;
-		for (VoiceElement element : voice.elements) {
-			BMP elementMP = score.getBMP(element);
-			if (elementMP.beat.compareTo(position.beat) < 1) {
-				for (Attachable attachment : score.globals.getAttachments().get(element)) {
-					if (attachment instanceof Dynamics) {
-						attached = t(((Dynamics) attachment).getType(), elementMP.beat);
+		for (VoiceElement element : voice.getElements()) {
+			Fraction elementBeat = voice.getBeat(element);
+			if (elementBeat.compareTo(position.beat) < 1) {
+				if (element instanceof Chord) { //TODO: can dynamics also be attached to rests?
+					Chord chord = (Chord) element;
+					for (Direction direction : it(chord.getDirections())) {
+						if (direction instanceof Dynamics) {
+							attached = t(((Dynamics) direction).getType(), elementBeat);
+						}
 					}
 				}
 			}
 		}
 		//then look in measure directions
 		Tuple2<DynamicsType, Fraction> inMeasure = null;
-		for (BeatE<Direction> direction : measure.directions) {
-			if (direction.beat.compareTo(position.beat) < 1) {
-				if (direction.element instanceof Dynamics) {
-					inMeasure = t(((Dynamics) direction.element).getType(), direction.beat);
+		if (measure.getDirections() != null) {
+			for (BeatE<Direction> direction : measure.getDirections()) {
+				if (direction.beat.compareTo(position.beat) < 1) {
+					if (direction.element instanceof Dynamics) {
+						inMeasure = t(((Dynamics) direction.element).getType(), direction.beat);
+					}
 				}
 			}
 		}

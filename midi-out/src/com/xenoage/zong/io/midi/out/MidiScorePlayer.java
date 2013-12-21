@@ -30,7 +30,7 @@ public class MidiScorePlayer
 	
 	private static final float defaultVolume = 0.7f;
 	private static final int eventNoteOn = 119;
-	private static final int eventPlaybackEnd = 117;
+	public static final int eventPlaybackEnd = 117;
 
 	private static MidiScorePlayer instance = null;
 	

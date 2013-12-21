@@ -44,7 +44,7 @@ public final class Voice
 	implements MPContainer {
 
 	/** The list of rests and chords, sorted by time */
-	@MaybeEmpty @Getter public final List<VoiceElement> elements;
+	@MaybeEmpty @Getter private List<VoiceElement> elements;
 
 	/** Back reference: the parent measure of this voice, or null if not part of a measure. */
 	@Getter @Setter private Measure parent = null;

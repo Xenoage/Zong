@@ -3,6 +3,7 @@ package com.xenoage.zong.io.midi.out;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Fraction.fr;
+import static com.xenoage.zong.core.position.MP.getMP;
 import static com.xenoage.zong.io.midi.out.MidiVelocityConverter.getVelocityAtPosition;
 import static com.xenoage.zong.io.midi.out.MidiVelocityConverter.getVoiceforDynamicsInStaff;
 
@@ -11,10 +12,14 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import lombok.AllArgsConstructor;
+
 import com.sun.media.sound.MidiUtils;
 import com.sun.media.sound.MidiUtils.TempoCache;
 import com.xenoage.utils.collections.ArrayUtils;
 import com.xenoage.utils.collections.CollectionUtils;
+import com.xenoage.utils.collections.SortedList;
+import com.xenoage.utils.kernel.Range;
 import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.Score;
@@ -28,20 +33,37 @@ import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.Note;
 import com.xenoage.zong.core.music.time.Time;
+import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.io.midi.out.Playlist.PlayRange;
 
 /**
- * This class creates a {@link MidiSequence} from a given {@link Score}..
+ * This class creates a {@link MidiSequence} from a given {@link Score}.
+ * 
+ * TIDY
  * 
  * @author Uli Teschemacher
  * @author Andreas Wenger
  */
+@AllArgsConstructor
 public class MidiConverter {
 
 	public static final int channel10 = 9; //channel 10 has index 9 (0-based)
 
+	//channel for events for the playback cursor
+	private static final int channelPlaybackControl = 119;
+	
 	//even shortest note has 8 ticks. this allows staccato playback for example.
 	private static final int resolutionFactor = 8;
+	
+	//in MIDI "Format 1" files, the track for tempo changes and so on is track 0 by convention
+	private static int systemTrackIndex = 0;
+	
+	//state
+	private Score score;
+	private MidiSequenceWriter writer;
+	private boolean addMPEvents;
+	private boolean metronome;
+	private Fraction durationFactor;
 
 
 	/**
@@ -68,7 +90,10 @@ public class MidiConverter {
 	 */
 	public static MidiSequence convertToSequence(Score score, boolean addMPEvents,
 		boolean metronome, Fraction durationFactor, MidiSequenceWriter writer) {
-
+		return new MidiConverter(score, writer, addMPEvents, metronome, durationFactor).convertToSequence();
+	}
+	
+	private MidiSequence convertToSequence() {
 		ArrayList<Integer> staffTracks = alist();
 		ArrayList<Long> measureStartTicks = alist();
 		Integer metronomeBeatTrackNumber = null;
@@ -80,9 +105,8 @@ public class MidiConverter {
 		//compute playlist (which contains repetitions and so on)
 		Playlist playlist = MidiRepetitionCalculator.createPlaylist(score);
 		
-		//one track for each staff and a system track for program changes, tempos and so on
+		//one track for each staff and one system track for program changes, tempos and so on.
 		int tracksCount = stavesCount + 1;
-		int systemTrackIndex = tracksCount - 1;
 		//resolution in ticks per quarter
 		int resolution = score.getDivisions() * resolutionFactor;
 		//init writer
@@ -133,11 +157,11 @@ public class MidiConverter {
 
 			int track = iStaff;
 
-			int[] voiceforDynamicsInStaff = getVoiceforDynamicsInStaff(staff, score.globals);
-			for (PlayRange playRange : playlist.ranges) {
+			int[] voiceforDynamicsInStaff = getVoiceforDynamicsInStaff(staff);
+			for (PlayRange playRange : playlist.getRanges()) {
 				int transposing = 0;
 				for (int iMeasure : range(playRange.from.measure, playRange.to.measure)) {
-					Measure measure = measures.get(iMeasure);
+					Measure measure = staff.getMeasure(iMeasure);
 					measureStartTicks.add(currenttickinstaff);
 
 					/*/TODO: transposition changes can happen everywhere in the measure
@@ -148,53 +172,44 @@ public class MidiConverter {
 					} //*/
 
 					Fraction start, end;
-					start = clipToMeasure(score, iMeasure, playRange.from).beat;
-					end = clipToMeasure(score, iMeasure, playRange.to).beat;
+					start = score.clipToMeasure(iMeasure, playRange.from).beat;
+					end = score.clipToMeasure(iMeasure, playRange.to).beat;
 
-					if (realMeasureColumnBeats.get(iMeasure).compareTo(end) < 0)
-						end = realMeasureColumnBeats.get(iMeasure);
+					if (realMeasureColumnBeats[iMeasure].compareTo(end) < 0)
+						end = realMeasureColumnBeats[iMeasure];
 
-					for (int iVoice = 0; iVoice < measure.voices.size(); iVoice++) {
-						Voice voice = measure.voices.get(iVoice);
+					for (int iVoice : range(measure.getVoices())) {
+						Voice voice = measure.getVoice(iVoice);
 						int currentVelocity = voicesVelocity[voiceforDynamicsInStaff[iVoice]];
-						voicesVelocity[iVoice] = generateMidi(resolution, channel, currenttickinstaff, staff,
-							track, currentVelocity, iVoice, voice, start, end, transposing, score,
-							durationFactor);
+						voicesVelocity[iVoice] = generateMidiForVoice(resolution, channel, currenttickinstaff, staff,
+							track, currentVelocity, iVoice, voice, start, end, transposing);
 					}
 					Fraction measureduration = end.sub(start);
 					currenttickinstaff += calculateTickFromFraction(measureduration, resolution);
-
 				}
-				staffTracks.add(track);
 			}
 		}
-		staffTracks.close();
-		measureStartTicks.close();
 
-			if (addMPEvents) {
-				createControlEventChannel(score, resolution, measureStartTicks, timePool, seq, 0, playlist); //score position events in channel 0
-				addPlaybackAtEndControlEvent(seq);
-			}
-			timePool.close();
-
-			if (metronome) {
-				metronomeBeatTrackNumber = createMetronomeTrack(score, resolution, seq, playlist,
-					measureStartTicks);
-			}
-
-			//Add Tempo Changes
-			/*ArrayList<MidiElement> tempo = MidiTempoConverter.getTempo(score, playList);
-			for (MidiElement midiElement : tempo)
-			{
-				long startTick = measureStartTick.get(midiElement.getMeasure());
-				long beat = startTick + (long)midiElement.getPosition().toFloat() * resolution;
-				MidiEvent event = new MidiEvent(midiElement.getMidiMessage(), beat);
-				tempoTrack.add(event);
-			}*/
-			MidiTempoConverter.writeTempoTrack(score, playlist, resolution, tempoTrack);
-		} catch (InvalidMidiDataException e) {
-			e.printStackTrace();
+		if (addMPEvents) {
+			createControlEventChannel(resolution, measureStartTicks, timePool, 0, playlist); //score position events in channel 0
+			addPlaybackAtEndControlEvent(seq);
 		}
+
+		if (metronome) {
+			metronomeBeatTrackNumber = createMetronomeTrack(score, resolution, seq, playlist,
+				measureStartTicks);
+		}
+
+		//Add Tempo Changes
+		/*ArrayList<MidiElement> tempo = MidiTempoConverter.getTempo(score, playList);
+		for (MidiElement midiElement : tempo)
+		{
+			long startTick = measureStartTick.get(midiElement.getMeasure());
+			long beat = startTick + (long)midiElement.getPosition().toFloat() * resolution;
+			MidiEvent event = new MidiEvent(midiElement.getMidiMessage(), beat);
+			tempoTrack.add(event);
+		}*/
+		MidiTempoConverter.writeTempoTrack(score, playlist, resolution, tempoTrack);
 
 		SequenceContainer container = new SequenceContainer(seq, metronomeBeatTrackNumber, timePool,
 			measureStartTicks, staffTracks);
@@ -203,18 +218,16 @@ public class MidiConverter {
 	}
 
 	/**
-	 * Generates the midi sequence starting at the given position.
-	 * Returns the velocity at the start position.
-	 * TIDY
+	 * Generates the MIDI data for the given voice.
+	 * Returns the velocity at the end position.
 	 */
-	private static int generateMidi(int resolution, int channel, long currenttickinstaff,
-		Staff staff, Track track, int currentVelocity, int iVoice, Voice voice, Fraction start,
-		Fraction end, int transposing, Score score, Fraction durationFactor)
-		throws InvalidMidiDataException {
+	private int generateMidiForVoice(int resolution, int channel, long currenttickinstaff,
+		Staff staff, int track, int currentVelocity, int iVoice, Voice voice, Fraction start,
+		Fraction end, int transposing) {
 		long currenttickinvoice = currenttickinstaff;
-		for (VoiceElement element : voice.elements) {
+		for (VoiceElement element : voice.getElements()) {
 			Fraction duration = element.getDuration();
-			Fraction elementBeat = score.getBMP(element).beat;
+			Fraction elementBeat = voice.getBeat(element);
 			if (!isInRange(elementBeat, duration, start, end))
 				continue;
 			Fraction startBeat = elementBeat;
@@ -232,9 +245,9 @@ public class MidiConverter {
 
 			if (starttick != stoptick && element instanceof Chord) {
 				Chord chord = (Chord) element;
-				for (Note note : chord.notes) {
+				for (Note note : chord.getNotes()) {
 					currentVelocity = addNoteToTrack(channel, staff, track, currentVelocity, iVoice,
-						starttick, stoptick, chord, note, transposing, score);
+						starttick, stoptick, chord, note, transposing);
 				}
 			}
 			//TODO Timidity doesn't like ithe following midi events
@@ -378,42 +391,34 @@ public class MidiConverter {
 		return currentTickInVoice + calculateTickFromFraction(duration, resolution);
 	}
 
-	private static int addNoteToTrack(int channel, Staff staff, Track track, int currentVelocity,
-		int iVoice, long starttick, long endtick, Chord chord, Note note, int transposing, Score score)
-		throws InvalidMidiDataException {
-		int[] velocityAtPosition = getVelocityAtPosition(staff, iVoice, score.getBMP(chord),
+	/**
+	 * Adds the given note to the given track.
+	 */
+	private int addNoteToTrack(int channel, Staff staff, int track, int currentVelocity,
+		int iVoice, long starttick, long endtick, Chord chord, Note note, int transposing) {
+		int[] velocityAtPosition = getVelocityAtPosition(staff, iVoice, getMP(chord),
 			currentVelocity, score);
 		int midiNote = MidiTools.getNoteNumberFromPitch(note.getPitch()) + transposing;
-		addEventToTrack(track, starttick, ShortMessage.NOTE_ON, channel, midiNote,
-			velocityAtPosition[0]);
-		addEventToTrack(track, endtick, ShortMessage.NOTE_OFF, channel, midiNote, 0);
+		writer.writeNote(track, channel, starttick, midiNote, true, velocityAtPosition[0]);
+		writer.writeNote(track, channel, endtick, midiNote, false, 0);
 		currentVelocity = velocityAtPosition[1];
 		return currentVelocity;
 	}
 
-	private static void addPlaybackAtEndControlEvent(Sequence seq)
-		throws InvalidMidiDataException {
-		Track t = seq.createTrack();
-		addEventToTrack(t, seq.getTickLength(), ShortMessage.CONTROL_CHANGE, 0, 117, 0);
+	private void addPlaybackAtEndControlEvent() {
+		writer.writeControlChange(systemTrackIndex, 0, writer.getLength(), MidiScorePlayer.eventPlaybackEnd, 0);
 	}
 
 	/**
-	 * Creates the ControlEvents for the Playback cursor. Channel 119 is used
-	 * because it has no other meaning.
+	 * Creates the control events for the playback cursor.
+	 * Channel {@value #channelPlaybackControl} is used because it has no other meaning.
 	 */
-	private static void createControlEventChannel(Score score, int resolution,
-		IVector<Long> measureStartTicks, IVector<MidiTime> timePoolOpen, Sequence sequence,
-		int channel, Playlist playlist)
-		throws InvalidMidiDataException {
-		IVector<SortedList<Fraction>> usedBeatsMeasures = ivec();
+	private void createControlEventChannel(int resolution,
+		List<Long> measureStartTicks, List<MidiTime> timePoolOpen, int channel, Playlist playlist) {
+		List<SortedList<Fraction>> usedBeatsMeasures = CollectionUtils.alist();
 		for (int i : range(score.getMeasuresCount()))
-			usedBeatsMeasures.add(getUsedBeats(score, i));
-		usedBeatsMeasures.close();
-
-		// Add ControlEvents for Listener
-
-		Track controltrack = sequence.createTrack();
-
+			usedBeatsMeasures.add(score.getMeasureUsedBeats(i));
+/* GOON
 		TempoCache tempoCache = new TempoCache(sequence);
 
 		int imeasure = 0;
@@ -440,7 +445,7 @@ public class MidiConverter {
 				}
 				imeasure++;
 			}
-		}
+		}*/
 	}
 
 	/**
@@ -529,26 +534,6 @@ public class MidiConverter {
 	 */
 	public static int calculateTickFromFraction(Fraction fraction, int resolution) {
 		return fraction.getNumerator() * 4 * resolution / fraction.getDenominator();
-	}
-
-	/**
-	 * Adds an event to a midi track.
-	 * @param Track
-	 * @param tick
-	 * @param type insert the constants of ShortMessage, e.g.
-	 * ShortMessage.NOTE_ON
-	 * @param channel the midi channel
-	 * @param note
-	 * @param velocity
-	 * @throws InvalidMidiDataException
-	 */
-	private static void addEventToTrack(Track Track, long tick, int type, int channel, int note,
-		int velocity)
-		throws InvalidMidiDataException {
-		ShortMessage message = new ShortMessage();
-		message.setMessage(type, channel, note, velocity);
-		MidiEvent midievent = new MidiEvent(message, tick);
-		Track.add(midievent);
 	}
 
 	/**

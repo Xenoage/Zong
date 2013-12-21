@@ -1,42 +1,34 @@
 package com.xenoage.zong.io.midi.out;
 
-import com.xenoage.utils.pdlib.PVector;
-import com.xenoage.zong.core.position.BMP;
+import java.util.List;
 
+import com.xenoage.zong.core.position.MP;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * This class stores the repetitions in a score by
  * remembering the sequential ranges which have to be played,
- * defined by start and end {@link BMP}s.
+ * defined by start and end {@link MP}s.
  * 
  * @author Andreas Wenger
  */
-public final class Playlist
-{
-	
-	
-	/**
-	 * A range from a given {@link BMP} to a given {@link BMP}.
-	 */
-	public static final class PlayRange
-	{
-		public final BMP from, to;
+@AllArgsConstructor
+@Getter
+public class Playlist {
 
-		public PlayRange(BMP from, BMP to)
-		{
-			this.from = from;
-			this.to = to;
-		}
+	/**
+	 * A range from a given {@link MP} to a given {@link MP}.
+	 */
+	@AllArgsConstructor
+	public static final class PlayRange {
+
+		public final MP from, to;
 	}
-	
-	
+
+
 	/** The list of ranges in chronological order. */
-	public final PVector<PlayRange> ranges;
-	
-	
-	public Playlist(PVector<PlayRange> ranges)
-	{
-		this.ranges = ranges;
-	}
+	private List<PlayRange> ranges;
 
 }

@@ -32,38 +32,19 @@ public class JseMidiSequenceWriter
 			tracks[i] = sequence.createTrack();
 		}
 	}
-
-	@Override public void writeProgramChange(int track, int channel, long tick, int program) {
-		try {
-			ShortMessage prgMsg = new ShortMessage();
-			prgMsg.setMessage(ShortMessage.PROGRAM_CHANGE, channel, program, 0);
-			tracks[track].add(new MidiEvent(prgMsg, tick));
-		} catch (InvalidMidiDataException e) {
-			//ignore - TODO
-		}
-	}
-
-	@Override public void writeVolumeChange(int track, int channel, long tick, float volume) {
-		try {
-			ShortMessage ctrlVolume = new ShortMessage();
-			ctrlVolume.setMessage(ShortMessage.CONTROL_CHANGE, channel, controllerVolume,
-				(int) (127 * volume));
-			tracks[track].add(new MidiEvent(ctrlVolume, tick));
-		} catch (InvalidMidiDataException e) {
-			//ignore - TODO
-		}
-	}
 	
-	@Override public void writePanChange(int track, int channel, long tick, float pan) {
+	@Override public void writeEvent(int track, int channel, long tick, int command, int data1, int data2) {
 		try {
-			//TODO: does not work, no panning can be heared using gervill
-			ShortMessage ctrlPan = new ShortMessage();
-			ctrlPan.setMessage(ShortMessage.CONTROL_CHANGE, channel, controllerPan,
-				(int) (64 + (63 * pan)));
-			tracks[track].add(new MidiEvent(ctrlPan, tick));
+			ShortMessage message = new ShortMessage();
+			message.setMessage(command, channel, data1, data2);
+			tracks[track].add(new MidiEvent(message, tick));
 		} catch (InvalidMidiDataException e) {
 			//ignore - TODO
 		}
+	}
+
+	@Override public long getLength() {
+		return sequence.getTickLength();
 	}
 	
 }
