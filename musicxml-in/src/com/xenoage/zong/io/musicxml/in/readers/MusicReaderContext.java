@@ -13,7 +13,6 @@ import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 
-import com.xenoage.utils.iterators.It;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.utils.math.VSide;
 import com.xenoage.zong.commands.core.music.ColumnElementWrite;
@@ -143,7 +142,7 @@ public final class MusicReaderContext {
 	/**
 	 * Gets the indices of the staves of the current part.
 	 */
-	public StavesRange getPartStaves() {
+	public StavesRange getPartStaffIndices() {
 		StavesList stavesList = getScore().getStavesList();
 		Part part = stavesList.getPartByStaffIndex(mp.staff);
 		return stavesList.getPartStaffIndices(part);
@@ -154,7 +153,7 @@ public final class MusicReaderContext {
 	 * to the current part.
 	 */
 	public int getStaffLinesCount(int staffIndexInPart) {
-		MP mp = this.mp.withStaff(getPartStaves().getStart() + staffIndexInPart);
+		MP mp = this.mp.withStaff(getPartStaffIndices().getStart() + staffIndexInPart);
 		return getScore().getStaff(mp).getLinesCount();
 	}
 
@@ -347,7 +346,7 @@ public final class MusicReaderContext {
 	 * staff with the given part-intern index.
 	 */
 	public MusicContext getMusicContext(int staffIndexInPart) {
-		MP mp = this.mp.withStaff(getPartStaves().getStart() + staffIndexInPart);
+		MP mp = this.mp.withStaff(getPartStaffIndices().getStart() + staffIndexInPart);
 		return score.getMusicContext(mp, Interval.BeforeOrAt, Interval.Before);
 	}
 
@@ -391,7 +390,7 @@ public final class MusicReaderContext {
 	 * staff in current part), current measure and current beat.
 	 */
 	public void writeMeasureElement(MeasureElement element, int staffIndexInPart) {
-		int staffIndex = getPartStaves().getStart() + staffIndexInPart;
+		int staffIndex = getPartStaffIndices().getStart() + staffIndexInPart;
 		MP mp = this.mp.withStaff(staffIndex);
 		new MeasureElementWrite(element, score.getMeasure(mp), mp.getBeat()).execute();
 	}
@@ -401,7 +400,7 @@ public final class MusicReaderContext {
 	 * without moving the cursor forward.
 	 */
 	public void writeVoiceElement(VoiceElement element, int staffIndexInPart, int voice) {
-		MP mp = this.mp.withStaff(getPartStaves().getStart() + staffIndexInPart).withVoice(voice);
+		MP mp = this.mp.withStaff(getPartStaffIndices().getStart() + staffIndexInPart).withVoice(voice);
 		try {
 			//create voice if needed
 			Measure measure = score.getMeasure(mp);

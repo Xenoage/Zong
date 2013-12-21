@@ -37,7 +37,7 @@ import com.xenoage.utils.font.FontInfo;
 
 	/** Default score format. */
 	public static final ScoreFormat defaultValue = new ScoreFormat(1.6f, 15,
-		SystemLayout.defaultValue, null, StaffLayout.defaultValue, defaultFont, MeasureNumbering.System);
+		new SystemLayout(), null, StaffLayout.defaultValue, defaultFont, MeasureNumbering.System);
 
 
 	/**

@@ -24,18 +24,16 @@ import static com.xenoage.zong.io.musicxml.in.util.CommandPerformer.execute;
 
 import java.util.List;
 
-import com.xenoage.utils.NullUtils;
 import com.xenoage.utils.font.FontInfo;
 import com.xenoage.utils.iterators.It;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.commands.core.music.ColumnElementWrite;
-import com.xenoage.zong.commands.core.music.MeasureAdd;
 import com.xenoage.zong.commands.core.music.MeasureAddUpTo;
-import com.xenoage.zong.commands.core.music.PartAdd;
 import com.xenoage.zong.commands.core.music.VoiceElementWrite;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.format.Break;
 import com.xenoage.zong.core.format.SystemLayout;
+import com.xenoage.zong.core.header.ScoreHeader;
 import com.xenoage.zong.core.music.ColumnElement;
 import com.xenoage.zong.core.music.Measure;
 import com.xenoage.zong.core.music.Staff;
@@ -62,7 +60,6 @@ import com.xenoage.zong.core.music.layout.SystemBreak;
 import com.xenoage.zong.core.music.rest.Rest;
 import com.xenoage.zong.core.music.time.Time;
 import com.xenoage.zong.core.position.MP;
-import com.xenoage.zong.io.musicxml.in.util.CommandPerformer;
 import com.xenoage.zong.io.musicxml.in.util.MusicReaderException;
 import com.xenoage.zong.musicxml.types.MxlAttributes;
 import com.xenoage.zong.musicxml.types.MxlBackup;
@@ -82,6 +79,7 @@ import com.xenoage.zong.musicxml.types.MxlPedal;
 import com.xenoage.zong.musicxml.types.MxlPrint;
 import com.xenoage.zong.musicxml.types.MxlScorePartwise;
 import com.xenoage.zong.musicxml.types.MxlSound;
+import com.xenoage.zong.musicxml.types.MxlStaffLayout;
 import com.xenoage.zong.musicxml.types.MxlSystemLayout;
 import com.xenoage.zong.musicxml.types.MxlTime;
 import com.xenoage.zong.musicxml.types.MxlWedge;
@@ -349,6 +347,8 @@ public final class MusicReader {
 	 * Reads the given print element.
 	 */
 	private static void readPrint(MusicReaderContext context, MxlPrint mxlPrint) {
+		MxlLayout mxlLayout = mxlPrint.getLayout();
+		ScoreHeader header = context.getScore().getHeader();
 
 		//system and page break
 		SystemBreak systemBreak = null;
@@ -389,9 +389,8 @@ public final class MusicReader {
 			}
 
 			//read system layout, if there
-			MxlLayout mxlLayout = mxlPrint.getLayout();
 			if (mxlLayout != null) {
-				MxlSystemLayout mxlSystemLayout = mxlPrint.getLayout().getSystemLayout();
+				MxlSystemLayout mxlSystemLayout = mxlLayout.getSystemLayout();
 				if (mxlSystemLayout != null) {
 					SystemLayoutReader.Value sl = SystemLayoutReader
 						.read(mxlSystemLayout, context.getTenthMm());
@@ -399,26 +398,31 @@ public final class MusicReader {
 	
 					//for first systems on a page, use top-system-distance
 					if (isPageStarted && sl.topSystemDistance != null) {
-						systemLayout = systemLayout.withDistance(sl.topSystemDistance);
+						systemLayout.setDistance(sl.topSystemDistance);
 					}
 	
 					//apply values
-					context.getScore().getHeader().setSystemLayout(context.getSystemIndex(), systemLayout);
+					header.setSystemLayout(context.getSystemIndex(), systemLayout);
+				}
+			}
+			
+			//staff layouts
+			if (mxlLayout != null) {
+				for (MxlStaffLayout mxlStaffLayout : it(mxlLayout.getStaffLayouts())) {
+					int staffIndex = mxlStaffLayout.getNumberNotNull() - 1;
+					//get system layout. if it does not exist yet, create it
+					SystemLayout systemLayout = header.getSystemLayout(context.getSystemIndex());
+					if (systemLayout == null) {
+						systemLayout = new SystemLayout();
+						header.setSystemLayout(context.getSystemIndex(), systemLayout);
+					}
+					systemLayout.setStaffLayout(
+						context.getPartStaffIndices().getStart() + staffIndex,
+						StaffLayoutReader.readStaffLayout(mxlStaffLayout, context.getTenthMm()).staffLayout);
 				}
 			}
 
 		}
-
-		//GOON
-		/*
-		//staff layouts
-		for (MxlStaffLayout mxlStaffLayout : mxlPrint.getLayout().getStaffLayouts()) {
-			int staffIndex = mxlStaffLayout.getNumberNotNull() - 1;
-			context = context.withScore(ScoreController.withSystemStaffLayout(context.getScore(),
-				context.getSystemIndex(), context.getPartStavesIndices().getStart() + staffIndex,
-				readStaffLayout(mxlStaffLayout, context.getTenthMm()).staffLayout));
-		}
-		*/
 	}
 
 	/**

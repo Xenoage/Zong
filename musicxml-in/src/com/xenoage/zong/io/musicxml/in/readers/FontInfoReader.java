@@ -5,7 +5,6 @@ import static com.xenoage.utils.collections.CList.ilist;
 import java.util.List;
 
 import com.xenoage.utils.annotations.MaybeNull;
-import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.collections.IList;
 import com.xenoage.utils.font.FontInfo;
 import com.xenoage.utils.font.FontStyle;

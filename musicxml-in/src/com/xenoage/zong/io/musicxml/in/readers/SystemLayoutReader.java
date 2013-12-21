@@ -26,19 +26,19 @@ public final class SystemLayoutReader {
 	 * Reads a {@link MxlSystemLayout}.
 	 */
 	public static Value read(MxlSystemLayout mxlSystemLayout, float tenthMm) {
-		SystemLayout systemLayout = SystemLayout.defaultValue;
+		SystemLayout systemLayout = new SystemLayout();
 
 		//system-margins
 		MxlSystemMargins mxlMargins = mxlSystemLayout.getSystemMargins();
 		if (mxlMargins != null) {
-			systemLayout = systemLayout.withMarginLeft(tenthMm * mxlMargins.getLeftMargin())
-				.withMarginRight(tenthMm * mxlMargins.getRightMargin());
+			systemLayout.setMarginLeft(tenthMm * mxlMargins.getLeftMargin());
+			systemLayout.setMarginRight(tenthMm * mxlMargins.getRightMargin());
 		}
 
 		//system-distance
 		Float mxlSystemDistance = mxlSystemLayout.getSystemDistance();
 		if (mxlSystemDistance != null) {
-			systemLayout = systemLayout.withDistance(tenthMm * mxlSystemDistance);
+			systemLayout.setDistance(tenthMm * mxlSystemDistance);
 		}
 
 		//top-system-distance

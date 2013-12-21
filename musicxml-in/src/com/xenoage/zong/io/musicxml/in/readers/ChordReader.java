@@ -77,7 +77,7 @@ public final class ChordReader {
 
 	/**
 	 * Reads the given chord, consisting of the given list of note elements,
-	 * including slurs and ties.
+	 * including beams, notations and lyrics.
 	 * All but the first given note must have a chord-element inside.
 	 */
 	public static void readChord(MusicReaderContext context, List<MxlNote> mxlNotes) {
@@ -440,7 +440,7 @@ public final class ChordReader {
 		int staff) {
 		Score score = context.getScore();
 		float defaultYInMm = defaultY * score.getFormat().getInterlineSpace() / 10;
-		float interlineSpace = score.getInterlineSpace(context.getPartStaves().getStart() +
+		float interlineSpace = score.getInterlineSpace(context.getPartStaffIndices().getStart() +
 			staff);
 		int linesCount = context.getStaffLinesCount(staff);
 		return 2 * (linesCount - 1) + 2 * defaultYInMm / interlineSpace;
