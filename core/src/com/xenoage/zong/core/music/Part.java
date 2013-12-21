@@ -44,5 +44,16 @@ import com.xenoage.zong.core.instrument.Instrument;
 		this.stavesCount = stavesCount;
 		this.instruments = instruments;
 	}
+	
+	/**
+	 * Gets the first instrument in this part.
+	 * If unset, the default instrument is returned.
+	 */
+	@NonNull public Instrument getFirstInstrument() {
+		if (instruments != null && instruments.size() > 0)
+			return instruments.get(0);
+		else
+			return Instrument.defaultValue;
+	}
 
 }

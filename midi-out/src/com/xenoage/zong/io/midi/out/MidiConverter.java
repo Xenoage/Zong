@@ -7,17 +7,13 @@ import static com.xenoage.zong.io.midi.out.MidiVelocityConverter.getVelocityAtPo
 import static com.xenoage.zong.io.midi.out.MidiVelocityConverter.getVoiceforDynamicsInStaff;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.sound.midi.InvalidMidiDataException;
-import javax.sound.midi.MidiEvent;
-import javax.sound.midi.Sequence;
-import javax.sound.midi.ShortMessage;
-import javax.sound.midi.Track;
-
 import com.sun.media.sound.MidiUtils;
 import com.sun.media.sound.MidiUtils.TempoCache;
+import com.xenoage.utils.collections.ArrayUtils;
 import com.xenoage.utils.collections.CollectionUtils;
 import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.utils.math.Fraction;
@@ -47,10 +43,6 @@ public class MidiConverter {
 	//even shortest note has 8 ticks. this allows staccato playback for example.
 	private static final int resolutionFactor = 8;
 
-	//controller numbers
-	private static final int controllerVolume = 7;
-	private static final int controllerPan = 10;
-
 
 	/**
 	 * Converts a {@link Score} to a {@link MidiSequence}.
@@ -61,8 +53,8 @@ public class MidiConverter {
 	 * @param writer          the writer for the midi data
 	 */
 	public static MidiSequence convertToSequence(Score score, boolean addMPEvents,
-		boolean metronome, MidiSequence sequence, MidiSequenceWriter writer) {
-		convertToSequence(score, addMPEvents, metronome, null);
+		boolean metronome, MidiSequenceWriter writer) {
+		return convertToSequence(score, addMPEvents, metronome, null, writer);
 	}
 
 	/**
@@ -78,127 +70,106 @@ public class MidiConverter {
 		boolean metronome, Fraction durationFactor, MidiSequenceWriter writer) {
 
 		ArrayList<Integer> staffTracks = alist();
-		int resolution = score.getDivisions() * resolutionFactor;
 		ArrayList<Long> measureStartTicks = alist();
 		Integer metronomeBeatTrackNumber = null;
 		ArrayList<MidiTime> timePool = alist();
 		int stavesCount = score.getStavesCount();
-		Track[] tracks = new Track[stavesCount];
-
+		
 		//compute mapping of staff indices to channel numbers
 		int[] channelMap = createChannelMap(score);
-
-		//create sequence
-		Sequence seq = null;
-		try {
-			seq = new Sequence(Sequence.PPQ, resolution);
-			Track tempoTrack = seq.createTrack();
-			Playlist playlist = MidiRepetitionCalculator.createPlaylist(score);
-
-			//create tracks
-			for (int iStaff = 0; iStaff < stavesCount; iStaff++) {
-				tracks[iStaff] = seq.createTrack();
-			}
-
-			//activate MIDI programs
-			int partFirstStaff = 0;
-			for (Part part : score.stavesList.parts) {
-				Instrument instrument = part.getInstruments().getFirst();
-				if (instrument instanceof PitchedInstrument) {
-					PitchedInstrument pitchedInstrument = (PitchedInstrument) instrument;
-					int channel = channelMap[partFirstStaff];
-					if (channel > -1) {
-						ShortMessage prgMsg = new ShortMessage();
-						prgMsg.setMessage(ShortMessage.PROGRAM_CHANGE, channel,
-							(pitchedInstrument).midiProgram, 0);
-						tempoTrack.add(new MidiEvent(prgMsg, 0)); //do all program changes in first track (tempoTrack)
-					}
-
-					//general volume for this instrument
-					if (instrument.base.volume != null) {
-						ShortMessage ctrlVolume = new ShortMessage();
-						ctrlVolume.setMessage(ShortMessage.CONTROL_CHANGE, channel, controllerVolume,
-							(int) (127 * instrument.base.volume));
-						tempoTrack.add(new MidiEvent(ctrlVolume, 0)); //in first track (tempoTrack)
-					}
-
-					//general panning for this instrument
-					//TODO: does not work, no panning can be heared using gervill
-					if (instrument.base.pan != null) {
-						ShortMessage ctrlPan = new ShortMessage();
-						ctrlPan.setMessage(ShortMessage.CONTROL_CHANGE, channel, controllerPan,
-							(int) (64 + (63 * instrument.base.pan)));
-						tempoTrack.add(new MidiEvent(ctrlPan, 0)); //in first track (tempoTrack)
-					}
-
+		//compute playlist (which contains repetitions and so on)
+		Playlist playlist = MidiRepetitionCalculator.createPlaylist(score);
+		
+		//one track for each staff and a system track for program changes, tempos and so on
+		int tracksCount = stavesCount + 1;
+		int systemTrackIndex = tracksCount - 1;
+		//resolution in ticks per quarter
+		int resolution = score.getDivisions() * resolutionFactor;
+		//init writer
+		writer.init(tracksCount, resolution);
+		
+		//activate MIDI programs
+		int partFirstStaff = 0;
+		for (Part part : score.getStavesList().getParts()) {
+			Instrument instrument = part.getFirstInstrument();
+			if (instrument instanceof PitchedInstrument) {
+				PitchedInstrument pitchedInstrument = (PitchedInstrument) instrument;
+				int channel = channelMap[partFirstStaff];
+				//program change
+				if (channel > -1) {
+					writer.writeProgramChange(systemTrackIndex, channel, 0, (pitchedInstrument).getMidiProgram());
 				}
-				partFirstStaff += part.getStavesCount();
-			}
-
-			//used beats in each measure column
-			IVector<Fraction> realMeasureColumnBeats = IVector.ivec(score.getMeasuresCount());
-			for (int iMeasure : range(score.getMeasuresCount())) {
-				realMeasureColumnBeats.add(getFilledBeats(score, iMeasure));
-			}
-			realMeasureColumnBeats.close();
-
-			//fill tracks
-			for (int iStaff = 0; iStaff < stavesCount; iStaff++) {
-				int channel = channelMap[iStaff];
-				if (channel == -1) {
-					continue; //no MIDI channel left for this staff
+				//general volume for this instrument
+				if (instrument.getData().getVolume() != null) {
+					writer.writeVolumeChange(systemTrackIndex, channel, 0, instrument.getData().getVolume());
 				}
-
-				long currenttickinstaff = 0;
-				Staff staff = score.getStaff(atStaff(iStaff));
-				Track track = tracks[iStaff];
-
-				Vector<Measure> measures = staff.measures;
-				int numberOfVoices = MidiVelocityConverter.getNumberOfVoicesInStaff(staff);
-				int velocity[] = new int[numberOfVoices];
-				for (int i = 0; i < velocity.length; i++) {
-					velocity[i] = 90;
-				}
-
-				int tracknumber = iStaff;
-
-				int[] voiceforDynamicsInStaff = getVoiceforDynamicsInStaff(staff, score.globals);
-				for (PlayRange playRange : playlist.ranges) {
-					int transposing = 0;
-					for (int iMeasure : range(playRange.from.measure, playRange.to.measure)) {
-						Measure measure = measures.get(iMeasure);
-						measureStartTicks.add(currenttickinstaff);
-
-						/*/TODO: transposition changes can happen everywhere in the measure
-						Transpose t = measure.getInstrumentChanges()...
-						if (t != null)
-						{
-							transposing = t.chromatic;
-						} //*/
-
-						Fraction start, end;
-						start = clipToMeasure(score, iMeasure, playRange.from).beat;
-						end = clipToMeasure(score, iMeasure, playRange.to).beat;
-
-						if (realMeasureColumnBeats.get(iMeasure).compareTo(end) < 0)
-							end = realMeasureColumnBeats.get(iMeasure);
-
-						for (int iVoice = 0; iVoice < measure.voices.size(); iVoice++) {
-							Voice voice = measure.voices.get(iVoice);
-							int currentVelocity = velocity[voiceforDynamicsInStaff[iVoice]];
-							velocity[iVoice] = generateMidi(resolution, channel, currenttickinstaff, staff,
-								track, currentVelocity, iVoice, voice, start, end, transposing, score,
-								durationFactor);
-						}
-						Fraction measureduration = end.sub(start);
-						currenttickinstaff += calculateTickFromFraction(measureduration, resolution);
-
-					}
-					staffTracks.add(tracknumber);
+				//general panning for this instrument
+				if (instrument.getData().getPan() != null) {
+					writer.writePanChange(systemTrackIndex, channel, 0, instrument.getData().getPan());
 				}
 			}
-			staffTracks.close();
-			measureStartTicks.close();
+			partFirstStaff += part.getStavesCount();
+		}
+
+		//used beats in each measure column
+		Fraction[] realMeasureColumnBeats = new Fraction[score.getMeasuresCount()];
+		for (int i : range(score.getMeasuresCount())) {
+			realMeasureColumnBeats[i] = score.getMeasureFilledBeats(i);
+		}
+
+		//fill tracks
+		for (int iStaff : range(stavesCount)) {
+			int channel = channelMap[iStaff];
+			if (channel == -1) {
+				continue; //no MIDI channel left for this staff
+			}
+
+			long currenttickinstaff = 0;
+			Staff staff = score.getStaff(iStaff);
+
+			int voicesCount = staff.getVoicesCount();
+			int voicesVelocity[] = new int[voicesCount];
+			Arrays.fill(voicesVelocity, 90);  
+
+			int track = iStaff;
+
+			int[] voiceforDynamicsInStaff = getVoiceforDynamicsInStaff(staff, score.globals);
+			for (PlayRange playRange : playlist.ranges) {
+				int transposing = 0;
+				for (int iMeasure : range(playRange.from.measure, playRange.to.measure)) {
+					Measure measure = measures.get(iMeasure);
+					measureStartTicks.add(currenttickinstaff);
+
+					/*/TODO: transposition changes can happen everywhere in the measure
+					Transpose t = measure.getInstrumentChanges()...
+					if (t != null)
+					{
+						transposing = t.chromatic;
+					} //*/
+
+					Fraction start, end;
+					start = clipToMeasure(score, iMeasure, playRange.from).beat;
+					end = clipToMeasure(score, iMeasure, playRange.to).beat;
+
+					if (realMeasureColumnBeats.get(iMeasure).compareTo(end) < 0)
+						end = realMeasureColumnBeats.get(iMeasure);
+
+					for (int iVoice = 0; iVoice < measure.voices.size(); iVoice++) {
+						Voice voice = measure.voices.get(iVoice);
+						int currentVelocity = voicesVelocity[voiceforDynamicsInStaff[iVoice]];
+						voicesVelocity[iVoice] = generateMidi(resolution, channel, currenttickinstaff, staff,
+							track, currentVelocity, iVoice, voice, start, end, transposing, score,
+							durationFactor);
+					}
+					Fraction measureduration = end.sub(start);
+					currenttickinstaff += calculateTickFromFraction(measureduration, resolution);
+
+				}
+				staffTracks.add(track);
+			}
+		}
+		staffTracks.close();
+		measureStartTicks.close();
 
 			if (addMPEvents) {
 				createControlEventChannel(score, resolution, measureStartTicks, timePool, seq, 0, playlist); //score position events in channel 0
@@ -592,8 +563,8 @@ public class MidiConverter {
 		int[] ret = new int[score.getStavesCount()];
 		//get number of parts which have not channel 10
 		int melodicPartsCount = 0;
-		for (Part part : score.stavesList.parts) {
-			if (part.getInstruments().getFirst() instanceof PitchedInstrument) {
+		for (Part part : score.getStavesList().getParts()) {
+			if (part.getFirstInstrument() instanceof PitchedInstrument) {
 				melodicPartsCount++;
 			}
 		}
@@ -603,8 +574,8 @@ public class MidiConverter {
 			//all unpitched parts get channel 10.
 			int partFirstStave = 0;
 			int iChannel = 0;
-			for (Part part : score.stavesList.parts) {
-				boolean pitched = (part.getInstruments().getFirst() instanceof PitchedInstrument);
+			for (Part part : score.getStavesList().getParts()) {
+				boolean pitched = (part.getFirstInstrument() instanceof PitchedInstrument);
 				int channel = (pitched ? iChannel : channel10);
 				for (int iStaff = partFirstStave; iStaff < partFirstStave + part.getStavesCount(); iStaff++) {
 					ret[iStaff] = channel;
@@ -623,15 +594,15 @@ public class MidiConverter {
 			int partFirstStave = 0;
 			int iChannel = 0;
 			HashMap<Integer, Integer> programToDeviceMap = new HashMap<Integer, Integer>();
-			for (Part part : score.stavesList.parts) {
-				boolean pitched = (part.getInstruments().getFirst() instanceof PitchedInstrument);
+			for (Part part : score.getStavesList().getParts()) {
+				boolean pitched = (part.getFirstInstrument() instanceof PitchedInstrument);
 				//find device
 				int channel = -1;
 				int program = 0;
 				boolean isChannelReused = false;
 				if (pitched && iChannel != -1) {
-					PitchedInstrument pitchedInstr = (PitchedInstrument) part.getInstruments().getFirst();
-					program = pitchedInstr.midiProgram;
+					PitchedInstrument pitchedInstr = (PitchedInstrument) part.getFirstInstrument();
+					program = pitchedInstr.getMidiProgram();
 					Integer channelReused = programToDeviceMap.get(program);
 					if (channelReused != null) {
 						isChannelReused = true;

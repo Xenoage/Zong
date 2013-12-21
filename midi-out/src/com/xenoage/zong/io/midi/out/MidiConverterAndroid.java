@@ -106,7 +106,7 @@ public class MidiConverterAndroid
 		int partFirstStaff = 0;
 		for (Part part : score.stavesList.parts)
 		{
-			Instrument instrument = part.getInstruments().getFirst();
+			Instrument instrument = part.getFirstInstrument();
 			if (instrument instanceof PitchedInstrument)
 			{
 				PitchedInstrument pitchedInstrument = (PitchedInstrument) instrument;
@@ -614,7 +614,7 @@ public class MidiConverterAndroid
 		int melodicPartsCount = 0;
 		for (Part part : score.stavesList.parts)
 		{
-			if (part.getInstruments().getFirst() instanceof PitchedInstrument)
+			if (part.getFirstInstrument() instanceof PitchedInstrument)
 			{
 				melodicPartsCount++;
 			}
@@ -628,7 +628,7 @@ public class MidiConverterAndroid
 			int iChannel = 0;
 			for (Part part : score.stavesList.parts)
 			{
-				boolean pitched = (part.getInstruments().getFirst() instanceof PitchedInstrument);
+				boolean pitched = (part.getFirstInstrument() instanceof PitchedInstrument);
 				int channel = (pitched ? iChannel : CHANNEL_10);
 				for (int iStaff = partFirstStave; iStaff < partFirstStave + part.getStavesCount(); iStaff++)
 				{
@@ -652,14 +652,14 @@ public class MidiConverterAndroid
 			HashMap<Integer, Integer> programToDeviceMap = new HashMap<Integer, Integer>();
 			for (Part part : score.stavesList.parts)
 			{
-				boolean pitched = (part.getInstruments().getFirst() instanceof PitchedInstrument);
+				boolean pitched = (part.getFirstInstrument()) instanceof PitchedInstrument);
 				//find device
 				int channel = -1;
 				int program = 0;
 				boolean isChannelReused = false;
 				if (pitched && iChannel != -1)
 				{
-					PitchedInstrument pitchedInstr = (PitchedInstrument) part.getInstruments().getFirst();
+					PitchedInstrument pitchedInstr = (PitchedInstrument) part.getFirstInstrument();
 					program = pitchedInstr.midiProgram;
 					Integer channelReused = programToDeviceMap.get(program);
 					if (channelReused != null)

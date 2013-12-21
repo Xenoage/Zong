@@ -4,6 +4,7 @@ import static com.xenoage.utils.kernel.Range.rangeReverse;
 import static com.xenoage.zong.core.music.Measure.measure;
 import static com.xenoage.zong.core.music.util.MPE.mpE;
 import static com.xenoage.zong.core.position.MP.atMeasure;
+import static java.lang.Math.max;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -164,6 +165,19 @@ public final class Staff {
 		}
 		measure.setParent(this);
 		measures.set(index, measure);
+	}
+	
+	/**
+	 * Gets the number of voices in this staff.
+	 * This is the number of voices in the measure with the most number of voices.
+	 */
+	public int getVoicesCount() {
+		int voiceCount = 0;
+		for (Measure measure : measures) {
+			int size = measure.getVoices().size();
+			voiceCount = max(voiceCount, size);
+		}
+		return voiceCount;
 	}
 
 

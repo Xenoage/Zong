@@ -9,5 +9,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/utils-kernel"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/utils-pdlib"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/voc"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/midi-out"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
