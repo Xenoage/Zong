@@ -64,6 +64,7 @@ public class MidiConverter {
 	private boolean addMPEvents;
 	private boolean metronome;
 	private Fraction durationFactor;
+	private int resolution;
 
 
 	/**
@@ -93,10 +94,18 @@ public class MidiConverter {
 		return new MidiConverter(score, writer, addMPEvents, metronome, durationFactor).convertToSequence();
 	}
 	
+	private MidiConverter(Score score, MidiSequenceWriter writer, boolean addMPEvents,
+		boolean metronome, Fraction durationFactor) {
+		this.score = score;
+		this.writer = writer;
+		this.addMPEvents = addMPEvents;
+		this.metronome = metronome;
+		this.durationFactor = durationFactor;
+	}
+	
 	private MidiSequence convertToSequence() {
 		ArrayList<Integer> staffTracks = alist();
 		ArrayList<Long> measureStartTicks = alist();
-		Integer metronomeBeatTrackNumber = null;
 		ArrayList<MidiTime> timePool = alist();
 		int stavesCount = score.getStavesCount();
 		
@@ -105,10 +114,16 @@ public class MidiConverter {
 		//compute playlist (which contains repetitions and so on)
 		Playlist playlist = MidiRepetitionCalculator.createPlaylist(score);
 		
-		//one track for each staff and one system track for program changes, tempos and so on.
+		//one track for each staff and one system track for program changes, tempos and so on,
+		//and maybe another track for the metronome
 		int tracksCount = stavesCount + 1;
+		Integer metronomeTrack = null;
+		if (metronome) {
+			metronomeTrack = tracksCount;
+			tracksCount++;
+		}
 		//resolution in ticks per quarter
-		int resolution = score.getDivisions() * resolutionFactor;
+		resolution = score.getDivisions() * resolutionFactor;
 		//init writer
 		writer.init(tracksCount, resolution);
 		
@@ -191,13 +206,12 @@ public class MidiConverter {
 		}
 
 		if (addMPEvents) {
-			createControlEventChannel(resolution, measureStartTicks, timePool, 0, playlist); //score position events in channel 0
-			addPlaybackAtEndControlEvent(seq);
+			createControlEventChannel(measureStartTicks, timePool, 0, playlist); //score position events in channel 0
+			addPlaybackAtEndControlEvent();
 		}
 
 		if (metronome) {
-			metronomeBeatTrackNumber = createMetronomeTrack(score, resolution, seq, playlist,
-				measureStartTicks);
+			createMetronomeTrack(metronomeTrack, playlist,	measureStartTicks);
 		}
 
 		//Add Tempo Changes
@@ -209,12 +223,9 @@ public class MidiConverter {
 			MidiEvent event = new MidiEvent(midiElement.getMidiMessage(), beat);
 			tempoTrack.add(event);
 		}*/
-		MidiTempoConverter.writeTempoTrack(score, playlist, resolution, tempoTrack);
+		MidiTempoConverter.writeTempoTrack(score, playlist, resolution, writer, systemTrackIndex);
 
-		SequenceContainer container = new SequenceContainer(seq, metronomeBeatTrackNumber, timePool,
-			measureStartTicks, staffTracks);
-
-		return container;
+		return writer.finish(metronomeTrack, timePool);
 	}
 
 	/**
@@ -413,7 +424,7 @@ public class MidiConverter {
 	 * Creates the control events for the playback cursor.
 	 * Channel {@value #channelPlaybackControl} is used because it has no other meaning.
 	 */
-	private void createControlEventChannel(int resolution,
+	private void createControlEventChannel(
 		List<Long> measureStartTicks, List<MidiTime> timePoolOpen, int channel, Playlist playlist) {
 		List<SortedList<Fraction>> usedBeatsMeasures = CollectionUtils.alist();
 		for (int i : range(score.getMeasuresCount()))
@@ -450,41 +461,19 @@ public class MidiConverter {
 
 	/**
 	 * Creates the track in the sequence with the beats of the metronome.
-	 * Additional it adds a second track that is used for the controlevents to
-	 * unmute the metronome in the correct moment. Message 118 is used. It
-	 * returns the number of the track in the sequencer.
-	 * 
-	 * TIDY
-	 * 
-	 * @param score
-	 * @param resolution the midi resolution
-	 * @param seq the midi sequence where the metronome should be added
-	 * @param playList the Playlist
-	 * @param measureStartTick
-	 * @return the number of the metronome track in the sequence
-	 * @throws InvalidMidiDataException
 	 */
-	private static int createMetronomeTrack(Score score, int resolution, Sequence seq,
-		Playlist playlist, IVector<Long> measureStartTicks)
-		throws InvalidMidiDataException {
-		int metronomeBeatTrackNumber;
-
+	private void createMetronomeTrack(int track, Playlist playlist, List<Long> measureStartTicks) {
 		// Load Settings
-		int metronomeStrongBeatNote = Settings.getInstance().getSetting("MetronomeStrongBeat",
-			"playback", 36);
-		int metronomeWeakBeatNote = Settings.getInstance().getSetting("MetronomeWeakBeat", "playback",
-			50);
-
-		// Create Tracks
-		metronomeBeatTrackNumber = seq.getTracks().length;
-		Track metronomeTrack = seq.createTrack();
-		Track metronomeControlTrack = seq.createTrack();
+		int metronomeStrongBeatNote = 36; /* GOON Settings.getInstance().getSetting("MetronomeStrongBeat",
+			"playback", 36); */
+		int metronomeWeakBeatNote = 50; /* GOON Settings.getInstance().getSetting("MetronomeWeakBeat", "playback",
+			50); */
 
 		int imeasure = 0;
-		for (PlayRange playRange : playlist.ranges) {
+		for (PlayRange playRange : playlist.getRanges()) {
 
 			for (int i : range(playRange.from.measure, playRange.to.measure)) {
-				Time time = getTimeAtOrBefore(score, i);
+				Time time = score.getHeader().getTimeAtOrBefore(i);
 
 				Fraction start, end;
 				if (playRange.from.measure == i) {
@@ -497,34 +486,30 @@ public class MidiConverter {
 					end = playRange.to.beat;
 				}
 				else {
-					end = getMeasureBeats(score, i);
+					end = score.getMeasureBeats(i);
 				}
 
 				if (time != null) {
-					Vector<Tuple2<Fraction, BeatWeight>> beatWeights = time.getBeatWeights();
-					for (Tuple2<Fraction, BeatWeight> beatWeight : beatWeights) {
-						if (!isInRange(beatWeight.get1(), fr(0), start, end))
+					boolean[] accentuation = time.getType().getBeatsAccentuation();
+					int timeDenominator = time.getType().getDenominator();
+					for (int beatNumerator : range(time.getType().getNumerator())) {
+						Fraction beat = fr(beatNumerator, timeDenominator);
+						if (false == isInRange(beat, fr(0), start, end))
 							continue;
-						long currenttick = measureStartTicks.get(imeasure) +
-							calculateTickFromFraction(beatWeight.get1().sub(start), resolution);
-						int note;
-						if (beatWeight.get2() == BeatWeight.StrongBeat) {
-							note = metronomeStrongBeatNote;
-						}
-						else {
-							note = metronomeWeakBeatNote;
-						}
+						long tickStart = measureStartTicks.get(imeasure) +
+							calculateTickFromFraction(beat.sub(start), resolution);
+						long tickStop = tickStart + calculateTickFromFraction(fr(1, timeDenominator), resolution);
+						
+						int note = (accentuation[beatNumerator] ? metronomeStrongBeatNote : metronomeWeakBeatNote);
 
 						int velocity = 127;
-						addEventToTrack(metronomeTrack, currenttick, ShortMessage.NOTE_ON, 9, note, velocity);
-						addEventToTrack(metronomeControlTrack, currenttick, ShortMessage.CONTROL_CHANGE, 9,
-							118, 0);
+						writer.writeNote(track, channel10, tickStart, note, true, velocity);
+						writer.writeNote(track, channel10, tickStop, note, false, 0);
 					}
 				}
 				imeasure++;
 			}
 		}
-		return metronomeBeatTrackNumber;
 	}
 
 	/**

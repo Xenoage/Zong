@@ -1,5 +1,10 @@
 package com.xenoage.zong.io.midi.out;
 
+import java.util.List;
+
+import com.xenoage.zong.core.position.MP;
+
+
 
 /**
  * Factory for an {@link MidiSequence} instance.
@@ -7,7 +12,7 @@ package com.xenoage.zong.io.midi.out;
  * 
  * @author Andreas Wenger
  */
-public abstract class MidiSequenceWriter {
+public abstract class MidiSequenceWriter<T> {
 
 	//controller numbers
 	private static final int controllerVolume = 7;
@@ -18,6 +23,9 @@ public abstract class MidiSequenceWriter {
 	private static final int commandControlChange = 0xB0; //176
 	private static final int commandNoteOn        = 0x90; //144
 	private static final int commandNoteOff       = 0x80; //128
+	
+	//meta message types
+	private static final int typeTempo            = 0x51; //81
 	
 
 
@@ -36,7 +44,7 @@ public abstract class MidiSequenceWriter {
 	 * @param program  the MIDI program to change to
 	 */
 	public void writeProgramChange(int track, int channel, long tick, int program) {
-		writeEvent(track, channel, tick, commandProgramChange, program, 0);
+		writeShortMessage(track, channel, tick, commandProgramChange, program, 0);
 	}
 
 	/**
@@ -47,7 +55,7 @@ public abstract class MidiSequenceWriter {
 	 * @param volume   the volume between 0 (silent) and 1 (full)
 	 */
 	public void writeVolumeChange(int track, int channel, long tick, float volume) {
-		writeEvent(track, channel, tick, commandControlChange, controllerVolume, (int) (127 * volume));
+		writeShortMessage(track, channel, tick, commandControlChange, controllerVolume, (int) (127 * volume));
 	}
 	
 	/**
@@ -58,7 +66,7 @@ public abstract class MidiSequenceWriter {
 	 * @param pan      the panning between -1 (left) and 1 (right)
 	 */
 	public void writePanChange(int track, int channel, long tick, float pan) {
-		writeEvent(track, channel, tick, commandControlChange, controllerPan, (int) (64 + (63 * pan)));
+		writeShortMessage(track, channel, tick, commandControlChange, controllerPan, (int) (64 + (63 * pan)));
 	}
 	
 	/**
@@ -70,24 +78,35 @@ public abstract class MidiSequenceWriter {
 	 * @param data2     the second data byte
 	 */
 	public void writeControlChange(int track, int channel, long tick, int data1, int data2) {
-		writeEvent(track, channel, tick, commandControlChange, data1, data2);
+		writeShortMessage(track, channel, tick, commandControlChange, data1, data2);
 	}
 	
 	/**
 	 * Writes a MIDI note on or off.
 	 * @param track     the index of the track where to write the event
-	 * @param channel   the channel which is affected by the pan change
+	 * @param channel   the channel where to play the note
 	 * @param tick      the time of the event
 	 * @param note      the MIDI note
 	 * @param on        true for note on, false for note off
 	 * @param velocity  velocity of the note event
 	 */
 	public void writeNote(int track, int channel, long tick, int note, boolean on, int velocity) {
-		writeEvent(track, channel, tick, on ? commandNoteOn : commandNoteOff, note, velocity);
+		writeShortMessage(track, channel, tick, on ? commandNoteOn : commandNoteOff, note, velocity);
 	}
 	
 	/**
-	 * Writes a MIDI event with the given data.
+	 * Writes a MIDI tempo change.
+	 * @param track     the index of the track where to write the event
+	 * @param tick      the time of the event
+	 * @param bpm       the new tempo in beats per minute
+	 */
+	public void writeTempoChange(int track, long tick, int bpm) {
+		byte[] data = toByteArray(getMicrosecondsPerBeat(bpm));
+		writeMetaMessage(track, tick, typeTempo, data);
+	}
+		
+	/**
+	 * Writes a MIDI short message with the given data.
 	 * @param track     the index of the track where to write the event
 	 * @param channel   the channel which is affected by the pan change
 	 * @param tick      the time of the event
@@ -95,11 +114,46 @@ public abstract class MidiSequenceWriter {
 	 * @param data1     the first data byte
 	 * @param data2     the second data byte
 	 */
-	public abstract void writeEvent(int track, int channel, long tick, int command, int data1, int data2);
+	public abstract void writeShortMessage(int track, int channel, long tick, int command, int data1, int data2);
+	
+	/**
+	 * Writes a MIDI meta message with the given data.
+	 * @param track  the index of the track where to write the event
+	 * @param tick   the time of the event
+	 * @param type   the type of the event
+	 * @param data   the data bytes
+	 */
+	public abstract void writeMetaMessage(int track, long tick, int type, byte[] data);
 	
 	/**
 	 * Gets the current length of the sequence in ticks.
 	 */
 	public abstract long getLength();
+	
+	/**
+	 * Converts the given value in beats per minutes into microseconds per beat.
+	 */
+	private static int getMicrosecondsPerBeat(int bpm) {
+		final int msPerMinute = 60000000;
+		return msPerMinute / bpm;
+	}
+	
+	/**
+	 * Returns the last three bytes of the given integer.
+	 */
+	private static byte[] toByteArray(int val) {
+		byte[] res = new byte[3];
+		res[0] = (byte) (val / 0x10000);
+		res[1] = (byte) ((val - res[0] * 0x10000) / 0x100);
+		res[2] = (byte) (val - res[0] * 0x10000 - res[1] * 0x100);
+		return res;
+	}
+	
+	/**
+	 * Returns a {@link MidiSequence} with the written data.
+	 * @param metronomeTrack  the number of the metronome track, or null if no metronome track was created
+	 * @param timePool        the mappings from MIDI ticks to {@link MP}s and milliseconds
+	 */
+	public abstract MidiSequence<T> finish(Integer metronomeTrack, List<MidiTime> timePool);
 
 }

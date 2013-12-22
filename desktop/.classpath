@@ -10,5 +10,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/utils-pdlib"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/voc"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/midi-out"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/lombok"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

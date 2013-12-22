@@ -208,7 +208,7 @@ public class MidiScorePlayer
 	public void setMetronomeEnabled(boolean metronomeEnabled)
 	{
 		this.metronomeEnabled = metronomeEnabled;
-		Integer metronomeBeatTrackNumber = sequenceContainer.metronomeBeatTrackNumber;
+		Integer metronomeBeatTrackNumber = sequenceContainer.metronomeTrack;
 		if (metronomeBeatTrackNumber != null)
 			SynthManager.getSequencer().setTrackMute(metronomeBeatTrackNumber,
 				!metronomeEnabled);

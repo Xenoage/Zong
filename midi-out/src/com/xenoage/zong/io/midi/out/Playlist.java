@@ -14,8 +14,7 @@ import lombok.Getter;
  * 
  * @author Andreas Wenger
  */
-@AllArgsConstructor
-@Getter
+@AllArgsConstructor @Getter
 public class Playlist {
 
 	/**

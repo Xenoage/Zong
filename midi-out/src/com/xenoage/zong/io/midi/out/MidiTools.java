@@ -11,8 +11,7 @@ import com.xenoage.zong.core.music.Pitch;
  *
  * @author Andreas Wenger
  */
-public class MidiTools
-{
+public class MidiTools {
   
   
   /**
@@ -20,14 +19,12 @@ public class MidiTools
    * to an instance of Pitch and returns it.
    * Only positive values are used for alter.
    */
-  public static Pitch getPitchFromNoteNumber(int noteNumber)
-  {
+  public static Pitch getPitchFromNoteNumber(int noteNumber) {
     //12 = C0, 24 = C1, 36 = C2, ...
     int octave = noteNumber / 12 - 1;
     noteNumber -= (octave + 1) * 12;
     int step = 0, alter = 0;
-    switch (noteNumber)
-    {
+    switch (noteNumber) {
       case 0: step = 0; alter = 0; break;
       case 1: step = 0; alter = 1; break;
       case 2: step = 1; alter = 0; break;
@@ -51,11 +48,9 @@ public class MidiTools
    * If the note number would be outside the range of 0 to 127,
    * 0 or 127 is returned.
    */
-  public static int getNoteNumberFromPitch(Pitch pitch)
-  {
+  public static int getNoteNumberFromPitch(Pitch pitch) {
     int ret = (pitch.getOctave() + 1) * 12;
-    switch (pitch.getStep())
-    {
+    switch (pitch.getStep()) {
       case 0: break;
       case 1: ret += 2; break;
       case 2: ret += 4; break;
