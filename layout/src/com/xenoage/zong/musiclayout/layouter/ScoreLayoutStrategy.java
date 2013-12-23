@@ -124,7 +124,7 @@ public class ScoreLayoutStrategy
 			for (int iStaff : range(measureColumn)) {
 				Measure measure = measureColumn.get(iStaff);
 				for (Voice voice : measure.getVoices()) {
-					for (MusicElement element : voice.elements) {
+					for (MusicElement element : voice.getElements()) {
 						if (element instanceof Chord) {
 							Chord chord = (Chord) element;
 							//compute each beam only one time (when the end waypoint is found)
@@ -303,7 +303,7 @@ public class ScoreLayoutStrategy
 			Column measureColumn = score.getColumn(iMeasure);
 			for (Measure measure : measureColumn) {
 				for (Voice voice : measure.getVoices()) {
-					for (MusicElement element : voice.elements) {
+					for (MusicElement element : voice.getElements()) {
 						if (element instanceof Chord) {
 							Chord chord = (Chord) element;
 							//compute each beam only one time (when the end waypoint is found)

@@ -1,11 +1,11 @@
 package com.xenoage.zong.io.midi.out;
 
 import static com.xenoage.utils.iterators.It.it;
+import static com.xenoage.utils.iterators.ReverseIterator.reverseIt;
 import static com.xenoage.utils.kernel.Tuple2.t;
 
 import java.util.List;
 
-import com.xenoage.utils.iterators.It;
 import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.utils.math.MathUtils;
@@ -30,20 +30,6 @@ public final class MidiVelocityConverter {
 
 	private static final int defaultvalue = 64;
 
-
-	
-
-	public static int getVelocity(Chord chord, int currentVelocity, Globals globals) {
-		for (Attachable attachment : globals.getAttachments().get(chord)) {
-			if (attachment instanceof Dynamics) {
-				Dynamics dynamic = (Dynamics) attachment;
-				int setting = Settings.getInstance().getSetting(dynamic.getType().name(),
-					"playback-dynamics", currentVelocity);
-				return convertToMidiVelocity(setting);
-			}
-		}
-		return currentVelocity;
-	}
 
 	private static boolean voiceHasDynamics(Staff staff, int voiceIndex) {
 		for (Measure measure : staff.getMeasures()) {
@@ -220,23 +206,25 @@ public final class MidiVelocityConverter {
 
 	private static Tuple2<DynamicsType, Fraction> getLatestDynamicsInMeasure(Staff staff,
 		int voiceNumber, int measureNumber, Score score) {
-		Measure measure = staff.measures.get(measureNumber);
+		Measure measure = staff.getMeasure(measureNumber);
 		//first look for attached dynamics
 		Tuple2<DynamicsType, Fraction> attached = null;
-		if (voiceNumber < measure.voices.size()) {
-			Voice voice = measure.voices.get(voiceNumber);
-			for (VoiceElement element : reverseIt(voice.elements)) {
-				for (Attachable attachment : score.globals.getAttachments().get(element)) {
-					if (attachment instanceof Dynamics) {
-						attached = t(((Dynamics) attachment).getType(), score.getBMP(element).beat);
-						break;
+		if (voiceNumber < measure.getVoices().size()) {
+			Voice voice = measure.getVoices().get(voiceNumber);
+			for (VoiceElement element : reverseIt(voice.getElements())) {
+				if (element instanceof Chord) { //TODO: can dynamics also be attached to rests?
+					Chord chord = (Chord) element;
+					for (Direction direction : it(chord.getDirections())) {
+						if (direction instanceof Dynamics) {
+							attached = t(((Dynamics) direction).getType(), voice.getBeat(direction));
+						}
 					}
 				}
 			}
 		}
 		//then look in measure directions
 		Tuple2<DynamicsType, Fraction> inMeasure = null;
-		for (BeatE<Direction> direction : measure.directions) {
+		for (BeatE<Direction> direction : measure.getDirections()) {
 			if (direction.element instanceof Dynamics) {
 				inMeasure = t(((Dynamics) direction.element).getType(), direction.beat);
 			}

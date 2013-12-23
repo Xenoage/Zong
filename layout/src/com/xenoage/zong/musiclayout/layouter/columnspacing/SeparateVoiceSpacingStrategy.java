@@ -56,7 +56,7 @@ public class SeparateVoiceSpacingStrategy
 		LinkedList<SpacingElement> acc = llist();
 
 		//special case: no elements in the measure.
-		if (voice.elements.size() == 0) {
+		if (voice.getElements().size() == 0) {
 			return new VoiceSpacing(voice, interlineSpace, ilist(
 				new SpacingElement(null, Fraction._0, 0), new SpacingElement(null, measureBeats,
 					layoutSettings.spacings.widthMeasureEmpty)));
@@ -85,7 +85,7 @@ public class SeparateVoiceSpacingStrategy
 		acc.addFirst(new SpacingElement(null, curBeat, lastFrontGapOffset));
 
 		//iterate through the elements in reverse order
-		for (VoiceElement element : reverseIt(voice.elements)) {
+		for (VoiceElement element : reverseIt(voice.getElements())) {
 			//get the notation
 			Notation notation = notations.get(element);
 			if (notation == null)

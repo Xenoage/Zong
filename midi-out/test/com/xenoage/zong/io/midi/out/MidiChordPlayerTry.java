@@ -11,6 +11,7 @@ import com.xenoage.zong.core.instrument.Transpose;
 import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.Note;
+import com.xenoage.zong.desktop.io.midi.out.MidiChordPlayer;
 
 
 /**

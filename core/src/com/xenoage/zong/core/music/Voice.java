@@ -9,6 +9,7 @@ import static com.xenoage.zong.core.music.util.Interval.Result.FalseHigh;
 import static com.xenoage.zong.core.music.util.Interval.Result.True;
 import static com.xenoage.zong.core.music.util.StartOrStop.Start;
 import static com.xenoage.zong.core.music.util.StartOrStop.Stop;
+import static com.xenoage.zong.core.position.MP.atVoice;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -28,6 +29,7 @@ import com.xenoage.zong.core.music.util.StartOrStop;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.position.MPContainer;
 import com.xenoage.zong.core.position.MPElement;
+import com.xenoage.zong.util.exceptions.IllegalMPException;
 
 
 /**
@@ -74,6 +76,18 @@ public final class Voice
 		Voice voice = voice();
 		voice.setParent(parent);
 		return voice;
+	}
+	
+	
+	/**
+	 * Gets the element with the given index, or throws an
+	 * {@link IllegalMPException} if there is none.
+	 */
+	public VoiceElement getElement(int index) {
+		if (index >= 0 && index <= elements.size())
+			return elements.get(index);
+		else
+			throw new IllegalMPException(atVoice(index));
 	}
 
 

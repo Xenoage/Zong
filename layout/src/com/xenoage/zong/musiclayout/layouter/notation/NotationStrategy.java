@@ -128,7 +128,7 @@ public final class NotationStrategy
 					Voice voice = measure.getVoice(iVoice);
 					//voice elements
 					Fraction beat = _0;
-					for (VoiceElement element : voice.elements) {
+					for (VoiceElement element : voice.getElements()) {
 						Notation notation = computeNotation(element, iStaff, score, symbolPool, layoutSettings);
 						if (notation != null)
 							ret.add(notation);

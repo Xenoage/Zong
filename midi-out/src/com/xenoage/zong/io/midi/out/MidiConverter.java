@@ -14,13 +14,8 @@ import java.util.List;
 
 import lombok.AllArgsConstructor;
 
-import com.sun.media.sound.MidiUtils;
-import com.sun.media.sound.MidiUtils.TempoCache;
-import com.xenoage.utils.collections.ArrayUtils;
 import com.xenoage.utils.collections.CollectionUtils;
 import com.xenoage.utils.collections.SortedList;
-import com.xenoage.utils.kernel.Range;
-import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.instrument.Instrument;
@@ -33,7 +28,6 @@ import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.Note;
 import com.xenoage.zong.core.music.time.Time;
-import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.io.midi.out.Playlist.PlayRange;
 
 /**

@@ -263,7 +263,7 @@ public class Measure
 		Map<Pitch, Fraction> retBeats = new HashMap<Pitch, Fraction>();
 		for (Voice voice : voices) {
 			Fraction pos = startBeat;
-			for (VoiceElement e : voice.elements) {
+			for (VoiceElement e : voice.getElements()) {
 				if (pos.compareTo(startBeat) < 0) {
 					pos = pos.add(e.getDuration());
 					continue;

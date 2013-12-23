@@ -98,7 +98,7 @@ public final class StavesList {
 		for (Staff staff : staves) {
 			for (Measure measure : staff.getMeasures()) {
 				for (Voice voice : measure.getVoices()) {
-					for (VoiceElement me : voice.elements) {
+					for (VoiceElement me : voice.getElements()) {
 						if (me.getDuration() != null) {
 							actualdivision = MathUtils.lcm(actualdivision, me.getDuration().getDenominator());
 						}

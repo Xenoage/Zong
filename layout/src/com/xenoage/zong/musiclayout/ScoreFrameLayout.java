@@ -65,6 +65,7 @@ public final class ScoreFrameLayout {
 	 * Gets all musical stampings (staves, notes, ...) of this frame,
 	 * but not selections or playback stampings.
 	 */
+	@SuppressWarnings("unchecked")
 	public Iterable<Stamping> getMusicalStampings() {
 		return new MultiIt<Stamping>(staffStampings, otherStampings);
 	}
@@ -73,6 +74,7 @@ public final class ScoreFrameLayout {
 	 * Gets all stampings of this frame, including both the musical
 	 * and the status stampings (selection, playback).
 	 */
+	@SuppressWarnings("unchecked")
 	public Iterable<Stamping> getAllStampings() {
 		return new MultiIt<Stamping>(staffStampings, otherStampings, selectionStampings,
 			playbackStampings);

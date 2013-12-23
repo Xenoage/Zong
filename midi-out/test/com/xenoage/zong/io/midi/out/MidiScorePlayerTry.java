@@ -1,12 +1,13 @@
 package com.xenoage.zong.io.midi.out;
 
-import static com.xenoage.zong.io.midi.out.MidiScorePlayer.midiScorePlayer;
+import static com.xenoage.zong.desktop.io.midi.out.MidiScorePlayer.midiScorePlayer;
 
 import javax.sound.midi.MidiUnavailableException;
 
 import com.xenoage.utils.io.IO;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.position.BMP;
+import com.xenoage.zong.desktop.io.midi.out.MidiScorePlayer;
 import com.xenoage.zong.util.demo.ScoreRevolutionary;
 
 

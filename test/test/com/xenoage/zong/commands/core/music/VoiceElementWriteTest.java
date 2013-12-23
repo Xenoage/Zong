@@ -365,9 +365,9 @@ public class VoiceElementWriteTest {
 		assertEquals(10, voice.getElements().size());
 		for (int i : range(8))
 			assertEquals(fr(1, 8), getDur(voice, i));
-		assertTrue(voice.elements.get(8) instanceof Rest);
+		assertTrue(voice.getElement(8) instanceof Rest);
 		assertEquals(fr(1, 8), getDur(voice, 8));
-		assertEquals(x, voice.elements.get(9));
+		assertEquals(x, voice.getElement(9));
 		assertEquals(fr(1, 4), getDur(voice, 9));
 		//test undo
 		cmd.undo();

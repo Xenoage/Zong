@@ -7,10 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.xenoage.utils.annotations.Untested;
-import com.xenoage.utils.collections.NullableList;
 import com.xenoage.utils.document.command.Command;
 import com.xenoage.utils.document.command.Undoability;
-import com.xenoage.utils.kernel.Range;
 import com.xenoage.zong.commands.core.music.beam.BeamRemove;
 import com.xenoage.zong.commands.core.music.slur.SlurRemove;
 import com.xenoage.zong.commands.core.music.tuplet.TupletRemove;

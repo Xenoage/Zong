@@ -3,7 +3,7 @@ package com.xenoage.zong.io.midi.out;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.utils.pdlib.PVector.pvec;
 import static com.xenoage.zong.core.position.IMP.imp0;
-import static com.xenoage.zong.io.midi.out.MidiScorePlayer.midiScorePlayer;
+import static com.xenoage.zong.desktop.io.midi.out.MidiScorePlayer.midiScorePlayer;
 
 import javax.sound.midi.MidiUnavailableException;
 
@@ -26,6 +26,7 @@ import com.xenoage.zong.core.music.direction.Dynamics;
 import com.xenoage.zong.core.music.direction.DynamicsType;
 import com.xenoage.zong.core.music.key.TraditionalKey;
 import com.xenoage.zong.core.music.time.NormalTime;
+import com.xenoage.zong.desktop.io.midi.out.MidiScorePlayer;
 import com.xenoage.zong.io.score.ScoreController;
 import com.xenoage.zong.io.selection.Cursor;
 

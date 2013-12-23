@@ -1,4 +1,4 @@
-package com.xenoage.zong.io.midi.out;
+package com.xenoage.zong.desktop.io.midi.out;
 
 import static com.xenoage.utils.log.Log.log;
 import static com.xenoage.utils.log.Report.warning;
@@ -11,11 +11,12 @@ import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
 import javax.sound.midi.ShortMessage;
 
-import com.xenoage.utils.base.collections.WeakList;
-import com.xenoage.utils.pdlib.IVector;
+import com.xenoage.utils.jse.collections.WeakList;
 import com.xenoage.zong.core.Score;
-import com.xenoage.zong.core.position.BMP;
-
+import com.xenoage.zong.core.position.MP;
+import com.xenoage.zong.io.midi.out.MidiConverter;
+import com.xenoage.zong.io.midi.out.MidiTime;
+import com.xenoage.zong.io.midi.out.PlaybackListener;
 
 /**
  * This class offers the interface for MIDI playback in
@@ -25,45 +26,38 @@ import com.xenoage.zong.core.position.BMP;
  * @author Andreas Wenger
  */
 public class MidiScorePlayer
-	implements ControllerEventListener
-{
-	
+	implements ControllerEventListener {
+
 	private static final float defaultVolume = 0.7f;
 	private static final int eventNoteOn = 119;
 	public static final int eventPlaybackEnd = 117;
 
 	private static MidiScorePlayer instance = null;
-	
-	private SequenceContainer sequenceContainer = null;
+
+	private JseMidiSequence sequence = null;
 	private WeakList<PlaybackListener> listeners = new WeakList<PlaybackListener>();
 	private boolean metronomeEnabled;
 	private float volume = defaultVolume;
 	private int currentPosition;
 	private TimeThread timeThread = new TimeThread();
-	
 
-	
+
 	/**
 	 * Gets the single instance of this class.
 	 */
-	public static MidiScorePlayer midiScorePlayer()
-	{
+	public static MidiScorePlayer midiScorePlayer() {
 		if (instance == null)
 			throw new IllegalStateException(MidiScorePlayer.class.getName() + " not initialized");
 		return instance;
 	}
-	
-	
+
 	public static void init()
-		throws MidiUnavailableException
-	{
+		throws MidiUnavailableException {
 		if (instance == null)
 			instance = new MidiScorePlayer();
 	}
-	
-	
-	private MidiScorePlayer()
-	{
+
+	private MidiScorePlayer() {
 		volume = defaultVolume;
 		setVolume(volume);
 		SynthManager.removeAllControllerEventListeners();
@@ -82,23 +76,20 @@ public class MidiScorePlayer
 		SynthManager.addControllerEventListener(this, controllersplaybackAtEnd);
 	}
 
-
 	/**
 	 * Opens the given {@link Score} for playback.
 	 */
-	public void openScore(Score score)
-	{
+	public void openScore(Score score) {
 		stop();
-		SequenceContainer container = MidiConverter.convertToSequence(score, true, true);
-		this.sequenceContainer = container;
+		this.sequence = (JseMidiSequence) MidiConverter.convertToSequence(
+			score, true, true, new JseMidiSequenceWriter());
 		try {
-			SynthManager.getSequencer().setSequence(container.sequence);
+			SynthManager.getSequencer().setSequence(sequence.getSequence());
 		} catch (InvalidMidiDataException ex) {
 			log(warning(ex));
 		}
 		applyVolume();
 	}
-
 
 	/**
 	 * Registers the given {@link PlaybackListener} which will be
@@ -106,50 +97,41 @@ public class MidiScorePlayer
 	 * This class stores only a weak reference of the listener, so
 	 * removing the listener is optional.
 	 */
-	public void addPlaybackListener(PlaybackListener listener)
-	{
+	public void addPlaybackListener(PlaybackListener listener) {
 		listeners.add(listener);
 	}
-
 
 	/**
 	 * Unregisters the given {@link PlaybackListener}. 
 	 */
-	public void removePlaybackListener(PlaybackListener listener)
-	{
+	public void removePlaybackListener(PlaybackListener listener) {
 		listeners.remove(listener);
 	}
-
 
 	/**
 	 * Changes the position of the playback cursor to the given
 	 * time in microseconds.
 	 */
-	public void setMicrosecondPosition(long ms)
-	{
+	public void setMicrosecondPosition(long ms) {
 		SynthManager.getSequencer().setMicrosecondPosition(ms);
 		currentPosition = 0;
 	}
-
 
 	/**
 	 * Changes the position of the playback cursor to the given
 	 * {@link BMP}.
 	 */
-	public void setMP(BMP bmp)
-	{
-		long tickPosition = calculateTickFromMP(bmp, sequenceContainer.measureStartTicks,
-			sequenceContainer.sequence.getResolution());
+	public void setMP(MP bmp) {
+		long tickPosition = calculateTickFromMP(bmp, sequence.measureStartTicks,
+			sequence.sequence.getResolution());
 		SynthManager.getSequencer().setTickPosition(tickPosition);
 		currentPosition = 0; //as we don't know the real position, we set it 0, because the playback will automatically jump to the correct position.
 	}
 
-
 	/**
 	 * Starts playback at the current position.
 	 */
-	public void start()
-	{
+	public void start() {
 		Sequencer sequencer = SynthManager.getSequencer();
 		if (sequencer.getSequence() != null) {
 			sequencer.start();
@@ -163,13 +145,11 @@ public class MidiScorePlayer
 		}
 	}
 
-
 	/**
 	 * Stops the playback without resetting the
 	 * current position.
 	 */
-	public void pause()
-	{
+	public void pause() {
 		Sequencer sequencer = SynthManager.getSequencer();
 		if (sequencer.isRunning()) {
 			sequencer.stop();
@@ -180,12 +160,10 @@ public class MidiScorePlayer
 		}
 	}
 
-
 	/**
 	 * Stops the playback and sets the cursor to the start position.
 	 */
-	public void stop()
-	{
+	public void stop() {
 		Sequencer sequencer = SynthManager.getSequencer();
 		if (sequencer.isRunning()) {
 			sequencer.stop();
@@ -198,42 +176,34 @@ public class MidiScorePlayer
 		}
 	}
 
-
-	public boolean getMetronomeEnabled()
-	{
+	public boolean getMetronomeEnabled() {
 		return metronomeEnabled;
 	}
 
-
-	public void setMetronomeEnabled(boolean metronomeEnabled)
-	{
+	public void setMetronomeEnabled(boolean metronomeEnabled) {
 		this.metronomeEnabled = metronomeEnabled;
-		Integer metronomeBeatTrackNumber = sequenceContainer.metronomeTrack;
+		Integer metronomeBeatTrackNumber = sequence.metronomeTrack;
 		if (metronomeBeatTrackNumber != null)
-			SynthManager.getSequencer().setTrackMute(metronomeBeatTrackNumber,
-				!metronomeEnabled);
+			SynthManager.getSequencer().setTrackMute(metronomeBeatTrackNumber, !metronomeEnabled);
 	}
 
-
-	private long calculateTickFromMP(BMP pos, IVector<Long> measureTicks, int resolution)
-	{
+	private long calculateTickFromMP(BMP pos, IVector<Long> measureTicks, int resolution) {
 		if (pos == null) {
 			return 0;
-		} else {
-			return measureTicks.get(pos.measure)
-				+ MidiConverter.calculateTickFromFraction(pos.beat, resolution);
+		}
+		else {
+			return measureTicks.get(pos.measure) +
+				MidiConverter.calculateTickFromFraction(pos.beat, resolution);
 		}
 	}
-
 
 	/**
 	 * This method catches the ControllerChangedEvent from the sequencer.
 	 * For BMP-specific events, the method decides, which {@link BMP} is the
 	 * right one and notifies the listener.
 	 */
-	@Override public void controlChange(ShortMessage message)
-	{
-		IVector<MidiTime> timePool = sequenceContainer.timePool;
+	@Override public void controlChange(ShortMessage message) {
+		IVector<MidiTime> timePool = sequence.timePool;
 		if (message.getData1() == eventNoteOn) {
 			//calls the listener with the most actual tick
 			long currentTick = SynthManager.getSequencer().getTickPosition();
@@ -249,7 +219,8 @@ public class MidiScorePlayer
 			for (PlaybackListener listener : listeners.getAll()) {
 				listener.playbackAtMP(pos, SynthManager.getSequencer().getMicrosecondPosition() / 1000L);
 			}
-		} else if (message.getData1() == eventPlaybackEnd) {
+		}
+		else if (message.getData1() == eventPlaybackEnd) {
 			stop(); //stop to really ensure the end
 			for (PlaybackListener listener : listeners.getAll()) {
 				listener.playbackAtEnd();
@@ -257,29 +228,23 @@ public class MidiScorePlayer
 		}
 	}
 
-
 	/**
 	 * Gets the volume, which is a value between 0 (silent) and 1 (loud).
 	 */
-	public float getVolume()
-	{
+	public float getVolume() {
 		return volume;
 	}
-
 
 	/**
 	 * Sets the volume.
 	 * @param volume  value between 0 (silent) and 1 (loud)
 	 */
-	public void setVolume(float volume)
-	{
+	public void setVolume(float volume) {
 		this.volume = volume;
 		applyVolume();
 	}
-	
-	
-	private void applyVolume()
-	{
+
+	private void applyVolume() {
 		MidiChannel[] channels = SynthManager.getSynthesizer().getChannels();
 
 		//max should be 127, but we use 255 to allow more loudness (overdrive)
@@ -292,58 +257,50 @@ public class MidiScorePlayer
 		}
 	}
 
-
 	/**
 	 * Returns true, if the playback cursor is at the end of the
 	 * score, otherwise false.
 	 */
-	public boolean isPlaybackFinished()
-	{
+	public boolean isPlaybackFinished() {
 		Sequencer sequencer = SynthManager.getSequencer();
 		return sequencer.getMicrosecondPosition() >= sequencer.getMicrosecondLength();
 	}
-
 
 	/**
 	 * Gets the length of the current sequence in microseconds,
 	 * or 0 if no score is loaded.
 	 */
-	public long getMicrosecondLength()
-	{
-		if (sequenceContainer == null)
+	public long getMicrosecondLength() {
+		if (sequence == null)
 			return 0;
-		return sequenceContainer.sequence.getMicrosecondLength();
+		return sequence.sequence.getMicrosecondLength();
 	}
-
 
 	/**
 	 * Gets the current position within the sequence in microseconds,
 	 * or 0 if no score is loaded.
 	 */
-	public long getMicrosecondPosition()
-	{
-		if (sequenceContainer == null)
+	public long getMicrosecondPosition() {
+		if (sequence == null)
 			return 0;
 		return SynthManager.getSequencer().getMicrosecondPosition();
 	}
 
-
-	public Sequence getSequence()
-	{
-		if (sequenceContainer != null)
-			return sequenceContainer.sequence;
+	public Sequence getSequence() {
+		if (sequence != null)
+			return sequence.sequence;
 		else
 			return null;
 	}
-	
-	
+
+
 	private class TimeThread
-		extends Thread
-	{
+		extends Thread {
+
 		private boolean stop = false;
-		
-		@Override public void run()
-		{
+
+
+		@Override public void run() {
 			try {
 				while (!stop) {
 					long ms = SynthManager.getSequencer().getMicrosecondPosition() / 1000;
@@ -355,9 +312,8 @@ public class MidiScorePlayer
 			} catch (InterruptedException e) {
 			}
 		}
-		
-		public void stopTimer()
-		{
+
+		public void stopTimer() {
 			stop = true;
 		}
 	}

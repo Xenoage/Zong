@@ -135,15 +135,15 @@ public final class Staff {
 		//in the given measure
 		Voice voice = getMeasure(mp.measure).getVoice(mp.voice);
 		for (int i : rangeReverse(mp.element - 1, 0)) {
-			VoiceElement e = voice.elements.get(i);
+			VoiceElement e = voice.getElement(i);
 			if (!onlyChord || (e instanceof Chord))
 				return mpE(e, mp.withElement(i));
 		}
 		//no result in this measure. loop through the preceding measures.
 		for (int iMeasure : rangeReverse(mp.measure - 1, 0)) {
 			voice = getMeasure(iMeasure).getVoice(mp.voice);
-			for (int i : rangeReverse(voice.elements)) {
-				VoiceElement e = voice.elements.get(i);
+			for (int i : rangeReverse(voice.getElements())) {
+				VoiceElement e = voice.getElement(i);
 				if (!onlyChord || (e instanceof Chord))
 					return mpE(e, MP.atElement(mp.staff, iMeasure, mp.voice, i));
 			}

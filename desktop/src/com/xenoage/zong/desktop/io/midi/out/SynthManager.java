@@ -1,4 +1,4 @@
-package com.xenoage.zong.io.midi.out;
+package com.xenoage.zong.desktop.io.midi.out;
 
 import java.io.BufferedInputStream;
 import java.io.File;

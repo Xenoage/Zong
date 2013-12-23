@@ -79,9 +79,10 @@ public class VoiceElementWrite
 			Fraction emptySpace = startBeat.sub(filledBeats);
 			if (emptySpace.isGreater0()) {
 				//add rest between start beat and filled beats, if needed
-				executeAndRemember(new VoiceElementWrite(voice, atElement(voice.elements.size()), new Rest(emptySpace), false));
+				executeAndRemember(new VoiceElementWrite(voice, atElement(voice.getElements().size()),
+					new Rest(emptySpace), false));
 				startBeat = startBeat.add(emptySpace);
-				elementIndex = voice.elements.size();
+				elementIndex = voice.getElements().size();
 			}
 			else {
 				elementIndex = voice.getElementIndex(startBeat);
@@ -112,14 +113,14 @@ public class VoiceElementWrite
 		Fraction posBeat = startBeat;
 		int firstRemoveIndex = elementIndex;
 		int lastRemoveIndex = -1;
-		for (int i = firstRemoveIndex; i < voice.elements.size() && posBeat.compareTo(endBeat) < 0; i++) {
+		for (int i = firstRemoveIndex; i < voice.getElements().size() && posBeat.compareTo(endBeat) < 0; i++) {
 			//we are still not at the end beat. remove element
-			VoiceElement e = voice.elements.get(i);
+			VoiceElement e = voice.getElements().get(i);
 			posBeat = posBeat.add(e.getDuration());
 			lastRemoveIndex = i;
 		}
 		for (int i : rangeReverse(lastRemoveIndex, firstRemoveIndex)) {
-			executeAndRemember(new VoiceElementRemove(voice.elements.get(i)));
+			executeAndRemember(new VoiceElementRemove(voice.getElements().get(i)));
 		}
 
 		//insert new element
