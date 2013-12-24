@@ -38,7 +38,7 @@ public final class MidiVelocityConverter {
 				for (VoiceElement element : elements) {
 					if (element instanceof Chord) { //TODO: may also be attached to rests?
 						Chord chord = (Chord) element;
-						for (Direction direction : chord.getDirections()) {
+						for (Direction direction : it(chord.getDirections())) {
 							if (direction instanceof Dynamics) {
 								return true;
 							}
@@ -216,7 +216,7 @@ public final class MidiVelocityConverter {
 					Chord chord = (Chord) element;
 					for (Direction direction : it(chord.getDirections())) {
 						if (direction instanceof Dynamics) {
-							attached = t(((Dynamics) direction).getType(), voice.getBeat(direction));
+							attached = t(((Dynamics) direction).getType(), voice.getBeat(chord));
 						}
 					}
 				}
@@ -224,9 +224,11 @@ public final class MidiVelocityConverter {
 		}
 		//then look in measure directions
 		Tuple2<DynamicsType, Fraction> inMeasure = null;
-		for (BeatE<Direction> direction : measure.getDirections()) {
-			if (direction.element instanceof Dynamics) {
-				inMeasure = t(((Dynamics) direction.element).getType(), direction.beat);
+		if (measure.getDirections() != null) {
+			for (BeatE<Direction> direction : measure.getDirections()) {
+				if (direction.element instanceof Dynamics) {
+					inMeasure = t(((Dynamics) direction.element).getType(), direction.beat);
+				}
 			}
 		}
 		if (attached != null && inMeasure != null)

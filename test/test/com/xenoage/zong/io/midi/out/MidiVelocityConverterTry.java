@@ -1,17 +1,19 @@
 package com.xenoage.zong.io.midi.out;
 
+import static com.xenoage.utils.collections.CList.ilist;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.math.Fraction.fr;
-import static com.xenoage.utils.pdlib.PVector.pvec;
-import static com.xenoage.zong.core.position.IMP.imp0;
+import static com.xenoage.zong.core.music.time.TimeType.timeType;
+import static com.xenoage.zong.core.position.MP.mp0;
 import static com.xenoage.zong.desktop.io.midi.out.MidiScorePlayer.midiScorePlayer;
 
 import javax.sound.midi.MidiUnavailableException;
 
-import com.xenoage.utils.io.IO;
 import com.xenoage.utils.math.Fraction;
+import com.xenoage.zong.commands.core.music.PartAdd;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.instrument.Instrument;
-import com.xenoage.zong.core.instrument.InstrumentBase;
+import com.xenoage.zong.core.instrument.InstrumentData;
 import com.xenoage.zong.core.instrument.PitchedInstrument;
 import com.xenoage.zong.core.instrument.Transpose;
 import com.xenoage.zong.core.music.ColumnElement;
@@ -25,45 +27,40 @@ import com.xenoage.zong.core.music.clef.ClefType;
 import com.xenoage.zong.core.music.direction.Dynamics;
 import com.xenoage.zong.core.music.direction.DynamicsType;
 import com.xenoage.zong.core.music.key.TraditionalKey;
-import com.xenoage.zong.core.music.time.NormalTime;
+import com.xenoage.zong.core.music.time.Time;
 import com.xenoage.zong.desktop.io.midi.out.MidiScorePlayer;
-import com.xenoage.zong.io.score.ScoreController;
+import com.xenoage.zong.desktop.io.midi.out.SynthManager;
 import com.xenoage.zong.io.selection.Cursor;
 
-
-
 /**
+ * Tests fpr {@link MidiVelocityConverter}.
+ * 
  * @author Uli Teschemacher
+ * @author Andreas Wenger
  */
-public class MidiVelocityConverterTry
-{
-	
-	
-	public static void main(String... args)
-	{
+public class MidiVelocityConverterTry {
+
+	public static void main(String... args) {
 		new MidiVelocityConverterTry().midiConverterTest();
 	}
-	
-	
-	public void midiConverterTest()
-	{
-		IO.initTest();
-		
+
+	public void midiConverterTest() {
 		Score score = createTestScore();
-		try
-		{
+		try {
 			SynthManager.init(false);
+			MidiScorePlayer.init();
 			MidiScorePlayer pl = midiScorePlayer();
-			pl.addPlaybackListener(new MidiScorePlayerTry());	
+			pl.addPlaybackListener(new MidiScorePlayerTry());
 			pl.openScore(score);
 			pl.start();
-			try { Thread.sleep(8000); } catch (InterruptedException ex) { }
+			try {
+				Thread.sleep(8000);
+			} catch (InterruptedException ex) {
+			}
 			SynthManager.close();
+		} catch (MidiUnavailableException e) {
 		}
-		catch (MidiUnavailableException e)
-		{
-		}
-		
+
 		/*
 		
 		byte[] message = sequence.getTracks()[0].get(0).getMessage().getMessage();
@@ -101,41 +98,32 @@ public class MidiVelocityConverterTry
 		//Message 22, 23 and 24 are note-off events
 		*/
 	}
-	
-	
 
-	public static Score createTestScore()
-	{
-		Score ret = Score.empty;
-		Instrument instr = new PitchedInstrument(
-			new InstrumentBase("piano", "Piano", "Pno.", null, null, null),
-			0, Transpose.none(), null, null, 0);
-		Part pianoPart = new Part("Test","T",1, pvec(instr));
-		
-		ret = ret.plusPart(pianoPart);
+	public static Score createTestScore() {
+		Score ret = new Score();
+		Instrument instr = new PitchedInstrument("piano", new InstrumentData("Piano", "Pno.", null,
+			null, null), 0, Transpose.noTranspose, null, null, 0);
+		Part pianoPart = new Part("Test", "T", 1, ilist(instr));
+		new PartAdd(ret, pianoPart, 0, null).execute();
 
-		//measure.plusColumnElement(new NormalTime(3, 4), fr(0, 4));
-		//ret.get
-		
-		Cursor cursor = new Cursor(ret, imp0, true);
-		
-		cursor = cursor.write((ColumnElement)new TraditionalKey(-3));
-		cursor = cursor.write((ColumnElement) new NormalTime(3,4));
-		
-		cursor = cursor.write(new Clef(ClefType.G));
+		Cursor cursor = new Cursor(ret, mp0, true);
+
+		cursor.write((ColumnElement) new TraditionalKey(-3));
+		cursor.write((ColumnElement) new Time(timeType(3, 4)));
+
+		cursor.write(new Clef(ClefType.G));
 
 		Fraction f4 = fr(1, 4);
 
-		
 		Chord attachC;
-		cursor = cursor.write(attachC = chord(f4,Pitch.pi(Pitch.G,4)));
-		cursor = cursor.withScore(ScoreController.plusAttachment(cursor.getScore(), attachC, new Dynamics(DynamicsType.pp)));
-		
-		cursor = cursor.write(attachC = chord(f4,Pitch.pi(Pitch.A, 4)));
-		cursor = cursor.withScore(ScoreController.plusAttachment(cursor.getScore(), attachC, new Dynamics(DynamicsType.ff)));
-		
-		cursor = cursor.write(attachC = chord(f4,Pitch.pi(Pitch.G, 4)));
-		cursor = cursor.withScore(ScoreController.plusAttachment(cursor.getScore(), attachC, new Dynamics(DynamicsType.sfp)));
+		cursor.write(attachC = chord(f4, Pitch.pi(Pitch.G, 4)));
+		attachC.addDirection(new Dynamics(DynamicsType.pp));
+
+		cursor.write(attachC = chord(f4, Pitch.pi(Pitch.A, 4)));
+		attachC.addDirection(new Dynamics(DynamicsType.ff));
+
+		cursor.write(attachC = chord(f4, Pitch.pi(Pitch.G, 4)));
+		attachC.addDirection(new Dynamics(DynamicsType.sfp));
 
 		/*
 		Chord chord;
@@ -150,13 +138,13 @@ public class MidiVelocityConverterTry
 
 		chord = voice.addNote(pi'G', 0, 4), fr(1, 4));
 		chord.addDirection(new Dynamics(DynamicsType.sfp));
-	*/
-		
-		cursor = cursor.withIMP(imp0.withVoice(1));
-		
-		cursor = cursor.write(attachC = chord(f4,Pitch.pi(Pitch.C, 4)));
-		cursor = cursor.withScore(ScoreController.plusAttachment(cursor.getScore(), attachC, new Dynamics(DynamicsType.fff)));
-		
+		*/
+
+		cursor.setMP(mp0.withVoice(1));
+
+		cursor.write(attachC = chord(f4, Pitch.pi(Pitch.C, 4)));
+		attachC.addDirection(new Dynamics(DynamicsType.fff));
+
 		/*
 		voice = measure.addVoice();
 		
@@ -164,21 +152,20 @@ public class MidiVelocityConverterTry
 		chord.addDirection(new Dynamics(DynamicsType.fff));
 		*/
 
-		cursor = cursor.withIMP(imp0.withMeasure(1));
-		
-		cursor = cursor.write(attachC = chord(f4,Pitch.pi(Pitch.G, 4)));
+		cursor.setMP(mp0.withMeasure(1));
+
+		cursor.write(attachC = chord(f4, Pitch.pi(Pitch.G, 4)));
 		//cursor.withScore(ScoreController.attachElement(cursor.getScore(), attachC, new Dynamics(DynamicsType.pp)));
-		
-		cursor = cursor.write(attachC = chord(f4,Pitch.pi(Pitch.A, 4)));
-		cursor = cursor.withScore(ScoreController.plusAttachment(cursor.getScore(), attachC, new Dynamics(DynamicsType.pp)));
-		
-		cursor = cursor.write(attachC = chord(f4,Pitch.pi(Pitch.G, 4)));
-		cursor = cursor.withScore(ScoreController.plusAttachment(cursor.getScore(), attachC, new Dynamics(DynamicsType.pp)));
-		
-		
-		cursor = cursor.withIMP(cursor.getIMP().withElement(0).withVoice(1));
-		
-		cursor = cursor.write(attachC = chord(f4, Pitch.pi(Pitch.C, 5)));
+
+		cursor.write(attachC = chord(f4, Pitch.pi(Pitch.A, 4)));
+		attachC.addDirection(new Dynamics(DynamicsType.pp));
+
+		cursor.write(attachC = chord(f4, Pitch.pi(Pitch.G, 4)));
+		attachC.addDirection(new Dynamics(DynamicsType.pp));
+
+		cursor.setMP(cursor.getMP().withElement(0).withVoice(1));
+
+		cursor.write(attachC = chord(f4, Pitch.pi(Pitch.C, 5)));
 		/*		
 		measure = staff.getMeasures().get(1);
 
@@ -194,23 +181,22 @@ public class MidiVelocityConverterTry
 
 		voice = measure.addVoice();
 		chord = voice.addNote(pi'C', 0, 5), fr(1, 4));
-*/
-		
-		cursor = cursor.withIMP(imp0.withMeasure(2));
-		
-		cursor = cursor.write(chord(f4,Pitch.pi(Pitch.G, 4)));
-		cursor = cursor.withScore(ScoreController.plusAttachment(cursor.getScore(), attachC, new Dynamics(DynamicsType.sfz)));
-		
-		cursor = cursor.write(chord(f4,Pitch.pi(Pitch.A, 4)));
+		*/
+
+		cursor.setMP(mp0.withMeasure(2));
+
+		cursor.write(attachC = chord(f4, Pitch.pi(Pitch.G, 4)));
+		attachC.addDirection(new Dynamics(DynamicsType.sfz));
+
+		cursor.write(chord(f4, Pitch.pi(Pitch.A, 4)));
 		//cursor = cursor.withScore(ScoreController.attachElement(cursor.getScore(), attachC, new Dynamics(DynamicsType.pp)));
-		
-		cursor = cursor.write(chord(f4,Pitch.pi(Pitch.G, 4)));
+
+		cursor.write(chord(f4, Pitch.pi(Pitch.G, 4)));
 		//cursor = cursor.withScore(ScoreController.attachElement(cursor.getScore(), attachC, new Dynamics(DynamicsType.pp)));
-		
-		
-		cursor = cursor.withIMP(imp0.withMeasure(2).withVoice(2));
-		
-		cursor = cursor.write(chord(f4,Pitch.pi(Pitch.C, 5)));
+
+		cursor.setMP(mp0.withMeasure(2).withVoice(2));
+
+		cursor.write(chord(f4, Pitch.pi(Pitch.C, 5)));
 		/*
 		measure = staff.getMeasures().get(2);
 
@@ -229,24 +215,19 @@ public class MidiVelocityConverterTry
 		voice = measure.addVoice();
 		chord = voice.addNote(pi'C',0,5), fr(1,2));
 
-*/
+		*/
 		return cursor.getScore();
 	}
 
-	
-	private static Chord chord(Fraction fraction, Pitch... pitches)
-	{
+	private static Chord chord(Fraction fraction, Pitch... pitches) {
 		return chord(fraction, null, pitches);
 	}
 
-
-	private static Chord chord(Fraction fraction, Articulation[] articulations,
-		Pitch... pitches)
-	{
-		return new Chord(Note.createNotes(pitches), fraction, null,
-			articulations != null ? pvec(articulations) : null);
+	private static Chord chord(Fraction fraction, Articulation[] articulations, Pitch... pitches) {
+		Chord ret = new Chord(Note.createNotes(pitches), fraction);
+		if (articulations != null)
+			ret.setArticulations(alist(articulations));
+		return ret;
 	}
-	
 
-	
 }

@@ -173,6 +173,12 @@ public class Chord
 	public boolean isGrace() {
 		return grace != null;
 	}
+	
+	public void addDirection(Direction direction) {
+		if (directions == null)
+			directions = new ArrayList<Direction>();
+		directions.add(direction);
+	}
 
 	@Override public String toString() {
 		return "chord(" + notes.get(0).toString() + (notes.size() > 1 ? ",..." : "") +

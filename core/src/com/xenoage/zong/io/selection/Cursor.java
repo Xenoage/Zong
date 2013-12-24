@@ -326,7 +326,7 @@ public final class Cursor
 		//create voice if needed
 		Measure measure = score.getMeasure(mp);
 		if (measure.getVoices().size() <= mp.voice)
-			new VoiceCreate(measure, mp.voice);
+			new VoiceCreate(measure, mp.voice).execute();
 	}
 
 

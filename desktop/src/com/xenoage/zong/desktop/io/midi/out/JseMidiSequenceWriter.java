@@ -29,6 +29,7 @@ public class JseMidiSequenceWriter
 			throw new RuntimeException(); //TODO
 		}
 		//add tracks
+		tracks = new Track[tracksCount];
 		for (int i = 0; i < tracksCount; i++) {
 			tracks[i] = sequence.createTrack();
 		}
