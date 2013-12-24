@@ -1,1 +1,1 @@
-include "core", "desktop", "layout", "midi-out", "musicxml", "musicxml-in", "test", "voc"
+include "core", "desktop", "layout", "midi-out", "musicxml", "musicxml-in", "sampled-out", "test", "voc"
