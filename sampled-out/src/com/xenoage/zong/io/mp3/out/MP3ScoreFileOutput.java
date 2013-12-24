@@ -6,16 +6,16 @@ import static com.xenoage.utils.log.Report.warning;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 
-import com.xenoage.utils.io.FileUtils;
+import com.xenoage.utils.document.io.FileOutput;
+import com.xenoage.utils.io.OutputStream;
+import com.xenoage.utils.jse.io.JseFileUtils;
+import com.xenoage.utils.jse.io.JseOutputStream;
 import com.xenoage.utils.lang.Lang;
 import com.xenoage.zong.Voc;
 import com.xenoage.zong.Zong;
 import com.xenoage.zong.core.Score;
-import com.xenoage.zong.io.ScoreFileOutput;
 import com.xenoage.zong.io.wav.out.WAVScoreFileOutput;
-
 
 /**
  * This class writes an MP3 file from a given {@link Score}.
@@ -26,13 +26,10 @@ import com.xenoage.zong.io.wav.out.WAVScoreFileOutput;
  * @author Andreas Wenger
  */
 public class MP3ScoreFileOutput
-	extends ScoreFileOutput
-{
+	implements FileOutput<Score> {
 
-
-	@Override public void write(Score score, OutputStream outputStream, String filePath)
-		throws IOException
-	{
+	@Override public void write(Score score, OutputStream stream, String filePath)
+		throws IOException {
 		//look if LAME is installed
 		try {
 			Runtime.getRuntime().exec("lame");
@@ -41,7 +38,8 @@ public class MP3ScoreFileOutput
 		}
 		//save temporary WAVE file first
 		File tempWAVFile = File.createTempFile(getClass().getName(), ".wav");
-		new WAVScoreFileOutput().write(score, new FileOutputStream(tempWAVFile), tempWAVFile.getAbsolutePath());
+		new WAVScoreFileOutput().write(score, new JseOutputStream(new FileOutputStream(tempWAVFile)),
+			tempWAVFile.getAbsolutePath());
 		//create temporary MP3 file
 		File tempMP3File = File.createTempFile(getClass().getName(), ".mp3");
 		//convert to MP3
@@ -60,13 +58,17 @@ public class MP3ScoreFileOutput
 				throw new IOException("LAME process returned: " + exitValue);
 			tempWAVFile.delete();
 			//copy MP3 file to output stream
-			FileUtils.copyFile(tempMP3File.getAbsolutePath(), outputStream);
+			JseFileUtils.copyFile(tempMP3File.getAbsolutePath(), new JseOutputStream(stream));
 			tempMP3File.delete();
 		} catch (Exception ex) {
 			tempWAVFile.delete();
 			tempMP3File.delete();
 			throw new IOException(ex);
 		}
+	}
+
+	@Override public boolean isFilePathRequired(Score document) {
+		return true;
 	}
 
 }

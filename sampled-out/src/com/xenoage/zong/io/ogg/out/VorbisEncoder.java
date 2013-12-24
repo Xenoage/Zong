@@ -1,9 +1,8 @@
 /********************************************************************
- * * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE. * USE,
- * DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS * GOVERNED BY A
- * BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE * IN 'COPYING'. PLEASE
- * READ THESE TERMS BEFORE DISTRIBUTING. * * THE OggVorbis SOURCE CODE IS (C)
- * COPYRIGHT 1994-2002 * by the Xiph.Org Foundation http://www.xiph.org/ * *
+ * * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE. * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY
+ * SOURCE IS * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE * IN 'COPYING'. PLEASE READ THESE TERMS
+ * BEFORE DISTRIBUTING. * * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2002 * by the Xiph.Org Foundation
+ * http://www.xiph.org/ * *
  ********************************************************************/
 package com.xenoage.zong.io.ogg.out;
 
@@ -20,16 +19,15 @@ import org.xiph.libvorbis.vorbis_dsp_state;
 import org.xiph.libvorbis.vorbis_info;
 import org.xiph.libvorbis.vorbisenc;
 
-
 /**
  * Converts a WAVE file (.wav) to an Ogg Vorbis file (.ogg) stream.
  * 
  * Based on code from the vorbis-java library, examples/VorbisEncoder.java.
  * 
+ * @author vorbis-java authors
  * @author Andreas Wenger
  */
-public class VorbisEncoder
-{
+public class VorbisEncoder {
 
 	static vorbisenc encoder;
 
@@ -57,8 +55,7 @@ public class VorbisEncoder
 	 * The OGG data is written to the given stream, which is closed at the end.
 	 */
 	public static void convert(String wavFile, OutputStream oggStream)
-		throws IOException
-	{
+		throws IOException {
 
 		boolean eos = false;
 
@@ -66,8 +63,7 @@ public class VorbisEncoder
 
 		encoder = new vorbisenc();
 
-		if (!encoder.vorbis_encode_init_vbr(vi, 2, 44100, .3f))
-		{
+		if (!encoder.vorbis_encode_init_vbr(vi, 2, 44100, .3f)) {
 			System.out.println("Failed to Initialize vorbisenc");
 			return;
 		}
@@ -77,8 +73,7 @@ public class VorbisEncoder
 
 		vd = new vorbis_dsp_state();
 
-		if (!vd.vorbis_analysis_init(vi))
-		{
+		if (!vd.vorbis_analysis_init(vi)) {
 			System.out.println("Failed to Initialize vorbis_dsp_state");
 			return;
 		}
@@ -102,8 +97,7 @@ public class VorbisEncoder
 		og = new ogg_page();
 		op = new ogg_packet();
 
-		while (!eos)
-		{
+		while (!eos) {
 
 			if (!os.ogg_stream_flush(og))
 				break;
@@ -117,14 +111,12 @@ public class VorbisEncoder
 		FileInputStream fin = new FileInputStream(wavFile);
 
 		//System.out.print("Encoding.");
-		while (!eos)
-		{
+		while (!eos) {
 
 			int i;
 			int bytes = fin.read(readbuffer, 0, READ * 4); // stereo hardwired here
 
-			if (bytes == 0)
-			{
+			if (bytes == 0) {
 
 				// end of file.  this can be done implicitly in the mainline,
 				// but it's easier to see here in non-clever fashion.
@@ -134,8 +126,7 @@ public class VorbisEncoder
 				vd.vorbis_analysis_wrote(0);
 
 			}
-			else
-			{
+			else {
 
 				// data to encode
 
@@ -143,8 +134,7 @@ public class VorbisEncoder
 				float[][] buffer = vd.vorbis_analysis_buffer(READ);
 
 				// uninterleave samples
-				for (i = 0; i < bytes / 4; i++)
-				{
+				for (i = 0; i < bytes / 4; i++) {
 					buffer[0][vd.pcm_current + i] = ((readbuffer[i * 4 + 1] << 8) | (0x00ff & (int) readbuffer[i * 4])) / 32768.f;
 					buffer[1][vd.pcm_current + i] = ((readbuffer[i * 4 + 3] << 8) | (0x00ff & (int) readbuffer[i * 4 + 2])) / 32768.f;
 				}
@@ -156,26 +146,22 @@ public class VorbisEncoder
 			// vorbis does some data preanalysis, then divvies up blocks for more involved 
 			// (potentially parallel) processing.  Get a single block for encoding now
 
-			while (vb.vorbis_analysis_blockout(vd))
-			{
+			while (vb.vorbis_analysis_blockout(vd)) {
 
 				// analysis, assume we want to use bitrate management
 
 				vb.vorbis_analysis(null);
 				vb.vorbis_bitrate_addblock();
 
-				while (vd.vorbis_bitrate_flushpacket(op))
-				{
+				while (vd.vorbis_bitrate_flushpacket(op)) {
 
 					// weld the packet into the bitstream
 					os.ogg_stream_packetin(op);
 
 					// write out pages (if any)
-					while (!eos)
-					{
+					while (!eos) {
 
-						if (!os.ogg_stream_pageout(og))
-						{
+						if (!os.ogg_stream_pageout(og)) {
 							break;
 						}
 

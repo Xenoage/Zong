@@ -5,16 +5,18 @@ import static com.xenoage.utils.log.Report.warning;
 import static com.xenoage.utils.math.Fraction.fr;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
+import javax.sound.midi.Sequence;
+
+import com.xenoage.utils.document.io.FileOutput;
+import com.xenoage.utils.io.OutputStream;
+import com.xenoage.utils.jse.io.JseOutputStream;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.Score;
-import com.xenoage.zong.io.ScoreFileOutput;
+import com.xenoage.zong.desktop.io.midi.out.JseMidiSequenceWriter;
+import com.xenoage.zong.desktop.io.midi.out.SynthManager;
 import com.xenoage.zong.io.midi.out.MidiConverter;
-import com.xenoage.zong.io.midi.out.SequenceContainer;
-import com.xenoage.zong.io.midi.out.SynthManager;
-import com.xenoage.zong.io.sampled.out.MidiToWaveRenderer;
-
+import com.xenoage.zong.io.midi.out.MidiSequence;
 
 /**
  * This class writes a Waveform Audio File Format (WAVE) file from a given {@link Score}.
@@ -22,24 +24,27 @@ import com.xenoage.zong.io.sampled.out.MidiToWaveRenderer;
  * @author Andreas Wenger
  */
 public class WAVScoreFileOutput
-	extends ScoreFileOutput
-{
+	implements FileOutput<Score> {
 
-
-	@Override public void write(Score score, OutputStream outputStream, String filePath)
-		throws IOException
-	{
+	@Override public void write(Score score, OutputStream stream, String filePath)
+		throws IOException {
 		//save WAVE file
 		try {
-			Fraction noteLength = fr(10, 10); //each note 100% length
+			Fraction noteLength = fr(100, 100); //each note 100% length
 			//create midi sequence
-			SequenceContainer sc = MidiConverter.convertToSequence(score, false, false, noteLength);
+			MidiSequence<Sequence> sequence = MidiConverter.convertToSequence(
+				score, false, false, noteLength, new JseMidiSequenceWriter());
 			//for all instruments
-			MidiToWaveRenderer.render(SynthManager.getSoundbank(), sc.sequence, null, outputStream);
+			MidiToWaveRenderer.render(SynthManager.getSoundbank(), sequence.getSequence(), null,
+				new JseOutputStream(stream));
 		} catch (Exception ex) {
 			log(warning(ex));
 			throw new IOException(ex);
 		}
+	}
+
+	@Override public boolean isFilePathRequired(Score document) {
+		return false;
 	}
 
 }

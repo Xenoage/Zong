@@ -3,4 +3,7 @@
     <library name="lombok" systemlibrary="false">
         <archive path="/lib/lombok-0.12.0.jar"/>
     </library>
+    <library name="vorbis-java" systemlibrary="false">
+        <archive path="/lib/vorbis-java-1.0.0-beta.jar"/>
+    </library>
 </eclipse-userlibraries>
