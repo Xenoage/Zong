@@ -14,7 +14,7 @@ import com.xenoage.zong.core.position.MP;
 @Const @AllArgsConstructor public class MidiTime {
 
 	public final long tick;
-	public final MP bmp;
+	public final MP mp;
 	public final long ms;
 
 }

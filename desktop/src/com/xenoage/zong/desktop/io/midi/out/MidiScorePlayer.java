@@ -3,6 +3,8 @@ package com.xenoage.zong.desktop.io.midi.out;
 import static com.xenoage.utils.log.Log.log;
 import static com.xenoage.utils.log.Report.warning;
 
+import java.util.List;
+
 import javax.sound.midi.ControllerEventListener;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiChannel;
@@ -15,6 +17,9 @@ import com.xenoage.utils.jse.collections.WeakList;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.io.midi.out.MidiConverter;
+import com.xenoage.zong.io.midi.out.MidiEvents;
+import com.xenoage.zong.io.midi.out.MidiSequence;
+import com.xenoage.zong.io.midi.out.MidiSettings;
 import com.xenoage.zong.io.midi.out.MidiTime;
 import com.xenoage.zong.io.midi.out.PlaybackListener;
 
@@ -28,16 +33,12 @@ import com.xenoage.zong.io.midi.out.PlaybackListener;
 public class MidiScorePlayer
 	implements ControllerEventListener {
 
-	private static final float defaultVolume = 0.7f;
-	private static final int eventNoteOn = 119;
-	public static final int eventPlaybackEnd = 117;
-
 	private static MidiScorePlayer instance = null;
 
-	private JseMidiSequence sequence = null;
+	private MidiSequence<Sequence> sequence = null;
 	private WeakList<PlaybackListener> listeners = new WeakList<PlaybackListener>();
 	private boolean metronomeEnabled;
-	private float volume = defaultVolume;
+	private float volume = MidiSettings.getDefaultVolume();
 	private int currentPosition;
 	private TimeThread timeThread = new TimeThread();
 
@@ -58,22 +59,13 @@ public class MidiScorePlayer
 	}
 
 	private MidiScorePlayer() {
-		volume = defaultVolume;
+		volume = MidiSettings.getDefaultVolume();
 		setVolume(volume);
 		SynthManager.removeAllControllerEventListeners();
 
-		//Java Sound is only able to use listeners for controller events,
-		//but not for normal note-on events. So we add a control-event on
-		//every position of a note-on event. Control-event number 119 is
-		//used, because it is undefined in the midi-documentation and so it
-		//doesn't affect anything.
-		//See http://www.midi.org/techspecs/midimessages.php
-		int controllers[] = { eventNoteOn };
-		SynthManager.addControllerEventListener(this, controllers);
-
-		//For the playbackAtEnd control event 117 is used.
-		int controllersplaybackAtEnd[] = { eventPlaybackEnd };
-		SynthManager.addControllerEventListener(this, controllersplaybackAtEnd);
+		//controller events to listen for (see MidiEvents doc)
+		SynthManager.addControllerEventListener(this, new int[]{ MidiEvents.eventPlaybackControl });
+		SynthManager.addControllerEventListener(this, new int[]{ MidiEvents.eventPlaybackEnd } );
 	}
 
 	/**
@@ -81,7 +73,7 @@ public class MidiScorePlayer
 	 */
 	public void openScore(Score score) {
 		stop();
-		this.sequence = (JseMidiSequence) MidiConverter.convertToSequence(
+		this.sequence = MidiConverter.convertToSequence(
 			score, true, true, new JseMidiSequenceWriter());
 		try {
 			SynthManager.getSequencer().setSequence(sequence.getSequence());
@@ -122,8 +114,8 @@ public class MidiScorePlayer
 	 * {@link BMP}.
 	 */
 	public void setMP(MP bmp) {
-		long tickPosition = calculateTickFromMP(bmp, sequence.measureStartTicks,
-			sequence.sequence.getResolution());
+		long tickPosition = calculateTickFromMP(bmp, sequence.getMeasureStartTicks(),
+			sequence.getSequence().getResolution());
 		SynthManager.getSequencer().setTickPosition(tickPosition);
 		currentPosition = 0; //as we don't know the real position, we set it 0, because the playback will automatically jump to the correct position.
 	}
@@ -182,12 +174,12 @@ public class MidiScorePlayer
 
 	public void setMetronomeEnabled(boolean metronomeEnabled) {
 		this.metronomeEnabled = metronomeEnabled;
-		Integer metronomeBeatTrackNumber = sequence.metronomeTrack;
-		if (metronomeBeatTrackNumber != null)
-			SynthManager.getSequencer().setTrackMute(metronomeBeatTrackNumber, !metronomeEnabled);
+		Integer metronomeTrack = sequence.getMetronomeTrack();
+		if (metronomeTrack != null)
+			SynthManager.getSequencer().setTrackMute(metronomeTrack, !metronomeEnabled);
 	}
 
-	private long calculateTickFromMP(BMP pos, IVector<Long> measureTicks, int resolution) {
+	private long calculateTickFromMP(MP pos, List<Long> measureTicks, int resolution) {
 		if (pos == null) {
 			return 0;
 		}
@@ -203,24 +195,24 @@ public class MidiScorePlayer
 	 * right one and notifies the listener.
 	 */
 	@Override public void controlChange(ShortMessage message) {
-		IVector<MidiTime> timePool = sequence.timePool;
-		if (message.getData1() == eventNoteOn) {
+		List<MidiTime> timePool = sequence.getTimePool();
+		if (message.getData1() == MidiEvents.eventPlaybackControl) {
 			//calls the listener with the most actual tick
 			long currentTick = SynthManager.getSequencer().getTickPosition();
 			//if playback is ahead: return nothing
-			if (timePool.getFirst().tick > currentTick) {
+			if (timePool.get(0).tick > currentTick) {
 				return;
 			}
 			//if the program hung up but the player continued, there programm would always be to late.
 			//So the algorithm deletes all aruments before the current Element.
 			while (timePool.get(currentPosition + 1).tick <= currentTick)
 				currentPosition++;
-			BMP pos = timePool.get(currentPosition).bmp;
+			MP pos = timePool.get(currentPosition).mp;
 			for (PlaybackListener listener : listeners.getAll()) {
 				listener.playbackAtMP(pos, SynthManager.getSequencer().getMicrosecondPosition() / 1000L);
 			}
 		}
-		else if (message.getData1() == eventPlaybackEnd) {
+		else if (message.getData1() == MidiEvents.eventPlaybackEnd) {
 			stop(); //stop to really ensure the end
 			for (PlaybackListener listener : listeners.getAll()) {
 				listener.playbackAtEnd();
@@ -273,7 +265,7 @@ public class MidiScorePlayer
 	public long getMicrosecondLength() {
 		if (sequence == null)
 			return 0;
-		return sequence.sequence.getMicrosecondLength();
+		return sequence.getSequence().getMicrosecondLength();
 	}
 
 	/**
@@ -288,7 +280,7 @@ public class MidiScorePlayer
 
 	public Sequence getSequence() {
 		if (sequence != null)
-			return sequence.sequence;
+			return sequence.getSequence();
 		else
 			return null;
 	}
@@ -298,7 +290,10 @@ public class MidiScorePlayer
 		extends Thread {
 
 		private boolean stop = false;
-
+		
+		public TimeThread() {
+			setDaemon(true);
+		}
 
 		@Override public void run() {
 			try {

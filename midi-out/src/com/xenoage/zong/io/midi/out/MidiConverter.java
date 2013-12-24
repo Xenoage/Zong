@@ -33,28 +33,24 @@ import com.xenoage.zong.io.midi.out.Playlist.PlayRange;
 /**
  * This class creates a {@link MidiSequence} from a given {@link Score}.
  * 
+ * @param <T> the platform-specific sequence class
+ * 
  * TIDY
  * 
  * @author Uli Teschemacher
  * @author Andreas Wenger
  */
 @AllArgsConstructor
-public class MidiConverter {
+public class MidiConverter<T> {
 
 	public static final int channel10 = 9; //channel 10 has index 9 (0-based)
 
-	//channel for events for the playback cursor
-	private static final int channelPlaybackControl = 119;
-	
-	//even shortest note has 8 ticks. this allows staccato playback for example.
-	private static final int resolutionFactor = 8;
-	
 	//in MIDI "Format 1" files, the track for tempo changes and so on is track 0 by convention
 	private static int systemTrackIndex = 0;
 	
 	//state
 	private Score score;
-	private MidiSequenceWriter writer;
+	private MidiSequenceWriter<T> writer;
 	private boolean addMPEvents;
 	private boolean metronome;
 	private Fraction durationFactor;
@@ -69,8 +65,8 @@ public class MidiConverter {
 	 * @param metronome    true to add metronome ticks, otherwise false
 	 * @param writer          the writer for the midi data
 	 */
-	public static MidiSequence convertToSequence(Score score, boolean addMPEvents,
-		boolean metronome, MidiSequenceWriter writer) {
+	public static <T> MidiSequence<T> convertToSequence(Score score, boolean addMPEvents,
+		boolean metronome, MidiSequenceWriter<T> writer) {
 		return convertToSequence(score, addMPEvents, metronome, null, writer);
 	}
 
@@ -83,12 +79,12 @@ public class MidiConverter {
 	 * @param durationFactor  factor to multiply all note durations with, or null
 	 * @param writer          the writer for the midi data
 	 */
-	public static MidiSequence convertToSequence(Score score, boolean addMPEvents,
-		boolean metronome, Fraction durationFactor, MidiSequenceWriter writer) {
-		return new MidiConverter(score, writer, addMPEvents, metronome, durationFactor).convertToSequence();
+	public static <T> MidiSequence<T> convertToSequence(Score score, boolean addMPEvents,
+		boolean metronome, Fraction durationFactor, MidiSequenceWriter<T> writer) {
+		return new MidiConverter<T>(score, writer, addMPEvents, metronome, durationFactor).convertToSequence();
 	}
 	
-	private MidiConverter(Score score, MidiSequenceWriter writer, boolean addMPEvents,
+	private MidiConverter(Score score, MidiSequenceWriter<T> writer, boolean addMPEvents,
 		boolean metronome, Fraction durationFactor) {
 		this.score = score;
 		this.writer = writer;
@@ -97,8 +93,7 @@ public class MidiConverter {
 		this.durationFactor = durationFactor;
 	}
 	
-	private MidiSequence convertToSequence() {
-		ArrayList<Integer> staffTracks = alist();
+	private MidiSequence<T> convertToSequence() {
 		ArrayList<Long> measureStartTicks = alist();
 		ArrayList<MidiTime> timePool = alist();
 		int stavesCount = score.getStavesCount();
@@ -117,7 +112,7 @@ public class MidiConverter {
 			tracksCount++;
 		}
 		//resolution in ticks per quarter
-		resolution = score.getDivisions() * resolutionFactor;
+		resolution = score.getDivisions() * MidiSettings.getResolutionFactor();
 		//init writer
 		writer.init(tracksCount, resolution);
 		
@@ -205,7 +200,7 @@ public class MidiConverter {
 		}
 
 		if (metronome) {
-			createMetronomeTrack(metronomeTrack, playlist,	measureStartTicks);
+			createMetronomeTrack(metronomeTrack, playlist, measureStartTicks);
 		}
 
 		//Add Tempo Changes
@@ -219,7 +214,7 @@ public class MidiConverter {
 		}*/
 		MidiTempoConverter.writeTempoTrack(score, playlist, resolution, writer, systemTrackIndex);
 
-		return writer.finish(metronomeTrack, timePool);
+		return writer.finish(metronomeTrack, timePool, measureStartTicks);
 	}
 
 	/**
@@ -411,12 +406,12 @@ public class MidiConverter {
 	}
 
 	private void addPlaybackAtEndControlEvent() {
-		writer.writeControlChange(systemTrackIndex, 0, writer.getLength(), MidiScorePlayer.eventPlaybackEnd, 0);
+		writer.writeControlChange(systemTrackIndex, 0, writer.getLength(), MidiEvents.eventPlaybackEnd, 0);
 	}
 
 	/**
 	 * Creates the control events for the playback cursor.
-	 * Channel {@value #channelPlaybackControl} is used because it has no other meaning.
+	 * The control message {@link MidiEvents#eventPlaybackControl} is used because it has no other meaning.
 	 */
 	private void createControlEventChannel(
 		List<Long> measureStartTicks, List<MidiTime> timePoolOpen, int channel, Playlist playlist) {

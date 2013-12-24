@@ -1,4 +1,4 @@
-package com.xenoage.zong.io.sampled.out;
+package com.xenoage.zong.desktop.io.sampled.out;
 
 /*
  * Copyright (c) 2007 by Karl Helgason All rights reserved.

@@ -219,8 +219,8 @@ public class VoiceElementWriteTest {
 		assertEquals(fr(1, 8), getDur(voice, 8));
 		assertEquals(fr(1, 8), getDur(voice, 9));
 		//right elements?
-		assertEquals(g1, voice.elements.get(2));
-		assertEquals(g2, voice.elements.get(3));
+		assertEquals(g1, voice.getElement(2));
+		assertEquals(g2, voice.getElement(3));
 		//test undo
 		cp.undoMultipleSteps(2);
 		assertTestScoreEighthsOriginalState(score);
@@ -246,7 +246,7 @@ public class VoiceElementWriteTest {
 		assertEquals(11, voice.getElements().size());
 		assertEquals(0, getStep(voice, 0)); //here 1st grace note has step 0, 2nd 1, ...
 		assertEquals(1, getStep(voice, 1));
-		assertEquals(r, voice.elements.get(2));
+		assertEquals(r, voice.getElement(2));
 		assertEquals(2, getStep(voice, 3));
 		assertEquals(3, getStep(voice, 4));
 		assertEquals(4, getStep(voice, 5));
@@ -281,7 +281,7 @@ public class VoiceElementWriteTest {
 		assertEquals(7, voice.getElements().size());
 		assertEquals(0, getStep(voice, 0)); //here 1st grace note has step 0, 2nd 1, ...
 		assertEquals(1, getStep(voice, 1));
-		assertEquals(r, voice.elements.get(2));
+		assertEquals(r, voice.getElement(2));
 		assertEquals(5, getStep(voice, 3));
 		assertEquals(fr(1, 4), getDur(voice, 4));
 		assertEquals(6, getStep(voice, 5));
@@ -311,7 +311,7 @@ public class VoiceElementWriteTest {
 		assertEquals(5, voice.getElements().size());
 		assertEquals(0, getStep(voice, 0)); //here 1st grace note has step 0, 2nd 1, ...
 		assertEquals(1, getStep(voice, 1));
-		assertEquals(r, voice.elements.get(2));
+		assertEquals(r, voice.getElement(2));
 		assertEquals(6, getStep(voice, 3));
 		assertEquals(0, getStep(voice, 4));
 		//test undo
@@ -483,12 +483,12 @@ public class VoiceElementWriteTest {
 	
 	
 	private Fraction getDur(Voice voice, int elementIndex) {
-		return voice.elements.get(elementIndex).getDuration();
+		return voice.getElement(elementIndex).getDuration();
 	}
 	
 	
 	private int getStep(Voice voice, int elementIndex) {
-		return ((Chord)voice.elements.get(elementIndex)).getNotes().get(0).getPitch().getStep();
+		return ((Chord)voice.getElement(elementIndex)).getNotes().get(0).getPitch().getStep();
 	}
 	
 	

@@ -1,7 +1,5 @@
 package com.xenoage.zong.desktop.io.midi.out;
 
-import java.util.List;
-
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MetaMessage;
 import javax.sound.midi.MidiEvent;
@@ -10,7 +8,6 @@ import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Track;
 
 import com.xenoage.zong.io.midi.out.MidiSequenceWriter;
-import com.xenoage.zong.io.midi.out.MidiTime;
 
 /**
  * Java SE implementation of a {@link MidiSequenceWriter}.
@@ -61,8 +58,8 @@ public class JseMidiSequenceWriter
 		return sequence.getTickLength();
 	}
 
-	@Override public JseMidiSequence finish(Integer metronomeTrack, List<MidiTime> timePool) {
-		return new JseMidiSequence(sequence, metronomeTrack, timePool);
+	@Override protected Sequence getSequence() {
+		return sequence;
 	}
-	
+
 }

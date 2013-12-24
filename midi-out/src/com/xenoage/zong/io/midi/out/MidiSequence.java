@@ -11,12 +11,13 @@ import com.xenoage.zong.core.position.MP;
 
 /**
  * A MIDI sequence with additional information.
- * It has to be subclassed to support platform-specific sequence classes.
+ * 
+ * @param <T> the platform-specific sequence class
  * 
  * @author Andreas Wenger
  */
 @AllArgsConstructor @Getter
-public abstract class MidiSequence<T> {
+public class MidiSequence<T> {
 
 	/** The sequence data. */
 	@NonNull protected T sequence;
@@ -24,5 +25,7 @@ public abstract class MidiSequence<T> {
 	@MaybeNull protected Integer metronomeTrack;
 	/** Mappings of MIDI ticks to {@link MP}s and milliseconds. */
 	protected List<MidiTime> timePool;
-
+	/** The start ticks of each measure (including repetitions). */
+	protected List<Long> measureStartTicks;
+	
 }

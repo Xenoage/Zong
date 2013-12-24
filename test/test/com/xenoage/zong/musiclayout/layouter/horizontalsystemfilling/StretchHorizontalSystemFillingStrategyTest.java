@@ -122,8 +122,8 @@ public class StretchHorizontalSystemFillingStrategyTest {
 		IList<BeatOffset> beatOffsets = ilist(new BeatOffset(fr(1, 4), offsetBeat0), new BeatOffset(
 			fr(3, 4), offsetBeat1), new BeatOffset(fr(5, 4), offsetBeat2));
 		IList<VoiceSpacing> voiceSpacings = ilist(new VoiceSpacing(voice, 1, ilist(new SpacingElement(
-			voice.elements.get(0), beatOffsets.get(0).getBeat(), beatOffsets.get(0).getOffsetMm()),
-			new SpacingElement(voice.elements.get(1), beatOffsets.get(1).getBeat(), beatOffsets.get(1)
+			voice.getElement(0), beatOffsets.get(0).getBeat(), beatOffsets.get(0).getOffsetMm()),
+			new SpacingElement(voice.getElement(1), beatOffsets.get(1).getBeat(), beatOffsets.get(1)
 				.getOffsetMm()))));
 		MeasureSpacing measureSpacing = new MeasureSpacing(atMeasure(0, 0), voiceSpacings,
 			MeasureElementsSpacings.empty, LeadingSpacingMock.createGClefSpacing(leadingWidth));
@@ -146,11 +146,11 @@ public class StretchHorizontalSystemFillingStrategyTest {
 		IList<BeatOffset> beatOffsets = ilist(new BeatOffset(fr(0, 4), offsetChord1), new BeatOffset(
 			fr(2, 4), offsetChord2), new BeatOffset(fr(4, 4), offsetMeasureEnd));
 		IList<VoiceSpacing> voiceSpacings = ilist(new VoiceSpacing(voice, 1, ilist(new SpacingElement(
-			voice.elements.get(0), beatOffsets.get(0).getBeat(), beatOffsets.get(0).getOffsetMm()),
-			new SpacingElement(voice.elements.get(1), beatOffsets.get(1).getBeat(), beatOffsets.get(1)
-				.getOffsetMm() - 2 * graceDistance, true), new SpacingElement(voice.elements.get(2),
+			voice.getElement(0), beatOffsets.get(0).getBeat(), beatOffsets.get(0).getOffsetMm()),
+			new SpacingElement(voice.getElement(1), beatOffsets.get(1).getBeat(), beatOffsets.get(1)
+				.getOffsetMm() - 2 * graceDistance, true), new SpacingElement(voice.getElement(2),
 				beatOffsets.get(1).getBeat(), beatOffsets.get(1).getOffsetMm() - 1 * graceDistance, true),
-			new SpacingElement(voice.elements.get(3), beatOffsets.get(1).getBeat(), beatOffsets.get(1)
+			new SpacingElement(voice.getElement(3), beatOffsets.get(1).getBeat(), beatOffsets.get(1)
 				.getOffsetMm()))));
 		MeasureSpacing measureSpacing = new MeasureSpacing(atMeasure(0, 0), voiceSpacings,
 			MeasureElementsSpacings.empty, null);

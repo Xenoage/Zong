@@ -26,9 +26,8 @@ import javax.sound.sampled.Mixer;
 import javax.sound.sampled.SourceDataLine;
 
 import com.sun.media.sound.AudioSynthesizer;
-import com.xenoage.utils.base.exceptions.InvalidFormatException;
-import com.xenoage.utils.base.settings.Settings;
-
+import com.xenoage.utils.exceptions.InvalidFormatException;
+import com.xenoage.utils.jse.settings.Settings;
 
 /**
  * This class shares a {@link Synthesizer}, {@link Sequencer}
@@ -44,12 +43,11 @@ import com.xenoage.utils.base.settings.Settings;
  * 
  * @author Andreas Wenger
  */
-public class SynthManager
-{
-	
+public class SynthManager {
+
 	public static final String CONFIG_FILE = "synth";
 	private static SynthManager instance = null;
-	
+
 	private Synthesizer synthesizer = null;
 	private Sequencer sequencer = null;
 	private Soundbank soundbank = null;
@@ -57,11 +55,10 @@ public class SynthManager
 	private Mixer mixer = null;
 	private SourceDataLine line = null;
 	private AudioFormat format = null;
-	
-	private Set<ControllerEventListener> controllerEventListeners =
-		new HashSet<ControllerEventListener>();
-	
-	
+
+	private Set<ControllerEventListener> controllerEventListeners = new HashSet<ControllerEventListener>();
+
+
 	/**
 	 * Initializes the manager. Must be called at the beginning one time
 	 * and each time when the audio settings should be reloaded.
@@ -69,15 +66,12 @@ public class SynthManager
 	 *                      false, to use default settings (e.g. for an applet)
 	 */
 	public static void init(boolean readSettings)
-		throws MidiUnavailableException
-	{
+		throws MidiUnavailableException {
 		//TIDY method (especially default settings)
-		if (instance == null)
-		{
+		if (instance == null) {
 			instance = new SynthManager();
 		}
-		if (readSettings)
-		{
+		if (readSettings) {
 			//load settings (or use default ones)
 			Settings s = Settings.getInstance();
 			String file = CONFIG_FILE;
@@ -90,220 +84,174 @@ public class SynthManager
 			String interpolation = s.getSetting("interpolation", file, "linear");
 			String soundbank = s.getSetting("soundbank", file, null);
 			//init midi and soundbank
-			instance.initMidi(sampleRate, sampleSizeInBits, channels, latency,
-				polyphony, deviceName, interpolation);
-			if (soundbank != null && soundbank.length() > 0)
-			{
-				try
-				{
+			instance.initMidi(sampleRate, sampleSizeInBits, channels, latency, polyphony, deviceName,
+				interpolation);
+			if (soundbank != null && soundbank.length() > 0) {
+				try {
 					instance.loadSoundbank(new File(soundbank));
-				}
-				catch (InvalidFormatException ex)
-				{
+				} catch (InvalidFormatException ex) {
 					//TODO
 				}
 			}
 		}
-		else
-		{
+		else {
 			instance.initMidi(44100, 16, 2, 100, 64, null, "linear");
 		}
 	}
-	
-	
+
 	/**
 	 * Gets the single instance of this manager.
 	 * Throws an IllegalStateEx when init was not called before
 	 * (this additional method was created so that there is no
 	 * need for throwing a MidiUnavail here).
 	 */
-	private static SynthManager getInstance()
-	{
+	private static SynthManager getInstance() {
 		if (instance == null)
 			throw new IllegalStateException("init() must be called first");
 		return instance;
 	}
-	
-	
+
 	/**
 	 * For the parameters, see {@link Sequencer#addControllerEventListener}.
 	 * Call this method instead, because this class will remember the registered
 	 * listeners so you can call removeAllControllerEventListeners.
 	 */
-	public static void addControllerEventListener(ControllerEventListener listener, int[] controllers)
-	{
+	public static void addControllerEventListener(ControllerEventListener listener, int[] controllers) {
 		SynthManager instance = getInstance();
 		instance.controllerEventListeners.add(listener);
 		instance.sequencer.addControllerEventListener(listener, controllers);
 	}
-	
-	
+
 	/**
 	 * Removes all addeed ControllerEventListeners.
 	 */
-	public static void removeAllControllerEventListeners()
-	{
+	public static void removeAllControllerEventListeners() {
 		SynthManager instance = getInstance();
 		for (ControllerEventListener listener : instance.controllerEventListeners)
 			instance.sequencer.removeControllerEventListener(listener, null);
 		instance.controllerEventListeners.clear();
 	}
-	
-	
+
 	/**
 	 * Closes all MIDI objects and frees the resources.
 	 */
-	public static void close()
-	{
+	public static void close() {
 		SynthManager t = instance;
-		if (t.sequencer != null)
-		{
+		if (t.sequencer != null) {
 			t.sequencer.stop();
 			t.sequencer.close();
 		}
-		if (t.synthesizer != null)
-		{
+		if (t.synthesizer != null) {
 			t.synthesizer.close();
 		}
-		if (t.mixer != null)
-		{
+		if (t.mixer != null) {
 			t.mixer.close();
 		}
 		instance = null;
 	}
-	
-	
+
 	/**
 	 * Gets the synthesizer.
 	 */
-	public static Synthesizer getSynthesizer()
-	{
+	public static Synthesizer getSynthesizer() {
 		return getInstance().synthesizer;
 	}
-	
-	
+
 	/**
 	 * Gets the sequencer.
 	 */
-	public static Sequencer getSequencer()
-	{
+	public static Sequencer getSequencer() {
 		return getInstance().sequencer;
 	}
-	
-	
-	public static Soundbank getSoundbank()
-	{
+
+	public static Soundbank getSoundbank() {
 		return getInstance().soundbank;
 	}
-	
-	
+
 	/**
 	 * Loads the soundbank from the given file.
 	 * If it fails, an {@link InvalidFormatException} is thrown.
 	 */
 	public void loadSoundbank(File file)
-		throws InvalidFormatException
-	{
-		try
-		{
+		throws InvalidFormatException {
+		try {
 			FileInputStream fis = new FileInputStream(file);
 			Soundbank newSB;
-			try
-			{				
+			try {
 				newSB = MidiSystem.getSoundbank(new BufferedInputStream(fis));
-			}
-			finally
-			{
+			} finally {
 				fis.close();
 			}
 			if (soundbank != null)
 				synthesizer.unloadAllInstruments(soundbank);
 			soundbank = newSB;
 			synthesizer.loadAllInstruments(soundbank);
-		}
-		catch (Exception ex)
-		{
+		} catch (Exception ex) {
 			throw new InvalidFormatException("Invalid soundbank: " + file, ex);
 		}
 	}
-	
-	
+
 	/**
 	 * (Re)initializes the MIDI objects and (re)configures the audio settings.
 	 * If currently playback is running, it is stopped.
 	 * TIDY
 	 * @param sampleRate		    the number of samples per second, e.g. 44100
-   * @param sampleSizeInBits	the number of bits in each sample, e.g. 16
-   * @param channels			    the number of channels (1 for mono, 2 for stereo, and so on)
-   * @param latency           the latency in ms
-   * @param polyphony         maximum number of concurrent notes
-   * @param deviceName        name of the device, or null for default
-   * @param interpolation     linear, cubic, sinc or point
+	 * @param sampleSizeInBits	the number of bits in each sample, e.g. 16
+	 * @param channels			    the number of channels (1 for mono, 2 for stereo, and so on)
+	 * @param latency           the latency in ms
+	 * @param polyphony         maximum number of concurrent notes
+	 * @param deviceName        name of the device, or null for default
+	 * @param interpolation     linear, cubic, sinc or point
 	 */
-	public void initMidi(float sampleRate, int sampleSizeInBits, int channels,
-		int latency, int polyphony, String deviceName, String interpolation)
-		throws MidiUnavailableException
-	{
+	public void initMidi(float sampleRate, int sampleSizeInBits, int channels, int latency,
+		int polyphony, String deviceName, String interpolation)
+		throws MidiUnavailableException {
 		Sequence sequence = null;
-		if (sequencer != null)
-		{
+		if (sequencer != null) {
 			sequencer.stop();
 			sequence = sequencer.getSequence();
 		}
-		if (synthesizer != null)
-		{
+		if (synthesizer != null) {
 			synthesizer.close();
 		}
-		if (mixer != null)
-		{
+		if (mixer != null) {
 			mixer.close();
 		}
 
 		format = new AudioFormat(sampleRate, sampleSizeInBits, channels, true, false);
 
-		if (deviceName != null)
-		{
+		if (deviceName != null) {
 			Mixer.Info selinfo = null;
-			for (Mixer.Info info : AudioSystem.getMixerInfo())
-			{
+			for (Mixer.Info info : AudioSystem.getMixerInfo()) {
 				Mixer mixer = AudioSystem.getMixer(info);
 				boolean hassrcline = false;
-				for (Line.Info linfo : mixer.getSourceLineInfo())
-				{
-					if (linfo instanceof javax.sound.sampled.DataLine.Info)
-					{
+				for (Line.Info linfo : mixer.getSourceLineInfo()) {
+					if (linfo instanceof javax.sound.sampled.DataLine.Info) {
 						hassrcline = true;
 						break;
 					}
 				}
-				if (hassrcline)
-				{
-					if (info.getName().equals(deviceName))
-					{
+				if (hassrcline) {
+					if (info.getName().equals(deviceName)) {
 						selinfo = info;
 						break;
 					}
 				}
 			}
-			if (selinfo != null)
-			{
+			if (selinfo != null) {
 				mixer = AudioSystem.getMixer(selinfo);
-				try
-				{
+				try {
 					mixer.open();
 					int bufferSize = (int) (format.getFrameSize() * format.getFrameRate() * latency / 1000f);
 					if (bufferSize < 500)
 						bufferSize = 500;
 					DataLine.Info dataLineInfo = new DataLine.Info(SourceDataLine.class, format, bufferSize);
-					if (mixer.isLineSupported(dataLineInfo))
-					{
+					if (mixer.isLineSupported(dataLineInfo)) {
 						line = (SourceDataLine) mixer.getLine(dataLineInfo);
 						line.open(format, bufferSize);
 						line.start();
 					}
-				}
-				catch (Throwable t)
-				{
+				} catch (Throwable t) {
 					mixer = null;
 				}
 			}
@@ -320,57 +268,44 @@ public class SynthManager
 		AudioSynthesizer synth = findAudioSynthesizer();
 		if (synth == null)
 			return; //no audio synthesizer
-		
+
 		synth.open(line, ainfo);
 
 		synthesizer = synth;
-		if (soundbank == null)
-		{
+		if (soundbank == null) {
 			soundbank = synth.getDefaultSoundbank();
 		}
-	
-		if (sequencer == null)
-		{
-			try
-			{
+
+		if (sequencer == null) {
+			try {
 				sequencer = MidiSystem.getSequencer(false);
-			}
-			catch (MidiUnavailableException ex)
-			{
+			} catch (MidiUnavailableException ex) {
 				//sequencer already open. no problem.
 			}
 		}
-		if (sequencer.isOpen())
-		{
+		if (sequencer.isOpen()) {
 			sequencer.close();
 		}
 		sequencer.getTransmitter().setReceiver(synthesizer.getReceiver());
 		sequencer.open();
-		if (sequence != null)
-		{
-			try
-			{
+		if (sequence != null) {
+			try {
 				sequencer.setSequence(sequence);
-			}
-			catch (InvalidMidiDataException ex)
-			{
+			} catch (InvalidMidiDataException ex) {
 			}
 		}
 	}
-	
-	
+
 	private AudioSynthesizer findAudioSynthesizer()
-		throws MidiUnavailableException
-	{
+		throws MidiUnavailableException {
 		//first check if default synthesizer is AudioSynthesizer.
 		Synthesizer synth = MidiSystem.getSynthesizer();
 		if (synth instanceof AudioSynthesizer)
-		return (AudioSynthesizer) synth;
+			return (AudioSynthesizer) synth;
 
 		//if default synthesizer is not AudioSynthesizer, check others.
 		Info[] infos = MidiSystem.getMidiDeviceInfo();
-		for (int i = 0; i < infos.length; i++)
-		{
+		for (int i = 0; i < infos.length; i++) {
 			MidiDevice dev = MidiSystem.getMidiDevice(infos[i]);
 			if (dev instanceof AudioSynthesizer)
 				return (AudioSynthesizer) dev;
@@ -379,6 +314,5 @@ public class SynthManager
 		//no AudioSynthesizer was found, return null.
 		return null;
 	}
-	
 
 }

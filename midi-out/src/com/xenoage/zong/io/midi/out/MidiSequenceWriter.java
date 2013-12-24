@@ -10,6 +10,8 @@ import com.xenoage.zong.core.position.MP;
  * Factory for an {@link MidiSequence} instance.
  * It has to be subclassed to support platform-specific sequence data.
  * 
+ * @param <T> the platform-specific sequence class
+ * 
  * @author Andreas Wenger
  */
 public abstract class MidiSequenceWriter<T> {
@@ -150,10 +152,19 @@ public abstract class MidiSequenceWriter<T> {
 	}
 	
 	/**
-	 * Returns a {@link MidiSequence} with the written data.
-	 * @param metronomeTrack  the number of the metronome track, or null if no metronome track was created
-	 * @param timePool        the mappings from MIDI ticks to {@link MP}s and milliseconds
+	 * Gets the platform-specific sequence with the current state.
 	 */
-	public abstract MidiSequence<T> finish(Integer metronomeTrack, List<MidiTime> timePool);
+	protected abstract T getSequence();
+	
+	/**
+	 * Returns a {@link MidiSequence} with the written data.
+	 * @param metronomeTrack     the number of the metronome track, or null if no metronome track was created
+	 * @param timePool           the mappings from MIDI ticks to {@link MP}s and milliseconds
+	 * @param measureStartTicks  the ticks of the beginnings of each measure (including repetitions)
+	 */
+	public MidiSequence<T> finish(Integer metronomeTrack, List<MidiTime> timePool,
+		List<Long> measureStartTicks) {
+		return new MidiSequence<T>(getSequence(), metronomeTrack, timePool, measureStartTicks);
+	}
 
 }
