@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/core"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/layout"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/musicxml"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/musicxml-in"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/utils-pdlib"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/midi-out"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/iText"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/utils-kernel"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/utils-base"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/utils-swing"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/utils-math"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/utils-graphics"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/utils-xml"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/utils-serialize"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/voc"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
