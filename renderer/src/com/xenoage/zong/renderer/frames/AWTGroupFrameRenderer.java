@@ -4,12 +4,12 @@ import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.geom.Rectangle2D;
 
+import com.xenoage.zong.desktop.renderer.canvas.AWTCanvas;
 import com.xenoage.zong.layout.Layout;
 import com.xenoage.zong.layout.frames.Frame;
 import com.xenoage.zong.layout.frames.GroupFrame;
 import com.xenoage.zong.renderer.RendererArgs;
 import com.xenoage.zong.renderer.background.AWTBackgroundRenderer;
-import com.xenoage.zong.renderer.canvas.AWTCanvas;
 
 
 /**

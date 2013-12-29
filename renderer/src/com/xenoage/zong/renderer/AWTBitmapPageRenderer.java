@@ -7,9 +7,9 @@ import java.awt.image.BufferedImage;
 
 import com.xenoage.utils.graphics.Units;
 import com.xenoage.utils.math.geom.Size2f;
+import com.xenoage.zong.desktop.renderer.canvas.AWTCanvas;
 import com.xenoage.zong.layout.Layout;
 import com.xenoage.zong.layout.Page;
-import com.xenoage.zong.renderer.canvas.AWTCanvas;
 import com.xenoage.zong.renderer.canvas.CanvasDecoration;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
 import com.xenoage.zong.renderer.canvas.CanvasIntegrity;
@@ -52,7 +52,7 @@ public class AWTBitmapPageRenderer
 		g2d.scale(zoom, zoom);
 		AWTPageLayoutRenderer renderer = AWTPageLayoutRenderer.getInstance();
 		renderer.paint(layout, pageIndex, new AWTCanvas(g2d, pageSize,
-			CanvasFormat.Bitmap, CanvasDecoration.None, CanvasIntegrity.Perfect));
+			CanvasFormat.Raster, CanvasDecoration.None, CanvasIntegrity.Perfect));
 		g2d.dispose();
 
 		return img;

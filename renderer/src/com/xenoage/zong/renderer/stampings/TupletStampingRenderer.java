@@ -50,7 +50,7 @@ public class TupletStampingRenderer
     //compute the horizontal line and color
     float y1Mm, y2Mm;
     ColorInfo paintColor;
-    if (canvas.getFormat() == CanvasFormat.Bitmap)
+    if (canvas.getFormat() == CanvasFormat.Raster)
     {
       BitmapStaff ss = parentStaff.screenInfo.getBitmapStaff(scaling);
       y1Mm = parentStaff.position.y + ss.getLPMm(tuplet.y1lp);

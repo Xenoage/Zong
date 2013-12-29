@@ -49,7 +49,7 @@ public class WedgeStampingRenderer
     //compute the horizontal line and color
     float yMm;
     ColorInfo paintColor;
-    if (canvas.getFormat() == CanvasFormat.Bitmap)
+    if (canvas.getFormat() == CanvasFormat.Raster)
     {
       BitmapStaff ss = parentStaff.screenInfo.getBitmapStaff(scaling);
       yMm = parentStaff.position.y + ss.getLPMm(wedge.lp);

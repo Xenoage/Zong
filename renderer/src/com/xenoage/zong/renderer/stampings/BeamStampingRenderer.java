@@ -44,7 +44,7 @@ public class BeamStampingRenderer
 		StaffStamping staff1 = beam.staff1;
 		StaffStamping staff2 = beam.staff2;
 
-		if (canvas.getFormat() == CanvasFormat.Bitmap) {
+		if (canvas.getFormat() == CanvasFormat.Raster) {
 			//render on screen
 			float staff1YPos = staff1.position.y;
 			float staff2YPos = staff2.position.y;

@@ -5,12 +5,12 @@ import java.awt.Graphics2D;
 
 import com.xenoage.utils.graphics.Units;
 import com.xenoage.utils.math.geom.Point2f;
+import com.xenoage.zong.desktop.renderer.canvas.AWTCanvas;
 import com.xenoage.zong.gui.components.TextEditor;
 import com.xenoage.zong.layout.Layout;
 import com.xenoage.zong.layout.frames.Frame;
 import com.xenoage.zong.layout.frames.TextFrame;
 import com.xenoage.zong.renderer.RendererArgs;
-import com.xenoage.zong.renderer.canvas.AWTCanvas;
 
 
 /**

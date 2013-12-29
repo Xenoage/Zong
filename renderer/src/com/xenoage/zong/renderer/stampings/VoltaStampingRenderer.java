@@ -55,7 +55,7 @@ public class VoltaStampingRenderer
     //compute the horizontal line and color
     float y;
     ColorInfo paintColor;
-    if (canvas.getFormat() == CanvasFormat.Bitmap)
+    if (canvas.getFormat() == CanvasFormat.Raster)
     {
       BitmapStaff ss = parentStaff.screenInfo.getBitmapStaff(scaling);
       y = parentStaff.position.y + ss.getLPMm(volta.lp);

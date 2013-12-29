@@ -213,7 +213,7 @@ public class BarlineStampingRenderer
   	StaffStamping staff2, float staff2LinePosition,
     float xMm, float widthMm, ColorInfo color)
   {
-		if (canvas.getFormat() == CanvasFormat.Bitmap) {
+		if (canvas.getFormat() == CanvasFormat.Raster) {
 			float scaling = args.targetScaling;
 			BitmapStaff screenStaff1 = staff1.screenInfo.getBitmapStaff(scaling);
 			BitmapStaff screenStaff2 = staff2.screenInfo.getBitmapStaff(scaling);

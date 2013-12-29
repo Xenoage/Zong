@@ -46,7 +46,7 @@ public class StaffSymbolStampingRenderer
     float symbolScaling = scaling * parentStaff.is;
     
     float yPosition;
-    if (canvas.getFormat() == CanvasFormat.Bitmap) {
+    if (canvas.getFormat() == CanvasFormat.Raster) {
       BitmapStaff ss = parentStaff.screenInfo.getBitmapStaff(viewScaling);
       yPosition = parentStaff.position.y + ss.getLPMm(position.lp);
       symbolScaling *= ss.heightScaling;

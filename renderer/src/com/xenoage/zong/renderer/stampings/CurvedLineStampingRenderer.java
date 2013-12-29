@@ -38,7 +38,7 @@ public class CurvedLineStampingRenderer
     float c1xMm = p1xMm + slur.c1.xMm;
     float c2xMm = p2xMm + slur.c2.xMm;
     float p1yMm = 0, p2yMm = 0, c1yMm = 0, c2yMm = 0;
-    if (canvas.getFormat() == CanvasFormat.Bitmap)
+    if (canvas.getFormat() == CanvasFormat.Raster)
     {
       float staffYPos = parentStaff.position.y;
       BitmapStaff screenStaff = parentStaff.screenInfo.getBitmapStaff(scaling);

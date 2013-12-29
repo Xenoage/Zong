@@ -47,7 +47,7 @@ public class LegerLineStampingRenderer
     ColorInfo color = ColorInfo.black;
     
     float yMm = 0;
-    if (canvas.getFormat() == CanvasFormat.Bitmap)
+    if (canvas.getFormat() == CanvasFormat.Raster)
     {
       //render on screen or print
       BitmapLine screenLine = new BitmapLine(lineWidthMm, color, scaling);

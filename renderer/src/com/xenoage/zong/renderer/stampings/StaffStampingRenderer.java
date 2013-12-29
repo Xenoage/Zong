@@ -39,7 +39,7 @@ public class StaffStampingRenderer
     
     ColorInfo color = ColorInfo.black;
     
-    if (canvas.getFormat() == CanvasFormat.Bitmap)
+    if (canvas.getFormat() == CanvasFormat.Raster)
     {
       //render on screen
       BitmapLine screenLine = staff.screenInfo.getBitmapLine(scaling, lineWidthMm, color);

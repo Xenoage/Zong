@@ -7,7 +7,7 @@ import java.awt.geom.AffineTransform;
 import com.xenoage.utils.graphics.color.ColorInfo;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.swing.color.AWTColorTools;
-import com.xenoage.zong.renderer.canvas.AWTCanvas;
+import com.xenoage.zong.desktop.renderer.canvas.AWTCanvas;
 import com.xenoage.zong.renderer.canvas.Canvas;
 import com.xenoage.zong.renderer.canvas.CanvasDecoration;
 import com.xenoage.zong.symbols.PathSymbol;

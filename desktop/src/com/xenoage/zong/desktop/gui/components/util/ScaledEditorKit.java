@@ -1,4 +1,4 @@
-package com.xenoage.zong.gui.util;
+package com.xenoage.zong.desktop.gui.components.util;
 
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.ComponentView;
@@ -11,43 +11,36 @@ import javax.swing.text.StyledEditorKit;
 import javax.swing.text.View;
 import javax.swing.text.ViewFactory;
 
-
 /**
  * @author Uli Teschemacher
  */
-public class ScaledEditorKit extends StyledEditorKit
-{
-	@Override public ViewFactory getViewFactory()
-	{
+public class ScaledEditorKit
+	extends StyledEditorKit {
+
+	@Override public ViewFactory getViewFactory() {
 		return new StyledViewFactory();
 	}
 
-	class StyledViewFactory implements ViewFactory
-	{
 
-		@Override public View create(Element elem)
-		{
+	class StyledViewFactory
+		implements ViewFactory {
+
+		@Override public View create(Element elem) {
 			String kind = elem.getName();
-			if (kind != null)
-			{
-				if (kind.equals(AbstractDocument.ContentElementName))
-				{
+			if (kind != null) {
+				if (kind.equals(AbstractDocument.ContentElementName)) {
 					return new LabelView(elem);
 				}
-				else if (kind.equals(AbstractDocument.ParagraphElementName))
-				{
+				else if (kind.equals(AbstractDocument.ParagraphElementName)) {
 					return new ParagraphView(elem);
 				}
-				else if (kind.equals(AbstractDocument.SectionElementName))
-				{
+				else if (kind.equals(AbstractDocument.SectionElementName)) {
 					return new ScaledView(elem, View.Y_AXIS);
 				}
-				else if (kind.equals(StyleConstants.ComponentElementName))
-				{
+				else if (kind.equals(StyleConstants.ComponentElementName)) {
 					return new ComponentView(elem);
 				}
-				else if (kind.equals(StyleConstants.IconElementName))
-				{
+				else if (kind.equals(StyleConstants.IconElementName)) {
 					return new IconView(elem);
 				}
 			}

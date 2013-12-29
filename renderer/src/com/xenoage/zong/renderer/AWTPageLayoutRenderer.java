@@ -1,10 +1,10 @@
 package com.xenoage.zong.renderer;
 
 import com.xenoage.utils.math.geom.Point2i;
+import com.xenoage.zong.desktop.renderer.canvas.AWTCanvas;
 import com.xenoage.zong.layout.Layout;
 import com.xenoage.zong.layout.Page;
 import com.xenoage.zong.layout.frames.Frame;
-import com.xenoage.zong.renderer.canvas.AWTCanvas;
 import com.xenoage.zong.renderer.frames.AWTFrameRenderer;
 
 

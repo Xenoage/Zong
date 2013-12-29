@@ -35,7 +35,7 @@ public class StaffCursorStampingRenderer
     StaffStamping parentStaff = cursor.parentStaff;
     
     float x, y1, y2;
-    if (canvas.getFormat() == CanvasFormat.Bitmap)
+    if (canvas.getFormat() == CanvasFormat.Raster)
     {
     	float staffY = parentStaff.position.y;
       BitmapStaff ss = parentStaff.screenInfo.getBitmapStaff(viewScaling);

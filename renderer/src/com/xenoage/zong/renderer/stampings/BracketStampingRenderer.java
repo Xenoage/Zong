@@ -107,7 +107,7 @@ public class BracketStampingRenderer
   {
     float scaling = args.targetScaling;
     float ret = staff.position.y;
-    if (canvas.getFormat() == CanvasFormat.Bitmap)
+    if (canvas.getFormat() == CanvasFormat.Raster)
     {
       //render on screen
       BitmapStaff screenStaff = staff.screenInfo.getBitmapStaff(scaling);
@@ -125,7 +125,7 @@ public class BracketStampingRenderer
   private static float getStaffBottomY(StaffStamping staff, Canvas canvas, RendererArgs args)
   {
     float scaling = args.targetScaling;
-    if (canvas.getFormat() == CanvasFormat.Bitmap)
+    if (canvas.getFormat() == CanvasFormat.Raster)
     {
       //render on screen
       BitmapStaff screenStaff = staff.screenInfo.getBitmapStaff(scaling);

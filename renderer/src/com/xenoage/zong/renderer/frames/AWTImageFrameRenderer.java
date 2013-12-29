@@ -12,11 +12,11 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import com.xenoage.utils.io.IO;
+import com.xenoage.zong.desktop.renderer.canvas.AWTCanvas;
 import com.xenoage.zong.layout.Layout;
 import com.xenoage.zong.layout.frames.Frame;
 import com.xenoage.zong.layout.frames.ImageFrame;
 import com.xenoage.zong.renderer.RendererArgs;
-import com.xenoage.zong.renderer.canvas.AWTCanvas;
 import com.xenoage.zong.renderer.canvas.Canvas;
 import com.xenoage.zong.renderer.canvas.CanvasIntegrity;
 import com.xenoage.zong.renderer.pool.ImagePool;

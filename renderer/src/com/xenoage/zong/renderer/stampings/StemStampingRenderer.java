@@ -51,7 +51,7 @@ public class StemStampingRenderer
 		else
 			noteheadLinePosition -= 0.2f;
 
-		if (canvas.getFormat() == CanvasFormat.Bitmap) {
+		if (canvas.getFormat() == CanvasFormat.Raster) {
 			//render on screen or print
 			BitmapLine screenLine = new BitmapLine(lineWidthMm, color, scaling);
 			BitmapStaff screenStaff = parentStaff.screenInfo.getBitmapStaff(scaling);

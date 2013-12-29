@@ -3,11 +3,11 @@ package com.xenoage.zong.renderer.frames;
 import java.util.HashMap;
 
 import com.xenoage.utils.base.annotations.MaybeNull;
+import com.xenoage.zong.desktop.renderer.canvas.AWTCanvas;
 import com.xenoage.zong.layout.Layout;
 import com.xenoage.zong.layout.frames.Frame;
 import com.xenoage.zong.layout.frames.FrameType;
 import com.xenoage.zong.renderer.RendererArgs;
-import com.xenoage.zong.renderer.canvas.AWTCanvas;
 import com.xenoage.zong.renderer.canvas.Canvas;
 
 

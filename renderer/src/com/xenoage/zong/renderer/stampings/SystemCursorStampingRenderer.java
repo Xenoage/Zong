@@ -36,7 +36,7 @@ public class SystemCursorStampingRenderer
     float x, y1, y2;
     x = topStaff.position.x + cursor.x;
     
-    if (canvas.getFormat() == CanvasFormat.Bitmap)
+    if (canvas.getFormat() == CanvasFormat.Raster)
     {
     	float staffY = topStaff.position.y;
       BitmapStaff ss = topStaff.screenInfo.getBitmapStaff(viewScaling);

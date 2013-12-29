@@ -5,6 +5,7 @@ import java.awt.Paint;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 
+import com.xenoage.zong.desktop.renderer.canvas.AWTCanvas;
 import com.xenoage.zong.layout.Layout;
 import com.xenoage.zong.layout.frames.Frame;
 import com.xenoage.zong.layout.frames.ScoreFrame;
@@ -12,7 +13,6 @@ import com.xenoage.zong.musiclayout.ScoreFrameLayout;
 import com.xenoage.zong.musiclayout.stampings.Stamping;
 import com.xenoage.zong.renderer.RendererArgs;
 import com.xenoage.zong.renderer.background.AWTBackgroundRenderer;
-import com.xenoage.zong.renderer.canvas.AWTCanvas;
 import com.xenoage.zong.renderer.canvas.CanvasDecoration;
 import com.xenoage.zong.renderer.stampings.StampingRenderer;
 
