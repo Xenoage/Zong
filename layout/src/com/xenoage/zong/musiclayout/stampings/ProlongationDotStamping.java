@@ -20,7 +20,7 @@ import com.xenoage.zong.symbols.common.CommonSymbol;
 	extends StaffSymbolStamping {
 
 	public ProlongationDotStamping(StaffStamping parentStaff, Chord chord, SP position,
-		SymbolPool<?> symbolPool) {
+		SymbolPool symbolPool) {
 		super(parentStaff, chord, symbolPool.getSymbol(CommonSymbol.NoteDot), null, position, 1, false);
 	}
 

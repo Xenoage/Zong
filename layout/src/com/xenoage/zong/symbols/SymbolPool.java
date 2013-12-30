@@ -13,33 +13,33 @@ import com.xenoage.zong.symbols.common.CommonSymbolPool;
  *
  * @author Andreas Wenger
  */
-public final class SymbolPool<Shape> {
+public final class SymbolPool {
 
 	/** The id of this symbol pool. */
 	@Getter private final String id;
 
 	//the symbols in this pool
-	private Map<String, Symbol<Shape>> symbols;
+	private Map<String, Symbol> symbols;
 
 	//special pool for very fast access
-	private CommonSymbolPool<Shape> commonSymbolPool;
+	private CommonSymbolPool commonSymbolPool;
 
 
 	/**
 	 * Creates a {@link SymbolPool} with the given ID and symbols.
 	 */
-	public SymbolPool(String id, Map<String, Symbol<Shape>> symbols) {
+	public SymbolPool(String id, Map<String, Symbol> symbols) {
 		this.id = id;
 		this.symbols = symbols;
-		this.commonSymbolPool = new CommonSymbolPool<Shape>(this);
+		this.commonSymbolPool = new CommonSymbolPool(this);
 	}
 
 	/**
 	 * Gets the symbol with the given ID.
 	 * If the symbol is not found, a warning symbol is returned.
 	 */
-	public Symbol<Shape> getSymbol(String id) {
-		Symbol<Shape> ret = symbols.get(id);
+	public Symbol getSymbol(String id) {
+		Symbol ret = symbols.get(id);
 		if (ret == null)
 			ret = commonSymbolPool.getWarningSymbol();
 		return ret;
@@ -49,8 +49,8 @@ public final class SymbolPool<Shape> {
 	 * Gets the given common symbol in constant time.
 	 * If the symbol is not found, a warning symbol is returned.
 	 */
-	public Symbol<Shape> getSymbol(CommonSymbol commonSymbol) {
-		Symbol<Shape> ret = commonSymbolPool.getSymbol(commonSymbol);
+	public Symbol getSymbol(CommonSymbol commonSymbol) {
+		Symbol ret = commonSymbolPool.getSymbol(commonSymbol);
 		if (ret == null)
 			ret = commonSymbolPool.getWarningSymbol();
 		return ret;
@@ -59,7 +59,7 @@ public final class SymbolPool<Shape> {
 	/**
 	 * Gets the WarningSymbol.
 	 */
-	public WarningSymbol<Shape> getWarningSymbol() {
+	public WarningSymbol getWarningSymbol() {
 		return commonSymbolPool.getWarningSymbol();
 	}
 
@@ -76,7 +76,7 @@ public final class SymbolPool<Shape> {
 		int len = s.length();
 		for (int i = 0; i < len; i++) {
 			char d = s.charAt(i);
-			Symbol<Shape> symbol = getSymbol("digit-" + d);
+			Symbol symbol = getSymbol("digit-" + d);
 			if (symbol != null) {
 				ret += symbol.boundingRect.size.width;
 				if (i < len - 1)

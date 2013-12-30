@@ -26,7 +26,7 @@ import com.xenoage.zong.symbols.common.CommonSymbol;
 	 * @param symbolPool      the pool where to find the symbol
 	 */
 	public AccidentalStamping(Chord chord, Accidental accidental, StaffStamping parentStaff,
-		SP position, float scaling, SymbolPool<?> symbolPool) {
+		SP position, float scaling, SymbolPool symbolPool) {
 		super(parentStaff, chord, symbolPool.getSymbol(CommonSymbol.getAccidental(accidental)), null,
 			position, scaling, false);
 	}

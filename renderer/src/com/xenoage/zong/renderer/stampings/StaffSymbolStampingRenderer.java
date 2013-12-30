@@ -1,6 +1,6 @@
 package com.xenoage.zong.renderer.stampings;
 
-import com.xenoage.utils.graphics.color.ColorInfo;
+import com.xenoage.utils.color.Color;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.zong.core.music.format.SP;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
@@ -38,7 +38,7 @@ public class StaffSymbolStampingRenderer
 	/**
 	 * Paints the given symbol using the given information and rendering parameters.
 	 */
-  public static void drawWith(Symbol symbol, ColorInfo color, SP position, 
+  public static void drawWith(Symbol symbol, Color color, SP position, 
   	float scaling, StaffStamping parentStaff, boolean mirrorV,
   	Canvas canvas, RendererArgs args)
   {
@@ -68,7 +68,7 @@ public class StaffSymbolStampingRenderer
     Point2f correctedPosition = new Point2f(position.xMm, yPosition);
     
     canvas.drawSymbol(
-      symbol, (color != null ? color : ColorInfo.black), correctedPosition,
+      symbol, (color != null ? color : Color.black), correctedPosition,
       new Point2f(symbolScaling, (mirrorV ? -1 : 1) * symbolScaling));
   }
   

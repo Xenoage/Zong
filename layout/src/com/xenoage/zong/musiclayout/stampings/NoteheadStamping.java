@@ -29,13 +29,13 @@ import com.xenoage.zong.symbols.common.CommonSymbol;
 
 
 	public NoteheadStamping(Chord chord, int notehead, Color color, StaffStamping parentStaff,
-		SP position, float scaling, SymbolPool<?> symbolPool) {
+		SP position, float scaling, SymbolPool symbolPool) {
 		super(parentStaff, chord, getSymbol(notehead, symbolPool), color, sp(
 			computePositionX(position.xMm, notehead, scaling, parentStaff, symbolPool), position.lp),
 			scaling, false);
 	}
 
-	private static <T> Symbol<T> getSymbol(int notehead, SymbolPool<T> symbolPool) {
+	private static Symbol getSymbol(int notehead, SymbolPool symbolPool) {
 		if (notehead == NOTEHEAD_WHOLE)
 			return symbolPool.getSymbol(CommonSymbol.NoteWhole);
 		else if (notehead == NOTEHEAD_HALF)
@@ -45,9 +45,9 @@ import com.xenoage.zong.symbols.common.CommonSymbol;
 	}
 
 	private static float computePositionX(float positionX, int notehead, float scaling,
-		StaffStamping staff, SymbolPool<?> symbolPool) {
+		StaffStamping staff, SymbolPool symbolPool) {
 		float ret = positionX;
-		Symbol<?> symbol = getSymbol(notehead, symbolPool);
+		Symbol symbol = getSymbol(notehead, symbolPool);
 		Rectangle2f bounds;
 		if (symbol != null)
 			bounds = symbol.getBoundingRect().scale(scaling);

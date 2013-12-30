@@ -1,6 +1,6 @@
 package com.xenoage.zong.renderer.stampings;
 
-import com.xenoage.utils.graphics.color.ColorInfo;
+import com.xenoage.utils.color.Color;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.zong.musiclayout.stampings.BeamStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
@@ -36,7 +36,7 @@ public class BeamStampingRenderer
 		float x1Mm = beam.x1 - stemWidthMm / 2f;
 		float x2Mm = beam.x2 + stemWidthMm / 2f;
 
-		ColorInfo color = ColorInfo.black;
+		Color color = Color.black;
 
 		float leftYStart = 0;
 		float rightYStart = 0;

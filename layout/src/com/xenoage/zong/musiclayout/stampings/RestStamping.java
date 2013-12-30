@@ -41,12 +41,12 @@ import com.xenoage.zong.symbols.common.CommonSymbol;
 
 
 	public RestStamping(Rest restElement, DurationInfo.Type duration, StaffStamping parentStaff,
-		float positionX, float scaling, SymbolPool<?> symbolPool) {
+		float positionX, float scaling, SymbolPool symbolPool) {
 		super(parentStaff, restElement, getSymbol(duration, symbolPool), null, sp(positionX,
 			getLinePosition(parentStaff, duration)), scaling, false);
 	}
 
-	private static <T> Symbol<T> getSymbol(DurationInfo.Type duration, SymbolPool<T> symbolPool) {
+	private static Symbol getSymbol(DurationInfo.Type duration, SymbolPool symbolPool) {
 		CommonSymbol cs = durationSymbolMapping.get(duration);
 		if (cs != null)
 			return symbolPool.getSymbol(cs);

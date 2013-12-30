@@ -18,7 +18,7 @@ import com.xenoage.zong.symbols.SymbolPool;
 	/** The default page formats. */
 	@NonNull private LayoutFormat format;
 	/** The pool of musical symbols. */
-	@NonNull private SymbolPool<?> symbolPool;
+	@NonNull private SymbolPool symbolPool;
 	/** The default musical layout settings. */
 	@NonNull private LayoutSettings layoutSettings;
 	

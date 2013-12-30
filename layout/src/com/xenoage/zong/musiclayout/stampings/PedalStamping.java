@@ -15,7 +15,7 @@ import com.xenoage.zong.core.music.format.SP;
 	extends StaffSymbolStamping {
 
 	public PedalStamping(Pedal pedal, StaffStamping parentStaff, SP position, float scaling,
-		SymbolPool<?> symbolPool) {
+		SymbolPool symbolPool) {
 		super(parentStaff, pedal, symbolPool.getSymbol(CommonSymbol.getPedal(pedal.getType())), null,
 			position, scaling, false);
 	}

@@ -166,7 +166,7 @@ import com.xenoage.zong.util.event.ScoreChangedEvent;
 		ScoreLayout oldScoreLayout = chain.getScoreLayout();
 
 		//select symbol pool and layout settings
-		SymbolPool<?> symbolPool = oldScoreLayout != null ?
+		SymbolPool symbolPool = oldScoreLayout != null ?
 			oldScoreLayout.symbolPool : defaults.getSymbolPool();
 		LayoutSettings layoutSettings = oldScoreLayout != null ?
 			oldScoreLayout.layoutSettings : defaults.getLayoutSettings();

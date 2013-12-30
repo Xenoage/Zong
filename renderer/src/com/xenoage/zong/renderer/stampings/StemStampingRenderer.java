@@ -1,6 +1,6 @@
 package com.xenoage.zong.renderer.stampings;
 
-import com.xenoage.utils.graphics.color.ColorInfo;
+import com.xenoage.utils.color.Color;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Rectangle2f;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
@@ -12,7 +12,6 @@ import com.xenoage.zong.renderer.RendererArgs;
 import com.xenoage.zong.renderer.canvas.Canvas;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
 
-
 /**
  * Renderer for a stem stamping.
  * 
@@ -22,16 +21,13 @@ import com.xenoage.zong.renderer.canvas.CanvasFormat;
  * @author Andreas Wenger
  */
 public class StemStampingRenderer
-	extends StampingRenderer
-{
-
+	extends StampingRenderer {
 
 	/**
 	 * Draws the given {@link StemStamping} on the given {@link Canvas},
 	 * using the given {@link RendererArgs}.
 	 */
-	@Override public void draw(Stamping stamping, Canvas canvas, RendererArgs args)
-	{
+	@Override public void draw(Stamping stamping, Canvas canvas, RendererArgs args) {
 		StemStamping stem = (StemStamping) stamping;
 
 		float scaling = args.targetScaling;
@@ -43,7 +39,7 @@ public class StemStampingRenderer
 		float lineWidthMm = parentStaff.getLineWidth(); //TODO: stem is thinner
 		Point2f p1Mm = new Point2f(positionX - lineWidthMm / 2, parentStaff.position.y);
 		Point2f p2Mm = new Point2f(positionX + lineWidthMm / 2, p1Mm.y);
-		ColorInfo color = ColorInfo.black;
+		Color color = Color.black;
 
 		//shorten stem a little bit at the notehead - TODO: looks good. is code ok?
 		if (endLinePosition > noteheadLinePosition)
@@ -60,7 +56,8 @@ public class StemStampingRenderer
 			float width = screenLine.widthMm; //ensure same width for each stem in this staff
 			canvas.fillRect(new Rectangle2f(p1Mm.x, p1Mm.y, width, p2Mm.y - p1Mm.y),
 			/* TEST Color.green */screenLine.color);
-		} else if (canvas.getFormat() == CanvasFormat.Vector) {
+		}
+		else if (canvas.getFormat() == CanvasFormat.Vector) {
 			//render with high quality
 			p1Mm = new Point2f(p1Mm.x, parentStaff.computeYMm(noteheadLinePosition));
 			p2Mm = new Point2f(p2Mm.x, parentStaff.computeYMm(endLinePosition));
@@ -68,6 +65,5 @@ public class StemStampingRenderer
 		}
 
 	}
-
 
 }

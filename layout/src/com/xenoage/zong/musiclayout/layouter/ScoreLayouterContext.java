@@ -20,7 +20,7 @@ import com.xenoage.zong.symbols.SymbolPool;
 	/** The score which is layouted. */
 	@Getter private final Score score;
 	/** The pool of musical symbols. */
-	@Getter private final SymbolPool<?> symbolPool;
+	@Getter private final SymbolPool symbolPool;
 	/** General layout preferences. */
 	@Getter private final LayoutSettings layoutSettings;
 	/** True to layout the whole score, false to layout

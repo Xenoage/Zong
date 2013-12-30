@@ -17,26 +17,26 @@ import com.xenoage.zong.symbols.WarningSymbol;
  * 
  * @author Andreas Wenger
  */
-public class CommonSymbolPool<Shape> {
+public class CommonSymbolPool {
 
-	private List<Symbol<Shape>> symbols;
+	private List<Symbol> symbols;
 	
 	/** The warning symbol. */
-	@Getter private WarningSymbol<Shape> warningSymbol;
+	@Getter private WarningSymbol warningSymbol;
 
 
-	public CommonSymbolPool(SymbolPool<Shape> pool) {
+	public CommonSymbolPool(SymbolPool pool) {
 		symbols = alist();
 		for (CommonSymbol commonSymbol : CommonSymbol.values()) {
 			symbols.add(pool.getSymbol(commonSymbol.getID()));
 		}
-		warningSymbol = new WarningSymbol<Shape>();
+		warningSymbol = new WarningSymbol();
 	}
 
 	/**
 	 * Gets the symbol belonging to the given CommonSymbol.
 	 */
-	public Symbol<Shape> getSymbol(CommonSymbol commonSymbol) {
+	public Symbol getSymbol(CommonSymbol commonSymbol) {
 		if (commonSymbol.ordinal() < symbols.size()) {
 			return symbols.get(commonSymbol.ordinal());
 		}

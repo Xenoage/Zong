@@ -100,7 +100,7 @@ public final class NotationStrategy
 	 * Computes the {@link Notation}s of all {@link MusicElement}s
 	 * in the given {@link Score}, using the given {@link SymbolPool}.
 	 */
-	public NotationsCache computeNotations(Score score, SymbolPool<?> symbolPool,
+	public NotationsCache computeNotations(Score score, SymbolPool symbolPool,
 		LayoutSettings layoutSettings) {
 		NotationsCache ret = new NotationsCache();
 		for (int iMeasure : range(0, score.getMeasuresCount() - 1)) {
@@ -145,7 +145,7 @@ public final class NotationStrategy
 	 * given staff in the given {@link Score}, using the given {@link SymbolPool}.
 	 */
 	private Notation computeNotation(MPElement element, int staff, Score score,
-		SymbolPool<?> symbolPool, LayoutSettings layoutSettings) {
+		SymbolPool symbolPool, LayoutSettings layoutSettings) {
 		//note: we can not read the MP of the element from the score in all cases,
 		//since column elements have no single MP, but are used over the whole column.
 		//so we provide the staff as a parameter
@@ -284,7 +284,7 @@ public final class NotationStrategy
 	/**
 	* Computes the layout of a {@link Time}.
 	*/
-	private TimeNotation computeTime(Time time, SymbolPool<?> symbolPool) {
+	private TimeNotation computeTime(Time time, SymbolPool symbolPool) {
 		//front and rear gap: 1 space
 		float gap = 1f;
 		//gap between digits: 0.1 space

@@ -39,7 +39,7 @@ import com.xenoage.zong.symbols.common.CommonSymbol;
 
 
 	public FlagsStamping(FlagsDirection flagsDirection, int flagsCount, float scaling,
-		StaffStamping parentStaff, Chord chord, SP position, SymbolPool<?> symbolPool) {
+		StaffStamping parentStaff, Chord chord, SP position, SymbolPool symbolPool) {
 		super(parentStaff, Level.Music, chord, createBoundingShape(flagsDirection, flagsCount, scaling,
 			parentStaff, position, symbolPool));
 		this.flagsDirection = flagsDirection;
@@ -49,8 +49,8 @@ import com.xenoage.zong.symbols.common.CommonSymbol;
 	}
 
 	private static Shape createBoundingShape(FlagsDirection flagsDirection, int flagsCount,
-		float scaling, StaffStamping parentStaff, SP position, SymbolPool<?> symbolPool) {
-		Symbol<?> symbol = symbolPool.getSymbol(CommonSymbol.NoteFlag);
+		float scaling, StaffStamping parentStaff, SP position, SymbolPool symbolPool) {
+		Symbol symbol = symbolPool.getSymbol(CommonSymbol.NoteFlag);
 		float flagsDistance = getFlagsDistance(flagsDirection, scaling);
 		float interlineSpace = parentStaff.is;
 		Rectangle2f flagsBounds = null;

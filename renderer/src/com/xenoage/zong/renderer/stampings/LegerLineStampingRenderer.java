@@ -2,7 +2,7 @@ package com.xenoage.zong.renderer.stampings;
 
 import static com.xenoage.utils.math.geom.Point2f.p;
 
-import com.xenoage.utils.graphics.color.ColorInfo;
+import com.xenoage.utils.color.Color;
 import com.xenoage.zong.musiclayout.stampings.LegerLineStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import com.xenoage.zong.musiclayout.stampings.Stamping;
@@ -44,7 +44,7 @@ public class LegerLineStampingRenderer
     float p1xMm = x - width/2;
     float p2xMm = p1xMm + width;
     float lineWidthMm = parentStaff.getLineWidth();
-    ColorInfo color = ColorInfo.black;
+    Color color = Color.black;
     
     float yMm = 0;
     if (canvas.getFormat() == CanvasFormat.Raster)

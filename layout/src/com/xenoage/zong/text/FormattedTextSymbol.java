@@ -16,7 +16,7 @@ import com.xenoage.zong.symbols.Symbol;
 @Const @Data public class FormattedTextSymbol
 	implements FormattedTextElement {
 
-	private final Symbol<?> symbol;
+	private final Symbol symbol;
 	private final FormattedTextStyle style;
 	private final float scaling;
 	/** The horizontal offset of the symbol, which must be added so that
@@ -34,7 +34,7 @@ import com.xenoage.zong.symbols.Symbol;
 	 *                 height defined in the symbol)
 	 * @param color    the color of the symbol
 	 */
-	public FormattedTextSymbol(Symbol<?> symbol, float sizePt, Color color) {
+	public FormattedTextSymbol(Symbol symbol, float sizePt, Color color) {
 		this.symbol = symbol;
 		this.style = new FormattedTextStyle(sizePt, color);
 		//compute scaling
@@ -62,7 +62,7 @@ import com.xenoage.zong.symbols.Symbol;
 	 * Computes and returns the scaling factor that is needed to draw
 	 * the given symbol fitting to the given font size.
 	 */
-	public static float computeScaling(Symbol<?> symbol, float sizePt) {
+	public static float computeScaling(Symbol symbol, float sizePt) {
 		//TODO: 0.65f is a constant that defines that the ascent has 65% of the complete hight
 		return sizePt * Units.pxToMm_1_1 / symbol.ascentHeight * 0.65f;
 	}

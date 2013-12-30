@@ -2,7 +2,7 @@ package com.xenoage.zong.renderer.stampings;
 
 import static com.xenoage.utils.math.geom.Point2f.p;
 
-import com.xenoage.utils.graphics.color.ColorInfo;
+import com.xenoage.utils.color.Color;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.zong.core.music.group.BracketGroup;
 import com.xenoage.zong.musiclayout.stampings.BracketStamping;
@@ -62,7 +62,7 @@ public class BracketStampingRenderer
    
     Symbol braceSymbol = args.symbolPool.getSymbol(CommonSymbol.BracketBrace);
     float symbolScaling = (y2 - y1) / braceSymbol.boundingRect.size.height;
-    canvas.drawSymbol(braceSymbol, ColorInfo.black, pCenter,
+    canvas.drawSymbol(braceSymbol, Color.black, pCenter,
       new Point2f(interlineSpace * 1.2f, symbolScaling));
     
   }
@@ -86,13 +86,13 @@ public class BracketStampingRenderer
     float lineYScaling = (y2 - y1 + lineYCorrection) /
     	bracketLineSymbol.boundingRect.size.height;
     
-    canvas.drawSymbol(bracketLineSymbol, ColorInfo.black,
+    canvas.drawSymbol(bracketLineSymbol, Color.black,
     	p(p1Mm.x, p1Mm.y - lineYCorrection/2),
       new Point2f(interlineSpace, lineYScaling));
-    canvas.drawSymbol(bracketEndSymbol, ColorInfo.black, p1Mm,
+    canvas.drawSymbol(bracketEndSymbol, Color.black, p1Mm,
       new Point2f(interlineSpace, -interlineSpace));
     p1Mm = new Point2f(p1Mm.x, y2);
-    canvas.drawSymbol(bracketEndSymbol, ColorInfo.black, p1Mm,
+    canvas.drawSymbol(bracketEndSymbol, Color.black, p1Mm,
       new Point2f(interlineSpace, interlineSpace));
     
   }

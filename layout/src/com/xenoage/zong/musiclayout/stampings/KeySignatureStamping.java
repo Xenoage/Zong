@@ -39,7 +39,7 @@ import com.xenoage.zong.symbols.common.CommonSymbol;
 
 
 	public KeySignatureStamping(TraditionalKey traditionalKey, int linePositionC4,
-		int linePositionMin, float positionX, StaffStamping parentStaff, SymbolPool<?> symbolPool,
+		int linePositionMin, float positionX, StaffStamping parentStaff, SymbolPool symbolPool,
 		LayoutSettings layoutSettings) {
 		super(parentStaff, Level.Music, null, createBoundingShape(traditionalKey, parentStaff,
 			linePositionC4, linePositionMin, positionX, symbolPool, layoutSettings));
@@ -52,14 +52,14 @@ import com.xenoage.zong.symbols.common.CommonSymbol;
 
 	private static Shape createBoundingShape(TraditionalKey traditionalKey,
 		StaffStamping parentStaff, int linePositionC4, int linePositionMin, float positionX,
-		SymbolPool<?> symbolPool, LayoutSettings layoutSettings) {
+		SymbolPool symbolPool, LayoutSettings layoutSettings) {
 		int fifth = traditionalKey.getFifth();
 		if (fifth == 0)
 			return null;
 		boolean useSharps = (fifth > 0);
 		float distance = (useSharps ? layoutSettings.spacings.widthSharp
 			: layoutSettings.spacings.widthFlat);
-		Symbol<?> symbol = symbolPool.getSymbol(useSharps ? CommonSymbol.AccidentalSharp
+		Symbol symbol = symbolPool.getSymbol(useSharps ? CommonSymbol.AccidentalSharp
 			: CommonSymbol.AccidentalFlat);
 		//create bounding shape
 		Rectangle2f shape = null;

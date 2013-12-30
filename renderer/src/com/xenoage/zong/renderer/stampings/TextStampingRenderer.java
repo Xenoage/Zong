@@ -8,39 +8,33 @@ import com.xenoage.zong.renderer.RendererArgs;
 import com.xenoage.zong.renderer.canvas.Canvas;
 import com.xenoage.zong.text.FormattedText;
 
-
 /**
  * Renderer for a {@link TextStamping}.
  *
  * @author Andreas Wenger
  */
 public class TextStampingRenderer
-	extends StampingRenderer
-{
-	
+	extends StampingRenderer {
+
 	public static final boolean yIsBaseline = true;
 	public static final float frameWidth = 0;
-	
-	
+
+
 	/**
 	 * Draws the given {@link TextStamping} on the given {@link Canvas},
 	 * using the given {@link RendererArgs}.
 	 */
-  @Override public void draw(Stamping stamping, Canvas canvas, RendererArgs args)
-  {
-  	TextStamping s = (TextStamping) stamping;
-  	drawWith(s.text, null, s.getPositionInFrame(), canvas);
-  }
-  
-  
-  /**
+	@Override public void draw(Stamping stamping, Canvas canvas, RendererArgs args) {
+		TextStamping s = (TextStamping) stamping;
+		drawWith(s.getText(), null, s.getPositionInFrame(), canvas);
+	}
+
+	/**
 	 * Paints the given formatted text using the given information and rendering parameters.
 	 */
-  public static void drawWith(FormattedText text, TextSelection selection,
-  	Point2f position, Canvas canvas)
-  {
-    canvas.drawText(text, selection, position, yIsBaseline, frameWidth);
-  }
-  
-  
+	public static void drawWith(FormattedText text, TextSelection selection, Point2f position,
+		Canvas canvas) {
+		canvas.drawText(text, selection, position, yIsBaseline, frameWidth);
+	}
+
 }

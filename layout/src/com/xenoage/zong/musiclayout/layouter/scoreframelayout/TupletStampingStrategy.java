@@ -36,7 +36,7 @@ public class TupletStampingStrategy
 	 * and returns it. 
 	 */
 	public TupletStamping createTupletStamping(Tuplet tuplet, OpenTupletsCache cache,
-		SymbolPool<?> symbolPool) {
+		SymbolPool symbolPool) {
 		StaffStamping ss = cache.getChord(tuplet.getChords().get(0), tuplet).staffStamping;
 
 		//horizontal position of the bracket
@@ -104,7 +104,7 @@ public class TupletStampingStrategy
 		}
 	}
 
-	private FormattedText createText(int digit, float fontSize, SymbolPool<?> symbolPool) {
+	private FormattedText createText(int digit, float fontSize, SymbolPool symbolPool) {
 		if (digit < 0 || digit > 9)
 			return null; //TODO
 		CommonSymbol s = CommonSymbol.getDigit(digit);

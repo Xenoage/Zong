@@ -31,7 +31,7 @@ public class ScoreLayout {
 	public final List<ScoreFrameLayout> frames;
 
 	/** The used pool of symbols */
-	public final SymbolPool<?> symbolPool;
+	public final SymbolPool symbolPool;
 
 	/** The used layout settings */
 	public final LayoutSettings layoutSettings;
@@ -45,7 +45,7 @@ public class ScoreLayout {
 	 * @param layoutSettings  the used layout settings
 	 */
 	public ScoreLayout(Score score, @MaybeEmpty List<ScoreFrameLayout> frames,
-		SymbolPool<?> symbolPool, LayoutSettings layoutSettings) {
+		SymbolPool symbolPool, LayoutSettings layoutSettings) {
 		this.score = score;
 		this.frames = frames;
 		this.symbolPool = symbolPool;
@@ -168,7 +168,7 @@ public class ScoreLayout {
 	 * Currently, the error layout consists of a single frame containing nothing.
 	 * TODO: show warning text in this frame!
 	 */
-	public static ScoreLayout createErrorLayout(Score score, SymbolPool<?> symbolPool) {
+	public static ScoreLayout createErrorLayout(Score score, SymbolPool symbolPool) {
 		return new ScoreLayout(score, new ArrayList<ScoreFrameLayout>(), symbolPool, null);
 	}
 

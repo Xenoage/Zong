@@ -22,7 +22,7 @@ import com.xenoage.zong.symbols.Symbol;
 	extends Stamping {
 
 	/** The musical symbol. */
-	public final Symbol<?> symbol;
+	public final Symbol symbol;
 
 	/** The color of the stamping, or null for default color. */
 	public final Color color;
@@ -37,7 +37,7 @@ import com.xenoage.zong.symbols.Symbol;
 	public final boolean mirrorV;
 
 
-	public StaffSymbolStamping(StaffStamping parentStaff, MusicElement musicElement, Symbol<?> symbol,
+	public StaffSymbolStamping(StaffStamping parentStaff, MusicElement musicElement, Symbol symbol,
 		Color color, SP position, float scaling, boolean mirrorV) {
 		super(parentStaff, Level.Music, musicElement, createBoundingShape(symbol, scaling, parentStaff,
 			position));
@@ -51,7 +51,7 @@ import com.xenoage.zong.symbols.Symbol;
 	/**
 	 * Creates the bounding geometry.
 	 */
-	private static Shape createBoundingShape(Symbol<?> symbol, float scaling, StaffStamping parentStaff,
+	private static Shape createBoundingShape(Symbol symbol, float scaling, StaffStamping parentStaff,
 		SP position) {
 		Rectangle2f bounds = symbol.getBoundingRect();
 		bounds = bounds.scale(scaling * parentStaff.is);

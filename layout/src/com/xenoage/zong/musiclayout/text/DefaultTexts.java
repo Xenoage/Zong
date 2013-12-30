@@ -29,7 +29,7 @@ import com.xenoage.zong.text.FormattedTextSymbol;
  */
 public class DefaultTexts {
 
-	public static Text getTextNotNull(TextElement element, SymbolPool<?> symbolPool) {
+	public static Text getTextNotNull(TextElement element, SymbolPool symbolPool) {
 		if (element.getText() != null)
 			return element.getText();
 		else if (element instanceof Tempo)
@@ -38,7 +38,7 @@ public class DefaultTexts {
 			return ut("???");
 	}
 
-	public static FormattedText getTempoTextNotNull(Tempo tempo, SymbolPool<?> symbolPool) {
+	public static FormattedText getTempoTextNotNull(Tempo tempo, SymbolPool symbolPool) {
 		FormattedTextStyle style = new FormattedTextStyle();
 		if (tempo.getText() != null) {
 			//use custom text

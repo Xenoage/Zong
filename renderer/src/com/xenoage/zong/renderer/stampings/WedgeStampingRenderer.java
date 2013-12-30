@@ -1,6 +1,6 @@
 package com.xenoage.zong.renderer.stampings;
 
-import com.xenoage.utils.graphics.color.ColorInfo;
+import com.xenoage.utils.color.Color;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import com.xenoage.zong.musiclayout.stampings.Stamping;
@@ -42,7 +42,7 @@ public class WedgeStampingRenderer
     float d2Mm = wedge.d2Is * parentStaff.is;
     
     //width and color of the line
-    ColorInfo color = ColorInfo.black;
+    Color color = Color.black;
     float width = parentStaff.getLineWidth(); //like staff line
     float paintWidth;
     

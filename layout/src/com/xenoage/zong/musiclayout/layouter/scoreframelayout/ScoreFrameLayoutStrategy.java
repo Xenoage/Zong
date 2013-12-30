@@ -459,7 +459,7 @@ public class ScoreFrameLayoutStrategy
 	 * using an appropriate strategy.
 	 */
 	private Stamping createMeasureElementStamping(Notation notation, float positionX,
-		StaffStamping staff, SymbolPool<?> symbolPool, LayoutSettings layoutSettings) {
+		StaffStamping staff, SymbolPool symbolPool, LayoutSettings layoutSettings) {
 		if (notation instanceof ClefNotation) {
 			return musicElementStampingStrategy.createClefStamping((ClefNotation) notation, positionX,
 				staff, symbolPool);
@@ -486,7 +486,7 @@ public class ScoreFrameLayoutStrategy
 		StaffStamping staff, int staffIndex, int systemIndex, FormattedTextStyle defaultLyricStyle,
 		OpenBeamsCache openBeamsCache, OpenSlursCache openCurvedLinesCache,
 		OpenLyricsCache openLyricsCache, LastLyrics lastLyrics, OpenTupletsCache openTupletsCache,
-		Score score, SymbolPool<?> symbolPool, LayoutSettings layoutSettings) {
+		Score score, SymbolPool symbolPool, LayoutSettings layoutSettings) {
 		
 		ArrayList<Stamping> ret = alist();
 		Chord chordElement = chord.getElement();

@@ -56,7 +56,7 @@ public class DirectionStampingStrategy
 	 * the given {@link Chord} and its {@link ChordStampings}.
 	 */
 	public IList<StaffTextStamping> createForChord(Chord chord, ChordStampings chordStampings,
-		SymbolPool<?> symbolPool) {
+		SymbolPool symbolPool) {
 		CList<StaffTextStamping> ret = CList.clist();
 		for (Direction direction : chord.getDirections()) {
 			if (direction instanceof Dynamics) {
@@ -71,7 +71,7 @@ public class DirectionStampingStrategy
 	 * below the given {@link Chord} and its {@link ChordStampings}.
 	 */
 	public StaffTextStamping createDynamics(Dynamics dynamics, MP mp, Chord chord,
-		ChordStampings chordStampings, SymbolPool<?> symbolPool) {
+		ChordStampings chordStampings, SymbolPool symbolPool) {
 		StaffStamping staff = chordStampings.staffStamping;
 
 		//positioning
@@ -90,7 +90,7 @@ public class DirectionStampingStrategy
 		//create text
 		CList<FormattedTextElement> elements = clist();
 		for (CommonSymbol s : CommonSymbol.getDynamics(dynamics.getType())) {
-			Symbol<?> symbol = symbolPool.getSymbol(s);
+			Symbol symbol = symbolPool.getSymbol(s);
 			elements.add(new FormattedTextSymbol(symbol, staff.is * FONT_SIZE_IN_IS,
 				FormattedTextStyle.defaultColor));
 		}
@@ -106,7 +106,7 @@ public class DirectionStampingStrategy
 	 * at the given {@link MP} within the given {@link StaffStamping}.
 	 */
 	public StaffTextStamping createDynamics(Dynamics dynamics, MP mp, StaffStamping staffStamping,
-		SymbolPool<?> symbolPool) {
+		SymbolPool symbolPool) {
 		//positioning
 		//below (default): 3 IS below the base line, or 2 IS below the lowest note
 		//above: 2 IS above the top line, or 1 IS above the highest note
@@ -118,7 +118,7 @@ public class DirectionStampingStrategy
 		//create text
 		CList<FormattedTextElement> elements = clist();
 		for (CommonSymbol s : CommonSymbol.getDynamics(dynamics.getType())) {
-			Symbol<?> symbol = symbolPool.getSymbol(s);
+			Symbol symbol = symbolPool.getSymbol(s);
 			elements.add(new FormattedTextSymbol(symbol, staffStamping.is * FONT_SIZE_IN_IS,
 				FormattedTextStyle.defaultColor));
 		}
@@ -134,7 +134,7 @@ public class DirectionStampingStrategy
 	 * at the given {@link MP} within the given {@link StaffStamping}.
 	 */
 	public StaffTextStamping createTempo(Tempo tempo, MP mp, StaffStamping staffStamping,
-		SymbolPool<?> symbolPool) {
+		SymbolPool symbolPool) {
 		//positioning
 		//below: 3 IS below the base line
 		//above (default): 2 IS above the top line
@@ -179,7 +179,7 @@ public class DirectionStampingStrategy
 	 * at the given {@link MP} within the given {@link StaffStamping}.
 	 */
 	public StaffSymbolStamping createPedal(Pedal pedal, MP mp, StaffStamping staffStamping,
-		SymbolPool<?> symbolPool) {
+		SymbolPool symbolPool) {
 		//positioning
 		//below (default): 4 IS below the base line
 		//above: 3 IS above the top line

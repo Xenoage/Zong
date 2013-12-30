@@ -1,7 +1,7 @@
 package com.xenoage.zong.renderer.stampings;
 
 import com.xenoage.utils.graphics.Units;
-import com.xenoage.utils.graphics.color.ColorInfo;
+import com.xenoage.utils.color.Color;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import com.xenoage.zong.musiclayout.stampings.Stamping;
@@ -43,7 +43,7 @@ public class TupletStampingRenderer
     float hookHeightPx = Units.mmToPx(parentStaff.is, scaling);
     
     //width and color of the line
-    ColorInfo color = ColorInfo.black;
+    Color color = Color.black;
     float width = parentStaff.getLineWidth() * 1.5f; //a little bit thicker than staff line
     float paintWidth;
     

@@ -16,7 +16,7 @@ import com.xenoage.zong.core.music.format.SP;
 	extends StaffSymbolStamping {
 
 	public ArticulationStamping(Chord chord, Articulation articulation, StaffStamping parentStaff,
-		SP position, float scaling, SymbolPool<?> symbolPool) {
+		SP position, float scaling, SymbolPool symbolPool) {
 		super(parentStaff, chord, symbolPool.getSymbol(CommonSymbol.getArticulation(articulation)),
 			null, position, scaling, false);
 	}

@@ -59,7 +59,7 @@ public class MusicElementStampingStrategy
 	 * those must be handled by other strategies.
 	 */
 	public ChordStampings createChordStampings(ChordNotation chordNot, float positionX,
-		StaffStamping staffStamping, SymbolPool<?> symbolPool, LayoutSettings layoutSettings) {
+		StaffStamping staffStamping, SymbolPool symbolPool, LayoutSettings layoutSettings) {
 		float interlineSpace = staffStamping.is;
 		Chord chord = chordNot.getMusicElement();
 		boolean grace = chord.isGrace();
@@ -223,7 +223,7 @@ public class MusicElementStampingStrategy
 	 * Creates a stamping for the given rest.
 	 */
 	public RestStamping createRestStamping(RestNotation rest, float positionX, StaffStamping staff,
-		SymbolPool<?> symbolPool) {
+		SymbolPool symbolPool) {
 		return new RestStamping(rest.getMusicElement(), DurationInfo.getRestType(rest.getMusicElement()
 			.getDuration()), staff, positionX, 1, symbolPool);
 	}
@@ -232,7 +232,7 @@ public class MusicElementStampingStrategy
 	 * Creates a stamping for the given clef.
 	 */
 	public ClefStamping createClefStamping(ClefNotation clef, float positionX, StaffStamping staff,
-		SymbolPool<?> symbolPool) {
+		SymbolPool symbolPool) {
 		return new ClefStamping(clef.getMusicElement(), staff, positionX, clef.scaling, symbolPool);
 	}
 
@@ -240,7 +240,7 @@ public class MusicElementStampingStrategy
 	 * Creates a stamping for the given key signature.
 	 */
 	public KeySignatureStamping createKeyStamping(TraditionalKeyNotation key, float positionX,
-		StaffStamping staff, SymbolPool<?> symbolPool, LayoutSettings layoutSettings) {
+		StaffStamping staff, SymbolPool symbolPool, LayoutSettings layoutSettings) {
 		return new KeySignatureStamping(key.getMusicElement(), key.linePositionC4,
 			key.linePositionMin, positionX, staff, symbolPool, layoutSettings);
 	}
@@ -249,7 +249,7 @@ public class MusicElementStampingStrategy
 	 * Creates a stamping for the given time signature.
 	 */
 	public Stamping createTimeStamping(TimeNotation time, float positionX, StaffStamping staff,
-		SymbolPool<?> symbolPool) {
+		SymbolPool symbolPool) {
 		if (time.getMusicElement().getType() == TimeType.timeCommon) {
 			return new CommonTimeStamping(time.getMusicElement(), positionX, staff, symbolPool);
 		}
