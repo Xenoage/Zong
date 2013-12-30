@@ -1,4 +1,4 @@
-package com.xenoage.zong.print;
+package com.xenoage.zong.desktop.io.print;
 
 import static com.xenoage.utils.error.Err.handle;
 import static com.xenoage.utils.log.Log.log;
@@ -14,16 +14,15 @@ import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 
-import com.xenoage.utils.graphics.Units;
+import com.xenoage.utils.math.Units;
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.Voc;
+import com.xenoage.zong.desktop.renderer.AwtPageLayoutRenderer;
 import com.xenoage.zong.desktop.renderer.canvas.AWTCanvas;
 import com.xenoage.zong.layout.Layout;
-import com.xenoage.zong.renderer.AWTPageLayoutRenderer;
 import com.xenoage.zong.renderer.canvas.CanvasDecoration;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
 import com.xenoage.zong.renderer.canvas.CanvasIntegrity;
-
 
 /**
  * This class allows the user to print out the current score.
@@ -34,8 +33,7 @@ import com.xenoage.zong.renderer.canvas.CanvasIntegrity;
  * @author Andreas Wenger
  */
 public final class PrintProcess
-	implements Pageable, Printable
-{
+	implements Pageable, Printable {
 
 	private Layout layout;
 
@@ -51,8 +49,7 @@ public final class PrintProcess
 	 * If he continues, the selected pages are printed.
 	 * Thus this method needs a PageLayout instance.
 	 */
-	public void requestPrint(Layout layout)
-	{
+	public void requestPrint(Layout layout) {
 		this.layout = layout;
 
 		//show print dialog
@@ -72,23 +69,18 @@ public final class PrintProcess
 		}
 	}
 
-
-	@Override public int getNumberOfPages()
-	{
+	@Override public int getNumberOfPages() {
 		return layout.pages.size();
 	}
 
-
 	@Override public PageFormat getPageFormat(int pageIndex)
-		throws IndexOutOfBoundsException
-	{
+		throws IndexOutOfBoundsException {
 		com.xenoage.zong.core.format.PageFormat pageFormat = layout.pages.get(pageIndex).format;
 		PageFormat ret = new PageFormat();
 		ret.setOrientation(PageFormat.PORTRAIT);
 		//set paper size
 		Paper paper = new Paper();
-		paper.setSize(Units.mmToPx(pageFormat.size.width, 1),
-			Units.mmToPx(pageFormat.size.height, 1));
+		paper.setSize(Units.mmToPx(pageFormat.size.width, 1), Units.mmToPx(pageFormat.size.height, 1));
 		//no margins TEST: 10 mm
 		paper.setImageableArea(10, 10, Units.mmToPx(pageFormat.size.width, 1) - 20,
 			Units.mmToPx(pageFormat.size.height, 1) - 20);
@@ -96,17 +88,13 @@ public final class PrintProcess
 		return ret;
 	}
 
-
 	@Override public Printable getPrintable(int pageIndex)
-		throws IndexOutOfBoundsException
-	{
+		throws IndexOutOfBoundsException {
 		return this;
 	}
 
-
 	@Override public int print(Graphics g, PageFormat pageFormat, int pageIndex)
-		throws PrinterException
-	{
+		throws PrinterException {
 		//valid page number?
 		if (pageIndex < 0 || pageIndex >= layout.pages.size()) {
 			return Printable.NO_SUCH_PAGE;
@@ -115,10 +103,10 @@ public final class PrintProcess
 		//print page
 		log(remark("Printing page " + pageIndex + "..."));
 		Graphics2D g2d = (Graphics2D) g;
-		AWTPageLayoutRenderer renderer = AWTPageLayoutRenderer.getInstance();
+		AwtPageLayoutRenderer renderer = AwtPageLayoutRenderer.getInstance();
 		Size2f pageSize = layout.pages.get(pageIndex).format.size;
-		renderer.paint(layout, pageIndex, new AWTCanvas(g2d, pageSize,
-			CanvasFormat.Vector, CanvasDecoration.None, CanvasIntegrity.Perfect));
+		renderer.paint(layout, pageIndex, new AWTCanvas(g2d, pageSize, CanvasFormat.Vector,
+			CanvasDecoration.None, CanvasIntegrity.Perfect));
 
 		//DEMO
 		/*
@@ -139,6 +127,5 @@ public final class PrintProcess
 
 		return Printable.PAGE_EXISTS;
 	}
-
 
 }

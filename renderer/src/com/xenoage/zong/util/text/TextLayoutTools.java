@@ -15,7 +15,7 @@ import java.util.Map;
 import com.xenoage.utils.graphics.font.FontStyle;
 import com.xenoage.utils.swing.color.AWTColorTools;
 import com.xenoage.zong.core.text.Alignment;
-import com.xenoage.zong.renderer.symbols.SymbolGraphicAttribute;
+import com.xenoage.zong.desktop.renderer.symbols.SymbolGraphicAttribute;
 import com.xenoage.zong.symbols.Symbol;
 import com.xenoage.zong.text.FormattedText;
 import com.xenoage.zong.text.FormattedTextElement;

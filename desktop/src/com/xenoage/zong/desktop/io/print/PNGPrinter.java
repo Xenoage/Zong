@@ -1,4 +1,4 @@
-package com.xenoage.zong.print;
+package com.xenoage.zong.desktop.io.print;
 
 import static com.xenoage.utils.error.Err.handle;
 import static com.xenoage.utils.log.Report.warning;
@@ -10,26 +10,22 @@ import java.io.OutputStream;
 
 import javax.imageio.ImageIO;
 
+import com.xenoage.zong.desktop.renderer.AwtBitmapPageRenderer;
 import com.xenoage.zong.layout.Layout;
-import com.xenoage.zong.renderer.AWTBitmapPageRenderer;
-
 
 /**
  * This class allows to print out the current score into a PNG file.
  *
  * @author Andreas Wenger
  */
-public final class PNGPrinter
-{
-
+public final class PNGPrinter {
 
 	/**
 	 * Prints the given page of the given {@link Layout} into the given PNG {@link File}.
 	 */
-	public static void print(Layout layout, int pageIndex, OutputStream out)
-	{
+	public static void print(Layout layout, int pageIndex, OutputStream out) {
 		//create image
-		BufferedImage img = AWTBitmapPageRenderer.paint(layout, pageIndex, 1f);
+		BufferedImage img = AwtBitmapPageRenderer.paint(layout, pageIndex, 1f);
 
 		//save file
 		try {
@@ -38,6 +34,5 @@ public final class PNGPrinter
 			handle(warning("could not print to PNG file"));
 		}
 	}
-
 
 }

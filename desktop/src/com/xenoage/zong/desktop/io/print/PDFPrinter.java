@@ -1,7 +1,7 @@
-package com.xenoage.zong.print;
+package com.xenoage.zong.desktop.io.print;
 
-import static com.xenoage.utils.base.iterators.It.it;
 import static com.xenoage.utils.error.Err.handle;
+import static com.xenoage.utils.iterators.It.it;
 import static com.xenoage.utils.log.Log.log;
 import static com.xenoage.utils.log.Report.remark;
 import static com.xenoage.utils.log.Report.warning;
@@ -9,23 +9,22 @@ import static com.xenoage.utils.log.Report.warning;
 import java.awt.Graphics2D;
 import java.io.OutputStream;
 
+import com.itextpdf.awt.PdfGraphics2D;
 import com.itextpdf.text.Document;
-import com.itextpdf.text.pdf.DefaultFontMapper;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.xenoage.utils.base.iterators.It;
-import com.xenoage.utils.graphics.Units;
+import com.xenoage.utils.iterators.It;
+import com.xenoage.utils.math.Units;
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.Voc;
-import com.xenoage.zong.desktop.renderer.canvas.AWTCanvas;
+import com.xenoage.zong.desktop.renderer.AwtPageLayoutRenderer;
+import com.xenoage.zong.desktop.renderer.canvas.AwtCanvas;
 import com.xenoage.zong.layout.Layout;
 import com.xenoage.zong.layout.Page;
-import com.xenoage.zong.renderer.AWTPageLayoutRenderer;
 import com.xenoage.zong.renderer.canvas.CanvasDecoration;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
 import com.xenoage.zong.renderer.canvas.CanvasIntegrity;
-
 
 /**
  * This class allows the user to print out
@@ -36,15 +35,12 @@ import com.xenoage.zong.renderer.canvas.CanvasIntegrity;
  *
  * @author Andreas Wenger
  */
-public final class PDFPrinter
-{
-
+public final class PDFPrinter {
 
 	/**
 	 * Prints the given {@link Layout} into the given PDF output stream.
 	 */
-	public static void print(Layout layout, OutputStream out)
-	{
+	public static void print(Layout layout, OutputStream out) {
 
 		Document document = new Document();
 		PdfWriter writer = null;
@@ -56,20 +52,20 @@ public final class PDFPrinter
 
 		document.open();
 		PdfContentByte cb = writer.getDirectContent();
-		AWTPageLayoutRenderer renderer = AWTPageLayoutRenderer.getInstance();
+		AwtPageLayoutRenderer renderer = AwtPageLayoutRenderer.getInstance();
 
-		It<Page> pages = it(layout.pages);
+		It<Page> pages = it(layout.getPages());
 		for (Page page : pages) {
 			//create PDF page
-			Size2f pageSize = page.format.size;
+			Size2f pageSize = page.getFormat().getSize();
 			float width = Units.mmToPx(pageSize.width, 1);
 			float height = Units.mmToPx(pageSize.height, 1);
 			document.newPage();
 			PdfTemplate tp = cb.createTemplate(width, height);
 			//fill PDF page
-			Graphics2D g2d = tp.createGraphics(width, height, new DefaultFontMapper());
+			Graphics2D g2d = new PdfGraphics2D(cb, width, height);
 			log(remark("Printing page " + pages.getIndex() + "..."));
-			renderer.paint(layout, pages.getIndex(), new AWTCanvas(g2d, pageSize, CanvasFormat.Vector,
+			renderer.paint(layout, pages.getIndex(), new AwtCanvas(g2d, pageSize, CanvasFormat.Vector,
 				CanvasDecoration.None, CanvasIntegrity.Perfect));
 			//finish page
 			g2d.dispose();
@@ -78,6 +74,5 @@ public final class PDFPrinter
 
 		document.close();
 	}
-
 
 }

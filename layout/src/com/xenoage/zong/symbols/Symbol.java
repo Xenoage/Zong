@@ -12,7 +12,7 @@ import com.xenoage.utils.math.geom.Rectangle2f;
  *
  * @author Andreas Wenger
  */
-public abstract class Symbol<Shape> {
+public abstract class Symbol {
 
 	public static float DEFAULT_BASELINE = 0;
 	public static float DEFAULT_ASCENT = 2f;
@@ -74,7 +74,7 @@ public abstract class Symbol<Shape> {
 	 * (e.g. when the symbol is more complex than just a shape).
 	 * The type of the shape is dependent on the graphics library.
 	 */
-	@MaybeNull public Shape getShape() {
+	@MaybeNull public Object getShape() {
 		return null;
 	}
 

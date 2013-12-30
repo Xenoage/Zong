@@ -1,4 +1,4 @@
-package com.xenoage.zong.renderer.symbols;
+package com.xenoage.zong.desktop.renderer.symbols;
 
 import java.awt.Graphics2D;
 import java.awt.Shape;
@@ -7,10 +7,9 @@ import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 
-import com.xenoage.utils.graphics.Units;
+import com.xenoage.utils.math.Units;
 import com.xenoage.utils.math.geom.Rectangle2f;
 import com.xenoage.zong.symbols.Symbol;
-
 
 /**
  * This class can draw {@link Symbol}s, which provide a {@link Shape},
@@ -19,20 +18,18 @@ import com.xenoage.zong.symbols.Symbol;
  * @author Andreas Wenger
  */
 public final class SymbolGraphicAttribute
-	extends GraphicAttribute
-{
+	extends GraphicAttribute {
 
 	private final Symbol symbol;
 	private final float scaling;
-	
+
 
 	/**
 	 * Creates a new {@link SymbolGraphicAttribute} from the given symbol
 	 * using the given scaling.
 	 * @throws IllegalArgumentException if the symbol does not provide a {@link Shape}
 	 */
-	public SymbolGraphicAttribute(Symbol symbol, float scaling)
-	{
+	public SymbolGraphicAttribute(Symbol symbol, float scaling) {
 		super(GraphicAttribute.ROMAN_BASELINE);
 		if (symbol.getShape() == null)
 			throw new IllegalArgumentException("Symbol does not provide a shape");
@@ -42,40 +39,29 @@ public final class SymbolGraphicAttribute
 		this.scaling = scaling * Units.mmToPx_1_1;
 	}
 
-
 	/**
 	 * Returns the distance from the origin to the top bounds of the symbol.
 	 */
-	@Override public float getAscent()
-	{
+	@Override public float getAscent() {
 		return symbol.ascentHeight * scaling;
 	}
-
 
 	/**
 	 * Returns the distance from the origin to the bottom bounds of the symbol.
 	 * By convention, this is 0, even if something is painted below the baseline.
 	 */
-	@Override public float getDescent()
-	{
+	@Override public float getDescent() {
 		return 0;
 	}
-
 
 	/**
 	 * Returns the distance from the origin to the right side of the bounds of the symbol.
 	 */
-	@Override public float getAdvance()
-	{
+	@Override public float getAdvance() {
 		return (-1 * symbol.getLeftBorder() + symbol.getRightBorder()) * scaling;
 	}
 
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override public void draw(Graphics2D g, float x, float y)
-	{
+	@Override public void draw(Graphics2D g, float x, float y) {
 		AffineTransform oldTransform = g.getTransform();
 		g.translate(x, y);
 		g.scale(scaling, scaling);
@@ -84,25 +70,15 @@ public final class SymbolGraphicAttribute
 		g.setTransform(oldTransform);
 	}
 
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override public Rectangle2D getBounds()
-	{
+	@Override public Rectangle2D getBounds() {
 		Rectangle2f f = symbol.boundingRect;
 		f.scale(scaling);
 		return new Rectangle2D.Float(f.x1(), f.y1(), f.width(), f.height());
 	}
 
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override public Shape getOutline(AffineTransform tx)
-	{
-		Shape s = AffineTransform.getScaleInstance(
-			scaling, scaling).createTransformedShape((Shape) symbol.getShape());
+	@Override public Shape getOutline(AffineTransform tx) {
+		Shape s = AffineTransform.getScaleInstance(scaling, scaling).createTransformedShape(
+			(Shape) symbol.getShape());
 		return tx == null ? s : tx.createTransformedShape(s);
 	}
 

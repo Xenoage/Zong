@@ -22,7 +22,7 @@ import com.xenoage.zong.text.FormattedText;
  * @author Andreas Wenger
  */
 @AllArgsConstructor @Getter
-public abstract class Canvas<Shape> {
+public abstract class Canvas {
 
 	/** The size of the canvas in mm. */
 	protected final Size2f sizeMm;
@@ -80,7 +80,7 @@ public abstract class Canvas<Shape> {
 	 * Draws the given Symbol using the given color to the given
 	 * position with the given scaling.
 	 */
-	public abstract void drawSymbol(Symbol<Shape> symbol, Color color, Point2f position, Point2f scaling);
+	public abstract void drawSymbol(Symbol symbol, Color color, Point2f position, Point2f scaling);
 
 	/**
 	 * Draws a beam using the given quad and color.

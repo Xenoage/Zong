@@ -4,7 +4,6 @@ import static com.xenoage.utils.jse.color.AwtColorUtils.toAwtColor;
 
 import java.awt.BasicStroke;
 import java.awt.Graphics2D;
-import java.awt.Shape;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
@@ -15,6 +14,7 @@ import com.xenoage.utils.color.Color;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Rectangle2f;
 import com.xenoage.utils.math.geom.Size2f;
+import com.xenoage.zong.desktop.renderer.symbols.AwtSymbolsRenderer;
 import com.xenoage.zong.io.selection.text.TextSelection;
 import com.xenoage.zong.renderer.canvas.Canvas;
 import com.xenoage.zong.renderer.canvas.CanvasDecoration;
@@ -22,7 +22,6 @@ import com.xenoage.zong.renderer.canvas.CanvasFormat;
 import com.xenoage.zong.renderer.canvas.CanvasIntegrity;
 import com.xenoage.zong.renderer.slur.AWTSlurRenderer;
 import com.xenoage.zong.renderer.slur.SimpleSlurShape;
-import com.xenoage.zong.renderer.symbols.AWTSymbolsRenderer;
 import com.xenoage.zong.symbols.Symbol;
 import com.xenoage.zong.text.FormattedText;
 import com.xenoage.zong.util.text.TextLayoutTools;
@@ -34,7 +33,7 @@ import com.xenoage.zong.util.text.TextLayouts;
  * @author Andreas Wenger
  */
 public class AwtCanvas
-	extends Canvas<Shape> {
+	extends Canvas {
 
 	//the AWT graphics context
 	private final Graphics2D g2d;
@@ -62,7 +61,7 @@ public class AwtCanvas
 	 * the given {@link Canvas}. If it is not a {@link AwtCanvas}, a {@link ClassCastException}
 	 * is thrown.
 	 */
-	public static Graphics2D getGraphics2D(Canvas<?> canvas) {
+	public static Graphics2D getGraphics2D(Canvas canvas) {
 		return ((AwtCanvas) canvas).getGraphicsContext();
 	}
 
@@ -82,8 +81,8 @@ public class AwtCanvas
 		g2d.setTransform(oldTransform);
 	}
 
-	@Override public void drawSymbol(Symbol<Shape> symbol, Color color, Point2f position, Point2f scaling) {
-		AWTSymbolsRenderer.instance.draw(symbol, this, color, position, scaling);
+	@Override public void drawSymbol(Symbol symbol, Color color, Point2f position, Point2f scaling) {
+		AwtSymbolsRenderer.instance.draw(symbol, this, color, position, scaling);
 	}
 
 	@Override public void drawLine(Point2f p1, Point2f p2, Color color, float lineWidth) {
