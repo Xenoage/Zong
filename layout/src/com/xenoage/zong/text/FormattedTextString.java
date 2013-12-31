@@ -43,7 +43,7 @@ import com.xenoage.utils.font.TextMetrics;
 
 		this.text = text;
 		this.style = style;
-		this.metrics = platformUtils().getTextMeasurer().measure(style.getFontInfo(), text);
+		this.metrics = platformUtils().getTextMeasurer().measure(style.getFont(), text);
 	}
 
 	public static FormattedTextString fString(String text, FormattedTextStyle style) {

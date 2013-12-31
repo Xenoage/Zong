@@ -36,10 +36,10 @@ public class FormattedTextParagraphTest {
 		FormattedTextParagraph paragraph = fPara(fString("This is a formatted text.", style));
 		assertEquals("This is a formatted text.", paragraph.getText());
 		style = ((FormattedTextString) paragraph.getElements().getFirst()).getStyle();
-		assertEquals(true, style.getFontInfo().getStyle().isSet(FontStyle.Bold));
-		assertEquals(false, style.getFontInfo().getStyle().isSet(FontStyle.Italic));
-		assertEquals(false, style.getFontInfo().getStyle().isSet(FontStyle.Underline));
-		assertEquals(false, style.getFontInfo().getStyle().isSet(FontStyle.Strikethrough));
+		assertEquals(true, style.getFont().getStyle().isSet(FontStyle.Bold));
+		assertEquals(false, style.getFont().getStyle().isSet(FontStyle.Italic));
+		assertEquals(false, style.getFont().getStyle().isSet(FontStyle.Underline));
+		assertEquals(false, style.getFont().getStyle().isSet(FontStyle.Strikethrough));
 		assertEquals(Color.red, style.getColor());
 		assertEquals(Superscript.Super, style.getSuperscript());
 	}
@@ -49,12 +49,12 @@ public class FormattedTextParagraphTest {
 		assertEquals("This is a mixed styled text!", text.getText());
 		List<FormattedTextElement> elements = text.getElements();
 		FormattedTextStyle style = ((FormattedTextString) elements.get(0)).getStyle();
-		assertEquals(true, style.getFontInfo().getStyle().isSet(FontStyle.Italic));
-		assertEquals(true, style.getFontInfo().getStyle().isSet(FontStyle.Underline));
-		assertEquals(14, style.getFontInfo().getSize(), Delta.Df);
+		assertEquals(true, style.getFont().getStyle().isSet(FontStyle.Italic));
+		assertEquals(true, style.getFont().getStyle().isSet(FontStyle.Underline));
+		assertEquals(14, style.getFont().getSize(), Delta.Df);
 		style = ((FormattedTextString) elements.get(1)).getStyle();
-		assertEquals(true, style.getFontInfo().getStyle().isSet(FontStyle.Bold));
-		assertEquals(true, style.getFontInfo().getStyle().isSet(FontStyle.Strikethrough));
+		assertEquals(true, style.getFont().getStyle().isSet(FontStyle.Bold));
+		assertEquals(true, style.getFont().getStyle().isSet(FontStyle.Strikethrough));
 		assertEquals(Color.green, style.getColor());
 	}
 

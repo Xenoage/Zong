@@ -7,7 +7,6 @@ import static com.xenoage.utils.log.Level.Warning;
 import static com.xenoage.utils.log.Report.createReport;
 import static com.xenoage.utils.log.Report.fatal;
 
-import java.awt.geom.GeneralPath;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -36,9 +35,9 @@ public class SymbolPoolReader {
 	 * Loads and returns the {@link SymbolPool} with the given ID from
 	 * {@value symbolPoolPath} or reports an error if not possible.
 	 */
-	public static SymbolPool<GeneralPath> readSymbolPool(String id) {
+	public static SymbolPool readSymbolPool(String id) {
 		
-		HashMap<String, Symbol<GeneralPath>> symbols = map();
+		HashMap<String, Symbol> symbols = map();
 
 		//load symbols
 		String dir = symbolPoolPath + id;
@@ -52,7 +51,7 @@ public class SymbolPoolReader {
 			for (String file : files) {
 				try {
 					String symbolPath = "data/symbols/" + id + "/" + file;
-					Symbol<GeneralPath> symbol = loader.loadSymbol(symbolPath);
+					Symbol symbol = loader.loadSymbol(symbolPath);
 					symbols.put(symbol.getId(), symbol);
 				} catch (IllegalStateException ex) {
 					symbolsWithErrors.add(file);
@@ -66,7 +65,7 @@ public class SymbolPoolReader {
 			handle(fatal(Voc.CouldNotLoadSymbolPool, ex));
 		}
 
-		return new SymbolPool<GeneralPath>(id, symbols);
+		return new SymbolPool(id, symbols);
 	}
 
 }

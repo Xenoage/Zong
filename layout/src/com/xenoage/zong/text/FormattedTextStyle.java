@@ -27,7 +27,7 @@ import com.xenoage.utils.font.FontInfo;
 	public static final FormattedTextStyle defaultStyle = new FormattedTextStyle(null, null, null);
 
 	//style properties
-	@Getter @NonNull private final FontInfo fontInfo;
+	@Getter @NonNull private final FontInfo font;
 	@Getter @NonNull private final Color color;
 	@Getter @NonNull private final Superscript superscript;
 
@@ -37,7 +37,7 @@ import com.xenoage.utils.font.FontInfo;
 	 */
 	public FormattedTextStyle(@MaybeNull FontInfo fontInfo, @MaybeNull Color color,
 		@MaybeNull Superscript superscript) {
-		this.fontInfo = notNull(fontInfo, FontInfo.defaultValue);
+		this.font = notNull(fontInfo, FontInfo.defaultValue);
 		this.color = notNull(color, defaultColor);
 		this.superscript = notNull(superscript, defaultSuperscript);
 	}
@@ -71,7 +71,7 @@ import com.xenoage.utils.font.FontInfo;
 	 * For the missing information the default style is used.
 	 */
 	public FormattedTextStyle() {
-		this.fontInfo = null; //not needed, since font is given
+		this.font = null; //not needed, since font is given
 		this.superscript = defaultSuperscript;
 		this.color = defaultColor;
 	}

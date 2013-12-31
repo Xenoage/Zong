@@ -4,7 +4,6 @@ import static com.xenoage.utils.jse.io.DesktopIO.desktopIO;
 import static com.xenoage.utils.log.Log.log;
 import static com.xenoage.utils.log.Report.remark;
 
-import java.awt.geom.GeneralPath;
 import java.io.File;
 
 import org.w3c.dom.Document;
@@ -26,7 +25,7 @@ public class SvgSymbolReader {
 	 * Creates a {@link Symbol} from the given SVG file.
 	 * If an error occurs, an {@link IllegalStateException} is thrown.
 	 */
-	public PathSymbol<GeneralPath> loadSymbol(String svgFilepath) {
+	public PathSymbol loadSymbol(String svgFilepath) {
 		File svgFile = new File(svgFilepath);
 		String id = JseFileUtils.getNameWithoutExt(svgFile);
 		log(remark("Loading symbol \"" + id + "\", file: \"" + svgFilepath + "\" ..."));
@@ -43,7 +42,7 @@ public class SvgSymbolReader {
 		//"path:clef-g", or "styled:warning". If there is no ":",
 		//the type "path" is used.
 		//styles: path, styled, rect
-		PathSymbol<GeneralPath> ret = null;
+		PathSymbol ret = null;
 		String elementID = XMLReader.attribute(XMLReader.root(doc), "id");
 		if (elementID == null || elementID.indexOf(':') == -1) {
 			//no format information. use path.

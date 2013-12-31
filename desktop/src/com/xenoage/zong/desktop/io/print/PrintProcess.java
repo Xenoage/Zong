@@ -18,7 +18,7 @@ import com.xenoage.utils.math.Units;
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.Voc;
 import com.xenoage.zong.desktop.renderer.AwtPageLayoutRenderer;
-import com.xenoage.zong.desktop.renderer.canvas.AWTCanvas;
+import com.xenoage.zong.desktop.renderer.canvas.AwtCanvas;
 import com.xenoage.zong.layout.Layout;
 import com.xenoage.zong.renderer.canvas.CanvasDecoration;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
@@ -70,20 +70,20 @@ public final class PrintProcess
 	}
 
 	@Override public int getNumberOfPages() {
-		return layout.pages.size();
+		return layout.getPages().size();
 	}
 
 	@Override public PageFormat getPageFormat(int pageIndex)
 		throws IndexOutOfBoundsException {
-		com.xenoage.zong.core.format.PageFormat pageFormat = layout.pages.get(pageIndex).format;
+		com.xenoage.zong.core.format.PageFormat pageFormat = layout.getPages().get(pageIndex).getFormat();
 		PageFormat ret = new PageFormat();
 		ret.setOrientation(PageFormat.PORTRAIT);
 		//set paper size
 		Paper paper = new Paper();
-		paper.setSize(Units.mmToPx(pageFormat.size.width, 1), Units.mmToPx(pageFormat.size.height, 1));
+		paper.setSize(Units.mmToPx(pageFormat.getSize().width, 1), Units.mmToPx(pageFormat.getSize().height, 1));
 		//no margins TEST: 10 mm
-		paper.setImageableArea(10, 10, Units.mmToPx(pageFormat.size.width, 1) - 20,
-			Units.mmToPx(pageFormat.size.height, 1) - 20);
+		paper.setImageableArea(10, 10, Units.mmToPx(pageFormat.getSize().width, 1) - 20,
+			Units.mmToPx(pageFormat.getSize().height, 1) - 20);
 		ret.setPaper(paper);
 		return ret;
 	}
@@ -96,7 +96,7 @@ public final class PrintProcess
 	@Override public int print(Graphics g, PageFormat pageFormat, int pageIndex)
 		throws PrinterException {
 		//valid page number?
-		if (pageIndex < 0 || pageIndex >= layout.pages.size()) {
+		if (pageIndex < 0 || pageIndex >= layout.getPages().size()) {
 			return Printable.NO_SUCH_PAGE;
 		}
 
@@ -104,8 +104,8 @@ public final class PrintProcess
 		log(remark("Printing page " + pageIndex + "..."));
 		Graphics2D g2d = (Graphics2D) g;
 		AwtPageLayoutRenderer renderer = AwtPageLayoutRenderer.getInstance();
-		Size2f pageSize = layout.pages.get(pageIndex).format.size;
-		renderer.paint(layout, pageIndex, new AWTCanvas(g2d, pageSize, CanvasFormat.Vector,
+		Size2f pageSize = layout.getPages().get(pageIndex).getFormat().getSize();
+		renderer.paint(layout, pageIndex, new AwtCanvas(g2d, pageSize, CanvasFormat.Vector,
 			CanvasDecoration.None, CanvasIntegrity.Perfect));
 
 		//DEMO

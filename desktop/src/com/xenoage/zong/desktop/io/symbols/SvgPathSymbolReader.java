@@ -24,7 +24,7 @@ final class SvgPathSymbolReader {
 	 * Creates a {@link PathSymbol} from the given SVG document.
 	 * If an error occurs, an IllegalArgumentException is thrown.
 	 */
-	public static PathSymbol<GeneralPath> read(String id, Document doc) {
+	public static PathSymbol read(String id, Document doc) {
 		SvgPathReader<GeneralPath> svgPathReader = new AwtSvgPathReader();
 
 		//read baseline and ascent, if there
@@ -70,7 +70,7 @@ final class SvgPathSymbolReader {
 		//otherwise return null.
 		if (ePath != null && XMLReader.attribute(ePath, "d") != null) {
 			Tuple2<GeneralPath, Rectangle2f> path = svgPathReader.read(XMLReader.attribute(ePath, "d"));
-			PathSymbol<GeneralPath> ret = new PathSymbol<GeneralPath>(id, path.get1(), path.get2(),
+			PathSymbol ret = new PathSymbol(id, path.get1(), path.get2(),
 				baseline, ascent, leftBorder, rightBorder);
 			return ret;
 		}

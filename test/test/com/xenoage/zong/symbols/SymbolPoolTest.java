@@ -5,8 +5,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.awt.geom.GeneralPath;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,7 +18,7 @@ import com.xenoage.zong.desktop.io.symbols.SymbolPoolReader;
  */
 public class SymbolPoolTest {
 
-	private SymbolPool<GeneralPath> symbolPool = null;
+	private SymbolPool symbolPool = null;
 
 
 	@Before public void setUp() {
