@@ -55,6 +55,9 @@ project(':voc') { dependencies { compile project(':core') } }
 
 //build dist of Zong!
 task dist {
+	//download custom JARs
+	ant.get(src: 'http://files.xenoage.com/itext/5.4.5/itextpdf-5.4.5.jar', dest:'lib/', verbose:true)
+	ant.get(src: 'http://files.xenoage.com/vorbis-java/1.0.0-beta/vorbis-java-1.0.0-beta.jar', dest:'lib/', verbose:true)
 	//first, build utils
 	dependsOn 'buildUtils'
 	//then, build the subprojects
