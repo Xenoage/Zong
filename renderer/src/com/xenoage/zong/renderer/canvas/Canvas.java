@@ -109,5 +109,33 @@ public abstract class Canvas {
 	 * @param color   the color of the rectangle
 	 */
 	public abstract void fillRect(Rectangle2f rect, Color color);
-
+	
+	/**
+	 * Saves the current transformation state on the stack.
+	 * It can be restored by calling 
+	 */
+	public abstract void transformSave();
+	
+	/**
+	 * Restores the last transformation state on the stack, which was stored by calling
+	 * {@link #transformSave()}. If there is none, nothing happens.
+	 */
+	public abstract void transformRestore();
+	
+	/**
+	 * Applies the given translation to all following operations.
+	 */
+	public abstract void transformTranslate(float x, float y);
+	
+	/**
+	 * Applies the given scaling to all following operations.
+	 */
+	public abstract void transformScale(float x, float y);
+	
+	/**
+	 * Applies the given rotation in degrees in counterclockwise direction
+	 * to all following operations.
+	 */
+	public abstract void transformRotate(float angle);
+	
 }

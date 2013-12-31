@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import com.xenoage.zong.core.Score;
+import com.xenoage.zong.musiclayout.ScoreFrameLayout;
 import com.xenoage.zong.musiclayout.ScoreLayout;
 
 /**
@@ -93,6 +94,17 @@ public class ScoreFrameChain {
 	 */
 	public boolean isLeadingScoreFrame(ScoreFrame scoreFrame) {
 		return frames.get(0) == scoreFrame;
+	}
+	
+	/**
+	 * Gets the {@link ScoreFrameLayout} of the given {@link ScoreFrame}, or
+	 * null if unknown.
+	 */
+	public ScoreFrameLayout getScoreFrameLayout(ScoreFrame frame) {
+		int frameIndex = frames.indexOf(frame);
+		if (frameIndex == -1)
+			return null;
+		return scoreLayout.frames.get(frameIndex);
 	}
 
 }

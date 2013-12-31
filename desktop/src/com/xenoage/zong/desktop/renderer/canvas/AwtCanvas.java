@@ -9,6 +9,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
+import java.util.Stack;
 
 import com.xenoage.utils.color.Color;
 import com.xenoage.utils.math.geom.Point2f;
@@ -37,6 +38,9 @@ public class AwtCanvas
 
 	//the AWT graphics context
 	private final Graphics2D g2d;
+	
+	//stack for stored transformation states
+	private Stack<AffineTransform> transformStack = new Stack<AffineTransform>();
 
 
 	/**
@@ -149,6 +153,28 @@ public class AwtCanvas
 		g2d.setColor(toAwtColor(color));
 		g2d.fill(new Rectangle2D.Float(rect.position.x, rect.position.y, rect.size.width,
 			rect.size.height));
+	}
+
+	@Override public void transformSave() {
+		transformStack.push(g2d.getTransform());
+	}
+
+	@Override public void transformRestore() {
+		if (false == transformStack.isEmpty()) {
+			g2d.setTransform(transformStack.pop());
+		}
+	}
+
+	@Override public void transformTranslate(float x, float y) {
+		g2d.translate(x, y);
+	}
+
+	@Override public void transformScale(float x, float y) {
+		g2d.scale(x, y);
+	}
+
+	@Override public void transformRotate(float angle) {
+		g2d.rotate(angle * Math.PI / 180f);
 	}
 
 }

@@ -32,7 +32,7 @@ public abstract class StampingRenderer {
 		renderers.put(StampingType.FlagsStamping, new FlagsStampingRenderer());
 		renderers.put(StampingType.KeySignatureStamping, new KeySignatureStampingRenderer());
 		renderers.put(StampingType.LegerLineStamping, new LegerLineStampingRenderer());
-		renderers.put(StampingType.TimeStamping, new TimeStampingRenderer());
+		renderers.put(StampingType.NormalTimeStamping, new NormalTimeStampingRenderer());
 		renderers.put(StampingType.StaffCursorStamping, new StaffCursorStampingRenderer());
 		renderers.put(StampingType.StaffStamping, new StaffStampingRenderer());
 		renderers.put(StampingType.StaffSymbolStamping, new StaffSymbolStampingRenderer());

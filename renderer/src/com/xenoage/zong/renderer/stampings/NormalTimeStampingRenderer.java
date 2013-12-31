@@ -15,7 +15,7 @@ import com.xenoage.zong.symbols.common.CommonSymbol;
  *
  * @author Andreas Wenger
  */
-public class TimeStampingRenderer
+public class NormalTimeStampingRenderer
 	extends StampingRenderer {
 
 	/**
@@ -31,7 +31,7 @@ public class TimeStampingRenderer
 
 		//write numerator digits
 		float offsetX = s.numeratorOffset * interlineSpace;
-		String num = Integer.toString(s.normalTime.getNumerator());
+		String num = Integer.toString(s.time.getType().getNumerator());
 		for (int i = 0; i < num.length(); i++) {
 			int d = num.charAt(i) - '0';
 			Symbol symbol = symbolPool.getSymbol(CommonSymbol.getDigit(d));
@@ -45,7 +45,7 @@ public class TimeStampingRenderer
 
 		//write denominator digits
 		offsetX = s.denominatorOffset * interlineSpace;
-		String den = Integer.toString(s.normalTime.getDenominator());
+		String den = Integer.toString(s.time.getType().getDenominator());
 		for (int i = 0; i < den.length(); i++) {
 			int d = den.charAt(i) - '0';
 			Symbol symbol = symbolPool.getSymbol(CommonSymbol.getDigit(d));

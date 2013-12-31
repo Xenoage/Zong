@@ -24,7 +24,7 @@ public enum StampingType {
 	SystemCursorStamping,
 	TestStamping,
 	TextStamping,
-	TimeStamping,
+	NormalTimeStamping,
 	TupletStamping,
 	VoltaStamping,
 	WedgeStamping

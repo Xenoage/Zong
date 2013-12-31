@@ -1,12 +1,13 @@
 package com.xenoage.zong.desktop.renderer;
 
+import static com.xenoage.zong.desktop.renderer.frames.AwtFramesRenderer.awtFramesRenderer;
+
 import com.xenoage.utils.math.geom.Point2i;
 import com.xenoage.zong.desktop.renderer.canvas.AwtCanvas;
 import com.xenoage.zong.layout.Layout;
 import com.xenoage.zong.layout.Page;
 import com.xenoage.zong.layout.frames.Frame;
 import com.xenoage.zong.renderer.RendererArgs;
-import com.xenoage.zong.renderer.frames.AWTFrameRenderer;
 
 /**
  * This class renders a {@link Layout} on an {@link AwtCanvas}.
@@ -39,7 +40,7 @@ public class AwtPageLayoutRenderer {
 		Page page = layout.getPages().get(pageIndex);
 		//draw frames
 		for (Frame frame : page.getFrames()) {
-			AWTFrameRenderer.getInstance().paintAny(frame, layout, canvas,
+			awtFramesRenderer().paintAny(frame, canvas,
 				new RendererArgs(1, 1, new Point2i(0, 0), layout.getDefaults().getSymbolPool(), null));
 		}
 	}

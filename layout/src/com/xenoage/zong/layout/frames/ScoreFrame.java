@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.math.geom.Point2f;
+import com.xenoage.zong.musiclayout.ScoreFrameLayout;
 import com.xenoage.zong.musiclayout.layouter.horizontalsystemfilling.HorizontalSystemFillingStrategy;
 import com.xenoage.zong.musiclayout.layouter.horizontalsystemfilling.StretchHorizontalSystemFillingStrategy;
 import com.xenoage.zong.musiclayout.layouter.verticalframefilling.NoVerticalFrameFillingStrategy;
@@ -46,6 +47,15 @@ import com.xenoage.zong.musiclayout.layouter.verticalframefilling.VerticalFrameF
 		Point2f ret = framePosition;
 		ret = ret.add(size.width / 2, size.height / 2);
 		return ret;
+	}
+	
+	/**
+	 * Gets the {@link ScoreFrameLayout} of this frame, or null if there is none. 
+	 */
+	public ScoreFrameLayout getScoreFrameLayout() {
+		if (scoreFrameChain == null)
+			return null;
+		return scoreFrameChain.getScoreFrameLayout(this);
 	}
 
 	@Override public FrameType getType() {
