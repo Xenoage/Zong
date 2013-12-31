@@ -61,6 +61,8 @@ public class MusicXMLDemoFilesTest {
 						ByteArrayInputStream in = new ByteArrayInputStream(bos.toByteArray());
 						MusicXMLDocument.read(new JseXmlReader(in));
 						in.close();
+						
+						//doc.write(new JseXmlWriter(new JseOutputStream(new File("test.xml"))));
 					}
 
 					totalMusicXMLReadingTime += (System.currentTimeMillis() - lastTime);
