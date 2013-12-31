@@ -4,6 +4,7 @@ import static com.xenoage.utils.PlatformUtils.platformUtils;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static org.junit.Assert.fail;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Set;
 
@@ -93,9 +94,10 @@ public class MusicXMLScoreFileInputTest {
 		String file = dir20 + "BeetAnGeSample.xml";
 		try {
 			new MusicXMLScoreFileInput().read(platformUtils().openFile(file), file);
-
 			//TEST
 			//ScoreTest.printScore(score);
+		} catch (FileNotFoundException ex) {
+			//file not there. ignore, since copyrighted file. - GOON: ask Michael Good for file license
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			fail("Could not load file: " + file);
