@@ -144,7 +144,7 @@ public class ScoreLayout {
 		for (int i = 0; i < this.frames.size(); i++) {
 			selections.add(new LinkedList<Stamping>());
 		}
-		/* GOON if (selection != null && selection instanceof Cursor)
+		/* TODO if (selection != null && selection instanceof Cursor)
 		{
 		  Cursor cursor = (Cursor) selection;
 		  StaffStampingPosition ssp =

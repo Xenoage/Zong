@@ -7,7 +7,7 @@ import com.xenoage.utils.annotations.Const;
 /**
  * Settings for the musical layout.
  * 
- * GOON: move to converter project: One instance of this class is used throughout the
+ * TODO: move to converter project: One instance of this class is used throughout the
  * whole application, and is loaded on demand from
  * "data/layout/default.xml".
  * 

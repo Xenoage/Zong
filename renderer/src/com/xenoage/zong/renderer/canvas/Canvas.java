@@ -44,7 +44,7 @@ public abstract class Canvas {
 	 * @param p1              starting point of the line in mm
 	 * @param p2              ending point of the line in mm
 	 * @param color           color of the line
-	 * @param lineWidth       width of the line in px GOON: really px?
+	 * @param lineWidth       width of the line in mm
 	 */
 	public abstract void drawLine(Point2f p1, Point2f p2, Color color, float lineWidth);
 
@@ -62,9 +62,9 @@ public abstract class Canvas {
 
 	/**
 	 * Draws a simplified staff (only a filled rectangle).
-	 * @param pos               position of the upper left corner in px GOON: really px?
-	 * @param length            length of the staff in px GOON: really px?
-	 * @param height            height of the staff in px GOON: really px?
+	 * @param pos               position of the upper left corner in mm
+	 * @param length            length of the staff in mm
+	 * @param height            height of the staff in mm
 	 * @param color             color of the lines
 	 */
 	public abstract void drawSimplifiedStaff(Point2f pos, float length, float height, Color color);
