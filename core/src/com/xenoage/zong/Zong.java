@@ -12,12 +12,12 @@ public class Zong
 {
 
 	//the version of this program as an integer number
-	public static final int PROJECT_ITERATION = 63;
+	public static final int PROJECT_ITERATION = 66;
 	
 	//general information on this program
   public static final String PROJECT_FAMILY_NAME = "Zong!";
-  public static final String PROJECT_VERSION = "p0.5";
-  public static final String PROJECT_ITERATION_NAME = "Cimarosa";
+  public static final String PROJECT_VERSION = "0.1-a";
+  public static final String PROJECT_ITERATION_NAME = "Rattle";
   
   //package path
   public static final String PACKAGE = "com.xenoage.zong";
@@ -27,12 +27,12 @@ public class Zong
   
   //copyright information
   public static final String COPYRIGHT =
-  	"Copyright © 2006-2012 by Andreas Wenger, Uli Teschemacher, Xenoage Software";
+  	"Copyright © 2006-2014 by Andreas Wenger, Uli Teschemacher, Xenoage Software";
   
   //other information
   public static final String WEBSITE = "http://www.zong-music.com";
   public static final String EMAIL_ERROR_REPORTS = "support@zong-music.com";
-  public static final String BUGTRACKER = "https://bugs.launchpad.net/zong";
+  public static final String BUGTRACKER = "http://xenoage.atlassian.net";
   
   //last version, that was "complete" regarding its functions, and not a
   //current snapshot or "work in progress"

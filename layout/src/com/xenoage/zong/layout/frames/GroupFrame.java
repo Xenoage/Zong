@@ -4,6 +4,7 @@ import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.rangeReverse;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -70,6 +71,20 @@ import com.xenoage.zong.layout.LayoutContainer;
 		else {
 			return null;
 		}
+	}
+	
+	/**
+	 * Gets a list with all {@link ScoreFrame}s in this {@link GroupFrame}.
+	 */
+	public List<ScoreFrame> getScoreFrames() {
+		List<ScoreFrame> ret = alist();
+		for (Frame frame : children) {
+			if (frame instanceof ScoreFrame)
+				ret.add((ScoreFrame) frame);
+			else if (frame instanceof GroupFrame)
+				ret.addAll(((GroupFrame) frame).getScoreFrames());
+		}
+		return ret;
 	}
 
 	@Override public FrameType getType() {

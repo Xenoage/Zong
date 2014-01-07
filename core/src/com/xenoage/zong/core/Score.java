@@ -124,7 +124,6 @@ public final class Score
 
 	/**
 	 * Gets the staff with the given index.
-	 * GOON: getStaff, getVoice, getMeasure... return null if not existing
 	 */
 	public Staff getStaff(int staffIndex) {
 		return stavesList.getStaff(staffIndex);

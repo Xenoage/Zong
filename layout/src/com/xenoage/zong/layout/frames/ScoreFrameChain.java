@@ -23,9 +23,9 @@ public class ScoreFrameChain {
 	/** The list of frames */
 	@Getter private ArrayList<ScoreFrame> frames = alist();
 	/** The score. */
-	@Getter private Score score; //GOON
+	@Getter private Score score;
 	/** The score layouts in the frames. */
-	@Getter @Setter private ScoreLayout scoreLayout; //GOON
+	@Getter @Setter private ScoreLayout scoreLayout;
 
 	
 	/**

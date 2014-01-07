@@ -25,7 +25,7 @@ public class ColumnElementWrite
 	private ColumnElement element;
 	private ColumnHeader column;
 	@MaybeNull private Fraction beat;
-	@MaybeNull private MeasureSide side; //GOON: get rid of the side. place it in the barline class itself
+	@MaybeNull private MeasureSide side; //TODO: get rid of the side. place it in the barline class itself
 	//backup data
 	private ColumnElement replacedElement = null;
 	

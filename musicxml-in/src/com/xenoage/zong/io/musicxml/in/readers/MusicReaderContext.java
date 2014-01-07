@@ -17,7 +17,7 @@ import com.xenoage.utils.math.Fraction;
 import com.xenoage.utils.math.VSide;
 import com.xenoage.zong.commands.core.music.ColumnElementWrite;
 import com.xenoage.zong.commands.core.music.MeasureElementWrite;
-import com.xenoage.zong.commands.core.music.VoiceCreate;
+import com.xenoage.zong.commands.core.music.VoiceAdd;
 import com.xenoage.zong.commands.core.music.VoiceElementWrite;
 import com.xenoage.zong.commands.core.music.beam.BeamAdd;
 import com.xenoage.zong.commands.core.music.slur.SlurAdd;
@@ -405,7 +405,7 @@ public final class MusicReaderContext {
 			//create voice if needed
 			Measure measure = score.getMeasure(mp);
 			if (measure.getVoices().size() < voice + 1)
-				execute(new VoiceCreate(measure, voice));
+				execute(new VoiceAdd(measure, voice));
 			execute(new VoiceElementWrite(score.getVoice(mp), mp, element, true));
 		} catch (MeasureFullException ex) {
 			if (!settings.isIgnoringErrors())

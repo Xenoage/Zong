@@ -16,11 +16,9 @@ import com.xenoage.zong.core.music.Voice;
  * So maybe more than one voice is created.
  * If already existing, a {@link UselessException} is thrown.
  * 
- * GOON: naming: ...Add or ...Create - should be the same in all similar commands
- * 
  * @author Andreas Wenger
  */
-public class VoiceCreate
+public class VoiceAdd
 	implements Command {
 
 	//data
@@ -30,7 +28,7 @@ public class VoiceCreate
 	private int lastExistingVoiceIndex;
 	
 	
-	public VoiceCreate(Measure measure, int voiceIndex) {
+	public VoiceAdd(Measure measure, int voiceIndex) {
 		this.measure = measure;
 		this.voiceIndex = voiceIndex;
 	}

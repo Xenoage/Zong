@@ -26,9 +26,7 @@ import com.xenoage.zong.text.FormattedTextStyle;
 import com.xenoage.zong.text.FormattedTextSymbol;
 
 /**
- * Creates a {@link TextLayout} from a given {@link FormattedTextElement}.
- * 
- * GOON: duplicate with {@link FormattedTextConverter}?
+ * Creates {@link TextLayout}s from {@link FormattedText} elements.
  * 
  * @author Andreas Wenger
  */

@@ -16,7 +16,7 @@ import com.xenoage.zong.commands.core.music.ColumnElementWrite;
 import com.xenoage.zong.commands.core.music.MeasureAdd;
 import com.xenoage.zong.commands.core.music.MeasureElementWrite;
 import com.xenoage.zong.commands.core.music.StaffAdd;
-import com.xenoage.zong.commands.core.music.VoiceCreate;
+import com.xenoage.zong.commands.core.music.VoiceAdd;
 import com.xenoage.zong.commands.core.music.VoiceElementWrite;
 import com.xenoage.zong.commands.core.music.slur.SlurAdd;
 import com.xenoage.zong.core.Score;
@@ -163,7 +163,7 @@ public final class Cursor
 		//find the last voice element starting before the current position
 		MPE<VoiceElement> ive = score.getStaff(mp.staff).getVoiceElementBefore(mp, false);
 
-		//if the target element is a chord, add the given pitches to it - GOON: use command
+		//if the target element is a chord, add the given pitches to it - TODO: use command
 		if (ive != null && ive.element instanceof Chord) {
 			Chord chord = (Chord) ive.element;
 			for (Pitch pitch : pitches)
@@ -326,7 +326,7 @@ public final class Cursor
 		//create voice if needed
 		Measure measure = score.getMeasure(mp);
 		if (measure.getVoices().size() <= mp.voice)
-			new VoiceCreate(measure, mp.voice).execute();
+			new VoiceAdd(measure, mp.voice).execute();
 	}
 
 

@@ -1,42 +1,12 @@
 package com.xenoage.zong.desktop.util.text;
 
 import static com.xenoage.utils.collections.CList.clist;
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.utils.collections.CollectionUtils.map;
-import static com.xenoage.utils.font.FontStyle.Bold;
-import static com.xenoage.utils.font.FontStyle.Italic;
-import static com.xenoage.utils.font.FontStyle.Underline;
 import static com.xenoage.utils.jse.color.AwtColorUtils.fromAwtColor;
 import static com.xenoage.utils.jse.color.AwtColorUtils.toAwtColor;
 import static com.xenoage.utils.jse.font.AwtFontUtils.toAwtFont;
-import static com.xenoage.utils.kernel.Range.range;
-import static java.awt.font.TextAttribute.FAMILY;
-import static java.awt.font.TextAttribute.FOREGROUND;
-import static java.awt.font.TextAttribute.POSTURE;
-import static java.awt.font.TextAttribute.POSTURE_OBLIQUE;
-import static java.awt.font.TextAttribute.POSTURE_REGULAR;
-import static java.awt.font.TextAttribute.SIZE;
-import static java.awt.font.TextAttribute.SUPERSCRIPT;
-import static java.awt.font.TextAttribute.SUPERSCRIPT_SUB;
-import static java.awt.font.TextAttribute.SUPERSCRIPT_SUPER;
-import static java.awt.font.TextAttribute.UNDERLINE;
-import static java.awt.font.TextAttribute.UNDERLINE_ON;
-import static java.awt.font.TextAttribute.WEIGHT;
-import static java.awt.font.TextAttribute.WEIGHT_BOLD;
-import static java.awt.font.TextAttribute.WEIGHT_REGULAR;
 
 import java.awt.Font;
-import java.awt.Shape;
-import java.awt.font.FontRenderContext;
-import java.awt.font.GraphicAttribute;
-import java.awt.font.ShapeGraphicAttribute;
-import java.awt.font.TextAttribute;
 import java.awt.font.TextLayout;
-import java.text.AttributedString;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -49,21 +19,16 @@ import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.font.FontInfo;
 import com.xenoage.utils.font.FontStyle;
 import com.xenoage.zong.core.text.Alignment;
-import com.xenoage.zong.symbols.PathSymbol;
-import com.xenoage.zong.symbols.Symbol;
 import com.xenoage.zong.text.FormattedText;
 import com.xenoage.zong.text.FormattedTextElement;
 import com.xenoage.zong.text.FormattedTextParagraph;
 import com.xenoage.zong.text.FormattedTextString;
 import com.xenoage.zong.text.FormattedTextStyle;
-import com.xenoage.zong.text.FormattedTextSymbol;
 import com.xenoage.zong.text.Superscript;
 
 /**
  * This class converts a {@link StyledDocument} or a {@link TextLayout}
  * into a {@link FormattedText} or the other way round.
- * 
- * GOON: duplicate with {@link TextLayoutTools}?
  * 
  * @author Andreas Wenger
  */
@@ -165,98 +130,6 @@ public class FormattedTextConverter {
 			line++;
 		}
 		return styledDoc;
-	}
-
-	/**
-	 * Converts the given {@link FormattedText} into a list of
-	 * {@link TextLayout}s, one for each paragraph. Line breaking is not done
-	 * within this method, so each paragraph from the given text is transformed into a
-	 * paragraph in the returned text.
-	 * Since {@link TextLayout}s have no alignment, the alignment of the given text
-	 * paragraphs is ignored.
-	 */
-	public List<TextLayout> toTextLayout(FormattedText text, FontRenderContext frc) {
-		List<TextLayout> ret = alist();
-		for (FormattedTextParagraph pSrc : text.getParagraphs()) {
-			StringBuilder textDest = new StringBuilder();
-			ArrayList<Integer> textLengthDest = alist();
-			ArrayList<Map<TextAttribute, Object>> styleDest = alist();
-			for (FormattedTextElement eSrc : pSrc.getElements()) {
-				if (eSrc instanceof FormattedTextString) {
-					//string
-					FormattedTextString fts = (FormattedTextString) eSrc;
-					textDest.append(fts.getText());
-					textLengthDest.add(fts.getText().length());
-					styleDest.add(getTextAttributes(fts.getStyle()));
-				}
-				else {
-					//symbol
-					FormattedTextSymbol fts = (FormattedTextSymbol) eSrc;
-					Symbol symbol = fts.getSymbol();
-					GraphicAttribute graphicAttr = null;
-					if (symbol instanceof PathSymbol) //TODO: support other symbols as well
-					{
-						PathSymbol pathSymbol = (PathSymbol) symbol;
-						graphicAttr = new ShapeGraphicAttribute((Shape) pathSymbol.path,
-							GraphicAttribute.ROMAN_BASELINE, ShapeGraphicAttribute.FILL);
-					}
-					if (graphicAttr != null) {
-						String c = "\ufffc"; //Unicode object replacement character
-						textDest.append(c);
-						Map<TextAttribute, Object> map = map();
-						map.put(TextAttribute.CHAR_REPLACEMENT, graphicAttr);
-						styleDest.add(map);
-						textLengthDest.add(1);
-					}
-				}
-			}
-			//combine all collected elements into a TextLayout
-			AttributedString asDest = new AttributedString(textDest.toString());
-			int pos = 0;
-			for (int i : range(styleDest)) {
-				int length = textLengthDest.get(i);
-				asDest.addAttributes(styleDest.get(i), pos, pos + length);
-				pos += length;
-			}
-			ret.add(new TextLayout(asDest.getIterator(), frc));
-		}
-		return ret;
-	}
-
-	/**
-	 * Converts a {@link FormattedTextStyle} into a map of {@link TextAttribute}s.
-	 */
-	private static Map<TextAttribute, Object> getTextAttributes(FormattedTextStyle style) {
-		Map<TextAttribute, Object> ret = new HashMap<TextAttribute, Object>();
-		//font name
-		Font font = toAwtFont(style.getFont());
-		ret.put(FAMILY, font.getFamily());
-		//font size
-		ret.put(SIZE, font.getSize2D());
-		//color
-		ret.put(FOREGROUND, toAwtColor(style.getColor()));
-		//bold
-		FontStyle fontStyle = style.getFont().getStyle();
-		ret.put(WEIGHT, (fontStyle.isSet(Bold) ? WEIGHT_BOLD : WEIGHT_REGULAR));
-		//italic
-		ret.put(POSTURE, (fontStyle.isSet(Italic) ? POSTURE_OBLIQUE : POSTURE_REGULAR));
-		//underline
-		ret.put(UNDERLINE, (fontStyle.isSet(Underline) ? UNDERLINE_ON : null));
-		//striketrough - TODO
-		//ret.put(TextAttribute.STRIKETHROUGH,
-		//  (style.underline ? TextAttribute.STRIKETHROUGH_ON : null));
-		//superscript
-		switch (style.getSuperscript()) {
-			case Super:
-				ret.put(SUPERSCRIPT, SUPERSCRIPT_SUPER);
-				break;
-			case Sub:
-				ret.put(SUPERSCRIPT, SUPERSCRIPT_SUB);
-				break;
-			default:
-				ret.put(SUPERSCRIPT, null);
-		}
-		return ret;
 	}
 
 	private static FormattedTextStyle getStyleFromAttributeSet(AttributeSet attr) {

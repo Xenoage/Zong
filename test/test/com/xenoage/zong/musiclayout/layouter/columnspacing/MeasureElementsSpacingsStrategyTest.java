@@ -41,7 +41,7 @@ import com.xenoage.zong.musiclayout.spacing.horizontal.VoiceSpacing;
  * 
  * @author Andreas Wenger
  */
-public class MeasureElementsSpacingStrategyTest {
+public class MeasureElementsSpacingsStrategyTest {
 
 	private float paddingWidth = 1;
 	private float clefWidth = 6;

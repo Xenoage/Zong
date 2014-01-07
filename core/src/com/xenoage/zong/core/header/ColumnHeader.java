@@ -10,6 +10,7 @@ import lombok.Data;
 import com.xenoage.utils.annotations.MaybeEmpty;
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.annotations.Untested;
 import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.collections.IList;
 import com.xenoage.utils.exceptions.UnsupportedClassException;
@@ -262,10 +263,8 @@ public final class ColumnHeader
 	 * @param beat     the beat where to add the element. Only needed for
 	 *                 key, tempo, middle barlines and other directions
 	 * @param side     Only needed for barlines           
-	 * 
-	 * Tested by {@link ScoreController#writeColumnElement(Score, BMP, MeasureSide, ColumnElement)}. GOON
 	 */
-	public ColumnElement setColumnElement(ColumnElement element, @MaybeNull Fraction beat,
+	@Untested public ColumnElement setColumnElement(ColumnElement element, @MaybeNull Fraction beat,
 		@MaybeNull MeasureSide side) {
 		if (element instanceof Barline) {
 			Barline barline = (Barline) element;
@@ -303,10 +302,8 @@ public final class ColumnHeader
 
 	/**
 	 * Removes the given {@link ColumnElement}.
-	 * 
-	 * Tested by {@link ScoreController#minusColumnElement(Score, ColumnElement)}. GOON
 	 */
-	public void removeColumnElement(ColumnElement element) {
+	@Untested public void removeColumnElement(ColumnElement element) {
 		if (element instanceof Barline) {
 			//left or right barline
 			if (element == startBarline)
@@ -342,10 +339,8 @@ public final class ColumnHeader
 
 	/**
 	 * Replaces the given {@link ColumnElement} with the other given one.
-	 * 
-	 * Tested by {@link ScoreController#replaceColumnElement(Score, ColumnElement, ColumnElement)}. GOON
 	 */
-	public <T extends ColumnElement> void replaceColumnElement(T oldElement, T newElement) {
+	@Untested public <T extends ColumnElement> void replaceColumnElement(T oldElement, T newElement) {
 		if (newElement instanceof Barline) {
 			Barline newBarline = (Barline) newElement;
 			//left or right barline

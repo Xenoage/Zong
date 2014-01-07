@@ -25,7 +25,7 @@ import com.xenoage.utils.kernel.Tuple3;
 import com.xenoage.zong.commands.core.music.ColumnElementWrite;
 import com.xenoage.zong.commands.core.music.MeasureAdd;
 import com.xenoage.zong.commands.core.music.MeasureElementWrite;
-import com.xenoage.zong.commands.core.music.VoiceCreate;
+import com.xenoage.zong.commands.core.music.VoiceAdd;
 import com.xenoage.zong.commands.core.music.VoiceElementWrite;
 import com.xenoage.zong.core.music.Measure;
 import com.xenoage.zong.core.music.MusicContext;
@@ -230,8 +230,8 @@ public class ScoreTest {
 		//(*) is a private key (not in measure column)
 		Score score = ScoreFactory.create1Staff();
 		new MeasureAdd(score, 1).execute();
-		new VoiceCreate(score.getMeasure(atMeasure(0, 0)), 1).execute();
-		new VoiceCreate(score.getMeasure(atMeasure(0, 1)), 1).execute();
+		new VoiceAdd(score.getMeasure(atMeasure(0, 0)), 1).execute();
+		new VoiceAdd(score.getMeasure(atMeasure(0, 1)), 1).execute();
 		//keys
 		new ColumnElementWrite(new TraditionalKey(1, Mode.Major), score.getColumnHeader(0), fr(0, 4), null).execute();
 		new MeasureElementWrite(new TraditionalKey(-1, Mode.Major), score.getMeasure(atMeasure(0, 1)), fr(0, 4)).execute();

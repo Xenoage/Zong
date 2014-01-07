@@ -402,7 +402,7 @@ public class VoiceElementWriteTest {
 	 */
 	private Score createTestScoreEighths() {
 		Score score = ScoreFactory.create1Staff();
-		new VoiceCreate(score.getMeasure(atMeasure(0, 0)), 1).execute();
+		new VoiceAdd(score.getMeasure(atMeasure(0, 0)), 1).execute();
 		for (int iVoice : range(2)) {
 			Voice voice = score.getVoice(atVoice(0, 0, iVoice));
 			List<Chord> beamChords = new ArrayList<Chord>();

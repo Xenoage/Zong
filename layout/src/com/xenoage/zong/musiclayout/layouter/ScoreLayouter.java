@@ -127,7 +127,7 @@ public class ScoreLayouter {
 
 	/**
 	 * Creates the strategy tree.
-	 * See "Dokumentation/Skizzen/Layoutengine-12-2008/Baum.odg" //GOON
+	 * See "doc/Layoutengine.odg"
 	 */
 	ScoreLayoutStrategy createStrategyTree() {
 		//notation subtree
@@ -135,15 +135,15 @@ public class ScoreLayouter {
 			new NotesAlignmentStrategy(), new AccidentalsAlignmentStrategy(),
 			new StemAlignmentStrategy(), new ArticulationsAlignmentStrategy());
 		//measure column subtree
-		ColumnSpacingStrategy measureColumnSpacingStrategy = new ColumnSpacingStrategy(
+		ColumnSpacingStrategy columnSpacingStrategy = new ColumnSpacingStrategy(
 			new SeparateVoiceSpacingStrategy(), new MeasureElementsSpacingsStrategy(),
 			new BeatOffsetsStrategy(), new BarlinesBeatOffsetsStrategy(),
 			new BeatOffsetBasedVoiceSpacingStrategy(), new LeadingSpacingStrategy(notationStrategy));
 		//complete tree
 		return new ScoreLayoutStrategy(notationStrategy, new BeamedStemDirectionNotationsStrategy(
 			notationStrategy), new VoiceStemDirectionNotationsStrategy(notationStrategy),
-			measureColumnSpacingStrategy, new FrameArrangementStrategy(new SystemArrangementStrategy(
-				measureColumnSpacingStrategy)), new BeamedStemAlignmentNotationsStrategy(),
+			columnSpacingStrategy, new FrameArrangementStrategy(new SystemArrangementStrategy(
+				columnSpacingStrategy)), new BeamedStemAlignmentNotationsStrategy(),
 			new ScoreFrameLayoutStrategy(new StaffStampingsStrategy(),
 				new MusicElementStampingStrategy(), new BeamStampingStrategy(),
 				new SlurStampingStrategy(), new LyricStampingStrategy(), new VoltaStampingStrategy(),

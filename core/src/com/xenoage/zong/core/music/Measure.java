@@ -112,10 +112,8 @@ public class Measure
 	/**
 	 * Adds a key at the given beat. If there is already one, it is replaced
 	 * and returned (otherwise null).
-	 * 
-	 * Tested by the tests for {@link #plusMeasureElement(MeasureElement, Fraction)}. GOON
 	 */
-	public Key setKey(Key key, Fraction beat) {
+	@Untested public Key setKey(Key key, Fraction beat) {
 		if (key != null) {
 			//add key to list. create list if needed
 			key.setParent(this);
@@ -137,10 +135,8 @@ public class Measure
 	/**
 	 * Adds a direction at the given beat. If there is already one, it is not
 	 * replaced, since there may be many directions belonging to a single beat.
-	 * 
-	 * Tested by the tests for {@link #plusMeasureElement(MeasureElement, Fraction)}. GOON
 	 */
-	public void addDirection(Direction direction, Fraction beat) {
+	@Untested public void addDirection(Direction direction, Fraction beat) {
 		direction.setParent(this);
 		if (directions == null)
 			directions = new BeatEList<Direction>();
@@ -151,10 +147,8 @@ public class Measure
 	/**
 	 * Adds an instrument change at the given beat.
 	 * If there is already one, it is replaced and returned (otherwise null).
-	 * 
-	 * Tested by the tests for {@link #plusMeasureElement(MeasureElement, Fraction)}. GOON
 	 */
-	public InstrumentChange setInstrumentChange(InstrumentChange instrumentChange, Fraction beat) {
+	@Untested public InstrumentChange setInstrumentChange(InstrumentChange instrumentChange, Fraction beat) {
 		if (instrumentChange != null) {
 			//add instrumentChange to list. create list if needed
 			instrumentChange.setParent(this);
@@ -177,10 +171,8 @@ public class Measure
 	 * Adds the given {@link MeasureElement} at the given beat. Dependent on its type,
 	 * it may replace elements of the same type, which is then returned (otherwise null).
 	 * See the documentation for the methods working with specific {@link MeasureElement}s.
-	 * 
-	 * Tested by {@link ScoreController#writeMeasureElement(Score, BMP, MeasureElement)}. GOON
 	 */
-	public MeasureElement addMeasureElement(MeasureElement element, Fraction beat) {
+	@Untested public MeasureElement addMeasureElement(MeasureElement element, Fraction beat) {
 		if (element instanceof Clef)
 			return setClef((Clef) element, beat);
 		else if (element instanceof Key)
@@ -198,10 +190,8 @@ public class Measure
 
 	/**
 	 * Removes the given {@link MeasureElement}.
-	 * 
-	 * Tested by {@link ScoreController#minusMeasureElement(Score, MeasureElement)}. GOON
 	 */
-	public void removeMeasureElement(MeasureElement element) {
+	@Untested public void removeMeasureElement(MeasureElement element) {
 		if (element instanceof Clef)
 			clefs.remove((Clef) element);
 		else if (element instanceof Key)
@@ -217,10 +207,8 @@ public class Measure
 
 	/**
 	 * Replaces the given {@link MeasureElement} at the given beat with the other given one.
-	 * 
-	 * Tested by {@link ScoreController#replaceMeasureElement(Score, MeasureElement, MeasureElement)}. GOON
 	 */
-	public <T extends MeasureElement> void replaceMeasureElement(T oldElement, T newElement, Fraction beat) {
+	@Untested public <T extends MeasureElement> void replaceMeasureElement(T oldElement, T newElement, Fraction beat) {
 		if (oldElement instanceof Direction) {
 			directions.remove((Direction) oldElement);
 			directions.add((Direction) newElement, beat);
@@ -238,8 +226,6 @@ public class Measure
 	 * the given beat (depending on the given interval), looking at all voices.
 	 * The private keys of this measure are ignored. They must be queried before and
 	 * used for the last two parameters.
-	 * 
-	 * Tested by {@link ScoreController#getAccidentals(Score, BMP, Interval)}. GOON
 	 *
 	 * @param beat       the maximum beat (inclusive if exclusive, depending on the interval)
 	 * @param interval   where to stop looking ({@link Interval#Before} or

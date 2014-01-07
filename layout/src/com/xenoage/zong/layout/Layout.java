@@ -6,7 +6,7 @@ import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.layout.LP.lp;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,6 +19,7 @@ import com.xenoage.zong.core.format.LayoutFormat;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.layout.frames.FP;
 import com.xenoage.zong.layout.frames.Frame;
+import com.xenoage.zong.layout.frames.GroupFrame;
 import com.xenoage.zong.layout.frames.ScoreFrame;
 import com.xenoage.zong.layout.frames.ScoreFrameChain;
 import com.xenoage.zong.musiclayout.ScoreLP;
@@ -229,7 +230,7 @@ import com.xenoage.zong.util.event.ScoreChangedEvent;
 	 * if it can not be found.
 	 */
 	public ScoreFrameChain getScoreFrameChain(Score score) {
-		for (ScoreFrame frame : iterateScoreFrames()) {
+		for (ScoreFrame frame : getScoreFrames()) {
 			ScoreFrameChain chain = frame.getScoreFrameChain();
 			if (chain != null && chain.getScore() == score)
 				return chain;
@@ -238,28 +239,19 @@ import com.xenoage.zong.util.event.ScoreChangedEvent;
 	}
 
 	/**
-	 * Gets a lazy iterator for all {@link ScoreFrame}s in this layout.
+	 * Gets a list with all {@link ScoreFrame}s in this layout.
 	 */
-	private Iterable<ScoreFrame> iterateScoreFrames() { //GOON
-		return new Iterable<ScoreFrame>() {
-
-			@Override public Iterator<ScoreFrame> iterator() {
-				return new Iterator<ScoreFrame>() {
-
-					@Override public boolean hasNext() {
-						return false;
-					}
-
-					@Override public ScoreFrame next() {
-						return null;
-					}
-
-					@Override public void remove() {
-						throw new UnsupportedOperationException();
-					}
-				};
+	public List<ScoreFrame> getScoreFrames() {
+		List<ScoreFrame> ret = alist();
+		for (Page page : pages) {
+			for (Frame frame : page.getFrames()) {
+				if (frame instanceof ScoreFrame)
+					ret.add((ScoreFrame) frame);
+				else if (frame instanceof GroupFrame)
+					ret.addAll(((GroupFrame) frame).getScoreFrames());
 			}
-		};
+		}
+		return ret;
 	}
 
 }
