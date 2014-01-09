@@ -71,7 +71,7 @@ import com.xenoage.utils.math.Fraction;
 			if (t.numerator == numerator && t.denominator == denominator)
 				return t;
 		//create new TimeType. only the first beat is accentuated.
-		boolean[] beatsAccentuation = new boolean[denominator];
+		boolean[] beatsAccentuation = new boolean[numerator];
 		if (denominator > 0)
 			beatsAccentuation[0] = true;
 		return new TimeType(numerator, denominator, TimeSymbol.Fractional, beatsAccentuation);
