@@ -96,8 +96,9 @@ import com.xenoage.utils.math.Fraction;
 	 * existing ones, but nothing is removed.
 	 */
 	public void addAll(BeatEList<? extends T> list) {
-		for (BeatE<? extends T> e : list)
-			add(e.getElement(), e.getBeat());
+		if (list != null)
+			for (BeatE<? extends T> e : list)
+				add(e.getElement(), e.getBeat());
 	}
 
 	/**

@@ -1,6 +1,7 @@
 package com.xenoage.zong.musiclayout.layouter.columnspacing;
 
 import static com.xenoage.utils.collections.CList.clist;
+import static com.xenoage.utils.iterators.It.it;
 import static com.xenoage.utils.kernel.Tuple2.t;
 import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.zong.core.position.MP.atMeasure;
@@ -11,6 +12,7 @@ import com.xenoage.utils.annotations.MaybeEmpty;
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.collections.IList;
+import com.xenoage.utils.iterators.It;
 import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.Score;
@@ -52,6 +54,7 @@ import com.xenoage.zong.musiclayout.spacing.horizontal.VoiceSpacing;
  * 
  * @author Andreas Wenger
  */
+@SuppressWarnings("unused")
 public class MeasureElementsSpacingsStrategy
 	implements ScoreLayouterStrategy {
 
@@ -83,7 +86,7 @@ public class MeasureElementsSpacingsStrategy
 		Key key0 = null;
 		if (keys.size() > 0 && keys.getFirst().beat.equals(_0))
 			key0 = keys.getFirst().element;
-		if (key0 == null && time == null && clefs.size() == 0) {
+		if (key0 == null && time == null && (clefs == null || clefs.size() == 0)) {
 			//nothing to do
 			return t(MeasureElementsSpacings.empty, originalVoiceSpacings);
 		}
@@ -158,38 +161,40 @@ public class MeasureElementsSpacingsStrategy
 		//clef:           *[clef]*
 		//voice 1:   o            2   
 		//voice 2:       1             o
-		for (BeatE<Clef> ME : clefs) {
-			Fraction MEb = ME.beat;
-			float MEwidth = notations.get(ME.element).getWidth().getWidth();
-
-			//if there is a leading spacing, ignore elements at beat 0
-			if (leadingSpacing && !MEb.isGreater0())
-				continue;
-
-			//find VE1 and VE2 for the current element
-			SpacingElement[] ses = getNearestSpacingElements(MEb, updatedVS, notations);
-			SpacingElement VE1 = ses[0], VE2 = ses[1];
-
-			//if VE1 is unknown, use startOffset. if VE2 is unknown, ignore this element
-			float VE1x = (VE1 != null ? getRightX(VE1, notations) : startOffset);
-			if (VE2 == null)
-				continue;
-			float VE2x = getLeftX(VE2, notations);
-
-			//existing space
-			float ES = VE2x - VE1x - 2 * layoutSettings.spacings.widthDistanceMin;
-			if (ES < MEwidth) {
-				//additional space needed
-				float AS = MEwidth - ES;
-				//move all elements at or after ME.beat
-				VE2x += AS;
-				updatedVS = shiftAfterBeat(updatedVS, AS, MEb);
+		if (clefs != null) {
+			for (BeatE<Clef> ME : clefs) {
+				Fraction MEb = ME.beat;
+				float MEwidth = notations.get(ME.element).getWidth().getWidth();
+	
+				//if there is a leading spacing, ignore elements at beat 0
+				if (leadingSpacing && !MEb.isGreater0())
+					continue;
+	
+				//find VE1 and VE2 for the current element
+				SpacingElement[] ses = getNearestSpacingElements(MEb, updatedVS, notations);
+				SpacingElement VE1 = ses[0], VE2 = ses[1];
+	
+				//if VE1 is unknown, use startOffset. if VE2 is unknown, ignore this element
+				float VE1x = (VE1 != null ? getRightX(VE1, notations) : startOffset);
+				if (VE2 == null)
+					continue;
+				float VE2x = getLeftX(VE2, notations);
+	
+				//existing space
+				float ES = VE2x - VE1x - 2 * layoutSettings.spacings.widthDistanceMin;
+				if (ES < MEwidth) {
+					//additional space needed
+					float AS = MEwidth - ES;
+					//move all elements at or after ME.beat
+					VE2x += AS;
+					updatedVS = shiftAfterBeat(updatedVS, AS, MEb);
+				}
+	
+				//add measure element
+				float MEx = VE2x - layoutSettings.spacings.widthDistanceMin - MEwidth / 2;
+				measureElementsSpacings.add(new SpacingElement(ME.element, ME.beat, MEx));
+	
 			}
-
-			//add measure element
-			float MEx = VE2x - layoutSettings.spacings.widthDistanceMin - MEwidth / 2;
-			measureElementsSpacings.add(new SpacingElement(ME.element, ME.beat, MEx));
-
 		}
 		return t(new MeasureElementsSpacings(measureElementsSpacings.close()), updatedVS);
 	}
