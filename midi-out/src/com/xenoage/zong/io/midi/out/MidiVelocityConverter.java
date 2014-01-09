@@ -115,7 +115,7 @@ public final class MidiVelocityConverter {
 			score);
 		if (latestDynamicsType != null) {
 			int vel[] = new int[2];
-			int velocityFactorAtBeat = -1; /* GOON Settings.getInstance().getSetting(
+			int velocityFactorAtBeat = -1; /* TODO: what is this?  Settings.getInstance().getSetting(
 				latestDynamicsType.get1().name(), "playback-dynamics", -1); */
 			if (velocityFactorAtBeat == -1) {
 				vel[0] = currentVelocity;
@@ -123,7 +123,7 @@ public final class MidiVelocityConverter {
 			else {
 				vel[0] = convertToMidiVelocity(velocityFactorAtBeat);
 			}
-			int subsequentVelocityFactor = velocityFactorAtBeat; /* GOON Settings.getInstance()
+			int subsequentVelocityFactor = velocityFactorAtBeat; /* TODO: what is this?  Settings.getInstance()
 				.getSetting(latestDynamicsType.get1().name() + "_subsequent", "playback-dynamics",
 					velocityFactorAtBeat); */
 

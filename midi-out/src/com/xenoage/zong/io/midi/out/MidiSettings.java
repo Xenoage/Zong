@@ -2,8 +2,6 @@ package com.xenoage.zong.io.midi.out;
 
 import lombok.Getter;
 
-import com.xenoage.zong.core.position.MP;
-
 /**
  * Settings for MIDI files in Zong!.
  * Later, this class may be using dynamically loaded settings instead
@@ -11,13 +9,19 @@ import com.xenoage.zong.core.position.MP;
  * 
  * @author Andreas Wenger
  */
-public class MidiSettings {
+@Getter public class MidiSettings {
 	
 	/** Default volume. */
-	@Getter private static final float defaultVolume = 0.7f;
+	private float defaultVolume = 0.7f;
 
 	/** Tick resolution factor. Even the shortest note has {@value #resolutionFactor} ticks.
 	 * this allows staccato playback for example. */
-	@Getter private static final int resolutionFactor = 8;
+	private int resolutionFactor = 8;
+	
+	/** MIDI note of a strong metronome beat. */
+	private int metronomeStrongBeatNote = 36; //getSetting("MetronomeStrongBeat", "playback")
+	
+	/** MIDI note of a weak metronome beat. */
+	private int metronomeWeakBeatNote = 50; //getSetting("MetronomeWeakBeat", "playback");
 
 }

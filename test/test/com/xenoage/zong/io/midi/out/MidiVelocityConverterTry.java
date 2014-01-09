@@ -33,7 +33,7 @@ import com.xenoage.zong.desktop.io.midi.out.SynthManager;
 import com.xenoage.zong.io.selection.Cursor;
 
 /**
- * Tests fpr {@link MidiVelocityConverter}.
+ * Tests for {@link MidiVelocityConverter}.
  * 
  * @author Uli Teschemacher
  * @author Andreas Wenger

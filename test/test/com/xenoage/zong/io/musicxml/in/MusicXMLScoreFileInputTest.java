@@ -97,7 +97,7 @@ public class MusicXMLScoreFileInputTest {
 			//TEST
 			//ScoreTest.printScore(score);
 		} catch (FileNotFoundException ex) {
-			//file not there. ignore, since copyrighted file. - GOON: ask Michael Good for file license
+			//file not there. ignore, since copyrighted file. - TODO: ask Michael Good for file license
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			fail("Could not load file: " + file);

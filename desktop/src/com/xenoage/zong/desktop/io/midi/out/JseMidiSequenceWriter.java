@@ -7,7 +7,10 @@ import javax.sound.midi.Sequence;
 import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Track;
 
+import com.sun.media.sound.MidiUtils;
+import com.sun.media.sound.MidiUtils.TempoCache;
 import com.xenoage.zong.io.midi.out.MidiSequenceWriter;
+
 
 /**
  * Java SE implementation of a {@link MidiSequenceWriter}.
@@ -19,6 +22,7 @@ public class JseMidiSequenceWriter
 
 	private Sequence sequence = null;
 	private Track[] tracks;
+	private TempoCache tempoCache = null;
 
 
 	@Override public void init(int tracksCount, int resolutionPpq) {
@@ -53,10 +57,21 @@ public class JseMidiSequenceWriter
 		} catch (InvalidMidiDataException ex) {
 			//ignore - TODO
 		}
+		//when it is a tempo change, the tempo cache is obsolete
+		if (type == typeTempo)
+			tempoCache = null;
 	}
 
 	@Override public long getLength() {
 		return sequence.getTickLength();
+	}
+	
+	@Override public long tickToMicrosecond(long tick) {
+		//recompute tempo cache if required
+		if (tempoCache == null)
+			tempoCache = new TempoCache(sequence);
+		//compute position
+	  return MidiUtils.tick2microsecond(sequence, tick, tempoCache);
 	}
 
 	@Override protected Sequence getSequence() {

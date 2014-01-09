@@ -1,4 +1,4 @@
-package com.xenoage.zong.test;
+package com.xenoage.zong.io.musicxml;
 
 import static com.xenoage.zong.musicxml.util.PlainMusicXMLFilenameFilter.plainMusicXMLFilenameFilter;
 

@@ -3,6 +3,7 @@ package com.xenoage.zong.io.midi.out;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Fraction.fr;
+import static com.xenoage.zong.core.position.MP.atBeat;
 import static com.xenoage.zong.core.position.MP.getMP;
 import static com.xenoage.zong.io.midi.out.MidiVelocityConverter.getVelocityAtPosition;
 import static com.xenoage.zong.io.midi.out.MidiVelocityConverter.getVoiceforDynamicsInStaff;
@@ -28,6 +29,7 @@ import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.Note;
 import com.xenoage.zong.core.music.time.Time;
+import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.io.midi.out.Playlist.PlayRange;
 
 /**
@@ -50,6 +52,7 @@ public class MidiConverter<T> {
 	
 	//state
 	private Score score;
+	private MidiSettings settings;
 	private MidiSequenceWriter<T> writer;
 	private boolean addMPEvents;
 	private boolean metronome;
@@ -87,6 +90,7 @@ public class MidiConverter<T> {
 	private MidiConverter(Score score, MidiSequenceWriter<T> writer, boolean addMPEvents,
 		boolean metronome, Fraction durationFactor) {
 		this.score = score;
+		this.settings = new MidiSettings(); //TODO: by parameter
 		this.writer = writer;
 		this.addMPEvents = addMPEvents;
 		this.metronome = metronome;
@@ -112,7 +116,7 @@ public class MidiConverter<T> {
 			tracksCount++;
 		}
 		//resolution in ticks per quarter
-		resolution = score.getDivisions() * MidiSettings.getResolutionFactor();
+		resolution = score.getDivisions() * settings.getResolutionFactor();
 		//init writer
 		writer.init(tracksCount, resolution);
 		
@@ -418,34 +422,31 @@ public class MidiConverter<T> {
 		List<SortedList<Fraction>> usedBeatsMeasures = CollectionUtils.alist();
 		for (int i : range(score.getMeasuresCount()))
 			usedBeatsMeasures.add(score.getMeasureUsedBeats(i));
-/* GOON
-		TempoCache tempoCache = new TempoCache(sequence);
-
 		int imeasure = 0;
-		for (PlayRange playRange : playlist.ranges) {
+		for (PlayRange playRange : playlist.getRanges()) {
 
 			for (int i : range(playRange.from.measure, playRange.to.measure)) {
 				SortedList<Fraction> usedBeats = usedBeatsMeasures.get(i);
 
 				Fraction start, end;
-				start = clipToMeasure(score, playRange.from.measure, playRange.from).beat;
-				end = clipToMeasure(score, playRange.to.measure, playRange.to).beat;
+				start = score.clipToMeasure(playRange.from.measure, playRange.from).beat;
+				end = score.clipToMeasure(playRange.to.measure, playRange.to).beat;
 
 				for (Fraction fraction : usedBeats) {
 					//only add, if beats are between start and end
 					if (fraction.compareTo(start) > -1 && fraction.compareTo(end) < 1) {
 						long tick = measureStartTicks.get(imeasure) +
 							calculateTickFromFraction(fraction.sub(start), resolution);
-						addEventToTrack(controltrack, tick, ShortMessage.CONTROL_CHANGE, channel, 119, 0);
+						writer.writeControlChange(systemTrackIndex, 0, tick, MidiEvents.eventPlaybackControl, 0);
 
-						BMP bmp = bmp(1, i, -1, fraction);
-						long ms = MidiUtils.tick2microsecond(sequence, tick, tempoCache) / 1000;
+						MP bmp = atBeat(1, i, -1, fraction);
+						long ms = writer.tickToMicrosecond(tick) / 1000;
 						timePoolOpen.add(new MidiTime(tick, bmp, ms));
 					}
 				}
 				imeasure++;
 			}
-		}*/
+		}
 	}
 
 	/**
@@ -453,10 +454,8 @@ public class MidiConverter<T> {
 	 */
 	private void createMetronomeTrack(int track, Playlist playlist, List<Long> measureStartTicks) {
 		// Load Settings
-		int metronomeStrongBeatNote = 36; /* GOON Settings.getInstance().getSetting("MetronomeStrongBeat",
-			"playback", 36); */
-		int metronomeWeakBeatNote = 50; /* GOON Settings.getInstance().getSetting("MetronomeWeakBeat", "playback",
-			50); */
+		int metronomeStrongBeatNote = settings.getMetronomeStrongBeatNote();
+		int metronomeWeakBeatNote = settings.getMetronomeWeakBeatNote();
 
 		int imeasure = 0;
 		for (PlayRange playRange : playlist.getRanges()) {

@@ -28,6 +28,7 @@ public class MidiScorePlayerTry
 		MidiScorePlayer player = midiScorePlayer();
 		player.addPlaybackListener(new MidiScorePlayerTry());
 		player.openScore(score);
+		System.out.println("Play");
 		player.start();
 		try {
 			Thread.sleep(2 * timeFactor);
@@ -39,6 +40,7 @@ public class MidiScorePlayerTry
 			Thread.sleep(2 * timeFactor);
 		} catch (InterruptedException ex) {
 		}
+		System.out.println("Play");
 		player.start();
 		try {
 			Thread.sleep(3 * timeFactor);

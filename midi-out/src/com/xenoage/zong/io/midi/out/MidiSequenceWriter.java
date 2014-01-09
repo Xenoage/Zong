@@ -17,17 +17,17 @@ import com.xenoage.zong.core.position.MP;
 public abstract class MidiSequenceWriter<T> {
 
 	//controller numbers
-	private static final int controllerVolume = 7;
-	private static final int controllerPan = 10;
+	protected static final int controllerVolume = 7;
+	protected static final int controllerPan = 10;
 	
 	//short message commands
-	private static final int commandProgramChange = 0xC0; //192
-	private static final int commandControlChange = 0xB0; //176
-	private static final int commandNoteOn        = 0x90; //144
-	private static final int commandNoteOff       = 0x80; //128
+	protected static final int commandProgramChange = 0xC0; //192
+	protected static final int commandControlChange = 0xB0; //176
+	protected static final int commandNoteOn        = 0x90; //144
+	protected static final int commandNoteOff       = 0x80; //128
 	
 	//meta message types
-	private static final int typeTempo            = 0x51; //81
+	protected static final int typeTempo            = 0x51; //81
 	
 
 
@@ -131,6 +131,12 @@ public abstract class MidiSequenceWriter<T> {
 	 * Gets the current length of the sequence in ticks.
 	 */
 	public abstract long getLength();
+	
+	/**
+	 * Gets the position in microseconds of the given tick.
+	 * This method is aware of all tempo changes written so far.
+	 */
+	public abstract long tickToMicrosecond(long tick);
 	
 	/**
 	 * Converts the given value in beats per minutes into microseconds per beat.

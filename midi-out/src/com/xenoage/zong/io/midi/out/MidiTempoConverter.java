@@ -25,7 +25,7 @@ public class MidiTempoConverter {
 	 * Only tempos found in the {@link ColumnHeader}s are used.
 	 */
 	public static void writeTempoTrack(Score score, Playlist playList, int resolution,
-		MidiSequenceWriter writer, int track) {
+		MidiSequenceWriter<?> writer, int track) {
 		long measurestarttick = 0;
 		for (PlayRange playRange : playList.getRanges()) {
 			for (int iMeasure : range(playRange.from.measure, playRange.to.measure)) {

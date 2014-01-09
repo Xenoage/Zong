@@ -38,7 +38,7 @@ public class MidiScorePlayer
 	private MidiSequence<Sequence> sequence = null;
 	private WeakList<PlaybackListener> listeners = new WeakList<PlaybackListener>();
 	private boolean metronomeEnabled;
-	private float volume = MidiSettings.getDefaultVolume();
+	private float volume = new MidiSettings().getDefaultVolume(); //TODO
 	private int currentPosition;
 	private TimeThread timeThread = new TimeThread();
 
@@ -59,7 +59,6 @@ public class MidiScorePlayer
 	}
 
 	private MidiScorePlayer() {
-		volume = MidiSettings.getDefaultVolume();
 		setVolume(volume);
 		SynthManager.removeAllControllerEventListeners();
 

@@ -79,7 +79,7 @@ public class StavesListReaderTest {
 			doc = MusicXMLDocument.read(platformUtils().createXmlReader(
 				platformUtils().openFile(filePath)));
 		} catch (FileNotFoundException ex) {
-			//file not there. ignore, since copyrighted file. - GOON: ask Michael Good for file license
+			//file not there. ignore, since copyrighted file. - TODO: ask Michael Good for file license
 			return null;
 		} catch (Exception ex) {
 			fail(ex.toString());
