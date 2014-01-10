@@ -14,7 +14,7 @@ import org.junit.Test;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.util.InconsistentScoreException;
 import com.xenoage.zong.desktop.io.midi.out.JseMidiSequenceWriter;
-import com.xenoage.zong.io.musicxml.in.MusicXMLScoreFileInput;
+import com.xenoage.zong.io.musicxml.in.MusicXmlScoreFileInput;
 import com.xenoage.zong.io.musicxml.in.MusicXMLScoreFileInputTest;
 
 /**
@@ -28,7 +28,7 @@ public class MidiConverterTest {
 		boolean writeFiles = false;
 		for (String file : MusicXMLScoreFileInputTest.getSampleFiles()) {
 			try {
-				Score score = new MusicXMLScoreFileInput().read(platformUtils().openFile(file), file);
+				Score score = new MusicXmlScoreFileInput().read(platformUtils().openFile(file), file);
 				MidiSequence<Sequence> sequence = MidiConverter.convertToSequence(
 					score, true, true, new JseMidiSequenceWriter());
 				if (writeFiles) {

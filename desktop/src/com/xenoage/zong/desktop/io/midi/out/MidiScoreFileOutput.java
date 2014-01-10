@@ -17,7 +17,7 @@ import com.xenoage.zong.io.midi.out.MidiSequence;
 
 
 /**
- * This class writes a Midi-file from a given {@link Score}.
+ * This class writes a MIDI file from a given {@link Score}.
  * 
  * @author Andreas Wenger
  * @author Uli Teschemacher
@@ -34,11 +34,7 @@ public class MidiScoreFileOutput
 		throws IOException {
 		MidiSequence<Sequence> sequence = MidiConverter.convertToSequence(score, false, false,
 			new JseMidiSequenceWriter());
-		int[] types = MidiSystem.getMidiFileTypes(sequence.getSequence());
-		int type = 0;
-		if (types.length != 0) {
-			type = types[types.length - 1];
-		}
+		int type = getPreferredMidiType(sequence.getSequence());
 		MidiSystem.write(sequence.getSequence(), type, new JseOutputStream(stream));
 		log(remark("Midi file written in format " + type));
 	}
@@ -47,4 +43,15 @@ public class MidiScoreFileOutput
 		return false;
 	}
 
+	/**
+	 * Gets the preferred MIDI type. This is a "Standard-MIDI-File Type 1" file.
+	 */
+	public static int getPreferredMidiType(Sequence sequence) {
+		int[] types = MidiSystem.getMidiFileTypes(sequence);
+		int type = 0;
+		if (types.length != 0) {
+			type = types[types.length - 1];
+		}
+		return type;
+	}
 }

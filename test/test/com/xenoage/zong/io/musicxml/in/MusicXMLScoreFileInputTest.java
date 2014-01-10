@@ -16,7 +16,7 @@ import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.util.InconsistentScoreException;
 
 /**
- * Tests for the {@link MusicXMLScoreFileInput} class.
+ * Tests for the {@link MusicXmlScoreFileInput} class.
  * 
  * @author Andreas Wenger
  */
@@ -37,7 +37,7 @@ public class MusicXMLScoreFileInputTest {
 		long startTime = System.currentTimeMillis();
 		for (String file : getSampleFiles()) {
 			try {
-				Score score = new MusicXMLScoreFileInput().read(platformUtils().openFile(file), file);
+				Score score = new MusicXmlScoreFileInput().read(platformUtils().openFile(file), file);
 				System.out.println("Loaded: " + file);
 			} catch (InconsistentScoreException ex) {
 				ex.printStackTrace();
@@ -79,7 +79,7 @@ public class MusicXMLScoreFileInputTest {
 	public static Score loadXMLTestScore(String filename) {
 		try {
 			String filepath = "data/test/scores/test/" + filename;
-			return new MusicXMLScoreFileInput().read(platformUtils().openFile(filepath), filepath);
+			return new MusicXmlScoreFileInput().read(platformUtils().openFile(filepath), filepath);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			fail("Could not load file: " + filename);
@@ -93,7 +93,7 @@ public class MusicXMLScoreFileInputTest {
 	@Test public void testSingleFile() {
 		String file = dir20 + "BeetAnGeSample.xml";
 		try {
-			new MusicXMLScoreFileInput().read(platformUtils().openFile(file), file);
+			new MusicXmlScoreFileInput().read(platformUtils().openFile(file), file);
 			//TEST
 			//ScoreTest.printScore(score);
 		} catch (FileNotFoundException ex) {

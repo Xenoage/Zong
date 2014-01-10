@@ -24,9 +24,9 @@ public class ScoreDoc
 	implements Document {
 
 	/** The score. */
-	private Score score;
+	@Getter private Score score;
 	/** The layout of the document. */
-	private Layout layout;
+	@Getter private Layout layout;
 	
 	/** Performs commands on this score document and supports undo. */
 	@Getter private CommandPerformer commandPerformer = new CommandPerformer(this);

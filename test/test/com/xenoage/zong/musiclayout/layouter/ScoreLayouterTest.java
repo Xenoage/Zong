@@ -9,7 +9,7 @@ import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.desktop.io.musiclayout.LayoutSettingsReader;
 import com.xenoage.zong.desktop.io.symbols.SymbolPoolReader;
-import com.xenoage.zong.io.musicxml.in.MusicXMLScoreFileInput;
+import com.xenoage.zong.io.musicxml.in.MusicXmlScoreFileInput;
 import com.xenoage.zong.io.musicxml.in.MusicXMLScoreFileInputTest;
 import com.xenoage.zong.musiclayout.layouter.notation.AccidentalsAlignmentStrategy;
 import com.xenoage.zong.musiclayout.layouter.notation.ArticulationsAlignmentStrategy;
@@ -39,7 +39,7 @@ public class ScoreLayouterTest {
 		for (String file : MusicXMLScoreFileInputTest.getSampleFiles()) {
 			try {
 				//System.out.println(file);
-				Score score = new MusicXMLScoreFileInput().read(platformUtils().openFile(file), file);
+				Score score = new MusicXmlScoreFileInput().read(platformUtils().openFile(file), file);
 				Size2f areaSize = new Size2f(150, 10000);
 				new ScoreLayouter(score, symbolPool, layoutSettings, false, areaSize).createLayoutWithExceptions();
 			} catch (Exception ex) {

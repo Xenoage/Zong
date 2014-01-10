@@ -13,5 +13,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/renderer"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/itext"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/vorbis-java"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/musicxml-in"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

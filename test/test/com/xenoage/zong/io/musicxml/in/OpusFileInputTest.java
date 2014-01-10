@@ -38,7 +38,7 @@ public class OpusFileInputTest {
 			try {
 				assertTrue(scoreExpected + " not found", scores.contains(scoreExpected));
 				String filePath = dir + "/" + scoreExpected;
-				FileReader.loadScores(platformUtils().openFile(filePath), filePath, new AllFilter<String>());
+				MusicXmlFileReader.loadScores(platformUtils().openFile(filePath), filePath, new AllFilter<String>());
 			} catch (Exception ex) {
 				throw new Exception("Failed to load " + scoreExpected, ex);
 			}

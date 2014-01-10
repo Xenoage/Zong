@@ -155,7 +155,7 @@ public class CompressedFileInput {
 			case Compressed:
 				return loadCompressedScore(path);
 			case XMLScorePartwise:
-				return new MusicXMLScoreFileInput().read(bis, path);
+				return new MusicXmlScoreFileInput().read(bis, path);
 			case XMLScoreTimewise:
 				throw new IllegalStateException("score-timewise is currently not implemented");
 			default:
