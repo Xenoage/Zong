@@ -5,10 +5,11 @@ import com.xenoage.utils.document.io.SupportedFormats;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.desktop.io.midi.out.MidiScoreDocFileOutput;
 import com.xenoage.zong.desktop.io.mp3.out.Mp3ScoreDocFileOutput;
-import com.xenoage.zong.desktop.io.ogg.out.OggScoreFileOutput;
+import com.xenoage.zong.desktop.io.musicxml.in.MusicXmlScoreDocFileInput;
+import com.xenoage.zong.desktop.io.ogg.out.OggScoreDocFileOutput;
 import com.xenoage.zong.desktop.io.pdf.out.PdfScoreDocFileOutput;
 import com.xenoage.zong.desktop.io.png.out.PngScoreDocFileOutput;
-import com.xenoage.zong.desktop.io.wav.out.WavScoreFileOutput;
+import com.xenoage.zong.desktop.io.wav.out.WavScoreDocFileOutput;
 import com.xenoage.zong.documents.ScoreDoc;
 
 /**
@@ -20,7 +21,7 @@ import com.xenoage.zong.documents.ScoreDoc;
 public class ConverterSupportedFormats
 	extends SupportedFormats<ScoreDoc> {
 
-	private ConverterSupportedFormats() {
+	public ConverterSupportedFormats() {
 		//Midi (write only)
 		formats.add(new FileFormat<ScoreDoc>("mid", "MIDI", ".mid", new String[0],
 			null, new MidiScoreDocFileOutput()));
@@ -29,34 +30,27 @@ public class ConverterSupportedFormats
 			null, new Mp3ScoreDocFileOutput()));
 		//MusicXML (read only)
 		formats.add(new FileFormat<ScoreDoc>("mxl", "MusicXML", ".mxl", new String[]{".xml"},
-			null, new MusicXMLScoreDocFileInput(), null));
+			new MusicXmlScoreDocFileInput(), null));
 		//OGG (write only)
-		formats = formats
-			.plus(new ScoreFileFormat(FileFormats.OGG.info, null, new OggScoreFileOutput()));
+		formats.add(new FileFormat<ScoreDoc>("ogg", "OGG Vorbis", ".ogg", new String[0],
+			null, new OggScoreDocFileOutput()));
 		//PDF (write only)
-		formats = formats.plus(new ScoreFileFormat(FileFormats.PDF.info, null,
-			new PdfScoreDocFileOutput()));
+		formats.add(new FileFormat<ScoreDoc>("pdf", "PDF", ".pdf", new String[0],
+			null, new PdfScoreDocFileOutput()));
 		//PNG (write only)
-		formats = formats.plus(new ScoreFileFormat(FileFormats.PNG.info, null,
-			new PngScoreDocFileOutput()));
+		formats.add(new FileFormat<ScoreDoc>("png", "PNG", ".png", new String[0],
+			null, new PngScoreDocFileOutput()));
 		//WAV (write only)
-		formats = formats
-			.plus(new ScoreFileFormat(FileFormats.WAV.info, null, new WavScoreFileOutput()));
-		return formats;
+		formats.add(new FileFormat<ScoreDoc>("wav", "WAV", ".wav", new String[0],
+			null, new WavScoreDocFileOutput()));
 	}
 
-	public static ConverterScoreFormats getInstance() {
-		if (instance == null)
-			instance = new ConverterScoreFormats();
-		return instance;
+	@Override public FileFormat<ScoreDoc> getReadDefaultFormat() {
+		return getByID("mxl");
 	}
 
-	@Override public ScoreFileFormat getReadDefaultFormat() {
-		return getByID(FileFormats.MusicXML.info.id);
-	}
-
-	@Override public ScoreFileFormat getWriteDefaultFormat() {
-		return getByID(FileFormats.PDF.info.id);
+	@Override public FileFormat<ScoreDoc> getWriteDefaultFormat() {
+		return getByID("pdf");
 	}
 
 }

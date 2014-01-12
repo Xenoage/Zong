@@ -21,7 +21,7 @@ public class Lyric
 	/** The text. Usually a single syllable. Or null, if type is {@link SyllableType#Extend}. */
 	@Getter private Text text;
 	/** The position of the syllable within the lyrics. */
-	@Getter @Setter @NonNull private SyllableType syllableType;
+	@Getter @NonNull private SyllableType syllableType;
 	/** The verse number. 0 is the first one. */
 	@Getter @Setter private int verse;
 	
@@ -31,7 +31,9 @@ public class Lyric
 
 	public Lyric(Text text, SyllableType syllableType, int verse) {
 		checkArgsNotNull(syllableType);
-		
+		if (syllableType != SyllableType.Extend)
+			checkArgsNotNull(text);
+		this.text = text;
 		this.syllableType = syllableType;
 		this.verse = verse;
 	}

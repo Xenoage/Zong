@@ -2,6 +2,7 @@ package com.xenoage.zong.musiclayout.layouter.scoreframelayout;
 
 import static com.xenoage.utils.NullUtils.notNull;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static com.xenoage.utils.iterators.It.it;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.core.music.format.SP.sp;
 import static com.xenoage.zong.core.position.MP.atBeat;
@@ -12,6 +13,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.xenoage.utils.iterators.It;
 import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.utils.kernel.Tuple3;
 import com.xenoage.utils.math.VSide;
@@ -317,35 +319,37 @@ public class ScoreFrameLayoutStrategy
 					//add directions - TODO
 					BeatEList<Direction> directionsWithBeats = score.getMeasure(
 						MP.atMeasure(iStaff, iMeasure + system.getStartMeasureIndex())).getDirections();
-					//over first staff, also add tempo directions for the whole column
-					if (iStaff == 0) {
-						directionsWithBeats.addAll(header.getColumnHeader(globalMeasureIndex).getTempos());
-					}
-					for (BeatE<Direction> elementWithBeat : directionsWithBeats) {
-						Direction element = elementWithBeat.element;
-						Stamping stamping = null;
-						if (element instanceof Tempo) {
-							stamping = directionStampingStrategy.createTempo((Tempo) element,
-								atBeat(iStaff, iMeasure + system.getStartMeasureIndex(), -1, elementWithBeat.beat),
-								staff, lc.getSymbolPool());
+					if (directionsWithBeats != null) {
+						//over first staff, also add tempo directions for the whole column
+						if (iStaff == 0) {
+							directionsWithBeats.addAll(header.getColumnHeader(globalMeasureIndex).getTempos());
 						}
-						else if (element instanceof Dynamics) {
-							stamping = directionStampingStrategy.createDynamics((Dynamics) element,
-								atBeat(iStaff, iMeasure + system.getStartMeasureIndex(), -1, elementWithBeat.beat),
-								staff, lc.getSymbolPool());
+						for (BeatE<Direction> elementWithBeat : directionsWithBeats) {
+							Direction element = elementWithBeat.element;
+							Stamping stamping = null;
+							if (element instanceof Tempo) {
+								stamping = directionStampingStrategy.createTempo((Tempo) element,
+									atBeat(iStaff, iMeasure + system.getStartMeasureIndex(), -1, elementWithBeat.beat),
+									staff, lc.getSymbolPool());
+							}
+							else if (element instanceof Dynamics) {
+								stamping = directionStampingStrategy.createDynamics((Dynamics) element,
+									atBeat(iStaff, iMeasure + system.getStartMeasureIndex(), -1, elementWithBeat.beat),
+									staff, lc.getSymbolPool());
+							}
+							else if (element instanceof Pedal) {
+								stamping = directionStampingStrategy.createPedal((Pedal) element,
+									atBeat(iStaff, iMeasure + system.getStartMeasureIndex(), -1, elementWithBeat.beat),
+									staff, lc.getSymbolPool());
+							}
+							else if (element instanceof Words) {
+								stamping = directionStampingStrategy.createWords((Words) element,
+									atBeat(iStaff, iMeasure + system.getStartMeasureIndex(), -1, elementWithBeat.beat),
+									staff);
+							}
+							if (stamping != null)
+								otherStampsPool.add(stamping);
 						}
-						else if (element instanceof Pedal) {
-							stamping = directionStampingStrategy.createPedal((Pedal) element,
-								atBeat(iStaff, iMeasure + system.getStartMeasureIndex(), -1, elementWithBeat.beat),
-								staff, lc.getSymbolPool());
-						}
-						else if (element instanceof Words) {
-							stamping = directionStampingStrategy.createWords((Words) element,
-								atBeat(iStaff, iMeasure + system.getStartMeasureIndex(), -1, elementWithBeat.beat),
-								staff);
-						}
-						if (stamping != null)
-							otherStampsPool.add(stamping);
 					}
 
 					//now begin with the voices
@@ -517,7 +521,7 @@ public class ScoreFrameLayoutStrategy
 		}
 
 		//ties and slurs
-		for (Slur slur : chordElement.getSlurs()) {
+		for (Slur slur : it(chordElement.getSlurs())) {
 			SlurWaypoint wp = slur.getWaypoint(chordElement);
 			WaypointPosition pos = slur.getWaypointPosition(chordElement);
 			int noteIndex = notNull(wp.getNoteIndex(), 0); //TODO: choose top/bottom
@@ -560,7 +564,7 @@ public class ScoreFrameLayoutStrategy
 
 		//lyric
 		List<Lyric> lyrics = chordElement.getLyrics();
-		if (lyrics.size() > 0) {
+		if (lyrics != null && lyrics.size() > 0) {
 			float baseLine = -10;
 
 			for (Lyric lyric : lyrics) {

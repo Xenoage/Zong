@@ -158,8 +158,8 @@ public class ScoreLayouter {
 	 */
 	public static String getName(Class<?> strategyClass) {
 		String className = strategyClass.getName();
-		if (className.startsWith(Zong.PACKAGE + "."))
-			className = className.substring((Zong.PACKAGE + ".").length());
+		if (className.startsWith(Zong.projectPackage + "."))
+			className = className.substring((Zong.projectPackage + ".").length());
 		return Lang.get(voc(className));
 	}
 

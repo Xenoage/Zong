@@ -1,5 +1,6 @@
 package com.xenoage.zong.desktop.util.text;
 
+import static com.xenoage.utils.NullUtils.notNull;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.jse.color.AwtColorUtils.toAwtColor;
 import static com.xenoage.utils.jse.font.AwtFontUtils.toAwtFont;
@@ -14,9 +15,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.sun.istack.internal.NotNull;
+import com.xenoage.utils.NullUtils;
+import com.xenoage.utils.font.FontInfo;
 import com.xenoage.utils.font.FontStyle;
 import com.xenoage.zong.core.text.Alignment;
 import com.xenoage.zong.desktop.renderer.symbols.SymbolGraphicAttribute;
+import com.xenoage.zong.io.musicxml.in.readers.FontInfoReader;
 import com.xenoage.zong.symbols.Symbol;
 import com.xenoage.zong.text.FormattedText;
 import com.xenoage.zong.text.FormattedTextElement;
@@ -117,15 +122,16 @@ public class TextLayoutTools {
 	 */
 	private static Map<TextAttribute, Object> createAttributesMap(FormattedTextStyle style) {
 		Map<TextAttribute, Object> ret = new HashMap<TextAttribute, Object>();
+		FontInfo fontInfo = notNull(style.getFont(), FontInfo.defaultValue);
 		//font name
-		Font font = toAwtFont(style.getFont());
+		Font font = toAwtFont(fontInfo);
 		ret.put(TextAttribute.FAMILY, font.getFamily());
 		//font size
 		ret.put(TextAttribute.SIZE, font.getSize2D());
 		//color
 		ret.put(TextAttribute.FOREGROUND, toAwtColor(style.getColor()));
 		//bold
-		FontStyle fontStyle = style.getFont().getStyle();
+		FontStyle fontStyle = fontInfo.getStyle();
 		ret.put(TextAttribute.WEIGHT, (fontStyle.isSet(FontStyle.Bold) ? TextAttribute.WEIGHT_BOLD
 			: TextAttribute.WEIGHT_REGULAR));
 		//italic

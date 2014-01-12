@@ -30,19 +30,19 @@ public class Mp3ScoreFileOutput
 
 	@Override public void write(Score score, OutputStream stream, String filePath)
 		throws IOException {
-		writeMP3(score, new JseOutputStream(stream));
+		writeMp3(score, new JseOutputStream(stream));
 	}
 
 	/**
 	 * Writes the given score as a MP3 into the given stream.
 	 */
-	public static void writeMP3(Score score, java.io.OutputStream stream)
+	public static void writeMp3(Score score, java.io.OutputStream stream)
 		throws IOException {
 		//look if LAME is installed
 		try {
 			Runtime.getRuntime().exec("lame");
 		} catch (Exception ex) {
-			handle(warning(Lang.get(Voc.CouldNotFindLAME, Zong.WEBSITE + "/lame")));
+			handle(warning(Lang.get(Voc.CouldNotFindLAME, Zong.website + "/lame")));
 		}
 		//save temporary WAVE file first
 		File tempWAVFile = File.createTempFile(Mp3ScoreFileOutput.class.getName(), ".wav");

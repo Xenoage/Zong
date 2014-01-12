@@ -7,6 +7,6 @@
 <listEntry value="1"/>
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.xenoage.zong.converter.Converter"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="--convert ../shared/data/test/scores/musicxml20/BeetAnGeSample.xml ../shared/data/test/temp/BeetAnGeSample.png PNG"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="--convert ../shared/data/test/scores/musicxml20/BeetAnGeSample.xml ../shared/data/test/temp/BeetAnGeSample.wav WAV"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="converter"/>
 </launchConfiguration>

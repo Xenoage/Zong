@@ -20,8 +20,16 @@ public class OggScoreFileOutput
 
 	@Override public void write(Score score, OutputStream stream, String filePath)
 		throws IOException {
+		writeOgg(score, new JseOutputStream(stream));
+	}
+	
+	/**
+	 * Writes the given score as a OGG Vorbis file into the given stream.
+	 */
+	public static void writeOgg(Score score, java.io.OutputStream stream)
+		throws IOException {
 		//save temporary WAVE file first
-		File tempFile = File.createTempFile(getClass().getName(), ".wav");
+		File tempFile = File.createTempFile(OggScoreFileOutput.class.getName(), ".wav");
 		new WavScoreFileOutput().write(score, new JseOutputStream(new FileOutputStream(tempFile)),
 			tempFile.getAbsolutePath());
 		//convert to ogg
@@ -30,7 +38,7 @@ public class OggScoreFileOutput
 	}
 
 	@Override public boolean isFilePathRequired(Score document) {
-		return true;
+		return false;
 	}
-
+	
 }

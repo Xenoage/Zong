@@ -31,7 +31,7 @@ public class POCreator {
 		PrintStream out = new PrintStream(filename, "UTF-8");
 		//header
 		out.println("# " + Zong.getNameAndVersion("Vocabulary"));
-		out.println("# " + Zong.COPYRIGHT);
+		out.println("# " + Zong.copyright);
 		out.println("msgid \"\"");
 		out.println("msgstr \"\"");
 		out.println("\"Project-Id-Version: " + Zong.getNameAndVersion("Vocabulary") + "\\n\"");

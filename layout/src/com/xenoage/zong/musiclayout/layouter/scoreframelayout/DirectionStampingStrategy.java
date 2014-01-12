@@ -2,6 +2,7 @@ package com.xenoage.zong.musiclayout.layouter.scoreframelayout;
 
 import static com.xenoage.utils.NullUtils.notNull;
 import static com.xenoage.utils.collections.CList.clist;
+import static com.xenoage.utils.iterators.It.it;
 import static com.xenoage.zong.core.music.format.Position.asPosition;
 import static com.xenoage.zong.core.music.format.SP.sp;
 import static com.xenoage.zong.musiclayout.text.DefaultTexts.getTempoTextNotNull;
@@ -10,6 +11,7 @@ import static com.xenoage.zong.text.FormattedTextUtils.styleText;
 
 import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.collections.IList;
+import com.xenoage.utils.iterators.It;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.direction.Direction;
 import com.xenoage.zong.core.music.direction.Dynamics;
@@ -58,7 +60,7 @@ public class DirectionStampingStrategy
 	public IList<StaffTextStamping> createForChord(Chord chord, ChordStampings chordStampings,
 		SymbolPool symbolPool) {
 		CList<StaffTextStamping> ret = CList.clist();
-		for (Direction direction : chord.getDirections()) {
+		for (Direction direction : it(chord.getDirections())) {
 			if (direction instanceof Dynamics) {
 				ret.add(createDynamics((Dynamics) direction, MP.getMP(chord), chord, chordStampings, symbolPool));
 			}

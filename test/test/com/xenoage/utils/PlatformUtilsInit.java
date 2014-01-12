@@ -14,7 +14,7 @@ public class PlatformUtilsInit {
 	
 	public static void init() {
 		PlatformUtils.init(new JsePlatformUtils());
-		DesktopIO.init(Zong.PACKAGE + "-test");
+		DesktopIO.init(Zong.projectPackage + "-test");
 	}
 
 }

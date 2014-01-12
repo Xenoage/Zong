@@ -28,6 +28,14 @@ public class WavScoreFileOutput
 
 	@Override public void write(Score score, OutputStream stream, String filePath)
 		throws IOException {
+		writeWav(score, new JseOutputStream(stream));
+	}
+	
+	/**
+	 * Writes the given score as a WAV file into the given stream.
+	 */
+	public static void writeWav(Score score, java.io.OutputStream stream)
+		throws IOException {
 		//save WAVE file
 		try {
 			Fraction noteLength = fr(100, 100); //each note 100% length

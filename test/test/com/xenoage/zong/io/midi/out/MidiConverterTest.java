@@ -7,15 +7,13 @@ import java.io.File;
 
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequence;
-import javax.sound.midi.spi.MidiFileWriter;
 
 import org.junit.Test;
 
 import com.xenoage.zong.core.Score;
-import com.xenoage.zong.core.util.InconsistentScoreException;
 import com.xenoage.zong.desktop.io.midi.out.JseMidiSequenceWriter;
-import com.xenoage.zong.io.musicxml.in.MusicXmlScoreFileInput;
 import com.xenoage.zong.io.musicxml.in.MusicXMLScoreFileInputTest;
+import com.xenoage.zong.io.musicxml.in.MusicXmlScoreFileInput;
 
 /**
  * Tests for the {@link MidiConverter}.

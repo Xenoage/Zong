@@ -1,4 +1,4 @@
-package com.xenoage.zong.desktop.io.mp3.out;
+package com.xenoage.zong.desktop.io.wav.out;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.io.FilenameUtils.numberFiles;
@@ -16,21 +16,19 @@ import com.xenoage.zong.core.Score;
 import com.xenoage.zong.documents.ScoreDoc;
 
 /**
- * This class writes one or more OGG Vorbis files from a given {@link ScoreDoc}.
+ * This class writes one or more Waveform Audio File Format (WAVE) files
+ * from a given {@link ScoreDoc}.
  * 
  * If there is just one score in the document, a single file is created.
- * If the document has multiple scores, one OGG file for each score is created and
+ * If the document has multiple scores, one WAV file for each score is created and
  * named according to {@link FilenameUtils#numberFiles(String, int)}.
- * 
- * The LAME tool must be installed and in the system path.
- * If lame can not be found, an error is reported.
  * 
  * @author Andreas Wenger
  */
-public class Mp3ScoreDocFileOutput
+public class WavScoreDocFileOutput
 	implements FileOutput<ScoreDoc> {
 
-	//TIDY: share code with OggScoreDocFileOutput and WavScoreDocFileOutput, since same logic
+	//TIDY: share code with OggScoreDocFileOutput and Mp3ScoreDocFileOutput, since same logic
 	@Override public void write(ScoreDoc document, OutputStream stream,
 		String filePath)
 		throws IOException {
@@ -38,13 +36,13 @@ public class Mp3ScoreDocFileOutput
 		scores.add(document.getScore()); //TODO: currently there is only one score per document
 		if (scores.size() == 1 || filePath == null) {
 			//simple case: just one score
-			Mp3ScoreFileOutput.writeMp3(scores.get(0), new JseOutputStream(stream));
+			WavScoreFileOutput.writeWav(scores.get(0), new JseOutputStream(stream));
 		}
 		else {
 			//more scores: one MP3 file for each score
 			List<String> filenames = numberFiles(filePath, scores.size());
 			for (int i : range(scores)) {
-				Mp3ScoreFileOutput.writeMp3(scores.get(i), new FileOutputStream(filenames.get(i)));
+				WavScoreFileOutput.writeWav(scores.get(i), new FileOutputStream(filenames.get(i)));
 			}
 		}
 	}

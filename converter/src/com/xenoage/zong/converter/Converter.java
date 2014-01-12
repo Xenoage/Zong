@@ -1,83 +1,132 @@
 package com.xenoage.zong.converter;
 
+import static com.xenoage.utils.error.Err.handle;
+import static com.xenoage.utils.log.Report.fatal;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import com.xenoage.utils.io.IO;
-import com.xenoage.utils.log.AppLogProcessing;
-import com.xenoage.utils.log.Log;
-import com.xenoage.zong.Zong;
-import com.xenoage.zong.documents.ScoreDoc;
-import com.xenoage.zong.io.ConverterScoreDocFormats;
-import com.xenoage.zong.io.ScoreDocFileInput;
-import com.xenoage.zong.io.ScoreFileFormat;
-import com.xenoage.zong.io.SupportedFormats;
-import com.xenoage.zong.io.symbols.AWTSVGPathReader;
-import com.xenoage.zong.symbols.SymbolPool;
-import com.xenoage.zong.symbols.SymbolPoolUtils;
+import javax.sound.midi.MidiUnavailableException;
 
+import com.xenoage.utils.PlatformUtils;
+import com.xenoage.utils.document.io.FileFormat;
+import com.xenoage.utils.document.io.FileInput;
+import com.xenoage.utils.error.Err;
+import com.xenoage.utils.jse.JsePlatformUtils;
+import com.xenoage.utils.jse.io.DesktopIO;
+import com.xenoage.utils.jse.io.JseInputStream;
+import com.xenoage.utils.jse.io.JseOutputStream;
+import com.xenoage.utils.jse.log.DesktopLogProcessing;
+import com.xenoage.utils.log.Log;
+import com.xenoage.utils.log.Report;
+import com.xenoage.zong.Zong;
+import com.xenoage.zong.desktop.io.midi.out.SynthManager;
+import com.xenoage.zong.documents.ScoreDoc;
+import com.xenoage.zong.io.ConverterSupportedFormats;
 
 /**
- * Task "--convert" for the command line.
+ * The <strong>Zong! Converter</strong> command-line application
+ * can convert MusicXML files into different graphic and audio formats
+ * like PDF, PNG, WAV, MID, OGG and MP3.
  * 
  * Syntax:
- * <pre>--convert infile outfile format</pre>
+ * <pre>... --convert infile outfile format</pre>
  * 
  * Example:
- * <pre>--convert /home/andi/files/Beeth.xml "/home/andi/pino 10 files/test.pino10" pino10</pre>
+ * <pre>... --convert /home/andi/files/Beeth.xml "/home/andi/my midi files/test.mid" mid</pre>
  * 
- * Input format is always MusicXML.
+ * The input format is always MusicXML.
+ * To list the possible output formats, call <pre>... --formats</pre>
  * 
  * @author Andreas Wenger
  */
-public class Converter
-{
-	
-	public static final String PROJECT_FIRST_NAME = "Converter";
-	public static final String FILENAME = Zong.FILENAME + "/converter/";
-	
+public class Converter {
+
+	public static final String projectFirstName = "Converter";
+	public static final String filename = Zong.filename + "/converter/";
+
+	private static ConverterSupportedFormats supportedFormats = new ConverterSupportedFormats();
+
 
 	public static void main(String[] args)
-		throws IOException
-	{
-		IO.initApplication(FILENAME);
-		Log.init(new AppLogProcessing(Zong.getNameAndVersion(PROJECT_FIRST_NAME)));
-		SymbolPoolUtils.init(new AWTSVGPathReader());
-		SymbolPoolUtils.setDefaultSymbolPool(new SymbolPool());
-		convert(args, ConverterScoreDocFormats.getInstance());
+		throws IOException {
+		PlatformUtils.init(new JsePlatformUtils());
+		DesktopIO.init(filename);
+		
+		Log.init(new DesktopLogProcessing(Zong.getNameAndVersion(projectFirstName)));
+		//SymbolPoolUtils.init(new AWTSVGPathReader());
+		//SymbolPoolUtils.setDefaultSymbolPool(new SymbolPool());
+		
+		try {
+			SynthManager.init(true);
+		} catch (MidiUnavailableException ex) {
+			handle(fatal(ex));
+		}
+
+		//do the job
+		if (args.length == 0)
+			showHelp();
+		else if (args[0].equals("--formats"))
+			showFormats();
+		else
+			convert(args);
+		
+		//TIDY - maybe hangs in SynthManager
+		System.exit(0);
 	}
-	
-	
-	public static void convert(String[] args, SupportedFormats supportedFormats)
-		throws IOException
-	{
+
+	private static void showHelp() {
+		System.out.println("Usage:");
+		System.out.println("... --convert infile outfile format");
+		System.out.println("For example:");
+		System.out
+			.println("... --convert /home/andi/files/Beeth.xml \"/home/andi/my midi files/test.mid\" mid");
+		System.out
+			.println("Input format is always MusicXML. To list the supported output formats, call:");
+		System.out.println("... --formats");
+	}
+
+	private static void showFormats() {
+		for (FileFormat<ScoreDoc> format : supportedFormats.getWriteFormats()) {
+			System.out.println(format.getId() + " (" + format.getName() + ")");
+		}
+	}
+
+	public static void convert(String[] args)
+		throws IOException {
 		//exception for wrong format
-		IOException ex =
-			new IOException("Convert syntax: --convert infile outfile format");
-		if (args.length < 4) throw ex;
-		//first argument: --convert
-		if (!args[0].equals("--convert")) throw ex;
+		if (args.length < 4 || !args[0].equals("--convert")) {
+			System.out.println("Wrong usage of parameters.");
+			showHelp();
+			return;
+		}
 		//second argument: input file
 		File inputFile = new File(args[1]);
-		if (!inputFile.exists())
-			throw new IOException("Input file could not be found");
+		if (!inputFile.exists()) {
+			System.out.println("Input file could not be found at");
+			System.out.println(inputFile.getAbsolutePath());
+			return;
+		}
 		//third argument: output file
 		File outputFile = new File(args[2]);
 		//fourth argument: output format
-		ScoreFileFormat format = supportedFormats.getByID(args[3]);
-		if (format == null) 
-			throw new IOException("Can not save files in format " + args[3]);
-		//do the conversion
-		ScoreDocFileInput input = (ScoreDocFileInput) supportedFormats.getByID("MusicXML").getInput();
-		ScoreDoc doc = null;
-		doc = input.read(new FileInputStream(inputFile), inputFile.getAbsolutePath());
-		if (doc != null && format.getOutput() != null) {
-			format.getOutput().write(doc, new FileOutputStream(outputFile), outputFile.getAbsolutePath());
+		String formatId = args[3].toLowerCase();
+		FileFormat<ScoreDoc> format = supportedFormats.getByID(formatId);
+		if (format == null || format.getOutput() == null) {
+			System.out.println("Can not save files in format " + formatId);
+			System.out.println("Supported formats are:");
+			showFormats();
+			return;
 		}
-		else
-			throw new IOException("Invalid score file");
+		//do the conversion
+		FileInput<ScoreDoc> input = supportedFormats.getReadDefaultFormat().getInput();
+		ScoreDoc doc = input.read(new JseInputStream(new FileInputStream(inputFile)),
+			inputFile.getAbsolutePath());
+		doc.getLayout().updateScoreLayouts(doc.getScore()); //TIDY
+		format.getOutput().write(doc, new JseOutputStream(new FileOutputStream(outputFile)),
+			outputFile.getAbsolutePath());
 	}
 
 }
