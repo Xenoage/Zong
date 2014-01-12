@@ -97,12 +97,12 @@ public class ScoreLayouter {
 		this.strategy = createStrategyTree();
 	}
 
-	private ScoreLayouter(ScoreLayouterContext context) {
+	public ScoreLayouter(ScoreLayouterContext context) {
 		this.context = context;
 		this.strategy = createStrategyTree();
 	}
 
-	private ScoreLayout createScoreLayout() {
+	public ScoreLayout createScoreLayout() {
 		try {
 			long startTime = System.currentTimeMillis();
 			layout = createLayoutWithExceptions();

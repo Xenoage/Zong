@@ -1,5 +1,7 @@
 package com.xenoage.zong.layout.frames;
 
+import static com.xenoage.utils.math.geom.Point2f.origin;
+import static com.xenoage.utils.math.geom.Size2f.size0;
 import static com.xenoage.zong.layout.LP.lp;
 import static java.lang.Math.max;
 import lombok.Data;
@@ -28,19 +30,19 @@ import com.xenoage.zong.layout.frames.background.Background;
 @Data public abstract class Frame {
 
 	/** The parent of this frame, or null if not in a layout. */
-	protected LayoutContainer parent;
+	protected LayoutContainer parent = null;
 
 	/** Center point of the frame in mm, relative to its parent. */
-	protected Point2f position;
+	protected Point2f position = origin;
 
 	/** Size of the frame in mm. */
-	protected Size2f size;
+	protected Size2f size = size0;
 
 	/** Ccw. rotation of the frame in degrees, relative to its parent. */
-	protected float rotation;
+	protected float rotation = 0;
 
 	/** Background of the frame, or null. */
-	@MaybeNull protected Background background;
+	@MaybeNull protected Background background = null;
 
 
 	/**

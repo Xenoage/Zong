@@ -77,7 +77,7 @@ public class MusicXmlScoreFileInput
 		//read score format
 		ScoreFormatReader.Value scoreFormatValue = ScoreFormatReader.read(mxlScore);
 		score.setFormat(scoreFormatValue.scoreFormat);
-		score.setMetaData("layoutformat", scoreFormatValue.layoutFormat);
+		score.setMetaData("layoutformat", scoreFormatValue.layoutFormat); //TIDY
 
 		//create the list of staves
 		StavesListReader.Value stavesListValue = StavesListReader.read(mxlScore);
@@ -88,7 +88,7 @@ public class MusicXmlScoreFileInput
 		MusicReader.read(mxlScore, score, ignoreErrors);
 
 		//remember the XML document for further application-dependend processing
-		score.setMetaData("mxldoc", mxlScore);
+		score.setMetaData("mxldoc", mxlScore); //TIDY
 
 		return score;
 	}

@@ -5,8 +5,10 @@ import static com.xenoage.utils.collections.CollectionUtils.alist;
 import java.util.ArrayList;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.musiclayout.ScoreFrameLayout;
 import com.xenoage.zong.musiclayout.ScoreLayout;
@@ -18,16 +20,16 @@ import com.xenoage.zong.musiclayout.ScoreLayout;
  * 
  * @author Andreas Wenger
  */
-public class ScoreFrameChain {
+@RequiredArgsConstructor public class ScoreFrameChain {
 
 	/** The list of frames */
 	@Getter private ArrayList<ScoreFrame> frames = alist();
 	/** The score. */
-	@Getter private Score score;
+	@Getter @NonNull private Score score;
 	/** The score layouts in the frames. */
-	@Getter @Setter private ScoreLayout scoreLayout;
+	@Getter @Setter private ScoreLayout scoreLayout = null;
 
-	
+
 	/**
 	 * Adds the given frame to the end of the chain, if it is not already part
 	 * of the chain.
@@ -69,7 +71,7 @@ public class ScoreFrameChain {
 		frames.remove(newFrame);
 		frames.add(position, newFrame);
 	}
-	
+
 	/**
 	 * Removes the given frame from this chain and unregisters the chain from the frame.
 	 */
@@ -77,7 +79,7 @@ public class ScoreFrameChain {
 		frames.remove(frame);
 		frame.setScoreFrameChain(null);
 	}
-	
+
 	/**
 	 * If the frame was already part of another chain, it is unregistered there.
 	 * It is registered for this chain.
@@ -87,7 +89,7 @@ public class ScoreFrameChain {
 			frame.getScoreFrameChain().remove(frame);
 		frame.setScoreFrameChain(this);
 	}
-	
+
 	/**
 	 * Returns true, if the given {@link ScoreFrame} is the first one in this
 	 * score frame chain.
@@ -95,7 +97,7 @@ public class ScoreFrameChain {
 	public boolean isLeadingScoreFrame(ScoreFrame scoreFrame) {
 		return frames.get(0) == scoreFrame;
 	}
-	
+
 	/**
 	 * Gets the {@link ScoreFrameLayout} of the given {@link ScoreFrame}, or
 	 * null if unknown.
