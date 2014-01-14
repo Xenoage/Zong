@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project webviewer">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <target name="create_run_jar">
+        <jar destfile="/home/andi/Werkstatt/Zong/Programm/Zong/webviewer/webviewer.jar" filesetmanifest="mergewithoutmain">
+            <manifest>
+                <attribute name="Main-Class" value="com.xenoage.zong.webviewer.server.Server"/>
+                <attribute name="Class-Path" value="."/>
+            </manifest>
+            <fileset dir="/home/andi/Werkstatt/Zong/Programm/Zong/webviewer/bin"/>
+            <fileset dir="/home/andi/Werkstatt/Zong/Programm/Zong/converter/bin"/>
+            <fileset dir="/home/andi/Werkstatt/Zong/Programm/Zong/core/bin"/>
+            <fileset dir="/home/andi/Werkstatt/Zong/Programm/Zong/utils/utils-pdlib/bin"/>
+            <fileset dir="/home/andi/Werkstatt/Zong/Programm/Zong/utils/utils-kernel/bin"/>
+            <fileset dir="/home/andi/Werkstatt/Zong/Programm/Zong/utils/utils-base/bin"/>
+            <fileset dir="/home/andi/Werkstatt/Zong/Programm/Zong/utils/utils-math/bin"/>
+            <fileset dir="/home/andi/Werkstatt/Zong/Programm/Zong/utils/utils-graphics/bin"/>
+            <fileset dir="/home/andi/Werkstatt/Zong/Programm/Zong/utils/utils-lang/bin"/>
+            <fileset dir="/home/andi/Werkstatt/Zong/Programm/Zong/utils/utils-xml/bin"/>
+            <fileset dir="/home/andi/Werkstatt/Zong/Programm/Zong/layout/bin"/>
+            <fileset dir="/home/andi/Werkstatt/Zong/Programm/Zong/musicxml/bin"/>
+            <fileset dir="/home/andi/Werkstatt/Zong/Programm/Zong/musicxml-in/bin"/>
+            <fileset dir="/home/andi/Werkstatt/Zong/Programm/Zong/utils/utils-swing/bin"/>
+            <fileset dir="/home/andi/Werkstatt/Zong/Programm/Zong/utils/utils-serialize/bin"/>
+            <fileset dir="/home/andi/Werkstatt/Zong/Programm/Zong/voc/bin"/>
+            <fileset dir="/home/andi/Werkstatt/Zong/Programm/Zong/midi-out/bin"/>
+            <fileset dir="/home/andi/Werkstatt/Zong/Programm/Zong/renderer/bin"/>
+            <zipfileset excludes="META-INF/*.SF" src="/home/andi/Werkstatt/Zong/Programm/Zong/lib/iText/iText-5.0.2.jar"/>
+            <fileset dir="/home/andi/Werkstatt/Zong/Programm/Zong/sampled-out/bin"/>
+            <zipfileset excludes="META-INF/*.SF" src="/home/andi/Werkstatt/Zong/Programm/Zong/lib/vorbis-java/vorbis-java-1.0.0-beta.jar"/>
+            <fileset dir="/home/andi/Werkstatt/Zong/Programm/Zong/player/bin"/>
+            <zipfileset excludes="META-INF/*.SF" src="/home/andi/Werkstatt/Zong/Programm/Zong/player/libtry/playerdata.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/home/andi/Werkstatt/Zong/Programm/Zong/player/libtry/skin.jar"/>
+            <fileset dir="/home/andi/Werkstatt/Zong/Programm/Zong/swingapp/bin"/>
+            <zipfileset excludes="META-INF/*.SF" src="/home/andi/Werkstatt/Zong/Programm/Zong/lib/tablelayout/tablelayout.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/home/andi/Werkstatt/Zong/Programm/Zong/lib/jetty/jetty.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/home/andi/Werkstatt/Zong/Programm/Zong/lib/jetty/servlet-api.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/home/andi/Werkstatt/Zong/Programm/Zong/lib/h2/h2-1.3.168.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/home/andi/Werkstatt/Zong/Programm/Zong/lib/gson/gson-2.2.2.jar"/>
+        </jar>
+    </target>
+</project>

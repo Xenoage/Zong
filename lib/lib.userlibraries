@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <eclipse-userlibraries version="2">
+    <library name="gson" systemlibrary="false">
+        <archive path="/lib/gson-2.2.4.jar" source="/lib/dev/gson-2.2.4-sources.jar"/>
+    </library>
+    <library name="h2" systemlibrary="false">
+        <archive path="/lib/h2-1.3.174.jar"/>
+    </library>
     <library name="itext" systemlibrary="false">
         <archive path="/lib/itextpdf-5.4.5.jar" source="/lib/dev/itextpdf-5.4.5-sources.jar"/>
+    </library>
+    <library name="jetty" systemlibrary="false">
+        <archive path="/lib/jetty-all-9.1.0.jar" source="/lib/dev/jetty-all-9.1.0-sources.jar"/>
+        <archive path="/lib/servlet-api-3.1.jar"/>
     </library>
     <library name="lombok" systemlibrary="false">
         <archive path="/lib/lombok-0.12.0.jar"/>

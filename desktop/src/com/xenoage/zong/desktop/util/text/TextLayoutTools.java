@@ -15,13 +15,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.sun.istack.internal.NotNull;
-import com.xenoage.utils.NullUtils;
 import com.xenoage.utils.font.FontInfo;
 import com.xenoage.utils.font.FontStyle;
 import com.xenoage.zong.core.text.Alignment;
 import com.xenoage.zong.desktop.renderer.symbols.SymbolGraphicAttribute;
-import com.xenoage.zong.io.musicxml.in.readers.FontInfoReader;
 import com.xenoage.zong.symbols.Symbol;
 import com.xenoage.zong.text.FormattedText;
 import com.xenoage.zong.text.FormattedTextElement;

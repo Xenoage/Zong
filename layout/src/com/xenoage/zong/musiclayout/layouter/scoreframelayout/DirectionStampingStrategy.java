@@ -11,7 +11,6 @@ import static com.xenoage.zong.text.FormattedTextUtils.styleText;
 
 import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.collections.IList;
-import com.xenoage.utils.iterators.It;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.direction.Direction;
 import com.xenoage.zong.core.music.direction.Dynamics;

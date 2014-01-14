@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html>
+  <head>
+    	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    	<title>Zong! Web Viewer Server</title>
+    	<script src="jquery-1.8.1.min.js" type="text/javascript"></script>
+    	<script type="text/javascript">
+			var dataOpen = {"action":"open", "url":"", "scalings":[{"dpi":100}]};
+			var dataPage = {"action":"page", "id":"", "page":0, "scaling":{"dpi":100}};
+			var dataAudio = {"action":"audio", "id":"", "format":"MP3"};
+			var dataCursor = {"action":"cursor", "id":""};
+							
+			function jsonToUrl(json) {
+				return encodeURIComponent(JSON.stringify(json));
+			}
+			
+			function openFile(url) {
+				$("#results").html("Loading. Please wait...");
+				//open file
+				dataOpen.url = url;
+				var openRes = null;
+				$.ajax({
+					url: "/action?data=" + jsonToUrl(dataOpen),
+					method: "post",
+					async: false,
+					dataType: 'json',
+					success: function(data){ openRes = data; },
+				});
+				//process result
+				if (openRes == null) {
+					$("#results").html("<p>Error. Could not load file.</p>");
+				}
+				else if (openRes.status == "error") {
+					$("#results").html("<p>Error. Could not load file. Details:</p><p>" + openRes.message + "</p>");
+				}
+				else {
+					//links for showing the first page, audio file and cursors file
+					var id = openRes.id;
+					var html = '<p>';
+					dataPage.id = id;
+					for (var iPage = 0; iPage < openRes.pages.length; iPage++) {
+						dataPage.page = iPage;
+						html += '<a href="/action?data=' + jsonToUrl(dataPage) + '">Get PNG of page ' + (iPage + 1) + '</a> | ';
+					}
+					dataAudio.id = id;
+					html += '<a href="/action?data=' + jsonToUrl(dataAudio) + '">Get MP3</a> | ';
+					dataCursor.id = id;
+					html += '<a href="/action?data=' + jsonToUrl(dataCursor) + '">Get cursor positions</a>';
+					dataPage.page = 0;
+					html += '</p><p><img src="/action?data=' + jsonToUrl(dataPage) + '"/></p>';
+					$("#results").html(html);
+				}
+			}
+		</script>
+  </head>
+  <body>
+    <h1>Zong! Web Viewer Server</h1>
+    
+    <h2>Demo</h2>
+    
+    <h3>Input: Load a file</h3>
+    
+    <p>Click one of the following links to existing demo MusicXML files (courtesy of Michael Good, from the <a href="http://www.makemusic.com/musicxml">MusicXML</a> project) or type the URL of your own MusicXML file.</p>
+    <p>Please notice that our layout algorithm is in a very early and experimental state!</a>
+    <ul>
+    	<li><a href="#" onclick="openFile('files/BeetAnGeSample.xml');">BeetAnGeSample.xml</a></li>
+    	<li><a href="#" onclick="openFile('files/FaurReveSample.xml');">FaurReveSample.xml</a></li>
+    	<li><a href="#" onclick="openFile('files/MahlFaGe4Sample.xml');">MahlFaGe4Sample.xml</a></li>
+    	<li><a href="#" onclick="openFile('files/MozartPianoSonata.xml');">MozartPianoSonata.xml</a></li>
+    	<li><a href="#" onclick="openFile('files/MozartTrio.xml');">MozartTrio.xml</a></li>
+    	<li><a href="#" onclick="openFile('files/MozaVeilSample.xml');">MozaVeilSample.xml</a></li>
+    	<li><a href="#" onclick="openFile('files/SchbAvMaSample.xml');">SchbAvMaSample.xml</a></li>
+    	<li>Your file: <input type="text" size="60" id="fileurl" value="http://www.xenoage.com/zong/webviewer/files/BeetAnGeSample.xml"/> <a href="#" onclick="openFile($('#fileurl').val());">Load</a></li>
+    </ul>
+    
+    <h3>Output: View the results</h3>
+    
+    <p id="results" style="width:90%; min-height:2em; outline:1px solid rgb(140, 140, 140); padding:5px; background-color: rgb(240, 240, 240);"></p>
+    
+  </body>
+</html> 

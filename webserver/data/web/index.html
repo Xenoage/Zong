@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html>
+  <head>
+    	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    	<title>Zong! Web Viewer Server</title>
+    	<script src="jquery-1.8.1.min.js" type="text/javascript"></script>
+    	<script type="text/javascript">
+			var dataPing = {"action":"ping"};
+			var dataOpen = {"action":"open", "url":"files/BeetAnGeSample.xml", "requestedID":"4110334f-785d-4a3d-9414-efb96387df88",
+				"scalings":[{"dpi":72}, {"dpi":144}, {"widthpx":500, "heightpx":800}]};
+			var resOpen = {"status":"ok", "id":"4110334f-785d-4a3d-9414-efb96387df88", "pages":[
+				{"height":279.4, "width":215.9, "scaledPages":[{"scaling":5000, "widthpx":380, "heightpx":500}, "... one for each scaling factor ..."]},
+				"... one for each page ..."]};
+			var dataPage = {"action":"page", "id":"4110334f-785d-4a3d-9414-efb96387df88", "page":0, "scaling":{"dpi":72}};
+			var dataAudio = {"action":"audio", "id":"4110334f-785d-4a3d-9414-efb96387df88", "format":"OGG"};
+			var dataCursor = {"action":"cursor", "id":"4110334f-785d-4a3d-9414-efb96387df88"};
+							
+			function jsonToUrl(json) {
+				return encodeURIComponent(JSON.stringify(json));
+			}
+			
+			function setDemoLink(id, json) {
+				$(id).attr('href', '/action?data=' + jsonToUrl(json));
+			}
+			
+			function setDemoText(id, json) {
+				$(id).html(JSON.stringify(json, null, 4));
+			}
+			
+			$(document).ready(function() {
+				setDemoLink('#a_ping', dataPing);
+				setDemoText('#code_ping', dataPing);
+				setDemoLink('#a_open', dataOpen);
+				setDemoText('#code_open', dataOpen);
+				setDemoText('#res_open', resOpen);
+				setDemoLink('#a_page', dataPage);
+				setDemoText('#code_page', dataPage);
+				setDemoLink('#a_audio', dataAudio);
+				setDemoText('#code_audio', dataAudio);
+				setDemoLink('#a_cursor', dataCursor);
+				setDemoText('#code_cursor', dataCursor);
+			});
+		</script>
+		<style type="text/css">
+			.pre {white-space: pre;}
+		</style>
+  </head>
+  <body>
+    <h1>Zong! Web Viewer Server</h1>
+
+    <h2>Demo</h2>
+    
+    <p>See the <a href="demo.html">demo page</a> to load, display and playback some demo files or your own MusicXML files.</p>
+    
+    <h2>Technical How To</h2>
+    
+    <h3>Call an action</h3>
+    <p>Call the action servlet <code>/action?data=...</code> with a JSON-encoded request</p>
+    
+    <h3>Check if the server is online</h3>
+    <p>Call the <em>ping</em> action. It will return "pong" immediately if the server is running.</p>
+    <p>Example (<a id="a_ping">run</a>):</p><p><code id="code_ping" class="pre"></code></p>
+    
+    <h3>Register a file</h3>
+    <p>Call the <em>open</em> action.</p>
+    <p>Example (<a id="a_open">run</a>):</p><p><code id="code_open" class="pre"></code></p>
+    <ul>
+    	<li><code>url</code>: The URL of the document, which must be available to the server. It may be a relative path like "files/SomeFile.xml", or an absolute URL like "http://www.zong-music.com/demo/SomeFile.xml".</li>
+    	<li><code>requestedID</code>: The ID with which the document can be identified from now on. As a rule, <em>don't use this parameter</em>. If it is missing, a random ID is generated automatically, which is normally the thing you want to have. If it is given, it is only used if there is not already another ID for this URL.</li>
+    	<li><code>scalings</code>: The list of all requested scaling factors, using one of the following formats for each of them. The initial scaling of the viewer should be the first number, since it is rendered first and is thus quicker available.
+    		<ul>
+			  	<li><code>{ "dpi": 72 }</code> renders this scaling with 72 dpi (must be an integer)</li>
+			  	<li><code>{ "widthpx": 500 }</code> finds a scaling so that the first page has a width of 500 px</li>
+			  	<li><code>{ "heightpx": 800 }</code> finds a scaling so that the first page has a height of 800 px</li>
+			  	<li><code>{ "widthpx": 500", "heightpx": 800 }</code> finds a scaling so that the first page fits into 500 px width <em>and</em> 800 px height (the smaller scaling factor is chosen to guarantee that the whole page fits into the given area)</li>
+    		</ul></li>
+    </ul>
+    <p>Calling this action will return either an error (with <code>{ "status": "error" }</code>) or it will contain information about the loaded file (<code>"status"</code> is <code>"ok"</code>, for each page there is one element in <code>"pages"</code>, which contains one element in <code>"scaledpages"</code> for each scaling factor):</p>
+    <p><code id="res_open" class="pre"></code></p>
+	<p>The unique <code>id</code> is used for referencing this score from now on, the URL is not needed any more.
+		<code>scaling</code> is in units in 72dpi/10000 space (e.g. return=5000 means 36dpi; this format is needed for indexing in the database).</p>
+	
+	<h3>Request a rendered page</h3>
+	<p>Call the <em>page</em> action.<p>
+	<p>Example (<a id="a_page">run</a>):</p><p><code id="code_page" class="pre"></code></p>
+    <ul>
+    	<li><code>id</code>: The ID of the document, which was returned in the previous step</li>
+    	<li><code>scaling</code>: Scaling in one of the formats described above</li>
+    	<li><code>page</code>: 0-based page index</li>
+    </ul>
+    <p>Either a PNG image is returned or, if something goes wrong, some undefined value (e.g. if a scaling is requested that does not exist, nothing or an error message may be returned).</p>
+    <p>If the tile was not rendered yet by the server, the servlet waits one or more seconds and tries again. This is done several times, for more than 30 seconds until the timeout.</p>
+    
+    
+    <h3>Request an audio file</h3>
+	<p>Call the <em>audio</em> action.<p>
+	<p>Example (<a id="a_audio">run</a>):</p><p><code id="code_audio" class="pre"></code></p>
+    <ul>
+    	<li><code>format</code>: One of the two supported formats, <code>OGG</code> for Ogg Vorbis or <code>MP3</code> for MPEG Audio Layer III.</li>
+    </ul>
+    <p>Either a sampled audio file is returned or, if something goes wrong, some undefined value.</p>
+    <p>If the audio file was not rendered yet by the server, the servlet waits one or more seconds and tries again. This is done several times, for more than 30 seconds until the timeout.</p>
+    
+    
+    <h3>Request the cursor positions</h3>
+	<p>Call the <em>cursor</em> action.<p>
+	<p>Example (<a id="a_cursor">run</a>):</p><p><code id="code_cursor" class="pre"></code></p>
+    <p>Either a JSON object with the cursor positions is returned or, if something goes wrong, some undefined value. The returned JSON object contains four items:</p>
+    <ul>
+			<li>mps: a mapping from musical positions (measure, beat) to time (milliseconds)</li>
+			<li>systems: page indices and y-coordinates of all systems (given by global system index) in percent of page height</li>
+			<li>measures: for each measure, its number, system index, left and right x-coordinates, and x-coordinates of all beats (all ratio to page width and relative to the left side of the page)</li>
+			<li>timecursors: for each beat (given in milliseconds), the page index, x-coordinate and y-coordinates (in percent of page size, relative to the top-left corner of the page) of the cursor is given. This could also be computed from the other data, but is much easier to read for thin clients.</li>
+    </ul>
+    <p>If the cursors file was not computed yet by the server, the servlet waits one or more seconds and tries again. This is done several times, for more than 30 seconds until the timeout.</p>
+    
+    
+    
+    <h2>Privacy</h2>
+    <p>The registered files have to be transferred to the server. The document has to be parsed, layouted and rendered. After that, the document is forgotten immediately. The rendered images and audio files are cached a certain amount of time (like 5 minutes, an hour or a day), and are then deleted. The returned id of a document is a secret number that prevents third people to view your scores.</p>
+    
+    <h2>About</h2>
+    <p>This web application is part of the <i>Zong! Music Notation</i> project, See <a href="http://www.zong-music.com">http://www.zong-music.com</a></p>
+    <p>&copy; 2011-2012 by Xenoage Software, <a href="http://www.xenoage.com">http://www.xenoage.com</a></p>
+    
+  </body>
+</html> 

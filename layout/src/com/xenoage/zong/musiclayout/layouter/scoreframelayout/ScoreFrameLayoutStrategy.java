@@ -13,7 +13,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.xenoage.utils.iterators.It;
 import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.utils.kernel.Tuple3;
 import com.xenoage.utils.math.VSide;
