@@ -104,10 +104,10 @@ public class ScoreLayouter {
 
 	public ScoreLayout createScoreLayout() {
 		try {
-			long startTime = System.currentTimeMillis();
+			//long startTime = System.currentTimeMillis();
 			layout = createLayoutWithExceptions();
-			long duration = System.currentTimeMillis() - startTime;
-			System.out.println(this.getClass().getSimpleName() + ": " + duration);
+			//long duration = System.currentTimeMillis() - startTime;
+			//System.out.println(this.getClass().getSimpleName() + ": " + duration);
 		} catch (Exception ex) {
 			//exception during the layouting process.
 			//show error page, but still allow saving or other things
