@@ -113,7 +113,11 @@ public class Converter {
 		File outputFile = new File(args[2]);
 		//fourth argument: output format
 		String formatId = args[3].toLowerCase();
-		FileFormat<ScoreDoc> format = supportedFormats.getByID(formatId);
+		FileFormat<ScoreDoc> format = null;
+		try {
+			format = supportedFormats.getByID(formatId);
+		} catch (IllegalArgumentException ex) {
+		}
 		if (format == null || format.getOutput() == null) {
 			System.out.println("Can not save files in format " + formatId);
 			System.out.println("Supported formats are:");
