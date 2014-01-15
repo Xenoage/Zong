@@ -1,13 +1,13 @@
 package com.xenoage.zong.webserver.model.requests;
 
-import static com.xenoage.utils.base.CheckUtils.checkNotNull;
+import static com.xenoage.utils.CheckUtils.checkNotNull;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
 import javax.servlet.http.HttpServletResponse;
 
-import com.xenoage.utils.base.annotations.NeverNull;
+import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.zong.webserver.Server;
 import com.xenoage.zong.webserver.actions.CursorAction;
 
@@ -20,28 +20,22 @@ import com.xenoage.zong.webserver.actions.CursorAction;
  * @author Andreas Wenger
  */
 public class CursorRequest
-	extends Request
-{
-	
-	@NeverNull public final String id;
-	
+	extends Request {
 
-	public CursorRequest(String id)
-	{
+	@NonNull public final String id;
+
+
+	public CursorRequest(String id) {
 		this.id = id;
 	}
-	
-	
-	@Override public void check()
-	{
+
+	@Override public void check() {
 		checkNotNull(id);
 	}
-	
-	
+
 	@Override public void respond(Server server, HttpServletResponse response)
-		throws SQLException, IOException
-	{
+		throws SQLException, IOException {
 		new CursorAction().perform(this, server, response);
 	}
-	
+
 }

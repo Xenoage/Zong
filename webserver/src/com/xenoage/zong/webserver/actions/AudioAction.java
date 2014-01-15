@@ -16,21 +16,16 @@ import com.xenoage.zong.webserver.Server;
 import com.xenoage.zong.webserver.model.requests.AudioRequest;
 import com.xenoage.zong.webserver.model.requests.Request;
 
-
 /**
  * Responds to an {@link AudioRequest}.
  * 
  * @author Andreas Wenger
  */
 public class AudioAction
-	extends RetryAction
-{
+	extends RetryAction {
 
-
-	@Override public boolean performTry(Request request, Server server,
-		HttpServletResponse response)
-		throws SQLException, IOException
-	{
+	@Override public boolean performTry(Request request, Server server, HttpServletResponse response)
+		throws SQLException, IOException {
 		AudioRequest audioRequest = getAs(AudioRequest.class, request);
 		Connection db = server.getDBConnection();
 
@@ -56,9 +51,9 @@ public class AudioAction
 		byte[] imageData = blob.getBytes(1, (int) blob.length());
 		stmtAudio.close();
 		//header
-		response.setHeader("Content-Type",
-			(audioRequest.format.equals("OGG") ? "application/ogg" : "audio/mpeg"));
-		response.setHeader("Content-Disposition", "attachment; filename=\"" + audioRequest.id + 
+		response.setHeader("Content-Type", (audioRequest.format.equals("OGG") ? "application/ogg"
+			: "audio/mpeg"));
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + audioRequest.id +
 			(audioRequest.format.equals("OGG") ? ".ogg" : ".mp3") + "\"");
 		//data
 		response.getOutputStream().write(imageData);

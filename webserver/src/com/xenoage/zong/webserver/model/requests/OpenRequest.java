@@ -1,7 +1,7 @@
 package com.xenoage.zong.webserver.model.requests;
 
-import static com.xenoage.utils.base.CheckUtils.checkNotEmpty;
-import static com.xenoage.utils.base.CheckUtils.checkNotNull;
+import static com.xenoage.utils.CheckUtils.checkNotEmpty;
+import static com.xenoage.utils.CheckUtils.checkNotNull;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -10,13 +10,12 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
-import com.xenoage.utils.base.annotations.MaybeNull;
-import com.xenoage.utils.base.annotations.NeverEmpty;
-import com.xenoage.utils.base.annotations.NeverNull;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.annotations.NonEmpty;
+import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.zong.webserver.Server;
 import com.xenoage.zong.webserver.actions.OpenAction;
 import com.xenoage.zong.webserver.model.Scaling;
-
 
 /**
  * Request to open a document.
@@ -36,33 +35,27 @@ import com.xenoage.zong.webserver.model.Scaling;
  * @author Andreas Wenger
  */
 public class OpenRequest
-	extends Request
-{
-	
-	@NeverNull public final String url;
+	extends Request {
+
+	@NonNull public final String url;
 	@MaybeNull public final UUID requestedID;
-	@NeverEmpty public final List<Scaling> scalings;
-	
-	
-	public OpenRequest(String url, UUID requestedID, List<Scaling> scalings)
-	{
+	@NonEmpty public final List<Scaling> scalings;
+
+
+	public OpenRequest(String url, UUID requestedID, List<Scaling> scalings) {
 		this.url = url;
 		this.requestedID = requestedID;
 		this.scalings = scalings;
 	}
-	
-	
-	@Override public void check()
-	{
+
+	@Override public void check() {
 		checkNotNull(url);
 		checkNotEmpty(scalings);
 	}
-	
-	
+
 	@Override public void respond(Server server, HttpServletResponse response)
-		throws SQLException, IOException
-	{
+		throws SQLException, IOException {
 		new OpenAction().perform(this, server, response);
 	}
-	
+
 }

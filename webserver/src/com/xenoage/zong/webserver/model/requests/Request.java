@@ -11,18 +11,15 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.xenoage.zong.webserver.Server;
 
-
 /**
  * A request to the server.
  * 
  * @author Andreas Wenger
  */
-public abstract class Request
-{
-	
+public abstract class Request {
+
 	private static HashMap<String, Class<? extends Request>> classes = new HashMap<String, Class<? extends Request>>();
-	
-	
+
 	static {
 		classes.put("audio", AudioRequest.class);
 		classes.put("cursor", CursorRequest.class);
@@ -30,13 +27,12 @@ public abstract class Request
 		classes.put("page", PageRequest.class);
 		classes.put("ping", PingRequest.class);
 	}
-	
-	
+
+
 	public static Request read(String data)
-		throws ServletException
-	{
+		throws ServletException {
 		try {
-			JsonObject o = (JsonObject)(new JsonParser().parse(data));
+			JsonObject o = (JsonObject) (new JsonParser().parse(data));
 			String action = o.getAsJsonPrimitive("action").getAsString();
 			//find Java class
 			Class<? extends Request> cls = classes.get(action);
@@ -51,14 +47,11 @@ public abstract class Request
 			throw new ServletException("incorrect request");
 		}
 	}
-	
-	
+
 	public void check()
-		throws IllegalStateException
-	{
+		throws IllegalStateException {
 	}
-	
-	
+
 	public abstract void respond(Server server, HttpServletResponse response)
 		throws SQLException, IOException;
 

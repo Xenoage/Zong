@@ -18,26 +18,22 @@ import com.xenoage.zong.webserver.model.ScaledPage;
 import com.xenoage.zong.webserver.model.requests.PageRequest;
 import com.xenoage.zong.webserver.model.requests.Request;
 
-
 /**
  * Responds with the tile image for the given document and page index.
  * 
  * @author Andreas Wenger
  */
 public class PageAction
-	extends RetryAction
-{
+	extends RetryAction {
 
-
-	@Override public boolean performTry(Request request, Server server,
-		HttpServletResponse response)
-		throws SQLException, IOException
-	{
+	@Override public boolean performTry(Request request, Server server, HttpServletResponse response)
+		throws SQLException, IOException {
 		PageRequest pageRequest = getAs(PageRequest.class, request);
 		Connection db = server.getDBConnection();
 
 		//get ID and number of pages of document
-		PreparedStatement stmtID = stmt(db, "SELECT id, pages FROM docs WHERE public_id = ?", pageRequest.id);
+		PreparedStatement stmtID = stmt(db, "SELECT id, pages FROM docs WHERE public_id = ?",
+			pageRequest.id);
 		ResultSet resID = stmtID.executeQuery();
 		if (!resID.next()) {
 			stmtID.close();
@@ -46,7 +42,7 @@ public class PageAction
 		int docID = resID.getInt(1);
 		int pages = resID.getInt(2);
 		stmtID.close();
-		
+
 		//unknown page?
 		if (pageRequest.page < 0 || pageRequest.page >= pages) {
 			throw new IOException("unknown page");
@@ -61,10 +57,9 @@ public class PageAction
 			stmtFirstPageSize.close();
 			return false;
 		}
-		Size2f firstPageSize = new Size2f(resFirstPageSize.getFloat(1),
-			resFirstPageSize.getFloat(2));
+		Size2f firstPageSize = new Size2f(resFirstPageSize.getFloat(1), resFirstPageSize.getFloat(2));
 		stmtFirstPageSize.close();
-		
+
 		//unknown scaling?
 		int scaling = pageRequest.scaling.convertTo10000(firstPageSize);
 		boolean scalingExists = (ScaledPage.fromDB(db, docID, 0, scaling) != null);

@@ -1,16 +1,15 @@
 package com.xenoage.zong.webserver.model.requests;
 
-import static com.xenoage.utils.base.CheckUtils.checkNotNull;
+import static com.xenoage.utils.CheckUtils.checkNotNull;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
 import javax.servlet.http.HttpServletResponse;
 
-import com.xenoage.utils.base.annotations.NeverNull;
+import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.zong.webserver.Server;
 import com.xenoage.zong.webserver.actions.AudioAction;
-
 
 /**
  * Request to retrieve a tile.
@@ -21,30 +20,24 @@ import com.xenoage.zong.webserver.actions.AudioAction;
  * @author Andreas Wenger
  */
 public class AudioRequest
-	extends Request
-{
+	extends Request {
 
-	@NeverNull public final String id;
-	@NeverNull public final String format;
+	@NonNull public final String id;
+	@NonNull public final String format;
 
 
-	public AudioRequest(String id, String format)
-	{
+	public AudioRequest(String id, String format) {
 		this.id = id;
 		this.format = format;
 	}
-	
-	
-	@Override public void check()
-	{
+
+	@Override public void check() {
 		checkNotNull(id);
 		checkNotNull(format);
 	}
 
-
 	@Override public void respond(Server server, HttpServletResponse response)
-		throws SQLException, IOException
-	{
+		throws SQLException, IOException {
 		new AudioAction().perform(this, server, response);
 	}
 

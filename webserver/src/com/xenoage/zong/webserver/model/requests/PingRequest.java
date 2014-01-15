@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.xenoage.zong.webserver.Server;
 import com.xenoage.zong.webserver.actions.PingAction;
 
-
 /**
  * Request to check if the server is online.
  * 
@@ -18,12 +17,10 @@ import com.xenoage.zong.webserver.actions.PingAction;
  * @author Andreas Wenger
  */
 public class PingRequest
-	extends Request
-{
+	extends Request {
 
 	@Override public void respond(Server server, HttpServletResponse response)
-		throws SQLException, IOException
-	{
+		throws SQLException, IOException {
 		new PingAction().perform(this, server, response);
 	}
 

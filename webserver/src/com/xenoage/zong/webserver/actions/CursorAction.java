@@ -16,21 +16,16 @@ import com.xenoage.zong.webserver.model.requests.CursorRequest;
 import com.xenoage.zong.webserver.model.requests.Request;
 import com.xenoage.zong.webserver.util.Response;
 
-
 /**
  * Responds to a {@link CursorRequest}.
  * 
  * @author Andreas Wenger
  */
 public class CursorAction
-	extends RetryAction
-{
+	extends RetryAction {
 
-
-	@Override public boolean performTry(Request request, Server server,
-		HttpServletResponse response)
-		throws SQLException, IOException
-	{
+	@Override public boolean performTry(Request request, Server server, HttpServletResponse response)
+		throws SQLException, IOException {
 		CursorRequest cursorRequest = getAs(CursorRequest.class, request);
 		Connection db = server.getDBConnection();
 

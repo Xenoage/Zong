@@ -2,7 +2,7 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
 <entry key="port">8090</entry>
-<entry key="dbdatabase">webviewer</entry>
+<entry key="dbdatabase">webserver</entry>
 <entry key="dbuser">test</entry>
 <entry key="dbpassword">test</entry>
 <entry key="cachetime">86400</entry>

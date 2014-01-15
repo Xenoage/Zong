@@ -1,6 +1,6 @@
 package com.xenoage.zong.webserver.actions;
 
-import static com.xenoage.utils.base.thread.ThreadUtils.sleep;
+import static com.xenoage.utils.jse.thread.ThreadUtils.sleepS;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -11,7 +11,6 @@ import com.xenoage.zong.webserver.Server;
 import com.xenoage.zong.webserver.model.requests.Request;
 import com.xenoage.zong.webserver.util.Response;
 
-
 /**
  * Abstract {@link Action} that is repeated several times, if
  * its {@link #performTry(Request, Server, HttpServletResponse)} method fails.
@@ -20,37 +19,32 @@ import com.xenoage.zong.webserver.util.Response;
  * @author Andreas Wenger
  */
 public abstract class RetryAction
-	extends Action
-{
+	extends Action {
 
 	private static final int waitTimes[] = { 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 5, 5, 5, 5, 5 };
 
 
-	@Override public void perform(Request request, Server server, HttpServletResponse response)
-	{
+	@Override public void perform(Request request, Server server, HttpServletResponse response) {
 		try {
 			boolean success = false;
 			for (int retryCount = 0; !success && retryCount <= waitTimes.length; retryCount++) {
 				if (retryCount > 0)
-					sleep(waitTimes[retryCount - 1]);
+					sleepS(waitTimes[retryCount - 1]);
 				success = performTry(request, server, response);
 			}
 			if (!success)
 				throw new IOException("timeout");
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			Response.writeError(response, ex.getMessage());
 		}
 	}
-
 
 	/**
 	 * Performs this action for the given request. If it returns false,
 	 * it was not successfull and requests to be called again.
 	 * If it returns true, the action is finished.
 	 */
-	public abstract boolean performTry(Request request, Server server,
-		HttpServletResponse response)
+	public abstract boolean performTry(Request request, Server server, HttpServletResponse response)
 		throws SQLException, IOException;
 
 }

@@ -8,31 +8,26 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-
 /**
  * Information about a page.
  * 
  * @author Andreas Wenger
  */
-public class Page
-{
+public class Page {
 
 	public final int docID, page;
 	public final float width, height; //in mm
 
 
-	public Page(int docID, int page, float width, float height)
-	{
+	public Page(int docID, int page, float width, float height) {
 		this.docID = docID;
 		this.page = page;
 		this.width = width;
 		this.height = height;
 	}
 
-
 	public static Page fromDB(Connection db, int docID, int page)
-		throws SQLException
-	{
+		throws SQLException {
 		PreparedStatement stmt = stmt(db, "SELECT doc_id, page, width, height "
 			+ "FROM pageinfos WHERE doc_id = ? AND page = ?", docID, page);
 		ResultSet res = stmt.executeQuery();
@@ -42,10 +37,8 @@ public class Page
 		return ret;
 	}
 
-
 	public void insertIntoDB(Connection db)
-		throws SQLException
-	{
+		throws SQLException {
 		insert(db, "pageinfos", "doc_id, page, width, height", docID, page, width, height);
 	}
 
