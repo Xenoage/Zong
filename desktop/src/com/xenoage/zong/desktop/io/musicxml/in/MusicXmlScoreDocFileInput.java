@@ -105,8 +105,10 @@ public class MusicXmlScoreDocFileInput
 			frame.setSize(frameSize);
 			//TEST frame = frame.withHFill(NoHorizontalSystemFillingStrategy.getInstance());
 			page.addFrame(frame);
-			if (chain == null)
+			if (chain == null) {
 				chain = new ScoreFrameChain(score);
+				chain.setScoreLayout(scoreLayout);
+			}
 			chain.add(frame);
 		}
 
