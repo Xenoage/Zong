@@ -53,7 +53,7 @@ import com.xenoage.zong.desktop.io.ogg.out.OggScoreFileOutput;
 import com.xenoage.zong.desktop.renderer.AwtBitmapPageRenderer;
 import com.xenoage.zong.documents.ScoreDoc;
 import com.xenoage.zong.layout.Layout;
-import com.xenoage.zong.webserver.Server;
+import com.xenoage.zong.webserver.Webserver;
 import com.xenoage.zong.webserver.io.CursorOutput;
 import com.xenoage.zong.webserver.model.Doc;
 import com.xenoage.zong.webserver.model.Page;
@@ -77,7 +77,7 @@ import com.xenoage.zong.webserver.util.WorkerThread;
 public class OpenAction
 	extends Action {
 
-	@Override public void perform(Request request, Server server, HttpServletResponse response)
+	@Override public void perform(Request request, Webserver server, HttpServletResponse response)
 		throws SQLException, IOException {
 		OpenRequest openRequest = getAs(OpenRequest.class, request);
 
@@ -278,7 +278,7 @@ public class OpenAction
 			jsonPage.addProperty("height", page.height);
 			JsonArray jsonScalesPages = new JsonArray();
 			for (ScaledPage sp : scaledPages.get(iPage))
-				jsonScalesPages.add(Server.instance.getGson().toJsonTree(sp));
+				jsonScalesPages.add(Webserver.instance.getGson().toJsonTree(sp));
 			jsonPage.add("scaledPages", jsonScalesPages);
 			jsonPages.add(jsonPage);
 		}
@@ -313,7 +313,7 @@ public class OpenAction
 	 */
 	public Tuple2<ScoreDoc, Doc> loadDocument(String url, @MaybeNull UUID publicID)
 		throws SQLException {
-		Connection db = Server.instance.getDBConnection();
+		Connection db = Webserver.instance.getDBConnection();
 		ScoreDoc scoreDoc;
 
 		//public ID of the document
@@ -335,7 +335,7 @@ public class OpenAction
 				inputStream = new URL(url).openStream();
 			}
 			else {
-				inputStream = new FileInputStream(Server.webPath + url);
+				inputStream = new FileInputStream(Webserver.webPath + url);
 			}
 			MusicXmlScoreDocFileInput in = new MusicXmlScoreDocFileInput();
 			scoreDoc = in.read(new JseInputStream(inputStream), null);

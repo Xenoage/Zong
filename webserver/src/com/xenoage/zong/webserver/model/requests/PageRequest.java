@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import javax.servlet.http.HttpServletResponse;
 
 import com.xenoage.utils.annotations.NonNull;
-import com.xenoage.zong.webserver.Server;
+import com.xenoage.zong.webserver.Webserver;
 import com.xenoage.zong.webserver.actions.PageAction;
 import com.xenoage.zong.webserver.model.Scaling;
 
@@ -40,7 +40,7 @@ public class PageRequest
 		checkNotNull(scaling);
 	}
 
-	@Override public void respond(Server server, HttpServletResponse response)
+	@Override public void respond(Webserver server, HttpServletResponse response)
 		throws SQLException, IOException {
 		new PageAction().perform(this, server, response);
 	}

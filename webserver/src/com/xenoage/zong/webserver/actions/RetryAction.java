@@ -7,13 +7,13 @@ import java.sql.SQLException;
 
 import javax.servlet.http.HttpServletResponse;
 
-import com.xenoage.zong.webserver.Server;
+import com.xenoage.zong.webserver.Webserver;
 import com.xenoage.zong.webserver.model.requests.Request;
 import com.xenoage.zong.webserver.util.Response;
 
 /**
  * Abstract {@link Action} that is repeated several times, if
- * its {@link #performTry(Request, Server, HttpServletResponse)} method fails.
+ * its {@link #performTry(Request, Webserver, HttpServletResponse)} method fails.
  * It throws an {@link IOException} timout exception if all attempts fail.
  * 
  * @author Andreas Wenger
@@ -24,7 +24,7 @@ public abstract class RetryAction
 	private static final int waitTimes[] = { 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 5, 5, 5, 5, 5 };
 
 
-	@Override public void perform(Request request, Server server, HttpServletResponse response) {
+	@Override public void perform(Request request, Webserver server, HttpServletResponse response) {
 		try {
 			boolean success = false;
 			for (int retryCount = 0; !success && retryCount <= waitTimes.length; retryCount++) {
@@ -44,7 +44,7 @@ public abstract class RetryAction
 	 * it was not successfull and requests to be called again.
 	 * If it returns true, the action is finished.
 	 */
-	public abstract boolean performTry(Request request, Server server, HttpServletResponse response)
+	public abstract boolean performTry(Request request, Webserver server, HttpServletResponse response)
 		throws SQLException, IOException;
 
 }

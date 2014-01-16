@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 import javax.servlet.http.HttpServletResponse;
 
-import com.xenoage.zong.webserver.Server;
+import com.xenoage.zong.webserver.Webserver;
 import com.xenoage.zong.webserver.actions.PingAction;
 
 /**
@@ -19,7 +19,7 @@ import com.xenoage.zong.webserver.actions.PingAction;
 public class PingRequest
 	extends Request {
 
-	@Override public void respond(Server server, HttpServletResponse response)
+	@Override public void respond(Webserver server, HttpServletResponse response)
 		throws SQLException, IOException {
 		new PingAction().perform(this, server, response);
 	}

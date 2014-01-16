@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import javax.servlet.http.HttpServletResponse;
 
 import com.xenoage.utils.annotations.NonNull;
-import com.xenoage.zong.webserver.Server;
+import com.xenoage.zong.webserver.Webserver;
 import com.xenoage.zong.webserver.actions.AudioAction;
 
 /**
@@ -36,7 +36,7 @@ public class AudioRequest
 		checkNotNull(format);
 	}
 
-	@Override public void respond(Server server, HttpServletResponse response)
+	@Override public void respond(Webserver server, HttpServletResponse response)
 		throws SQLException, IOException {
 		new AudioAction().perform(this, server, response);
 	}

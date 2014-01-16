@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.xenoage.zong.webserver.Server;
+import com.xenoage.zong.webserver.Webserver;
 import com.xenoage.zong.webserver.actions.Action;
 import com.xenoage.zong.webserver.model.requests.Request;
 
@@ -33,7 +33,7 @@ public class ActionServlet
 			String data = httpRequest.getParameter("data");
 			if (data != null) {
 				request = Request.read(data);
-				request.respond(Server.instance, httpResponse);
+				request.respond(Webserver.instance, httpResponse);
 			}
 			else {
 				writeError(httpResponse, "Parameter data missing");

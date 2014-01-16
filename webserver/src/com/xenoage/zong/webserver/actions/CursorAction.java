@@ -11,7 +11,7 @@ import java.sql.SQLException;
 
 import javax.servlet.http.HttpServletResponse;
 
-import com.xenoage.zong.webserver.Server;
+import com.xenoage.zong.webserver.Webserver;
 import com.xenoage.zong.webserver.model.requests.CursorRequest;
 import com.xenoage.zong.webserver.model.requests.Request;
 import com.xenoage.zong.webserver.util.Response;
@@ -24,7 +24,7 @@ import com.xenoage.zong.webserver.util.Response;
 public class CursorAction
 	extends RetryAction {
 
-	@Override public boolean performTry(Request request, Server server, HttpServletResponse response)
+	@Override public boolean performTry(Request request, Webserver server, HttpServletResponse response)
 		throws SQLException, IOException {
 		CursorRequest cursorRequest = getAs(CursorRequest.class, request);
 		Connection db = server.getDBConnection();

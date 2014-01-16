@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 import javax.servlet.http.HttpServletResponse;
 
-import com.xenoage.zong.webserver.Server;
+import com.xenoage.zong.webserver.Webserver;
 import com.xenoage.zong.webserver.model.requests.Request;
 
 /**
@@ -16,7 +16,7 @@ import com.xenoage.zong.webserver.model.requests.Request;
 public class PingAction
 	extends Action {
 
-	@Override public void perform(Request request, Server server, HttpServletResponse response)
+	@Override public void perform(Request request, Webserver server, HttpServletResponse response)
 		throws SQLException, IOException {
 		response.setContentType("text/plain");
 		response.getWriter().write("pong");

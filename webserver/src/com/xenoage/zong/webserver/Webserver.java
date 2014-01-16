@@ -43,13 +43,13 @@ import com.xenoage.zong.webserver.servlet.ActionServlet;
  * 
  * @author Andreas Wenger
  */
-public class Server {
+public class Webserver {
 
-	public static final String projectName = "webserver";
-	public static final String filename = Zong.filename + "/" + projectName + "/";
+	public static final String projectName = "Webserver";
+	public static final String filename = Zong.filename + "/" + projectName.toLowerCase() + "/";
 	public static final String webPath = "data/web/";
 
-	public static Server instance = null;
+	public static Webserver instance = null;
 	public static int port = 8080;
 
 	private org.eclipse.jetty.server.Server server;
@@ -59,7 +59,7 @@ public class Server {
 
 
 	public static void main(String... args) {
-		instance = new Server();
+		instance = new Webserver();
 		instance.start();
 		try {
 			instance.join();
@@ -68,7 +68,7 @@ public class Server {
 		}
 	}
 
-	public Server() {
+	public Webserver() {
 		//init IO and logging
 		PlatformUtils.init(new JsePlatformUtils());
 		DesktopIO.init(filename);

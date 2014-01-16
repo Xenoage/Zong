@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.xenoage.zong.webserver.Server;
+import com.xenoage.zong.webserver.Webserver;
 
 /**
  * A request to the server.
@@ -39,7 +39,7 @@ public abstract class Request {
 			//convert JSON object to Java class
 			if (cls == null)
 				throw new ServletException("unknown action: " + action);
-			Request request = Server.instance.getGson().fromJson(o, cls);
+			Request request = Webserver.instance.getGson().fromJson(o, cls);
 			//check integrity
 			request.check();
 			return request;
@@ -52,7 +52,7 @@ public abstract class Request {
 		throws IllegalStateException {
 	}
 
-	public abstract void respond(Server server, HttpServletResponse response)
+	public abstract void respond(Webserver server, HttpServletResponse response)
 		throws SQLException, IOException;
 
 }
