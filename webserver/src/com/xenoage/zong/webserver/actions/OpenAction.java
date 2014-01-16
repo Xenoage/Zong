@@ -42,7 +42,7 @@ import com.xenoage.utils.document.io.FileOutput;
 import com.xenoage.utils.math.Units;
 import com.xenoage.utils.jse.io.JseInputStream;
 import com.xenoage.utils.jse.io.JseOutputStream;
-import com.xenoage.utils.jse.io.StreamUtils;
+import com.xenoage.utils.jse.io.JseStreamUtils;
 import com.xenoage.utils.jse.io.URLUtils;
 import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.utils.math.geom.Size2f;
@@ -300,7 +300,7 @@ public class OpenAction
 		File tempFile = File.createTempFile(getClass().getName(), "." + audioFormatID.toLowerCase());
 		scoreFileOutput.write(scoreDoc.getScore(), new JseOutputStream(new FileOutputStream(tempFile)),
 			tempFile.getAbsolutePath());
-		byte[] bytes = StreamUtils.readToByteArray(new FileInputStream(tempFile));
+		byte[] bytes = JseStreamUtils.readToByteArray(new FileInputStream(tempFile));
 		if (bytes == null)
 			throw new IOException("Could not read " + audioFormatID + " file");
 		insert(db, "audio", "doc_id, format, audio", doc.id, audioFormatID, bytes);
