@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vocabulary project="editor" package="Command">
+	<voc key="app.RedoCommand" value="Undo"/>
+	<voc key="app.UndoCommand" value="Redo"/>
+	<voc key="dialogs.EmptyStavesDocumentDialogCommand" value="Create empty sheet of music"/>
+	<voc key="dialogs.FrameOptionsDialogCommand" value="Format frame"/>
+	<voc key="dialogs.PageFormatDialogCommand" value="Change page format"/>
+	<voc key="layout.EditTextFrame" value="Edit text"/>
+	<voc key="layout.FrameInsertCommand" value="Insert frame"/>
+	<voc key="layout.FrameMoveCommand" value="Move frame"/>
+	<voc key="layout.FrameRemoveCommand" value="Remove frame"/>
+	<voc key="layout.FrameResizeCommand" value="Resize frame"/>
+	<voc key="layout.FrameRotateCommand" value="Rotate frame"/>
+	<voc key="layout.FrameSelectionCommand" value="Select frame"/>
+	<voc key="layout.ImageInsertByDialogCommand" value="Insert image"/>
+	<voc key="layout.LineBreakStyleCommand" value="Automatic line break"/>
+	<voc key="layout.ScoreFrameChainUpCommand" value="Connect score frames"/>
+</vocabulary>

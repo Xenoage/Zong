@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vocabulary project="layout" package="Strategy">
+  <voc key="musiclayout.layouter.horizontalsystemfilling.EmptyStavesHorizontalSystemFillingStrategy" value="Empty staves up to the border"/>
+  <voc key="musiclayout.layouter.horizontalsystemfilling.NoHorizontalSystemFillingStrategy" value="Left"/>
+  <voc key="musiclayout.layouter.horizontalsystemfilling.StretchHorizontalSystemFillingStrategy" value="Stretch measures up to the border"/>
+  <voc key="musiclayout.layouter.verticalframefilling.EmptySystemsVerticalFrameFillingStrategy" value="Fill with empty systems"/>
+  <voc key="musiclayout.layouter.verticalframefilling.NoVerticalFrameFillingStrategy" value="Top"/>
+  <voc key="musiclayout.layouter.verticalframefilling.FillPageVerticalFrameFillingStrategy" value="Fill page by moving staves"/>
+</vocabulary>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vocabulary project="editor" package="Command">
+	<voc key="app.RedoCommand" value="Rückgängig"/>
+	<voc key="app.UndoCommand" value="Wiederherstellen"/>
+	<voc key="dialogs.EmptyStavesDocumentDialogCommand" value="Leeres Notenblatt erstellen"/>
+	<voc key="dialogs.FrameOptionsDialogCommand" value="Rahmen formatieren"/>
+	<voc key="dialogs.PageFormatDialogCommand" value="Seitenformat ändern"/>
+	<voc key="layout.EditTextFrame" value="Text bearbeiten"/>
+	<voc key="layout.FrameInsertCommand" value="Rahmen einfügen"/>
+	<voc key="layout.FrameMoveCommand" value="Rahmen verschieben"/>
+	<voc key="layout.FrameRemoveCommand" value="Rahmen löschen"/>
+	<voc key="layout.FrameResizeCommand" value="Rahmengröße ändern"/>
+	<voc key="layout.FrameRotateCommand" value="Rahmen drehen"/>
+	<voc key="layout.FrameSelectionCommand" value="Rahmen auswählen"/>
+	<voc key="layout.ImageInsertByDialogCommand" value="Bild einfügen"/>
+	<voc key="layout.LineBreakStyleCommand" value="Automatischer Zeilenumbruch"/>
+	<voc key="layout.ScoreFrameChainUpCommand" value="Musikrahmen verbinden"/>
+</vocabulary>

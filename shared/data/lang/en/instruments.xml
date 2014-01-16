@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?> <!-- TODO -->
+<vocabulary project="core" package="Instrument">
+  <voc key="woodwind" value="Woodwind"/>
+  <voc key="keyboard" value="Keyboard"/>
+  <voc key="percussion" value="Percussion"/>
+  <voc key="strings" value="Strings"/>
+	
+	<voc key="piano_Name" value="Piano"/>
+  <voc key="piano_Abbr" value="Pn"/>
+  <voc key="flue_Name" value="Flute"/>
+  <voc key="flute_Abbr" value="Fl"/>
+  <voc key="alto_flute_Name" value="Altflöte"/>
+  <voc key="alto_flute_Abbr" value="Alt"/>
+  <voc key="oboe_Name" value="Oboe"/>
+  <voc key="oboe_Abbr" value="Oboe"/>
+  <voc key="english_horn_Name" value="Englischhorn"/>
+  <voc key="english_horn_Abbr" value="Englh"/>
+  <voc key="clarinet_Name" value="Klarinette"/>
+  <voc key="clarinet_Abbr" value="Klar"/>
+  <voc key="horn_f_Name" value="Horn in F"/>
+  <voc key="horn_f_Abbr" value="Horn"/>
+  <voc key="trumpet_c_Name" value="Trompete"/>
+  <voc key="trumpet_c_Abbr" value="Trp"/>
+  <voc key="trumpet_b_Name" value="Trompete in B"/>
+  <voc key="trumpet_b_Abbr" value="Trp"/>
+  <voc key="piccolo_Name" value="Piccolo"/>
+  <voc key="piccolo_Abbr" value="Pic"/>
+  <voc key="soprano_Name" value="Sopran"/>
+  <voc key="soprano_Abbr" value="S"/>
+  <voc key="mezzo_soprano_Name" value="Mezzosopran"/>
+  <voc key="mezzo-soprano_Abbr" value="M"/>
+  <voc key="alto_Name" value="Alt"/>
+  <voc key="alto_Abbr" value="A"/>
+  <voc key="tenor_Name" value="Tenor"/>
+  <voc key="tenor_Abbr" value="T"/>
+  <voc key="baritone_Name" value="Bariton"/>
+  <voc key="baritone_Abbr" value="Bar"/>
+  <voc key="bass_Name" value="Bass"/>
+  <voc key="bass_Abbr" value="B"/>
+  <voc key="violin_Name" value="Violine"/>
+  <voc key="violin_Abbr" value="Viol"/>
+  <voc key="viola_Name" value="Viola"/>
+  <voc key="viola_Abbr" value="Vl"/>
+  <voc key="cello_Name" value="Cello"/>
+  <voc key="cello_Abbr" value="C"/>
+  <voc key="contrabass_Name" value="Kontrabass"/>
+  <voc key="contrabass_Abbr" value="K"/>
+  <voc key="guitar_Name" value="Gitarre"/>
+  <voc key="guitar_Abbr" value="Git"/>
+  <voc key="vibraphone_Name" value="Vibraphon"/>
+  <voc key="vibraphone_Abbr" value="Vib"/>
+  <voc key="glockenspiel_Name" value="Glockenspiel"/>
+  <voc key="glockenspiel_Abbr" value="Glck"/>
+  <voc key="celesta_Name" value="Celesta"/>
+  <voc key="celesta_Abbr" value="Cel"/>
+  <voc key="soprano_sax_Name" value="Sopransaxophon"/>
+  <voc key="soprano_sax_Abbr" value="Sopr"/>
+  <voc key="alto_sax_Name" value="Altsaxophon"/>
+  <voc key="alto_sax_Abbr" value="Alt"/>
+  <voc key="tenor_sax_Name" value="Tenorsaxophon"/>
+  <voc key="tenor_sax_Abbr" value="Ten"/>
+  <voc key="baritone_sax_Name" value="Baritonsaxophon"/>
+  <voc key="baritone_sax_Abbr" value="Bar"/>
+  <voc key="bass_sax_Name" value="Basssaxophon"/>
+  <voc key="bass_sax_Abbr" value="Bass"/>
+  <voc key="clarinetineb_Name" value="Klarinette in Es"/>
+  <voc key="clarinetineb_Abbr" value="Klar"/>
+</vocabulary>

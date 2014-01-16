@@ -1,0 +1,142 @@
+
+Unneeded Voc items:
+About
+AllPictures
+AttachFile
+Audio
+AudioSettings
+AttachLog
+Beta
+Bits
+Blog
+Bottom
+Cancel
+CancelAtFirstError
+Channels
+CleanUpMemory
+Close
+CloseDocument
+CommandFailed
+CouldNotCreateBitmaps
+CouldNotLoadImages
+CouldNotSaveDocument
+Convert
+Copyright
+Creators
+Cubic
+CurrentMemoryUsage
+Default
+Description
+Details
+DeviceName
+DirectoryConversionResult
+DirToMidi
+Distance
+Document
+DownloadError
+EditFrameSettings
+ErrorMessage
+ErrorReportOrFeatureRequest
+ErrorSavingFile
+Exit
+FatalError
+FatalErrorMessage
+FeedbackDescription
+FeedbackTitle
+FileToMidi
+ForMoreInfoSeeWebsite
+FrameSettings
+Height
+Help
+IncludeSubdirectories
+Info
+InterpolationMode
+Language
+LatencyMs
+Left
+License
+Linear
+MailForFurtherQuestions
+MaxMemory
+MaxPolyphony
+MemoryUsage
+MidiNotAvailable
+MinStaffHeightMessage
+MovementNumber
+MovementTitle
+NoDocumentsAvailable
+NoFileLoaded
+OK
+Open
+OpenDocument
+OpenFileInvalidFormat
+OpenFileIOError
+OpenFileNotFound
+PageFormat
+PageMargins
+PageSettings
+Parts
+PlayerDescription
+Point
+Position
+Print
+ProblemDescription
+ProgramInfo
+Readme
+ReportError
+Right
+Rights
+Rotation
+SampleRateHz
+SaveAs
+SaveFileUnknownOrigin
+ScoreInfo
+SecurityError
+Select
+SelectColor
+SelectDocument
+Send
+SendFailed
+SendOK
+Settings
+ShowInfo
+Sinc
+Size
+Soundbank
+Staves
+Top
+UnknownError
+UnnamedScore
+UseBugtracker
+Used
+UseDefault
+Version
+Warning
+Website
+Width
+WorkNumber
+WorkTitle
+Vocabulary for Command "com.xenoage.zong.commands.core.music.ColumnElementRemove" not found in language "en"
+Vocabulary for Command "com.xenoage.zong.commands.core.music.ColumnElementWrite" not found in language "en"
+Vocabulary for Command "com.xenoage.zong.commands.core.music.MeasureAdd" not found in language "en"
+Vocabulary for Command "com.xenoage.zong.commands.core.music.MeasureAddUpTo" not found in language "en"
+Vocabulary for Command "com.xenoage.zong.commands.core.music.MeasureElementWrite" not found in language "en"
+Vocabulary for Command "com.xenoage.zong.commands.core.music.PartAdd" not found in language "en"
+Vocabulary for Command "com.xenoage.zong.commands.core.music.StaffAdd" not found in language "en"
+Vocabulary for Command "com.xenoage.zong.commands.core.music.VoiceAdd" not found in language "en"
+Vocabulary for Command "com.xenoage.zong.commands.core.music.VoiceElementRemove" not found in language "en"
+Vocabulary for Command "com.xenoage.zong.commands.core.music.VoiceElementWrite" not found in language "en"
+Vocabulary for Command "com.xenoage.zong.commands.core.music.beam.BeamAdd" not found in language "en"
+Vocabulary for Command "com.xenoage.zong.commands.core.music.beam.BeamRemove" not found in language "en"
+Vocabulary for Command "com.xenoage.zong.commands.core.music.direction.DirectionAdd" not found in language "en"
+Vocabulary for Command "com.xenoage.zong.commands.core.music.group.BarlineGroupAdd" not found in language "en"
+Vocabulary for Command "com.xenoage.zong.commands.core.music.group.BarlineGroupRemove" not found in language "en"
+Vocabulary for Command "com.xenoage.zong.commands.core.music.group.BracketGroupAdd" not found in language "en"
+Vocabulary for Command "com.xenoage.zong.commands.core.music.group.BracketGroupRemove" not found in language "en"
+Vocabulary for Command "com.xenoage.zong.commands.core.music.lyric.LyricAdd" not found in language "en"
+Vocabulary for Command "com.xenoage.zong.commands.core.music.slur.SlurAdd" not found in language "en"
+Vocabulary for Command "com.xenoage.zong.commands.core.music.slur.SlurRemove" not found in language "en"
+Vocabulary for Command "com.xenoage.zong.commands.core.music.tuplet.TupletRemove" not found in language "en"
+
+Unneeded elements in language "de":
+NoValidMusicXMLFile

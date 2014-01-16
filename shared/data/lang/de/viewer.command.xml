@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vocabulary project="viewer" package="Command">
+	<voc key="CommandList" value="Befehlsliste"/>
+	<voc key="app.LanguageChangeCommand" value="Sprache wechseln"/>
+	<voc key="dialogs.MemoryUsageDialogCommand" value="Speicherverbrauch anzeigen"/>
+	<voc key="dialogs.OpenDocumentDialogCommand" value="Dokument öffnen"/>
+	<voc key="dialogs.SaveDocumentDialogCommand" value="Dokument speichern"/>
+	<voc key="dialogs.TextEditorDialogCommand" value="Text bearbeiten"/>
+	<voc key="document.PageFormatCommand" value="Seitenformat ändern"/>
+	<voc key="document.PrintCommand" value="Drucken"/>
+	<voc key="input.ChangeClefCommand" value="Notenschlüssel ändern"/>
+	<voc key="input.ChangeKeyCommand" value="Tonart ändern"/>
+	<voc key="input.ChangeTimeCommand" value="Taktart ändern"/>
+	<voc key="input.CursorCommand" value="Cursor setzen"/>
+	<voc key="input.DeleteChordBeforeCursorCommand" value="Note/Akkord löschen"/>
+	<voc key="input.MoveCursorCommand" value="Cursor bewegen"/>
+	<voc key="input.MoveNoteCommand" value="Note verschieben"/>
+	<voc key="input.SetDurationCommand" value="Tonlänge ändern"/>
+	<voc key="input.WritePitchCommand" value="Note schreiben"/>
+	<voc key="input.WriteRestCommand" value="Pause schreiben"/>
+	<voc key="io.MetronomeOnOffCommand" value="Metronom an/aus"/>
+	<voc key="io.MidiPlaybackCommand" value="Partitur abspielen"/>
+	<voc key="music.ScoreFrameHorizontalSystemFillingCommand" value="Horizontale Ausrichtung"/>
+	<voc key="music.ScoreFrameVerticalFrameFillingCommand" value="Vertikale Ausrichtung"/>
+	<voc key="MessageCommand" value="Nachricht anzeigen"/>
+</vocabulary>

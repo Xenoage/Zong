@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vocabulary project="layout" package="Strategy">
+  <voc key="musiclayout.layouter.horizontalsystemfilling.EmptyStavesHorizontalSystemFillingStrategy" value="Leere Zeilen bis zum Rand"/>
+  <voc key="musiclayout.layouter.horizontalsystemfilling.NoHorizontalSystemFillingStrategy" value="Links"/>
+  <voc key="musiclayout.layouter.horizontalsystemfilling.StretchHorizontalSystemFillingStrategy" value="Strecken bis zum Rand"/>
+  <voc key="musiclayout.layouter.verticalframefilling.EmptySystemsVerticalFrameFillingStrategy" value="Mit leeren Systemen auffüllen"/>
+  <voc key="musiclayout.layouter.verticalframefilling.NoVerticalFrameFillingStrategy" value="Oben"/>
+  <voc key="musiclayout.layouter.verticalframefilling.FillPageVerticalFrameFillingStrategy" value="Auf Seite ausdehnen"/>
+</vocabulary>
