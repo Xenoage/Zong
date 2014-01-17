@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_jar" name="Create Jar with Zong! java classes for the Android viewer">
+    <target name="create_jar">
+        <jar destfile="libs/zong-java.jar">
+            <fileset dir="../core/bin"/>
+            <fileset dir="../layout/bin"/>
+            <fileset dir="../midi-out/bin"/>
+            <fileset dir="../musicxml/bin"/>
+            <fileset dir="../musicxml-in/bin"/>
+            <fileset dir="../renderer/bin"/>
+            <fileset dir="../utils/utils-base/bin"/>
+            <fileset dir="../utils/utils-graphics/bin"/>
+            <fileset dir="../utils/utils-kernel/bin"/>
+            <fileset dir="../utils/utils-lang/bin"/>
+            <fileset dir="../utils/utils-math/bin"/>
+            <fileset dir="../utils/utils-pdlib/bin"/>
+            <fileset dir="../utils/utils-xml/bin"/>
+            <fileset dir="../voc/bin"/>
+        </jar>
+    </target>
+</project>
