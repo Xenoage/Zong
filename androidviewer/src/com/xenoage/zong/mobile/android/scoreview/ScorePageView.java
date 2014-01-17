@@ -1,5 +1,6 @@
 package com.xenoage.zong.mobile.android.scoreview;
 
+import static com.xenoage.utils.PlatformUtils.platformUtils;
 import static com.xenoage.utils.kernel.Range.range;
 
 import java.io.IOException;
@@ -15,8 +16,9 @@ import android.graphics.drawable.NinePatchDrawable;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.xenoage.utils.graphics.Units;
-import com.xenoage.utils.io.IO;
+import com.xenoage.utils.PlatformUtils;
+import com.xenoage.utils.jse.io.JseInputStream;
+import com.xenoage.utils.math.Units;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Rectangle2i;
 import com.xenoage.utils.math.geom.Size2i;
@@ -27,7 +29,6 @@ import com.xenoage.zong.renderer.AndroidBitmapPageRenderer;
 import com.xenoage.zong.view.PageViewManager;
 import com.xenoage.zong.view.ViewState;
 
-
 /**
  * This class provides a scrollable (by dragging) and zoomable (by using
  * the zoom buttons) view on a {@link ScoreDoc}.
@@ -35,8 +36,7 @@ import com.xenoage.zong.view.ViewState;
  * @author Andreas Wenger
  */
 public class ScorePageView
-	extends View
-{
+	extends View {
 
 	private Layout layout;
 
@@ -58,35 +58,29 @@ public class ScorePageView
 	private int pageUnloadDistance = 400;
 
 
-	public ScorePageView(Context context, float scaling)
-	{
+	public ScorePageView(Context context, float scaling) {
 		super(context);
 		this.scaling = scaling;
 	}
-	
-	
-	public ScorePageView(Context context)
-	{
+
+	public ScorePageView(Context context) {
 		this(context, 1);
 	}
 
-
-	public void setScoreDoc(ScoreDoc doc)
-	{
+	public void setScoreDoc(ScoreDoc doc) {
 		this.layout = doc.getLayout();
 		this.pageViewManager = new PageViewManager(layout);
 		//load desktop and page image
 		try {
-			desktopBitmap = BitmapFactory.decodeStream(IO.openInputStream("data/img/desktop/desktop.png"));
+			desktopBitmap = BitmapFactory.decodeStream(new JseInputStream(
+				platformUtils().openFile("data/img/desktop/desktop.png")));
 			page9Patch = (NinePatchDrawable) getContext().getResources().getDrawable(R.drawable.page);
 		} catch (IOException ex) {
 		}
 		//register touch listener for scrolling
-		setOnTouchListener(new View.OnTouchListener()
-		{
+		setOnTouchListener(new View.OnTouchListener() {
 
-			@Override public boolean onTouch(View view, MotionEvent event)
-			{
+			@Override public boolean onTouch(View view, MotionEvent event) {
 				Point2f currentPx = new Point2f(event.getX(), event.getY());
 				switch (event.getAction()) {
 					case MotionEvent.ACTION_DOWN:
@@ -95,8 +89,8 @@ public class ScorePageView
 					case MotionEvent.ACTION_MOVE:
 					case MotionEvent.ACTION_UP:
 						Point2f distancePx = scrollLastPx.sub(currentPx);
-						Point2f distanceMm = new Point2f(Units.pxToMm(distancePx.x, scaling), Units.pxToMm(distancePx.y,
-							scaling));
+						Point2f distanceMm = new Point2f(Units.pxToMm(distancePx.x, scaling), Units.pxToMm(
+							distancePx.y, scaling));
 						scrollMm = scrollMm.add(distanceMm);
 						scrollLastPx = currentPx;
 						view.postInvalidate();
@@ -107,23 +101,17 @@ public class ScorePageView
 		});
 	}
 
-
-	public void setScaling(float scaling)
-	{
+	public void setScaling(float scaling) {
 		this.scaling = scaling;
 		pagesBitmaps.clear();
 		postInvalidate();
 	}
 
-
-	private ViewState getViewState()
-	{
+	private ViewState getViewState() {
 		return new ViewState(new Size2i(getWidth(), getHeight()), scaling, scrollMm);
 	}
 
-
-	@Override protected void onDraw(Canvas canvas)
-	{
+	@Override protected void onDraw(Canvas canvas) {
 		int w = getWidth();
 		int h = getHeight();
 		Rect viewRect = new Rect(0, 0, w, h);
@@ -136,7 +124,7 @@ public class ScorePageView
 		canvas.drawBitmap(desktopBitmap, null, viewRect, null);
 
 		//paint pages
-		for (int iPage : range(layout.pages)) {
+		for (int iPage : range(layout.getPages())) {
 			Rectangle2i pageRect = pageViewManager.computePageRect(iPage, getViewState());
 
 			//if page is invisible, ingore page
@@ -154,8 +142,8 @@ public class ScorePageView
 			//frames
 			if (isPageVisible(iPage, pagePreloadDistance)) {
 				Bitmap pageBitmap = getPageBitmap(iPage);
-				canvas.drawBitmap(pageBitmap, null, new RectF(0, 0, pageBitmap.getWidth(), pageBitmap.getHeight()),
-					null);
+				canvas.drawBitmap(pageBitmap, null,
+					new RectF(0, 0, pageBitmap.getWidth(), pageBitmap.getHeight()), null);
 			}
 
 			canvas.restore();
@@ -174,67 +162,55 @@ public class ScorePageView
 		canvas.drawLine(0, 0, getWidth(), getHeight(), paintLine); */
 	}
 
-
-	@Override protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
-	{
+	@Override protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		//maximize in parent (if width and height are fill_parent)
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 		setMeasuredDimension(getMeasuredWidth(), getMeasuredHeight());
 	}
 
-
 	/**
 	 * Removes all pages, that are currently not visible.
 	 */
-	private void cleanupPages()
-	{
-		for (int iPage : range(layout.pages)) {
+	private void cleanupPages() {
+		for (int iPage : range(layout.getPages())) {
 			if (!isPageVisible(iPage, pageUnloadDistance))
 				pagesBitmaps.set(iPage, null);
 		}
 	}
-
 
 	/**
 	 * Gets the {@link Bitmap} of the given page.
 	 * If it is not loaded yet, it is generated and then returned.
 	 * The method blocks until the bitmap is ready.
 	 */
-	private Bitmap getPageBitmap(int pageIndex)
-	{
+	private Bitmap getPageBitmap(int pageIndex) {
 		Bitmap ret = pagesBitmaps.get(pageIndex);
 		if (ret == null) {
 			ret = AndroidBitmapPageRenderer.paint(layout, pageIndex, scaling);
-			//GOON: AWTBitmapPageRenderer.paint(layout, pageIndex, 1f);
 			pagesBitmaps.set(pageIndex, ret);
 		}
 		return ret;
 	}
 
-
 	/**
 	 * Returns true, if the page with the given index
 	 * is currently visible (with respect to the given additional distance).
 	 */
-	private boolean isPageVisible(int pageIndex, int additionalDistance)
-	{
-		Rectangle2i viewRect = new Rectangle2i(-additionalDistance, -additionalDistance, getWidth() + 2 *
-			additionalDistance, getHeight() + 2 * additionalDistance);
+	private boolean isPageVisible(int pageIndex, int additionalDistance) {
+		Rectangle2i viewRect = new Rectangle2i(-additionalDistance, -additionalDistance, getWidth() +
+			2 * additionalDistance, getHeight() + 2 * additionalDistance);
 		Rectangle2i pageRect = pageViewManager.computePageRect(pageIndex, getViewState());
 		return (isRectVisible(viewRect, pageRect, 0));
 	}
-
 
 	/**
 	 * Returns true, if the given rectangle is partially
 	 * or fully visible on the view rect, otherwise false.
 	 */
-	private boolean isRectVisible(Rectangle2i viewRect, Rectangle2i rect, int additionalDistance)
-	{
+	private boolean isRectVisible(Rectangle2i viewRect, Rectangle2i rect, int additionalDistance) {
 		int ad = additionalDistance;
 		return (rect.x2() + ad >= viewRect.x1() && rect.x1() - ad <= viewRect.x2() &&
 			rect.y2() + ad >= viewRect.y1() && rect.y1() - ad <= viewRect.y2());
 	}
-
 
 }

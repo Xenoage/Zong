@@ -7,9 +7,7 @@ import android.content.Context;
 import android.media.MediaPlayer;
 import android.net.Uri;
 
-import com.leff.midi.MidiFile;
 import com.xenoage.zong.core.Score;
-import com.xenoage.zong.io.midi.out.MidiConverterAndroid;
 
 
 /**
@@ -32,8 +30,10 @@ public class MidiPlayer
 	{
 		try {
 			File outputFile = File.createTempFile("zong", "mid", context.getCacheDir());
-			MidiFile midi = MidiConverterAndroid.convertToMidiFile(score, false, false);
-			midi.writeToFile(outputFile);
+			
+			//GOON
+			//MidiFile midi = MidiConverterAndroid.convertToMidiFile(score, false, false);
+			//midi.writeToFile(outputFile);
 			
 			stop();
 			mediaPlayer = MediaPlayer.create(context, Uri.fromFile(outputFile));

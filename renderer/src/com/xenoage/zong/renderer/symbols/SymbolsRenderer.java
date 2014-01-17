@@ -8,7 +8,7 @@ import com.xenoage.zong.symbols.Symbol;
 import com.xenoage.zong.symbols.WarningSymbol;
 
 /**
- * Interface for {@link Symbol} renderers.
+ * Base class for {@link Symbol} renderers.
  * 
  * @author Andreas Wenger
  */

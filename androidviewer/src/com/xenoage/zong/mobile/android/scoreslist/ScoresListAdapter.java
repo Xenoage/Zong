@@ -12,13 +12,11 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
-
 public class ScoresListAdapter
-	implements ListAdapter
-{
-	
+	implements ListAdapter {
+
 	Context context;
-	
+
 	//TODO: support more than these predefined scores
 	Document[] documents = {
 		new Document("An die ferne Geliebte", "BeetAnGeSample.xml"),
@@ -36,79 +34,62 @@ public class ScoresListAdapter
 		new Document("Sind surmani", "Sind surmani.xml"),
 		//new Document("Tuljak", "Tuljak.xml"),
 		//new Document("Ungarische Tänze Nr. 5", "Brahms.xml"),
-		new Document("Topporzer Kreuzpolka", "Topporzer.xml"),
-		new Document("Woaf", "Woaf.xml")
-	};
-	
-	
-	public ScoresListAdapter(Context context)
-	{
+		new Document("Topporzer Kreuzpolka", "Topporzer.xml"), new Document("Woaf", "Woaf.xml") };
+
+
+	public ScoresListAdapter(Context context) {
 		this.context = context;
 	}
-	
-	
-	@Override public View getView(int position, View convertView, ViewGroup parent)
-	{
-		Document document = getItem(position);
-    View view = LayoutInflater.from(context).inflate(R.layout.listitem, null);
-    ((ImageView) view.findViewById(R.id.icon)).setImageDrawable(
-    	context.getResources().getDrawable(R.drawable.icon_score));
-    ((TextView) view.findViewById(R.id.title)).setText(document.name);
-    ((TextView) view.findViewById(R.id.description)).setText(document.filename);
-    return view;
- }
 
-	@Override public int getCount()
-	{
+	@Override public View getView(int position, View convertView, ViewGroup parent) {
+		Document document = getItem(position);
+		View view = LayoutInflater.from(context).inflate(R.layout.listitem, null);
+		((ImageView) view.findViewById(R.id.icon)).setImageDrawable(context.getResources().getDrawable(
+			R.drawable.icon_score));
+		((TextView) view.findViewById(R.id.title)).setText(document.name);
+		((TextView) view.findViewById(R.id.description)).setText(document.filename);
+		return view;
+	}
+
+	@Override public int getCount() {
 		return documents.length;
 	}
 
-	@Override public Document getItem(int position)
-	{
+	@Override public Document getItem(int position) {
 		return documents[position];
 	}
 
-	@Override public long getItemId(int position)
-	{
+	@Override public long getItemId(int position) {
 		return position;
 	}
 
-	@Override public int getItemViewType(int position)
-	{
+	@Override public int getItemViewType(int position) {
 		return 0;
 	}
 
-
-	@Override public int getViewTypeCount()
-	{
+	@Override public int getViewTypeCount() {
 		return 1;
 	}
 
-	@Override public boolean hasStableIds()
-	{
+	@Override public boolean hasStableIds() {
 		return false;
 	}
 
-	@Override public boolean isEmpty()
-	{
+	@Override public boolean isEmpty() {
 		return false;
 	}
 
-	@Override public void registerDataSetObserver(DataSetObserver observer)
-	{
+	@Override public void registerDataSetObserver(DataSetObserver observer) {
 	}
 
-	@Override public void unregisterDataSetObserver(DataSetObserver observer)
-	{
+	@Override public void unregisterDataSetObserver(DataSetObserver observer) {
 	}
 
-	@Override public boolean areAllItemsEnabled()
-	{
+	@Override public boolean areAllItemsEnabled() {
 		return false;
 	}
 
-	@Override public boolean isEnabled(int position)
-	{
+	@Override public boolean isEnabled(int position) {
 		return true;
 	}
 
