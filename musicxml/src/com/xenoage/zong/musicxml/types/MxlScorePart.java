@@ -72,10 +72,10 @@ public class MxlScorePart
 						scoreInstruments.add(MxlScoreInstrument.read(reader));
 					break;
 			}
-			if (partName == null)
-				throw reader.dataException("part-name unknown");
 			reader.closeElement();
 		}
+		if (partName == null)
+			throw reader.dataException("part-name unknown");
 		return new MxlScorePart(identification, partName, partAbbreviation, scoreInstruments,
 			midiInstruments, id);
 	}

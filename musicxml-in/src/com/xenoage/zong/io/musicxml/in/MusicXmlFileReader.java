@@ -79,6 +79,7 @@ public class MusicXmlFileReader {
 		else {
 			throw new IOException("Unknown file type");
 		}
+		bis.close();
 		return ret;
 	}
 

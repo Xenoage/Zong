@@ -91,7 +91,7 @@ public class MusicXMLScoreFileInputTest {
 	 * Tests a single file.
 	 */
 	@Test public void testSingleFile() {
-		String file = dir20 + "BeetAnGeSample.xml";
+		String file = dir20 + "1.xml"; //"BeetAnGeSample.xml";
 		try {
 			new MusicXmlScoreFileInput().read(platformUtils().openFile(file), file);
 			//TEST

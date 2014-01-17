@@ -1,5 +1,6 @@
 package com.xenoage.zong;
 
+import static com.xenoage.utils.iterators.It.it;
 import static com.xenoage.utils.jse.io.JseFileUtils.listFilesDeep;
 
 import java.io.File;
@@ -11,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.xenoage.utils.PlatformUtils;
+import com.xenoage.utils.iterators.It;
 import com.xenoage.utils.jse.JsePlatformUtils;
 import com.xenoage.utils.jse.io.JseFileUtils;
 import com.xenoage.utils.jse.io.JseInputStream;
@@ -46,9 +48,12 @@ public class MusicXmlMassTest {
 		int ok = 0;
 		Collection<File> files = listFilesDeep(new File(dir), JseFileUtils.getXMLFilter());
 		System.out.println("Processing " + files.size() + " files...");
-		for (File file : files) {
+		It<File> filesIt = it(files);
+		for (File file : filesIt) {
 			if (testFile(file))
 				ok++;
+			if (filesIt.getIndex() % 10 == 0)
+				System.out.println("Progress: " + (100 * filesIt.getIndex() / files.size()) + "%");
 		}
 		System.out.println("Could load " + ok + " of " + files.size() + " files (" +
 			new DecimalFormat("#.##").format(100f * ok / files.size()) + "%)");

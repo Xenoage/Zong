@@ -61,23 +61,24 @@ public class CompressedFileInput {
 
 		//load root file
 		try {
-			InputStream rootStream = zip.openFile(rootfilePath);
+			BufferedInputStream rootStream = new BufferedInputStream(zip.openFile(rootfilePath));
+			rootStream.mark();
 			FileType type = FileTypeReader.getFileType(rootStream);
-			rootStream.close();
+			rootStream.reset();
+			rootStream.unmark();
 			if (type == null)
 				throw new IllegalStateException("Unknown root file type");
 			switch (type) {
 				case Compressed:
 					throw new IllegalStateException("Root file may (currently) not be compressed");
 				case XMLOpus:
-					rootStream = zip.openFile(rootfilePath);
 					rootItem = new OpusFileInput().readOpusFile(rootStream);
-					rootStream.close();
 					break;
 				case XMLScorePartwise:
 				case XMLScoreTimewise:
 					rootItem = new Score(new LinkAttributes(rootfilePath), null);
 			}
+			rootStream.close();
 		} catch (IOException ex) {
 			throw new IOException("Could not load root file", ex);
 		}
@@ -144,23 +145,28 @@ public class CompressedFileInput {
 	public com.xenoage.zong.core.Score loadScore(String path)
 		throws InvalidFormatException, IOException {
 		BufferedInputStream bis = new BufferedInputStream(zip.openFile(path));
-		bis.mark();
 		//XML or compressed?
+		bis.mark();
 		FileType fileType = FileTypeReader.getFileType(bis);
 		bis.reset();
 		bis.unmark();
 		if (fileType == null)
 			throw new InvalidFormatException("Score has invalid format: " + path);
+		com.xenoage.zong.core.Score ret = null;
 		switch (fileType) {
 			case Compressed:
-				return loadCompressedScore(path);
+				ret = loadCompressedScore(path);
+				break;
 			case XMLScorePartwise:
-				return new MusicXmlScoreFileInput().read(bis, path);
+				ret = new MusicXmlScoreFileInput().read(bis, path);
+				break;
 			case XMLScoreTimewise:
 				throw new IllegalStateException("score-timewise is currently not implemented");
 			default:
 				throw new InvalidFormatException("Score has invalid format: " + path);
 		}
+		bis.close();
+		return ret;
 	}
 
 	private com.xenoage.zong.core.Score loadCompressedScore(String path)
