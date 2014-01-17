@@ -8,7 +8,7 @@ import android.graphics.Paint.Style;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 
-import com.xenoage.utils.color.android.AndroidColorTools;
+import com.xenoage.utils.android.color.AndroidColorUtils;
 import com.xenoage.utils.graphics.Units;
 import com.xenoage.utils.graphics.color.ColorInfo;
 import com.xenoage.utils.math.geom.Point2f;
@@ -107,7 +107,7 @@ public class AndroidCanvas
   	  	{
   	  		//TODO - formatting
   	  		FormattedTextString t = (FormattedTextString) e;
-  	  		Paint paint = new Paint(AndroidColorTools.black);
+  	  		Paint paint = new Paint(AndroidColorUtils.black);
   	  		paint.setTypeface(Typeface.SERIF);
   	  		paint.setTextSize(Units.pxToMm(t.style.fontInfo.getSize(), 1));
   	  		paint.setAntiAlias(true);
@@ -150,7 +150,7 @@ public class AndroidCanvas
     ColorInfo color, float lineWidth)
   {
     Paint paint = new Paint();
-    paint.setColor(AndroidColorTools.createColor(color));
+    paint.setColor(AndroidColorUtils.createColor(color));
     paint.setStyle(Style.STROKE);
     paint.setStrokeWidth(lineWidth);
     paint.setStrokeCap(Cap.BUTT);
@@ -165,7 +165,7 @@ public class AndroidCanvas
   @Override public void drawStaff(Point2f pos, float length, int lines,
     ColorInfo color, float lineWidth, float interlineSpace)
   {
-    Paint paint = AndroidColorTools.createPaintFill(color);
+    Paint paint = AndroidColorUtils.createPaintFill(color);
     for (int i = 0; i < lines; i++)
     {
     	float x = pos.x;
@@ -181,7 +181,7 @@ public class AndroidCanvas
   @Override public void drawSimplifiedStaff(Point2f pos, float length, float height,
     ColorInfo color)
   {
-    Paint paint = AndroidColorTools.createPaintFill(color);
+    Paint paint = AndroidColorUtils.createPaintFill(color);
     canvas.drawRect(new RectF(pos.x, pos.y, pos.x + length, pos.y + height), paint);
   }
   
@@ -192,7 +192,7 @@ public class AndroidCanvas
   public void fillEllipse(Point2f pCenter, 
     float width, float height, ColorInfo color)
   {
-    Paint paint = AndroidColorTools.createPaintFill(color);
+    Paint paint = AndroidColorUtils.createPaintFill(color);
     canvas.drawOval(new RectF(pCenter.x - width / 2, pCenter.y - height / 2,
     	pCenter.x + width / 2, pCenter.y + height / 2), paint);
   }
@@ -205,7 +205,7 @@ public class AndroidCanvas
   {
     RectF beamSymbol = new RectF(-1f, -0.25f, 1f, 0.25f);
     
-    Paint paint = AndroidColorTools.createPaintFill(color);
+    Paint paint = AndroidColorUtils.createPaintFill(color);
     
     int oldTransform = canvas.save();
     
@@ -229,7 +229,7 @@ public class AndroidCanvas
   @Override public void drawCurvedLine(Point2f p1, Point2f p2, Point2f c1, Point2f c2,
   	float interlineSpace, ColorInfo color)
   {
-  	Paint paint = AndroidColorTools.createPaintFill(color);
+  	Paint paint = AndroidColorUtils.createPaintFill(color);
     SimpleSlurShape slurShape = new SimpleSlurShape(p1, p2, c1, c2, interlineSpace);
     canvas.drawPath(AndroidSlurRenderer.getPath(slurShape), paint);
   }
@@ -240,7 +240,7 @@ public class AndroidCanvas
    */
   @Override public void fillRect(Rectangle2f rect, ColorInfo color)
   {
-    Paint paint = AndroidColorTools.createPaintFill(color);
+    Paint paint = AndroidColorUtils.createPaintFill(color);
     canvas.drawRect(new RectF(rect.x1(), rect.y1(), rect.x2(), rect.y2()), paint);
   }
   

@@ -3,7 +3,7 @@ package com.xenoage.zong.renderer.background;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 
-import com.xenoage.utils.color.android.AndroidColorTools;
+import com.xenoage.utils.android.color.AndroidColorUtils;
 import com.xenoage.zong.layout.frames.background.Background;
 import com.xenoage.zong.layout.frames.background.ColorBackground;
 
@@ -36,7 +36,7 @@ public class AndroidBackgroundRenderer
   public static Paint getPaint(ColorBackground background)
   {
   	Paint paint = new Paint();
-  	paint.setColor(AndroidColorTools.createColor(background.color));
+  	paint.setColor(AndroidColorUtils.createColor(background.color));
   	paint.setStyle(Style.FILL);
     return paint;
   }

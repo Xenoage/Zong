@@ -11,8 +11,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 
+import com.xenoage.utils.android.color.AndroidColorUtils;
 import com.xenoage.utils.base.NullUtils;
-import com.xenoage.utils.color.android.AndroidColorTools;
 import com.xenoage.utils.graphics.Units;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Size2f;

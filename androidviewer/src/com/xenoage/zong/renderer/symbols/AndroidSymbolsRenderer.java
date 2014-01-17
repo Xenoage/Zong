@@ -5,7 +5,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.Log;
 
-import com.xenoage.utils.color.android.AndroidColorTools;
+import com.xenoage.utils.android.color.AndroidColorUtils;
 import com.xenoage.utils.graphics.color.ColorInfo;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.zong.renderer.canvas.AndroidCanvas;
@@ -39,7 +39,7 @@ public class AndroidSymbolsRenderer
   	c.scale(scaling.x, scaling.y);
 
     Paint paint = new Paint();
-    paint.setColor(AndroidColorTools.createColor(color));
+    paint.setColor(AndroidColorUtils.createColor(color));
     paint.setStyle(Paint.Style.FILL);
     paint.setAntiAlias(true);
     c.drawPath((Path) symbol.path, paint);
