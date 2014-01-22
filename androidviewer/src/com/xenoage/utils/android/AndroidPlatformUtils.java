@@ -6,10 +6,13 @@ import android.content.res.Resources;
 
 import com.xenoage.utils.PlatformUtils;
 import com.xenoage.utils.android.font.AndroidTextMeasurer;
+import com.xenoage.utils.android.xml.AndroidXmlReader;
 import com.xenoage.utils.font.TextMeasurer;
 import com.xenoage.utils.io.InputStream;
 import com.xenoage.utils.jse.JsePlatformUtils;
 import com.xenoage.utils.jse.io.JseInputStream;
+import com.xenoage.utils.jse.xml.JseXmlReader;
+import com.xenoage.utils.xml.XmlReader;
 
 /**
  * Android specific {@link PlatformUtils} implementation.
@@ -40,6 +43,10 @@ public class AndroidPlatformUtils
 	@Override public InputStream openFile(String filePath)
 		throws IOException {
 		return new JseInputStream(resources.getAssets().open(filePath));
+	}
+	
+	@Override public XmlReader createXmlReader(InputStream inputStream) {
+		return new AndroidXmlReader(new JseInputStream(inputStream));
 	}
 
 }

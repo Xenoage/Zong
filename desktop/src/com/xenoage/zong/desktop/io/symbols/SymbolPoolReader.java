@@ -10,8 +10,11 @@ import static com.xenoage.utils.log.Report.fatal;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
+import com.xenoage.utils.io.FileFilters;
+import com.xenoage.utils.io.FilesystemInput;
 import com.xenoage.utils.jse.io.DesktopIO;
 import com.xenoage.utils.jse.io.JseFileUtils;
 import com.xenoage.zong.Voc;
@@ -19,9 +22,7 @@ import com.xenoage.zong.symbols.Symbol;
 import com.xenoage.zong.symbols.SymbolPool;
 
 /**
- * This class reads a {@link SymbolPool} from the file system.
- * 
- * {@link DesktopIO} is used.
+ * This class reads a {@link SymbolPool} from a given {@link FilesystemInput}.
  * 
  * @author Andreas Wenger
  */
@@ -35,7 +36,7 @@ public class SymbolPoolReader {
 	 * Loads and returns the {@link SymbolPool} with the given ID from
 	 * {@value symbolPoolPath} or reports an error if not possible.
 	 */
-	public static SymbolPool readSymbolPool(String id) {
+	public static SymbolPool readSymbolPool(String id, FilesystemInput filesystem) {
 		
 		HashMap<String, Symbol> symbols = map();
 
@@ -45,8 +46,8 @@ public class SymbolPoolReader {
 			handle(fatal(Voc.CouldNotLoadSymbolPool, new FileNotFoundException(dir)));
 		}
 		try {
-			Set<String> files = desktopIO().listFiles(dir, JseFileUtils.getSVGFilter());
-			SvgSymbolReader loader = new SvgSymbolReader();
+			List<String> files = filesystem.listFiles(dir, FileFilters.svgFilter);
+			SvgSymbolReader loader = new SvgSymbolReader(); //GOON
 			LinkedList<String> symbolsWithErrors = new LinkedList<String>();
 			for (String file : files) {
 				try {
