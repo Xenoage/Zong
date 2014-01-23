@@ -1,6 +1,6 @@
 package com.xenoage.zong.desktop.renderer.frames;
 
-import static com.xenoage.utils.jse.io.DesktopIO.desktopIO;
+import static com.xenoage.utils.jse.JsePlatformUtils.desktopIO;
 
 import java.awt.BasicStroke;
 import java.awt.Color;

@@ -21,6 +21,7 @@ import com.xenoage.utils.jse.log.DesktopLogProcessing;
 import com.xenoage.utils.log.Log;
 import com.xenoage.zong.Zong;
 import com.xenoage.zong.desktop.io.midi.out.SynthManager;
+import com.xenoage.zong.desktop.util.JseZongPlatformUtils;
 import com.xenoage.zong.documents.ScoreDoc;
 import com.xenoage.zong.io.ConverterSupportedFormats;
 
@@ -50,8 +51,7 @@ public class Converter {
 
 	public static void main(String[] args)
 		throws IOException {
-		PlatformUtils.init(new JsePlatformUtils());
-		DesktopIO.init(filename);
+		JseZongPlatformUtils.init(filename);
 		
 		Log.init(new DesktopLogProcessing(Zong.getNameAndVersion(projectFirstName)));
 		//SymbolPoolUtils.init(new AWTSVGPathReader());

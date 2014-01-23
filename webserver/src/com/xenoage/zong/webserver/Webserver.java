@@ -25,11 +25,9 @@ import org.eclipse.jetty.servlet.ServletHolder;
 
 import com.google.gson.Gson;
 import com.xenoage.utils.Parser;
-import com.xenoage.utils.PlatformUtils;
 import com.xenoage.utils.error.BasicErrorProcessing;
 import com.xenoage.utils.error.Err;
 import com.xenoage.utils.jse.JsePlatformUtils;
-import com.xenoage.utils.jse.io.DesktopIO;
 import com.xenoage.utils.jse.log.DesktopLogProcessing;
 import com.xenoage.utils.jse.settings.Settings;
 import com.xenoage.utils.log.Log;
@@ -70,8 +68,7 @@ public class Webserver {
 
 	public Webserver() {
 		//init IO and logging
-		PlatformUtils.init(new JsePlatformUtils());
-		DesktopIO.init(filename);
+		JsePlatformUtils.init(filename);
 		Log.init(new DesktopLogProcessing(Zong.getNameAndVersion(projectName)));
 		Err.init(new BasicErrorProcessing());
 

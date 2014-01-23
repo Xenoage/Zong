@@ -2,16 +2,15 @@ package com.xenoage.zong.io.musicxml.in;
 
 import static com.xenoage.utils.PlatformUtils.platformUtils;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static com.xenoage.utils.io.FileFilters.xmlFilter;
+import static com.xenoage.utils.jse.JsePlatformUtils.desktopIO;
 import static org.junit.Assert.fail;
 
 import java.io.FileNotFoundException;
 import java.util.List;
-import java.util.Set;
 
 import org.junit.Test;
 
-import com.xenoage.utils.jse.io.DesktopIO;
-import com.xenoage.utils.jse.io.JseFileUtils;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.util.InconsistentScoreException;
 
@@ -61,11 +60,11 @@ public class MusicXMLScoreFileInputTest {
 	 */
 	public static List<String> getSampleFiles() {
 		List<String> ret = alist();
-		Set<String> files = DesktopIO.desktopIO().listFiles(dir11, JseFileUtils.getXMLFilter());
+		List<String> files = desktopIO().listFiles(dir11, xmlFilter);
 		for (String file : files) {
 			ret.add(dir11 + file);
 		}
-		files = DesktopIO.desktopIO().listFiles(dir20, JseFileUtils.getXMLFilter());
+		files = desktopIO().listFiles(dir20, xmlFilter);
 		for (String file : files) {
 			ret.add(dir20 + file);
 		}

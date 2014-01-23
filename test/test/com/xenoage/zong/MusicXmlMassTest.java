@@ -1,6 +1,8 @@
 package com.xenoage.zong;
 
+import static com.xenoage.utils.io.FileFilters.xmlFilter;
 import static com.xenoage.utils.iterators.It.it;
+import static com.xenoage.utils.jse.io.JseFileUtils.getFilter;
 import static com.xenoage.utils.jse.io.JseFileUtils.listFilesDeep;
 
 import java.io.File;
@@ -12,6 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.xenoage.utils.PlatformUtils;
+import com.xenoage.utils.io.FileFilters;
 import com.xenoage.utils.iterators.It;
 import com.xenoage.utils.jse.JsePlatformUtils;
 import com.xenoage.utils.jse.io.JseFileUtils;
@@ -36,7 +39,6 @@ public class MusicXmlMassTest {
 
 
 	@Before public void setUp() {
-		PlatformUtils.init(new JsePlatformUtils());
 		LangManager.loadLanguage("en");
 	}
 
@@ -46,7 +48,7 @@ public class MusicXmlMassTest {
 	 */
 	@Test public void testSampleFiles() {
 		int ok = 0;
-		Collection<File> files = listFilesDeep(new File(dir), JseFileUtils.getXMLFilter());
+		Collection<File> files = listFilesDeep(new File(dir), getFilter(xmlFilter));
 		System.out.println("Processing " + files.size() + " files...");
 		It<File> filesIt = it(files);
 		for (File file : filesIt) {

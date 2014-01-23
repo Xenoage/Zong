@@ -3,7 +3,7 @@ package com.xenoage.zong;
 import java.io.IOException;
 import java.io.PrintStream;
 
-import com.xenoage.utils.jse.io.DesktopIO;
+import com.xenoage.utils.jse.JsePlatformUtils;
 import com.xenoage.utils.jse.lang.LangManager;
 import com.xenoage.utils.jse.lang.LanguageReader;
 import com.xenoage.utils.lang.Language;
@@ -13,7 +13,7 @@ import com.xenoage.utils.lang.VocID;
  * Creates a PO file (GNU gettext) with all vocab from {@link Voc}
  * for the language "de".
  * 
- * {@link DesktopIO} is used.
+ * {@link JsePlatformUtils} is used.
  * 
  * @author Andreas Wenger
  */
@@ -21,7 +21,7 @@ public class POCreator {
 
 	public static void main(String... args)
 		throws IOException {
-		DesktopIO.init(POCreator.class.getName());
+		JsePlatformUtils.init(POCreator.class.getName());
 		Language lang = LanguageReader.read(LangManager.defaultLangPath, "de");
 		POCreator.write(Voc.values(), lang, "de", "de.po");
 	}

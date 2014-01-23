@@ -5,10 +5,8 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.xenoage.utils.jse.io.DesktopIO;
 import com.xenoage.utils.math.Delta;
 import com.xenoage.zong.desktop.io.musiclayout.LayoutSettingsReader;
-import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 
 public class LayoutSettingsTest {
 
@@ -32,7 +30,6 @@ public class LayoutSettingsTest {
 	}
 
 	public static LayoutSettings loadTestSettings() {
-		DesktopIO.initTest();
 		return LayoutSettingsReader.load("data/test/layout/LayoutSettingsTest.xml");
 	}
 

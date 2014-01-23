@@ -1,7 +1,8 @@
 package com.xenoage.zong;
 
-import static com.xenoage.utils.PlatformUtils.init;
 import static com.xenoage.utils.collections.CollectionUtils.llist;
+import static com.xenoage.utils.io.FileFilters.javaFilter;
+import static com.xenoage.utils.jse.io.JseFileUtils.getFilter;
 import static com.xenoage.utils.jse.io.JseFileUtils.listFilesDeep;
 import static com.xenoage.utils.lang.VocByString.voc;
 
@@ -15,13 +16,13 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import com.xenoage.utils.document.command.Command;
-import com.xenoage.utils.jse.JsePlatformUtils;
 import com.xenoage.utils.jse.io.DesktopIO;
 import com.xenoage.utils.jse.io.JseFileUtils;
 import com.xenoage.utils.jse.lang.LangManager;
 import com.xenoage.utils.jse.lang.LanguageReader;
 import com.xenoage.utils.lang.Language;
 import com.xenoage.utils.lang.VocID;
+import com.xenoage.zong.desktop.util.JseZongPlatformUtils;
 
 /**
  * This class contains tests for the language packages.
@@ -67,8 +68,7 @@ public class VocabularyTry {
 
 	public static void main(String... args)
 		throws Exception {
-		init(new JsePlatformUtils());
-		DesktopIO.init(Zong.filename + "/" + VocabularyTry.class.getName());
+		JseZongPlatformUtils.init(Zong.filename + "/" + VocabularyTry.class.getName());
 		VocabularyTry test = new VocabularyTry();
 		test.setUp();
 		test.testAllVocWordsUsed();
@@ -102,7 +102,7 @@ public class VocabularyTry {
 		//collect all Voc values
 		LinkedList<VocID> remaining = llist((VocID[]) Voc.values());
 		//search in all .java files in src folder
-		Collection<File> files = listFilesDeep(new File(".."), JseFileUtils.getJavaFilter());
+		Collection<File> files = listFilesDeep(new File(".."), getFilter(javaFilter));
 		for (File file : files) {
 			String fileContent = JseFileUtils.readFile(file);
 			for (Iterator<VocID> vocIt = remaining.iterator(); vocIt.hasNext();) {

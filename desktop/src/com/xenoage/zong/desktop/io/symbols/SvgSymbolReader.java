@@ -1,21 +1,17 @@
 package com.xenoage.zong.desktop.io.symbols;
 
-import static com.xenoage.utils.jse.io.DesktopIO.desktopIO;
 import static com.xenoage.utils.log.Log.log;
 import static com.xenoage.utils.log.Report.remark;
 
-import java.io.File;
-
 import org.w3c.dom.Document;
 
-import com.xenoage.utils.jse.io.JseFileUtils;
+import com.xenoage.utils.io.FileUtils;
 import com.xenoage.utils.jse.xml.XMLReader;
 import com.xenoage.zong.symbols.PathSymbol;
 import com.xenoage.zong.symbols.Symbol;
 
 /**
- * A {@link SvgSymbolReader} creates {@link Symbol}s
- * from SVG files.
+ * A {@link SvgSymbolReader} creates {@link Symbol}s from SVG files.
  *
  * @author Andreas Wenger
  */
@@ -26,14 +22,13 @@ public class SvgSymbolReader {
 	 * If an error occurs, an {@link IllegalStateException} is thrown.
 	 */
 	public PathSymbol loadSymbol(String svgFilepath) {
-		File svgFile = new File(svgFilepath);
-		String id = JseFileUtils.getNameWithoutExt(svgFile);
+		String id = FileUtils.getNameWithoutExt(svgFilepath);
 		log(remark("Loading symbol \"" + id + "\", file: \"" + svgFilepath + "\" ..."));
 
 		//open the file
 		Document doc;
 		try {
-			doc = XMLReader.readFile(desktopIO().findFile(svgFilepath).getAbsolutePath());
+			doc = null; //GOON XMLReader.readFile(platformUtils().openFile(svgFilepath));
 		} catch (Exception ex) {
 			throw new IllegalStateException("Could not read XML file \"" + svgFilepath + "\"");
 		}

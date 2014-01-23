@@ -1,6 +1,6 @@
 package com.xenoage.zong.desktop.util.image;
 
-import static com.xenoage.utils.jse.io.DesktopIO.desktopIO;
+import static com.xenoage.utils.jse.JsePlatformUtils.desktopIO;
 
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;

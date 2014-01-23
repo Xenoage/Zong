@@ -9,14 +9,13 @@ import android.graphics.Bitmap;
 
 import com.xenoage.utils.PlatformUtils;
 import com.xenoage.utils.android.AndroidPlatformUtils;
+import com.xenoage.utils.android.io.AndroidIO;
 import com.xenoage.utils.io.InputStream;
-import com.xenoage.utils.jse.io.JseInputStream;
 import com.xenoage.utils.log.Log;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.desktop.io.musicxml.in.MusicXmlScoreDocFileInput;
 import com.xenoage.zong.documents.ScoreDoc;
 import com.xenoage.zong.io.musicxml.in.MusicXmlScoreFileInput;
-import com.xenoage.zong.io.symbols.AndroidSvgPathReader;
 import com.xenoage.zong.symbols.SymbolPool;
 
 /**
@@ -40,7 +39,11 @@ public class App {
 		throws IOException {
 		
 		//init platform utils and logging
-		PlatformUtils.init(new AndroidPlatformUtils(context.getResources()));
+		
+		//GOON
+		AndroidIO.init(context.getResources());
+		PlatformUtils.init(new AndroidPlatformUtils());
+		
 		Log.initNoLog();
 
 		//load symbol pool
