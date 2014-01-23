@@ -1,4 +1,4 @@
-package com.xenoage.zong.mobile.android.scoreview;
+package com.xenoage.zong.android.scoreview;
 
 import static com.xenoage.utils.NullUtils.notNull;
 import static com.xenoage.utils.kernel.Range.range;
@@ -16,6 +16,7 @@ import com.xenoage.utils.math.Units;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.utils.math.geom.Size2i;
+import com.xenoage.zong.android.App;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.format.PageFormat;
 import com.xenoage.zong.core.format.PageMargins;
@@ -28,7 +29,6 @@ import com.xenoage.zong.layout.Layout;
 import com.xenoage.zong.layout.Page;
 import com.xenoage.zong.layout.frames.ScoreFrame;
 import com.xenoage.zong.layout.frames.ScoreFrameChain;
-import com.xenoage.zong.mobile.android.App;
 import com.xenoage.zong.mobile.android.R;
 import com.xenoage.zong.musiclayout.ScoreLayout;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouter;

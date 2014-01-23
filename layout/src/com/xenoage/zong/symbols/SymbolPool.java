@@ -41,7 +41,7 @@ public final class SymbolPool {
 	public Symbol getSymbol(String id) {
 		Symbol ret = symbols.get(id);
 		if (ret == null)
-			ret = commonSymbolPool.getWarningSymbol();
+			ret = CommonSymbolPool.getWarningSymbol();
 		return ret;
 	}
 
@@ -52,7 +52,7 @@ public final class SymbolPool {
 	public Symbol getSymbol(CommonSymbol commonSymbol) {
 		Symbol ret = commonSymbolPool.getSymbol(commonSymbol);
 		if (ret == null)
-			ret = commonSymbolPool.getWarningSymbol();
+			ret = CommonSymbolPool.getWarningSymbol();
 		return ret;
 	}
 	
@@ -60,7 +60,7 @@ public final class SymbolPool {
 	 * Gets the WarningSymbol.
 	 */
 	public WarningSymbol getWarningSymbol() {
-		return commonSymbolPool.getWarningSymbol();
+		return CommonSymbolPool.getWarningSymbol();
 	}
 
 	/**

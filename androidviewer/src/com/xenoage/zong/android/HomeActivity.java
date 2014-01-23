@@ -1,4 +1,4 @@
-package com.xenoage.zong.mobile.android;
+package com.xenoage.zong.android;
 
 import static com.xenoage.utils.PlatformUtils.platformUtils;
 import android.app.Activity;
@@ -12,8 +12,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.xenoage.zong.Zong;
-import com.xenoage.zong.mobile.android.model.Document;
-import com.xenoage.zong.mobile.android.scoreslist.ScoresListAdapter;
+import com.xenoage.zong.android.model.Document;
+import com.xenoage.zong.android.scoreslist.ScoresListAdapter;
+import com.xenoage.zong.mobile.android.R;
 
 public class HomeActivity
 	extends Activity

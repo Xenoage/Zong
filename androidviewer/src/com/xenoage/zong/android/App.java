@@ -1,4 +1,4 @@
-package com.xenoage.zong.mobile.android;
+package com.xenoage.zong.android;
 
 import static com.xenoage.utils.PlatformUtils.platformUtils;
 
@@ -7,11 +7,11 @@ import java.io.IOException;
 import android.content.Context;
 import android.graphics.Bitmap;
 
-import com.xenoage.utils.PlatformUtils;
 import com.xenoage.utils.android.AndroidPlatformUtils;
-import com.xenoage.utils.android.io.AndroidIO;
+import com.xenoage.utils.android.log.AndroidLogProcessing;
 import com.xenoage.utils.io.InputStream;
 import com.xenoage.utils.log.Log;
+import com.xenoage.zong.Zong;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.desktop.io.musicxml.in.MusicXmlScoreDocFileInput;
 import com.xenoage.zong.documents.ScoreDoc;
@@ -28,7 +28,7 @@ public class App {
 
 	//naming "... for Android" according to http://developer.android.com/distribute/googleplay/promote/brand.html
 	//notice: use "Android™" when it appears the first time, and add "Android is a trademark of Google Inc." on the about screen
-	public static final String PROJECT_FIRST_NAME = "Viewer for Android";
+	public static final String projectFirstName = "Viewer for Android™";
 
 	private static SymbolPool symbolPool;
 	private static Bitmap symbolsBitmap;
@@ -39,12 +39,8 @@ public class App {
 		throws IOException {
 		
 		//init platform utils and logging
-		
-		//GOON
-		AndroidIO.init(context.getResources());
-		PlatformUtils.init(new AndroidPlatformUtils());
-		
-		Log.initNoLog();
+		AndroidPlatformUtils.init(context.getResources());
+		Log.init(new AndroidLogProcessing(Zong.getNameAndVersion(projectFirstName)));
 
 		//load symbol pool
 		//SymbolPoolUtils.init(new AndroidSvgPathReader());

@@ -22,7 +22,7 @@ public class CommonSymbolPool {
 	private List<Symbol> symbols;
 	
 	/** The warning symbol. */
-	@Getter private WarningSymbol warningSymbol;
+	@Getter public static WarningSymbol warningSymbol;
 
 
 	public CommonSymbolPool(SymbolPool pool) {

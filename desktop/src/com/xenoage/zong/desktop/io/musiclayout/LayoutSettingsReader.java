@@ -1,6 +1,5 @@
 package com.xenoage.zong.desktop.io.musiclayout;
 
-import static com.xenoage.utils.jse.JsePlatformUtils.desktopIO;
 import static com.xenoage.utils.jse.xml.XMLReader.attributeNotNull;
 import static com.xenoage.utils.jse.xml.XMLReader.elementNotNull;
 import static com.xenoage.utils.jse.xml.XMLReader.readFile;
@@ -13,7 +12,6 @@ import static com.xenoage.zong.desktop.io.musiclayout.SpacingsReader.readSpacing
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import com.xenoage.utils.jse.JsePlatformUtils;
 import com.xenoage.utils.jse.xml.XMLReader;
 import com.xenoage.zong.musiclayout.settings.ChordWidths;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;

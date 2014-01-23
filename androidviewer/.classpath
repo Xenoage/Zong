@@ -17,6 +17,5 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/utils-jse"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/desktop"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/woodstox"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

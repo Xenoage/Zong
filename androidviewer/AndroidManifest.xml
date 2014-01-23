@@ -7,7 +7,7 @@
 
     <application android:icon="@drawable/icon" android:label="@string/app_name"
         android:theme="@style/LightThemeSelector" android:debuggable="true">
-        <activity android:name=".HomeActivity"
+        <activity android:name="com.xenoage.zong.android.HomeActivity"
                   android:label="@string/app_name"
                   android:screenOrientation="portrait">
             <intent-filter>
@@ -16,8 +16,8 @@
             </intent-filter>
         </activity>
 
-		<activity android:name=".InfoActivity" android:screenOrientation="portrait"/>
-		<activity android:name=".ScoreActivity" android:screenOrientation="portrait"/>
+		<activity android:name="com.xenoage.zong.android.InfoActivity" android:screenOrientation="portrait"/>
+		<activity android:name="com.xenoage.zong.android.ScoreActivity" android:screenOrientation="portrait"/>
 
     </application>
 </manifest>

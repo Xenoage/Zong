@@ -51,8 +51,6 @@ public class TextLayouts {
 
 
 	public TextLayouts(ArrayList<Item> items) {
-		if (items.size() == 0)
-			throw new IllegalArgumentException("Must have at least one item");
 		this.items = items;
 		//compute bounding rect
 		Rectangle2f boundingRect = null;

@@ -1,4 +1,4 @@
-package com.xenoage.zong.mobile.android.scoreview;
+package com.xenoage.zong.android.scoreview;
 
 import static com.xenoage.utils.PlatformUtils.platformUtils;
 import static com.xenoage.utils.kernel.Range.range;

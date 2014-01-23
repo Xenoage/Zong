@@ -1,8 +1,7 @@
 package com.xenoage.utils.android.xml;
 
+import java.io.IOException;
 import java.io.InputStream;
-
-import javax.xml.stream.XMLStreamConstants;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -22,16 +21,18 @@ import com.xenoage.utils.xml.XmlReader;
 public class AndroidXmlReader
 	extends XmlReader {
 	
+	private InputStream inputStream;
 	private XmlPullParser reader;
 	private boolean cancelNextClose = false;
 	
-	public AndroidXmlReader(InputStream in) {
+	public AndroidXmlReader(InputStream inputStream) {
 		try {
 			XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
 			factory.setFeature(XmlPullParser.FEATURE_PROCESS_DOCDECL, false);
 	    factory.setNamespaceAware(false);
-			reader = factory.newPullParser();
-			reader.setInput(new JseInputStream(in), "UTF-8");
+	    this.inputStream = inputStream;
+			this.reader = factory.newPullParser();
+			this.reader.setInput(new JseInputStream(inputStream), "UTF-8");
 		} catch (XmlPullParserException ex) {
 			throw new XmlException(ex);
 		}
@@ -53,7 +54,7 @@ public class AndroidXmlReader
 				if (event == XmlPullParser.TEXT) {
 					break;
 				}
-				else if (event == XMLStreamConstants.END_ELEMENT) {
+				else if (event == XmlPullParser.END_TAG) {
 					cancelNextClose = true;
 					return null;
 				}
@@ -144,6 +145,13 @@ public class AndroidXmlReader
 
 	@Override public int getLine() {
 		return reader.getLineNumber();
+	}
+
+	@Override public void close() {
+		try {
+			inputStream.close();
+		} catch (IOException ex) {
+		}
 	}
 
 }

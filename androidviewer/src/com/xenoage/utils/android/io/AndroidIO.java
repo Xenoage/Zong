@@ -10,6 +10,7 @@ import java.util.Set;
 
 import android.content.res.Resources;
 
+import com.xenoage.utils.android.AndroidPlatformUtils;
 import com.xenoage.utils.io.FileFilter;
 import com.xenoage.utils.io.FilesystemInput;
 import com.xenoage.utils.io.InputStream;
@@ -20,31 +21,21 @@ import com.xenoage.utils.jse.io.JseInputStream;
  * Some useful input/output methods for an Android application.
  * 
  * Currently only reading the assets of the app is supported.
+ * 
+ * Use {@link AndroidPlatformUtils#androidIO()} to get an instance of this class.
  *
  * @author Andreas Wenger
  */
 public class AndroidIO
 	implements FilesystemInput {
 
-	private static AndroidIO instance = null;
-	
 	private Resources res;
 	
 	/**
 	 * Initializes the {@link AndroidIO} with the given {@link Resources}.
-	 * This methods has to be called before this class can be used.
 	 */
-	public static void init(Resources res) {
-		instance = new AndroidIO();
-		instance.res = res;
-	}
-
-	/**
-	 * Gets the only instance of the {@link AndroidIO} class.
-	 * The <code>init</code> method has to be called before, otherwise null is returned.
-	 */
-	public static AndroidIO androidIO() {
-		return instance;
+	public AndroidIO(Resources res) {
+		this.res = res;
 	}
 
 	@Override public boolean existsFile(String filepath) {

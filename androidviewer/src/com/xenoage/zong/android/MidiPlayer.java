@@ -1,4 +1,4 @@
-package com.xenoage.zong.mobile.android;
+package com.xenoage.zong.android;
 
 import java.io.File;
 import java.io.IOException;

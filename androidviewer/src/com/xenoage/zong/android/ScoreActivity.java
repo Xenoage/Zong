@@ -1,4 +1,4 @@
-package com.xenoage.zong.mobile.android;
+package com.xenoage.zong.android;
 
 import static com.xenoage.utils.PlatformUtils.platformUtils;
 import static com.xenoage.utils.kernel.Range.range;
@@ -18,8 +18,9 @@ import android.widget.ZoomControls;
 
 import com.github.ysamlan.horizontalpager.HorizontalPager;
 import com.xenoage.utils.math.geom.Size2i;
+import com.xenoage.zong.android.scoreview.ScreenViewBitmaps;
 import com.xenoage.zong.documents.ScoreDoc;
-import com.xenoage.zong.mobile.android.scoreview.ScreenViewBitmaps;
+import com.xenoage.zong.mobile.android.R;
 
 /**
  * This activity displays a given score.

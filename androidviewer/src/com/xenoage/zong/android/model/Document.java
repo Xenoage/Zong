@@ -1,4 +1,4 @@
-package com.xenoage.zong.mobile.android.model;
+package com.xenoage.zong.android.model;
 
 import com.xenoage.utils.annotations.Const;
 

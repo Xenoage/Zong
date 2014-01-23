@@ -10,11 +10,8 @@ import java.io.IOException;
 
 import javax.sound.midi.MidiUnavailableException;
 
-import com.xenoage.utils.PlatformUtils;
 import com.xenoage.utils.document.io.FileFormat;
 import com.xenoage.utils.document.io.FileInput;
-import com.xenoage.utils.jse.JsePlatformUtils;
-import com.xenoage.utils.jse.io.DesktopIO;
 import com.xenoage.utils.jse.io.JseInputStream;
 import com.xenoage.utils.jse.io.JseOutputStream;
 import com.xenoage.utils.jse.log.DesktopLogProcessing;
