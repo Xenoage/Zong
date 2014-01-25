@@ -39,7 +39,7 @@ public class DefaultTexts {
 	}
 
 	public static FormattedText getTempoTextNotNull(Tempo tempo, SymbolPool symbolPool) {
-		FormattedTextStyle style = new FormattedTextStyle();
+		FormattedTextStyle style = FormattedTextStyle.defaultStyle;
 		if (tempo.getText() != null) {
 			//use custom text
 			return styleText(tempo.getText(), style);

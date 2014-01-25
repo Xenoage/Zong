@@ -3,6 +3,7 @@ package com.xenoage.zong.musiclayout.layouter;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.collections.IList;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
@@ -18,11 +19,11 @@ import com.xenoage.zong.symbols.SymbolPool;
 @RequiredArgsConstructor public final class ScoreLayouterContext {
 
 	/** The score which is layouted. */
-	@Getter private final Score score;
+	@NonNull @Getter private final Score score;
 	/** The pool of musical symbols. */
-	@Getter private final SymbolPool symbolPool;
+	@NonNull @Getter private final SymbolPool symbolPool;
 	/** General layout preferences. */
-	@Getter private final LayoutSettings layoutSettings;
+	@NonNull @Getter private final LayoutSettings layoutSettings;
 	/** True to layout the whole score, false to layout
 	 * only the frames of the score frame chain. */
 	@Getter private final boolean isCompleteLayout;

@@ -168,7 +168,7 @@ public class DirectionStampingStrategy
 			defaultLPBelow);
 
 		//create text
-		FormattedTextStyle style = new FormattedTextStyle(); //TODO: FormattedTextStyle(words.getFontInfo());
+		FormattedTextStyle style =FormattedTextStyle.defaultStyle; //TODO: FormattedTextStyle(words.getFontInfo());
 		FormattedText text = styleText(words.getText(), style);
 
 		//create stamping

@@ -1,3 +1,0 @@
-Woodstox is licensed the Apache License 2.0
-
-http://woodstox.codehaus.org

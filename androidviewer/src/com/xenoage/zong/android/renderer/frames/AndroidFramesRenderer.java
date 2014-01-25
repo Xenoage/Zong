@@ -1,10 +1,12 @@
-package com.xenoage.zong.renderer.frames;
+package com.xenoage.zong.android.renderer.frames;
 
 import static com.xenoage.utils.collections.CollectionUtils.map;
 
 import java.util.Map;
 
 import com.xenoage.zong.layout.frames.FrameType;
+import com.xenoage.zong.renderer.frames.FrameRenderer;
+import com.xenoage.zong.renderer.frames.FramesRenderer;
 
 /**
  * This class manages the Android frame renderers.

@@ -134,7 +134,7 @@ public class FormattedTextConverter {
 
 	private static FormattedTextStyle getStyleFromAttributeSet(AttributeSet attr) {
 		if (attr == null) {
-			return new FormattedTextStyle();
+			return FormattedTextStyle.defaultStyle;
 		}
 
 		//font style

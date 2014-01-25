@@ -16,16 +16,15 @@ import android.graphics.drawable.NinePatchDrawable;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.xenoage.utils.PlatformUtils;
 import com.xenoage.utils.jse.io.JseInputStream;
 import com.xenoage.utils.math.Units;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Rectangle2i;
 import com.xenoage.utils.math.geom.Size2i;
+import com.xenoage.zong.android.R;
+import com.xenoage.zong.android.renderer.AndroidBitmapPageRenderer;
 import com.xenoage.zong.documents.ScoreDoc;
 import com.xenoage.zong.layout.Layout;
-import com.xenoage.zong.mobile.android.R;
-import com.xenoage.zong.renderer.AndroidBitmapPageRenderer;
 import com.xenoage.zong.view.PageViewManager;
 import com.xenoage.zong.view.ViewState;
 

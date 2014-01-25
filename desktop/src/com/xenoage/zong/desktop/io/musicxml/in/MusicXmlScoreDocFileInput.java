@@ -1,5 +1,7 @@
 package com.xenoage.zong.desktop.io.musicxml.in;
 
+import static com.xenoage.zong.util.ZongPlatformUtils.zongPlatformUtils;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -7,14 +9,16 @@ import com.xenoage.utils.document.io.FileInput;
 import com.xenoage.utils.exceptions.InvalidFormatException;
 import com.xenoage.utils.filter.AllFilter;
 import com.xenoage.utils.io.InputStream;
+import com.xenoage.utils.log.Log;
+import com.xenoage.utils.log.Report;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.format.LayoutFormat;
 import com.xenoage.zong.core.format.PageFormat;
-import com.xenoage.zong.desktop.io.musiclayout.LayoutSettingsReader;
 import com.xenoage.zong.desktop.io.symbols.SymbolPoolReader;
 import com.xenoage.zong.documents.ScoreDoc;
+import com.xenoage.zong.io.musiclayout.LayoutSettingsReader;
 import com.xenoage.zong.io.musicxml.in.MusicXmlFileReader;
 import com.xenoage.zong.layout.Layout;
 import com.xenoage.zong.layout.LayoutDefaults;
@@ -26,6 +30,7 @@ import com.xenoage.zong.musiclayout.layouter.ScoreLayouter;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.musicxml.types.MxlScorePartwise;
 import com.xenoage.zong.symbols.SymbolPool;
+import com.xenoage.zong.util.ZongPlatformUtils;
 
 /**
  * This class reads a MusicXML 2.0 file
@@ -72,8 +77,8 @@ public class MusicXmlScoreDocFileInput
 			layoutFormat = (LayoutFormat) oLayoutFormat;
 		}
 		
-		//load symbol pool - TIDY: do not reload each time when a score is loaded
-		SymbolPool symbolPool = SymbolPoolReader.readSymbolPool("default");
+		//use default symbol pool
+		SymbolPool symbolPool = zongPlatformUtils().getSymbolPool();
 		
 		//load layout settings - TIDY: do not reload each time when a score is loaded
 		LayoutSettings layoutSettings = LayoutSettingsReader.load("data/layout/default.xml");

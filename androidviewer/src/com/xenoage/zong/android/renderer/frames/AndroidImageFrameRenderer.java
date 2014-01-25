@@ -1,4 +1,4 @@
-package com.xenoage.zong.renderer.frames;
+package com.xenoage.zong.android.renderer.frames;
 
 import static com.xenoage.utils.PlatformUtils.platformUtils;
 import static com.xenoage.utils.log.Log.log;
@@ -11,11 +11,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 
 import com.xenoage.utils.jse.io.JseInputStream;
+import com.xenoage.zong.android.renderer.canvas.AndroidCanvas;
 import com.xenoage.zong.layout.frames.Frame;
 import com.xenoage.zong.layout.frames.ImageFrame;
 import com.xenoage.zong.renderer.RendererArgs;
-import com.xenoage.zong.renderer.canvas.AndroidCanvas;
 import com.xenoage.zong.renderer.canvas.Canvas;
+import com.xenoage.zong.renderer.frames.FrameRenderer;
 
 /**
  * Android renderer for an image frame.

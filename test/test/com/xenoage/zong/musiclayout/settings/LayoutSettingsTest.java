@@ -3,14 +3,17 @@ package com.xenoage.zong.musiclayout.settings;
 import static com.xenoage.utils.math.Fraction.fr;
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
+
 import org.junit.Test;
 
 import com.xenoage.utils.math.Delta;
-import com.xenoage.zong.desktop.io.musiclayout.LayoutSettingsReader;
+import com.xenoage.zong.io.musiclayout.LayoutSettingsReader;
 
 public class LayoutSettingsTest {
 
-	@Test public void testGetWidth() {
+	@Test public void testGetWidth()
+		throws IOException {
 		LayoutSettings ls = loadTestSettings();
 		ChordSpacings sp = ls.spacings.normalChordSpacings;
 		//duration 1/4 = width 3
@@ -29,7 +32,8 @@ public class LayoutSettingsTest {
 		assertEquals(12, sp.getWidth(fr(2, 1)), Delta.DELTA_FLOAT_ROUGH);
 	}
 
-	public static LayoutSettings loadTestSettings() {
+	public static LayoutSettings loadTestSettings()
+		throws IOException {
 		return LayoutSettingsReader.load("data/test/layout/LayoutSettingsTest.xml");
 	}
 

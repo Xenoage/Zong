@@ -1,7 +1,7 @@
 package com.xenoage.zong.android.scoreslist;
 
 import com.xenoage.zong.android.model.Document;
-import com.xenoage.zong.mobile.android.R;
+import com.xenoage.zong.android.R;
 
 import android.content.Context;
 import android.database.DataSetObserver;

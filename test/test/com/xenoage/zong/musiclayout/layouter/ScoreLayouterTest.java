@@ -3,12 +3,14 @@ package com.xenoage.zong.musiclayout.layouter;
 import static com.xenoage.utils.PlatformUtils.platformUtils;
 import static org.junit.Assert.fail;
 
+import java.io.IOException;
+
 import org.junit.Test;
 
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.core.Score;
-import com.xenoage.zong.desktop.io.musiclayout.LayoutSettingsReader;
 import com.xenoage.zong.desktop.io.symbols.SymbolPoolReader;
+import com.xenoage.zong.io.musiclayout.LayoutSettingsReader;
 import com.xenoage.zong.io.musicxml.in.MusicXmlScoreFileInput;
 import com.xenoage.zong.io.musicxml.in.MusicXMLScoreFileInputTest;
 import com.xenoage.zong.musiclayout.layouter.notation.AccidentalsAlignmentStrategy;
@@ -30,9 +32,10 @@ public class ScoreLayouterTest {
 	/**
 	 * Try to layout all official MusicXML 1.1 and 2.0 sample files.
 	 * We can not test for the correct layout of course, but at least
-	 * we want to have no exceptions.
+	 * we want to have no exceptions. 
 	 */
-	@Test public void testSampleFiles() {
+	@Test public void testSampleFiles()
+		throws IOException {
 		//SymbolPoolUtils.init(new AWTSVGPathReader());
 		SymbolPool symbolPool = SymbolPoolReader.readSymbolPool("default");
 		LayoutSettings layoutSettings = LayoutSettingsReader.load("data/test/layout/LayoutSettingsTest.xml");

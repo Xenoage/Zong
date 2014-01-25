@@ -1,12 +1,13 @@
-package com.xenoage.zong.renderer;
+package com.xenoage.zong.android.renderer;
 
-import static com.xenoage.zong.renderer.frames.AndroidFramesRenderer.androidFramesRenderer;
+import static com.xenoage.zong.android.renderer.frames.AndroidFramesRenderer.androidFramesRenderer;
 
 import com.xenoage.utils.math.geom.Point2i;
+import com.xenoage.zong.android.renderer.canvas.AndroidCanvas;
 import com.xenoage.zong.layout.Layout;
 import com.xenoage.zong.layout.Page;
 import com.xenoage.zong.layout.frames.Frame;
-import com.xenoage.zong.renderer.canvas.AndroidCanvas;
+import com.xenoage.zong.renderer.RendererArgs;
 import com.xenoage.zong.renderer.canvas.Canvas;
 
 /**

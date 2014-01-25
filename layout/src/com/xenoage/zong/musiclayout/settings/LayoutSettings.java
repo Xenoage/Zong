@@ -3,6 +3,7 @@ package com.xenoage.zong.musiclayout.settings;
 import lombok.Data;
 
 import com.xenoage.utils.annotations.Const;
+import com.xenoage.utils.annotations.NonNull;
 
 /**
  * Settings for the musical layout.
@@ -21,11 +22,11 @@ import com.xenoage.utils.annotations.Const;
 @Const @Data public final class LayoutSettings {
 
 	//chord settings
-	public final ChordWidths chordWidths;
-	public final ChordWidths graceChordWidths;
+	@NonNull public final ChordWidths chordWidths;
+	@NonNull public final ChordWidths graceChordWidths;
 
 	//spacings
-	public final Spacings spacings;
+	@NonNull public final Spacings spacings;
 
 	//scalings
 	public final float scalingClefInner; //clef in the middle of a staff

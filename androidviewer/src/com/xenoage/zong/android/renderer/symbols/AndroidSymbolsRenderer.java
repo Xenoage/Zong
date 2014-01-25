@@ -1,4 +1,4 @@
-package com.xenoage.zong.renderer.symbols;
+package com.xenoage.zong.android.renderer.symbols;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -8,7 +8,8 @@ import android.util.Log;
 import com.xenoage.utils.android.color.AndroidColorUtils;
 import com.xenoage.utils.color.Color;
 import com.xenoage.utils.math.geom.Point2f;
-import com.xenoage.zong.renderer.canvas.AndroidCanvas;
+import com.xenoage.zong.android.renderer.canvas.AndroidCanvas;
+import com.xenoage.zong.renderer.symbols.SymbolsRenderer;
 import com.xenoage.zong.symbols.PathSymbol;
 import com.xenoage.zong.symbols.Symbol;
 import com.xenoage.zong.symbols.WarningSymbol;

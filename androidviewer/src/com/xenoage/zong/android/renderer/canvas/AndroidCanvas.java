@@ -1,4 +1,4 @@
-package com.xenoage.zong.renderer.canvas;
+package com.xenoage.zong.android.renderer.canvas;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -15,11 +15,14 @@ import com.xenoage.utils.math.Units;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Rectangle2f;
 import com.xenoage.utils.math.geom.Size2f;
+import com.xenoage.zong.android.renderer.slur.AndroidSlurRenderer;
+import com.xenoage.zong.android.renderer.symbols.AndroidSymbolsRenderer;
 import com.xenoage.zong.core.text.Alignment;
 import com.xenoage.zong.io.selection.text.TextSelection;
-import com.xenoage.zong.renderer.slur.AndroidSlurRenderer;
+import com.xenoage.zong.renderer.canvas.CanvasDecoration;
+import com.xenoage.zong.renderer.canvas.CanvasFormat;
+import com.xenoage.zong.renderer.canvas.CanvasIntegrity;
 import com.xenoage.zong.renderer.slur.SimpleSlurShape;
-import com.xenoage.zong.renderer.symbols.AndroidSymbolsRenderer;
 import com.xenoage.zong.symbols.Symbol;
 import com.xenoage.zong.text.FormattedText;
 import com.xenoage.zong.text.FormattedTextElement;

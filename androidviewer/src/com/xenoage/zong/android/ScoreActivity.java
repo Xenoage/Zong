@@ -2,6 +2,8 @@ package com.xenoage.zong.android;
 
 import static com.xenoage.utils.PlatformUtils.platformUtils;
 import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.utils.log.Log.log;
+import static com.xenoage.utils.log.Report.error;
 
 import java.io.IOException;
 
@@ -17,10 +19,12 @@ import android.widget.TextView;
 import android.widget.ZoomControls;
 
 import com.github.ysamlan.horizontalpager.HorizontalPager;
+import com.xenoage.utils.log.Log;
+import com.xenoage.utils.log.Report;
 import com.xenoage.utils.math.geom.Size2i;
 import com.xenoage.zong.android.scoreview.ScreenViewBitmaps;
 import com.xenoage.zong.documents.ScoreDoc;
-import com.xenoage.zong.mobile.android.R;
+import com.xenoage.zong.android.R;
 
 /**
  * This activity displays a given score.
@@ -194,6 +198,9 @@ public class ScoreActivity
 	}
 
 	private void showError(String text) {
+		//show error in log
+		log(error(text));
+		//show error in text view
 		final TextView tv = new TextView(ScoreActivity.this);
 		tv.setText(text);
 		runOnUiThread(new Runnable() {

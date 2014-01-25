@@ -7,6 +7,7 @@ import lombok.Data;
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.annotations.NonEmpty;
 import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.font.FontInfo;
 import com.xenoage.utils.font.TextMetrics;
 
 /**
@@ -43,7 +44,12 @@ import com.xenoage.utils.font.TextMetrics;
 
 		this.text = text;
 		this.style = style;
-		this.metrics = platformUtils().getTextMeasurer().measure(style.getFont(), text);
+		
+		FontInfo font = style.getFont();
+		if (font == null)
+			font = FontInfo.defaultValue;
+		
+		this.metrics = platformUtils().getTextMeasurer().measure(font, text);
 	}
 
 	public static FormattedTextString fString(String text, FormattedTextStyle style) {

@@ -24,7 +24,8 @@ import com.xenoage.utils.font.FontInfo;
 	//default values
 	public static final Superscript defaultSuperscript = Superscript.Normal;
 	public static final Color defaultColor = Color.black;
-	public static final FormattedTextStyle defaultStyle = new FormattedTextStyle(null, null, null);
+	public static final FormattedTextStyle defaultStyle =
+		new FormattedTextStyle(FontInfo.defaultValue, defaultColor, defaultSuperscript);
 
 	//style properties
 	@Getter @NonNull private final FontInfo font;
@@ -59,21 +60,11 @@ import com.xenoage.utils.font.FontInfo;
 	}
 
 	/**
-	* Creates a new {@link FormattedTextStyle} with the given font size and color.
-	* For the missing information the default style is used.
-	*/
-	public FormattedTextStyle(float fontSize, Color color) {
-		this(new FontInfo((String) null, fontSize, null), color, defaultSuperscript);
-	}
-
-	/**
-	 * Creates a new {@link FormattedTextStyle} with the given font information.
+	 * Creates a new {@link FormattedTextStyle} with the given font size and color.
 	 * For the missing information the default style is used.
 	 */
-	public FormattedTextStyle() {
-		this.font = null; //not needed, since font is given
-		this.superscript = defaultSuperscript;
-		this.color = defaultColor;
+	public FormattedTextStyle(float fontSize, Color color) {
+		this(new FontInfo((String) null, fontSize, null), color, defaultSuperscript);
 	}
 
 }

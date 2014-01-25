@@ -1,11 +1,12 @@
-package com.xenoage.zong.renderer.frames;
+package com.xenoage.zong.android.renderer.frames;
 
 import com.xenoage.utils.math.geom.Point2f;
+import com.xenoage.zong.android.renderer.canvas.AndroidCanvas;
 import com.xenoage.zong.layout.frames.Frame;
 import com.xenoage.zong.layout.frames.TextFrame;
 import com.xenoage.zong.renderer.RendererArgs;
-import com.xenoage.zong.renderer.canvas.AndroidCanvas;
 import com.xenoage.zong.renderer.canvas.Canvas;
+import com.xenoage.zong.renderer.frames.FrameRenderer;
 
 /**
  * Android renderer for a text frame.

@@ -1,22 +1,24 @@
 package com.xenoage.zong.android;
 
 import static com.xenoage.utils.PlatformUtils.platformUtils;
+import static com.xenoage.zong.util.ZongPlatformUtils.zongPlatformUtils;
 
 import java.io.IOException;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 
-import com.xenoage.utils.android.AndroidPlatformUtils;
 import com.xenoage.utils.android.log.AndroidLogProcessing;
 import com.xenoage.utils.io.InputStream;
 import com.xenoage.utils.log.Log;
 import com.xenoage.zong.Zong;
+import com.xenoage.zong.android.util.AndroidZongPlatformUtils;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.desktop.io.musicxml.in.MusicXmlScoreDocFileInput;
 import com.xenoage.zong.documents.ScoreDoc;
 import com.xenoage.zong.io.musicxml.in.MusicXmlScoreFileInput;
 import com.xenoage.zong.symbols.SymbolPool;
+import com.xenoage.zong.util.ZongPlatformUtils;
 
 /**
  * General information about the app and
@@ -39,13 +41,11 @@ public class App {
 		throws IOException {
 		
 		//init platform utils and logging
-		AndroidPlatformUtils.init(context.getResources());
+		AndroidZongPlatformUtils.init(context.getResources());
 		Log.init(new AndroidLogProcessing(Zong.getNameAndVersion(projectFirstName)));
 
 		//load symbol pool
-		//SymbolPoolUtils.init(new AndroidSvgPathReader());
-		//symbolPool = new SymbolPool();
-		//symbolPoolUtils.setDefaultSymbolPool(symbolPool);
+		symbolPool = zongPlatformUtils().getSymbolPool();
 
 		//midi player
 		midiPlayer = new MidiPlayer();

@@ -1,4 +1,4 @@
-package com.xenoage.zong.io.symbols;
+package com.xenoage.zong.android.io.symbols;
 
 import android.graphics.Matrix;
 import android.graphics.Path;
@@ -6,6 +6,7 @@ import android.graphics.RectF;
 
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Rectangle2f;
+import com.xenoage.zong.io.symbols.SvgPathReader;
 
 /**
  * This class creates a path from a given SVG path.

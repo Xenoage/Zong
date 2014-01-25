@@ -206,7 +206,8 @@ public final class ColumnHeader
 	public Break setBreak(Break measureBreak) {
 		Break old = this.measureBreak;
 		this.measureBreak = measureBreak;
-		this.measureBreak.setParent(this);
+		if (this.measureBreak != null)
+			this.measureBreak.setParent(this);
 		return old;
 	}
 

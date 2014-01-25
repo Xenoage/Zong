@@ -5,6 +5,7 @@ import static com.xenoage.utils.math.Delta.DELTA_FLOAT;
 import static com.xenoage.utils.math.Fraction.fr;
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.junit.Before;
@@ -36,7 +37,8 @@ public class SeparateVoiceSpacingStrategyTest {
 	private LayoutSettings layoutSettings;
 
 
-	@Before public void setUp() {
+	@Before public void setUp()
+		throws IOException {
 		r1 = new Rest(fr(1, 4));
 		r2 = new Rest(fr(1, 8));
 		r3 = new Rest(fr(1, 8));

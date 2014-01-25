@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.xenoage.zong.Zong;
-import com.xenoage.zong.mobile.android.R;
+import com.xenoage.zong.android.R;
 
 
 public class InfoActivity

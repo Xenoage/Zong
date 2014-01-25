@@ -4,7 +4,10 @@ import static com.xenoage.utils.CheckUtils.checkArgsNotNull;
 
 import com.xenoage.utils.PlatformUtils;
 import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.error.Err;
+import com.xenoage.utils.log.Report;
 import com.xenoage.zong.io.symbols.SvgPathReader;
+import com.xenoage.zong.symbols.SymbolPool;
 
 /**
  * Interface for platform dependent methods which are specific to Zong!,
@@ -23,8 +26,10 @@ public abstract class ZongPlatformUtils {
 	 * Gets the current {@link ZongPlatformUtils}.
 	 */
 	@NonNull public static ZongPlatformUtils zongPlatformUtils() {
-		if (zongPlatformUtils == null)
+		if (zongPlatformUtils == null) {
+			Err.handle(Report.fatal(ZongPlatformUtils.class.getName() + " not initialized"));
 			throw new IllegalStateException(ZongPlatformUtils.class.getName() + " not initialized");
+		}
 		return zongPlatformUtils;
 	}
 	
@@ -35,6 +40,11 @@ public abstract class ZongPlatformUtils {
 		checkArgsNotNull(zongPlatformUtils);
 		ZongPlatformUtils.zongPlatformUtils = zongPlatformUtils;
 	}
+	
+	/**
+	 * Gets the default SymbolPool.
+	 */
+	public abstract SymbolPool getSymbolPool();
 	
 	/**
 	 * Gets the {@link SvgPathReader} for the current platform.

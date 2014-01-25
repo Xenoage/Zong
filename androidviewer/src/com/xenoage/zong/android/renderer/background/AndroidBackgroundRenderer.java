@@ -1,4 +1,4 @@
-package com.xenoage.zong.renderer.background;
+package com.xenoage.zong.android.renderer.background;
 
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
