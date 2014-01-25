@@ -20,7 +20,8 @@ public abstract class MidiSequenceWriter<T> {
 	protected static final int controllerVolume = 7;
 	protected static final int controllerPan = 10;
 	
-	//short message commands
+	//short message commands - TIDY: not compatible with AndroidMidiSequenceWriter, since
+	//the order of the bytes is reversed. Can we find a platform independent representation?
 	protected static final int commandProgramChange = 0xC0; //192
 	protected static final int commandControlChange = 0xB0; //176
 	protected static final int commandNoteOn        = 0x90; //144
@@ -141,7 +142,7 @@ public abstract class MidiSequenceWriter<T> {
 	/**
 	 * Converts the given value in beats per minutes into microseconds per beat.
 	 */
-	private static int getMicrosecondsPerBeat(int bpm) {
+	public static int getMicrosecondsPerBeat(int bpm) {
 		final int msPerMinute = 60000000;
 		return msPerMinute / bpm;
 	}
