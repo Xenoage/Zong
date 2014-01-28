@@ -35,7 +35,7 @@ public class AndroidBitmapPageRenderer {
 
 		Bitmap bitmap = Bitmap.createBitmap(width, height, Config.ARGB_8888);
 		Canvas canvas = new Canvas(bitmap);
-		canvas.drawARGB(255, 255, 255, 255); //GOON: necessary? and really 8888 bitmap?
+		canvas.drawARGB(255, 255, 255, 255); //TODO: necessary? and really 8888 bitmap?
 
 		canvas.scale(zoom, zoom);
 		androidPageLayoutRenderer.paint(layout, pageIndex, new AndroidCanvas(canvas, pageSize,

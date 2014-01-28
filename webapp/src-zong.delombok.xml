@@ -1,0 +1,24 @@
+<!--
+Ant script which "delombok"s the required Zong! projects.
+Call this script each time before compiling this project.
+-->
+<project name="zong-src.delombok" default="zong-src.delombok">
+	<property name="target" value="src-zong"/>
+	<property name="lombok-path" value="../lib/lombok-1.12.5-xng.jar"/>
+	<target name="zong-src.delombok">
+	    <echo>Delombok Zong! sources...</echo>
+	    <!-- clean target directory -->
+		<delete includeEmptyDirs="true">
+			<fileset dir="${target}">
+			    <include name="**/*"/>
+        		<exclude name="readme.txt"/>
+		    </fileset>
+		</delete>
+		<!-- delombok -->
+		<taskdef classname="lombok.delombok.ant.DelombokTask" classpath="${lombok-path}" name="delombok"/>
+		<delombok verbose="true" encoding="UTF-8" to="${target}" from="../core/src">
+			<format value="suppressWarnings:skip" />
+		</delombok>
+		<echo>Done.</echo>
+	</target>
+</project>
