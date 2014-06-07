@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import lombok.ToString;
+
 import com.xenoage.utils.annotations.MaybeEmpty;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.zong.core.Score;
@@ -22,6 +24,7 @@ import com.xenoage.zong.symbols.SymbolPool;
  *
  * @author Andreas Wenger
  */
+@ToString
 public class ScoreLayout {
 
 	/** The score */

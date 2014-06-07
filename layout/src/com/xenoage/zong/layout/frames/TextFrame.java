@@ -7,7 +7,7 @@ import com.xenoage.zong.text.FormattedText;
 /**
  * A {@link TextFrame} is a frame that contains a {@link FormattedText}.
  * 
- * It may use multiple fonts, colors and  styles and may contain
+ * It may use multiple fonts, colors and styles and may contain
  * several paragraphs.
  * 
  * @author Andreas Wenger

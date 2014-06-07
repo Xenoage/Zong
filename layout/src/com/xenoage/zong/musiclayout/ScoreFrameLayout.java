@@ -7,6 +7,7 @@ import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import com.xenoage.utils.iterators.MultiIt;
 import com.xenoage.utils.math.geom.Point2f;
@@ -28,6 +29,7 @@ import com.xenoage.zong.musiclayout.stampings.TextStamping;
  * 
  * @author Andreas Wenger
  */
+@ToString
 public final class ScoreFrameLayout {
 
 	/** Information about the systems in this frame. */

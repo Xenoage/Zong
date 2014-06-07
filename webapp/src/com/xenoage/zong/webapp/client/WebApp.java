@@ -34,6 +34,9 @@ public class WebApp
 		container.add(new Label(findAClef(score, MP.atBeat(1, 1, 0, _0))));
 		MP mp = MP.atBeat(0, 1, 0, _0);
 		container.add(new Label("Voice at " + mp + ": " + score.getVoice(mp)));
+		
+		container.add(new Label("And here is the layout data:"));
+		container.add(new Label("TODO"));
 	}
 	
 	private String findAClef(Score score, MP mp) {

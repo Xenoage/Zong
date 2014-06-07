@@ -1,5 +1,7 @@
 package com.xenoage.zong.musiclayout.stampings;
 
+import lombok.ToString;
+
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.utils.math.geom.Point2f;
@@ -14,7 +16,8 @@ import com.xenoage.zong.musiclayout.stampings.bitmap.StaffStampingBitmapInfo;
  *
  * @author Andreas Wenger
  */
-@Const public final class StaffStamping
+@Const @ToString
+public final class StaffStamping
 	extends Stamping {
 
 	/** Top-left (TODO: really?) position (top line) of the staff in mm. */

@@ -11,7 +11,7 @@
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="com.google.gwt.eclipse.core.moduleClasspathProvider"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.google.gwt.dev.DevMode"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-remoteUI &quot;${gwt_remote_ui_server_port}:${unique_id}&quot; -startupUrl webapp.html -logLevel INFO -codeServerPort 9997 -port 8888 -war C:\Users\andi\Werkstatt\Zong-github\webapp\war com.xenoage.zong.webapp.webapp"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-startupUrl webapp.html -war C:\Users\andi\Werkstatt\Zong-github\webapp\war -remoteUI &quot;${gwt_remote_ui_server_port}:${unique_id}&quot; -logLevel INFO -codeServerPort 9997 -port 8888 com.xenoage.zong.webapp.webapp"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="webapp"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xmx512m -javaagent:C:\Users\andi\Programme\eclipse-kepler\lombok.jar=ECJ"/>
 </launchConfiguration>

@@ -11,6 +11,7 @@ import java.util.Collection;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.xenoage.utils.PlatformUtils;
@@ -29,6 +30,7 @@ import com.xenoage.zong.symbols.SymbolPool;
  * 
  * @author Andreas Wenger
  */
+@Ignore
 public class MusicXmlMassTest {
 
 	private static final String dir = //*

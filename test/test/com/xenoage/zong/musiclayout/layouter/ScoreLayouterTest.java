@@ -44,7 +44,7 @@ public class ScoreLayouterTest {
 				//System.out.println(file);
 				Score score = new MusicXmlScoreFileInput().read(platformUtils().openFile(file), file);
 				Size2f areaSize = new Size2f(150, 10000);
-				new ScoreLayouter(score, symbolPool, layoutSettings, false, areaSize).createLayoutWithExceptions();
+				new ScoreLayouter(score, symbolPool, layoutSettings, true, areaSize).createLayoutWithExceptions();
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				fail("Failed to layout file: " + file);

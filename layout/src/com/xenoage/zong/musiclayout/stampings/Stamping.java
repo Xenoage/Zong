@@ -1,6 +1,7 @@
 package com.xenoage.zong.musiclayout.stampings;
 
 import lombok.AllArgsConstructor;
+import lombok.ToString;
 
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.math.geom.Shape;
@@ -16,7 +17,8 @@ import com.xenoage.zong.core.music.MusicElement;
  *
  * @author Andreas Wenger
  */
-@Const @AllArgsConstructor public abstract class Stamping {
+@Const @AllArgsConstructor @ToString
+public abstract class Stamping {
 
 	/**
 	 * The musical level to which a stamping belongs to.

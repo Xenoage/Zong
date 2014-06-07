@@ -6,8 +6,7 @@ import com.xenoage.utils.kernel.Range;
 import com.xenoage.zong.core.Score;
 
 /**
- * This event is fired when the score has been
- * changed.
+ * This event is fired when the score has been changed.
  * 
  * @author Andreas Wenger
  */
