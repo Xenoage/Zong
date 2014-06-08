@@ -2,12 +2,21 @@ package com.xenoage.zong.webapp.client;
 
 import static com.xenoage.utils.math.Fraction._0;
 
+import java.util.HashMap;
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.util.Interval;
 import com.xenoage.zong.core.position.MP;
+import com.xenoage.zong.io.musiclayout.LayoutSettingsReader;
+import com.xenoage.zong.musiclayout.ScoreLayout;
+import com.xenoage.zong.musiclayout.layouter.ScoreLayouter;
+import com.xenoage.zong.musiclayout.settings.LayoutSettings;
+import com.xenoage.zong.symbols.Symbol;
+import com.xenoage.zong.symbols.SymbolPool;
 import com.xenoage.zong.util.demo.ScoreRevolutionary;
 
 
@@ -21,6 +30,8 @@ public class WebApp
 	 * This is the entry point method.
 	 */
 	@Override public void onModuleLoad() {
+		
+		//test core
 		Score score = ScoreRevolutionary.createScore();
 		//String t = score.getClef(MP.atBeat(0, 1, 0, _0), Interval.BeforeOrAt).getType().toString() + " found";
 		//Clef clef = new Clef(ClefType.G);
@@ -35,7 +46,18 @@ public class WebApp
 		MP mp = MP.atBeat(0, 1, 0, _0);
 		container.add(new Label("Voice at " + mp + ": " + score.getVoice(mp)));
 		
+		//test layout
 		container.add(new Label("And here is the layout data:"));
+		SymbolPool symbolPool = new SymbolPool("default", new HashMap<String, Symbol>());
+		try {
+			LayoutSettings layoutSettings = LayoutSettingsReader.load("data/test/layout/LayoutSettingsTest.xml");
+			Size2f areaSize = new Size2f(150, 10000);
+			ScoreLayout layout = new ScoreLayouter(score, symbolPool, layoutSettings, true,
+				areaSize).createLayoutWithExceptions();
+			System.out.println(layout.toString());
+		} catch (Exception ex) {
+			container.add(new Label("ERROR: " + ex.toString()));
+		}
 		container.add(new Label("TODO"));
 	}
 	

@@ -17,6 +17,7 @@ import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.utils.kernel.Tuple3;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Rectangle2f;
+import com.xenoage.zong.desktop.util.math.DesktopMathUtils;
 
 /**
  * This class combines several {@link TextLayout}s with
@@ -56,7 +57,7 @@ public class TextLayouts {
 		Rectangle2f boundingRect = null;
 		for (int i : range(items)) {
 			Item item = items.get(i);
-			Rectangle2f r = Rectangle2f.fromRectangle2D(item.textLayout.getBounds()).move(item.position);
+			Rectangle2f r = DesktopMathUtils.createRectangle2f(item.textLayout.getBounds()).move(item.position);
 			if (boundingRect == null)
 				boundingRect = r;
 			else

@@ -13,7 +13,7 @@ import com.xenoage.zong.symbols.SymbolPool;
  * Interface for platform dependent methods which are specific to Zong!,
  * similar to the more general {@link PlatformUtils} class.
  * 
- * Call the {@link #init(ZongPlatformUtils, PlatformUtils)} method before
+ * Call the {@link #init(ZongPlatformUtils)} method before
  * using the other methods of this class.
  * 
  * @author Andreas Wenger

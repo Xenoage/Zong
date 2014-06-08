@@ -6,6 +6,7 @@ import java.awt.geom.Point2D;
 
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Rectangle2f;
+import com.xenoage.zong.desktop.util.math.DesktopMathUtils;
 import com.xenoage.zong.io.symbols.SvgPathReader;
 
 /**
@@ -66,7 +67,7 @@ public class AwtSvgPathReader
 	}
 
 	@Override public Rectangle2f getBoundingRect() {
-		return new Rectangle2f(path.getBounds2D());
+		return DesktopMathUtils.createRectangle2f(path.getBounds2D());
 	}
 
 }
