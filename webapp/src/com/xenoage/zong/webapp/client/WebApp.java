@@ -2,11 +2,14 @@ package com.xenoage.zong.webapp.client;
 
 import static com.xenoage.utils.math.Fraction._0;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.xenoage.utils.gwt.GwtPlatformUtils;
+import com.xenoage.utils.gwt.io.GwtInputStream;
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.util.Interval;
@@ -45,6 +48,18 @@ public class WebApp
 		container.add(new Label(findAClef(score, MP.atBeat(1, 1, 0, _0))));
 		MP mp = MP.atBeat(0, 1, 0, _0);
 		container.add(new Label("Voice at " + mp + ": " + score.getVoice(mp)));
+		
+		//Test GWT IO
+		GwtPlatformUtils.init();
+		GwtInputStream s;
+		try {
+			s = (GwtInputStream) GwtPlatformUtils.platformUtils().openFile("test.txt");
+			container.add(new Label("File content:"));
+			container.add(new Label(s.data));
+		} catch (Exception ex) {
+			container.add(new Label("File error: " + ex.toString()));
+		}
+		
 		
 		//test layout
 		container.add(new Label("And here is the layout data:"));
