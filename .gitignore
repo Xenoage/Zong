@@ -1,4 +1,5 @@
 *.class
+Thumbs.db
 
 # Package Files #
 *.jar
@@ -15,3 +16,4 @@ build
 # Libraries #
 lib/*.jar
 lib/*.txt
+

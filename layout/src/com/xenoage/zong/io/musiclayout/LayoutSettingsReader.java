@@ -9,10 +9,7 @@ import static java.lang.Float.parseFloat;
 
 import java.io.IOException;
 
-import com.xenoage.utils.io.AsyncReader;
-import com.xenoage.utils.io.AsyncReaderCallback;
 import com.xenoage.utils.io.InputStream;
-import com.xenoage.utils.io.InputStreamCallback;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.zong.musiclayout.settings.ChordWidths;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
@@ -23,24 +20,15 @@ import com.xenoage.zong.musiclayout.settings.Spacings;
  * 
  * @author Andreas Wenger
  */
-public final class LayoutSettingsReader
-	implements AsyncReader<LayoutSettings> {
+public final class LayoutSettingsReader {
 
 	//private static final String file = "data/musiclayout/default.xml";
-	
-	private InputStream inputStream = null;
-	private AsyncReaderCallback<LayoutSettings> callback = null;
 
 	/**
 	 * Reads the {@link LayoutSettings} from the given input stream.
 	 */
-	@Override public void read(InputStream inputStream, AsyncReaderCallback<LayoutSettings> callback) {
-		this.inputStream = inputStream;
-		this.callback = callback;
-		inputStream.open(callback);
-	}
-
-	@Override public void inputStreamSuccess() {
+	public static LayoutSettings read(InputStream inputStream)
+		throws IOException {
 		ChordWidths chordWidths = null, graceChordWidths;
 		Spacings spacings = null;
 		float scalingClefInner = 0, scalingGrace = 0;
@@ -85,7 +73,7 @@ public final class LayoutSettingsReader
 			}
 			r.close();
 		} catch (Exception ex) {
-			log(error("Could not read the file \"" + file + "\":", ex));
+			log(error("Could not read the input stream", ex));
 			throw new IOException(ex);
 			/*
 			//default values
@@ -106,10 +94,6 @@ public final class LayoutSettingsReader
 		graceChordWidths = chordWidths.scale(scalingGrace);
 		return new LayoutSettings(chordWidths, graceChordWidths, spacings, scalingClefInner,
 			scalingGrace, offsetMeasureStart, offsetBeatsMinimal);
-	}
-
-	@Override public void inputStreamFailure(IOException ex) {
-		callback.readFailure(ex);
 	}
 
 }
