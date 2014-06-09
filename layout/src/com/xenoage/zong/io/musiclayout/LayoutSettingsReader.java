@@ -9,6 +9,10 @@ import static java.lang.Float.parseFloat;
 
 import java.io.IOException;
 
+import com.xenoage.utils.io.AsyncReader;
+import com.xenoage.utils.io.AsyncReaderCallback;
+import com.xenoage.utils.io.InputStream;
+import com.xenoage.utils.io.InputStreamCallback;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.zong.musiclayout.settings.ChordWidths;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
@@ -19,23 +23,31 @@ import com.xenoage.zong.musiclayout.settings.Spacings;
  * 
  * @author Andreas Wenger
  */
-public final class LayoutSettingsReader {
+public final class LayoutSettingsReader
+	implements AsyncReader<LayoutSettings> {
 
 	//private static final String file = "data/musiclayout/default.xml";
-
+	
+	private InputStream inputStream = null;
+	private AsyncReaderCallback<LayoutSettings> callback = null;
 
 	/**
-	 * Reads the {@link LayoutSettings} from the given file.
+	 * Reads the {@link LayoutSettings} from the given input stream.
 	 */
-	public static LayoutSettings load(String file)
-		throws IOException {
+	@Override public void read(InputStream inputStream, AsyncReaderCallback<LayoutSettings> callback) {
+		this.inputStream = inputStream;
+		this.callback = callback;
+		inputStream.open(callback);
+	}
+
+	@Override public void inputStreamSuccess() {
 		ChordWidths chordWidths = null, graceChordWidths;
 		Spacings spacings = null;
 		float scalingClefInner = 0, scalingGrace = 0;
 		float offsetMeasureStart = 0;
 		float offsetBeatsMinimal = 0;
 		try {
-			XmlReader r = platformUtils().createXmlReader(platformUtils().openFile(file));
+			XmlReader r = platformUtils().createXmlReader(inputStream);
 			r.openNextChildElement();
 			while (r.openNextChildElement()) {
 				String n = r.getElementName();
@@ -94,6 +106,10 @@ public final class LayoutSettingsReader {
 		graceChordWidths = chordWidths.scale(scalingGrace);
 		return new LayoutSettings(chordWidths, graceChordWidths, spacings, scalingClefInner,
 			scalingGrace, offsetMeasureStart, offsetBeatsMinimal);
+	}
+
+	@Override public void inputStreamFailure(IOException ex) {
+		callback.readFailure(ex);
 	}
 
 }
