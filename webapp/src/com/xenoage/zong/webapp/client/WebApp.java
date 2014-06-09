@@ -1,15 +1,17 @@
 package com.xenoage.zong.webapp.client;
 
+import static com.xenoage.utils.PlatformUtils.platformUtils;
 import static com.xenoage.utils.math.Fraction._0;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.xenoage.utils.callback.AsyncCallback;
 import com.xenoage.utils.gwt.GwtPlatformUtils;
 import com.xenoage.utils.gwt.io.GwtInputStream;
+import com.xenoage.utils.io.InputStream;
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.util.Interval;
@@ -51,17 +53,27 @@ public class WebApp
 		
 		//Test GWT IO
 		GwtPlatformUtils.init();
-		GwtInputStream s;
 		try {
-			s = (GwtInputStream) GwtPlatformUtils.platformUtils().openFile("test.txt");
 			container.add(new Label("File content:"));
-			container.add(new Label(s.data));
+			final Label lblData = new Label("Loading...");
+			container.add(lblData);
+			platformUtils().openFileAsync("test.txt", new AsyncCallback<InputStream>() {
+				
+				@Override public void onSuccess(InputStream data) {
+					lblData.setText(((GwtInputStream) data).getData());
+				}
+				
+				@Override public void onFailure(Exception ex) {
+					lblData.setText("Error: " + ex.toString());
+				}
+			});
 		} catch (Exception ex) {
 			container.add(new Label("File error: " + ex.toString()));
 		}
 		
 		
 		//test layout
+		/*
 		container.add(new Label("And here is the layout data:"));
 		SymbolPool symbolPool = new SymbolPool("default", new HashMap<String, Symbol>());
 		try {
@@ -73,7 +85,7 @@ public class WebApp
 		} catch (Exception ex) {
 			container.add(new Label("ERROR: " + ex.toString()));
 		}
-		container.add(new Label("TODO"));
+		container.add(new Label("TODO")); */
 	}
 	
 	private String findAClef(Score score, MP mp) {

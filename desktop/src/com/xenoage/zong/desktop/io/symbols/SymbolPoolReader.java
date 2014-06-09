@@ -1,8 +1,8 @@
 package com.xenoage.zong.desktop.io.symbols;
 
-import static com.xenoage.utils.PlatformUtils.platformUtils;
 import static com.xenoage.utils.collections.CollectionUtils.map;
 import static com.xenoage.utils.error.Err.handle;
+import static com.xenoage.utils.jse.JsePlatformUtils.desktopIO;
 import static com.xenoage.utils.log.Level.Warning;
 import static com.xenoage.utils.log.Report.createReport;
 import static com.xenoage.utils.log.Report.fatal;
@@ -14,7 +14,7 @@ import java.util.List;
 
 import com.xenoage.utils.PlatformUtils;
 import com.xenoage.utils.io.FileFilters;
-import com.xenoage.utils.io.FilesystemInput;
+import com.xenoage.utils.jse.io.DesktopIO;
 import com.xenoage.zong.Voc;
 import com.xenoage.zong.symbols.Symbol;
 import com.xenoage.zong.symbols.SymbolPool;
@@ -40,14 +40,14 @@ public class SymbolPoolReader {
 		HashMap<String, Symbol> symbols = map();
 
 		//load symbols
-		FilesystemInput filesystem = platformUtils().getFilesystemInput();
+		DesktopIO io = desktopIO();
 		String dir = symbolPoolPath + id;
 		try {
-			if (!filesystem.existsDirectory(dir)) {
+			if (!io.existsDirectory(dir)) {
 				handle(fatal(Voc.CouldNotLoadSymbolPool, new FileNotFoundException(dir)));
 				return null;
 			}
-			List<String> files = filesystem.listFiles(dir, FileFilters.svgFilter);
+			List<String> files = io.listFiles(dir, FileFilters.svgFilter);
 			SvgSymbolReader loader = new SvgSymbolReader();
 			LinkedList<String> symbolsWithErrors = new LinkedList<String>();
 			for (String file : files) {

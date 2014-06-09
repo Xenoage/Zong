@@ -1,6 +1,7 @@
 package com.xenoage.zong.io.musicxml.in.readers;
 
 import static com.xenoage.utils.PlatformUtils.platformUtils;
+import static com.xenoage.utils.jse.JsePlatformUtils.jsePlatformUtils;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -77,7 +78,7 @@ public class StavesListReaderTest {
 		MusicXMLDocument doc = null;
 		try {
 			doc = MusicXMLDocument.read(platformUtils().createXmlReader(
-				platformUtils().openFile(filePath)));
+				jsePlatformUtils().openFile(filePath)));
 		} catch (FileNotFoundException ex) {
 			//file not there. ignore, since copyrighted file. - TODO: ask Michael Good for file license
 			return null;

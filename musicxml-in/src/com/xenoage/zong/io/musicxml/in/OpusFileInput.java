@@ -84,8 +84,8 @@ public class OpusFileInput {
 				InputStream opusStream = null;
 				if (zip != null)
 					opusStream = zip.openFile(filePath);
-				else if (basePath != null)
-					opusStream = platformUtils().openFile(basePath + "/" + filePath);
+				/* else if (basePath != null)
+					opusStream = platformUtils().openFile(basePath + "/" + filePath); */ //GOON: async!
 				else
 					throw new IOException("neither zip nor basePath is given");
 				if (opusStream == null)

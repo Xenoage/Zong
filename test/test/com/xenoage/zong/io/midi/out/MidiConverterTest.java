@@ -1,6 +1,6 @@
 package com.xenoage.zong.io.midi.out;
 
-import static com.xenoage.utils.PlatformUtils.platformUtils;
+import static com.xenoage.utils.jse.JsePlatformUtils.jsePlatformUtils;
 import static org.junit.Assert.fail;
 
 import java.io.File;
@@ -26,7 +26,7 @@ public class MidiConverterTest {
 		boolean writeFiles = false;
 		for (String file : MusicXMLScoreFileInputTest.getSampleFiles()) {
 			try {
-				Score score = new MusicXmlScoreFileInput().read(platformUtils().openFile(file), file);
+				Score score = new MusicXmlScoreFileInput().read(jsePlatformUtils().openFile(file), file);
 				MidiSequence<Sequence> sequence = MidiConverter.convertToSequence(
 					score, true, true, new JseMidiSequenceWriter());
 				if (writeFiles) {

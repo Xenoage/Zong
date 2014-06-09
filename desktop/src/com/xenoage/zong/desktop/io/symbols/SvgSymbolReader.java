@@ -1,10 +1,12 @@
 package com.xenoage.zong.desktop.io.symbols;
 
 import static com.xenoage.utils.PlatformUtils.platformUtils;
+import static com.xenoage.utils.jse.JsePlatformUtils.jsePlatformUtils;
 import static com.xenoage.utils.log.Log.log;
 import static com.xenoage.utils.log.Report.remark;
 
 import com.xenoage.utils.io.FileUtils;
+import com.xenoage.utils.jse.JsePlatformUtils;
 import com.xenoage.utils.log.Log;
 import com.xenoage.utils.log.Report;
 import com.xenoage.utils.xml.XmlReader;
@@ -29,7 +31,7 @@ public class SvgSymbolReader {
 		//open the file
 		XmlReader xmlReader;
 		try {
-			xmlReader = platformUtils().createXmlReader(platformUtils().openFile(svgFilepath));
+			xmlReader = platformUtils().createXmlReader(jsePlatformUtils().openFile(svgFilepath));
 		} catch (Exception ex) {
 			throw new IllegalStateException("Could not open XML file \"" + svgFilepath + "\"");
 		}

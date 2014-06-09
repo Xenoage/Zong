@@ -62,8 +62,8 @@ public class MusicXmlFileReader {
 			List<String> filePaths = scoreFileFilter.filter(opus.getScoreFilenames());
 			for (String filePath : filePaths) {
 				String relativePath = directory + "/" + filePath;
-				List<Score> scores = loadScores(platformUtils().openFile(relativePath), relativePath,
-					scoreFileFilter);
+				List<Score> scores = new ArrayList<Score>(); /* loadScores(platformUtils().openFile(relativePath), relativePath,
+					scoreFileFilter); */ //GOON: async!!
 				ret.addAll(scores);
 			}
 		}

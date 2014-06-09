@@ -1,6 +1,6 @@
 package com.xenoage.zong.io.musicxml.in;
 
-import static com.xenoage.utils.PlatformUtils.platformUtils;
+import static com.xenoage.utils.jse.JsePlatformUtils.jsePlatformUtils;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -17,7 +17,7 @@ public class CompressedFileInputTest {
 
 	@Test public void test()
 		throws Exception {
-		CompressedFileInput zip = new CompressedFileInput(platformUtils().openFile(
+		CompressedFileInput zip = new CompressedFileInput(jsePlatformUtils().openFile(
 			"data/test/scores/MxlCompressedFileInputTest/album.mxl"));
 		//root item is an opus
 		assertTrue(zip.isOpus());

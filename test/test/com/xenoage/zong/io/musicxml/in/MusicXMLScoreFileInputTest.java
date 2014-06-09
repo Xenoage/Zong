@@ -1,9 +1,9 @@
 package com.xenoage.zong.io.musicxml.in;
 
-import static com.xenoage.utils.PlatformUtils.platformUtils;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.io.FileFilters.xmlFilter;
 import static com.xenoage.utils.jse.JsePlatformUtils.desktopIO;
+import static com.xenoage.utils.jse.JsePlatformUtils.jsePlatformUtils;
 import static org.junit.Assert.fail;
 
 import java.io.FileNotFoundException;
@@ -36,7 +36,8 @@ public class MusicXMLScoreFileInputTest {
 		long startTime = System.currentTimeMillis();
 		for (String file : getSampleFiles()) {
 			try {
-				Score score = new MusicXmlScoreFileInput().read(platformUtils().openFile(file), file);
+				Score score = new MusicXmlScoreFileInput().read(
+					jsePlatformUtils().openFile(file), file);
 				System.out.println("Loaded: " + file);
 			} catch (InconsistentScoreException ex) {
 				ex.printStackTrace();
@@ -78,7 +79,7 @@ public class MusicXMLScoreFileInputTest {
 	public static Score loadXMLTestScore(String filename) {
 		try {
 			String filepath = "data/test/scores/test/" + filename;
-			return new MusicXmlScoreFileInput().read(platformUtils().openFile(filepath), filepath);
+			return new MusicXmlScoreFileInput().read(jsePlatformUtils().openFile(filepath), filepath);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			fail("Could not load file: " + filename);
@@ -92,7 +93,7 @@ public class MusicXMLScoreFileInputTest {
 	@Test public void testSingleFile() {
 		String file = dir20 + "1.xml"; //"BeetAnGeSample.xml";
 		try {
-			new MusicXmlScoreFileInput().read(platformUtils().openFile(file), file);
+			new MusicXmlScoreFileInput().read(jsePlatformUtils().openFile(file), file);
 			//TEST
 			//ScoreTest.printScore(score);
 		} catch (FileNotFoundException ex) {

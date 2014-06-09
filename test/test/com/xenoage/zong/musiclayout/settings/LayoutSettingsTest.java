@@ -1,5 +1,6 @@
 package com.xenoage.zong.musiclayout.settings;
 
+import static com.xenoage.utils.jse.JsePlatformUtils.jsePlatformUtils;
 import static com.xenoage.utils.math.Fraction.fr;
 import static org.junit.Assert.assertEquals;
 
@@ -34,7 +35,8 @@ public class LayoutSettingsTest {
 
 	public static LayoutSettings loadTestSettings()
 		throws IOException {
-		return LayoutSettingsReader.load("data/test/layout/LayoutSettingsTest.xml");
+		return LayoutSettingsReader.read(
+			jsePlatformUtils().openFile("data/test/layout/LayoutSettingsTest.xml"));
 	}
 
 }

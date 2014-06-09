@@ -1,6 +1,6 @@
 package com.xenoage.zong.musiclayout.layouter;
 
-import static com.xenoage.utils.PlatformUtils.platformUtils;
+import static com.xenoage.utils.jse.JsePlatformUtils.jsePlatformUtils;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
@@ -11,8 +11,8 @@ import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.desktop.io.symbols.SymbolPoolReader;
 import com.xenoage.zong.io.musiclayout.LayoutSettingsReader;
-import com.xenoage.zong.io.musicxml.in.MusicXmlScoreFileInput;
 import com.xenoage.zong.io.musicxml.in.MusicXMLScoreFileInputTest;
+import com.xenoage.zong.io.musicxml.in.MusicXmlScoreFileInput;
 import com.xenoage.zong.musiclayout.layouter.notation.AccidentalsAlignmentStrategy;
 import com.xenoage.zong.musiclayout.layouter.notation.ArticulationsAlignmentStrategy;
 import com.xenoage.zong.musiclayout.layouter.notation.NotationStrategy;
@@ -38,11 +38,12 @@ public class ScoreLayouterTest {
 		throws IOException {
 		//SymbolPoolUtils.init(new AWTSVGPathReader());
 		SymbolPool symbolPool = SymbolPoolReader.readSymbolPool("default");
-		LayoutSettings layoutSettings = LayoutSettingsReader.load("data/test/layout/LayoutSettingsTest.xml");
+		LayoutSettings layoutSettings = LayoutSettingsReader.read(
+			jsePlatformUtils().openFile("data/test/layout/LayoutSettingsTest.xml"));
 		for (String file : MusicXMLScoreFileInputTest.getSampleFiles()) {
 			try {
 				//System.out.println(file);
-				Score score = new MusicXmlScoreFileInput().read(platformUtils().openFile(file), file);
+				Score score = new MusicXmlScoreFileInput().read(jsePlatformUtils().openFile(file), file);
 				Size2f areaSize = new Size2f(150, 10000);
 				new ScoreLayouter(score, symbolPool, layoutSettings, true, areaSize).createLayoutWithExceptions();
 			} catch (Exception ex) {
