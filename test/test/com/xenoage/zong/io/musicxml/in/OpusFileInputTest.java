@@ -1,6 +1,7 @@
 package com.xenoage.zong.io.musicxml.in;
 
 import static com.xenoage.utils.jse.JsePlatformUtils.jsePlatformUtils;
+import static com.xenoage.utils.jse.async.Blocking.blocking;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -38,8 +39,8 @@ public class OpusFileInputTest {
 			try {
 				assertTrue(scoreExpected + " not found", scores.contains(scoreExpected));
 				String filePath = dir + "/" + scoreExpected;
-				MusicXmlFileReader.loadScores(jsePlatformUtils().openFile(filePath),
-					filePath, new AllFilter<String>());
+				blocking(new MusicXmlFileReader(jsePlatformUtils().openFile(filePath),
+					filePath, new AllFilter<String>()));
 			} catch (Exception ex) {
 				throw new Exception("Failed to load " + scoreExpected, ex);
 			}

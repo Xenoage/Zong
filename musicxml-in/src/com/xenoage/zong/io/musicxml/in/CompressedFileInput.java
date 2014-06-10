@@ -46,6 +46,9 @@ public class CompressedFileInput {
 		
 		//load zip contents
 		zip = platformUtils().createZipReader(inputStream);
+		if (zip == null) {
+			throw new IOException("Zip reader is unsupported");
+		}
 		
 		//parse META-INF/container.xml
 		String rootfilePath = null;

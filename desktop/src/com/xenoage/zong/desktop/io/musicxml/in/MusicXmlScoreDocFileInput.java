@@ -1,6 +1,7 @@
 package com.xenoage.zong.desktop.io.musicxml.in;
 
 import static com.xenoage.utils.jse.JsePlatformUtils.jsePlatformUtils;
+import static com.xenoage.utils.jse.async.Blocking.blocking;
 import static com.xenoage.zong.util.ZongPlatformUtils.zongPlatformUtils;
 
 import java.io.IOException;
@@ -49,10 +50,19 @@ public class MusicXmlScoreDocFileInput
 	 */
 	@Override public ScoreDoc read(InputStream stream, String filePath)
 		throws InvalidFormatException, IOException {
-		
+
 		Score score;
 
-		List<Score> scores = MusicXmlFileReader.loadScores(stream, filePath, new AllFilter<String>());
+		List<Score> scores;
+		try {
+			scores = blocking(new MusicXmlFileReader(stream, filePath, new AllFilter<String>()));
+		} catch (InvalidFormatException ex) {
+			throw ex; //forward
+		} catch (IOException ex) {
+			throw ex; //forward
+		} catch (Exception ex) {
+			throw new IOException(ex);
+		}
 		if (scores.size() > 0)
 			score = scores.get(0);
 		else
@@ -66,24 +76,24 @@ public class MusicXmlScoreDocFileInput
 	 */
 	public ScoreDoc read(Score score, String filePath)
 		throws InvalidFormatException, IOException {
-		
+
 		//page format
 		LayoutFormat layoutFormat = null;
 		Object oLayoutFormat = score.getMetaData().get("layoutformat");
 		if (oLayoutFormat instanceof LayoutFormat) {
 			layoutFormat = (LayoutFormat) oLayoutFormat;
 		}
-		
+
 		//use default symbol pool
 		SymbolPool symbolPool = zongPlatformUtils().getSymbolPool();
-		
+
 		//load layout settings - TIDY: do not reload each time when a score is loaded
-		LayoutSettings layoutSettings = LayoutSettingsReader.read(
-			jsePlatformUtils().openFile("data/layout/default.xml"));
-		
+		LayoutSettings layoutSettings = LayoutSettingsReader.read(jsePlatformUtils().openFile(
+			"data/layout/default.xml"));
+
 		//create layout defaults
 		LayoutDefaults layoutDefaults = new LayoutDefaults(layoutFormat, symbolPool, layoutSettings);
-		
+
 		//create the document
 		ScoreDoc ret = new ScoreDoc(score, layoutDefaults);
 		Layout layout = ret.getLayout();
@@ -121,7 +131,7 @@ public class MusicXmlScoreDocFileInput
 			MxlScorePartwise doc = (MxlScorePartwise) o;
 			CreditsReader.read(doc, layout, score.getFormat());
 		}
-		
+
 		return ret;
 	}
 

@@ -8,7 +8,7 @@ import java.util.HashMap;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.xenoage.utils.callback.AsyncCallback;
+import com.xenoage.utils.async.AsyncCallback;
 import com.xenoage.utils.gwt.GwtPlatformUtils;
 import com.xenoage.utils.gwt.io.GwtInputStream;
 import com.xenoage.utils.io.InputStream;
