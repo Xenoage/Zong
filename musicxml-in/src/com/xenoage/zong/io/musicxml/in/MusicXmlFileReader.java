@@ -30,9 +30,13 @@ import com.xenoage.zong.io.musicxml.opus.Opus;
 public class MusicXmlFileReader
 	implements AsyncProducer<List<Score>> {
 
+	//input
 	private InputStream in;
 	private String path;
 	private Filter<String> scoreFileFilter;
+	
+	//working data
+	
 
 
 	/**
@@ -51,8 +55,8 @@ public class MusicXmlFileReader
 		this.scoreFileFilter = scoreFileFilter;
 	}
 
-	@Override public void produce(AsyncCallback<List<Score>> callback) {
-		List<Score> ret = alist();
+	@Override public void produce(final AsyncCallback<List<Score>> callback) {
+		final List<Score> ret = alist();
 		//open stream
 		BufferedInputStream bis = new BufferedInputStream(in);
 		try {
@@ -75,12 +79,24 @@ public class MusicXmlFileReader
 				}
 				else {
 					//read files
-					String directory = FileUtils.getDirectoryName(path);
+					final String directory = FileUtils.getDirectoryName(path);
 					OpusFileInput opusInput = new OpusFileInput();
 					Opus opus = opusInput.readOpusFile(bis);
-					opus = opusInput.resolveOpusLinks(opus, null, directory);
-					List<String> filePaths = scoreFileFilter.filter(opus.getScoreFilenames());
-					collectScores(directory, filePaths, scoreFileFilter, ret, callback);
+					new OpusLinkResolver(opus, null, directory).produce(new AsyncCallback<Opus>() {
+
+						@Override public void onSuccess(Opus opus) {
+							try {
+								List<String> filePaths = scoreFileFilter.filter(opus.getScoreFilenames());
+								processNextScore(directory, filePaths, scoreFileFilter, ret, callback);
+							} catch (IOException ex) {
+								callback.onFailure(ex);
+							}
+						}
+
+						@Override public void onFailure(Exception ex) {
+							callback.onFailure(ex);
+						}
+					});
 				}
 			}
 			else if (fileType == FileType.Compressed) {
@@ -91,6 +107,7 @@ public class MusicXmlFileReader
 					ret.add(score);
 				}
 				zip.close();
+				callback.onSuccess(ret);
 			}
 			else {
 				callback.onFailure(new IOException("Unknown file type"));
@@ -104,11 +121,10 @@ public class MusicXmlFileReader
 	}
 
 	/**
-	 * Processes the given list of filepaths. The scores and opuses are loaded
-	 * and added to the accumulator list. When finished, the callback method for
-	 * success or failure is called.
+	 * Processes the next opus item in the input queue, or finishes the processing
+	 * if the queue is empty.
 	 */
-	private static void collectScores(final String directory, final List<String> filePaths,
+	private static void processNextScore(final String directory, final List<String> filePaths,
 		final Filter<String> scoreFileFilter, final List<Score> acc,
 		final AsyncCallback<List<Score>> callback) {
 		if (filePaths.size() > 0) {
@@ -125,7 +141,7 @@ public class MusicXmlFileReader
 							@Override public void onSuccess(List<Score> scores) {
 								acc.addAll(scores);
 								//async recursive call
-								collectScores(directory, filePaths, scoreFileFilter, acc, callback);
+								processNextScore(directory, filePaths, scoreFileFilter, acc, callback);
 							}
 
 							@Override public void onFailure(Exception ex) {

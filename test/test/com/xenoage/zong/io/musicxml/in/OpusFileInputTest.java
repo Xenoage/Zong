@@ -29,7 +29,7 @@ public class OpusFileInputTest {
 		assertTrue(opus.getItems().get(1) instanceof com.xenoage.zong.io.musicxml.opus.Opus);
 		assertTrue(opus.getItems().get(2) instanceof com.xenoage.zong.io.musicxml.opus.OpusLink);
 		//resolve links
-		opus = opusInput.resolveOpusLinks(opus, null, dir);
+		opus = blocking(new OpusLinkResolver(opus, null, dir));
 		//check flattened list of scores and load the files
 		List<String> scores = opus.getScoreFilenames();
 		assertEquals(4, scores.size());
