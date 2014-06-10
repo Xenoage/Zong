@@ -29,6 +29,6 @@
   <entry-point class='com.xenoage.zong.webapp.client.WebApp'/>
 
   <!-- Specify the paths for translatable code                    -->
-  <source path='client'/>
+  <source path='client'/>>
 
 </module>
