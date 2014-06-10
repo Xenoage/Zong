@@ -3,6 +3,7 @@ package com.xenoage.zong.webapp.client;
 import static com.xenoage.utils.PlatformUtils.platformUtils;
 import static com.xenoage.utils.math.Fraction._0;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 import com.google.gwt.core.client.EntryPoint;
@@ -64,11 +65,35 @@ public class WebApp
 				}
 				
 				@Override public void onFailure(Exception ex) {
-					lblData.setText("Error: " + ex.toString());
+					lblData.setText("File error: " + ex.toString());
 				}
 			});
 		} catch (Exception ex) {
 			container.add(new Label("File error: " + ex.toString()));
+		}
+		
+		//test XML reading
+		try {
+			container.add(new Label("XML content:"));
+			final Label lblData = new Label("Loading...");
+			container.add(lblData);
+			platformUtils().openFileAsync("test.xml", new AsyncCallback<InputStream>() {
+				
+				@Override public void onSuccess(InputStream data) {
+					try {
+						LayoutSettings layoutSettings = LayoutSettingsReader.read(data);
+						lblData.setText("grace scaling: " + layoutSettings.scalingGrace);
+					} catch (IOException ex) {
+						lblData.setText("XML error: " + ex.toString());
+					}
+				}
+				
+				@Override public void onFailure(Exception ex) {
+					lblData.setText("XML error: " + ex.toString());
+				}
+			});
+		} catch (Exception ex) {
+			container.add(new Label("XML error: " + ex.toString()));
 		}
 		
 		
