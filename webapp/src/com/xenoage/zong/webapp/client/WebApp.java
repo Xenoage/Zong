@@ -38,7 +38,7 @@ public class WebApp
 	@Override public void onModuleLoad() {
 		
 		//test core
-		Score score = ScoreRevolutionary.createScore();
+		final Score score = ScoreRevolutionary.createScore();
 		//String t = score.getClef(MP.atBeat(0, 1, 0, _0), Interval.BeforeOrAt).getType().toString() + " found";
 		//Clef clef = new Clef(ClefType.G);
 		//String t = clef.getType().toString();
@@ -98,19 +98,29 @@ public class WebApp
 		
 		
 		//test layout
-		/*
 		container.add(new Label("And here is the layout data:"));
-		SymbolPool symbolPool = new SymbolPool("default", new HashMap<String, Symbol>());
-		try {
-			LayoutSettings layoutSettings = LayoutSettingsReader.load("data/test/layout/LayoutSettingsTest.xml");
-			Size2f areaSize = new Size2f(150, 10000);
-			ScoreLayout layout = new ScoreLayouter(score, symbolPool, layoutSettings, true,
-				areaSize).createLayoutWithExceptions();
-			System.out.println(layout.toString());
-		} catch (Exception ex) {
-			container.add(new Label("ERROR: " + ex.toString()));
-		}
-		container.add(new Label("TODO")); */
+		final SymbolPool symbolPool = new SymbolPool("default", new HashMap<String, Symbol>());
+		final Label lblLayout = new Label("Loading...");
+		container.add(lblLayout);
+		platformUtils().openFileAsync("test.xml", new AsyncCallback<InputStream>() {
+			
+			@Override public void onSuccess(InputStream data) {
+				try {
+					LayoutSettings layoutSettings = LayoutSettingsReader.read(data);
+					Size2f areaSize = new Size2f(150, 10000);
+					ScoreLayout layout = new ScoreLayouter(score, symbolPool, layoutSettings, true,
+						areaSize).createLayoutWithExceptions();
+					lblLayout.setText(layout.toString());
+				} catch (IOException ex) {
+					lblLayout.setText("layout error: " + ex.toString());
+				}
+			}
+			
+			@Override public void onFailure(Exception ex) {
+				lblLayout.setText("Layout error: " + ex.toString());
+			}
+		});
+
 	}
 	
 	private String findAClef(Score score, MP mp) {

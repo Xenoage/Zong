@@ -121,7 +121,7 @@ public class ScoreLayouter {
 	 * Computes the whole layout and returns it.
 	 * If something fails, an exception is thrown.
 	 */
-	ScoreLayout createLayoutWithExceptions() {
+	public ScoreLayout createLayoutWithExceptions() {
 		return strategy.computeScoreLayout(context);
 	}
 
