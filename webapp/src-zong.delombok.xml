@@ -22,6 +22,9 @@ Call this script each time before compiling this project.
 		<delombok verbose="true" encoding="UTF-8" to="${target}" from="../layout/src">
 			<format value="suppressWarnings:skip" />
 		</delombok>
+		<delombok verbose="true" encoding="UTF-8" to="${target}" from="../renderer/src">
+			<format value="suppressWarnings:skip" />
+		</delombok>
 		<echo>Done.</echo>
 	</target>
 </project>

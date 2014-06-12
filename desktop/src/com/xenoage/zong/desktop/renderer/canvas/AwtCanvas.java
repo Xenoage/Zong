@@ -15,6 +15,7 @@ import com.xenoage.utils.color.Color;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Rectangle2f;
 import com.xenoage.utils.math.geom.Size2f;
+import com.xenoage.zong.desktop.renderer.slur.AwtSlurRenderer;
 import com.xenoage.zong.desktop.renderer.symbols.AwtSymbolsRenderer;
 import com.xenoage.zong.desktop.util.text.TextLayoutTools;
 import com.xenoage.zong.desktop.util.text.TextLayouts;
@@ -23,7 +24,6 @@ import com.xenoage.zong.renderer.canvas.Canvas;
 import com.xenoage.zong.renderer.canvas.CanvasDecoration;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
 import com.xenoage.zong.renderer.canvas.CanvasIntegrity;
-import com.xenoage.zong.renderer.slur.AWTSlurRenderer;
 import com.xenoage.zong.renderer.slur.SimpleSlurShape;
 import com.xenoage.zong.symbols.Symbol;
 import com.xenoage.zong.text.FormattedText;
@@ -143,7 +143,7 @@ public class AwtCanvas
 		float interlineSpace, Color color) {
 		g2d.setColor(toAwtColor(color));
 		SimpleSlurShape slurShape = new SimpleSlurShape(p1, p2, c1, c2, interlineSpace);
-		g2d.fill(AWTSlurRenderer.getShape(slurShape));
+		g2d.fill(AwtSlurRenderer.getShape(slurShape));
 	}
 
 	/**

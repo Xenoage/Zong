@@ -23,7 +23,8 @@
   <inherits name="com.xenoage.utils.gwt"/>
   <inherits name="com.xenoage.utils.kernel"/>
   <inherits name="com.xenoage.zong.core"/>
-  <!--<inherits name="com.xenoage.zong.layout"/> -->
+  <inherits name="com.xenoage.zong.layout"/>
+  <inherits name="com.xenoage.zong.renderer"/>
 
   <!-- Specify the app entry point class.                         -->
   <entry-point class='com.xenoage.zong.webapp.client.WebApp'/>

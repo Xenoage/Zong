@@ -10,23 +10,19 @@ import com.xenoage.zong.renderer.RendererArgs;
 import com.xenoage.zong.renderer.canvas.Canvas;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
 
-
 /**
  * Renderer for a {@link BeamStamping}.
  *
  * @author Andreas Wenger
  */
 public class BeamStampingRenderer
-	extends StampingRenderer
-{
-
+	extends StampingRenderer {
 
 	/**
 	 * Draws the given {@link BeamStamping} on the given {@link Canvas},
 	 * using the given {@link RendererArgs}.
 	 */
-	@Override public void draw(Stamping stamping, Canvas canvas, RendererArgs args)
-	{
+	@Override public void draw(Stamping stamping, Canvas canvas, RendererArgs args) {
 		BeamStamping beam = (BeamStamping) stamping;
 		float scaling = args.targetScaling;
 
@@ -52,7 +48,8 @@ public class BeamStampingRenderer
 			BitmapStaff screenStaff2 = staff2.screenInfo.getBitmapStaff(scaling);
 			leftYStart = staff1YPos + screenStaff1.getLPMm(beam.lp1);
 			rightYStart = staff2YPos + screenStaff2.getLPMm(beam.lp2);
-		} else if (canvas.getFormat() == CanvasFormat.Vector) {
+		}
+		else if (canvas.getFormat() == CanvasFormat.Vector) {
 			leftYStart = staff1.computeYMm(beam.lp1);
 			rightYStart = staff2.computeYMm(beam.lp2);
 		}
@@ -74,6 +71,5 @@ public class BeamStampingRenderer
 		canvas.drawBeam(points, /* Color.green /*/color /**/, staff1.is);
 
 	}
-
 
 }
