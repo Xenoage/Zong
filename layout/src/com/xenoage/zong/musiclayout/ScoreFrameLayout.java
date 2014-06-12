@@ -17,6 +17,7 @@ import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.musiclayout.continued.ContinuedElement;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import com.xenoage.zong.musiclayout.stampings.Stamping;
+import com.xenoage.zong.musiclayout.stampings.StampingType;
 import com.xenoage.zong.musiclayout.stampings.TextStamping;
 
 /**
@@ -116,9 +117,9 @@ public final class ScoreFrameLayout {
 	 * of the given class under the given position in score layout coordinates,
 	 * or null, if there is none.
 	 */
-	public Stamping getOtherStampingAt(Point2f point, Class<?> stampingClass) {
+	public Stamping getOtherStampingAt(Point2f point, StampingType type) {
 		for (Stamping s : otherStampings) {
-			if (s.boundingShape != null && s.boundingShape.contains(point) && stampingClass.isInstance(s))
+			if (s.boundingShape != null && s.boundingShape.contains(point) && s.getType() == type)
 				return s;
 		}
 		return null;
@@ -163,7 +164,7 @@ public final class ScoreFrameLayout {
 	public TextStamping computeTextStamping(Point2f point) {
 		if (point == null)
 			return null;
-		return (TextStamping) getOtherStampingAt(point, TextStamping.class);
+		return (TextStamping) getOtherStampingAt(point, StampingType.TextStamping);
 	}
 
 	/**

@@ -4,6 +4,8 @@ import static com.xenoage.utils.collections.CList.clist;
 import static com.xenoage.utils.jse.color.AwtColorUtils.fromAwtColor;
 import static com.xenoage.utils.jse.color.AwtColorUtils.toAwtColor;
 import static com.xenoage.utils.jse.font.AwtFontUtils.toAwtFont;
+import static com.xenoage.zong.desktop.util.text.AlignmentUtils.applyAlignmentToAttributeSet;
+import static com.xenoage.zong.desktop.util.text.AlignmentUtils.fromAttributeSet;
 
 import java.awt.Font;
 import java.awt.font.TextLayout;
@@ -68,7 +70,7 @@ public class FormattedTextConverter {
 			else if (attribute != styledDoc.getCharacterElement(i).getAttributes()) {
 				//set alignment, if not already done
 				if (alignment == null) {
-					alignment = Alignment.fromAttributeSet(styledDoc.getParagraphElement(i).getAttributes());
+					alignment = fromAttributeSet(styledDoc.getParagraphElement(i).getAttributes());
 				}
 				//style has changed, so save old element and create a new one
 				if (!textelement.equals("")) {
@@ -106,7 +108,7 @@ public class FormattedTextConverter {
 		for (FormattedTextParagraph p : input.getParagraphs()) {
 			//apply the alignment of the paragraph (apply style to the first letter of the paragraph)
 			SimpleAttributeSet paragraphStyle = new SimpleAttributeSet();
-			p.getAlignment().applyOnAttributeSet(paragraphStyle);
+			applyAlignmentToAttributeSet(p.getAlignment(), paragraphStyle);
 			styledDoc.setParagraphAttributes(styledDoc.getLength(), 1, paragraphStyle, true);
 			//handle all elements within this paragraph
 			for (FormattedTextElement t : p.getElements()) //TODO: Symbols ?!
