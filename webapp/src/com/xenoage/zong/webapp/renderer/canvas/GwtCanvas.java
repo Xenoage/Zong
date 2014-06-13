@@ -96,7 +96,7 @@ public class GwtCanvas
 				if (e instanceof FormattedTextString) {
 					//TODO - formatting
 					FormattedTextString t = (FormattedTextString) e;
-					/* GOON Paint paint = new Paint(AndroidColorUtils.black);
+					/* TODO Paint paint = new Paint(AndroidColorUtils.black);
 					paint.setTypeface(Typeface.SERIF);
 					paint.setTextSize(Units.pxToMm(t.getStyle().getFont().getSize(), 1));
 					paint.setAntiAlias(true);
@@ -106,7 +106,7 @@ public class GwtCanvas
 				else {
 					//symbol
 					FormattedTextSymbol fts = (FormattedTextSymbol) e;
-					/* GOON float scaling = fts.getScaling();
+					/* TODO float scaling = fts.getScaling();
 					AndroidSymbolsRenderer.instance.draw(fts.getSymbol(), this, Color.black, new Point2f(
 						offsetX + fts.getOffsetX(), offsetY + fts.getSymbol().baselineOffset * scaling),
 						new Point2f(scaling, scaling)); */
@@ -121,7 +121,7 @@ public class GwtCanvas
 	}
 
 	@Override public void drawSymbol(Symbol symbol, Color color, Point2f position, Point2f scaling) {
-		/* GOON AndroidSymbolsRenderer.instance.draw(symbol, this, color, position, scaling); */
+		/* TODO AndroidSymbolsRenderer.instance.draw(symbol, this, color, position, scaling); */
 	}
 
 	@Override public void drawLine(Point2f p1, Point2f p2, Color color, float lineWidth) {
@@ -154,11 +154,11 @@ public class GwtCanvas
 	}
 
 	public void fillEllipse(Point2f pCenter, float width, float height, Color color) {
-		//GOON
+		//TODO
 	}
 
 	@Override public void drawBeam(Point2f[] points, Color color, float interlineSpace) {
-		/* GOON RectF beamSymbol = new RectF(-1f, -0.25f, 1f, 0.25f);
+		/* TODO RectF beamSymbol = new RectF(-1f, -0.25f, 1f, 0.25f);
 
 		Paint paint = AndroidColorUtils.createPaintFill(color);
 
@@ -180,7 +180,7 @@ public class GwtCanvas
 		float interlineSpace, Color color) {
 		/* Paint paint = AndroidColorUtils.createPaintFill(color);
 		SimpleSlurShape slurShape = new SimpleSlurShape(p1, p2, c1, c2, interlineSpace);
-		canvas.drawPath(AndroidSlurRenderer.getPath(slurShape), paint); */ //GOON
+		canvas.drawPath(AndroidSlurRenderer.getPath(slurShape), paint); */ //TODO
 	}
 
 	@Override public void fillRect(Rectangle2f rect, Color color) {

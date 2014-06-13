@@ -120,8 +120,8 @@ public class WebApp
     int width = 800, height = 400;
     canvas.setWidth(width + "px");
     canvas.setHeight(height + "px");
-    canvas.setCoordinateSpaceWidth(width);
-    canvas.setCoordinateSpaceHeight(height);
+    canvas.setCoordinateSpaceWidth(width * 4);
+    canvas.setCoordinateSpaceHeight(height * 4);
     container.add(canvas);
     context = canvas.getContext2d();
     gwtCanvas = new GwtCanvas(canvas, CanvasFormat.Raster, CanvasDecoration.None, CanvasIntegrity.Perfect);
@@ -149,9 +149,10 @@ public class WebApp
 					lblLayout.setText(layout.toString().substring(0, 1000) + "...");
 					
 					//draw in canvas
+					gwtCanvas.transformScale(20, 20);
 					Iterable<Stamping> stampings = layout.getScoreFrameLayout(0).getMusicalStampings();
 					//render them
-					RendererArgs args = new RendererArgs(5, 5, new Point2i(0, 0), symbolPool, null);
+					RendererArgs args = new RendererArgs(1, 1, new Point2i(0, 0), symbolPool, null);
 					for (Stamping s : stampings) {
 						StampingRenderer.drawAny(s, gwtCanvas, args);
 					}

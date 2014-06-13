@@ -135,7 +135,7 @@ public class CompressedFileInput {
 		if (isOpus()) {
 			getScoreFilenames(
 				//new OpusFileInput().resolveOpusLinks((Opus) rootItem, zip, null), ret);
-				(Opus) rootItem, ret); //GOON
+				(Opus) rootItem, ret); //TODO
 		}
 		else {
 			ret.add(((Score) rootItem).getLink().getHref());
