@@ -6,6 +6,8 @@ import static com.xenoage.utils.math.Fraction._0;
 import java.io.IOException;
 import java.util.HashMap;
 
+import com.google.gwt.canvas.client.Canvas;
+import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -13,6 +15,7 @@ import com.xenoage.utils.async.AsyncCallback;
 import com.xenoage.utils.gwt.GwtPlatformUtils;
 import com.xenoage.utils.gwt.io.GwtInputStream;
 import com.xenoage.utils.io.InputStream;
+import com.xenoage.utils.math.geom.Point2i;
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.util.Interval;
@@ -21,9 +24,16 @@ import com.xenoage.zong.io.musiclayout.LayoutSettingsReader;
 import com.xenoage.zong.musiclayout.ScoreLayout;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouter;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
+import com.xenoage.zong.musiclayout.stampings.Stamping;
+import com.xenoage.zong.renderer.RendererArgs;
+import com.xenoage.zong.renderer.canvas.CanvasDecoration;
+import com.xenoage.zong.renderer.canvas.CanvasFormat;
+import com.xenoage.zong.renderer.canvas.CanvasIntegrity;
+import com.xenoage.zong.renderer.stampings.StampingRenderer;
 import com.xenoage.zong.symbols.Symbol;
 import com.xenoage.zong.symbols.SymbolPool;
 import com.xenoage.zong.util.demo.ScoreRevolutionary;
+import com.xenoage.zong.webapp.renderer.canvas.GwtCanvas;
 
 
 /**
@@ -31,6 +41,11 @@ import com.xenoage.zong.util.demo.ScoreRevolutionary;
  */
 public class WebApp
 	implements EntryPoint {
+	
+	private Canvas canvas;
+	private Context2d context;
+	private GwtCanvas gwtCanvas;
+	
 
 	/**
 	 * This is the entry point method.
@@ -96,8 +111,29 @@ public class WebApp
 			container.add(new Label("XML error: " + ex.toString()));
 		}
 		
-		
-		//test layout
+		//test canvas
+		canvas = Canvas.createIfSupported();
+    if (canvas == null) {
+    	container.add(new Label("Error: canvas not supported!"));
+      return;
+    }
+    int width = 800, height = 400;
+    canvas.setWidth(width + "px");
+    canvas.setHeight(height + "px");
+    canvas.setCoordinateSpaceWidth(width);
+    canvas.setCoordinateSpaceHeight(height);
+    container.add(canvas);
+    context = canvas.getContext2d();
+    gwtCanvas = new GwtCanvas(canvas, CanvasFormat.Raster, CanvasDecoration.None, CanvasIntegrity.Perfect);
+    /* context.beginPath();
+    context.moveTo(25,0);
+    context.lineTo(0,20);
+    context.lineTo(25,40);
+    context.lineTo(25,0);
+    context.fill();
+    context.closePath(); */
+    
+    //test layout
 		container.add(new Label("And here is the layout data:"));
 		final SymbolPool symbolPool = new SymbolPool("default", new HashMap<String, Symbol>());
 		final Label lblLayout = new Label("Loading...");
@@ -110,7 +146,15 @@ public class WebApp
 					Size2f areaSize = new Size2f(150, 10000);
 					ScoreLayout layout = new ScoreLayouter(score, symbolPool, layoutSettings, true,
 						areaSize).createLayoutWithExceptions();
-					lblLayout.setText(layout.toString());
+					lblLayout.setText(layout.toString().substring(0, 1000) + "...");
+					
+					//draw in canvas
+					Iterable<Stamping> stampings = layout.getScoreFrameLayout(0).getMusicalStampings();
+					//render them
+					RendererArgs args = new RendererArgs(5, 5, new Point2i(0, 0), symbolPool, null);
+					for (Stamping s : stampings) {
+						StampingRenderer.drawAny(s, gwtCanvas, args);
+					}
 				} catch (IOException ex) {
 					lblLayout.setText("layout error: " + ex.toString());
 				}
@@ -120,7 +164,6 @@ public class WebApp
 				lblLayout.setText("Layout error: " + ex.toString());
 			}
 		});
-
 	}
 	
 	private String findAClef(Score score, MP mp) {
