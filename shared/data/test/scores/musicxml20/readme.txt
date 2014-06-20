@@ -1,10 +1,10 @@
 Insert MusicXML 2.0 demo files in this directory:
 
-ActorPreludeSample.xml
+ActorPreludeSample.xml (*)
 BeetAnGeSample.xml
 Binchois.xml
 BrahWiMeSample.xml
-BrookeWestSample.xml
+BrookeWestSample.xml (*)
 Chant.xml
 DebuMandSample.xml
 Dichterliebe01.xml
@@ -20,5 +20,6 @@ Saltarello.xml
 SchbAvMaSample.xml
 Telemann.xml
 
-These files are not distributed within the git repository because of copyright restrictions.
+The files marked with (*) are not distributed within the git repository because of copyright restrictions.
 Visit http://www.musicxml.org/ or contact info@xenoage.com to get the files.
+Thanks to Michael Good for providing the files.

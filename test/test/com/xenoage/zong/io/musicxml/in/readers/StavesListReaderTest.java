@@ -11,6 +11,8 @@ import java.io.FileNotFoundException;
 
 import org.junit.Test;
 
+import com.xenoage.utils.PlatformUtils;
+import com.xenoage.utils.jse.io.DesktopIO;
 import com.xenoage.zong.core.music.StavesList;
 import com.xenoage.zong.core.music.group.BarlineGroup;
 import com.xenoage.zong.core.music.group.BracketGroup;
@@ -57,7 +59,11 @@ public class StavesListReaderTest {
 	 * from the MusicXML 1.1 sample files.
 	 */
 	@Test public void testStavesList2() {
-		StavesList sl = createStavesList("data/test/scores/musicxml11/ActorPreludeSample.xml");
+		String file = "data/test/scores/musicxml11/ActorPreludeSample.xml";
+		//proprietary file. if not there, ignore test
+		if (false == jsePlatformUtils().getFilesystemInput().existsFile(file))
+			return;
+		StavesList sl = createStavesList(file);
 		if (sl == null)
 			return;
 		assertEquals(22, sl.getParts().size());
