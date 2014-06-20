@@ -33,7 +33,7 @@ public class SymbolPoolReader {
 
 	/**
 	 * Loads and returns the {@link SymbolPool} with the given ID from
-	 * {@value symbolPoolPath} or reports an error if not possible.
+	 * {@value #symbolPoolPath} or reports an error if not possible.
 	 */
 	public static SymbolPool readSymbolPool(String id) {
 		

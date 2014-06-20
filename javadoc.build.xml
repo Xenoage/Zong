@@ -1,0 +1,27 @@
+<project name="javadoc" default="antZongJavadoc">
+	<target name="antZongJavadoc">
+		<delete dir="doc"/>
+		<javadoc packagenames="com.xenoage"
+				useexternalfile="true"
+				destdir="doc"
+				author="true"
+				use="true"
+				windowtitle="Zong! API"
+				doctitle="&lt;h1&gt;Zong! API&lt;/h1&gt;">
+			<fileset dir="utils/utils-kernel/src"/>
+			<fileset dir="utils/utils-base/src"/>
+			<fileset dir="utils/utils-jse/src"/>
+			<fileset dir="utils/utils-gwt/src"/>
+			<fileset dir="converter/src"/>
+			<fileset dir="core/src"/>
+			<fileset dir="desktop/src"/>
+			<fileset dir="layout/src"/>
+			<fileset dir="midi-out/src"/>
+			<fileset dir="musicxml/src"/>
+			<fileset dir="musicxml-in/src"/>
+			<fileset dir="renderer/src"/>
+			<fileset dir="voc/src"/>
+			<fileset dir="webserver/src"/>
+		</javadoc>
+	</target>
+</project>

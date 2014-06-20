@@ -12,6 +12,7 @@ Thumbs.db
 .gradle
 bin
 build
+/doc
 
 # Libraries #
 lib/*.jar
