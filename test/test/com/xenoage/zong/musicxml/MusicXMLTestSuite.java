@@ -49,4 +49,62 @@ public class MusicXMLTestSuite {
 		return expectedPitches;
 	}
 	
+	
+	/**
+	 * All pitch intervals in ascending jump size. 
+	 */
+	public static Pitch[] get_01b_Pitches_Intervals() {
+		Pitch[] expectedPitches = new Pitch[41 * 2];
+		Pitch pi1 = pi(0, 0, 5);
+		Pitch pi2 = pi(0, 0, 5);
+		for (int i = 0; i < expectedPitches.length / 2; i++) {
+			expectedPitches[i * 2 + 0] = pi1;
+			expectedPitches[i * 2 + 1] = pi2;
+			pi1 = incHalftoneWithEnharmonicChange(pi1);
+			pi2 = decHalftoneWithEnharmonicChange(pi2);
+		}
+		return expectedPitches;
+	}
+	
+	//not supported yet: 01d-Pitches-Microtones.xml
+	
+	
+	private static Pitch incHalftoneWithEnharmonicChange(Pitch p) {
+		int step = p.getStep();
+		int alter = p.getAlter();
+		int octave = p.getOctave();
+		if (alter == 1) {
+			//next step
+			alter = -1;
+			step += 1;
+			if (step > 6) {
+				step = 0;
+				octave += 1;
+			}
+		}
+		else {
+			alter += 1;
+		}
+		return pi(step, alter, octave);
+	}
+	
+	private static Pitch decHalftoneWithEnharmonicChange(Pitch p) {
+		int step = p.getStep();
+		int alter = p.getAlter();
+		int octave = p.getOctave();
+		if (alter == -1) {
+			//next step
+			alter = 1;
+			step -= 1;
+			if (step < 0) {
+				step = 6;
+				octave -= 1;
+			}
+		}
+		else {
+			alter -= 1;
+		}
+		return pi(step, alter, octave);
+	}
+	
 }

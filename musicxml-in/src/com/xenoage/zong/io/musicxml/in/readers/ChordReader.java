@@ -119,7 +119,7 @@ public final class ChordReader {
 
 		//voice
 		//TODO: might not exist! we have to use a helper algorithm to determine the right voice
-		//then, see MusicReader class documentation
+		//then, see MusicReader class documentation.
 		int staffVoice = 0;
 		MxlEditorialVoice editorialVoice = mxlFirstNote.getEditorialVoice();
 		if (editorialVoice != null) {
