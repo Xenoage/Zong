@@ -34,9 +34,6 @@ public class MusicXmlFileReader
 	private InputStream in;
 	private String path;
 	private Filter<String> scoreFileFilter;
-	
-	//working data
-	
 
 
 	/**

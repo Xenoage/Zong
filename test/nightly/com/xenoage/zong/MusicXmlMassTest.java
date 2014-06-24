@@ -10,39 +10,26 @@ import java.text.DecimalFormat;
 import java.util.Collection;
 
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import com.xenoage.utils.PlatformUtils;
-import com.xenoage.utils.io.FileFilters;
 import com.xenoage.utils.iterators.It;
-import com.xenoage.utils.jse.JsePlatformUtils;
-import com.xenoage.utils.jse.io.JseFileUtils;
 import com.xenoage.utils.jse.io.JseInputStream;
-import com.xenoage.utils.jse.lang.LangManager;
 import com.xenoage.zong.desktop.io.musicxml.in.MusicXmlScoreDocFileInput;
 import com.xenoage.zong.documents.ScoreDoc;
-import com.xenoage.zong.symbols.SymbolPool;
 
 /**
  * This test tries to load and layout a huge range of MusicXML files.
  * 
+ * If the files do not exist, nothing is tested. This class allows to test
+ * a large number of files locally, which can not be uploaded to the
+ * public repository because of copyright restrictions.
+ * 
  * @author Andreas Wenger
  */
-@Ignore
 public class MusicXmlMassTest {
 
-	private static final String dir = //*
-	"C:/Users/andi/Werkstatt/Zong-Test/";
-	//"/home/andi/Werkstatt/Zong-Test/MusicXML/Andi/MusicXML 3.0 - Dolet 6 Beta 1/";
+	private static final String dir = "../../Zong-Test/";
 
-	SymbolPool symbolPool;
-
-
-	@Before public void setUp() {
-		LangManager.loadLanguage("en");
-	}
 
 	/**
 	 * We check all .xml files in the {@link #dir} directory
@@ -68,7 +55,7 @@ public class MusicXmlMassTest {
 	/*
 	@Test public void testSingleFile()
 	{
-		File file = new File(dir + "/" + "jsbchorales.net/043300B_.xml");
+		File file = new File(dir + "/MusicXML/hausmusik.ch/b/bach_joh_sebastian(1685-1750)/bwv0772-0994_Klavierwerke/bwv846-869_das_wohltemp_klavier-Teil1/bwv_862/bwv_862p/bwv_862p.xml");
 		if (!testFile(file)) Assert.fail();
 	} //*/
 

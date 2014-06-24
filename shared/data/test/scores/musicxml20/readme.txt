@@ -8,7 +8,7 @@ BrookeWestSample.xml (*)
 Chant.xml
 DebuMandSample.xml
 Dichterliebe01.xml
-Echigo-Jishi.xml
+Echigo-Jishi.xml (*)
 FaurReveSample.xml
 MahlFaGe4Sample.xml
 MozaChloSample.xml
