@@ -5,6 +5,7 @@ import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.music.Pitch.pi;
 import static com.xenoage.zong.core.position.MP.mp0;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -22,9 +23,12 @@ import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.rest.Rest;
+import com.xenoage.zong.core.music.time.TimeType;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.musicxml.MusicXMLDocument;
 import com.xenoage.zong.musicxml.MusicXMLTestSuite;
+import com.xenoage.zong.musicxml.types.MxlAttributes;
+import com.xenoage.zong.musicxml.types.MxlNormalTime;
 import com.xenoage.zong.musicxml.types.MxlNote;
 import com.xenoage.zong.musicxml.types.MxlPitch;
 import com.xenoage.zong.musicxml.types.MxlSyllabicText;
@@ -32,6 +36,7 @@ import com.xenoage.zong.musicxml.types.choice.MxlMusicDataContent;
 import com.xenoage.zong.musicxml.types.choice.MxlNormalNote;
 import com.xenoage.zong.musicxml.types.choice.MxlFullNoteContent.MxlFullNoteContentType;
 import com.xenoage.zong.musicxml.types.choice.MxlMusicDataContent.MxlMusicDataContentType;
+import com.xenoage.zong.musicxml.types.enums.MxlTimeSymbol;
 import com.xenoage.zong.musicxml.types.groups.MxlFullNote;
 import com.xenoage.zong.musicxml.types.partwise.MxlMeasure;
 import com.xenoage.zong.musicxml.types.partwise.MxlPart;
@@ -109,38 +114,12 @@ public class MusicXMLScoreFileInputTestSuiteTest
 	@Test @Override public void test_02a_Rests_Durations() {
 		//multirests are not supported yet - TODO
 		Score score = load("02a-Rests-Durations.xml");
-		Staff staff = score.getStaff(0);
-		Fraction[] expectedDurations = get_02a_Rests_Durations();
-		int iDuration = 0;
-		for (int iM = 0; iM < staff.getMeasures().size(); iM++) {
-			Voice voice = staff.getMeasure(iM).getVoice(0);
-			for (VoiceElement e : voice.getElements()) {
-				if (e instanceof Rest) {
-					Rest rest = (Rest) e;
-					//check duration
-					assertEquals("rest " + iDuration, expectedDurations[iDuration++], rest.getDuration());
-				}
-			}
-		}
-		assertEquals("not all rests found", expectedDurations.length, iDuration);
+		checkDurations(score, get_02a_Rests_Durations());
 	}
 	
 	@Test @Override public void test_03a_Rhythm_Durations() {
 		Score score = load("03a-Rhythm-Durations.xml");
-		Staff staff = score.getStaff(0);
-		Fraction[] expectedDurations = get_03a_Rhythm_Durations();
-		int iDuration = 0;
-		for (int iM = 0; iM < staff.getMeasures().size(); iM++) {
-			Voice voice = staff.getMeasure(iM).getVoice(0);
-			for (VoiceElement e : voice.getElements()) {
-				if (e instanceof Chord) {
-					Chord rest = (Chord) e;
-					//check duration
-					assertEquals("note " + iDuration, expectedDurations[iDuration++], rest.getDuration());
-				}
-			}
-		}
-		assertEquals("not all notes found", expectedDurations.length, iDuration);
+		checkDurations(score, get_03a_Rhythm_Durations());
 	}
 	
 	@Test @Override public void test_03b_Rhythm_Backup() {
@@ -165,6 +144,41 @@ public class MusicXMLScoreFileInputTestSuiteTest
 		assertEquals(fr(1, 4), voice.getElement(1).getDuration());
 		assertEquals(pi(5, 0, 3), ((Chord) voice.getElement(2)).getNotes().get(0).getPitch());
 		assertEquals(fr(1, 4), voice.getElement(2).getDuration());
+	}
+	
+	@Test @Override public void test_03c_Rhythm_DivisionChange() {
+		Score score = load("03c-Rhythm-DivisionChange.xml");
+		checkDurations(score, get_03c_Rhythm_DivisionChange());
+	}
+	
+	@Test @Override public void test_11a_TimeSignatures() {
+		Score score = load("11a-TimeSignatures.xml");
+		int iTime = 0;
+		TimeType[] expectedTimes = get_11a_TimeSignatures();
+		for (int iM = 0; iM < score.getMeasuresCount(); iM++) {
+			//TODO: first time is wrong in MusicXML file - ignore
+			if (iTime == 0) {
+				iTime++;
+				continue;
+			}
+			//check time
+			assertEquals("element " + iTime, expectedTimes[iTime++],
+				score.getColumnHeader(iM).getTime().getType());
+		}
+		assertEquals("not all times found", expectedTimes.length, iTime);
+	}
+	
+	private void checkDurations(Score score, Fraction[] expectedDurations) {
+		Staff staff = score.getStaff(0);
+		int iDuration = 0;
+		for (int iM = 0; iM < staff.getMeasures().size(); iM++) {
+			Voice voice = staff.getMeasure(iM).getVoice(0);
+			for (VoiceElement e : voice.getElements()) {
+				//check duration
+				assertEquals("element " + iDuration, expectedDurations[iDuration++], e.getDuration());
+			}
+		}
+		assertEquals("not all element found", expectedDurations.length, iDuration);
 	}
 
 	private Score load(String filename) {

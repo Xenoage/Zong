@@ -59,6 +59,7 @@ import com.xenoage.zong.core.music.layout.PageBreak;
 import com.xenoage.zong.core.music.layout.SystemBreak;
 import com.xenoage.zong.core.music.rest.Rest;
 import com.xenoage.zong.core.music.time.Time;
+import com.xenoage.zong.core.music.time.TimeType;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.io.musicxml.in.util.MusicReaderException;
 import com.xenoage.zong.musicxml.types.MxlAttributes;
@@ -96,6 +97,7 @@ import com.xenoage.zong.musicxml.types.choice.MxlNoteContent.MxlNoteContentType;
 import com.xenoage.zong.musicxml.types.choice.MxlTimeContent.MxlTimeContentType;
 import com.xenoage.zong.musicxml.types.enums.MxlBackwardForward;
 import com.xenoage.zong.musicxml.types.enums.MxlRightLeftMiddle;
+import com.xenoage.zong.musicxml.types.enums.MxlTimeSymbol;
 import com.xenoage.zong.musicxml.types.groups.MxlLayout;
 import com.xenoage.zong.musicxml.types.partwise.MxlMeasure;
 import com.xenoage.zong.musicxml.types.partwise.MxlPart;
@@ -269,10 +271,15 @@ public final class MusicReader {
 				time = new Time(timeSenzaMisura);
 			}
 			else if (type == MxlTimeContentType.NormalTime) {
-				//at the moment we read only one beats/beat-type
-				//currently we accept only integers > 0
+				//normal time
 				MxlNormalTime mxlNormalTime = (MxlNormalTime) mxlTime.getContent();
-				time = new Time(timeType(mxlNormalTime.getBeats(), mxlNormalTime.getBeatType()));
+				//common, cut or fractional?
+				if (mxlTime.getSymbol() == MxlTimeSymbol.Cut)
+					time = new Time(TimeType.timeAllaBreve);
+				else if (mxlTime.getSymbol() == MxlTimeSymbol.Common)
+					time = new Time(TimeType.timeCommon);
+				else //otherwise, we currently support only normal fractional time signatures
+					time = new Time(timeType(mxlNormalTime.getBeats(), mxlNormalTime.getBeatType()));
 			}
 			//write to column header (TODO: attribute "number" for single staves)
 			if (time != null) {

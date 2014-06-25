@@ -1,5 +1,6 @@
 Already submitted to gmane.comp.gnu.lilypond.bugs:
 - 01b-Pitches-Intervals.xml: only a single measure in MusicXML
+- 11a-TimeSignatures.xml: the symbol attribute of the first time signature should be "Cut", not "Common"
 
 Fixed locally:
 - 02a-Rests-Durations.xml fixed by p.l.schmidt

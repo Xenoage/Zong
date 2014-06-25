@@ -5,6 +5,9 @@ import static com.xenoage.zong.core.music.Pitch.pi;
 
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.Pitch;
+import com.xenoage.zong.core.music.time.Time;
+import com.xenoage.zong.core.music.time.TimeSymbol;
+import com.xenoage.zong.core.music.time.TimeType;
 
 /**
  * Some expected results from the
@@ -168,4 +171,28 @@ public abstract class MusicXMLTestSuite {
 	 */
 	public abstract void test_03b_Rhythm_Backup();
 
+	/**
+	 * Although uncommon, the divisions of a quarter note can change somewhere in the middle of
+	 * a MusicXML file. Here, the first half measure uses a division of 1, which then changes
+	 * to 8 in the middle of the first measure and to 38 in the middle of the second measure. 
+	 */
+	public abstract void test_03c_Rhythm_DivisionChange();
+
+	protected Fraction[] get_03c_Rhythm_DivisionChange() {
+		return new Fraction[] { fr(1, 4), fr(1, 4), fr(1, 4), fr(1, 4), fr(1, 2), fr(1, 2) };
+	}
+
+	//TODO: not supported yet: 03d-Rhythm-DottedDurations-Factors.xml
+
+	/**
+	 * Various time signatures: 2/2 (alla breve), 4/4 (C), 2/2, 3/2, 2/4,
+	 * 3/4, 4/4, 5/4, 3/8, 6/8, 12/8 
+	 */
+	public abstract void test_11a_TimeSignatures();
+
+	protected TimeType[] get_11a_TimeSignatures() {
+		return new TimeType[] { TimeType.timeAllaBreve, TimeType.timeCommon, TimeType.time_2_2,
+			TimeType.timeType(3, 2), TimeType.time_2_4, TimeType.time_3_4, TimeType.time_4_4,
+			TimeType.timeType(5, 4), TimeType.timeType(3, 8), TimeType.time_6_8, TimeType.timeType(12, 8) };
+	}
 }
