@@ -128,10 +128,12 @@ public abstract class MusicXMLTestSuite {
 	protected Fraction[] get_02a_Rests_Durations() {
 		//TODO: <multiple-rest> not yet supported
 		return new Fraction[] {
-			//first measure
-			fr(1), fr(1, 2), fr(1, 4), fr(1, 8), fr(1, 16), fr(1, 32), fr(1, 64), fr(1, 128), fr(1, 128),
-			//second and third measure
-			fr(3, 4), fr(1, 4), fr(3, 8), fr(3, 16), fr(3, 32), fr(3, 64), fr(3, 128), fr(1, 64) /* the last dotted 128th is probably a bug in the test suite */};
+			//undotted
+			fr(1), fr(1), fr(1), fr(1, 2), fr(1, 4), fr(1, 8), fr(1, 16), fr(1, 32), fr(1, 64),
+			fr(1, 128), fr(1, 128),
+			//dotted
+			fr(3, 4), fr(1, 4), fr(1, 4), fr(3, 8), fr(3, 16), fr(3, 32), fr(3, 64), fr(3, 128),
+			fr(3, 256), fr(3, 256) };
 	}
 
 	//TODO: not supported yet: 02b-Rests-PitchedRests.xml
@@ -158,7 +160,7 @@ public abstract class MusicXMLTestSuite {
 			fr(7), fr(7, 2), fr(7, 4), fr(7, 8), fr(7, 16), fr(7, 32), fr(7, 64), fr(7, 128), fr(7, 256),
 			fr(7, 256) };
 	}
-	
+
 	/**
 	 * Two voices with a backup, that does not jump to the beginning for the measure for voice 2,
 	 * but somewhere in the middle. Voice 2 thus won’t have any notes or rests for the first beat

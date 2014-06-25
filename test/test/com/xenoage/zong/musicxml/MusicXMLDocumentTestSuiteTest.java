@@ -94,13 +94,13 @@ public class MusicXMLDocumentTestSuiteTest
 	}
 
 	@Test @Override public void test_02a_Rests_Durations() {
-		//start in measure 3 (multirests are not supported yet - TODO)
+		//multirests are not supported yet - TODO
 		MusicXMLDocument doc = load("02a-Rests-Durations.xml");
 		MxlPart part = doc.getScore().getParts().get(0);
 		Fraction[] expectedDurations = get_02a_Rests_Durations();
 		int iDuration = 0;
-		int divisions = 32; //from MusicXML file
-		for (int iM = 2; iM < part.getMeasures().size(); iM++) {
+		int divisions = 64; //from MusicXML file
+		for (int iM = 0; iM < part.getMeasures().size(); iM++) {
 			MxlMeasure measure = part.getMeasures().get(iM);
 			for (MxlMusicDataContent data : measure.getMusicData().getContent()) {
 				if (data.getMusicDataContentType() == MxlMusicDataContentType.Note) {

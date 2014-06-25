@@ -107,12 +107,12 @@ public class MusicXMLScoreFileInputTestSuiteTest
 	}
 	
 	@Test @Override public void test_02a_Rests_Durations() {
-		//start in measure 3 (multirests are not supported yet - TODO)
+		//multirests are not supported yet - TODO
 		Score score = load("02a-Rests-Durations.xml");
 		Staff staff = score.getStaff(0);
 		Fraction[] expectedDurations = get_02a_Rests_Durations();
 		int iDuration = 0;
-		for (int iM = 2; iM < staff.getMeasures().size(); iM++) {
+		for (int iM = 0; iM < staff.getMeasures().size(); iM++) {
 			Voice voice = staff.getMeasure(iM).getVoice(0);
 			for (VoiceElement e : voice.getElements()) {
 				if (e instanceof Rest) {
