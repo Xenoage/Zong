@@ -186,7 +186,7 @@ public abstract class MusicXMLTestSuite {
 
 	/**
 	 * Various time signatures: 2/2 (alla breve), 4/4 (C), 2/2, 3/2, 2/4,
-	 * 3/4, 4/4, 5/4, 3/8, 6/8, 12/8 
+	 * 3/4, 4/4, 5/4, 3/8, 6/8, 12/8.
 	 */
 	public abstract void test_11a_TimeSignatures();
 
@@ -195,4 +195,20 @@ public abstract class MusicXMLTestSuite {
 			TimeType.timeType(3, 2), TimeType.time_2_4, TimeType.time_3_4, TimeType.time_4_4,
 			TimeType.timeType(5, 4), TimeType.timeType(3, 8), TimeType.time_6_8, TimeType.timeType(12, 8) };
 	}
+	
+	/**
+	 * A score without a time signature (but with a key and clefs).
+	 */
+	public abstract void test_11b_TimeSignatures_NoTime(); 
+	
+	//TODO: not supported yet: 11c-TimeSignatures-CompoundSimple.xml
+	//TODO: not supported yet: 11d-TimeSignatures-CompoundMultiple.xml
+	//TODO: not supported yet: 11e-TimeSignatures-CompoundMixed.xml
+	//not tested: 11f-TimeSignatures-SymbolMeaning.xml - 3/8 time with cut symbol is not supported
+	//TODO: not supported yet: 11g-TimeSignatures-SingleNumber.xml
+	
+	/**
+	 * Senza-misura time signature.
+	 */
+	public abstract void test_11h_TimeSignatures_SenzaMisura(); 
 }

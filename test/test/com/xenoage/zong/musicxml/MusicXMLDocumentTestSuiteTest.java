@@ -190,6 +190,16 @@ public class MusicXMLDocumentTestSuiteTest
 		}
 		assertEquals("not all times found", expectedTimes.length, iTime);
 	}
+	
+	@Test @Override public void test_11b_TimeSignatures_NoTime() {
+		//successfull when it loads
+		load("11b-TimeSignatures-NoTime.xml");
+	}
+	
+	@Test @Override public void test_11h_TimeSignatures_SenzaMisura() {
+		//successfull when it loads
+		load("11h-TimeSignatures-SenzaMisura.xml");
+	}
 
 	private MusicXMLDocument load(String filename) {
 		try {

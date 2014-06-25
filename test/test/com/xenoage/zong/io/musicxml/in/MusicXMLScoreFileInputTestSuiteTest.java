@@ -168,6 +168,21 @@ public class MusicXMLScoreFileInputTestSuiteTest
 		assertEquals("not all times found", expectedTimes.length, iTime);
 	}
 	
+	@Test @Override public void test_11b_TimeSignatures_NoTime() {
+		//successfull when it loads
+		load("11b-TimeSignatures-NoTime.xml");
+	}
+	
+	@Test @Override public void test_11h_TimeSignatures_SenzaMisura() {
+		//successfull when it loads
+		Score score = load("11h-TimeSignatures-SenzaMisura.xml");
+		//time signature must be senza misura
+		assertEquals(TimeType.timeSenzaMisura, score.getColumnHeader(0).getTime().getType());
+		//measure must contain 3 notes and have a length of 3/8
+		assertEquals(3, score.getVoice(mp0).getElements().size());
+		assertEquals(fr(3, 8), score.getVoice(mp0).getFilledBeats());
+	}
+	
 	private void checkDurations(Score score, Fraction[] expectedDurations) {
 		Staff staff = score.getStaff(0);
 		int iDuration = 0;
