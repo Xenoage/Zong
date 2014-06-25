@@ -162,7 +162,7 @@ public final class MusicReader {
 				if (voice0.isEmpty()) {
 					//TODO: "whole rests" or split. currently, also 3/4 rests are possible
 					MP mp = atElement(iStaff, iMeasure, 0, 0);
-					new VoiceElementWrite(score.getVoice(mp), mp, new Rest(measureDuration), false).execute();
+					new VoiceElementWrite(score.getVoice(mp), mp, new Rest(measureDuration), null).execute();
 				}
 			}
 		}

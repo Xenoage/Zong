@@ -22,6 +22,8 @@ public final class Rest
 	@Getter @Setter @NonNull private Fraction duration;
 	/** True, if this rest has cue size, otherwise false. */
 	@Getter @Setter private boolean cue = false;
+	/** True, if this rest is not visible (e.g. because it is at the beginning of a second voice). */
+	@Getter @Setter private boolean hidden = false;
 	
 	/** Back reference: the parent voice, or null if not part of a score. */
 	@Getter @Setter private Voice parent = null;

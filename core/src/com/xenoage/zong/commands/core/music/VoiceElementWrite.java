@@ -1,5 +1,6 @@
 package com.xenoage.zong.commands.core.music;
 
+import static com.xenoage.utils.NullUtils.notNull;
 import static com.xenoage.utils.iterators.ReverseIterator.reverseIt;
 import static com.xenoage.utils.kernel.Range.rangeReverse;
 import static com.xenoage.zong.core.position.MP.atElement;
@@ -7,6 +8,10 @@ import static com.xenoage.zong.core.position.MP.atElement;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+import com.xenoage.utils.NullUtils;
 import com.xenoage.utils.document.command.Command;
 import com.xenoage.utils.document.command.Undoability;
 import com.xenoage.utils.math.Fraction;
@@ -17,7 +22,6 @@ import com.xenoage.zong.core.music.rest.Rest;
 import com.xenoage.zong.core.music.time.Time;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.util.exceptions.MeasureFullException;
-
 
 /**
  * Replaces the {@link VoiceElement}s between the given {@link MP}
@@ -30,15 +34,35 @@ import com.xenoage.zong.util.exceptions.MeasureFullException;
 public class VoiceElementWrite
 	implements Command {
 
+	/**
+	 * Options for writing.
+	 */
+	public static class Options {
+
+		/** True, when an exception should be thrown when the element
+		 * is too long for the current time signature. If this is true, the
+		 * given voice must be part of a score.
+		 */
+		public boolean checkTimeSignature = false;
+		/**
+		 * True, if additional rests, written before the given element,
+		 * should be set to invisible.
+		 */
+		public boolean fillWithHiddenRests = false;
+	}
+
+
+	private final static Options defaultOptions = new Options();
+
 	//data
 	private Voice voice;
 	private MP startMP; //beat or element must be given
 	private VoiceElement element;
-	private boolean checkTimeSignature;
+	private Options options;
 	//backup
 	private List<Command> backupCmds = null;
-	
-	
+
+
 	/**
 	 * Creates a new {@link VoiceElement} command.
 	 * @param voice    the affected voice
@@ -50,17 +74,14 @@ public class VoiceElementWrite
 	 *                 at the start beat of the existing element with this index, or, if it does not exist,
 	 *                 after the last element in this voice.</li></ul>
 	 * @param element  the element to write
-	 * @param checkTimeSignature  true, when an exception should be thrown when the element
-	 *                 is too long for the current time signature. If this is true, the
-	 *                 given voice must be part of a score.
+	 * @param options  options for writing, or null for the default settings
 	 */
-	public VoiceElementWrite(Voice voice, MP startMP, VoiceElement element, boolean checkTimeSignature) {
+	public VoiceElementWrite(Voice voice, MP startMP, VoiceElement element, Options options) {
 		this.voice = voice;
 		this.startMP = startMP;
 		this.element = element;
-		this.checkTimeSignature = checkTimeSignature;
+		this.options = notNull(options, defaultOptions);
 	}
-
 
 	@Override public void execute()
 		throws MeasureFullException {
@@ -79,8 +100,11 @@ public class VoiceElementWrite
 			Fraction emptySpace = startBeat.sub(filledBeats);
 			if (emptySpace.isGreater0()) {
 				//add rest between start beat and filled beats, if needed
+				//GOON: split rests into reasonable parts
+				Rest rest = new Rest(emptySpace);
+				rest.setHidden(options.fillWithHiddenRests);
 				executeAndRemember(new VoiceElementWrite(voice, atElement(voice.getElements().size()),
-					new Rest(emptySpace), false));
+					rest, null));
 				startBeat = startBeat.add(emptySpace);
 				elementIndex = voice.getElements().size();
 			}
@@ -98,7 +122,7 @@ public class VoiceElementWrite
 		Fraction endBeat = startBeat.add(element.getDuration());
 
 		//optionally check time signature
-		if (checkTimeSignature) {
+		if (options.checkTimeSignature) {
 			Score score = voice.getScore();
 			if (score == null)
 				throw new IllegalStateException("parent score is required");
@@ -127,11 +151,9 @@ public class VoiceElementWrite
 		voice.addElement(elementIndex, element);
 	}
 
-
 	@Override public Undoability getUndoability() {
 		return Undoability.Undoable;
 	}
-
 
 	@Override public void undo() {
 		voice.removeElement(element);
@@ -140,8 +162,7 @@ public class VoiceElementWrite
 				cmd.undo();
 		}
 	}
-	
-	
+
 	private void executeAndRemember(Command cmd) {
 		if (backupCmds == null)
 			backupCmds = new ArrayList<Command>();

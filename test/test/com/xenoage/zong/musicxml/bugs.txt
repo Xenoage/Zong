@@ -1,0 +1,3 @@
+Already submitted to gmane.comp.gnu.lilypond.bugs:
+- 01b-Pitches-Intervals.xml: only a single measure in MusicXML
+- 02a-Rests-Durations.xml: last note has duration 2 (= undotted 64th), but shows a dotted 128th

@@ -78,11 +78,19 @@ public final class MusicReaderContext {
 	private String instrumentID = null;
 
 	private MusicReaderSettings settings;
+	
+	private VoiceElementWrite.Options writeVoicElementOptions;
 
 
 	public MusicReaderContext(Score score, MusicReaderSettings settings) {
 		this.score = score;
 		this.settings = settings;
+		
+		//when writing voice elements, alwayse obey time signature and fill gaps
+		//with hidden rests
+		writeVoicElementOptions = new VoiceElementWrite.Options();
+		writeVoicElementOptions.checkTimeSignature = true;
+		writeVoicElementOptions.fillWithHiddenRests = true;
 	}
 
 	/**
@@ -406,7 +414,7 @@ public final class MusicReaderContext {
 			Measure measure = score.getMeasure(mp);
 			if (measure.getVoices().size() < voice + 1)
 				execute(new VoiceAdd(measure, voice));
-			execute(new VoiceElementWrite(score.getVoice(mp), mp, element, true));
+			execute(new VoiceElementWrite(score.getVoice(mp), mp, element, writeVoicElementOptions));
 		} catch (MeasureFullException ex) {
 			if (!settings.isIgnoringErrors())
 				throw new MusicReaderException(ex, this);

@@ -70,6 +70,8 @@ public final class Cursor
 	private MP mp;
 	/** True, when the cursor is moved when the write method is executed. */
 	@Getter @Setter private boolean moving;
+	/** True, when empty space should be filled with invisible rests. Defaults to false. */
+	@Getter @Setter private boolean fillWithHiddenRests = false;
 
 
 	private ArrayList<BeamWaypoint> openBeamWaypoints = null;
@@ -190,8 +192,13 @@ public final class Cursor
 		//create the voice, if needed
 		ensureVoiceExists(mp);
 
+		//create the options
+		VoiceElementWrite.Options options = new VoiceElementWrite.Options();
+		options.checkTimeSignature = true; //always obey to time signature
+		options.fillWithHiddenRests = fillWithHiddenRests; //optionally, fill gaps with hidden rests
+		
 		//write the element
-		new VoiceElementWrite(score.getVoice(mp), mp, element, true).execute();
+		new VoiceElementWrite(score.getVoice(mp), mp, element, options).execute();
 
 		//if a beam is open and it is a chord, add it
 		if (openBeamWaypoints != null && element instanceof Chord) {

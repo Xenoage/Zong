@@ -51,7 +51,7 @@ public class VoiceElementWriteTest {
 		//in voice 1, write a 7/16 rest at 1/8
 		MP mp = atElement(0, 0, 1, 1);
 		Voice voice = score.getVoice(mp);
-		VoiceElementWrite cmd = new VoiceElementWrite(voice, mp, new Rest(fr(7, 16)), false);
+		VoiceElementWrite cmd = new VoiceElementWrite(voice, mp, new Rest(fr(7, 16)), null);
 		cmd.execute();
 		//now, there must be the durations 1/8, 7/16, 1/8, 1/8, 1/8 in voice 1
 		assertEquals(5, voice.getElements().size());
@@ -77,7 +77,7 @@ public class VoiceElementWriteTest {
 		//in voice 1, write a half rest at 1/8
 		MP mp = atElement(0, 0, 1, 1);
 		Voice voice = score.getVoice(mp);
-		VoiceElementWrite cmd = new VoiceElementWrite(voice, mp, new Rest(fr(1, 2)), false);
+		VoiceElementWrite cmd = new VoiceElementWrite(voice, mp, new Rest(fr(1, 2)), null);
 		cmd.execute();
 		//now, there must be the durations 1/8, 1/2, 1/8, 1/8, 1/8 in voice 1
 		assertEquals(5, voice.getElements().size());
@@ -103,7 +103,7 @@ public class VoiceElementWriteTest {
 		//in voice 1, write a half rest at 0/8
 		MP mp = atElement(0, 0, 1, 0);
 		Voice voice = score.getVoice(mp);
-		VoiceElementWrite cmd = new VoiceElementWrite(voice, mp, new Rest(fr(1, 2)), false);
+		VoiceElementWrite cmd = new VoiceElementWrite(voice, mp, new Rest(fr(1, 2)), null);
 		cmd.execute();
 		//now, there must be the durations 1/2, 1/8, 1/8, 1/8, 1/8 in voice 1
 		assertEquals(5, voice.getElements().size());
@@ -129,7 +129,7 @@ public class VoiceElementWriteTest {
 		//in voice 1, write a half rest at 4/8
 		MP mp = atElement(0, 0, 1, 4);
 		Voice voice = score.getVoice(mp);
-		VoiceElementWrite cmd = new VoiceElementWrite(voice, mp, new Rest(fr(1, 2)), false);
+		VoiceElementWrite cmd = new VoiceElementWrite(voice, mp, new Rest(fr(1, 2)), null);
 		cmd.execute();
 		//now, there must be the durations 1/8, 1/8, 1/8, 1/8, 1/2 in voice 1
 		assertEquals(5, voice.getElements().size());
@@ -155,7 +155,7 @@ public class VoiceElementWriteTest {
 		//in voice 1, write a 1/16 rest at 4/8
 		MP mp = atElement(0, 0, 1, 0);
 		Voice voice = score.getVoice(mp);
-		VoiceElementWrite cmd = new VoiceElementWrite(voice, mp, new Rest(fr(1, 16)), false);
+		VoiceElementWrite cmd = new VoiceElementWrite(voice, mp, new Rest(fr(1, 16)), null);
 		cmd.execute();
 		//now, there must be the durations 1/16, 1/8, 1/8, 1/8, 1/8, 1/8, 1/8, 1/8 in voice 1
 		assertEquals(8, voice.getElements().size());
@@ -180,11 +180,11 @@ public class VoiceElementWriteTest {
 		Score score = ScoreFactory.create1Staff();
 		Voice voice = score.getVoice(atVoice(0, 0, 0));
 		Rest rest0 = new Rest(fr(1, 4));
-		new VoiceElementWrite(voice, atElement(0, 0, 0, 0), rest0, false).execute();
+		new VoiceElementWrite(voice, atElement(0, 0, 0, 0), rest0, null).execute();
 		Rest rest1 = new Rest(fr(1, 4));
-		new VoiceElementWrite(voice, atElement(0, 0, 0, 1), rest1, false).execute();
+		new VoiceElementWrite(voice, atElement(0, 0, 0, 1), rest1, null).execute();
 		Rest rest2 = new Rest(fr(1, 4));
-		new VoiceElementWrite(voice, atElement(0, 0, 0, 2), rest2, false).execute();
+		new VoiceElementWrite(voice, atElement(0, 0, 0, 2), rest2, null).execute();
 		assertTrue(rest0 == voice.getElementAt(fr(0, 4)));
 		assertTrue(rest1 == voice.getElementAt(fr(1, 4)));
 		assertTrue(rest2 == voice.getElementAt(fr(2, 4)));
@@ -204,8 +204,8 @@ public class VoiceElementWriteTest {
 		//in voice 1, write two grace notes
 		Voice voice = score.getVoice(atVoice(0, 0, 1));
 		Chord g1 = grace(1), g2 = grace(2);
-		cp.execute(new VoiceElementWrite(voice, atElement(0, 0, 1, 2), g1, false));
-		cp.execute(new VoiceElementWrite(voice, atElement(0, 0, 1, 3), g2, false));
+		cp.execute(new VoiceElementWrite(voice, atElement(0, 0, 1, 2), g1, null));
+		cp.execute(new VoiceElementWrite(voice, atElement(0, 0, 1, 3), g2, null));
 		//now we must find the other elements unchanged but the grace notes inserted
 		assertEquals(10, voice.getElements().size());
 		assertEquals(fr(1, 8), getDur(voice, 0));
@@ -240,7 +240,7 @@ public class VoiceElementWriteTest {
 		MP mp = atElement(0, 0, 0, 2);
 		Voice voice = score.getVoice(mp);
 		Rest r = new Rest(fr(1, 4));
-		VoiceElementWrite cmd = new VoiceElementWrite(voice, mp, r, false);
+		VoiceElementWrite cmd = new VoiceElementWrite(voice, mp, r, null);
 		cmd.execute();
 		//check notes
 		assertEquals(11, voice.getElements().size());
@@ -275,7 +275,7 @@ public class VoiceElementWriteTest {
 		MP mp = atElement(0, 0, 0, 2);
 		Voice voice = score.getVoice(mp);
 		Rest r = new Rest(fr(1, 2));
-		VoiceElementWrite cmd = new VoiceElementWrite(voice, mp, r, false);
+		VoiceElementWrite cmd = new VoiceElementWrite(voice, mp, r, null);
 		cmd.execute();
 		//check notes
 		assertEquals(7, voice.getElements().size());
@@ -305,7 +305,7 @@ public class VoiceElementWriteTest {
 		MP mp = atElement(0, 0, 0, 2);
 		Voice voice = score.getVoice(mp);
 		Rest r = new Rest(fr(5, 8));
-		VoiceElementWrite cmd = new VoiceElementWrite(voice, mp, r, false);
+		VoiceElementWrite cmd = new VoiceElementWrite(voice, mp, r, null);
 		cmd.execute();
 		//check notes
 		assertEquals(5, voice.getElements().size());
@@ -332,7 +332,7 @@ public class VoiceElementWriteTest {
 		MP mp = atBeat(0, 0, 0, fr(1, 8));
 		Voice voice = score.getVoice(mp);
 		Rest r = new Rest(fr(7, 16));
-		VoiceElementWrite cmd = new VoiceElementWrite(voice, mp, r, false);
+		VoiceElementWrite cmd = new VoiceElementWrite(voice, mp, r, null);
 		cmd.execute();
 		//now, there must be the durations 1/18, 7/16, 1/8, 1/8, 1/8 in voice 1
 		assertEquals(5, voice.getElements().size());
@@ -359,7 +359,7 @@ public class VoiceElementWriteTest {
 		MP mp = atBeat(0, 0, 0, fr(9, 8));
 		Voice voice = score.getVoice(mp);
 		Rest x = new Rest(fr(1, 4));
-		VoiceElementWrite cmd = new VoiceElementWrite(voice, mp, x, false);
+		VoiceElementWrite cmd = new VoiceElementWrite(voice, mp, x, null);
 		cmd.execute();
 		//check elements
 		assertEquals(10, voice.getElements().size());
@@ -381,15 +381,18 @@ public class VoiceElementWriteTest {
 	@Test public void testTimeAware() {
 		Score score = ScoreFactory.create1Staff4Measures();
 		score.getHeader().getColumnHeaders().get(1).setTime(new Time(TimeType.time_3_4));
+		//create options
+		VoiceElementWrite.Options options = new VoiceElementWrite.Options();
+		options.checkTimeSignature = true;
 		//measure 0: senza misura: write 100 1/4 chords
 		Voice voice = score.getVoice(MP.atVoice(0, 0, 0));
 		for (int i : range(100))
-			new VoiceElementWrite(voice, atElement(0, 0, 0, i), new Rest(fr(1, 4)), true).execute();
+			new VoiceElementWrite(voice, atElement(0, 0, 0, i), new Rest(fr(1, 4)), options).execute();
 		//measure 2: must work for 3/4, then fail
 		for (int i : range(3))
-			new VoiceElementWrite(voice, atElement(0, 2, 0, i), new Rest(fr(1, 4)), true).execute();
+			new VoiceElementWrite(voice, atElement(0, 2, 0, i), new Rest(fr(1, 4)), options).execute();
 		try {
-			new VoiceElementWrite(voice, atElement(0, 2, 0, 3), new Rest(fr(1, 4)), true).execute();
+			new VoiceElementWrite(voice, atElement(0, 2, 0, 3), new Rest(fr(1, 4)), options).execute();
 			fail();
 		} catch (MeasureFullException ex) {
 		}
