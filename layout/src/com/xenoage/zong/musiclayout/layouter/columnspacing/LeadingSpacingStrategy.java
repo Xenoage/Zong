@@ -64,7 +64,7 @@ public class LeadingSpacingStrategy
 
 		Clef clef = new Clef(musicContext.getClef().getType()); //it is not the same element instance, but has the same meaning
 		ClefNotation clefNotation = new ClefNotation(clef, new ElementWidth(0,
-			layoutSettings.spacings.widthClef, 0), musicContext.getClef().getType().getLine(), 1);
+			layoutSettings.spacings.widthClef, 0), musicContext.getClef().getType().getLp(), 1);
 		notations.add(clefNotation);
 		xOffset += layoutSettings.spacings.widthClef / 2;
 		elements.add(new SpacingElement(clef, fr(0), xOffset));

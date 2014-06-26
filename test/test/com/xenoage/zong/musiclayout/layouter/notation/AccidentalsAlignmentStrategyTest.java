@@ -41,7 +41,7 @@ public class AccidentalsAlignmentStrategyTest {
 
 	@Before public void setUp() {
 		strategy = new AccidentalsAlignmentStrategy();
-		ClefType clefG = ClefType.G;
+		ClefType clefG = ClefType.clefTreble;
 		contextC = MusicContext.simpleInstance;
 		//contextEb: key = Eb major, acc = Fbb5, G##5
 		contextEb = new MusicContext(new Clef(clefG), new TraditionalKey(-3), new Pitch[] {

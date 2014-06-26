@@ -68,7 +68,7 @@ public class MeasureElementsSpacingsStrategyTest {
 		IList<VoiceSpacing> vs = ilist(
 			new VoiceSpacing(null, 1, ilist(se(ve[0], fr(1, 2), 4), se(ve[1], fr(6), 15))),
 			new VoiceSpacing(null, 1, ilist(se(ve[2], fr(1), 5), se(ve[3], fr(17, 2), 20))));
-		Clef innerClef = new Clef(ClefType.G);
+		Clef innerClef = new Clef(ClefType.clefTreble);
 		BeatEList<Clef> innerClefs = new BeatEList<Clef>();
 		innerClefs.add(beatE(innerClef, fr(6)));
 		Tuple2<MeasureElementsSpacings, IList<VoiceSpacing>> res = new MeasureElementsSpacingsStrategy()
@@ -107,7 +107,7 @@ public class MeasureElementsSpacingsStrategyTest {
 		IList<VoiceSpacing> vs = ilist(
 			new VoiceSpacing(null, 1, ilist(se(ve[0], fr(1, 2), 4), se(ve[1], fr(4), 11))),
 			new VoiceSpacing(null, 1, ilist(se(ve[2], fr(1), 5), se(ve[3], fr(13, 2), 16))));
-		Clef innerClef = new Clef(ClefType.G);
+		Clef innerClef = new Clef(ClefType.clefTreble);
 		BeatEList<Clef> innerClefs = new BeatEList<Clef>();
 		innerClefs.add(beatE(innerClef, fr(4)));
 		Tuple2<MeasureElementsSpacings, IList<VoiceSpacing>> res = new MeasureElementsSpacingsStrategy()

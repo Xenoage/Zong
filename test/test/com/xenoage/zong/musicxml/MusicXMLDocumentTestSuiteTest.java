@@ -4,7 +4,6 @@ import static com.xenoage.utils.jse.JsePlatformUtils.jsePlatformUtils;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.music.Pitch.pi;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
@@ -21,7 +20,6 @@ import com.xenoage.zong.musicxml.types.MxlNormalTime;
 import com.xenoage.zong.musicxml.types.MxlNote;
 import com.xenoage.zong.musicxml.types.MxlPitch;
 import com.xenoage.zong.musicxml.types.MxlSyllabicText;
-import com.xenoage.zong.musicxml.types.MxlTime;
 import com.xenoage.zong.musicxml.types.choice.MxlFullNoteContent.MxlFullNoteContentType;
 import com.xenoage.zong.musicxml.types.choice.MxlMusicDataContent;
 import com.xenoage.zong.musicxml.types.choice.MxlMusicDataContent.MxlMusicDataContentType;
@@ -199,6 +197,11 @@ public class MusicXMLDocumentTestSuiteTest
 	@Test @Override public void test_11h_TimeSignatures_SenzaMisura() {
 		//successfull when it loads
 		load("11h-TimeSignatures-SenzaMisura.xml");
+	}
+	
+	@Test @Override public void test_12a_Clefs() {
+		//successfull when it loads - more is tested in musicxml-in
+		load("12a-Clefs.xml");
 	}
 
 	private MusicXMLDocument load(String filename) {

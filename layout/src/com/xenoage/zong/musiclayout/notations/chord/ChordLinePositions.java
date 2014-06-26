@@ -23,7 +23,7 @@ import com.xenoage.zong.core.music.chord.Note;
 	public ChordLinePositions(Chord chord, MusicContext context) {
 		linePositions = new int[chord.getNotes().size()];
 		for (int i = 0; i < chord.getNotes().size(); i++) {
-			linePositions[i] = context.computeLinePosition(((Note) chord.getNotes().get(i)).getPitch());
+			linePositions[i] = context.getLp(((Note) chord.getNotes().get(i)).getPitch());
 		}
 	}
 

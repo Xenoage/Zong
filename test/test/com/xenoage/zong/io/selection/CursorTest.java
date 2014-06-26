@@ -51,14 +51,14 @@ public class CursorTest {
 		cursor.write(new Rest(fr(1, 4)));
 		cursor.write(new Rest(fr(1, 4)));
 		//write clef at 1/4
-		Clef clef1 = new Clef(ClefType.F);
+		Clef clef1 = new Clef(ClefType.clefBass);
 		cursor.setMP(atElement(0, 0, 0, 1));
 		cursor.write(clef1);
 		BeatEList<Clef> clefs = score.getMeasure(atMeasure(0, 0)).getClefs();
 		assertEquals(1, clefs.size());
 		assertEquals(beatE(clef1, fr(1, 4)), clefs.getFirst());
 		//write clef at 2/4
-		Clef clef2 = new Clef(ClefType.G);
+		Clef clef2 = new Clef(ClefType.clefTreble);
 		cursor.setMP(atElement(0, 0, 0, 2));
 		cursor.write(clef2);
 		clefs = score.getMeasure(atMeasure(0, 0)).getClefs();
@@ -66,7 +66,7 @@ public class CursorTest {
 		assertEquals(beatE(clef1, fr(1, 4)), clefs.getFirst());
 		assertEquals(beatE(clef2, fr(2, 4)), clefs.getElements().get(1));
 		//overwrite clef at 1/4
-		Clef clef3 = new Clef(ClefType.G);
+		Clef clef3 = new Clef(ClefType.clefTreble);
 		cursor.setMP(atElement(0, 0, 0, 1));
 		cursor.write(clef3);
 		clefs = score.getMeasure(atMeasure(0, 0)).getClefs();

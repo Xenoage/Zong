@@ -26,7 +26,7 @@ import com.xenoage.zong.core.music.key.TraditionalKey.Mode;
  */
 @Const @Data public class MusicContext {
 
-	public static final MusicContext simpleInstance = new MusicContext(new Clef(ClefType.G),
+	public static final MusicContext simpleInstance = new MusicContext(new Clef(ClefType.clefTreble),
 		new TraditionalKey(0, Mode.Major), new Pitch[0], 5);
 
 
@@ -70,8 +70,8 @@ import com.xenoage.zong.core.music.key.TraditionalKey.Mode;
 	 * that is the vertical offset of the note in half-spaces
 	 * from the bottom line.
 	 */
-	public int computeLinePosition(Pitch pitch) {
-		return clef.getType().computeLinePosition(pitch);
+	public int getLp(Pitch pitch) {
+		return clef.getType().getLp(pitch);
 	}
 
 

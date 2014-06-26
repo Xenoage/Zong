@@ -23,7 +23,7 @@ public class LeadingSpacingMock {
 	 */
 	public static LeadingSpacing createGClefSpacing(float widthMm) {
 		float widthIS = widthMm / ScoreFormat.defaultValue.getInterlineSpace();
-		ClefNotation notation = new ClefNotation(new Clef(ClefType.G), new ElementWidth(widthIS), 0, 1);
+		ClefNotation notation = new ClefNotation(new Clef(ClefType.clefTreble), new ElementWidth(widthIS), 0, 1);
 		SpacingElement spacing = new SpacingElement(notation.getMusicElement(), fr(0), 0);
 		return new LeadingSpacing(ilist(spacing), widthIS);
 	}

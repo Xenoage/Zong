@@ -111,7 +111,7 @@ public class MidiVelocityConverterTry {
 		cursor.write((ColumnElement) new TraditionalKey(-3));
 		cursor.write((ColumnElement) new Time(timeType(3, 4)));
 
-		cursor.write(new Clef(ClefType.G));
+		cursor.write(new Clef(ClefType.clefTreble));
 
 		Fraction f4 = fr(1, 4);
 

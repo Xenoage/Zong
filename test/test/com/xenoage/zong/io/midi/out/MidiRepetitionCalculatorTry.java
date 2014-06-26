@@ -36,7 +36,7 @@ public class MidiRepetitionCalculatorTry {
 
 		//measure 0
 		Cursor cursor = new Cursor(score, mp0, true);
-		cursor.write(new Clef(ClefType.G));
+		cursor.write(new Clef(ClefType.clefTreble));
 		cursor.write((ColumnElement) new TraditionalKey(-3));
 		cursor.write(new Time(timeType(3, 4)));
 

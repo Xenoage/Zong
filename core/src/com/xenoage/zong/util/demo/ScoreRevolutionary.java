@@ -107,7 +107,7 @@ public class ScoreRevolutionary {
 		cursor.write(new Time(TimeType.timeCommon));
 
 		//first staff: g-clef and some notes
-		cursor.write(new Clef(ClefType.G));
+		cursor.write(new Clef(ClefType.clefTreble));
 
 		//measure 1
 		Tempo tempo = new Tempo(f4, 160); //, , FontInfo.defaultValue, );
@@ -161,7 +161,7 @@ public class ScoreRevolutionary {
 
 		//second staff: f-clef some notes
 		cursor = new Cursor(cursor.getScore(), mp(1, 0, 0, _0, 0), true);
-		cursor.write(new Clef(ClefType.F));
+		cursor.write(new Clef(ClefType.clefBass));
 
 		//measure 1
 		cursor.openBeam();

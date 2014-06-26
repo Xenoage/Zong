@@ -295,7 +295,7 @@ public final class ChordReader {
 					//slur or tied
 					MxlSlurOrTied mxlSlur = (MxlSlurOrTied) mxlNC;
 					Pitch pitch = chord.getNotes().get(noteIndex).getPitch();
-					float noteLP = context.getMusicContext(staffIndexInPart).computeLinePosition(pitch);
+					float noteLP = context.getMusicContext(staffIndexInPart).getLp(pitch);
 
 					//type
 					SlurType type;
@@ -456,12 +456,12 @@ public final class ChordReader {
 		List<Pitch> pitches = chord.getPitches();
 		//if there is just one note, it's easy
 		if (pitches.size() == 1) {
-			return mc.computeLinePosition(pitches.get(0));
+			return mc.getLp(pitches.get(0));
 		}
 		//otherwise, test for the topmost and bottommost note
 		else {
-			float top = mc.computeLinePosition(pitches.get(pitches.size() - 1));
-			float bottom = mc.computeLinePosition(pitches.get(0));
+			float top = mc.getLp(pitches.get(pitches.size() - 1));
+			float bottom = mc.getLp(pitches.get(0));
 			return (Math.abs(top - nearTo) < Math.abs(bottom - nearTo) ? top : bottom);
 		}
 	}

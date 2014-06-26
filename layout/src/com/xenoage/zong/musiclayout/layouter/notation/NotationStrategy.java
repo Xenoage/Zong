@@ -281,7 +281,7 @@ public final class NotationStrategy
 	*/
 	private ClefNotation computeClef(Clef clef, LayoutSettings ls) {
 		return new ClefNotation(clef, new ElementWidth(0, ls.spacings.widthClef * ls.scalingClefInner,
-			0), clef.getType().getLine(), ls.scalingClefInner);
+			0), clef.getType().getLp(), ls.scalingClefInner);
 	}
 
 	/**
@@ -329,8 +329,8 @@ public final class NotationStrategy
 		else {
 			width = -fifth * layoutSettings.spacings.widthFlat;
 		}
-		return new TraditionalKeyNotation(key, new ElementWidth(0, width, 1), contextClef.getType()
-			.computeLinePosition(pi(0, 0, 4)), contextClef.getType().getKeySignatureLowestLine(fifth));
+		return new TraditionalKeyNotation(key, new ElementWidth(0, width, 1),
+			contextClef.getType().getLp(pi(0, 0, 4)), contextClef.getType().getKeySignatureLowestLp(fifth));
 	}
 
 	/**

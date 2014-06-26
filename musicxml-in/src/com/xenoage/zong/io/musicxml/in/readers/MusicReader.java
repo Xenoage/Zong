@@ -290,7 +290,7 @@ public final class MusicReader {
 		//clefs
 		if (mxlAttributes.getClefs() != null) {
 			for (MxlClef mxlClef : mxlAttributes.getClefs()) {
-				ClefType clefType = getEnumValue(mxlClef.getSign(), ClefType.values());
+				ClefType clefType = ClefReader.readClef(mxlClef);
 				Clef clef = (clefType != null ? new Clef(clefType) : null);
 				//staff (called "number" in MusicXML), first staff is default
 				int staff = mxlClef.getNumber() - 1;

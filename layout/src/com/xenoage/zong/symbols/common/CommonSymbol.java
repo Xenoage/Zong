@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.xenoage.zong.core.music.chord.Accidental;
 import com.xenoage.zong.core.music.chord.Articulation;
-import com.xenoage.zong.core.music.clef.ClefType;
+import com.xenoage.zong.core.music.clef.ClefSymbol;
 import com.xenoage.zong.core.music.direction.DynamicsType;
 import com.xenoage.zong.core.music.direction.Pedal;
 import com.xenoage.zong.symbols.SymbolPool;
@@ -154,16 +154,16 @@ public enum CommonSymbol {
 	}
 
 	/**
-	 * Gets the common symbol for the given {@link ClefType}.
+	 * Gets the common symbol for the given {@link ClefSymbol}.
 	 */
-	public static CommonSymbol getClef(ClefType clefType) {
-		switch (clefType) {
+	public static CommonSymbol getClef(ClefSymbol clefSymbol) {
+		switch (clefSymbol) {
 			case F:
 				return CommonSymbol.ClefF;
 			case G:
 				return CommonSymbol.ClefG;
 			default:
-				throw new IllegalArgumentException("unsupported clef");
+				return CommonSymbol.ClefG; //TODO: add more clefs
 		}
 	}
 
