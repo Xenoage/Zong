@@ -46,7 +46,7 @@ project(':desktop') {
 	dependencies {
 		compile project(':renderer'), project(':midi-out'), project(':musicxml-in'), project(':voc')
 		compile group: "com.itextpdf", name: "itextpdf", version: "5.4.5"
-		compile files('../lib/vorbis-java-1.0.0-beta.jar')
+		compile files('../lib/lib/vorbis-java-1.0.0-beta.jar')
 	}
 }
 project(':layout') { dependencies { compile project(':core') } }
@@ -66,10 +66,16 @@ project(':webserver') {
 	}
 }
 
+//update lib
+task updateLib << {
+	println 'Updating libraries'
+	ant.java(jar:"lib/sync.jar", fork:true, dir:"lib")
+}
+
 //build dist of Zong!
 task dist {
-	//download custom JARs
-	ant.get(src: 'http://files.xenoage.com/vorbis-java/1.0.0-beta/vorbis-java-1.0.0-beta.jar', dest:'lib/', verbose:true)
+	//update libraries
+	dependsOn updateLib
 	//first, build utils
 	dependsOn 'buildUtils'
 	//then, build the subprojects

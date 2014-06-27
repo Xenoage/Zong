@@ -1,13 +1,15 @@
 <project name="javadoc" default="antZongJavadoc">
+	<taskdef classname="lombok.delombok.ant.DelombokTask" classpath="lib/lib/lombok-1.14.2.jar" name="delombok"/>
+	
 	<target name="antZongJavadoc">
-		<delete dir="doc"/>
-		<javadoc packagenames="com.xenoage"
-				useexternalfile="true"
-				destdir="doc"
-				author="true"
-				use="true"
-				windowtitle="Zong! API"
-				doctitle="&lt;h1&gt;Zong! API&lt;/h1&gt;">
+		<!-- settings -->
+		<property name="docdir" value="doc"/>
+		<property name="tempdir" value="doc_temp"/>
+		<!-- clean -->
+		<delete dir="${docdir}"/>
+		<delete dir="${tempdir}"/>
+		<!-- copy delomboked sources to temp folder -->
+		<copy todir="${tempdir}/src">
 			<fileset dir="utils/utils-kernel/src"/>
 			<fileset dir="utils/utils-base/src"/>
 			<fileset dir="utils/utils-jse/src"/>
@@ -22,6 +24,21 @@
 			<fileset dir="renderer/src"/>
 			<fileset dir="voc/src"/>
 			<fileset dir="webserver/src"/>
+		</copy>
+		<delombok verbose="true" encoding="UTF-8" from="${tempdir}/src" to="${tempdir}/src_delomboked">
+			<format value="suppressWarnings:skip" />
+		</delombok>
+		<!-- create javadoc -->
+		<javadoc packagenames="com.xenoage"
+				useexternalfile="true"
+				destdir="doc"
+				author="true"
+				use="true"
+				windowtitle="Zong! API"
+				doctitle="&lt;h1&gt;Zong! API&lt;/h1&gt;">
+			<fileset dir="${tempdir}/src_delomboked"/>
 		</javadoc>
+		<!-- delete temp dir -->
+		<delete dir="${tempdir}"/>
 	</target>
 </project>
