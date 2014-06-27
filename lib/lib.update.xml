@@ -1,6 +1,6 @@
 <!--
 Ant script for updating the required libs for Zong!
-This script should be replaced by a system that manages remote
+This script, using Xenoage SimpleSync, emulates a system that manages remote
 libs in eclipse, like NuGet for Visual Studio. Maven was no choice so far, since we do not want
 to use a Maven project structure, we just want to manage the lib files.
 -->
@@ -8,38 +8,10 @@ to use a Maven project structure, we just want to manage the lib files.
 	<property name="server" value="http://files.xenoage.com"/>
 	<target name="update">
 	    <echo>Updating Zong! libraries...</echo>
-		<delete>
-			<fileset dir="." includes="*.jar"/>
-			<fileset dir="." includes="*.txt"/>
-		</delete>
-		<!-- android-midi-lib -->
-		<get src="${server}/android-midi-lib/3.49/android-midi-lib-3.49.jar" dest="."/>
-		<get src="${server}/android-midi-lib/3.49/android-midi-lib-license.txt" dest="."/>
-		<!-- gson -->
-		<get src="${server}/gson/2.2.4/gson-2.2.4.jar" dest="."/>
-		<get src="${server}/gson/2.2.4/gson-2.2.4-sources.jar" dest="dev/"/>
-		<get src="${server}/gson/2.2.4/gson-license.txt" dest="."/>
-		<!-- gwt -->
-		<get src="${server}/gwt/2.5.1/gwt-servlet.jar" dest="../webapp/war/WEB-INF/lib/"/>
-		<!-- h2 -->
-		<get src="${server}/h2/1.3.174/h2-1.3.174.jar" dest="."/>
-		<get src="${server}/h2/1.3.174/h2-license.txt" dest="."/>
-		<!-- itext -->
-		<get src="${server}/itext/5.4.5/itextpdf-5.4.5.jar" dest="."/>
-		<get src="${server}/itext/5.4.5/itextpdf-5.4.5-sources.jar" dest="dev/"/>
-		<get src="${server}/itext/5.4.5/itext-license.txt" dest="."/>
-		<!-- jetty -->
-		<get src="${server}/jetty/9.1.0/jetty-all-9.1.0.jar" dest="."/>
-		<get src="${server}/jetty/9.1.0/jetty-all-9.1.0-sources.jar" dest="dev/"/>
-		<get src="${server}/jetty/9.1.0/jetty-all-license.txt" dest="."/>
-		<get src="${server}/jetty/9.1.0/servlet-api-3.1.jar" dest="."/>
-		<get src="${server}/jetty/9.1.0/servlet-api-license.txt" dest="."/>
-		<!-- lombok -->
-		<get src="${server}/lombok/1.12.5-xng/lombok-1.12.5-xng.jar" dest="."/>
-		<get src="${server}/lombok/1.12.5-xng/lombok-license.txt" dest="."/>
-		<!-- vorbis-java -->
-		<get src="${server}/vorbis-java/1.0.0-beta/vorbis-java-1.0.0-beta.jar" dest="."/>
-		<get src="${server}/vorbis-java/1.0.0-beta/vorbis-java-license.txt" dest="."/>
-		<echo>Done.</echo>
+		<java classname="com.xenoage.simplesync.Sync">
+         <classpath>
+           <pathelement location="sync.jar"/>
+         </classpath>
+       </java>
 	</target>
 </project>

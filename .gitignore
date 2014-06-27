@@ -15,6 +15,5 @@ build
 /doc
 
 # Libraries #
-lib/*.jar
-lib/*.txt
+lib/lib/
 
