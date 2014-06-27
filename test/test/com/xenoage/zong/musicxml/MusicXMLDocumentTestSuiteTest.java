@@ -62,17 +62,19 @@ public class MusicXMLDocumentTestSuiteTest
 	}
 
 	@Test @Override public void test_01b_Pitches_Intervals() {
-		//the MusicXML file contains only a single measure (possibly an error in the test suite)
 		MusicXMLDocument doc = load("01b-Pitches-Intervals.xml");
 		Pitch[] expectedPitches = get_01b_Pitches_Intervals();
-		MxlMeasure measure = doc.getScore().getParts().get(0).getMeasures().get(0);
+		MxlPart part = doc.getScore().getParts().get(0);
 		int iPitch = 0;
-		for (MxlMusicDataContent data : measure.getMusicData().getContent()) {
-			if (data.getMusicDataContentType() == MxlMusicDataContentType.Note) {
-				//check note and pitch
-				MxlFullNote note = ((MxlNote) data).getContent().getFullNote();
-				MxlPitch pitch = (MxlPitch) (note.getContent());
-				assertEquals("note " + iPitch, expectedPitches[iPitch++], pitch.getPitch());
+		for (int iM = 0; iM < part.getMeasures().size(); iM++) {
+			MxlMeasure measure = part.getMeasures().get(iM);
+			for (MxlMusicDataContent data : measure.getMusicData().getContent()) {
+				if (data.getMusicDataContentType() == MxlMusicDataContentType.Note) {
+					//check note and pitch
+					MxlFullNote note = ((MxlNote) data).getContent().getFullNote();
+					MxlPitch pitch = (MxlPitch) (note.getContent());
+					assertEquals("note " + iPitch, expectedPitches[iPitch++], pitch.getPitch());
+				}
 			}
 		}
 		assertEquals("not all notes found", expectedPitches.length, iPitch);
