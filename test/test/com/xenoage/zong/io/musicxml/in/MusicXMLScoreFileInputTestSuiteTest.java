@@ -27,10 +27,20 @@ import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.clef.Clef;
 import com.xenoage.zong.core.music.clef.ClefSymbol;
 import com.xenoage.zong.core.music.clef.ClefType;
+import com.xenoage.zong.core.music.key.TraditionalKey;
+import com.xenoage.zong.core.music.key.TraditionalKey.Mode;
 import com.xenoage.zong.core.music.rest.Rest;
 import com.xenoage.zong.core.music.time.TimeType;
 import com.xenoage.zong.core.music.util.Interval;
+import com.xenoage.zong.musicxml.MusicXMLDocument;
 import com.xenoage.zong.musicxml.MusicXMLTestSuite;
+import com.xenoage.zong.musicxml.types.MxlAttributes;
+import com.xenoage.zong.musicxml.types.MxlKey;
+import com.xenoage.zong.musicxml.types.choice.MxlMusicDataContent;
+import com.xenoage.zong.musicxml.types.choice.MxlMusicDataContent.MxlMusicDataContentType;
+import com.xenoage.zong.musicxml.types.enums.MxlMode;
+import com.xenoage.zong.musicxml.types.partwise.MxlMeasure;
+import com.xenoage.zong.musicxml.types.partwise.MxlPart;
 
 /**
  * Test the {@link MusicXmlScoreFileInput} class for the documents in the
@@ -235,7 +245,24 @@ public class MusicXMLScoreFileInputTestSuiteTest
 		assertNotNull(header.getKeys().get(_0));
 	}
 
+	@Test @Override public void test_13a_KeySignatures() {
+		//TODO: Zong! supports only -7 to +7, starting in measure 9,
+		//ending in measure 38
+		Score score = load("13a-KeySignatures.xml");
+		TraditionalKey[] expectedKeys = get_13a_KeySignatures();
+		int iKey = 0;
+		for (int i = 8; i <= 37; i++) {
+			ColumnHeader column = score.getColumnHeader(i);
+			TraditionalKey key = (TraditionalKey) column.getKeys().get(_0);
+			assertEquals("measure " + i, expectedKeys[iKey].getFifths(), key.getFifths());
+			assertEquals("measure " + i, expectedKeys[iKey].getMode(), key.getMode());
+			iKey++;
+		}
+	}
 	
+	@Test @Override public void test_13b_KeySignatures_ChurchModes() {
+		
+	}
 
 	private Score load(String filename) {
 		try {

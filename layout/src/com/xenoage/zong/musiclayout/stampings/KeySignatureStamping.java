@@ -53,7 +53,7 @@ import com.xenoage.zong.symbols.common.CommonSymbol;
 	private static Shape createBoundingShape(TraditionalKey traditionalKey,
 		StaffStamping parentStaff, int linePositionC4, int linePositionMin, float positionX,
 		SymbolPool symbolPool, LayoutSettings layoutSettings) {
-		int fifth = traditionalKey.getFifth();
+		int fifth = traditionalKey.getFifths();
 		if (fifth == 0)
 			return null;
 		boolean useSharps = (fifth > 0);

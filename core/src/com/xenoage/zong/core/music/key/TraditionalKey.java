@@ -1,5 +1,6 @@
 package com.xenoage.zong.core.music.key;
 
+import static com.xenoage.utils.NullUtils.notNull;
 import static com.xenoage.zong.core.music.Pitch.pi;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,8 +33,8 @@ public final class TraditionalKey
 	};
 
 
-	/** The number within the circle of fifth, e.g. 1 for G major or E minor. Between -7 and +7. */
-	@Getter private int fifth;
+	/** The number within the circle of fifths, e.g. 1 for G major or E minor. Between -7 and +7. */
+	@Getter private int fifths;
 	/** The mode, e.g. major, or null for an unknown mode. */
 	@Getter @Setter private Mode mode;
 
@@ -51,7 +52,7 @@ public final class TraditionalKey
 
 	public TraditionalKey(int fifth, Mode mode) {
 		setFifth(fifth);
-		this.mode = mode;
+		this.mode = notNull(mode, Mode.Major);
 	}
 
 	public TraditionalKey(int fifth) {
@@ -62,14 +63,14 @@ public final class TraditionalKey
 	public void setFifth(int fifth) {
 		if (fifth < -7 || fifth > +7)
 			throw new IllegalArgumentException("fifth must be between -7 and +7");
-		this.fifth = fifth;
+		this.fifths = fifth;
 	}
 
 	/**
 	 * Returns the alterations from the notes from C (0) to B (6).
 	 */
 	@Override public int[] getAlterations() {
-		return alterations[fifth + 7];
+		return alterations[fifths + 7];
 	}
 
 	/**
@@ -77,7 +78,7 @@ public final class TraditionalKey
 	 * example index = 0 at Eb flat will return Pitch.B.
 	 */
 	public int getStep(int index) {
-		if (fifth < 0) {
+		if (fifths < 0) {
 			switch (index) {
 				case 0:
 					return Pitch.B;
@@ -202,7 +203,7 @@ public final class TraditionalKey
 	}
 
 	public boolean equalsValue(TraditionalKey k) {
-		return this.fifth == k.fifth && this.mode == k.mode;
+		return this.fifths == k.fifths && this.mode == k.mode;
 	}
 
 }

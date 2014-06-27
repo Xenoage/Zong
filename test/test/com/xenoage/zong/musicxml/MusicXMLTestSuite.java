@@ -5,6 +5,8 @@ import static com.xenoage.zong.core.music.Pitch.pi;
 
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.Pitch;
+import com.xenoage.zong.core.music.key.TraditionalKey;
+import com.xenoage.zong.core.music.key.TraditionalKey.Mode;
 import com.xenoage.zong.core.music.time.Time;
 import com.xenoage.zong.core.music.time.TimeSymbol;
 import com.xenoage.zong.core.music.time.TimeType;
@@ -224,5 +226,31 @@ public abstract class MusicXMLTestSuite {
 	/**
 	 * A score without any key or clef defined. The default (4/4 in treble clef) should be used. 
 	 */
-	public abstract void test_12b_Clefs_NoKeyOrClef(); 
+	public abstract void test_12b_Clefs_NoKeyOrClef();
+	
+	/**
+	 * Various key signature: from 11 flats to 11 sharps (each one first one measure in major,
+	 * then one measure in minor).
+	 */
+	public abstract void test_13a_KeySignatures(); //TODO: Zong! supports only -7 to +7
+	
+	public TraditionalKey[] get_13a_KeySignatures() {
+		//TODO: Zong! supports only -7 to +7
+		TraditionalKey[] ret = new TraditionalKey[15 * 2];
+		for (int fifths = -7; fifths <= 7; fifths++) {
+			ret[(fifths + 7) * 2 + 0] = new TraditionalKey(fifths, Mode.Major);
+			ret[(fifths + 7) * 2 + 1] = new TraditionalKey(fifths, Mode.Minor);
+		}
+		return ret;
+	}
+	
+	/**
+	 * All different modes: major, minor, ionian, dorian, phrygian, lydian, mixolydian,
+	 * aeolian, and locrian; All modes are given with 2 sharps.
+	 */
+	public abstract void test_13b_KeySignatures_ChurchModes(); 
+	
+	//TODO: not supported yet: 13c-KeySignatures-NonTraditional.xml
+	//TODO: not supported yet: 13d-KeySignatures-Microtones.xml
+	
 }

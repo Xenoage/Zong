@@ -7,6 +7,7 @@ import static com.xenoage.utils.iterators.It.it;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.utils.math.Fraction.fr;
+import static com.xenoage.utils.math.MathUtils.clamp;
 import static com.xenoage.zong.core.music.MeasureSide.Left;
 import static com.xenoage.zong.core.music.MeasureSide.Right;
 import static com.xenoage.zong.core.music.barline.Barline.barline;
@@ -28,6 +29,7 @@ import java.util.List;
 import com.xenoage.utils.font.FontInfo;
 import com.xenoage.utils.iterators.It;
 import com.xenoage.utils.math.Fraction;
+import com.xenoage.utils.math.MathUtils;
 import com.xenoage.zong.commands.core.music.ColumnElementWrite;
 import com.xenoage.zong.commands.core.music.MeasureAddUpTo;
 import com.xenoage.zong.commands.core.music.MeasureElementWrite;
@@ -273,8 +275,8 @@ public final class MusicReader {
 		//key signature
 		MxlKey mxlKey = mxlAttributes.getKey();
 		if (mxlKey != null) {
-			//only the fifths element is supported
-			int mxlFifths = mxlKey.fifths;
+			//read fifths. currently, only -7 to 7 is supported (clamp, if needed)
+			int mxlFifths = clamp(mxlKey.fifths, -7, 7);
 			//write to column header (TODO: attribute "number" for single staves)
 			Mode mode = getEnumValue(mxlKey.mode, Mode.values());
 			Key key = new TraditionalKey(mxlFifths, mode);

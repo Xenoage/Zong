@@ -322,7 +322,7 @@ public final class NotationStrategy
 	public TraditionalKeyNotation computeTraditionalKey(TraditionalKey key, Clef contextClef,
 		LayoutSettings layoutSettings) {
 		float width = 0;
-		int fifth = key.getFifth();
+		int fifth = key.getFifths();
 		if (fifth > 0) {
 			width = fifth * layoutSettings.spacings.widthSharp;
 		}

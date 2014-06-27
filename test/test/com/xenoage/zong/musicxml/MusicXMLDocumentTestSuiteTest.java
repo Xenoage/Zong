@@ -14,8 +14,11 @@ import org.junit.Test;
 
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.Pitch;
+import com.xenoage.zong.core.music.key.TraditionalKey;
+import com.xenoage.zong.core.music.key.TraditionalKey.Mode;
 import com.xenoage.zong.core.music.time.TimeType;
 import com.xenoage.zong.musicxml.types.MxlAttributes;
+import com.xenoage.zong.musicxml.types.MxlKey;
 import com.xenoage.zong.musicxml.types.MxlNormalTime;
 import com.xenoage.zong.musicxml.types.MxlNote;
 import com.xenoage.zong.musicxml.types.MxlPitch;
@@ -24,6 +27,7 @@ import com.xenoage.zong.musicxml.types.choice.MxlFullNoteContent.MxlFullNoteCont
 import com.xenoage.zong.musicxml.types.choice.MxlMusicDataContent;
 import com.xenoage.zong.musicxml.types.choice.MxlMusicDataContent.MxlMusicDataContentType;
 import com.xenoage.zong.musicxml.types.choice.MxlNormalNote;
+import com.xenoage.zong.musicxml.types.enums.MxlMode;
 import com.xenoage.zong.musicxml.types.enums.MxlTimeSymbol;
 import com.xenoage.zong.musicxml.types.groups.MxlFullNote;
 import com.xenoage.zong.musicxml.types.partwise.MxlMeasure;
@@ -209,6 +213,33 @@ public class MusicXMLDocumentTestSuiteTest
 	@Test @Override public void test_12b_Clefs_NoKeyOrClef() {
 		//successfull when it loads - more is tested in musicxml-in
 		load("12b-Clefs-NoKeyOrClef.xml");
+	}
+	
+	@Test @Override public void test_13a_KeySignatures() {
+		//TODO: Zong! supports only -7 to +7, starting in measure 9,
+		//ending in measure 38
+		MusicXMLDocument doc = load("13a-KeySignatures.xml");
+		MxlPart part = doc.getScore().getParts().get(0);
+		TraditionalKey[] expectedKeys = get_13a_KeySignatures();
+		int iKey = 0;
+		for (int i = 8; i <= 37; i++) {
+			MxlMeasure measure = part.getMeasures().get(i);
+			for (MxlMusicDataContent data : measure.getMusicData().getContent()) {
+				if (data.getMusicDataContentType() == MxlMusicDataContentType.Attributes) {
+					//check type
+					MxlAttributes attr = (MxlAttributes) data;
+					MxlKey key = attr.getKey();
+					assertEquals(expectedKeys[iKey].getFifths(), key.getFifths());
+					assertEquals(expectedKeys[iKey].getMode() == Mode.Major ?
+						MxlMode.Major : MxlMode.Minor, key.getMode());
+					iKey++;
+				}
+			}
+		}
+	}
+	
+	@Test @Override public void test_13b_KeySignatures_ChurchModes() {
+		
 	}
 
 	private MusicXMLDocument load(String filename) {

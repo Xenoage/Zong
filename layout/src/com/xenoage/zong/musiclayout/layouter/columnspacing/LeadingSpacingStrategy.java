@@ -73,7 +73,7 @@ public class LeadingSpacingStrategy
 		if (useKey) {
 			TraditionalKey tkey = (TraditionalKey) key;
 			xOffset += layoutSettings.spacings.widthDistanceMin;
-			TraditionalKey tradKey = new TraditionalKey(tkey.getFifth(), tkey.getMode()); //it is not the same element instance, but has the same meaning
+			TraditionalKey tradKey = new TraditionalKey(tkey.getFifths(), tkey.getMode()); //it is not the same element instance, but has the same meaning
 			TraditionalKeyNotation keyNotation = notationStrategy.computeTraditionalKey(tradKey, clef,
 				layoutSettings);
 			notations.add(keyNotation, iStaff);

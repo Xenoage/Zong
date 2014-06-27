@@ -25,18 +25,18 @@ public class KeySignatureStampingRenderer
 	@Override public void draw(Stamping stamping, Canvas canvas, RendererArgs args) {
 		KeySignatureStamping s = (KeySignatureStamping) stamping;
 
-		int fifth = s.traditionalKey.getFifth();
-		if (fifth == 0)
+		int fifths = s.traditionalKey.getFifths();
+		if (fifths == 0)
 			return;
-		boolean useSharps = (fifth > 0);
+		boolean useSharps = (fifths > 0);
 		float distance = (useSharps ? s.layoutSettings.spacings.widthSharp
 			: s.layoutSettings.spacings.widthFlat);
 		Symbol symbol = args.symbolPool.getSymbol(useSharps ? CommonSymbol.AccidentalSharp
 			: CommonSymbol.AccidentalFlat);
 		//paint sharps/flats
-		fifth = Math.abs(fifth);
+		fifths = Math.abs(fifths);
 		float interlineSpace = s.parentStaff.is;
-		for (int i = 0; i < fifth; i++) {
+		for (int i = 0; i < fifths; i++) {
 			int linePosition = TraditionalKey.getLinePosition(i, useSharps, s.linePositionC4,
 				s.linePositionMin);
 			StaffSymbolStampingRenderer.drawWith(symbol, null,
