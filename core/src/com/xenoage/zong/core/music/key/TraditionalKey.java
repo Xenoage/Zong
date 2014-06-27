@@ -23,12 +23,12 @@ public final class TraditionalKey
 	public enum Mode {
 		Major,
 		Minor,
+		Ionian,
 		Dorian,
 		Phrygian,
 		Lydian,
 		Mixolydian,
 		Aeolian,
-		Ionian,
 		Locrian;
 	};
 

@@ -1,5 +1,6 @@
 package com.xenoage.zong.musicxml;
 
+import static com.xenoage.utils.EnumUtils.getEnumValue;
 import static com.xenoage.utils.jse.JsePlatformUtils.jsePlatformUtils;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.music.Pitch.pi;
@@ -27,7 +28,6 @@ import com.xenoage.zong.musicxml.types.choice.MxlFullNoteContent.MxlFullNoteCont
 import com.xenoage.zong.musicxml.types.choice.MxlMusicDataContent;
 import com.xenoage.zong.musicxml.types.choice.MxlMusicDataContent.MxlMusicDataContentType;
 import com.xenoage.zong.musicxml.types.choice.MxlNormalNote;
-import com.xenoage.zong.musicxml.types.enums.MxlMode;
 import com.xenoage.zong.musicxml.types.enums.MxlTimeSymbol;
 import com.xenoage.zong.musicxml.types.groups.MxlFullNote;
 import com.xenoage.zong.musicxml.types.partwise.MxlMeasure;
@@ -230,8 +230,7 @@ public class MusicXMLDocumentTestSuiteTest
 					MxlAttributes attr = (MxlAttributes) data;
 					MxlKey key = attr.getKey();
 					assertEquals(expectedKeys[iKey].getFifths(), key.getFifths());
-					assertEquals(expectedKeys[iKey].getMode() == Mode.Major ?
-						MxlMode.Major : MxlMode.Minor, key.getMode());
+					assertEquals(expectedKeys[iKey].getMode(), getEnumValue(""+key.getMode(), Mode.values()));
 					iKey++;
 				}
 			}
@@ -239,7 +238,26 @@ public class MusicXMLDocumentTestSuiteTest
 	}
 	
 	@Test @Override public void test_13b_KeySignatures_ChurchModes() {
-		
+		MusicXMLDocument doc = load("13b-KeySignatures-ChurchModes.xml");
+		MxlPart part = doc.getScore().getParts().get(0);
+		TraditionalKey[] expectedKeys = get_13b_KeySignatures_ChurchModes();
+		int iKey = 0;
+		for (int i = 0; i <= 2; i++) {
+			MxlMeasure measure = part.getMeasures().get(i);
+			for (MxlMusicDataContent data : measure.getMusicData().getContent()) {
+				if (data.getMusicDataContentType() == MxlMusicDataContentType.Attributes) {
+					//check type
+					MxlAttributes attr = (MxlAttributes) data;
+					MxlKey key = attr.getKey();
+					assertEquals(expectedKeys[iKey].getFifths(), key.getFifths());
+					assertEquals(expectedKeys[iKey].getMode(), getEnumValue(""+key.getMode(), Mode.values()));
+					iKey++;
+					if (iKey >= expectedKeys.length)
+						break;
+				}
+			}
+		}
+		assertEquals("not all keys found", expectedKeys.length, iKey);
 	}
 
 	private MusicXMLDocument load(String filename) {

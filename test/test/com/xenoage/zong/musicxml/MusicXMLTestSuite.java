@@ -1,8 +1,10 @@
 package com.xenoage.zong.musicxml;
 
+import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.music.Pitch.pi;
 
+import com.xenoage.utils.kernel.Range;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.music.key.TraditionalKey;
@@ -248,7 +250,15 @@ public abstract class MusicXMLTestSuite {
 	 * All different modes: major, minor, ionian, dorian, phrygian, lydian, mixolydian,
 	 * aeolian, and locrian; All modes are given with 2 sharps.
 	 */
-	public abstract void test_13b_KeySignatures_ChurchModes(); 
+	public abstract void test_13b_KeySignatures_ChurchModes();
+	
+	public TraditionalKey[] get_13b_KeySignatures_ChurchModes() {
+		TraditionalKey[] ret = new TraditionalKey[9];
+		for (int i : range(ret)) {
+			ret[i] = new TraditionalKey(2, Mode.values()[i]);
+		}
+		return ret;
+	}
 	
 	//TODO: not supported yet: 13c-KeySignatures-NonTraditional.xml
 	//TODO: not supported yet: 13d-KeySignatures-Microtones.xml
