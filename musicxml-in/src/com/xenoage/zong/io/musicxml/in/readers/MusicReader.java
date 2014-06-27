@@ -5,6 +5,7 @@ import static com.xenoage.utils.NullUtils.notNull;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.iterators.It.it;
 import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.music.MeasureSide.Left;
 import static com.xenoage.zong.core.music.MeasureSide.Right;
@@ -29,6 +30,7 @@ import com.xenoage.utils.iterators.It;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.commands.core.music.ColumnElementWrite;
 import com.xenoage.zong.commands.core.music.MeasureAddUpTo;
+import com.xenoage.zong.commands.core.music.MeasureElementWrite;
 import com.xenoage.zong.commands.core.music.VoiceElementWrite;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.format.Break;
@@ -36,6 +38,7 @@ import com.xenoage.zong.core.format.SystemLayout;
 import com.xenoage.zong.core.header.ScoreHeader;
 import com.xenoage.zong.core.music.ColumnElement;
 import com.xenoage.zong.core.music.Measure;
+import com.xenoage.zong.core.music.Part;
 import com.xenoage.zong.core.music.Staff;
 import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.barline.BarlineStyle;
@@ -52,6 +55,7 @@ import com.xenoage.zong.core.music.direction.WedgeType;
 import com.xenoage.zong.core.music.direction.Words;
 import com.xenoage.zong.core.music.format.Position;
 import com.xenoage.zong.core.music.format.Positioning;
+import com.xenoage.zong.core.music.group.StavesRange;
 import com.xenoage.zong.core.music.key.Key;
 import com.xenoage.zong.core.music.key.TraditionalKey;
 import com.xenoage.zong.core.music.key.TraditionalKey.Mode;
@@ -124,14 +128,30 @@ public final class MusicReader {
 	public static void read(MxlScorePartwise doc, Score score, boolean ignoreErrors) {
 		MusicReaderContext context = new MusicReaderContext(score, new MusicReaderSettings(
 			ignoreErrors));
-
-		//read the parts
+		
+		//create the measures of the parts
 		It<MxlPart> mxlParts = it(doc.getParts());
 		for (MxlPart mxlPart : mxlParts) {
-			//clear part-dependent context values
-			context.beginNewPart(mxlParts.getIndex());
 			//create measures
 			execute(new MeasureAddUpTo(score, mxlPart.getMeasures().size()));
+			//initialize each measure with a C clef
+			Part part = score.getStavesList().getParts().get(mxlParts.getIndex());
+			StavesRange stavesRange = score.getStavesList().getPartStaffIndices(part);
+			for (int staff : stavesRange.getRange()) {
+				execute(new MeasureElementWrite(new Clef(ClefType.clefTreble),
+					score.getMeasure(MP.atMeasure(staff, 0)), _0));
+			}
+		}
+		
+		//write a 4/4 measure and C key signature in the first measure
+		execute(new ColumnElementWrite(new Time(TimeType.time_4_4), score.getColumnHeader(0), _0, null));
+		execute(new ColumnElementWrite(new TraditionalKey(0), score.getColumnHeader(0), _0, null));
+			
+		//read the parts
+		mxlParts = it(doc.getParts());
+		for (MxlPart mxlPart : mxlParts) {
+			//clear part-dependent context values
+			Part part = context.beginNewPart(mxlParts.getIndex());
 			//read the measures
 			It<MxlMeasure> mxlMeasures = it(mxlPart.getMeasures());
 			for (MxlMeasure mxlMeasure : mxlMeasures) {

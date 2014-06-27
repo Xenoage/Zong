@@ -205,6 +205,11 @@ public class MusicXMLDocumentTestSuiteTest
 		//successfull when it loads - more is tested in musicxml-in
 		load("12a-Clefs.xml");
 	}
+	
+	@Test @Override public void test_12b_Clefs_NoKeyOrClef() {
+		//successfull when it loads - more is tested in musicxml-in
+		load("12b-Clefs-NoKeyOrClef.xml");
+	}
 
 	private MusicXMLDocument load(String filename) {
 		try {

@@ -168,7 +168,7 @@ public final class MusicReaderContext {
 	/**
 	 * Call this method when a new part begins.
 	 */
-	public void beginNewPart(int partIndex) {
+	public Part beginNewPart(int partIndex) {
 		Part part = score.getStavesList().getParts().get(partIndex);
 		this.mp = atBeat(score.getStavesList().getPartStaffIndices(part).getStart(), 0, 0, _0);
 		List<List<String>> voiceMappings = alist();
@@ -177,6 +177,7 @@ public final class MusicReaderContext {
 		this.voiceMappings = voiceMappings;
 		//reset instrument to null
 		this.instrumentID = null;
+		return part;
 	}
 
 	/**

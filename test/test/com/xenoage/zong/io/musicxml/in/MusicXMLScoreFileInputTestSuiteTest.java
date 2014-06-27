@@ -1,13 +1,13 @@
 package com.xenoage.zong.io.musicxml.in;
 
 import static com.xenoage.utils.jse.JsePlatformUtils.jsePlatformUtils;
+import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.music.Pitch.pi;
 import static com.xenoage.zong.core.position.MP.atMeasure;
-import static com.xenoage.zong.core.position.MP.atVoice;
-import static com.xenoage.zong.core.position.MP.mp;
 import static com.xenoage.zong.core.position.MP.mp0;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -16,17 +16,20 @@ import org.junit.Test;
 
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.Score;
+import com.xenoage.zong.core.header.ColumnHeader;
 import com.xenoage.zong.core.music.Measure;
+import com.xenoage.zong.core.music.MusicContext;
 import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.music.Staff;
 import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.core.music.chord.Chord;
+import com.xenoage.zong.core.music.clef.Clef;
 import com.xenoage.zong.core.music.clef.ClefSymbol;
 import com.xenoage.zong.core.music.clef.ClefType;
 import com.xenoage.zong.core.music.rest.Rest;
 import com.xenoage.zong.core.music.time.TimeType;
-import com.xenoage.zong.core.position.MP;
+import com.xenoage.zong.core.music.util.Interval;
 import com.xenoage.zong.musicxml.MusicXMLTestSuite;
 
 /**
@@ -138,6 +141,19 @@ public class MusicXMLScoreFileInputTestSuiteTest
 		Score score = load("03c-Rhythm-DivisionChange.xml");
 		checkDurations(score, get_03c_Rhythm_DivisionChange());
 	}
+	
+	private void checkDurations(Score score, Fraction[] expectedDurations) {
+		Staff staff = score.getStaff(0);
+		int iDuration = 0;
+		for (int iM = 0; iM < staff.getMeasures().size(); iM++) {
+			Voice voice = staff.getMeasure(iM).getVoice(0);
+			for (VoiceElement e : voice.getElements()) {
+				//check duration
+				assertEquals("element " + iDuration, expectedDurations[iDuration++], e.getDuration());
+			}
+		}
+		assertEquals("not all element found", expectedDurations.length, iDuration);
+	}
 
 	@Test @Override public void test_11a_TimeSignatures() {
 		Score score = load("11a-TimeSignatures.xml");
@@ -202,19 +218,24 @@ public class MusicXMLScoreFileInputTestSuiteTest
 		assertEquals("measure " + measure, expectedClefLP, clef.getLp());
 		assertEquals("measure " + measure, expectedC4LP, clef.getLp(pi('C', 0, 4)));
 	}
-
-	private void checkDurations(Score score, Fraction[] expectedDurations) {
-		Staff staff = score.getStaff(0);
-		int iDuration = 0;
-		for (int iM = 0; iM < staff.getMeasures().size(); iM++) {
-			Voice voice = staff.getMeasure(iM).getVoice(0);
-			for (VoiceElement e : voice.getElements()) {
-				//check duration
-				assertEquals("element " + iDuration, expectedDurations[iDuration++], e.getDuration());
-			}
-		}
-		assertEquals("not all element found", expectedDurations.length, iDuration);
+	
+	@Test @Override public void test_12b_Clefs_NoKeyOrClef() {
+		Score score = load("12b-Clefs-NoKeyOrClef.xml");
+		//musical context must be 4/4, C clef and no accidentals
+		MusicContext context = score.getMusicContext(mp0, Interval.At, Interval.At);
+		assertEquals(fr(4, 4), score.getMeasureBeats(0));
+		assertEquals(ClefType.clefTreble, context.getClef().getType());
+		for (int i = 0; i < 7; i++)
+			assertEquals(0, context.getKey().getAlterations()[i]);
+		//there should be a C clef in the first measure
+		assertEquals(ClefType.clefTreble, score.getMeasure(mp0).getClefs().get(_0).getType());
+		//there should be a time signature and key signature in the measure column
+		ColumnHeader header = score.getHeader().getColumnHeader(0);
+		assertEquals(TimeType.time_4_4, header.getTime().getType());
+		assertNotNull(header.getKeys().get(_0));
 	}
+
+	
 
 	private Score load(String filename) {
 		try {

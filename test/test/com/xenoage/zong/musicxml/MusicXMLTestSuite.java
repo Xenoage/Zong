@@ -219,5 +219,10 @@ public abstract class MusicXMLTestSuite {
 	 * (measure 17 has the "none" clef), only measure 18 has the same treble clef
 	 * as measure 1. 
 	 */
-	public abstract void test_12a_Clefs(); 
+	public abstract void test_12a_Clefs();
+	
+	/**
+	 * A score without any key or clef defined. The default (4/4 in treble clef) should be used. 
+	 */
+	public abstract void test_12b_Clefs_NoKeyOrClef(); 
 }
