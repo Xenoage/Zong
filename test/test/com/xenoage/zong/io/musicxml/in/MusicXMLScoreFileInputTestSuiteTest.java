@@ -281,6 +281,15 @@ public class MusicXMLScoreFileInputTestSuiteTest
 			}
 		}
 	}
+	
+	@Override public void test_21a_Chord_Basic() {
+		Score score = load(file_21a_Chord_Basic());
+		Chord expectedChord = get_21a_Chord_Basic();
+		Chord chord = (Chord) score.getVoice(mp0).getElement(0);
+		assertEquals(2, chord.getNotes().size());
+		assertEquals(expectedChord.getNotes(), chord.getNotes());
+		assertEquals(expectedChord.getDuration(), chord.getDuration());
+	}
 
 	private Score load(String filename) {
 		try {

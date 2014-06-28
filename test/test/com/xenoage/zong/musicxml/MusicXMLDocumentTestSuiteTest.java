@@ -11,6 +11,7 @@ import static org.junit.Assert.fail;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.xenoage.utils.math.Fraction;
@@ -258,6 +259,11 @@ public class MusicXMLDocumentTestSuiteTest
 			}
 		}
 		assertEquals("not all keys found", expectedKeys.length, iKey);
+	}
+	
+	@Override public void test_21a_Chord_Basic() {
+		//successfull when it loads - more is tested in musicxml-in
+		load(file_21a_Chord_Basic());
 	}
 
 	private MusicXMLDocument load(String filename) {

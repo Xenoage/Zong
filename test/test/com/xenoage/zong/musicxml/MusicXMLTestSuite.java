@@ -1,12 +1,18 @@
 package com.xenoage.zong.musicxml;
 
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.music.Pitch.pi;
 
+import org.junit.Test;
+
+import com.xenoage.utils.collections.CollectionUtils;
 import com.xenoage.utils.kernel.Range;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.Pitch;
+import com.xenoage.zong.core.music.chord.Chord;
+import com.xenoage.zong.core.music.chord.Note;
 import com.xenoage.zong.core.music.key.TraditionalKey;
 import com.xenoage.zong.core.music.key.TraditionalKey.Mode;
 import com.xenoage.zong.core.music.time.Time;
@@ -262,5 +268,19 @@ public abstract class MusicXMLTestSuite {
 	
 	//TODO: not supported yet: 13c-KeySignatures-NonTraditional.xml
 	//TODO: not supported yet: 13d-KeySignatures-Microtones.xml
+	//TODO: not supported yet: 14a-StaffDetails-LineChanges.xml
+	
+	/**
+	 * One simple chord consisting of two notes.
+	 */
+	@Test public abstract void test_21a_Chord_Basic();
+	
+	protected String file_21a_Chord_Basic() {
+		return "21a-Chord-Basic.xml";
+	}
+	
+	protected Chord get_21a_Chord_Basic() {
+		return new Chord(alist(new Note(pi('F', 0, 4)), new Note(pi('A', 0, 4))), fr(1, 4));
+	}
 	
 }
