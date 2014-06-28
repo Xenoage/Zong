@@ -261,4 +261,8 @@ public class MusicXMLDocumentTestSuiteTest
 		//successfull when it loads - more is tested in musicxml-in
 	}
 	
+	@Override public void test_21c_Chords_ThreeNotesDuration(MusicXMLDocument doc, Chord[] expectedChords) {
+		//successfull when it loads - more is tested in musicxml-in
+	}
+	
 }

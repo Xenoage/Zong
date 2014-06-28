@@ -272,8 +272,7 @@ public class MusicXMLScoreFileInputTestSuiteTest
 		int expectedChordsCount, Chord expectedChord) {
 		MP mp = mp0;
 		for (int i = 0; i < expectedChordsCount; i++) {
-			Chord chord = (Chord) score.getVoice(mp0).getElement(0);
-			assertEquals(2, chord.getNotes().size());
+			Chord chord = (Chord) score.getVoice(mp).getElementAt(mp.beat);
 			assertEquals(expectedChord.getNotes(), chord.getNotes());
 			assertEquals(expectedChord.getDuration(), chord.getDuration());
 			mp = mp.withBeat(mp.beat.add(fr(1, 4)));
@@ -283,4 +282,17 @@ public class MusicXMLScoreFileInputTestSuiteTest
 		}
 	}
 
+	@Override public void test_21c_Chords_ThreeNotesDuration(Score score, Chord[] expectedChords) {
+		MP mp = mp0;
+		for (int i = 0; i < expectedChords.length; i++) {
+			Chord chord = (Chord) score.getVoice(mp).getElementAt(mp.beat);
+			assertEquals("chord " + i, expectedChords[i].getNotes(), chord.getNotes());
+			assertEquals("chord " + i, expectedChords[i].getDuration(), chord.getDuration());
+			mp = mp.withBeat(mp.beat.add(expectedChords[i].getDuration()));
+			if (mp.beat.compareTo(_1) >= 0) {
+				mp = mp.withMeasure(mp.measure + 1).withBeat(_0);
+			}
+		}
+	}
+	
 }

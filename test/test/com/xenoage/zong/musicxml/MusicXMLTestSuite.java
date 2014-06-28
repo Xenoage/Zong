@@ -1,9 +1,10 @@
 package com.xenoage.zong.musicxml;
 
-import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.music.Pitch.pi;
+
+import java.util.ArrayList;
 
 import org.junit.Test;
 
@@ -324,8 +325,15 @@ public abstract class MusicXMLTestSuite<T> {
 	 */
 	@Test public void test_21a_Chord_Basic() {
 		T data = load("21a-Chord-Basic.xml");
-		Chord expectedChord = new Chord(alist(new Note(pi('F', 0, 4)), new Note(pi('A', 0, 4))), fr(1, 4));
+		Chord expectedChord = ch(fr(1, 4), pi('F', 0, 4), pi('A', 0, 4));
 		test_21a_Chord_Basic(data, expectedChord);
+	}
+	
+	private Chord ch(Fraction duration, Pitch... pitches) {
+		ArrayList<Note> notes = new ArrayList<>();
+		for (Pitch pitch : pitches)
+			notes.add(new Note(pitch));
+		return new Chord(notes, duration);
 	}
 	
 	protected abstract void test_21a_Chord_Basic(T data, Chord expectedChord);
@@ -335,10 +343,26 @@ public abstract class MusicXMLTestSuite<T> {
 	 */
 	@Test public void test_21b_Chords_TwoNotes() {
 		T data = load("21b-Chords-TwoNotes.xml");
-		test_21b_Chords_TwoNotes(data, 8,
-			new Chord(alist(new Note(pi('F', 0, 4)), new Note(pi('A', 0, 4))), fr(1, 4)));
+		Chord expectedChord = ch(fr(1, 4), pi('F', 0, 4), pi('A', 0, 4));
+		test_21b_Chords_TwoNotes(data, 8, expectedChord);
 	}
 	
 	protected abstract void test_21b_Chords_TwoNotes(T data, int expectedChordsCount, Chord expectedChord);
 
+	@Test public void test_21c_Chords_ThreeNotesDuration() {
+		T data = load("21c-Chords-ThreeNotesDuration.xml");
+		Chord[] expectedChords = new Chord[] {
+			ch(fr(3, 8), pi('F', 0, 4), pi('A', 0, 4), pi('C', 0, 5)),
+			ch(fr(1, 8), pi('A', 0, 4), pi('G', 0, 5)),
+			ch(fr(1, 4), pi('F', 0, 4), pi('A', 0, 4), pi('C', 0, 5)),
+			ch(fr(1, 4), pi('F', 0, 4), pi('A', 0, 4), pi('C', 0, 5)),
+			ch(fr(1, 4), pi('F', 0, 4), pi('A', 0, 4), pi('E', 0, 5)),
+			ch(fr(1, 4), pi('F', 0, 4), pi('A', 0, 4), pi('F', 0, 5)),
+			ch(fr(1, 2), pi('F', 0, 4), pi('A', 0, 4), pi('D', 0, 5))
+		};
+		test_21c_Chords_ThreeNotesDuration(data, expectedChords);
+	}
+	
+	public abstract void test_21c_Chords_ThreeNotesDuration(T data, Chord[] expectedChords);
+	
 }
