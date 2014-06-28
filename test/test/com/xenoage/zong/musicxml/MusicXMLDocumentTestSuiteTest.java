@@ -256,4 +256,9 @@ public class MusicXMLDocumentTestSuiteTest
 		//successfull when it loads - more is tested in musicxml-in
 	}
 
+	@Override public void test_21b_Chords_TwoNotes(MusicXMLDocument doc,
+		int expectedChordsCount, Chord expectedChord) {
+		//successfull when it loads - more is tested in musicxml-in
+	}
+	
 }

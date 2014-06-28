@@ -329,5 +329,16 @@ public abstract class MusicXMLTestSuite<T> {
 	}
 	
 	protected abstract void test_21a_Chord_Basic(T data, Chord expectedChord);
+	
+	/**
+	 * Some subsequent (identical) two-note chords.
+	 */
+	@Test public void test_21b_Chords_TwoNotes() {
+		T data = load("21b-Chords-TwoNotes.xml");
+		test_21b_Chords_TwoNotes(data, 8,
+			new Chord(alist(new Note(pi('F', 0, 4)), new Note(pi('A', 0, 4))), fr(1, 4)));
+	}
+	
+	protected abstract void test_21b_Chords_TwoNotes(T data, int expectedChordsCount, Chord expectedChord);
 
 }

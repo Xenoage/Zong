@@ -33,6 +33,7 @@ import com.xenoage.zong.core.music.rest.Rest;
 import com.xenoage.zong.core.music.time.TimeType;
 import com.xenoage.zong.core.music.util.Interval;
 import com.xenoage.zong.core.position.MP;
+import com.xenoage.zong.musicxml.MusicXMLDocument;
 import com.xenoage.zong.musicxml.MusicXMLTestSuite;
 
 /**
@@ -265,6 +266,21 @@ public class MusicXMLScoreFileInputTestSuiteTest
 		assertEquals(2, chord.getNotes().size());
 		assertEquals(expectedChord.getNotes(), chord.getNotes());
 		assertEquals(expectedChord.getDuration(), chord.getDuration());
+	}
+	
+	@Override public void test_21b_Chords_TwoNotes(Score score,
+		int expectedChordsCount, Chord expectedChord) {
+		MP mp = mp0;
+		for (int i = 0; i < expectedChordsCount; i++) {
+			Chord chord = (Chord) score.getVoice(mp0).getElement(0);
+			assertEquals(2, chord.getNotes().size());
+			assertEquals(expectedChord.getNotes(), chord.getNotes());
+			assertEquals(expectedChord.getDuration(), chord.getDuration());
+			mp = mp.withBeat(mp.beat.add(fr(1, 4)));
+			if (mp.beat.compareTo(_1) >= 0) {
+				mp = mp.withMeasure(mp.measure + 1).withBeat(_0);
+			}
+		}
 	}
 
 }
