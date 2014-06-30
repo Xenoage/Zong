@@ -427,5 +427,15 @@ public abstract class MusicXMLTestSuite<T> {
 	public abstract void test_21d_Chords_SchubertStabatMater(T data, Chord[] expectedChords,
 		List<Tuple2<MP, ? extends Direction>> expectedDirections);
 	
+	/**
+	 * Check for proper chord detection after a pickup measure (i.e. the first beat of the measure is
+	 * not aligned with multiples of the time signature)! 
+	 */
+	@Test public void test_21e_Chords_PickupMeasures() {
+		T data = load("21e-Chords-PickupMeasures.xml");
+		test_21e_Chords_PickupMeasures(data);
+	}
+	
+	public abstract void test_21e_Chords_PickupMeasures(T data);
 	
 }
