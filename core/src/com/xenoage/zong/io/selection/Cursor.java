@@ -151,7 +151,7 @@ public final class Cursor
 		}
 		else {
 			//default behaviour: write chord after cursor
-			Chord chord = new Chord(Note.createNotes(pitches), options.getDuration());
+			Chord chord = new Chord(Note.notes(pitches), options.getDuration());
 			write(chord, options);
 		}
 	}

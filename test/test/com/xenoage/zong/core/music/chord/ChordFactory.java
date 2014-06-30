@@ -19,12 +19,12 @@ public class ChordFactory {
 
 
 	public static Chord chord(Pitch[] pitches, Fraction duration) {
-		return new Chord(Note.createNotes(pitches), duration);
+		return new Chord(Note.notes(pitches), duration);
 	}
 
 
 	public static Chord graceChord(Pitch pitch) {
-		Chord chord = new Chord(Note.createNotes(pitch), new Grace(true, _1$8));
+		Chord chord = new Chord(Note.notes(pitch), new Grace(true, _1$8));
 		return chord;
 	}
 

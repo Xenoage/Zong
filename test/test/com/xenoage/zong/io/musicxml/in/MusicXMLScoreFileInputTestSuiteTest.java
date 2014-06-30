@@ -13,21 +13,33 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.header.ColumnHeader;
 import com.xenoage.zong.core.music.Measure;
+import com.xenoage.zong.core.music.MeasureElement;
 import com.xenoage.zong.core.music.MusicContext;
 import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.music.Staff;
 import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.VoiceElement;
+import com.xenoage.zong.core.music.annotation.Articulation;
+import com.xenoage.zong.core.music.annotation.ArticulationType;
+import com.xenoage.zong.core.music.annotation.Fermata;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.clef.ClefSymbol;
 import com.xenoage.zong.core.music.clef.ClefType;
+import com.xenoage.zong.core.music.direction.Direction;
+import com.xenoage.zong.core.music.direction.Dynamics;
+import com.xenoage.zong.core.music.direction.DynamicsType;
+import com.xenoage.zong.core.music.direction.Words;
+import com.xenoage.zong.core.music.format.Placement;
 import com.xenoage.zong.core.music.key.TraditionalKey;
 import com.xenoage.zong.core.music.rest.Rest;
 import com.xenoage.zong.core.music.time.TimeType;
@@ -292,6 +304,61 @@ public class MusicXMLScoreFileInputTestSuiteTest
 			if (mp.beat.compareTo(_1) >= 0) {
 				mp = mp.withMeasure(mp.measure + 1).withBeat(_0);
 			}
+		}
+	}
+
+	@Override public void test_21d_Chords_SchubertStabatMater(Score score,
+		Chord[] expectedChords, List<Tuple2<MP, ? extends Direction>> expectedDirections) {
+		//first measure
+		{
+			//F4, whole, with accent and fermata
+			Chord chord = (Chord) score.getVoice(mp0).getElementAt(_0);
+			assertEquals(1, chord.getNotes().size());
+			assertEquals(pi('F', 0, 4), chord.getNotes().get(0).getPitch());
+			assertEquals(_1, chord.getDuration());
+			assertEquals(2, chord.getAnnotations().size());
+			assertEquals(new Articulation(ArticulationType.Accent, Placement.Below),
+				chord.getAnnotations().get(0));
+			assertEquals(new Fermata(Placement.Above), chord.getAnnotations().get(1));
+			//words "Largo"
+			List<MeasureElement> directions = score.getMeasure(mp0).getMeasureElements().getAll(_0);
+			assertEquals(3, directions.size()); //clef, words, dynamics
+			Words words = (Words) directions.get(1);
+			assertEquals("Largo", words.getText().toString());
+			assertEquals(Placement.Above, words.getPositioning());
+			//dynamics "fp"
+			Dynamics dynamics = (Dynamics) directions.get(2);
+			assertEquals(DynamicsType.fp, dynamics.getType());
+			assertEquals(Placement.Below, dynamics.getPositioning());
+		}
+		//second measure
+		{
+			MP m2 = mp0.withMeasure(1);
+			//chords
+			Chord chord = (Chord) score.getVoice(m2).getElementAt(_0);
+			assertEquals(2, chord.getNotes().size());
+			assertEquals(pi('F', 0, 4), chord.getNotes().get(0).getPitch());
+			assertEquals(pi('A', -1, 4), chord.getNotes().get(1).getPitch());
+			assertEquals(fr(3, 8), chord.getDuration());
+			chord = (Chord) score.getVoice(m2).getElementAt(fr(3, 8));
+			assertEquals(2, chord.getNotes().size());
+			assertEquals(pi('F', 0, 4), chord.getNotes().get(0).getPitch());
+			assertEquals(pi('A', -1, 4), chord.getNotes().get(1).getPitch());
+			assertEquals(fr(1, 8), chord.getDuration());
+			chord = (Chord) score.getVoice(m2).getElementAt(fr(2, 4));
+			assertEquals(2, chord.getNotes().size());
+			assertEquals(pi('G', 0, 4), chord.getNotes().get(0).getPitch());
+			assertEquals(pi('B', -1, 4), chord.getNotes().get(1).getPitch());
+			assertEquals(fr(1, 4), chord.getDuration());
+			chord = (Chord) score.getVoice(m2).getElementAt(fr(3, 4));
+			assertEquals(2, chord.getNotes().size());
+			assertEquals(pi('G', 0, 4), chord.getNotes().get(0).getPitch());
+			assertEquals(pi('B', -1, 4), chord.getNotes().get(1).getPitch());
+			assertEquals(fr(1, 4), chord.getDuration());
+			//dynamics "p"
+			Dynamics dynamics = (Dynamics) score.getMeasure(m2).getMeasureElements().get(_0);
+			assertEquals(DynamicsType.p, dynamics.getType());
+			assertEquals(Placement.Below, dynamics.getPositioning());
 		}
 	}
 	

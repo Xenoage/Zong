@@ -11,6 +11,7 @@ import com.xenoage.zong.core.header.ColumnHeader;
  * @author Andreas Wenger
  */
 public final class Segno
-	extends Direction {
+	extends Direction
+	implements NavigationMarker {
 
 }

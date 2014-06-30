@@ -15,6 +15,9 @@ import static com.xenoage.zong.core.music.format.SP.sp;
 import static com.xenoage.zong.core.position.MP.mp;
 import static com.xenoage.zong.core.text.UnformattedText.ut;
 
+import java.util.ArrayList;
+
+import com.xenoage.utils.collections.CollectionUtils;
 import com.xenoage.utils.collections.NullableList;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.commands.core.music.ColumnElementWrite;
@@ -34,9 +37,11 @@ import com.xenoage.zong.core.music.MeasureElement;
 import com.xenoage.zong.core.music.MeasureSide;
 import com.xenoage.zong.core.music.Part;
 import com.xenoage.zong.core.music.Pitch;
+import com.xenoage.zong.core.music.annotation.Annotation;
+import com.xenoage.zong.core.music.annotation.Articulation;
+import com.xenoage.zong.core.music.annotation.ArticulationType;
 import com.xenoage.zong.core.music.barline.Barline;
 import com.xenoage.zong.core.music.barline.BarlineStyle;
-import com.xenoage.zong.core.music.chord.Articulation;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.Note;
 import com.xenoage.zong.core.music.clef.Clef;
@@ -81,8 +86,8 @@ public class ScoreRevolutionary {
 		StaffLayout staffLayout = new StaffLayout(is * 9);
 		score.setFormat(score.getFormat().withStaffLayoutOther(staffLayout));
 
-		Articulation[] accent = { Articulation.Accent };
-		Articulation[] staccato = { Articulation.Staccato };
+		ArticulationType[] accent = { ArticulationType.Accent };
+		ArticulationType[] staccato = { ArticulationType.Staccato };
 
 		Fraction f2 = fr(1, 2);
 		Fraction f4 = fr(1, 4);
@@ -304,10 +309,14 @@ public class ScoreRevolutionary {
 	}
 
 
-	private static Chord chord(Fraction fraction, Articulation[] articulations, Pitch... pitches) {
-		Chord chord = new Chord(Note.createNotes(pitches), fraction);
-		if (articulations != null)
-			chord.setArticulations(alist(articulations));
+	private static Chord chord(Fraction fraction, ArticulationType[] articulations, Pitch... pitches) {
+		Chord chord = new Chord(Note.notes(pitches), fraction);
+		if (articulations != null) {
+			ArrayList<Annotation> a = alist(articulations.length);
+			for (ArticulationType at : articulations)
+				a.add(new Articulation(at, null));
+			chord.setAnnotations(a);
+		}
 		return chord;
 	}
 

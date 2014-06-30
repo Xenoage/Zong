@@ -52,7 +52,7 @@ public class MidiChordPlayerTry {
 	}
 
 	public static Chord chord(Pitch[] pitches, Fraction duration) {
-		return new Chord(Note.createNotes(pitches), duration);
+		return new Chord(Note.notes(pitches), duration);
 	}
 
 }

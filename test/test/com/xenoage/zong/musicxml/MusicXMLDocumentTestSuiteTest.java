@@ -12,18 +12,27 @@ import java.util.List;
 
 import org.junit.Assert;
 
+import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.music.chord.Chord;
+import com.xenoage.zong.core.music.direction.Direction;
+import com.xenoage.zong.core.music.direction.DynamicsType;
 import com.xenoage.zong.core.music.key.TraditionalKey;
 import com.xenoage.zong.core.music.key.TraditionalKey.Mode;
 import com.xenoage.zong.core.music.time.TimeType;
+import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.musicxml.types.MxlAttributes;
+import com.xenoage.zong.musicxml.types.MxlDirection;
+import com.xenoage.zong.musicxml.types.MxlDynamics;
 import com.xenoage.zong.musicxml.types.MxlKey;
 import com.xenoage.zong.musicxml.types.MxlNormalTime;
 import com.xenoage.zong.musicxml.types.MxlNote;
 import com.xenoage.zong.musicxml.types.MxlPitch;
 import com.xenoage.zong.musicxml.types.MxlSyllabicText;
+import com.xenoage.zong.musicxml.types.MxlWords;
+import com.xenoage.zong.musicxml.types.choice.MxlDirectionTypeContent;
+import com.xenoage.zong.musicxml.types.choice.MxlDirectionTypeContent.MxlDirectionTypeContentType;
 import com.xenoage.zong.musicxml.types.choice.MxlFullNoteContent.MxlFullNoteContentType;
 import com.xenoage.zong.musicxml.types.choice.MxlMusicDataContent;
 import com.xenoage.zong.musicxml.types.choice.MxlMusicDataContent.MxlMusicDataContentType;
@@ -264,5 +273,44 @@ public class MusicXMLDocumentTestSuiteTest
 	@Override public void test_21c_Chords_ThreeNotesDuration(MusicXMLDocument doc, Chord[] expectedChords) {
 		//successfull when it loads - more is tested in musicxml-in
 	}
+
+	@Override public void test_21d_Chords_SchubertStabatMater(MusicXMLDocument doc,
+		Chord[] expectedChords, List<Tuple2<MP, ? extends Direction>> expectedDirections) {
+		//check only directions in this test	
+		MxlPart part = doc.getScore().getParts().get(0);
+		int iDirection = 0;
+		for (int iMeasure = 0; iMeasure <= 1; iMeasure++) {
+			MxlMeasure measure = part.getMeasures().get(iMeasure);
+			for (MxlMusicDataContent data : measure.getMusicData().getContent()) {
+				if (data.getMusicDataContentType() == MxlMusicDataContentType.Direction) {
+					//check type
+					MxlDirection dir = (MxlDirection) data;
+					MxlDirectionTypeContent content = dir.getDirectionTypes().get(0).getContent();
+					if (iDirection == 0) {
+						//Words "Largo"
+						assertEquals(0, iMeasure);
+						assertEquals(MxlDirectionTypeContentType.Words, content.getDirectionTypeContentType());
+						assertEquals("Largo", ((MxlWords) content).getFormattedText().getValue());
+					}
+					else if (iDirection == 1) {
+						//Dynamics "fp"
+						assertEquals(0, iMeasure);
+						assertEquals(MxlDirectionTypeContentType.Dynamics, content.getDirectionTypeContentType());
+						assertEquals(DynamicsType.fp, ((MxlDynamics) content).getElement());
+					}
+					else if (iDirection == 2) {
+						//Dynamics "p"
+						assertEquals(1, iMeasure);
+						assertEquals(MxlDirectionTypeContentType.Dynamics, content.getDirectionTypeContentType());
+						assertEquals(DynamicsType.p, ((MxlDynamics) content).getElement());
+					}
+					iDirection++;
+				}
+			}
+		}
+		assertEquals("not all directions found", expectedDirections.size(), iDirection);
+	}
+
+	
 	
 }

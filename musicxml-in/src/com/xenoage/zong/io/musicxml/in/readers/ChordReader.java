@@ -9,6 +9,7 @@ import static com.xenoage.zong.core.position.MP.getMP;
 import static com.xenoage.zong.core.text.UnformattedText.ut;
 import static com.xenoage.zong.io.musicxml.in.readers.MusicReader.readDuration;
 import static com.xenoage.zong.io.musicxml.in.readers.OtherReader.readBezierPoint;
+import static com.xenoage.zong.io.musicxml.in.readers.OtherReader.readPlacement;
 import static com.xenoage.zong.io.musicxml.in.readers.OtherReader.readPositioning;
 import static com.xenoage.zong.io.musicxml.in.readers.OtherReader.readVSide;
 
@@ -24,7 +25,10 @@ import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.MusicContext;
 import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.music.WaypointPosition;
-import com.xenoage.zong.core.music.chord.Articulation;
+import com.xenoage.zong.core.music.annotation.Annotation;
+import com.xenoage.zong.core.music.annotation.Articulation;
+import com.xenoage.zong.core.music.annotation.ArticulationType;
+import com.xenoage.zong.core.music.annotation.Fermata;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.Grace;
 import com.xenoage.zong.core.music.chord.Note;
@@ -33,15 +37,18 @@ import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.core.music.direction.Dynamics;
 import com.xenoage.zong.core.music.direction.DynamicsType;
 import com.xenoage.zong.core.music.format.BezierPoint;
+import com.xenoage.zong.core.music.format.Placement;
 import com.xenoage.zong.core.music.format.Positioning;
 import com.xenoage.zong.core.music.lyric.Lyric;
 import com.xenoage.zong.core.music.lyric.SyllableType;
 import com.xenoage.zong.core.music.rest.Rest;
 import com.xenoage.zong.core.music.slur.SlurType;
 import com.xenoage.zong.core.music.slur.SlurWaypoint;
+import com.xenoage.zong.musicxml.types.MxlAccent;
 import com.xenoage.zong.musicxml.types.MxlArticulations;
 import com.xenoage.zong.musicxml.types.MxlBeam;
 import com.xenoage.zong.musicxml.types.MxlDynamics;
+import com.xenoage.zong.musicxml.types.MxlFermata;
 import com.xenoage.zong.musicxml.types.MxlLyric;
 import com.xenoage.zong.musicxml.types.MxlNotations;
 import com.xenoage.zong.musicxml.types.MxlNote;
@@ -50,6 +57,7 @@ import com.xenoage.zong.musicxml.types.MxlSlurOrTied;
 import com.xenoage.zong.musicxml.types.MxlSlurOrTied.MxlElementType;
 import com.xenoage.zong.musicxml.types.MxlStem;
 import com.xenoage.zong.musicxml.types.MxlSyllabicText;
+import com.xenoage.zong.musicxml.types.attributes.MxlEmptyPlacement;
 import com.xenoage.zong.musicxml.types.attributes.MxlPosition;
 import com.xenoage.zong.musicxml.types.attributes.MxlPrintStyle;
 import com.xenoage.zong.musicxml.types.choice.MxlArticulationsContent;
@@ -64,6 +72,7 @@ import com.xenoage.zong.musicxml.types.choice.MxlNotationsContent;
 import com.xenoage.zong.musicxml.types.choice.MxlNotationsContent.MxlNotationsContentType;
 import com.xenoage.zong.musicxml.types.choice.MxlNoteContent.MxlNoteContentType;
 import com.xenoage.zong.musicxml.types.enums.MxlStartStopContinue;
+import com.xenoage.zong.musicxml.types.enums.MxlUprightInverted;
 import com.xenoage.zong.musicxml.types.groups.MxlEditorialVoice;
 import com.xenoage.zong.musicxml.types.groups.MxlFullNote;
 
@@ -287,6 +296,8 @@ public final class ChordReader {
 	 */
 	private static void readNotations(MusicReaderContext context,
 		MxlNotations mxlNotations, Chord chord, int noteIndex, int staffIndexInPart) {
+		
+		ArrayList<Annotation> annotations = alist(0);
 		for (MxlNotationsContent mxlNC : mxlNotations.getElements()) {
 			MxlNotationsContentType mxlNCType = mxlNC.getNotationsContentType();
 
@@ -352,38 +363,62 @@ public final class ChordReader {
 				case Articulations: {
 					//articulations
 					MxlArticulations mxlArticulations = (MxlArticulations) mxlNC;
-					ArrayList<Articulation> articulations = alist();
 					for (MxlArticulationsContent mxlAC : mxlArticulations.getContent()) {
 						MxlArticulationsContentType mxlACType = mxlAC.getArticulationsContentType();
-						Articulation a = null;
+						//read type
+						ArticulationType a = null;
 						switch (mxlACType) {
 							case Accent:
-								a = Articulation.Accent;
+								a = ArticulationType.Accent;
 								break;
 							case Staccatissimo:
-								a = Articulation.Staccatissimo;
+								a = ArticulationType.Staccatissimo;
 								break;
 							case Staccato:
-								a = Articulation.Staccato;
+								a = ArticulationType.Staccato;
 								break;
 							case StrongAccent:
-								a = Articulation.StrongAccent;
+								a = ArticulationType.Marcato;
 								break;
 							case Tenuto:
-								a = Articulation.Tenuto;
+								a = ArticulationType.Tenuto;
 								break;
 						}
+						//read placement
+						Placement placement = null;
+						MxlEmptyPlacement mxlPlacement = mxlAC.getEmptyPlacement();
+						if (mxlPlacement != null) {
+							placement = readPlacement(mxlPlacement.getPlacement());
+						}
 						if (a != null) {
-							articulations.add(a);
+							annotations.add(new Articulation(a, placement));
 						}
 					}
-					if (articulations.size() > 0) {
-						chord.setArticulations(articulations);
+					break;
+				}
+				
+				case Fermata: {
+					//fermata
+					MxlFermata mxlFermata = (MxlFermata) mxlNC;
+					//determine position
+					MxlPrintStyle printStyle = mxlFermata.getPrintStyle();
+					MxlPosition position = (printStyle != null ? printStyle.getPosition() : null);
+					Positioning positioning = readPositioning(position,
+						null, null, context.getTenthMm(), context.getStaffLinesCount(staffIndexInPart));
+					if (positioning == null) {
+						if (mxlFermata.getType() == MxlUprightInverted.Upright)
+							positioning = Placement.Above;
+						else if (mxlFermata.getType() == MxlUprightInverted.Inverted)
+							positioning = Placement.Below;
 					}
+					annotations.add(new Fermata(positioning));
 					break;
 				}
 			}
 		}
+		
+		if (annotations.size() > 0)
+			chord.setAnnotations(annotations);
 	}
 
 	/**

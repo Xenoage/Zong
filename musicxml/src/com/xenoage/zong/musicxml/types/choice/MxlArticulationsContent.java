@@ -1,6 +1,7 @@
 package com.xenoage.zong.musicxml.types.choice;
 
 import com.xenoage.utils.xml.XmlWriter;
+import com.xenoage.zong.musicxml.types.attributes.MxlEmptyPlacement;
 
 /**
  * Interface for all types of content that may appear within
@@ -21,7 +22,11 @@ public interface MxlArticulationsContent {
 		Tenuto,
 		Staccatissimo;
 	}
-
+	
+	/**
+	 * Not in MusicXML spec, but all types of articulations have a placement.
+	 */
+	public MxlEmptyPlacement getEmptyPlacement();
 
 	public MxlArticulationsContentType getArticulationsContentType();
 

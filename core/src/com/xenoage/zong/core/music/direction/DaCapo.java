@@ -11,6 +11,7 @@ import com.xenoage.zong.core.header.ColumnHeader;
  * @Andreas Wenger
  */
 public final class DaCapo
-	extends Direction {
+	extends Direction
+	implements NavigationMarker {
 
 }

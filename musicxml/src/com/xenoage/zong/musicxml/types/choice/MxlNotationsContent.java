@@ -18,6 +18,7 @@ public interface MxlNotationsContent {
 	public enum MxlNotationsContentType {
 		Articulations,
 		Dynamics,
+		Fermata,
 		SlurOrTied;
 	}
 

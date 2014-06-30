@@ -14,10 +14,13 @@ import lombok.Setter;
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.NonEmpty;
 import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.collections.CollectionUtils;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.VoiceElement;
+import com.xenoage.zong.core.music.annotation.Annotation;
+import com.xenoage.zong.core.music.annotation.Articulation;
 import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.music.direction.Direction;
 import com.xenoage.zong.core.music.direction.DirectionContainer;
@@ -57,8 +60,9 @@ public class Chord
 	@Getter @Setter private boolean cue = false;
 	/** The grace value of this chord, or null if it is a normal chord. */
 	@Getter @Setter @MaybeNull private Grace grace = null;
-	/** The articulations within this chord, sorted by ascending distance to the chord. */
-	@Getter @Setter @MaybeNull private List<Articulation> articulations = null;
+	/** The articulation, ornament and other annitations on this chord,
+	 * sorted by ascending distance to the chord. */
+	@Getter @Setter @MaybeNull private List<Annotation> annotations = null;
 	/** The beam this chord is part of, or null. */
 	@Getter @Setter @MaybeNull private Beam beam = null;
 	/** The slurs which start or end at this chord, or null. */
@@ -188,6 +192,20 @@ public class Chord
 	@Override public MP getMP(MPElement child) {
 		//all children have the same musical position as this chord
 		return MP.getMP(this);
+	}
+	
+	/**
+	 * Gets the articulations on this chord, in ascending distance to the chord.
+	 */
+	public List<Articulation> getArticulations() { //TIDY: this method should not be needed
+		if (annotations == null)
+			return null;
+		ArrayList<Articulation> ret = alist();
+		for (Annotation a : annotations) {
+			if (a instanceof Articulation)
+				ret.add((Articulation) a);
+		}
+		return ret;
 	}
 
 }

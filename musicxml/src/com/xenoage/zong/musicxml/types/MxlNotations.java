@@ -19,7 +19,7 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
  * 
  * @author Andreas Wenger
  */
-@IncompleteMusicXML(missing = "tuplet,glissando,slide,ornaments,technical,fermata,"
+@IncompleteMusicXML(missing = "tuplet,glissando,slide,ornaments,technical,"
 	+ "arpeggiate,non-arpeggiate,accidental-mark,other-notation", children = "slur,tied,articulations,dynamics")
 @AllArgsConstructor @Getter @Setter
 public final class MxlNotations {
@@ -39,6 +39,9 @@ public final class MxlNotations {
 			}
 			else if (childName.equals(MxlDynamics.elemName)) {
 				element = MxlDynamics.read(reader);
+			}
+			else if (childName.equals(MxlFermata.elemName)) {
+				element = MxlFermata.read(reader);
 			}
 			else if (childName.equals(MxlSlurOrTied.elemNameSlur) ||
 				childName.equals(MxlSlurOrTied.elemNameTied)) {

@@ -11,6 +11,7 @@ import com.xenoage.zong.core.header.ColumnHeader;
  * @author Andreas Wenger
  */
 public final class Coda
-	extends Direction {
+	extends Direction
+	implements NavigationMarker {
 
 }

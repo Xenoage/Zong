@@ -3,7 +3,8 @@ package com.xenoage.zong.musiclayout.layouter.notation;
 import java.util.List;
 
 import com.xenoage.utils.math.VSide;
-import com.xenoage.zong.core.music.chord.Articulation;
+import com.xenoage.zong.core.music.annotation.Articulation;
+import com.xenoage.zong.core.music.annotation.ArticulationType;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
@@ -51,8 +52,9 @@ public class ArticulationsAlignmentStrategy
 		//special cases (which appear often): if there is only a single articulation
 		//which is either a staccato or tenuto, we can place it between the staff lines
 		if (articulations.size() == 1 &&
-			(articulations.get(0) == Articulation.Staccato || articulations.get(0) == Articulation.Tenuto)) {
-			return computeSimpleArticulation(articulations.get(0), outerNote, side, staffLinesCount);
+			(articulations.get(0).getType() == ArticulationType.Staccato ||
+			articulations.get(0).getType() == ArticulationType.Tenuto)) {
+			return computeSimpleArticulation(articulations.get(0).getType(), outerNote, side, staffLinesCount);
 		}
 		//otherwise, the articulations a placed above or below the staff
 		else {
@@ -61,11 +63,11 @@ public class ArticulationsAlignmentStrategy
 	}
 
 	/**
-	 * Creates an {@link ArticulationsAlignment} for the given {@link Articulation}
+	 * Creates an {@link ArticulationsAlignment} for the given {@link ArticulationType}
 	 * at the given notehead at the given side. If possible, it is placed between
 	 * the staff lines.
 	 */
-	ArticulationsAlignment computeSimpleArticulation(Articulation articulation,
+	ArticulationsAlignment computeSimpleArticulation(ArticulationType articulation,
 		NoteAlignment outerNote, VSide side, int staffLinesCount) {
 		//compute LP of the articulation: if within staff, it must be
 		//between the staff lines (LP 1, 3, 5, ...)
@@ -82,7 +84,7 @@ public class ArticulationsAlignmentStrategy
 	}
 
 	/**
-	 * Creates an {@link ArticulationsAlignment} for the given {@link Articulation}s
+	 * Creates an {@link ArticulationsAlignment} for the given {@link ArticulationType}s
 	 * at the given notehead at the given side. The articulations are always placed
 	 * outside the staff lines. The first one is placed as the innermost articulation,
 	 * the last one as the outermost one.
@@ -100,7 +102,7 @@ public class ArticulationsAlignmentStrategy
 		ArticulationAlignment[] aa = new ArticulationAlignment[articulations.size()];
 		for (int i = 0; i < articulations.size(); i++) {
 			aa[i] = new ArticulationAlignment(lp + 2 * i * side.getDir(), outerNote.getOffset(),
-				articulations.get(i));
+				articulations.get(i).getType());
 		}
 		//total height: 1 IS for each articulation
 		float totalHeightIS = Math.abs(lp - outerNote.getLinePosition()) / 2;

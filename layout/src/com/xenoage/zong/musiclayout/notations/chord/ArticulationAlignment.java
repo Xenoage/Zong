@@ -3,7 +3,7 @@ package com.xenoage.zong.musiclayout.notations.chord;
 import lombok.AllArgsConstructor;
 
 import com.xenoage.utils.annotations.Const;
-import com.xenoage.zong.core.music.chord.Articulation;
+import com.xenoage.zong.core.music.annotation.ArticulationType;
 
 /**
  * The alignment of a single articulation assigned
@@ -18,7 +18,7 @@ import com.xenoage.zong.core.music.chord.Articulation;
 	public final float yLP;
 	/** The horizontal offset of the articulation in interline spaces. */
 	public final float xOffsetIS;
-	/** The type of the articulation (staccato, tenuto, ...). */
-	public final Articulation type;
+	/** The articulation symbol. */
+	public final ArticulationType articulationType;
 
 }

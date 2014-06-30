@@ -1,21 +1,40 @@
 package com.xenoage.zong.musicxml;
 
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.utils.kernel.Tuple2.t;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.music.Pitch.pi;
+import static com.xenoage.zong.core.position.MP.mp0;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 
+import com.xenoage.utils.collections.CollectionUtils;
+import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.Pitch;
+import com.xenoage.zong.core.music.annotation.Annotation;
+import com.xenoage.zong.core.music.annotation.Articulation;
+import com.xenoage.zong.core.music.annotation.ArticulationType;
+import com.xenoage.zong.core.music.annotation.Fermata;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.Note;
+import com.xenoage.zong.core.music.direction.Direction;
+import com.xenoage.zong.core.music.direction.Dynamics;
+import com.xenoage.zong.core.music.direction.DynamicsType;
+import com.xenoage.zong.core.music.direction.Words;
+import com.xenoage.zong.core.music.format.Placement;
 import com.xenoage.zong.core.music.key.TraditionalKey;
 import com.xenoage.zong.core.music.key.TraditionalKey.Mode;
 import com.xenoage.zong.core.music.time.TimeType;
+import com.xenoage.zong.core.music.util.BeatE;
+import com.xenoage.zong.core.music.util.BeatEList;
+import com.xenoage.zong.core.position.MP;
+import com.xenoage.zong.core.text.UnformattedText;
 
 /**
  * Abstract tests for the
@@ -349,6 +368,9 @@ public abstract class MusicXMLTestSuite<T> {
 	
 	protected abstract void test_21b_Chords_TwoNotes(T data, int expectedChordsCount, Chord expectedChord);
 
+	/**
+	 * Some three-note chords, with various durations.
+	 */
 	@Test public void test_21c_Chords_ThreeNotesDuration() {
 		T data = load("21c-Chords-ThreeNotesDuration.xml");
 		Chord[] expectedChords = new Chord[] {
@@ -364,5 +386,46 @@ public abstract class MusicXMLTestSuite<T> {
 	}
 	
 	public abstract void test_21c_Chords_ThreeNotesDuration(T data, Chord[] expectedChords);
+	
+	/**
+	 * Chords in the second measure, after several ornaments in the first measure
+	 * and a p at the beginning of the second measure. 
+	 */
+	@Test public void test_21d_Chords_SchubertStabatMater() {
+		T data = load("21d-Chords-SchubertStabatMater.xml");
+		//chords
+		Chord[] expectedChords = new Chord[] {
+			ch(fr(1, 1), pi('F', 0, 4), pi('A', 0, 4), pi('C', 0, 5)),
+			ch(fr(3, 8), pi('F', 0, 4), pi('A', -1, 4)),
+			ch(fr(1, 8), pi('F', 0, 4), pi('A', -1, 4)),
+			ch(fr(1, 4), pi('G', 0, 4), pi('B', -1, 4)),
+			ch(fr(1, 4), pi('G', 0, 4), pi('B', -1, 4))
+		};
+		addAnnotation(expectedChords[0], new Articulation(ArticulationType.Accent, Placement.Below));
+		addAnnotation(expectedChords[0], new Fermata(Placement.Above));
+		//directions
+		List<Tuple2<MP, ? extends Direction>> expectedDirections = alist();
+		Words largo = new Words(new UnformattedText("Largo"));
+		largo.setPositioning(Placement.Above);
+		expectedDirections.add(t(mp0, largo));
+		Dynamics fp = new Dynamics(DynamicsType.fp);
+		fp.setPositioning(Placement.Below);
+		expectedDirections.add(t(mp0, fp));
+		Dynamics p = new Dynamics(DynamicsType.p);
+		fp.setPositioning(Placement.Below);
+		expectedDirections.add(t(mp0.withMeasure(1), p));
+		//test
+		test_21d_Chords_SchubertStabatMater(data, expectedChords, expectedDirections);
+	}
+	
+	private void addAnnotation(Chord chord, Annotation a) {
+		if (chord.getAnnotations() == null)
+			chord.setAnnotations(new ArrayList<Annotation>(1));
+		chord.getAnnotations().add(a);
+	}
+	
+	public abstract void test_21d_Chords_SchubertStabatMater(T data, Chord[] expectedChords,
+		List<Tuple2<MP, ? extends Direction>> expectedDirections);
+	
 	
 }

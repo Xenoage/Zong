@@ -2,8 +2,8 @@ package com.xenoage.zong.symbols.common;
 
 import java.util.ArrayList;
 
+import com.xenoage.zong.core.music.annotation.ArticulationType;
 import com.xenoage.zong.core.music.chord.Accidental;
-import com.xenoage.zong.core.music.chord.Articulation;
 import com.xenoage.zong.core.music.clef.ClefSymbol;
 import com.xenoage.zong.core.music.direction.DynamicsType;
 import com.xenoage.zong.core.music.direction.Pedal;
@@ -25,7 +25,7 @@ public enum CommonSymbol {
 	ArticulationAccent("articulation-accent"),
 	ArticulationStaccato("articulation-staccato"),
 	ArticulationStaccatissimo("articulation-staccatissimo"),
-	ArticulationStrongAccent("articulation-strongaccent"),
+	ArticulationStrongAccent("articulation-strongaccent"), //TODO: rename to "Marcato"
 	ArticulationTenuto("articulation-tenuto"),
 	BracketBrace("bracket-brace"),
 	BracketBracketLine("bracket-bracketline"),
@@ -118,7 +118,7 @@ public enum CommonSymbol {
 	/**
 	 * Gets the common symbol for the given articulation type.
 	 */
-	public static CommonSymbol getArticulation(Articulation articulation) {
+	public static CommonSymbol getArticulation(ArticulationType articulation) {
 		switch (articulation) {
 			case Accent:
 				return ArticulationAccent;
@@ -126,7 +126,7 @@ public enum CommonSymbol {
 				return ArticulationStaccato;
 			case Staccatissimo:
 				return ArticulationStaccatissimo;
-			case StrongAccent:
+			case Marcato:
 				return ArticulationStrongAccent;
 			case Tenuto:
 				return ArticulationTenuto;

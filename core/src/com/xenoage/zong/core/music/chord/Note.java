@@ -14,7 +14,6 @@ import com.xenoage.zong.core.music.Pitch;
  * Within a score, it is always part of a chord.
  *
  * @author Andreas Wenger
- * @author Uli Teschemacher
  */
 @Const @Data public final class Note {
 
@@ -24,7 +23,7 @@ import com.xenoage.zong.core.music.Pitch;
 	/**
 	 * Returns a list of {@link Note}s from the given {@link Pitch}es.
 	 */
-	public static ArrayList<Note> createNotes(Pitch... pitches) {
+	public static ArrayList<Note> notes(Pitch... pitches) {
 		ArrayList<Note> ret = new ArrayList<Note>(pitches.length);
 		for (int i = 0; i < pitches.length; i++) {
 			ret.add(new Note(pitches[i]));
@@ -34,7 +33,7 @@ import com.xenoage.zong.core.music.Pitch;
 
 
 	@Override public String toString() {
-		return "note" + pitch.toString();
+		return "note(" + pitch.toString() + ")";
 	}
 
 

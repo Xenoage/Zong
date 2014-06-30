@@ -211,7 +211,7 @@ public class MusicElementStampingStrategy
 			for (int iArt = 0; iArt < cara.getArticulations().length; iArt++) {
 				ArticulationAlignment ara = cara.getArticulations()[iArt];
 				ArticulationStamping araSt = new ArticulationStamping(chordNot.getMusicElement(),
-					ara.type, staffStamping, sp(leftNoteX + (ara.xOffsetIS + (noteheadWidth / 2)) *
+					ara.articulationType, staffStamping, sp(leftNoteX + (ara.xOffsetIS + (noteheadWidth / 2)) *
 						interlineSpace, ara.yLP), 1, symbolPool);
 				articulations.add(araSt);
 			}

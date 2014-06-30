@@ -29,7 +29,6 @@ import java.util.List;
 import com.xenoage.utils.font.FontInfo;
 import com.xenoage.utils.iterators.It;
 import com.xenoage.utils.math.Fraction;
-import com.xenoage.utils.math.MathUtils;
 import com.xenoage.zong.commands.core.music.ColumnElementWrite;
 import com.xenoage.zong.commands.core.music.MeasureAddUpTo;
 import com.xenoage.zong.commands.core.music.MeasureElementWrite;
@@ -49,6 +48,7 @@ import com.xenoage.zong.core.music.clef.ClefType;
 import com.xenoage.zong.core.music.direction.Direction;
 import com.xenoage.zong.core.music.direction.Dynamics;
 import com.xenoage.zong.core.music.direction.DynamicsType;
+import com.xenoage.zong.core.music.direction.NavigationMarker;
 import com.xenoage.zong.core.music.direction.Pedal;
 import com.xenoage.zong.core.music.direction.Pedal.Type;
 import com.xenoage.zong.core.music.direction.Tempo;
@@ -501,6 +501,7 @@ public final class MusicReader {
 		}
 	}
 
+	//TIDY: move into own class, and read formatting info
 	/**
 	 * Reads the given direction element.
 	 */
@@ -601,13 +602,17 @@ public final class MusicReader {
 					if (direction == null) {
 						MxlWords mxlWords = (MxlWords) mxlDTC;
 						MxlFormattedText mxlFormattedText = mxlWords.getFormattedText();
-						MxlPrintStyle mxlPrintStyle = notNull(mxlFormattedText.getPrintStyle(), MxlPrintStyle.empty);
-						FontInfo fontInfo = readFontInfo(mxlPrintStyle.getFont(), defaultFont);
-						Position position = readPosition(mxlPrintStyle.getPosition(),
-							context.getTenthMm(), context.getStaffLinesCount(staff));
 						direction = new Words(ut(mxlFormattedText.getValue()));
-						//direction.setFont(fontInfo); //TODO
-						direction.setPositioning(position);
+						
+						MxlPrintStyle mxlPrintStyle = notNull(mxlFormattedText.getPrintStyle(), MxlPrintStyle.empty);
+						Positioning positioning = readPositioning(mxlPrintStyle.getPosition(),
+							mxlDirection.getPlacement(), null, context.getTenthMm(),
+							context.getStaffLinesCount(staff));
+						direction.setPositioning(positioning);
+						
+						//TODO
+						//FontInfo fontInfo = readFontInfo(mxlPrintStyle.getFont(), defaultFont); 
+						//direction.setFont(fontInfo);
 					}
 					break;
 				}
@@ -627,8 +632,10 @@ public final class MusicReader {
 		}
 
 		//write direction to score
+		//TODO: find out if measure direction or column direction.
+		//currently, we write a column element only for tempo or navigation markers
 		if (direction != null) {
-			if (direction instanceof ColumnElement) {
+			if (direction instanceof Tempo || direction instanceof NavigationMarker) {
 				context.writeColumnElement((ColumnElement) direction);
 			}
 			else {

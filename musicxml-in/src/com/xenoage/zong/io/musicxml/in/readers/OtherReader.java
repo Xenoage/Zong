@@ -70,6 +70,8 @@ public final class OtherReader {
 	}
 
 	@MaybeNull public static Placement readPlacement(MxlPlacement mxlPlacement) {
+		if (mxlPlacement == null)
+			return null;
 		switch (mxlPlacement) {
 			case Above:
 				return Placement.Above;

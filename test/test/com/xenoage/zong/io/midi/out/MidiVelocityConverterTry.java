@@ -1,8 +1,8 @@
 package com.xenoage.zong.io.midi.out;
 
 import static com.xenoage.utils.collections.CList.ilist;
-import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.math.Fraction.fr;
+import static com.xenoage.zong.core.music.chord.Note.notes;
 import static com.xenoage.zong.core.music.time.TimeType.timeType;
 import static com.xenoage.zong.core.position.MP.mp0;
 import static com.xenoage.zong.desktop.io.midi.out.MidiScorePlayer.midiScorePlayer;
@@ -19,9 +19,7 @@ import com.xenoage.zong.core.instrument.Transpose;
 import com.xenoage.zong.core.music.ColumnElement;
 import com.xenoage.zong.core.music.Part;
 import com.xenoage.zong.core.music.Pitch;
-import com.xenoage.zong.core.music.chord.Articulation;
 import com.xenoage.zong.core.music.chord.Chord;
-import com.xenoage.zong.core.music.chord.Note;
 import com.xenoage.zong.core.music.clef.Clef;
 import com.xenoage.zong.core.music.clef.ClefType;
 import com.xenoage.zong.core.music.direction.Dynamics;
@@ -220,14 +218,7 @@ public class MidiVelocityConverterTry {
 	}
 
 	private static Chord chord(Fraction fraction, Pitch... pitches) {
-		return chord(fraction, null, pitches);
-	}
-
-	private static Chord chord(Fraction fraction, Articulation[] articulations, Pitch... pitches) {
-		Chord ret = new Chord(Note.createNotes(pitches), fraction);
-		if (articulations != null)
-			ret.setArticulations(alist(articulations));
-		return ret;
+		return new Chord(notes(pitches), fraction);
 	}
 
 }
