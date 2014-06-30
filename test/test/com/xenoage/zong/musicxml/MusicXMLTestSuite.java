@@ -12,7 +12,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.xenoage.utils.collections.CollectionUtils;
 import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.Score;
@@ -31,8 +30,6 @@ import com.xenoage.zong.core.music.format.Placement;
 import com.xenoage.zong.core.music.key.TraditionalKey;
 import com.xenoage.zong.core.music.key.TraditionalKey.Mode;
 import com.xenoage.zong.core.music.time.TimeType;
-import com.xenoage.zong.core.music.util.BeatE;
-import com.xenoage.zong.core.music.util.BeatEList;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.text.UnformattedText;
 
@@ -437,5 +434,16 @@ public abstract class MusicXMLTestSuite<T> {
 	}
 	
 	public abstract void test_21e_Chords_PickupMeasures(T data);
+	
+	/**
+	 * Between the individual notes of a chord there can be direction or harmony elements,
+	 * which should be properly assigned to the chord (or the position of the chord). 
+	 */
+	@Test public void test_21f_Chord_ElementInBetween() {
+		T data = load("21f-Chord-ElementInBetween.xml");
+		test_21f_Chord_ElementInBetween(data);
+	}
+	
+	public abstract void test_21f_Chord_ElementInBetween(T data);
 	
 }

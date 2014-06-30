@@ -16,7 +16,6 @@ import static org.junit.Assert.fail;
 import java.util.List;
 
 import org.junit.Assert;
-import org.junit.Test;
 
 import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.utils.math.Fraction;
@@ -38,6 +37,7 @@ import com.xenoage.zong.core.music.clef.ClefType;
 import com.xenoage.zong.core.music.direction.Direction;
 import com.xenoage.zong.core.music.direction.Dynamics;
 import com.xenoage.zong.core.music.direction.DynamicsType;
+import com.xenoage.zong.core.music.direction.Segno;
 import com.xenoage.zong.core.music.direction.Words;
 import com.xenoage.zong.core.music.format.Placement;
 import com.xenoage.zong.core.music.key.TraditionalKey;
@@ -45,7 +45,6 @@ import com.xenoage.zong.core.music.rest.Rest;
 import com.xenoage.zong.core.music.time.TimeType;
 import com.xenoage.zong.core.music.util.Interval;
 import com.xenoage.zong.core.position.MP;
-import com.xenoage.zong.musicxml.MusicXMLDocument;
 import com.xenoage.zong.musicxml.MusicXMLTestSuite;
 
 /**
@@ -63,6 +62,7 @@ public class MusicXMLScoreFileInputTestSuiteTest
 			String filepath = dir + file;
 			return new MusicXmlScoreFileInput().read(jsePlatformUtils().openFile(filepath), filepath);
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			Assert.fail("Could not load " + file + ": " + ex.toString());
 			return null;
 		}
@@ -375,6 +375,24 @@ public class MusicXMLScoreFileInputTestSuiteTest
 		assertEquals(fr(1, 4), score.getVoice(m2).getElement(0).getDuration());
 		assertEquals(fr(1, 4), score.getVoice(m2).getElement(1).getDuration());
 		assertEquals(fr(2, 4), score.getMeasure(m2).getFilledBeats());
+	}
+
+	@Override public void test_21f_Chord_ElementInBetween(Score score) {
+		//1/4 with 3 notes at beat 0
+		List<VoiceElement> e = score.getVoice(mp0).getElements();
+		Chord chord = (Chord) e.get(0);
+		assertEquals(3, chord.getNotes().size());
+		assertEquals(fr(1, 4), chord.getDuration());
+		//followed by 2 rests, 1/4 and 2/4
+		assertEquals(fr(1, 4), ((Rest) e.get(1)).getDuration());
+		assertEquals(fr(2, 4), ((Rest) e.get(2)).getDuration());
+		//segno at beat 1/4 in column
+		Direction segno = (Segno) score.getColumnHeader(0).getOtherDirections().get(fr(1, 4));
+		assertNotNull(segno);
+		//dynamics p at beat 1/4 in measure
+		Dynamics dynamics = (Dynamics) score.getMeasure(mp0).getDirections().get(fr(1, 4));
+		assertNotNull(dynamics);
+		assertEquals(DynamicsType.p, dynamics.getType());
 	}
 	
 }

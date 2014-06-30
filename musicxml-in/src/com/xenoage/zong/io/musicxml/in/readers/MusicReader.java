@@ -45,12 +45,14 @@ import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.barline.BarlineStyle;
 import com.xenoage.zong.core.music.clef.Clef;
 import com.xenoage.zong.core.music.clef.ClefType;
+import com.xenoage.zong.core.music.direction.Coda;
 import com.xenoage.zong.core.music.direction.Direction;
 import com.xenoage.zong.core.music.direction.Dynamics;
 import com.xenoage.zong.core.music.direction.DynamicsType;
 import com.xenoage.zong.core.music.direction.NavigationMarker;
 import com.xenoage.zong.core.music.direction.Pedal;
 import com.xenoage.zong.core.music.direction.Pedal.Type;
+import com.xenoage.zong.core.music.direction.Segno;
 import com.xenoage.zong.core.music.direction.Tempo;
 import com.xenoage.zong.core.music.direction.Wedge;
 import com.xenoage.zong.core.music.direction.WedgeType;
@@ -72,6 +74,7 @@ import com.xenoage.zong.musicxml.types.MxlAttributes;
 import com.xenoage.zong.musicxml.types.MxlBackup;
 import com.xenoage.zong.musicxml.types.MxlBarline;
 import com.xenoage.zong.musicxml.types.MxlClef;
+import com.xenoage.zong.musicxml.types.MxlCoda;
 import com.xenoage.zong.musicxml.types.MxlDirection;
 import com.xenoage.zong.musicxml.types.MxlDirectionType;
 import com.xenoage.zong.musicxml.types.MxlDynamics;
@@ -85,6 +88,7 @@ import com.xenoage.zong.musicxml.types.MxlNote;
 import com.xenoage.zong.musicxml.types.MxlPedal;
 import com.xenoage.zong.musicxml.types.MxlPrint;
 import com.xenoage.zong.musicxml.types.MxlScorePartwise;
+import com.xenoage.zong.musicxml.types.MxlSegno;
 import com.xenoage.zong.musicxml.types.MxlSound;
 import com.xenoage.zong.musicxml.types.MxlStaffLayout;
 import com.xenoage.zong.musicxml.types.MxlSystemLayout;
@@ -206,6 +210,11 @@ public final class MusicReader {
 			switch (mxlMDC.getMusicDataContentType()) {
 				case Note: {
 					MxlNote mxlNote = ((MxlNote) mxlMDC);
+					//when it is a chord, ignore it, because we already read it
+					if (mxlNote.getContent().getNoteContentType() == MxlNoteContentType.Normal && 
+						((MxlNormalNote) mxlNote.getContent()).getFullNote().isChord()) {
+						continue;
+					}
 					//instrument change?
 					MxlInstrument mxlInstrument = mxlNote.getInstrument();
 					if (mxlInstrument != null) {
@@ -216,22 +225,27 @@ public final class MusicReader {
 							context.writeInstrumentChange(instrumentID);
 						}
 					}
-					//collect all directly following notes which have a chord-element
+					//collect all following notes which have a chord-element
+					//inbetween there may be direction elements, so we collect the
+					//notes until the first non-chord or non-direction element and after
+					//that go on at the current position + 1
 					List<MxlNote> mxlNotes = alist(mxlNote);
 					for (int i2 = i + 1; i2 < content.size(); i2++) {
-						boolean found = false;
 						MxlMusicDataContent mxlMDC2 = content.get(i2);
+						boolean goOn = false;
 						if (mxlMDC2.getMusicDataContentType() == MxlMusicDataContentType.Note) {
 							MxlNote mxlNote2 = (MxlNote) mxlMDC2;
 							if (mxlNote2.getContent().getNoteContentType() == MxlNoteContentType.Normal) {
 								if (((MxlNormalNote) mxlNote2.getContent()).getFullNote().isChord()) {
 									mxlNotes.add(mxlNote2);
-									i++;
-									found = true;
+									goOn = true;
 								}
 							}
 						}
-						if (!found)
+						else if (mxlMDC2.getMusicDataContentType() == MxlMusicDataContentType.Direction) {
+							goOn = true;
+						}
+						if (!goOn)
 							break;
 					}
 					readChord(context, mxlNotes);
@@ -502,6 +516,7 @@ public final class MusicReader {
 	}
 
 	//TIDY: move into own class, and read formatting info
+	//TIDY: read print-style/positioning from all directions together (use common interface?)
 	/**
 	 * Reads the given direction element.
 	 */
@@ -517,6 +532,18 @@ public final class MusicReader {
 			MxlDirectionTypeContent mxlDTC = mxlType.getContent();
 			MxlDirectionTypeContentType mxlDTCType = mxlDTC.getDirectionTypeContentType();
 			switch (mxlDTCType) {
+				case Coda: {
+					//code
+					MxlCoda mxlCoda = (MxlCoda) mxlDTC;
+					MxlPrintStyle printStyle = notNull(mxlCoda.getPrintStyle(), MxlPrintStyle.empty);
+					Positioning positioning = readPositioning(printStyle.getPosition(),
+						null, mxlDirection.getPlacement(), context.getTenthMm(),
+						context.getStaffLinesCount(staff));
+					Coda coda = new Coda();
+					coda.setPositioning(positioning);
+					context.writeColumnElement(coda);
+					break;
+				}
 				case Dynamics: {
 					//dynamics
 					MxlDynamics mxlDynamics = (MxlDynamics) mxlDTC;
@@ -564,6 +591,18 @@ public final class MusicReader {
 							context.getTenthMm(), context.getStaffLinesCount(staff)));
 						context.writeMeasureElement(pedal, staff);
 					}
+					break;
+				}
+				case Segno: {
+					//segno
+					MxlSegno mxlSegno = (MxlSegno) mxlDTC;
+					MxlPrintStyle printStyle = notNull(mxlSegno.getPrintStyle(), MxlPrintStyle.empty);
+					Positioning positioning = readPositioning(printStyle.getPosition(),
+						null, mxlDirection.getPlacement(), context.getTenthMm(),
+						context.getStaffLinesCount(staff));
+					Segno segno = new Segno();
+					segno.setPositioning(positioning);
+					context.writeColumnElement(segno);
 					break;
 				}
 				case Wedge: {

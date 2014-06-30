@@ -15,7 +15,9 @@ public interface MxlDirectionTypeContent {
 	 * for finding out the type of the content.
 	 */
 	public enum MxlDirectionTypeContentType {
+		Segno,
 		Words,
+		Coda,
 		Wedge,
 		Dynamics,
 		Pedal,

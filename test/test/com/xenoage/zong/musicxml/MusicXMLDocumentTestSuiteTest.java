@@ -314,5 +314,9 @@ public class MusicXMLDocumentTestSuiteTest
 	@Override public void test_21e_Chords_PickupMeasures(MusicXMLDocument data) {
 		//successfull when it loads - more is tested in musicxml-in
 	}
+
+	@Override public void test_21f_Chord_ElementInBetween(MusicXMLDocument data) {
+		//successfull when it loads - more is tested in musicxml-in
+	}
 	
 }

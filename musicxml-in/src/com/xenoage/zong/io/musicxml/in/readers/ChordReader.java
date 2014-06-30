@@ -213,7 +213,7 @@ public final class ChordReader {
 				}
 			}
 
-			//notations   
+			//notations of first note
 			for (MxlNotations mxlNotations : it(mxlFirstNote.getNotations())) {
 				readNotations(context, mxlNotations, chord, 0, staff); //first note has index 0
 			}

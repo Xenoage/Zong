@@ -55,7 +55,7 @@ public class MusicXmlMassTest {
 	/*
 	@Test public void testSingleFile()
 	{
-		File file = new File(dir + "/MusicXML/hausmusik.ch/b/bach_joh_sebastian(1685-1750)/bwv0772-0994_Klavierwerke/bwv846-869_das_wohltemp_klavier-Teil1/bwv_862/bwv_862p/bwv_862p.xml");
+		File file = new File(dir + "/MusicXML/MusicXML 1.1/MozaChloSample.xml");
 		if (!testFile(file)) Assert.fail();
 	} //*/
 

@@ -18,7 +18,7 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
  * 
  * @author Andreas Wenger
  */
-@IncompleteMusicXML(missing = "rehearsal,segno,coda,dashes,bracket,"
+@IncompleteMusicXML(missing = "rehearsal,dashes,bracket,"
 	+ "octave-shift,harp-pedals,damp,damp-all,eyeglasses,scordatura,accordion-registration,"
 	+ "other-direction")
 @AllArgsConstructor @Getter @Setter
@@ -37,6 +37,10 @@ public final class MxlDirectionType {
 		if (reader.openNextChildElement()) {
 			String n = reader.getElementName();
 			switch (n.charAt(0)) { //switch for performance
+				case 'c':
+					if (n.equals(MxlCoda.elemName))
+						content = MxlCoda.read(reader);
+					break;
 				case 'd':
 					if (n.equals(MxlDynamics.elemName))
 						content = MxlDynamics.read(reader);
@@ -52,6 +56,10 @@ public final class MxlDirectionType {
 				case 'm':
 					if (n.equals(MxlMetronome.elemName))
 						content = MxlMetronome.read(reader);
+					break;
+				case 's':
+					if (n.equals(MxlSegno.elemName))
+						content = MxlSegno.read(reader);
 					break;
 				case 'w':
 					if (n.equals(MxlWedge.elemName))
