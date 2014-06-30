@@ -349,7 +349,7 @@ public abstract class MusicXMLTestSuite<T> {
 	}
 	
 	private Chord ch(Fraction duration, Pitch... pitches) {
-		ArrayList<Note> notes = new ArrayList<>();
+		ArrayList<Note> notes = alist();
 		for (Pitch pitch : pitches)
 			notes.add(new Note(pitch));
 		return new Chord(notes, duration);
