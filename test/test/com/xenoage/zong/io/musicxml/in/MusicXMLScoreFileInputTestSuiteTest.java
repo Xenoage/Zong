@@ -125,11 +125,11 @@ public class MusicXMLScoreFileInputTestSuiteTest
 
 	@Override public void test_02a_Rests_Durations(Score score, Fraction[] expectedDurations) {
 		//multirests are not supported yet - TODO
-		checkDurations(score, expectedDurations);
+		checkDurations(score.getStaff(0), expectedDurations);
 	}
 
 	@Override public void test_03a_Rhythm_Durations(Score score, Fraction[] expectedDurations) {
-		checkDurations(score, expectedDurations);
+		checkDurations(score.getStaff(0), expectedDurations);
 	}
 
 	@Override public void test_03b_Rhythm_Backup(Score score) {
@@ -156,11 +156,10 @@ public class MusicXMLScoreFileInputTestSuiteTest
 	}
 
 	@Override public void test_03c_Rhythm_DivisionChange(Score score, Fraction[] expectedDurations) {
-		checkDurations(score, expectedDurations);
+		checkDurations(score.getStaff(0), expectedDurations);
 	}
 	
-	private void checkDurations(Score score, Fraction[] expectedDurations) {
-		Staff staff = score.getStaff(0);
+	private void checkDurations(Staff staff, Fraction[] expectedDurations) {
 		int iDuration = 0;
 		for (int iM = 0; iM < staff.getMeasures().size(); iM++) {
 			Voice voice = staff.getMeasure(iM).getVoice(0);
@@ -393,6 +392,17 @@ public class MusicXMLScoreFileInputTestSuiteTest
 		Dynamics dynamics = (Dynamics) score.getMeasure(mp0).getDirections().get(fr(1, 4));
 		assertNotNull(dynamics);
 		assertEquals(DynamicsType.p, dynamics.getType());
+	}
+
+	@Override public void test_23a_Tuplets(Score score, Fraction[] expectedDurations) {
+		checkDurations(score.getStaff(0), expectedDurations);
+		//TODO: add support for tuplet notation and test it
+	}
+
+	@Override public void test_23f_Tuplets_DurationButNoBracket(Score score,
+		Fraction[] expectedDurationsStaff1, Fraction[] expectedDurationsStaff2) {
+		checkDurations(score.getStaff(0), expectedDurationsStaff1);
+		checkDurations(score.getStaff(1), expectedDurationsStaff2);
 	}
 	
 }

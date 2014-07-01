@@ -318,5 +318,14 @@ public class MusicXMLDocumentTestSuiteTest
 	@Override public void test_21f_Chord_ElementInBetween(MusicXMLDocument data) {
 		//successfull when it loads - more is tested in musicxml-in
 	}
+
+	@Override public void test_23a_Tuplets(MusicXMLDocument data, Fraction[] expectedDurations) {
+		//successfull when it loads - more is tested in musicxml-in
+	}
+
+	@Override public void test_23f_Tuplets_DurationButNoBracket(MusicXMLDocument data,
+		Fraction[] expectedDurationsStaff1, Fraction[] expectedDurationsStaff2) {
+		//successfull when it loads - more is tested in musicxml-in
+	}
 	
 }
