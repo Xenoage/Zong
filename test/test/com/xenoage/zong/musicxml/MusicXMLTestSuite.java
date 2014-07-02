@@ -5,6 +5,7 @@ import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.kernel.Tuple2.t;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.music.Pitch.pi;
+import static com.xenoage.zong.core.music.beam.Beam.beamFromChords;
 import static com.xenoage.zong.core.position.MP.mp0;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import org.junit.Test;
 
 import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.utils.math.Fraction;
+import com.xenoage.zong.commands.core.music.beam.BeamAdd;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.music.annotation.Annotation;
@@ -21,6 +23,7 @@ import com.xenoage.zong.core.music.annotation.Articulation;
 import com.xenoage.zong.core.music.annotation.ArticulationType;
 import com.xenoage.zong.core.music.annotation.Fermata;
 import com.xenoage.zong.core.music.chord.Chord;
+import com.xenoage.zong.core.music.chord.Grace;
 import com.xenoage.zong.core.music.chord.Note;
 import com.xenoage.zong.core.music.direction.Direction;
 import com.xenoage.zong.core.music.direction.Dynamics;
@@ -29,6 +32,9 @@ import com.xenoage.zong.core.music.direction.Words;
 import com.xenoage.zong.core.music.format.Placement;
 import com.xenoage.zong.core.music.key.TraditionalKey;
 import com.xenoage.zong.core.music.key.TraditionalKey.Mode;
+import com.xenoage.zong.core.music.slur.Slur;
+import com.xenoage.zong.core.music.slur.SlurType;
+import com.xenoage.zong.core.music.slur.SlurWaypoint;
 import com.xenoage.zong.core.music.time.TimeType;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.text.UnformattedText;
@@ -496,7 +502,64 @@ public abstract class MusicXMLTestSuite<T> {
 	public abstract void test_23f_Tuplets_DurationButNoBracket(T data,
 		Fraction[] expectedDurationsStaff1, Fraction[] expectedDurationsStaff2);
 	
-	//TODO: 24a-GraceNotes.xml (60 min) (partly supported) 
+	/**
+	 * Different kinds of grace notes: acciaccatura, appoggiatura; beamed grace notes;
+	 * grace notes with accidentals; different durations of the grace notes. 
+	 */
+	@Test public void test_24a_GraceNotes() {
+		T data = load("24a-GraceNotes.xml");
+		//[b]eamed chords [s]tart and [e]nd
+		Chord b1s, b1e, b2s, b2e;
+		Chord[] expectedChords = new Chord[] {
+			//measure 0
+			gr(fr(1, 16), false, pi('D', 0, 5)),
+			ch(fr(1, 4), pi('C', 0, 5)),
+			b1s = gr(fr(1, 16), false, pi('E', 0, 5)),
+			b1e = gr(fr(1, 16), false, pi('D', 0, 5)),
+			ch(fr(1, 4), pi('C', 0, 5)),
+			gr(fr(1, 16), false, pi('D', 0, 5)),
+			ch(fr(1, 4), pi('C', 0, 5)),
+			gr(fr(1, 8), false, pi('D', 0, 5)),
+			ch(fr(1, 4), pi('C', 0, 5)),
+			//measure 1
+			gr(fr(1, 16), true, pi('D', 0, 5)),
+			ch(fr(1, 4), pi('C', 0, 5)),
+			b2s = gr(fr(1, 16), false, pi('E', 0, 5)),
+			b2e = gr(fr(1, 16), false, pi('D', 0, 5)),
+			ch(fr(2, 4), pi('C', 0, 5)),
+			gr(fr(1, 16), true, pi('D', 0, 5)),
+			ch(fr(1, 8), pi('C', 0, 5)),
+			gr(fr(1, 16), true, pi('D', 0, 5)),
+			ch(fr(1, 8), pi('C', 0, 5)),
+			gr(fr(1, 16), false, pi('E', 0, 5)),
+			//measure 2
+			gr(fr(1, 16), false, pi('E', 0, 5)),
+			ch(fr(1, 4), pi('F', 0, 4), pi('C', 0, 5)),
+			gr(fr(1, 4), false, pi('D', 1, 5)),
+			ch(fr(1, 4), pi('C', 0, 5)),
+			gr(fr(1, 4), false, pi('D', -1, 5)),
+			gr(fr(1, 4), false, pi('A', -1, 4)),
+			ch(fr(1, 4), pi('C', 0, 5)),
+			ch(fr(1, 4), pi('C', 0, 5))
+		};
+		new BeamAdd(beamFromChords(alist(b1s, b1e))).execute();
+		new BeamAdd(beamFromChords(alist(b2s, b2e))).execute();
+		test_24a_GraceNotes(data, expectedChords);
+	}
+	
+	public abstract void test_24a_GraceNotes(T data, Chord[] expectedChords);
+	
+	/**
+	 * Sets the given chord to a grace chord.
+	 */
+	private Chord gr(Fraction graceDuration, boolean slash, Pitch... pitches) {
+		Grace grace = new Grace(slash, graceDuration);
+		ArrayList<Note> notes = alist();
+		for (Pitch pitch : pitches)
+			notes.add(new Note(pitch));
+		return new Chord(notes, grace);
+	}
+	
 	//TODO: 24b-ChordAsGraceNote.xml (30 min) 
 	//TODO: 24c-GraceNote-MeasureEnd.xml (30 min) 
 	//TODO: 24d-AfterGrace.xml (30 min) 
@@ -504,6 +567,21 @@ public abstract class MusicXMLTestSuite<T> {
 	//TODO: not supported yet: 24e-GraceNote-StaffChange.xml
 	
 	//TODO: 24f-GraceNote-Slur.xml (30 min) 
+	/* //[s]lur chords [s]tart and [e]nd
+	  Chord s1s, s1e;
+		Chord[] expectedChords = new Chord[] {
+			s1s = gr(fr(1, 16), true, pi('D', 0, 5)),
+			s1e = ch(fr(1, 4), pi('C', 0, 5)),
+		};
+		new SlurAdd(sl(s1s, s1e)).execute(); */
+	/**
+	 * Creates a slur for the given chords (to the first notes).
+	 */
+	private Slur sl(Chord start, Chord end) {
+		return new Slur(SlurType.Slur, new SlurWaypoint(start, 0, null),
+			new SlurWaypoint(end, 0, null), null);
+	}
+	
 	//TODO: 31a-Directions.xml (60 min) (partly supported) 
 	
 	//TODO: not supported yet: 31c-MetronomeMarks.xml

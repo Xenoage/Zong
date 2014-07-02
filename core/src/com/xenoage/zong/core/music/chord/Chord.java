@@ -14,7 +14,6 @@ import lombok.Setter;
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.NonEmpty;
 import com.xenoage.utils.annotations.NonNull;
-import com.xenoage.utils.collections.CollectionUtils;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.music.Voice;
@@ -52,7 +51,7 @@ public class Chord
 
 	/** The notes within this chord, sorted ascending (begin with lowest notated pitch). */
 	@Getter @Setter @NonEmpty private List<Note> notes;
-	/** The duration of this chord. */
+	/** The duration of this chord. For a grace chord, this is 0. */
 	@Getter @Setter @NonNull private Fraction duration;
 	/** The stem of this chord, or null if a default stem is used. */
 	@Getter @Setter @MaybeNull private Stem stem = null;

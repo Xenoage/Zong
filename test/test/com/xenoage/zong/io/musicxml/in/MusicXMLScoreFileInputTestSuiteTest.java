@@ -10,6 +10,7 @@ import static com.xenoage.zong.core.position.MP.atMeasure;
 import static com.xenoage.zong.core.position.MP.mp0;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -28,9 +29,11 @@ import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.music.Staff;
 import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.VoiceElement;
+import com.xenoage.zong.core.music.WaypointPosition;
 import com.xenoage.zong.core.music.annotation.Articulation;
 import com.xenoage.zong.core.music.annotation.ArticulationType;
 import com.xenoage.zong.core.music.annotation.Fermata;
+import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.clef.ClefSymbol;
 import com.xenoage.zong.core.music.clef.ClefType;
@@ -403,6 +406,42 @@ public class MusicXMLScoreFileInputTestSuiteTest
 		Fraction[] expectedDurationsStaff1, Fraction[] expectedDurationsStaff2) {
 		checkDurations(score.getStaff(0), expectedDurationsStaff1);
 		checkDurations(score.getStaff(1), expectedDurationsStaff2);
+	}
+
+	@Override public void test_24a_GraceNotes(Score score, Chord[] expectedChords) {
+		Staff staff = score.getStaff(0);
+		int iChord = 0;
+		Beam currentBeam = null;
+		for (int iM = 0; iM < staff.getMeasures().size(); iM++) {
+			Voice voice = staff.getMeasure(iM).getVoice(0);
+			for (VoiceElement e : voice.getElements()) {
+				//check duration, type and notes
+				Chord chord = (Chord) e;
+				Chord expectedChord = expectedChords[iChord];
+				assertEquals("chord " + iChord, expectedChord.getDuration(), chord.getDuration());
+				assertEquals("chord " + iChord, expectedChord.getGrace(), chord.getGrace());
+				assertEquals("chord " + iChord, expectedChord.getNotes(), chord.getNotes());
+				//beams between chord 2 and 3 and between 11 and 12
+				if (iChord == 2 || iChord == 11) {
+					assertNotNull("chord " + iChord + " unbeamed", expectedChord.getBeam());
+					assertEquals("chord " + iChord, WaypointPosition.Start,
+						expectedChord.getBeam().getWaypointPosition(expectedChord));
+					currentBeam = expectedChord.getBeam();
+				}
+				else if (iChord == 3 || iChord == 12) {
+					assertNotNull("chord " + iChord + " unbeamed", expectedChord.getBeam());
+					assertEquals("wrong beam", currentBeam, expectedChord.getBeam());
+					assertEquals("chord " + iChord, WaypointPosition.Stop,
+						expectedChord.getBeam().getWaypointPosition(expectedChord));
+					currentBeam = null;
+				}
+				else {
+					assertNull("chord " + iChord + " beamed", expectedChord.getBeam());
+				}
+				iChord++;
+			}
+		}
+		assertEquals("not all chords found", expectedChords.length, iChord);
 	}
 	
 }

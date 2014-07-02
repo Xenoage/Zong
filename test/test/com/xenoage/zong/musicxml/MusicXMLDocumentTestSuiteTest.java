@@ -327,5 +327,9 @@ public class MusicXMLDocumentTestSuiteTest
 		Fraction[] expectedDurationsStaff1, Fraction[] expectedDurationsStaff2) {
 		//successfull when it loads - more is tested in musicxml-in
 	}
+
+	@Override public void test_24a_GraceNotes(MusicXMLDocument data, Chord[] expectedChords) {
+		//successfull when it loads - more is tested in musicxml-in
+	}
 	
 }

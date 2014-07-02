@@ -149,7 +149,7 @@ public final class ChordReader {
 				Fraction graceDuration = fr(1, 8);
 				if (mxlFirstNote.getNoteType() != null)
 					graceDuration = mxlFirstNote.getNoteType().getDuration();
-				grace = new Grace(notNull(mxlFirstGraceNote.getSlash(), true), graceDuration);
+				grace = new Grace(notNull(mxlFirstGraceNote.getSlash(), false), graceDuration);
 				chord = new Chord(alist(new Note(pitch)), grace);
 			}
 			else {
