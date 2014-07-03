@@ -17,5 +17,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/converter"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/renderer"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/webserver"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/lombok"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
