@@ -273,18 +273,16 @@ public final class ChordReader {
 		MxlNote mxlNote, Chord chord, int staffIndexInPart) {
 		//only pitch is interesting for us, since we do not allow
 		//different durations for notes within a chord or other strange stuff
-		if (mxlNote.getContent().getNoteContentType() == MxlNoteContentType.Normal) {
-			MxlFullNoteContent mxlFNC = ((MxlNormalNote) mxlNote.getContent()).getFullNote().getContent();
-			if (mxlFNC.getFullNoteContentType() == MxlFullNoteContentType.Pitch) {
-				Pitch pitch = ((MxlPitch) mxlFNC).getPitch();
-				Note note = new Note(pitch);
-				chord.addNote(note);
-				//notations. we are only interested in the first element.
-				if (mxlNote.getNotations() != null) {
-					for (MxlNotations notations : mxlNote.getNotations()) {
-						readNotations(context, notations, chord,
-							chord.getNotes().indexOf(note), staffIndexInPart);
-					}
+		MxlFullNoteContent mxlFNC = mxlNote.getContent().getFullNote().getContent();
+		if (mxlFNC.getFullNoteContentType() == MxlFullNoteContentType.Pitch) {
+			Pitch pitch = ((MxlPitch) mxlFNC).getPitch();
+			Note note = new Note(pitch);
+			chord.addNote(note);
+			//notations. we are only interested in the first element.
+			if (mxlNote.getNotations() != null) {
+				for (MxlNotations notations : mxlNote.getNotations()) {
+					readNotations(context, notations, chord,
+						chord.getNotes().indexOf(note), staffIndexInPart);
 				}
 			}
 		}

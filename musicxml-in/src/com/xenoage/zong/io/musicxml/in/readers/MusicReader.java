@@ -210,9 +210,8 @@ public final class MusicReader {
 			switch (mxlMDC.getMusicDataContentType()) {
 				case Note: {
 					MxlNote mxlNote = ((MxlNote) mxlMDC);
-					//when it is a chord, ignore it, because we already read it
-					if (mxlNote.getContent().getNoteContentType() == MxlNoteContentType.Normal && 
-						((MxlNormalNote) mxlNote.getContent()).getFullNote().isChord()) {
+					//when it is a chord, ignore it, because we did already read it
+					if (mxlNote.getContent().getFullNote().isChord()) {
 						continue;
 					}
 					//instrument change?
@@ -235,11 +234,9 @@ public final class MusicReader {
 						boolean goOn = false;
 						if (mxlMDC2.getMusicDataContentType() == MxlMusicDataContentType.Note) {
 							MxlNote mxlNote2 = (MxlNote) mxlMDC2;
-							if (mxlNote2.getContent().getNoteContentType() == MxlNoteContentType.Normal) {
-								if (((MxlNormalNote) mxlNote2.getContent()).getFullNote().isChord()) {
-									mxlNotes.add(mxlNote2);
-									goOn = true;
-								}
+							if (mxlNote2.getContent().getFullNote().isChord()) {
+								mxlNotes.add(mxlNote2);
+								goOn = true;
 							}
 						}
 						else if (mxlMDC2.getMusicDataContentType() == MxlMusicDataContentType.Direction) {
