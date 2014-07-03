@@ -7,11 +7,11 @@ import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.music.Pitch.pi;
 import static com.xenoage.zong.core.music.beam.Beam.beamFromChords;
 import static com.xenoage.zong.core.position.MP.mp0;
-import static com.xenoage.zong.musicxml.testsuite.Utils.ch;
-import static com.xenoage.zong.musicxml.testsuite.Utils.gr;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import lombok.Getter;
 
 import org.junit.Test;
 
@@ -25,6 +25,8 @@ import com.xenoage.zong.core.music.annotation.Articulation;
 import com.xenoage.zong.core.music.annotation.ArticulationType;
 import com.xenoage.zong.core.music.annotation.Fermata;
 import com.xenoage.zong.core.music.chord.Chord;
+import com.xenoage.zong.core.music.chord.Grace;
+import com.xenoage.zong.core.music.chord.Note;
 import com.xenoage.zong.core.music.direction.Direction;
 import com.xenoage.zong.core.music.direction.Dynamics;
 import com.xenoage.zong.core.music.direction.DynamicsType;
@@ -45,7 +47,8 @@ import com.xenoage.zong.core.text.UnformattedText;
  * Unofficial MusicXML test suite</a>, published under the GPL license.
  * 
  * For specific projects (core, musicxml-in, layout, ...), subclasses of this
- * class can be created.
+ * class can be created. Tests can be overwritten, but if not, just the loading of
+ * the file is checked.
  * 
  * @param <T> musicxml-in tests may test a {@link MusicXMLDocument}, core tests
  *            may test a {@link Score}, and so on.
@@ -56,19 +59,41 @@ public abstract class MusicXMLTestSuite<T> {
 
 	public final String dir = "data/test/scores/MusicXML-TestSuite-0.1/";
 
+	/**
+	 * The filename of the current test.
+	 */
+	@Getter private String file;
+	
+	/**
+	 * The loaded data of the current test.
+	 */
+	@Getter private T data;
 
 	/**
 	 * Loads the given file or fails in JUnit.
 	 */
-	public abstract T load(String file);
+	public abstract T loadData(String file);
+	
+	/**
+	 * Prepares the given test.
+	 * Call this method at the beginning of each test to
+	 * load the required data.
+	 */
+	private void loadTest(String file) {
+		this.file = file;
+		this.data = loadData(file);
+	}
 
 	/**
 	 * All pitches from G to c”” in ascending steps; First without accidentals,
 	 * then with a sharp and then with a flat accidental.
 	 * Double alterations and cautionary accidentals are tested at the end. 
 	 */
-	@Test public void test_01a_Pitches_Pitches() {
-		T data = load("01a-Pitches-Pitches.xml");
+	@Test public void test_01a() {
+		loadTest("01a-Pitches-Pitches.xml");
+	}
+
+	public Pitch[] get_01a_Pitches() {
 		Pitch[] expectedPitches = new Pitch[24 * 4 + 6];
 		int iPitch = 0;
 		for (int alter : new int[] { 0, 1, -1 }) {
@@ -90,16 +115,17 @@ public abstract class MusicXMLTestSuite<T> {
 		expectedPitches[iPitch++] = pi(0, 1, 5);
 		expectedPitches[iPitch++] = pi(0, 1, 5);
 		expectedPitches[iPitch++] = pi(0, 1, 5);
-		test_01a_Pitches_Pitches(data, expectedPitches);
+		return expectedPitches;
 	}
-
-	public abstract void test_01a_Pitches_Pitches(T data, Pitch[] expectedPitches);
 
 	/**
 	 * All pitch intervals in ascending jump size. 
 	 */
-	@Test public void test_01b_Pitches_Intervals() {
-		T data = load("01b-Pitches-Intervals.xml");
+	@Test public void test_01b() {
+		loadTest("01b-Pitches-Intervals.xml");
+	}
+	
+	public Pitch[] get_01b_Pitches() {
 		Pitch[] expectedPitches = new Pitch[41 * 2];
 		Pitch pi1 = pi(0, 0, 5);
 		Pitch pi2 = pi(0, 0, 5);
@@ -109,7 +135,7 @@ public abstract class MusicXMLTestSuite<T> {
 			pi1 = incHalftoneWithEnharmonicChange(pi1);
 			pi2 = decHalftoneWithEnharmonicChange(pi2);
 		}
-		test_01b_Pitches_Intervals(data, expectedPitches);
+		return expectedPitches;
 	}
 
 	private Pitch incHalftoneWithEnharmonicChange(Pitch p) {
@@ -150,19 +176,14 @@ public abstract class MusicXMLTestSuite<T> {
 		return pi(step, alter, octave);
 	}
 
-	public abstract void test_01b_Pitches_Intervals(T data, Pitch[] expectedPitches);
-
 	/**
 	 * The {@literal <voice>} element of notes is optional in MusicXML (although Dolet always writes it out).
 	 * Here, there is one note with lyrics, but without a voice assigned.
 	 * It should still be correctly converted.  
 	 */
-	@Test public void test_01c_Pitches_NoVoiceElement() {
-		T data = load("01c-Pitches-NoVoiceElement.xml");
-		test_01c_Pitches_NoVoiceElement(data);
+	@Test public void test_01c() {
+		loadTest("01c-Pitches-NoVoiceElement.xml");
 	}
-
-	public abstract void test_01c_Pitches_NoVoiceElement(T data);
 
 	//TODO: not supported yet: 01d-Pitches-Microtones.xml
 	//TODO: not supported yet: 01e-Pitches-ParenthesizedAccidentals.xml
@@ -171,20 +192,18 @@ public abstract class MusicXMLTestSuite<T> {
 	/**
 	 * All pitch intervals in ascending jump size. 
 	 */
-	@Test public void test_02a_Rests_Durations() {
+	@Test public void test_02a() {
 		//TODO: <multiple-rest> not yet supported
-		T data = load("02a-Rests-Durations.xml");
-		Fraction[] expectedDurations = new Fraction[] {
-			//undotted
-			fr(1), fr(1), fr(1), fr(1, 2), fr(1, 4), fr(1, 8), fr(1, 16), fr(1, 32), fr(1, 64),
-			fr(1, 128), fr(1, 128),
-			//dotted
-			fr(3, 4), fr(1, 4), fr(1, 4), fr(3, 8), fr(3, 16), fr(3, 32), fr(3, 64), fr(3, 128),
-			fr(3, 256), fr(3, 256) };
-		test_02a_Rests_Durations(data, expectedDurations);
+		loadTest("02a-Rests-Durations.xml");
 	}
 	
-	public abstract void test_02a_Rests_Durations(T data, Fraction[] expectedDurations); 
+	@Getter private Fraction[] _02a_Durations = {
+		//undotted
+		fr(1), fr(1), fr(1), fr(1, 2), fr(1, 4), fr(1, 8), fr(1, 16), fr(1, 32), fr(1, 64),
+		fr(1, 128), fr(1, 128),
+		//dotted
+		fr(3, 4), fr(1, 4), fr(1, 4), fr(3, 8), fr(3, 16), fr(3, 32), fr(3, 64), fr(3, 128),
+		fr(3, 256), fr(3, 256) };
 
 	//TODO: not supported yet: 02b-Rests-PitchedRests.xml
 	//TODO: not supported yet: 02c-Rests-MultiMeasureRests.xml
@@ -194,50 +213,43 @@ public abstract class MusicXMLTestSuite<T> {
 	 * All note durations, from long, brevis, whole until 128th;
 	 * First with their plain values, then dotted and finally doubly-dotted. 
 	 */
-	@Test public void test_03a_Rhythm_Durations() {
+	@Test public void test_03a() {
 		//TODO: <multiple-rest> not yet supported
-		T data = load("03a-Rhythm-Durations.xml");
-		Fraction[] expectedDurations = new Fraction[] {
-			//undotted
-			fr(4), fr(2), fr(1), fr(1, 2), fr(1, 4), fr(1, 8), fr(1, 16), fr(1, 32), fr(1, 64),
-			fr(1, 128),
-			fr(1, 128),
-			//single dotted
-			fr(6), fr(3), fr(3, 2), fr(3, 4), fr(3, 8), fr(3, 16), fr(3, 32), fr(3, 64), fr(3, 128),
-			fr(3, 256), fr(3, 256),
-			//double dotted
-			fr(7), fr(7, 2), fr(7, 4), fr(7, 8), fr(7, 16), fr(7, 32), fr(7, 64), fr(7, 128), fr(7, 256),
-			fr(7, 256) };
-		test_03a_Rhythm_Durations(data, expectedDurations);
+		loadTest("03a-Rhythm-Durations.xml");
 	}
 	
-	public abstract void test_03a_Rhythm_Durations(T data, Fraction[] expectedDurations);
+	@Getter private Fraction[] _03a_Durations = {
+		//undotted
+		fr(4), fr(2), fr(1), fr(1, 2), fr(1, 4), fr(1, 8), fr(1, 16), fr(1, 32), fr(1, 64),
+		fr(1, 128),
+		fr(1, 128),
+		//single dotted
+		fr(6), fr(3), fr(3, 2), fr(3, 4), fr(3, 8), fr(3, 16), fr(3, 32), fr(3, 64), fr(3, 128),
+		fr(3, 256), fr(3, 256),
+		//double dotted
+		fr(7), fr(7, 2), fr(7, 4), fr(7, 8), fr(7, 16), fr(7, 32), fr(7, 64), fr(7, 128), fr(7, 256),
+		fr(7, 256) };
 
 	/**
 	 * Two voices with a backup, that does not jump to the beginning for the measure for voice 2,
 	 * but somewhere in the middle. Voice 2 thus won’t have any notes or rests for the first beat
 	 * of the measures. 
 	 */
-	@Test public void test_03b_Rhythm_Backup() {
-		T data = load("03b-Rhythm-Backup.xml");
-		test_03b_Rhythm_Backup(data);
+	@Test public void test_03b() {
+		loadTest("03b-Rhythm-Backup.xml");
 	}
-	
-	public abstract void test_03b_Rhythm_Backup(T data);
 
 	/**
 	 * Although uncommon, the divisions of a quarter note can change somewhere in the middle of
 	 * a MusicXML file. Here, the first half measure uses a division of 1, which then changes
 	 * to 8 in the middle of the first measure and to 38 in the middle of the second measure. 
 	 */
-	@Test public void test_03c_Rhythm_DivisionChange() {
-		T data = load("03c-Rhythm-DivisionChange.xml");
-		Fraction[] expectedDurations = new Fraction[] {
-			fr(1, 4), fr(1, 4), fr(1, 4), fr(1, 4), fr(1, 2), fr(1, 2) };
-		test_03c_Rhythm_DivisionChange(data, expectedDurations);
+	@Test public void test_03c() {
+		loadTest("03c-Rhythm-DivisionChange.xml");
 	}
-
-	public abstract void test_03c_Rhythm_DivisionChange(T data, Fraction[] expectedDurations);
+	
+	@Getter private Fraction[] _03c_Durations = new Fraction[] {
+		fr(1, 4), fr(1, 4), fr(1, 4), fr(1, 4), fr(1, 2), fr(1, 2) };
 
 	//TODO: not supported yet: 03d-Rhythm-DottedDurations-Factors.xml
 
@@ -245,26 +257,21 @@ public abstract class MusicXMLTestSuite<T> {
 	 * Various time signatures: 2/2 (alla breve), 4/4 (C), 2/2, 3/2, 2/4,
 	 * 3/4, 4/4, 5/4, 3/8, 6/8, 12/8.
 	 */
-	@Test public void test_11a_TimeSignatures() {
-		T data = load("11a-TimeSignatures.xml");
-		TimeType[] expectedTimes = new TimeType[] {
-			TimeType.timeAllaBreve, TimeType.timeCommon, TimeType.time_2_2,
-			TimeType.timeType(3, 2), TimeType.time_2_4, TimeType.time_3_4, TimeType.time_4_4,
-			TimeType.timeType(5, 4), TimeType.timeType(3, 8), TimeType.time_6_8, TimeType.timeType(12, 8) };
-		test_11a_TimeSignatures(data, expectedTimes);
+	@Test public void test_11a() {
+		loadTest("11a-TimeSignatures.xml");
 	}
 	
-	public abstract void test_11a_TimeSignatures(T data, TimeType[] expectedTimes);
+	@Getter private TimeType[] _11a_Times = {
+		TimeType.timeAllaBreve, TimeType.timeCommon, TimeType.time_2_2,
+		TimeType.timeType(3, 2), TimeType.time_2_4, TimeType.time_3_4, TimeType.time_4_4,
+		TimeType.timeType(5, 4), TimeType.timeType(3, 8), TimeType.time_6_8, TimeType.timeType(12, 8) };
 
 	/**
 	 * A score without a time signature (but with a key and clefs).
 	 */
-	@Test public void test_11b_TimeSignatures_NoTime() {
-		T data = load("11b-TimeSignatures-NoTime.xml");
-		test_11b_TimeSignatures_NoTime(data);
+	@Test public void test_11b() {
+		loadTest("11b-TimeSignatures-NoTime.xml");
 	}
-	
-	public abstract void test_11b_TimeSignatures_NoTime(T data);
 
 	//TODO: not supported yet: 11c-TimeSignatures-CompoundSimple.xml
 	//TODO: not supported yet: 11d-TimeSignatures-CompoundMultiple.xml
@@ -275,12 +282,9 @@ public abstract class MusicXMLTestSuite<T> {
 	/**
 	 * Senza-misura time signature.
 	 */
-	@Test public void test_11h_TimeSignatures_SenzaMisura() {
-		T data = load("11h-TimeSignatures-SenzaMisura.xml");
-		test_11h_TimeSignatures_SenzaMisura(data);
+	@Test public void test_11h() {
+		loadTest("11h-TimeSignatures-SenzaMisura.xml");
 	}
-	
-	public abstract void test_11h_TimeSignatures_SenzaMisura(T data);
 
 	/**
 	 * Various clefs: G, C, F, percussion, TAB and none; some are also possible
@@ -289,54 +293,50 @@ public abstract class MusicXMLTestSuite<T> {
 	 * (measure 17 has the "none" clef), only measure 18 has the same treble clef
 	 * as measure 1. 
 	 */
-	@Test public void test_12a_Clefs() {
-		T data = load("12a-Clefs.xml");
-		test_12a_Clefs(data);
+	@Test public void test_12a() {
+		loadTest("12a-Clefs.xml");
 	}
-	
-	public abstract void test_12a_Clefs(T data);
 
 	/**
 	 * A score without any key or clef defined. The default (4/4 in treble clef) should be used. 
 	 */
-	@Test public void test_12b_Clefs_NoKeyOrClef() {
-		T data = load("12b-Clefs-NoKeyOrClef.xml");
-		test_12b_Clefs_NoKeyOrClef(data);
+	@Test public void test_12b() {
+		loadTest("12b-Clefs-NoKeyOrClef.xml");
 	}
-	
-	public abstract void test_12b_Clefs_NoKeyOrClef(T data);
 
 	/**
 	 * Various key signature: from 11 flats to 11 sharps (each one first one measure in major,
 	 * then one measure in minor).
 	 */
-	@Test public void test_13a_KeySignatures() {
+	@Test public void test_13a() {
 		//TODO: Zong! supports only -7 to +7
-		T data = load("13a-KeySignatures.xml");
+		loadTest("13a-KeySignatures.xml");
+	}
+	
+	public TraditionalKey[] get_13a_Keys() {
 		TraditionalKey[] expectedKeys = new TraditionalKey[15 * 2];
 		for (int fifths = -7; fifths <= 7; fifths++) {
 			expectedKeys[(fifths + 7) * 2 + 0] = new TraditionalKey(fifths, Mode.Major);
 			expectedKeys[(fifths + 7) * 2 + 1] = new TraditionalKey(fifths, Mode.Minor);
 		}
-		test_13a_KeySignatures(data, expectedKeys);
+		return expectedKeys;
 	}
-	
-	protected abstract void test_13a_KeySignatures(T data, TraditionalKey[] expectedKeys);
 
 	/**
 	 * All different modes: major, minor, ionian, dorian, phrygian, lydian, mixolydian,
 	 * aeolian, and locrian; All modes are given with 2 sharps.
 	 */
-	@Test public void test_13b_KeySignatures_ChurchModes() {
-		T data = load("13b-KeySignatures-ChurchModes.xml");
+	@Test public void test_13b() {
+		loadTest("13b-KeySignatures-ChurchModes.xml");
+	}
+	
+	public TraditionalKey[] get_13b_Keys() {
 		TraditionalKey[] expectedKeys = new TraditionalKey[9];
 		for (int i : range(expectedKeys)) {
 			expectedKeys[i] = new TraditionalKey(2, Mode.values()[i]);
 		}
-		test_13b_KeySignatures_ChurchModes(data, expectedKeys);
+		return expectedKeys;
 	}
-	
-	protected abstract void test_13b_KeySignatures_ChurchModes(T data, TraditionalKey[] expectedKeys);
 
 	//TODO: not supported yet: 13c-KeySignatures-NonTraditional.xml
 	//TODO: not supported yet: 13d-KeySignatures-Microtones.xml
@@ -345,52 +345,56 @@ public abstract class MusicXMLTestSuite<T> {
 	/**
 	 * One simple chord consisting of two notes.
 	 */
-	@Test public void test_21a_Chord_Basic() {
-		T data = load("21a-Chord-Basic.xml");
-		Chord expectedChord = ch(fr(1, 4), pi('F', 0, 4), pi('A', 0, 4));
-		test_21a_Chord_Basic(data, expectedChord);
+	@Test public void test_21a() {
+		loadTest("21a-Chord-Basic.xml");
 	}
 	
-	protected abstract void test_21a_Chord_Basic(T data, Chord expectedChord);
+	@Getter private Chord _21a_Chord = ch(fr(1, 4), pi('F', 0, 4), pi('A', 0, 4));
+	
+	private Chord ch(Fraction duration, Pitch... pitches) {
+		ArrayList<Note> notes = alist();
+		for (Pitch pitch : pitches)
+			notes.add(new Note(pitch));
+		return new Chord(notes, duration);
+	}
 	
 	/**
 	 * Some subsequent (identical) two-note chords.
 	 */
-	@Test public void test_21b_Chords_TwoNotes() {
-		T data = load("21b-Chords-TwoNotes.xml");
-		Chord expectedChord = ch(fr(1, 4), pi('F', 0, 4), pi('A', 0, 4));
-		test_21b_Chords_TwoNotes(data, 8, expectedChord);
+	@Test public void test_21b() {
+		loadTest("21b-Chords-TwoNotes.xml");
 	}
 	
-	protected abstract void test_21b_Chords_TwoNotes(T data, int expectedChordsCount, Chord expectedChord);
+	@Getter private int _21b_ChordsCount = 8;
+	@Getter private Chord _21b_Chord = ch(fr(1, 4), pi('F', 0, 4), pi('A', 0, 4));
 
 	/**
 	 * Some three-note chords, with various durations.
 	 */
-	@Test public void test_21c_Chords_ThreeNotesDuration() {
-		T data = load("21c-Chords-ThreeNotesDuration.xml");
-		Chord[] expectedChords = new Chord[] {
-			ch(fr(3, 8), pi('F', 0, 4), pi('A', 0, 4), pi('C', 0, 5)),
-			ch(fr(1, 8), pi('A', 0, 4), pi('G', 0, 5)),
-			ch(fr(1, 4), pi('F', 0, 4), pi('A', 0, 4), pi('C', 0, 5)),
-			ch(fr(1, 4), pi('F', 0, 4), pi('A', 0, 4), pi('C', 0, 5)),
-			ch(fr(1, 4), pi('F', 0, 4), pi('A', 0, 4), pi('E', 0, 5)),
-			ch(fr(1, 4), pi('F', 0, 4), pi('A', 0, 4), pi('F', 0, 5)),
-			ch(fr(1, 2), pi('F', 0, 4), pi('A', 0, 4), pi('D', 0, 5))
-		};
-		test_21c_Chords_ThreeNotesDuration(data, expectedChords);
+	@Test public void test_21c() {
+		loadTest("21c-Chords-ThreeNotesDuration.xml");
 	}
 	
-	public abstract void test_21c_Chords_ThreeNotesDuration(T data, Chord[] expectedChords);
+	@Getter private Chord[] _21c_Chords = {
+		ch(fr(3, 8), pi('F', 0, 4), pi('A', 0, 4), pi('C', 0, 5)),
+		ch(fr(1, 8), pi('A', 0, 4), pi('G', 0, 5)),
+		ch(fr(1, 4), pi('F', 0, 4), pi('A', 0, 4), pi('C', 0, 5)),
+		ch(fr(1, 4), pi('F', 0, 4), pi('A', 0, 4), pi('C', 0, 5)),
+		ch(fr(1, 4), pi('F', 0, 4), pi('A', 0, 4), pi('E', 0, 5)),
+		ch(fr(1, 4), pi('F', 0, 4), pi('A', 0, 4), pi('F', 0, 5)),
+		ch(fr(1, 2), pi('F', 0, 4), pi('A', 0, 4), pi('D', 0, 5))
+	};
 	
 	/**
 	 * Chords in the second measure, after several ornaments in the first measure
 	 * and a p at the beginning of the second measure. 
 	 */
-	@Test public void test_21d_Chords_SchubertStabatMater() {
-		T data = load("21d-Chords-SchubertStabatMater.xml");
-		//chords
-		Chord[] expectedChords = new Chord[] {
+	@Test public void test_21d() {
+		loadTest("21d-Chords-SchubertStabatMater.xml");
+	}
+	
+	public Chord[] get_21d_Chords() {
+		Chord[] expectedChords = {
 			ch(fr(1, 1), pi('F', 0, 4), pi('A', 0, 4), pi('C', 0, 5)),
 			ch(fr(3, 8), pi('F', 0, 4), pi('A', -1, 4)),
 			ch(fr(1, 8), pi('F', 0, 4), pi('A', -1, 4)),
@@ -399,7 +403,10 @@ public abstract class MusicXMLTestSuite<T> {
 		};
 		addAnnotation(expectedChords[0], new Articulation(ArticulationType.Accent, Placement.Below));
 		addAnnotation(expectedChords[0], new Fermata(Placement.Above));
-		//directions
+		return expectedChords;
+	}
+	
+	public List<Tuple2<MP, ? extends Direction>> get_21d_Directions() {
 		List<Tuple2<MP, ? extends Direction>> expectedDirections = alist();
 		Words largo = new Words(new UnformattedText("Largo"));
 		largo.setPositioning(Placement.Above);
@@ -410,8 +417,7 @@ public abstract class MusicXMLTestSuite<T> {
 		Dynamics p = new Dynamics(DynamicsType.p);
 		fp.setPositioning(Placement.Below);
 		expectedDirections.add(t(mp0.withMeasure(1), p));
-		//test
-		test_21d_Chords_SchubertStabatMater(data, expectedChords, expectedDirections);
+		return expectedDirections;
 	}
 	
 	private void addAnnotation(Chord chord, Annotation a) {
@@ -420,30 +426,21 @@ public abstract class MusicXMLTestSuite<T> {
 		chord.getAnnotations().add(a);
 	}
 	
-	public abstract void test_21d_Chords_SchubertStabatMater(T data, Chord[] expectedChords,
-		List<Tuple2<MP, ? extends Direction>> expectedDirections);
-	
 	/**
 	 * Check for proper chord detection after a pickup measure (i.e. the first beat of the measure is
 	 * not aligned with multiples of the time signature)! 
 	 */
-	@Test public void test_21e_Chords_PickupMeasures() {
-		T data = load("21e-Chords-PickupMeasures.xml");
-		test_21e_Chords_PickupMeasures(data);
+	@Test public void test_21e() {
+		loadTest("21e-Chords-PickupMeasures.xml");
 	}
-	
-	public abstract void test_21e_Chords_PickupMeasures(T data);
 	
 	/**
 	 * Between the individual notes of a chord there can be direction or harmony elements,
 	 * which should be properly assigned to the chord (or the position of the chord). 
 	 */
-	@Test public void test_21f_Chord_ElementInBetween() {
-		T data = load("21f-Chord-ElementInBetween.xml");
-		test_21f_Chord_ElementInBetween(data);
+	@Test public void test_21f() {
+		loadTest("21f-Chord-ElementInBetween.xml");
 	}
-	
-	public abstract void test_21f_Chord_ElementInBetween(T data);
 	
 	//TODO: not supported yet: 22a-Noteheads.xml
 	//TODO: not supported yet: 22b-Staff-Notestyles.xml
@@ -454,18 +451,16 @@ public abstract class MusicXMLTestSuite<T> {
 	 * Some tuplets (3:2, 3:2, 3:2, 4:2, 4:1, 7:3, 6:2) with the default tuplet bracket displaying the
 	 * number of actual notes played. The second tuplet does not have a number attribute set. 
 	 */
-	@Test public void test_23a_Tuplets() {
-		T data = load("23a-Tuplets.xml");
-		Fraction[] expectedDurations = new Fraction[] {
-			fr(1, 6), fr(1, 6), fr(1, 6), fr(1, 6), fr(1, 6), fr(1, 6), fr(1, 6), fr(1, 6), fr(1, 6),
-			fr(1, 8), fr(1, 8), fr(1, 8), fr(1, 8), fr(1, 16), fr(1, 16), fr(1, 16), fr(1, 16),
-			fr(3, 28), fr(3, 28), fr(3, 28), fr(3, 28), fr(3, 28), fr(3, 28), fr(3, 28),
-			fr(1, 12), fr(1, 12), fr(1, 12), fr(1, 12), fr(1, 12), fr(1, 12)
-		};
-		test_23a_Tuplets(data, expectedDurations);
+	@Test public void test_23a() {
+		loadTest("23a-Tuplets.xml");
 	}
 	
-	public abstract void test_23a_Tuplets(T data, Fraction[] expectedDurations);
+	@Getter private Fraction[] _23a_Durations = {
+		fr(1, 6), fr(1, 6), fr(1, 6), fr(1, 6), fr(1, 6), fr(1, 6), fr(1, 6), fr(1, 6), fr(1, 6),
+		fr(1, 8), fr(1, 8), fr(1, 8), fr(1, 8), fr(1, 16), fr(1, 16), fr(1, 16), fr(1, 16),
+		fr(3, 28), fr(3, 28), fr(3, 28), fr(3, 28), fr(3, 28), fr(3, 28), fr(3, 28),
+		fr(1, 12), fr(1, 12), fr(1, 12), fr(1, 12), fr(1, 12), fr(1, 12)
+	};
 	
 	//TODO: not yet supported: 23b-Tuplets-Styles.xml
 	//TODO: not yet supported: 23c-Tuplet-Display-NonStandard.xml 
@@ -478,29 +473,31 @@ public abstract class MusicXMLTestSuite<T> {
 	 * notes in the second staff should be scaled properly in comparison to staff 1,
 	 * but no visual indication about the tuplets is given. 
 	 */
-	@Test public void test_23f_Tuplets_DurationButNoBracket() {
-		T data = load("23f-Tuplets-DurationButNoBracket.xml");
-		Fraction[] expectedDurationsStaff1 = new Fraction[] {
+	@Test public void test_23f() {
+		loadTest("23f-Tuplets-DurationButNoBracket.xml");
+		//TODO: add layout test for this case. notes must be properly aligned.
+	}
+	
+	@Getter private Fraction[][] _23f_Durations = {
+		{ //staff 0
 			fr(1, 4), fr(1, 4), fr(1, 6), fr(1, 6), fr(1, 6)
-		};
-		Fraction[] expectedDurationsStaff2 = new Fraction[] {
+		},
+		{ //staff 1
 			fr(1, 8), fr(1, 8), fr(1, 12), fr(1, 12), fr(1, 12),
 			fr(1, 16), fr(1, 16), fr(1, 16), fr(1, 16),
 			fr(1, 24), fr(1, 24), fr(1, 24), fr(1, 24), fr(1, 24), fr(1, 24)
-		};
-		test_23f_Tuplets_DurationButNoBracket(data, expectedDurationsStaff1, expectedDurationsStaff2);
-	}
-	
-	//TODO: add layout test for this case. notes must be properly aligned.
-	public abstract void test_23f_Tuplets_DurationButNoBracket(T data,
-		Fraction[] expectedDurationsStaff1, Fraction[] expectedDurationsStaff2);
+		}
+	};
 	
 	/**
 	 * Different kinds of grace notes: acciaccatura, appoggiatura; beamed grace notes;
 	 * grace notes with accidentals; different durations of the grace notes. 
 	 */
-	@Test public void test_24a_GraceNotes() {
-		T data = load("24a-GraceNotes.xml");
+	@Test public void test_24a() {
+		loadTest("24a-GraceNotes.xml");
+	}
+	
+	public Chord[] get_24a_Chords() {
 		//[b]eamed chords [s]tart and [e]nd
 		Chord b1s, b1e, b2s, b2e;
 		Chord[] expectedChords = new Chord[] {
@@ -537,9 +534,151 @@ public abstract class MusicXMLTestSuite<T> {
 		};
 		new BeamAdd(beamFromChords(alist(b1s, b1e))).execute();
 		new BeamAdd(beamFromChords(alist(b2s, b2e))).execute();
-		test_24a_GraceNotes(data, expectedChords);
+		return expectedChords;
 	}
 	
-	public abstract void test_24a_GraceNotes(T data, Chord[] expectedChords);
+	/**
+	 * Sets the given chord to a grace chord.
+	 */
+	private Chord gr(Fraction graceDuration, boolean slash, Pitch... pitches) {
+		Grace grace = new Grace(slash, graceDuration);
+		ArrayList<Note> notes = alist();
+		for (Pitch pitch : pitches)
+			notes.add(new Note(pitch));
+		return new Chord(notes, grace);
+	}
+	
+	/**
+	 * Chords as grace notes.
+	 */
+	@Test public void test_24b() {
+		loadTest("24b-ChordAsGraceNote.xml");
+	}
+	
+	public Chord[] get_24b_Chords() {
+		return new Chord[] {
+			ch(fr(1, 4), pi('C', 0, 5)),
+			gr(fr(1, 8), true, pi('D', 0, 5), pi('F', 0, 5)),
+			ch(fr(1, 4), pi('C', 0, 5)),
+			gr(fr(1, 8), true, pi('B', 0, 4), pi('D', 0, 5)),
+			ch(fr(1, 4), pi('A', 0, 4), pi('C', 0, 5))};
+	}
+	
+	//TODO: 24b-ChordAsGraceNote.xml (30 min) 
+	//TODO: 24c-GraceNote-MeasureEnd.xml (30 min) 
+	//TODO: 24d-AfterGrace.xml (30 min) 
+	
+	//TODO: not supported yet: 24e-GraceNote-StaffChange.xml
+	
+	//TODO: 24f-GraceNote-Slur.xml (30 min) 
+	/* //[s]lur chords [s]tart and [e]nd
+	  Chord s1s, s1e;
+		Chord[] expectedChords = new Chord[] {
+			s1s = gr(fr(1, 16), true, pi('D', 0, 5)),
+			s1e = ch(fr(1, 4), pi('C', 0, 5)),
+		};
+		new SlurAdd(sl(s1s, s1e)).execute(); */
+	/**
+	 * Creates a slur for the given chords (to the first notes).
+	 */
+	private Slur sl(Chord start, Chord end) {
+		return new Slur(SlurType.Slur, new SlurWaypoint(start, 0, null),
+			new SlurWaypoint(end, 0, null), null);
+	}
+	
+	//TODO: 31a-Directions.xml (60 min) (partly supported) 
+	
+	//TODO: not supported yet: 31c-MetronomeMarks.xml
+	
+	//TODO: 32a-Notations.xml (60 min) (partly supported) 
+	//TODO: 32b-Articulations-Texts.xml (30 min) (partly supported) 
+	//TODO: 32c-MultipleNotationChildren.xml (30 min) 
+	
+	//TODO: not supported yet: 32d-Arpeggio.xml
+	//TODO: not supported yet: 33a-Spanners.xml
+	
+	//TODO: 33b-Spanners-Tie.xml (15 min) 
+	//TODO: 33c-Spanners-Slurs.xml (30 min)
+	
+	//TODO: not supported yet: 33d-Spanners-OctaveShifts.xml
+	//TODO: not supported yet: 33e-Spanners-OctaveShifts-InvalidSize.xml
+	//TODO: not supported yet: 33f-Trill-EndingOnGraceNote.xml
+	
+	//TODO: 33g-Slur-ChordedNotes.xml (30 min) 
+	
+	//TODO: not supported yet: 33h-Spanners-Glissando.xml
+	
+	//TODO: 33i-Ties-NotEnded.xml (45 min) 
+	//TODO: 41a-MultiParts-Partorder.xml (30 min) 
+	//TODO: 41b-MultiParts-MoreThan10.xml (15 min) 
+	//TODO: 41c-StaffGroups.xml (60 min) 
+	//TODO: 41d-StaffGroups-Nested.xml (15 min) 
+	//TODO: 41e-StaffGroups-InstrumentNames-Linebroken.xml (30 min) 
+	//TODO: 41f-StaffGroups-Overlapping.xml (30 min) 
+	//TODO: 41g-PartNoId.xml (15 min) 
+	//TODO: 41h-TooManyParts.xml (15 min) 
+	//TODO: 41i-PartNameDisplay-Override.xml (30 min) 
+	//TODO: 42a-MultiVoice-TwoVoicesOnStaff-Lyrics.xml (60 min) 
+	//TODO: 42b-MultiVoice-MidMeasureClefChange.xml (60 min) 
+	//TODO: 43a-PianoStaff.xml (15 min) 
+	
+	//TODO: not supported yet: 43b-MultiStaff-DifferentKeys.xml
+	//TODO: not supported yet: 43c-MultiStaff-DifferentKeysAfterBackup.xml
+	
+	//TODO: 43d-MultiStaff-StaffChange.xml (60 min) 
+	//TODO: 43e-Multistaff-ClefDynamics.xml (60 min) 
+	//TODO: 45a-SimpleRepeat.xml (30 min) 
+	//TODO: 45b-RepeatWithAlternatives.xml (30 min) 
+	//TODO: 45c-RepeatMultipleTimes.xml (30 min) 
+	//TODO: 45d-Repeats-Nested-Alternatives.xml (30 min) 
+	//TODO: 45e-Repeats-Nested-Alternatives.xml (45 min) 
+	//TODO: 45f-Repeats-InvalidEndings.xml (30 min) 
+	//TODO: 45g-Repeats-NotEnded.xml (15 min) 
+	//TODO: 46a-Barlines.xml (30 min) 
+	//TODO: 46b-MidmeasureBarline.xml (30 min) 
+	//TODO: 46c-Midmeasure-Clef.xml (15 min) 
+	//TODO: 46d-PickupMeasure-ImplicitMeasures.xml (15 min) 
+	//TODO: 46e-PickupMeasure-SecondVoiceStartsLater.xml (15 min) 
+	//TODO: 46f-IncompleteMeasures.xml (15 min)
+	
+	//TODO: not supported yet: 46g-PickupMeasure-Chordnames-FiguredBass.xml
+	
+	//TODO: 51b-Header-Quotes.xml (15 min) 
+	//TODO: 51c-MultipleRights.xml (15 min) 
+	//TODO: 51d-EmptyTitle.xml (15 min) 
+	//TODO: 52a-PageLayout.xml (30 min) 
+	//TODO: 52b-Breaks.xml (15 min) 
+	//TODO: 61a-Lyrics.xml (30 min) 
+	//TODO: 61b-MultipleLyrics.xml (30 min)
+	//TODO: 61c-Lyrics-Pianostaff.xml (30 min) 
+	//TODO: 61d-Lyrics-Melisma.xml (30 min) 
+	//TODO: 61e-Lyrics-Chords.xml (15 min) 
+	//TODO: 61f-Lyrics-GracedNotes.xml (30 min) 
+	//TODO: 61g-Lyrics-NameNumber.xml (30 min) 
+	//TODO: 61h-Lyrics-BeamsMelismata.xml (30 min) 
+	//TODO: 61i-Lyrics-Chords.xml (15 min) 
+	//TODO: 61j-Lyrics-Elisions.xml (30 min) 
+	//TODO: 61k-Lyrics-SpannersExtenders.xml (30 min)
+	
+	//TODO: not supported yet: 71a-Chordnames.xml
+	//TODO: not supported yet: 71c-ChordsFrets.xml
+	//TODO: not supported yet: 71d-ChordsFrets-Multistaff.xml
+	//TODO: not supported yet: 71e-TabStaves.xml
+	//TODO: not supported yet: 71f-AllChordTypes.xml
+	//TODO: not supported yet: 71g-MultipleChordnames.xml
+	
+	//TODO: 72a-TransposingInstruments.xml (60 min)
+	//TODO: 72b-TransposingInstruments-Full.xml (30 min)
+	//TODO: 72c-TransposingInstruments-Change.xml (60 min)
+	//TODO: 73a-Percussion.xml (60 min)
+	
+	//TODO: not supported yet: 74a-FiguredBass.xml
+	//TODO: not supported yet: 75a-AccordionRegistrations.xml
+	
+	//TODO: 90a-Compressed-MusicXML.mxl (30 min)
+	
+	//irrelevant: 99a-Sibelius5-IgnoreBeaming.xml
+	//irrelevant: 99b-Lyrics-BeamsMelismata-IgnoreBeams.xml
+	
 	
 }

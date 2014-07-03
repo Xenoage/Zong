@@ -18,7 +18,6 @@ import java.util.List;
 
 import org.junit.Assert;
 
-import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.header.ColumnHeader;
@@ -60,10 +59,13 @@ import com.xenoage.zong.musicxml.MusicXMLTestSuite;
 public class MusicXMLScoreFileInputTestSuiteTest
 	extends MusicXMLTestSuite<Score> {
 	
-	@Override public Score load(String file) {
+	//the currently tested score
+	private Score score;
+	
+	@Override public Score loadData(String file) {
 		try {
 			String filepath = dir + file;
-			return new MusicXmlScoreFileInput().read(jsePlatformUtils().openFile(filepath), filepath);
+			return score = new MusicXmlScoreFileInput().read(jsePlatformUtils().openFile(filepath), filepath);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			Assert.fail("Could not load " + file + ": " + ex.toString());
@@ -71,7 +73,9 @@ public class MusicXMLScoreFileInputTestSuiteTest
 		}
 	}
 
-	@Override public void test_01a_Pitches_Pitches(Score score, Pitch[] expectedPitches) {
+	@Override public void test_01a() {
+		super.test_01a();
+		Pitch[] expectedPitches = get_01a_Pitches();
 		Staff staff = score.getStaff(0);
 		assertEquals(26, staff.getMeasures().size());
 		int iPitch = 0;
@@ -91,7 +95,9 @@ public class MusicXMLScoreFileInputTestSuiteTest
 		//is not supported yet
 	}
 
-	@Override public void test_01b_Pitches_Intervals(Score score, Pitch[] expectedPitches) {
+	@Override public void test_01b() {
+		super.test_01b();
+		Pitch[] expectedPitches = get_01b_Pitches();
 		int iPitch = 0;
 		Staff staff = score.getStaff(0);
 		for (int iM = 0; iM < staff.getMeasures().size(); iM++) {
@@ -110,7 +116,8 @@ public class MusicXMLScoreFileInputTestSuiteTest
 		//assertEquals("not all notes found", expectedPitches.length, iPitch);
 	}
 
-	@Override public void test_01c_Pitches_NoVoiceElement(Score score) {
+	@Override public void test_01c() {
+		super.test_01c();
 		Voice voice = score.getVoice(mp0);
 		for (VoiceElement e : voice.getElements()) {
 			if (e instanceof Chord) {
@@ -126,16 +133,19 @@ public class MusicXMLScoreFileInputTestSuiteTest
 		fail("note not found");
 	}
 
-	@Override public void test_02a_Rests_Durations(Score score, Fraction[] expectedDurations) {
+	@Override public void test_02a() {
+		super.test_02a();
 		//multirests are not supported yet - TODO
-		checkDurations(score.getStaff(0), expectedDurations);
+		checkDurations(score.getStaff(0), get_02a_Durations());
 	}
 
-	@Override public void test_03a_Rhythm_Durations(Score score, Fraction[] expectedDurations) {
-		checkDurations(score.getStaff(0), expectedDurations);
+	@Override public void test_03a() {
+		super.test_03a();
+		checkDurations(score.getStaff(0), get_03a_Durations());
 	}
 
-	@Override public void test_03b_Rhythm_Backup(Score score) {
+	@Override public void test_03b() {
+		super.test_03b();
 		Measure measure = score.getMeasure(mp0);
 		//two voices
 		assertEquals(2, measure.getVoices().size());
@@ -158,8 +168,9 @@ public class MusicXMLScoreFileInputTestSuiteTest
 		assertEquals(fr(1, 4), voice.getElement(2).getDuration());
 	}
 
-	@Override public void test_03c_Rhythm_DivisionChange(Score score, Fraction[] expectedDurations) {
-		checkDurations(score.getStaff(0), expectedDurations);
+	@Override public void test_03c() {
+		super.test_03c();
+		checkDurations(score.getStaff(0), get_03c_Durations());
 	}
 	
 	private void checkDurations(Staff staff, Fraction[] expectedDurations) {
@@ -174,7 +185,9 @@ public class MusicXMLScoreFileInputTestSuiteTest
 		assertEquals("not all element found", expectedDurations.length, iDuration);
 	}
 
-	@Override public void test_11a_TimeSignatures(Score score, TimeType[] expectedTimes) {
+	@Override public void test_11a() {
+		super.test_11a();
+		TimeType[] expectedTimes = get_11a_Times();
 		int iTime = 0;
 		for (int iM = 0; iM < score.getMeasuresCount(); iM++) {
 			//TODO: first time is wrong in MusicXML file - ignore
@@ -183,17 +196,14 @@ public class MusicXMLScoreFileInputTestSuiteTest
 				continue;
 			}
 			//check time
-			assertEquals("element " + iTime, expectedTimes[iTime++], score.getColumnHeader(iM).getTime()
-				.getType());
+			assertEquals("element " + iTime, expectedTimes[iTime++],
+				score.getColumnHeader(iM).getTime().getType());
 		}
 		assertEquals("not all times found", expectedTimes.length, iTime);
 	}
 
-	@Override public void test_11b_TimeSignatures_NoTime(Score score) {
-		//successfull when it loads
-	}
-
-	@Override public void test_11h_TimeSignatures_SenzaMisura(Score score) {
+	@Override public void test_11h() {
+		super.test_11h();
 		//time signature must be senza misura
 		assertEquals(TimeType.timeSenzaMisura, score.getColumnHeader(0).getTime().getType());
 		//measure must contain 3 notes and have a length of 3/8
@@ -201,7 +211,8 @@ public class MusicXMLScoreFileInputTestSuiteTest
 		assertEquals(fr(3, 8), score.getVoice(mp0).getFilledBeats());
 	}
 	
-	@Override public void test_12a_Clefs(Score score) {
+	@Override public void test_12a() {
+		super.test_12a();
 		//check clefs and line position of c4
 		int m = 0;
 		checkClef(score, m++, ClefSymbol.G, 2, -2);
@@ -232,7 +243,8 @@ public class MusicXMLScoreFileInputTestSuiteTest
 		assertEquals("measure " + measure, expectedC4LP, clef.getLp(pi('C', 0, 4)));
 	}
 	
-	@Override public void test_12b_Clefs_NoKeyOrClef(Score score) {
+	@Override public void test_12b() {
+		super.test_12b();
 		//musical context must be 4/4, C clef and no accidentals
 		MusicContext context = score.getMusicContext(mp0, Interval.At, Interval.At);
 		assertEquals(fr(4, 4), score.getMeasureBeats(0));
@@ -247,7 +259,9 @@ public class MusicXMLScoreFileInputTestSuiteTest
 		assertNotNull(header.getKeys().get(_0));
 	}
 
-	@Override public void test_13a_KeySignatures(Score score, TraditionalKey[] expectedKeys) {
+	@Override public void test_13a() {
+		super.test_13a();
+		TraditionalKey[] expectedKeys = get_13a_Keys();
 		//TODO: Zong! supports only -7 to +7, starting in measure 9,
 		//ending in measure 38
 		int iKey = 0;
@@ -260,7 +274,9 @@ public class MusicXMLScoreFileInputTestSuiteTest
 		}
 	}
 	
-	@Override public void test_13b_KeySignatures_ChurchModes(Score score, TraditionalKey[] expectedKeys) {
+	@Override public void test_13b() {
+		super.test_13b();
+		TraditionalKey[] expectedKeys = get_13b_Keys();
 		MP mp = mp0;
 		for (int iKey : range(expectedKeys)) {
 			ColumnHeader column = score.getColumnHeader(mp.measure);
@@ -275,15 +291,19 @@ public class MusicXMLScoreFileInputTestSuiteTest
 		}
 	}
 	
-	@Override public void test_21a_Chord_Basic(Score score, Chord expectedChord) {
+	@Override public void test_21a() {
+		super.test_21a();
+		Chord expectedChord = get_21a_Chord();
 		Chord chord = (Chord) score.getVoice(mp0).getElement(0);
 		assertEquals(2, chord.getNotes().size());
 		assertEquals(expectedChord.getNotes(), chord.getNotes());
 		assertEquals(expectedChord.getDuration(), chord.getDuration());
 	}
 	
-	@Override public void test_21b_Chords_TwoNotes(Score score,
-		int expectedChordsCount, Chord expectedChord) {
+	@Override public void test_21b() {
+		super.test_21b();
+		int expectedChordsCount = get_21b_ChordsCount();
+		Chord expectedChord = get_21b_Chord();
 		MP mp = mp0;
 		for (int i = 0; i < expectedChordsCount; i++) {
 			Chord chord = (Chord) score.getVoice(mp).getElementAt(mp.beat);
@@ -296,7 +316,9 @@ public class MusicXMLScoreFileInputTestSuiteTest
 		}
 	}
 
-	@Override public void test_21c_Chords_ThreeNotesDuration(Score score, Chord[] expectedChords) {
+	@Override public void test_21c() {
+		super.test_21c();
+		Chord[] expectedChords = get_21c_Chords();
 		MP mp = mp0;
 		for (int i = 0; i < expectedChords.length; i++) {
 			Chord chord = (Chord) score.getVoice(mp).getElementAt(mp.beat);
@@ -309,8 +331,8 @@ public class MusicXMLScoreFileInputTestSuiteTest
 		}
 	}
 
-	@Override public void test_21d_Chords_SchubertStabatMater(Score score,
-		Chord[] expectedChords, List<Tuple2<MP, ? extends Direction>> expectedDirections) {
+	@Override public void test_21d() {
+		super.test_21d();
 		//first measure
 		{
 			//F4, whole, with accent and fermata
@@ -364,7 +386,8 @@ public class MusicXMLScoreFileInputTestSuiteTest
 		}
 	}
 
-	@Override public void test_21e_Chords_PickupMeasures(Score score) {
+	@Override public void test_21e() {
+		super.test_21e();
 		//4/4 time in first measure (implicit)
 		assertEquals(fr(4, 4), score.getColumnHeader(0).getTime().getType().getMeasureBeats());
 		//first measure has only a 1/4 chord and a total length of 1/4
@@ -379,7 +402,8 @@ public class MusicXMLScoreFileInputTestSuiteTest
 		assertEquals(fr(2, 4), score.getMeasure(m2).getFilledBeats());
 	}
 
-	@Override public void test_21f_Chord_ElementInBetween(Score score) {
+	@Override public void test_21f() {
+		super.test_21f();
 		//1/4 with 3 notes at beat 0
 		List<VoiceElement> e = score.getVoice(mp0).getElements();
 		Chord chord = (Chord) e.get(0);
@@ -397,30 +421,31 @@ public class MusicXMLScoreFileInputTestSuiteTest
 		assertEquals(DynamicsType.p, dynamics.getType());
 	}
 
-	@Override public void test_23a_Tuplets(Score score, Fraction[] expectedDurations) {
-		checkDurations(score.getStaff(0), expectedDurations);
+	@Override public void test_23a() {
+		super.test_23a();
+		checkDurations(score.getStaff(0), get_23a_Durations());
 		//TODO: add support for tuplet notation and test it
 	}
 
-	@Override public void test_23f_Tuplets_DurationButNoBracket(Score score,
-		Fraction[] expectedDurationsStaff1, Fraction[] expectedDurationsStaff2) {
-		checkDurations(score.getStaff(0), expectedDurationsStaff1);
-		checkDurations(score.getStaff(1), expectedDurationsStaff2);
+	@Override public void test_23f() {
+		super.test_23f();
+		checkDurations(score.getStaff(0), get_23f_Durations()[0]);
+		checkDurations(score.getStaff(1), get_23f_Durations()[1]);
 	}
 
-	@Override public void test_24a_GraceNotes(Score score, Chord[] expectedChords) {
+	@Override public void test_24a() {
+		super.test_24a();
+		Chord[] expectedChords = get_24a_Chords();
 		Staff staff = score.getStaff(0);
+		//check chords
+		checkGraceChords(staff, expectedChords);
+		//check beams
 		int iChord = 0;
 		Beam currentBeam = null;
 		for (int iM = 0; iM < staff.getMeasures().size(); iM++) {
 			Voice voice = staff.getMeasure(iM).getVoice(0);
 			for (VoiceElement e : voice.getElements()) {
-				//check duration, type and notes
-				Chord chord = (Chord) e;
 				Chord expectedChord = expectedChords[iChord];
-				assertEquals("chord " + iChord, expectedChord.getDuration(), chord.getDuration());
-				assertEquals("chord " + iChord, expectedChord.getGrace(), chord.getGrace());
-				assertEquals("chord " + iChord, expectedChord.getNotes(), chord.getNotes());
 				//beams between chord 2 and 3 and between 11 and 12
 				if (iChord == 2 || iChord == 11) {
 					assertNotNull("chord " + iChord + " unbeamed", expectedChord.getBeam());
@@ -442,6 +467,29 @@ public class MusicXMLScoreFileInputTestSuiteTest
 			}
 		}
 		assertEquals("not all chords found", expectedChords.length, iChord);
+	}
+	
+	private void checkGraceChords(Staff staff, Chord[] expectedChords) {
+		int iChord = 0;
+		for (int iM = 0; iM < staff.getMeasures().size(); iM++) {
+			Voice voice = staff.getMeasure(iM).getVoice(0);
+			for (VoiceElement e : voice.getElements()) {
+				//check duration, type and notes
+				Chord chord = (Chord) e;
+				Chord expectedChord = expectedChords[iChord];
+				assertEquals("chord " + iChord, expectedChord.getDuration(), chord.getDuration());
+				assertEquals("chord " + iChord, expectedChord.getGrace(), chord.getGrace());
+				assertEquals("chord " + iChord, expectedChord.getNotes(), chord.getNotes());
+				iChord++;
+			}
+		}
+		assertEquals("not all chords found", expectedChords.length, iChord);
+	}
+
+	@Override public void test_24b() {
+		super.test_24b();
+		//check chords
+		checkGraceChords(getData().getStaff(0), get_24b_Chords());
 	}
 	
 }

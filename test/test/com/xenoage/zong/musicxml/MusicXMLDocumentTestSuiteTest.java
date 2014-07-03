@@ -15,7 +15,6 @@ import org.junit.Assert;
 import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.Pitch;
-import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.direction.Direction;
 import com.xenoage.zong.core.music.direction.DynamicsType;
 import com.xenoage.zong.core.music.key.TraditionalKey;
@@ -52,9 +51,12 @@ import com.xenoage.zong.musicxml.types.partwise.MxlPart;
 public class MusicXMLDocumentTestSuiteTest
 	extends MusicXMLTestSuite<MusicXMLDocument> {
 	
-	@Override public MusicXMLDocument load(String file) {
+	//the currently tested document
+	private MusicXMLDocument doc;
+	
+	@Override public MusicXMLDocument loadData(String file) {
 		try {
-			return MusicXMLDocument.read(jsePlatformUtils().createXmlReader(
+			return doc = MusicXMLDocument.read(jsePlatformUtils().createXmlReader(
 				jsePlatformUtils().openFile(dir + file)));
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -63,7 +65,9 @@ public class MusicXMLDocumentTestSuiteTest
 		}
 	}
 
-	 @Override public void test_01a_Pitches_Pitches(MusicXMLDocument doc, Pitch[] expectedPitches) {
+	@Override public void test_01a() {
+		super.test_01a();
+		Pitch[] expectedPitches = get_01a_Pitches();
 		MxlPart part = doc.getScore().getParts().get(0);
 		assertEquals(26, part.getMeasures().size());
 		int iPitch = 0;
@@ -83,7 +87,9 @@ public class MusicXMLDocumentTestSuiteTest
 		//is not supported yet
 	}
 
-	@Override public void test_01b_Pitches_Intervals(MusicXMLDocument doc, Pitch[] expectedPitches) {
+	@Override public void test_01b() {
+		super.test_01b();
+		Pitch[] expectedPitches = get_01b_Pitches();
 		MxlPart part = doc.getScore().getParts().get(0);
 		int iPitch = 0;
 		for (int iM = 0; iM < part.getMeasures().size(); iM++) {
@@ -100,7 +106,8 @@ public class MusicXMLDocumentTestSuiteTest
 		assertEquals("not all notes found", expectedPitches.length, iPitch);
 	}
 
-	@Override public void test_01c_Pitches_NoVoiceElement(MusicXMLDocument doc) {
+	@Override public void test_01c() {
+		super.test_01c();
 		MxlMeasure measure = doc.getScore().getParts().get(0).getMeasures().get(0);
 		for (MxlMusicDataContent data : measure.getMusicData().getContent()) {
 			if (data.getMusicDataContentType() == MxlMusicDataContentType.Note) {
@@ -119,7 +126,9 @@ public class MusicXMLDocumentTestSuiteTest
 		fail("note not found");
 	}
 
-	@Override public void test_02a_Rests_Durations(MusicXMLDocument doc, Fraction[] expectedDurations) {
+	@Override public void test_02a() {
+		super.test_02a();
+		Fraction[] expectedDurations = get_02a_Durations();
 		//multirests are not supported yet - TODO
 		MxlPart part = doc.getScore().getParts().get(0);
 		int iDuration = 0;
@@ -140,7 +149,9 @@ public class MusicXMLDocumentTestSuiteTest
 		assertEquals("not all rests found", expectedDurations.length, iDuration);
 	}
 	
-	@Override public void test_03a_Rhythm_Durations(MusicXMLDocument doc, Fraction[] expectedDurations) {
+	@Override public void test_03a() {
+		super.test_03a();
+		Fraction[] expectedDurations = get_03a_Durations();
 		MxlPart part = doc.getScore().getParts().get(0);
 		int iDuration = 0;
 		int divisions = 64; //from MusicXML file
@@ -160,7 +171,8 @@ public class MusicXMLDocumentTestSuiteTest
 		assertEquals("not all notes found", expectedDurations.length, iDuration);
 	}
 	
-	@Override public void test_03b_Rhythm_Backup(MusicXMLDocument doc) {
+	@Override public void test_03b() {
+		super.test_03b();
 		//elements in this measure: attributes, note, note, backup, note, note
 		MxlMeasure measure = doc.getScore().getParts().get(0).getMeasures().get(0);
 		List<MxlMusicDataContent> content = measure.getMusicData().getContent();
@@ -173,11 +185,9 @@ public class MusicXMLDocumentTestSuiteTest
 		assertEquals(MxlMusicDataContentType.Note, content.get(5).getMusicDataContentType());
 	}
 	
-	@Override public void test_03c_Rhythm_DivisionChange(MusicXMLDocument doc, Fraction[] expectedDurations) {
-		//successful when it loads
-	}
-	
-	@Override public void test_11a_TimeSignatures(MusicXMLDocument doc, TimeType[] expectedTimes) {
+	@Override public void test_11a() {
+		super.test_11a();
+		TimeType[] expectedTimes = get_11a_Times();
 		MxlPart part = doc.getScore().getParts().get(0);
 		int iTime = 0;
 		for (int i = 0; i < part.getMeasures().size(); i++) {
@@ -203,23 +213,9 @@ public class MusicXMLDocumentTestSuiteTest
 		assertEquals("not all times found", expectedTimes.length, iTime);
 	}
 	
-	@Override public void test_11b_TimeSignatures_NoTime(MusicXMLDocument doc) {
-		//successfull when it loads
-	}
-	
-	@Override public void test_11h_TimeSignatures_SenzaMisura(MusicXMLDocument doc) {
-		//successfull when it loads
-	}
-	
-	@Override public void test_12a_Clefs(MusicXMLDocument doc) {
-		//successfull when it loads - more is tested in musicxml-in
-	}
-	
-	@Override public void test_12b_Clefs_NoKeyOrClef(MusicXMLDocument doc) {
-		//successfull when it loads - more is tested in musicxml-in
-	}
-	
-	@Override public void test_13a_KeySignatures(MusicXMLDocument doc, TraditionalKey[] expectedKeys) {
+	@Override public void test_13a() {
+		super.test_13a();
+		TraditionalKey[] expectedKeys = get_13a_Keys();
 		//TODO: Zong! supports only -7 to +7, starting in measure 9,
 		//ending in measure 38
 		MxlPart part = doc.getScore().getParts().get(0);
@@ -239,8 +235,9 @@ public class MusicXMLDocumentTestSuiteTest
 		}
 	}
 	
-	@Override public void test_13b_KeySignatures_ChurchModes(
-		MusicXMLDocument doc, TraditionalKey[] expectedKeys) {
+	@Override public void test_13b() {
+		super.test_13b();
+		TraditionalKey[] expectedKeys = get_13b_Keys();
 		MxlPart part = doc.getScore().getParts().get(0);
 		int iKey = 0;
 		for (int i = 0; i <= 2; i++) {
@@ -260,22 +257,10 @@ public class MusicXMLDocumentTestSuiteTest
 		}
 		assertEquals("not all keys found", expectedKeys.length, iKey);
 	}
-	
-	@Override public void test_21a_Chord_Basic(MusicXMLDocument doc, Chord expectedChord) {
-		//successfull when it loads - more is tested in musicxml-in
-	}
 
-	@Override public void test_21b_Chords_TwoNotes(MusicXMLDocument doc,
-		int expectedChordsCount, Chord expectedChord) {
-		//successfull when it loads - more is tested in musicxml-in
-	}
-	
-	@Override public void test_21c_Chords_ThreeNotesDuration(MusicXMLDocument doc, Chord[] expectedChords) {
-		//successfull when it loads - more is tested in musicxml-in
-	}
-
-	@Override public void test_21d_Chords_SchubertStabatMater(MusicXMLDocument doc,
-		Chord[] expectedChords, List<Tuple2<MP, ? extends Direction>> expectedDirections) {
+	@Override public void test_21d() {
+		super.test_21d();
+		List<Tuple2<MP, ? extends Direction>> expectedDirections = get_21d_Directions();
 		//check only directions in this test	
 		MxlPart part = doc.getScore().getParts().get(0);
 		int iDirection = 0;
@@ -309,27 +294,6 @@ public class MusicXMLDocumentTestSuiteTest
 			}
 		}
 		assertEquals("not all directions found", expectedDirections.size(), iDirection);
-	}
-
-	@Override public void test_21e_Chords_PickupMeasures(MusicXMLDocument data) {
-		//successfull when it loads - more is tested in musicxml-in
-	}
-
-	@Override public void test_21f_Chord_ElementInBetween(MusicXMLDocument data) {
-		//successfull when it loads - more is tested in musicxml-in
-	}
-
-	@Override public void test_23a_Tuplets(MusicXMLDocument data, Fraction[] expectedDurations) {
-		//successfull when it loads - more is tested in musicxml-in
-	}
-
-	@Override public void test_23f_Tuplets_DurationButNoBracket(MusicXMLDocument data,
-		Fraction[] expectedDurationsStaff1, Fraction[] expectedDurationsStaff2) {
-		//successfull when it loads - more is tested in musicxml-in
-	}
-
-	@Override public void test_24a_GraceNotes(MusicXMLDocument data, Chord[] expectedChords) {
-		//successfull when it loads - more is tested in musicxml-in
 	}
 	
 }
