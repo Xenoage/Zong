@@ -100,7 +100,7 @@ public class VoiceElementWrite
 			Fraction emptySpace = startBeat.sub(filledBeats);
 			if (emptySpace.isGreater0()) {
 				//add rest between start beat and filled beats, if needed
-				//GOON: split rests into reasonable parts
+				//TODO: split rests into reasonable parts
 				Rest rest = new Rest(emptySpace);
 				rest.setHidden(options.fillWithHiddenRests);
 				executeAndRemember(new VoiceElementWrite(voice, atElement(voice.getElements().size()),

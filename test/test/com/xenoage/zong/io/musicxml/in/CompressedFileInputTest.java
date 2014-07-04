@@ -16,7 +16,7 @@ import org.junit.Test;
  */
 public class CompressedFileInputTest {
 
-	@Ignore //GOON: fix this test - fails on the command line (gradle)
+	@Ignore //TODO: fix resolving of opus links, then activate this test again
 	@Test public void test()
 		throws Exception {
 		CompressedFileInput zip = new CompressedFileInput(jsePlatformUtils().openFile(

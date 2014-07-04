@@ -134,8 +134,8 @@ public class CompressedFileInput {
 		List<String> ret = CollectionUtils.alist();
 		if (isOpus()) {
 			getScoreFilenames(
-				//new OpusFileInput().resolveOpusLinks((Opus) rootItem, zip, null), ret);
-				(Opus) rootItem, ret); //TODO
+				//new OpusFileInput().resolveOpusLinks((Opus) rootItem, zip, null), ret); //TODO
+				(Opus) rootItem, ret);
 		}
 		else {
 			ret.add(((Score) rootItem).getLink().getHref());
