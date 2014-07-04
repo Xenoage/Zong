@@ -488,8 +488,12 @@ public class MusicXMLScoreFileInputTestSuiteTest
 
 	@Override public void test_24b() {
 		super.test_24b();
-		//check chords
-		checkGraceChords(getData().getStaff(0), get_24b_Chords());
+		checkGraceChords(score.getStaff(0), get_24b_Chords());
+	}
+	
+	@Override public void test_24c() {
+		super.test_24c();
+		checkGraceChords(score.getStaff(0), get_24c_Chords());
 	}
 	
 }

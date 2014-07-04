@@ -564,8 +564,24 @@ public abstract class MusicXMLTestSuite<T> {
 			ch(fr(1, 4), pi('A', 0, 4), pi('C', 0, 5))};
 	}
 	
-	//TODO: 24b-ChordAsGraceNote.xml (30 min) 
-	//TODO: 24c-GraceNote-MeasureEnd.xml (30 min) 
+	/**
+	 * A grace note that appears at the measure end (without any steal-from-* attribute set).
+	 * Some applications need to convert this into an after-grace. 
+	 */
+	@Test public void test_24c() {
+		loadTest("24c-GraceNote-MeasureEnd.xml");
+	}
+	
+	public Chord[] get_24c_Chords() {
+		Chord[] ret = new Chord[] {
+			ch(fr(2, 4), pi('E', 0, 5)),
+			ch(fr(2, 4), pi('E', 0, 5)),
+			gr(fr(1, 16), false, pi('G', 0, 5)),
+			gr(fr(1, 16), false, pi('A', 0, 5))};
+		new BeamAdd(beamFromChords(alist(ret[2], ret[3]))).execute();
+		return ret;
+	}
+	
 	//TODO: 24d-AfterGrace.xml (30 min) 
 	
 	//TODO: not supported yet: 24e-GraceNote-StaffChange.xml
