@@ -10,12 +10,12 @@ import javax.swing.JOptionPane;
 public class Zong {
 
 	//the version of this program as an integer number
-	public static final int projectIteration = 67;
+	public static final int projectIteration = 68;
 
 	//general information on this program
 	public static final String projectFamilyName = "Zong!";
 	public static final String projectVersion = "0.1-a";
-	public static final String projectIterationName = "Drum";
+	public static final String projectIterationName = "Flute";
 
 	//package path
 	public static final String projectPackage = "com.xenoage.zong";
@@ -24,7 +24,7 @@ public class Zong {
 	public static final String filename = "zong";
 
 	//copyright information
-	public static final String copyright = "Copyright © 2006-2014 by Andreas Wenger, Uli Teschemacher, Xenoage Software";
+	public static final String copyright = "Copyright © 2006-2014 by Xenoage Software";
 
 	//other information
 	public static final String website = "http://www.zong-music.com";
