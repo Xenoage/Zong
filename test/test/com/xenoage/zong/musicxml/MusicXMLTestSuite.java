@@ -582,7 +582,27 @@ public abstract class MusicXMLTestSuite<T> {
 		return ret;
 	}
 	
-	//TODO: 24d-AfterGrace.xml (30 min) 
+	/**
+	 * Some grace notes and after-graces (indicated by steal-time-previous
+	 * and steal-time-following). 
+	 */
+	@Test public void test_24d() {
+		loadTest("24d-AfterGrace.xml");
+		//TODO: concept of steal-time-previous and steal-time-following is not implemented yet
+	}
+	
+	public Chord[] get_24d_Chords() {
+		Chord[] ret = new Chord[] {
+			ch(fr(2, 4), pi('E', 0, 5)),
+			gr(fr(1, 16), false, pi('G', 0, 5)),
+			gr(fr(1, 16), false, pi('A', 0, 5)),
+			gr(fr(1, 16), false, pi('A', 0, 5)),
+			ch(fr(2, 4), pi('E', 0, 5)),
+			gr(fr(1, 16), false, pi('G', 0, 5)),
+			gr(fr(1, 16), false, pi('A', 0, 5))};
+		new BeamAdd(beamFromChords(alist(ret[4], ret[5]))).execute();
+		return ret;
+	}
 	
 	//TODO: not supported yet: 24e-GraceNote-StaffChange.xml
 	

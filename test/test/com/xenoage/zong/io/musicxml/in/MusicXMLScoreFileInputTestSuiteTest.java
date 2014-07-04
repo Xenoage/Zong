@@ -496,4 +496,9 @@ public class MusicXMLScoreFileInputTestSuiteTest
 		checkGraceChords(score.getStaff(0), get_24c_Chords());
 	}
 	
+	@Override public void test_24d() {
+		super.test_24d();
+		checkGraceChords(score.getStaff(0), get_24d_Chords());
+	}
+	
 }
