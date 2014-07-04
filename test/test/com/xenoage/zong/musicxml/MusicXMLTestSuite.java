@@ -3,6 +3,7 @@ package com.xenoage.zong.musicxml;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.kernel.Tuple2.t;
+import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.music.Pitch.pi;
 import static com.xenoage.zong.core.music.beam.Beam.beamFromChords;
@@ -18,6 +19,7 @@ import org.junit.Test;
 import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.commands.core.music.beam.BeamAdd;
+import com.xenoage.zong.commands.core.music.slur.SlurAdd;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.music.annotation.Annotation;
@@ -573,7 +575,7 @@ public abstract class MusicXMLTestSuite<T> {
 	}
 	
 	public Chord[] get_24c_Chords() {
-		Chord[] ret = new Chord[] {
+		Chord[] ret = {
 			ch(fr(2, 4), pi('E', 0, 5)),
 			ch(fr(2, 4), pi('E', 0, 5)),
 			gr(fr(1, 16), false, pi('G', 0, 5)),
@@ -592,7 +594,7 @@ public abstract class MusicXMLTestSuite<T> {
 	}
 	
 	public Chord[] get_24d_Chords() {
-		Chord[] ret = new Chord[] {
+		Chord[] ret = {
 			ch(fr(2, 4), pi('E', 0, 5)),
 			gr(fr(1, 16), false, pi('G', 0, 5)),
 			gr(fr(1, 16), false, pi('A', 0, 5)),
@@ -604,20 +606,55 @@ public abstract class MusicXMLTestSuite<T> {
 		return ret;
 	}
 	
-	//TODO: not supported yet: 24e-GraceNote-StaffChange.xml
+	/**
+	 * A grace note on a different staff than the actual note.
+	 */
+	@Test public void test_24e() {
+		loadTest("24e-GraceNote-StaffChange.xml");
+	}
 	
-	//TODO: 24f-GraceNote-Slur.xml (30 min) 
-	/* //[s]lur chords [s]tart and [e]nd
-	  Chord s1s, s1e;
-		Chord[] expectedChords = new Chord[] {
-			s1s = gr(fr(1, 16), true, pi('D', 0, 5)),
-			s1e = ch(fr(1, 4), pi('C', 0, 5)),
+	public Chord[][] get_24e_StavesChords() {
+		Chord[][] ret = {
+			{ //staff 0
+				ch(fr(2, 4), pi('E', 0, 5)),
+				ch(fr(2, 4), pi('E', 0, 5))
+			},
+			{ //staff 1
+				gr(fr(1, 16), false, pi('G', 0, 5)),
+				gr(fr(1, 16), false, pi('A', 0, 5))
+			}};
+		new BeamAdd(beamFromChords(alist(ret[0][0], ret[0][1]))).execute();
+		return ret;
+	}
+	
+	public Fraction[][] get_24e_StavesBeats() {
+		return new Fraction[][] {
+			{ _0, fr(2, 4) }, //staff 0
+			{ fr(2, 4), fr(2, 4) }, //staff 1
 		};
-		new SlurAdd(sl(s1s, s1e)).execute(); */
+	}
+	
+	/**
+	 * A grace note with a slur to the actual note. This can be interpreted
+	 * as acciaccatura or appoggiatura, depending on the existence of a slash. 
+	 */
+	@Test public void test_24f() {
+		loadTest("24f-GraceNote-Slur.xml");
+	}
+	
+	public Chord[] get_24f_Chords() {
+		Chord[] ret = {
+			ch(fr(2, 4), pi('E', 0, 5)),
+			gr(fr(1, 16), false, pi('G', 0, 5)),
+			ch(fr(2, 4), pi('E', 0, 5))};
+		new SlurAdd(slur(ret[1], ret[2])).execute();
+		return ret;
+	}
+		
 	/**
 	 * Creates a slur for the given chords (to the first notes).
 	 */
-	private Slur sl(Chord start, Chord end) {
+	private Slur slur(Chord start, Chord end) {
 		return new Slur(SlurType.Slur, new SlurWaypoint(start, 0, null),
 			new SlurWaypoint(end, 0, null), null);
 	}

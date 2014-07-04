@@ -44,6 +44,7 @@ import com.xenoage.zong.core.music.direction.Words;
 import com.xenoage.zong.core.music.format.Placement;
 import com.xenoage.zong.core.music.key.TraditionalKey;
 import com.xenoage.zong.core.music.rest.Rest;
+import com.xenoage.zong.core.music.slur.Slur;
 import com.xenoage.zong.core.music.time.TimeType;
 import com.xenoage.zong.core.music.util.Interval;
 import com.xenoage.zong.core.position.MP;
@@ -470,10 +471,16 @@ public class MusicXMLScoreFileInputTestSuiteTest
 	}
 	
 	private void checkGraceChords(Staff staff, Chord[] expectedChords) {
+		checkGraceChords(staff, expectedChords, false);
+	}
+	
+	private void checkGraceChords(Staff staff, Chord[] expectedChords, boolean skipRests) {
 		int iChord = 0;
 		for (int iM = 0; iM < staff.getMeasures().size(); iM++) {
 			Voice voice = staff.getMeasure(iM).getVoice(0);
 			for (VoiceElement e : voice.getElements()) {
+				if (e instanceof Rest && skipRests)
+					continue;
 				//check duration, type and notes
 				Chord chord = (Chord) e;
 				Chord expectedChord = expectedChords[iChord];
@@ -499,6 +506,29 @@ public class MusicXMLScoreFileInputTestSuiteTest
 	@Override public void test_24d() {
 		super.test_24d();
 		checkGraceChords(score.getStaff(0), get_24d_Chords());
+	}
+	
+	@Override public void test_24e() {
+		super.test_24e();
+		for (int i : range(2))
+			checkGraceChords(score.getStaff(i), get_24e_StavesChords()[i], true);
+		//check start beats
+		Fraction[][] startBeats = get_24e_StavesBeats();
+		assertEquals(startBeats[0][0], MP.getMP(score.getVoice(mp0).getElement(0)).getBeat());
+		assertEquals(startBeats[0][1], MP.getMP(score.getVoice(mp0).getElement(1)).getBeat());
+		assertEquals(fr(2, 4), score.getVoice(mp0.withStaff(1)).getElement(0).getDuration()); //half rest
+		assertEquals(startBeats[1][0], MP.getMP(score.getVoice(mp0.withStaff(1)).getElement(1)).getBeat());
+		assertEquals(startBeats[1][1], MP.getMP(score.getVoice(mp0.withStaff(1)).getElement(2)).getBeat());
+	}
+	
+	@Override public void test_24f() {
+		super.test_24f();
+		Chord[] expectedChords = get_24f_Chords();
+		checkGraceChords(score.getStaff(0), expectedChords);
+		//slur between chord 1 and 2
+		Slur slur = expectedChords[1].getSlurs().get(0);
+		assertEquals(expectedChords[1], slur.getStart().getChord());
+		assertEquals(expectedChords[2], slur.getStop().getChord());
 	}
 	
 }
