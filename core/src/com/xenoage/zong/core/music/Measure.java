@@ -371,10 +371,10 @@ public class Measure
 	 */
 	public BeatEList<MeasureElement> getMeasureElements() {
 		BeatEList<MeasureElement> ret = beatEList();
-		ret.addAll(instrumentChanges);
-		ret.addAll(directions);
-		ret.addAll(privateKeys);
 		ret.addAll(clefs);
+		ret.addAll(privateKeys);
+		ret.addAll(directions);
+		ret.addAll(instrumentChanges);
 		return ret;
 	}
 	

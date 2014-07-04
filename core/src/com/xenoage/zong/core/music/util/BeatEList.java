@@ -1,6 +1,7 @@
 package com.xenoage.zong.core.music.util;
 
 import static com.xenoage.utils.collections.CList.clist;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.iterators.ReverseIterator.reverseIt;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.core.music.util.BeatE.beatE;
@@ -12,6 +13,7 @@ import java.util.LinkedList;
 import lombok.Data;
 
 import com.xenoage.utils.collections.CList;
+import com.xenoage.utils.collections.CollectionUtils;
 import com.xenoage.utils.collections.IList;
 import com.xenoage.utils.math.Fraction;
 
@@ -55,8 +57,8 @@ import com.xenoage.utils.math.Fraction;
 	/**
 	 * Gets all elements at the given beat, or an empty list if there are none.
 	 */
-	public LinkedList<T> getAll(Fraction beat) {
-		LinkedList<T> ret = new LinkedList<T>();
+	public ArrayList<T> getAll(Fraction beat) {
+		ArrayList<T> ret = alist();
 		for (BeatE<T> e : elements) {
 			int compare = e.getBeat().compareTo(beat);
 			if (compare == 0)
@@ -68,13 +70,14 @@ import com.xenoage.utils.math.Fraction;
 	}
 
 	/**
-	 * Adds the given positioned element. If there is already
-	 * one, it is added before the existing one, but nothing is removed.
+	 * Adds the given positioned element.
+	 * If there are already elements at this beat, it is added
+	 * after the existing ones, but nothing is removed.
 	 */
 	public void add(BeatE<T> element) {
 		checkNotNull(element);
 		for (int i : range(elements)) {
-			if (element.getBeat().compareTo(elements.get(i).getBeat()) <= 0) {
+			if (element.getBeat().compareTo(elements.get(i).getBeat()) < 0) {
 				elements.add(i, element);
 				return;
 			}
@@ -83,17 +86,18 @@ import com.xenoage.utils.math.Fraction;
 	}
 
 	/**
-	 * Adds the given positioned element. If there is already
-	 * one, it is added before the existing one, but nothing is removed.
+	 * Adds the given positioned element.
+	 * If there are already elements at this beat, it is added
+	 * after the existing ones, but nothing is removed.
 	 */
 	public void add(T element, Fraction beat) {
 		add(beatE(element, beat));
 	}
 
 	/**
-	 * Adds the given positioned elements. If there are already
-	 * elements at the given positions, the elements are added before the
-	 * existing ones, but nothing is removed.
+	 * Adds the given positioned elements.
+	 * If there are already elements at the respective beat, the given elements are added
+	 * after the existing ones, but nothing is removed.
 	 */
 	public void addAll(BeatEList<? extends T> list) {
 		if (list != null)

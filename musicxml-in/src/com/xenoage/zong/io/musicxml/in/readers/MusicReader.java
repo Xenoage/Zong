@@ -514,6 +514,7 @@ public final class MusicReader {
 
 	//TIDY: move into own class, and read formatting info
 	//TIDY: read print-style/positioning from all directions together (use common interface?)
+	//TODO: add support for multiple direction-types within a single MusicXML direction
 	/**
 	 * Reads the given direction element.
 	 */
