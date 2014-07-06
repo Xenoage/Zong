@@ -22,7 +22,7 @@ import com.xenoage.utils.jse.lang.LangManager;
 import com.xenoage.utils.jse.lang.LanguageReader;
 import com.xenoage.utils.lang.Language;
 import com.xenoage.utils.lang.VocID;
-import com.xenoage.zong.desktop.util.JseZongPlatformUtils;
+import com.xenoage.zong.desktop.utils.JseZongPlatformUtils;
 
 /**
  * This class contains tests for the language packages.

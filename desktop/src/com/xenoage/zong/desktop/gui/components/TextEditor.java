@@ -1,7 +1,7 @@
 package com.xenoage.zong.desktop.gui.components;
 
-import static com.xenoage.zong.desktop.util.text.FormattedTextConverter.fromStyledDocument;
-import static com.xenoage.zong.desktop.util.text.FormattedTextConverter.toStyledDocument;
+import static com.xenoage.zong.desktop.utils.text.FormattedTextConverter.fromStyledDocument;
+import static com.xenoage.zong.desktop.utils.text.FormattedTextConverter.toStyledDocument;
 
 import java.awt.Color;
 import java.awt.Dimension;

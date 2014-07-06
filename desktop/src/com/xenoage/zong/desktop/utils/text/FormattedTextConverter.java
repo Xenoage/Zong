@@ -1,11 +1,11 @@
-package com.xenoage.zong.desktop.util.text;
+package com.xenoage.zong.desktop.utils.text;
 
 import static com.xenoage.utils.collections.CList.clist;
 import static com.xenoage.utils.jse.color.AwtColorUtils.fromAwtColor;
 import static com.xenoage.utils.jse.color.AwtColorUtils.toAwtColor;
 import static com.xenoage.utils.jse.font.AwtFontUtils.toAwtFont;
-import static com.xenoage.zong.desktop.util.text.AlignmentUtils.applyAlignmentToAttributeSet;
-import static com.xenoage.zong.desktop.util.text.AlignmentUtils.fromAttributeSet;
+import static com.xenoage.zong.desktop.utils.text.AlignmentUtils.applyAlignmentToAttributeSet;
+import static com.xenoage.zong.desktop.utils.text.AlignmentUtils.fromAttributeSet;
 
 import java.awt.Font;
 import java.awt.font.TextLayout;

@@ -15,9 +15,9 @@ import javax.swing.JPanel;
 import com.xenoage.zong.commands.Command;
 import com.xenoage.zong.commands.dialogs.OpenDocumentDialogCommand;
 import com.xenoage.zong.commands.player.dialog.InfoDialogCommand;
-import com.xenoage.zong.commands.player.playback.PauseMidiPlaybackCommand;
-import com.xenoage.zong.commands.player.playback.StartMidiPlaybackCommand;
-import com.xenoage.zong.commands.player.playback.StopMidiPlaybackCommand;
+import com.xenoage.zong.commands.player.playback.PlaybackPause;
+import com.xenoage.zong.commands.player.playback.PlaybackStart;
+import com.xenoage.zong.commands.player.playback.PlaybackStop;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.gui.IconReader;
 import com.xenoage.zong.gui.component.PlaybackProgressBar;
@@ -97,9 +97,9 @@ public class PlayerPanel
 		add(pnlButtons);
 		//add playback buttons
 		pnlButtons.add(jButton(ir, "media-eject.png", new OpenDocumentDialogCommand()));
-		pnlButtons.add(jButton(ir, "media-playback-start.png", new StartMidiPlaybackCommand()));
-		pnlButtons.add(jButton(ir, "media-playback-pause.png", new PauseMidiPlaybackCommand()));
-		pnlButtons.add(jButton(ir, "media-playback-stop.png", new StopMidiPlaybackCommand()));
+		pnlButtons.add(jButton(ir, "media-playback-start.png", new PlaybackStart()));
+		pnlButtons.add(jButton(ir, "media-playback-pause.png", new PlaybackPause()));
+		pnlButtons.add(jButton(ir, "media-playback-stop.png", new PlaybackStop()));
 		//add volume control
 		pnlButtons.add(new VolumeSlider(player));
 		//add document info button

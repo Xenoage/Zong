@@ -1,4 +1,4 @@
-package com.xenoage.zong.desktop.util.text;
+package com.xenoage.zong.desktop.utils.text;
 
 import static com.xenoage.utils.NullUtils.notNull;
 import static com.xenoage.utils.collections.CollectionUtils.alist;

@@ -1,6 +1,6 @@
-package com.xenoage.zong.desktop.util;
+package com.xenoage.zong.desktop.utils;
 
-import static com.xenoage.zong.desktop.JavaFXApp.app;
+import static com.xenoage.zong.desktop.App.app;
 
 import java.util.LinkedList;
 import java.util.List;

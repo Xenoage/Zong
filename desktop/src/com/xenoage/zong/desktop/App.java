@@ -47,7 +47,7 @@ import com.xenoage.zong.Zong;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.desktop.io.midi.out.MidiScorePlayer;
 import com.xenoage.zong.desktop.io.midi.out.SynthManager;
-import com.xenoage.zong.desktop.util.FilenameDialogFilter;
+import com.xenoage.zong.desktop.utils.FilenameDialogFilter;
 import com.xenoage.zong.io.musicxml.in.MusicXmlFileReader;
 
 /**
@@ -58,7 +58,7 @@ import com.xenoage.zong.io.musicxml.in.MusicXmlFileReader;
  * 
  * @author Andreas Wenger
  */
-public class JavaFXApp<DocType extends Document> {
+public class App<DocType extends Document> {
 
 	/**
 	 * Type of JavaFX app.
@@ -82,7 +82,7 @@ public class JavaFXApp<DocType extends Document> {
 
 
 	//the only instance of the this class (singleton pattern)
-	protected static JavaFXApp<?> app = null;
+	protected static App<?> app = null;
 
 	/** The "first" name of the app, like "Player" for the Zong! Player. */
 	@Getter protected String appFirstName = "JavaFXApp";
@@ -104,28 +104,37 @@ public class JavaFXApp<DocType extends Document> {
 
 
 	/**
-	 * Gets the only instance of the {@link JavaFXApp} class.
-	 * One of {@link JavaFXApp}'s subclasses should be instatiated before. Then
+	 * Gets the only instance of the {@link App} class.
+	 * One of {@link App}'s subclasses should be instatiated before. Then
 	 * that one is returned. Otherwise, a new instance of this class is created,
 	 * which is useful for testing purposes.
 	 */
-	public static JavaFXApp<?> app() {
+	public static App<?> app() {
 		if (app == null) {
 			//create minimal app for testing purposes
-			app = new JavaFXApp<Document>(AppType.DesktopApp, DocumentInterface.SDI);
+			app = new App<Document>();
 		}
 		return app;
 	}
 
 	/**
-	 * Creates a new {@link JavaFXApp} instance.
+	 * Creates a new {@link App} instance.
 	 * May be useful for testing purposes, but normally subclasses of this class
 	 * should be instantiated.
 	 */
-	protected JavaFXApp(AppType appType, DocumentInterface documentInterface) {
+	protected App(String appFirstName, AppType appType, DocumentInterface documentInterface) {
 		app = this;
+		this.appFirstName = appFirstName;
 		this.appType = appType;
 		this.documentInterface = documentInterface;
+		init();
+	}
+	
+	private App() {
+		init();
+	}
+	
+	private void init() {
 		//initialize platform utils, logging, error handling, language, audio and GUI
 		//using the template method pattern
 		initPlatformUtils();

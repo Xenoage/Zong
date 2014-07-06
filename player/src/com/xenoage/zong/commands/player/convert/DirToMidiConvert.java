@@ -1,27 +1,21 @@
 package com.xenoage.zong.commands.player.convert;
 
 import static com.xenoage.utils.jse.io.JseFileUtils.listFiles;
-import static com.xenoage.zong.io.midi.out.MidiConverter.convertToSequence;
-import static com.xenoage.zong.player.PlayerApplication.pApp;
+import static com.xenoage.zong.desktop.App.app;
+import static com.xenoage.zong.player.PlayerApp.pApp;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 
 import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
 
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequence;
 
-import com.xenoage.utils.document.command.Command;
-import com.xenoage.utils.document.command.CommandPerformer;
+import com.xenoage.utils.document.command.TransparentCommand;
 import com.xenoage.utils.filter.AllFilter;
-import com.xenoage.utils.io.FileUtils;
 import com.xenoage.utils.iterators.It;
-import com.xenoage.utils.jse.JFileChooserUtil;
-import com.xenoage.utils.jse.io.JseFileUtils;
 import com.xenoage.utils.jse.io.JseInputStream;
 import com.xenoage.utils.lang.Lang;
 import com.xenoage.zong.Voc;
@@ -41,7 +35,7 @@ import com.xenoage.zong.io.musicxml.in.FileTypeReader;
  * @author Andreas Wenger
  */
 public class DirToMidiConvert
-	implements Command {
+	extends TransparentCommand {
 
 	@Override public void execute() {
 		DirectoryChooser dc = new DirectoryChooser();

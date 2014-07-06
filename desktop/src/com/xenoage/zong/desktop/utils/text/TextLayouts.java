@@ -1,4 +1,4 @@
-package com.xenoage.zong.desktop.util.text;
+package com.xenoage.zong.desktop.utils.text;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
@@ -17,7 +17,7 @@ import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.utils.kernel.Tuple3;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Rectangle2f;
-import com.xenoage.zong.desktop.util.math.DesktopMathUtils;
+import com.xenoage.zong.desktop.utils.math.DesktopMathUtils;
 
 /**
  * This class combines several {@link TextLayout}s with

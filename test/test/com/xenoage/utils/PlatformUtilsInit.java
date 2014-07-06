@@ -1,7 +1,7 @@
 package com.xenoage.utils;
 
 import com.xenoage.zong.Zong;
-import com.xenoage.zong.desktop.util.JseZongPlatformUtils;
+import com.xenoage.zong.desktop.utils.JseZongPlatformUtils;
 
 /**
  * Bootstrap loader for {@link PlatformUtils}, called automatically

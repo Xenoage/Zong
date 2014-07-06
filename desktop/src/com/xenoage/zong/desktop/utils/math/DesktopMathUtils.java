@@ -1,4 +1,4 @@
-package com.xenoage.zong.desktop.util.math;
+package com.xenoage.zong.desktop.utils.math;
 
 import java.awt.geom.Rectangle2D;
 

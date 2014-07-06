@@ -1,4 +1,4 @@
-package com.xenoage.zong.desktop.util.text;
+package com.xenoage.zong.desktop.utils.text;
 
 import javax.swing.text.AttributeSet;
 import javax.swing.text.MutableAttributeSet;

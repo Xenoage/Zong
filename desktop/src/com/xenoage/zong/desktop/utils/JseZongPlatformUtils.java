@@ -1,4 +1,4 @@
-package com.xenoage.zong.desktop.util;
+package com.xenoage.zong.desktop.utils;
 
 import com.xenoage.utils.PlatformUtils;
 import com.xenoage.utils.jse.JsePlatformUtils;

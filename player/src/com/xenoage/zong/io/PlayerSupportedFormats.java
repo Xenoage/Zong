@@ -1,14 +1,19 @@
 package com.xenoage.zong.io;
 
-import static com.xenoage.utils.pdlib.PVector.pvec;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 
-import com.xenoage.utils.pdlib.PVector;
-import com.xenoage.zong.io.midi.out.MidiScoreFileOutput;
-import com.xenoage.zong.io.mp3.out.MP3ScoreFileOutput;
-import com.xenoage.zong.io.musicxml.in.MusicXMLScoreFileInput;
-import com.xenoage.zong.io.ogg.out.OGGScoreFileOutput;
-import com.xenoage.zong.io.wav.out.WAVScoreFileOutput;
+import java.util.List;
 
+import lombok.Getter;
+
+import com.xenoage.utils.document.io.FileFormat;
+import com.xenoage.utils.document.io.SupportedFormats;
+import com.xenoage.zong.core.Score;
+import com.xenoage.zong.desktop.io.midi.out.MidiScoreFileOutput;
+import com.xenoage.zong.desktop.io.mp3.out.Mp3ScoreFileOutput;
+import com.xenoage.zong.desktop.io.ogg.out.OggScoreFileOutput;
+import com.xenoage.zong.desktop.io.wav.out.WavScoreFileOutput;
+import com.xenoage.zong.io.musicxml.in.MusicXmlScoreFileInput;
 
 /**
  * This class contains a list of all formats which can be used
@@ -17,58 +22,36 @@ import com.xenoage.zong.io.wav.out.WAVScoreFileOutput;
  * @author Andreas Wenger
  */
 public class PlayerSupportedFormats
-	extends SupportedFormats
-{
-	
-	private static PlayerSupportedFormats instance = new PlayerSupportedFormats();
-	
-	
-	private PlayerSupportedFormats()
-	{
-		super(getSupportedFormats());
+	extends SupportedFormats<Score> {
+
+	@Getter private static PlayerSupportedFormats instance = new PlayerSupportedFormats();
+
+
+	private PlayerSupportedFormats() {
+		this.formats = getSupportedFormats();
 	}
-	
-	
-	static PVector<ScoreFileFormat> getSupportedFormats()
-	{
-		PVector<ScoreFileFormat> formats = pvec();
+
+	static List<FileFormat<Score>> getSupportedFormats() {
+		List<FileFormat<Score>> formats = alist();
 		//Midi (write only)
-		formats = formats.plus(new ScoreFileFormat(
-			FileFormats.Midi.info, null, new MidiScoreFileOutput()));
+		formats.add(ScoreFileFormats.Midi.format.withIO(null, new MidiScoreFileOutput()));
 		//MP3 (write only)
-		formats = formats.plus(new ScoreFileFormat(
-			FileFormats.MP3.info, null, new MP3ScoreFileOutput()));
+		formats.add(ScoreFileFormats.MP3.format.withIO(null, new Mp3ScoreFileOutput()));
 		//MusicXML (read only)
-		formats = formats.plus(new ScoreFileFormat(
-			FileFormats.MusicXML.info, new MusicXMLScoreFileInput(), null));
+		formats.add(ScoreFileFormats.MusicXML.format.withIO(new MusicXmlScoreFileInput(), null));
 		//OGG (write only)
-		formats = formats.plus(new ScoreFileFormat(
-			FileFormats.OGG.info, null, new OGGScoreFileOutput()));
+		formats.add(ScoreFileFormats.OGG.format.withIO(null, new OggScoreFileOutput()));
 		//WAV (write only)
-		formats = formats.plus(new ScoreFileFormat(
-			FileFormats.WAV.info, null, new WAVScoreFileOutput()));
+		formats.add(ScoreFileFormats.MP3.format.withIO(null, new WavScoreFileOutput()));
 		return formats;
 	}
-	
-	
-	public static PlayerSupportedFormats getInstance()
-	{
-		if (instance == null)
-			instance = new PlayerSupportedFormats();
-		return instance;
-	}
-	
-	
-	@Override public ScoreFileFormat getReadDefaultFormat()
-	{
-		return getByID(FileFormats.MusicXML.info.id);
+
+	@Override public FileFormat<Score> getReadDefaultFormat() {
+		return getByID(ScoreFileFormats.MusicXML.format.getId());
 	}
 
-
-	@Override public ScoreFileFormat getWriteDefaultFormat()
-	{
-		return getByID(FileFormats.Midi.info.id);
+	@Override public FileFormat<Score> getWriteDefaultFormat() {
+		return getByID(ScoreFileFormats.Midi.format.getId());
 	}
-	
 
 }

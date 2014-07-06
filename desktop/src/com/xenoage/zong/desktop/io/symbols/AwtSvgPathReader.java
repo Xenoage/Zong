@@ -6,7 +6,7 @@ import java.awt.geom.Point2D;
 
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Rectangle2f;
-import com.xenoage.zong.desktop.util.math.DesktopMathUtils;
+import com.xenoage.zong.desktop.utils.math.DesktopMathUtils;
 import com.xenoage.zong.io.symbols.SvgPathReader;
 
 /**

@@ -1,4 +1,4 @@
-package com.xenoage.zong.desktop.util.image;
+package com.xenoage.zong.desktop.utils.image;
 
 import static com.xenoage.utils.jse.JsePlatformUtils.desktopIO;
 

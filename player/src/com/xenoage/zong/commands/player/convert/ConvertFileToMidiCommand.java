@@ -5,7 +5,7 @@ import static com.xenoage.utils.log.Report.warning;
 import static com.xenoage.utils.swing.JFileChooserUtil.createFileFilter;
 import static com.xenoage.zong.SwingApp.app;
 import static com.xenoage.zong.io.midi.out.MidiConverter.convertToSequence;
-import static com.xenoage.zong.player.PlayerApplication.pApp;
+import static com.xenoage.zong.player.PlayerApp.pApp;
 
 import java.io.File;
 import java.util.List;

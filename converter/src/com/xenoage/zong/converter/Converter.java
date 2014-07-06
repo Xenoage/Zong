@@ -18,7 +18,7 @@ import com.xenoage.utils.jse.log.DesktopLogProcessing;
 import com.xenoage.utils.log.Log;
 import com.xenoage.zong.Zong;
 import com.xenoage.zong.desktop.io.midi.out.SynthManager;
-import com.xenoage.zong.desktop.util.JseZongPlatformUtils;
+import com.xenoage.zong.desktop.utils.JseZongPlatformUtils;
 import com.xenoage.zong.documents.ScoreDoc;
 import com.xenoage.zong.io.ConverterSupportedFormats;
 
