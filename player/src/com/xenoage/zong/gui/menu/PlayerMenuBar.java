@@ -22,9 +22,6 @@ import com.xenoage.utils.lang.LanguageComponent;
 import com.xenoage.zong.Voc;
 import com.xenoage.zong.commands.app.ExitCommand;
 import com.xenoage.zong.commands.beta.ErrorReportDialogCommand;
-import com.xenoage.zong.commands.convert.ConvertDirToMidiCommand;
-import com.xenoage.zong.commands.convert.ConvertFileToMidiCommand;
-import com.xenoage.zong.commands.dialog.InfoDialogCommand;
 import com.xenoage.zong.commands.dialogs.AboutDialogCommand;
 import com.xenoage.zong.commands.dialogs.AudioSettingsDialogCommand;
 import com.xenoage.zong.commands.dialogs.OpenDocumentDialogCommand;
@@ -32,6 +29,9 @@ import com.xenoage.zong.commands.dialogs.SaveDocumentDialogCommand;
 import com.xenoage.zong.commands.help.BlogCommand;
 import com.xenoage.zong.commands.help.ReadmeCommand;
 import com.xenoage.zong.commands.help.WebsiteCommand;
+import com.xenoage.zong.commands.player.convert.DirToMidiConvert;
+import com.xenoage.zong.commands.player.convert.ConvertFileToMidiCommand;
+import com.xenoage.zong.commands.player.dialog.InfoDialogCommand;
 
 
 /**
@@ -83,7 +83,7 @@ public class PlayerMenuBar
     //convert menu
 		JMenu mnuConvert = jMenu(Convert);
 		mnuConvert.add(jMenuItem(Lang.getWithEllipsis(FileToMidi), null, new ConvertFileToMidiCommand()));
-		mnuConvert.add(jMenuItem(Lang.getWithEllipsis(DirToMidi), null, new ConvertDirToMidiCommand()));
+		mnuConvert.add(jMenuItem(Lang.getWithEllipsis(DirToMidi), null, new DirToMidiConvert()));
 		menuSwing.add(mnuConvert);
     
     //settings menu

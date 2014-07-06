@@ -1,4 +1,4 @@
-package com.xenoage.zong.commands.convert;
+package com.xenoage.zong.commands.player.convert;
 
 import static com.xenoage.utils.error.Err.handle;
 import static com.xenoage.utils.log.Report.warning;

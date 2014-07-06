@@ -9,11 +9,12 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/voc"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/midi-out"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/lombok"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/renderer"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/itext"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/vorbis-java"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/musicxml-in"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/musicxml"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/controlsfx"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

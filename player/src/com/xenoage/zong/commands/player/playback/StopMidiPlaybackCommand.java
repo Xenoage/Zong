@@ -1,4 +1,4 @@
-package com.xenoage.zong.commands.playback;
+package com.xenoage.zong.commands.player.playback;
 
 import static com.xenoage.zong.player.PlayerApplication.pApp;
 
@@ -7,17 +7,17 @@ import com.xenoage.zong.commands.CommandPerformer;
 
 
 /**
- * This command pauses the MIDI playback.
+ * This command stops the MIDI playback.
  * 
  * @author Andreas Wenger
  */
-public class PauseMidiPlaybackCommand
+public class StopMidiPlaybackCommand
 	extends Command
 {
 
 	@Override public void execute(CommandPerformer performer)
 	{
-		pApp().getPlayer().pause();
+		pApp().getPlayer().stop();
 	}
 
 }

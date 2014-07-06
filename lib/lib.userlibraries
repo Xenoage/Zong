@@ -3,6 +3,9 @@
     <library name="android-midi-lib" systemlibrary="false">
         <archive path="/lib/lib/android-midi-lib-3.49.jar"/>
     </library>
+    <library name="controlsfx" systemlibrary="false">
+        <archive path="/lib/lib/controlsfx-8.0.6.jar"/>
+    </library>
     <library name="gson" systemlibrary="false">
         <archive path="/lib/lib/gson-2.2.4.jar" source="/lib/lib/dev/gson-2.2.4-sources.jar"/>
     </library>

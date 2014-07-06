@@ -13,11 +13,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.xenoage.zong.commands.Command;
-import com.xenoage.zong.commands.dialog.InfoDialogCommand;
 import com.xenoage.zong.commands.dialogs.OpenDocumentDialogCommand;
-import com.xenoage.zong.commands.playback.PauseMidiPlaybackCommand;
-import com.xenoage.zong.commands.playback.StartMidiPlaybackCommand;
-import com.xenoage.zong.commands.playback.StopMidiPlaybackCommand;
+import com.xenoage.zong.commands.player.dialog.InfoDialogCommand;
+import com.xenoage.zong.commands.player.playback.PauseMidiPlaybackCommand;
+import com.xenoage.zong.commands.player.playback.StartMidiPlaybackCommand;
+import com.xenoage.zong.commands.player.playback.StopMidiPlaybackCommand;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.gui.IconReader;
 import com.xenoage.zong.gui.component.PlaybackProgressBar;

@@ -1,4 +1,4 @@
-package com.xenoage.zong.commands.dialog;
+package com.xenoage.zong.commands.player.dialog;
 
 import static com.xenoage.zong.SwingApp.app;
 import static com.xenoage.zong.player.PlayerApplication.pApp;

@@ -8,6 +8,11 @@
 		<file name="android-midi-lib-3.49.jar" md5="1e2dce28260eb0fe12ce83b07341b6a3"/>
 		<file name="android-midi-lib-license.txt" md5="cafc597722cfad668c26d84e214993bb"/>
 	</fileset>
+	<!-- controlsfx -->
+	<fileset sourcedir="controlsfx/8.0.6/">
+		<file name="controlsfx-8.0.6.jar" md5="aa3b85f9514c420576174a46e72abc65"/>
+		<file name="controlsfx-license.txt" md5="fd298eb980b38ea8806dddb8c334b90b"/>
+	</fileset>
 	<!-- gson -->
 	<fileset sourcedir="gson/2.2.4/">
 		<file name="gson-2.2.4.jar" md5="232ea9ab7ec43b8b2ef36181ee7d693b"/>

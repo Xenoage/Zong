@@ -49,8 +49,7 @@ public class Zong {
 	 * using the given "first" name of the project (like "Viewer" or "Editor").
 	 */
 	public static String getNameAndVersion(String firstName) {
-		return projectFamilyName + " " + firstName + " " + projectVersion + "." + projectIteration +
-			" ALPHA";
+		return projectFamilyName + " " + firstName + " " + projectVersion + "." + projectIteration;
 	}
 
 	/**
