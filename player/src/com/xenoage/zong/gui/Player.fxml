@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.scene.effect.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
@@ -7,75 +8,153 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
-<VBox prefHeight="142.0" prefWidth="545.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<VBox prefHeight="27.0" prefWidth="541.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.xenoage.zong.gui.PlayerController">
    <children>
       <MenuBar>
         <menus>
-          <Menu mnemonicParsing="false" text="File">
+          <Menu fx:id="mnuFile" mnemonicParsing="false" onAction="#onOpen" text="File">
             <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
+              <MenuItem fx:id="mnuFileOpen" mnemonicParsing="false" text="Open">
+                     <graphic>
+                        <ImageView pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@img/media-eject.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></MenuItem>
+                  <MenuItem fx:id="mnuFileSaveAs" mnemonicParsing="false" onAction="#onSave" text="Save as">
+                     <graphic>
+                        <ImageView pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@img/document-save-as.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></MenuItem>
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem fx:id="mnuFileInfo" mnemonicParsing="false" onAction="#onInfo" text="Show info">
+                     <graphic>
+                        <ImageView pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@img/documentinfo.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></MenuItem>
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem fx:id="mnuFileExit" mnemonicParsing="false" onAction="#onExit" text="Exit" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
+          <Menu fx:id="mnuConvert" mnemonicParsing="false" text="Convert">
             <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
+              <MenuItem fx:id="mnuConvertFileToMidi" mnemonicParsing="false" onAction="#onConvertFileToMidi" text="File to Midi" />
+                  <MenuItem fx:id="mnuConvertDirToMidi" mnemonicParsing="false" onAction="#onConvertDirToMidi" text="Dir to Midi" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Help">
+            <Menu fx:id="mnuSettings" mnemonicParsing="false" text="Settings">
+               <items>
+                  <MenuItem fx:id="mnuSettingsAudio" mnemonicParsing="false" onAction="#onSettings" text="Audio" />
+               </items>
+            </Menu>
+          <Menu fx:id="mnuHelp" mnemonicParsing="false" text="Help">
             <items>
-              <MenuItem mnemonicParsing="false" text="About" />
+                  <MenuItem fx:id="mnuHelpReadme" mnemonicParsing="false" onAction="#onReadme" text="Read me" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+              <MenuItem fx:id="mnuHelpAbout" mnemonicParsing="false" onAction="#onHelp" text="About" />
             </items>
           </Menu>
         </menus>
       </MenuBar>
-      <BorderPane>
-         <center>
-            <Label alignment="CENTER" text="Label with a very long text, veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeery looooooooooooooooooong" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <Label fx:id="lblTitle" alignment="CENTER" text="Zong! Player" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <font>
-                  <Font name="System Bold" size="15.0" />
+                  <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-         </center>
+         </children>
          <VBox.margin>
-            <Insets />
+            <Insets bottom="5.0" left="10.0" right="10.0" top="10.0" />
          </VBox.margin>
-         <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </padding>
-      </BorderPane>
+      </AnchorPane>
       <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
          <children>
-            <Label text="00:15" />
+            <Label fx:id="lblTimePos" text="00:15" />
             <AnchorPane HBox.hgrow="ALWAYS">
                <children>
-                  <ProgressBar progress="0.55" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <ProgressBar fx:id="progress" progress="0.55" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                </children>
             </AnchorPane>
-            <Label layoutX="20.0" layoutY="21.0" text="23:54" />
+            <Label fx:id="lblTimeDuration" layoutX="20.0" layoutY="21.0" text="23:54" />
          </children>
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
       </HBox>
-      <HBox alignment="CENTER_LEFT" spacing="5.0">
+      <HBox alignment="CENTER_LEFT" prefHeight="0.0" prefWidth="667.0" spacing="5.0">
          <children>
-            <Button mnemonicParsing="false" text="Op" />
-            <Button mnemonicParsing="false" text="Pl" />
-            <Button layoutX="66.0" layoutY="15.0" mnemonicParsing="false" text="Pa" />
-            <Button layoutX="104.0" layoutY="15.0" mnemonicParsing="false" text="St" />
-            <Label text="Vol">
+            <Button fx:id="btnOpen" mnemonicParsing="false" onAction="#onOpen">
+               <graphic>
+                  <ImageView pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/media-eject.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <HBox.margin>
+                  <Insets right="10.0" />
+               </HBox.margin></Button>
+            <Button fx:id="btnStart" mnemonicParsing="false" onAction="#onStart">
+               <graphic>
+                  <ImageView pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/media-playback-start.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+            <Button fx:id="btnPause" layoutX="66.0" layoutY="15.0" mnemonicParsing="false" onAction="#onPause">
+               <graphic>
+                  <ImageView pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/media-playback-pause.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+            <Button fx:id="btnStop" layoutX="104.0" layoutY="15.0" mnemonicParsing="false" onAction="#onStop">
+               <graphic>
+                  <ImageView pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/media-playback-stop.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+            <ImageView fx:id="imgVolume" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@img/audio-volume-high.png" />
+               </image>
                <HBox.margin>
                   <Insets left="10.0" />
                </HBox.margin>
-            </Label>
-            <Slider HBox.hgrow="ALWAYS">
+            </ImageView>
+            <Slider fx:id="sliderVolume" HBox.hgrow="ALWAYS">
                <HBox.margin>
                   <Insets right="10.0" />
                </HBox.margin>
             </Slider>
-            <Button layoutX="146.0" layoutY="15.0" mnemonicParsing="false" text="Sa" />
-            <Button layoutX="509.0" layoutY="15.0" mnemonicParsing="false" text="He" />
+            <Button fx:id="btnSave" layoutX="146.0" layoutY="15.0" mnemonicParsing="false" onAction="#onSave">
+               <graphic>
+                  <ImageView pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/document-save-as.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+            <Button fx:id="btnInfo" layoutX="509.0" layoutY="15.0" mnemonicParsing="false" onAction="#onInfo">
+               <graphic>
+                  <ImageView pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/documentinfo.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
          </children>
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="5.0" />
