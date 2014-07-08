@@ -307,7 +307,7 @@ public class App<DocType extends Document> {
 	 */
 	public void showMessageDialog(final String message, final String title) {
 		log(remark("Message: " + message));
-		dialog().title("title").message(message).showInformation();
+		dialog().message(message).showInformation();
 	}
 
 	/**

@@ -1,5 +1,9 @@
 package com.xenoage.zong.gui;
 
+import static com.xenoage.zong.player.PlayerApp.pApp;
+
+import com.xenoage.zong.player.PlayerApp;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -44,7 +48,7 @@ public class PlayerController {
 	@FXML private Button btnInfo;
 	
 	@FXML void onOpen(ActionEvent event) {
-
+		pApp().showMessageDialog("Soso ist das!");
 	}
 
 	@FXML void onSave(ActionEvent event) {
