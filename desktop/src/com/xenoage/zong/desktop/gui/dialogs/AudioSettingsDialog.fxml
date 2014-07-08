@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.*?>
 
 
-<BorderPane prefHeight="449.0" prefWidth="524.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="449.0" prefWidth="524.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.xenoage.zong.desktop.gui.dialogs.AudioSettingsDialogController">
    <bottom>
       <HBox alignment="BOTTOM_RIGHT" minHeight="60.0" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
@@ -41,8 +41,8 @@
             <RowConstraints maxHeight="0.0" minHeight="0.0" prefHeight="0.0" vgrow="NEVER" />
         </rowConstraints>
          <children>
-            <Label fx:id="lblSampleRate" text="%SampleRateHz:" GridPane.rowIndex="1" />
-            <Label fx:id="lblDeviceName1" layoutX="10.0" layoutY="22.0" text="%DeviceName:" />
+            <Label text="%SampleRateHz:" GridPane.rowIndex="1" />
+            <Label layoutX="10.0" layoutY="22.0" text="%DeviceName:" />
             <Label text="%Channels:" GridPane.rowIndex="2" />
             <Label text="%Bits:" GridPane.rowIndex="3" />
             <Label text="%LatencyMs" GridPane.rowIndex="4" />
@@ -53,7 +53,7 @@
                   <Insets top="10.0" />
                </GridPane.margin>
             </Label>
-            <ComboBox minWidth="150.0" promptText="(Default)" GridPane.columnIndex="1" />
+            <ComboBox fx:id="cmbDeviceName" minWidth="150.0" promptText="(Default)" GridPane.columnIndex="1" />
             <ComboBox minWidth="150.0" promptText="44100" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <ComboBox minWidth="150.0" promptText="2" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <ComboBox minWidth="150.0" promptText="16" GridPane.columnIndex="1" GridPane.rowIndex="3" />
@@ -69,8 +69,8 @@
                   </Label>
                   <HBox spacing="10.0">
                      <children>
-                        <Button mnemonicParsing="false" text="%Select..." />
-                        <Button mnemonicParsing="false" text="%UseDefault" />
+                        <Button fx:id="btnSoundbankSelect" mnemonicParsing="false" onAction="#onSoundbankSelect" text="%Select..." />
+                        <Button fx:id="btnSoundbankUseDefault" mnemonicParsing="false" onAction="#onSoundbankUseDefault" text="%UseDefault" />
                      </children>
                   </HBox>
                </children>

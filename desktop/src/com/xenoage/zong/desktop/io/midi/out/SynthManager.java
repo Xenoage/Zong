@@ -3,8 +3,10 @@ package com.xenoage.zong.desktop.io.midi.out;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -315,4 +317,24 @@ public class SynthManager {
 		return null;
 	}
 
+	/**
+	 * Gets a list with the names of the available audio mixers.
+	 * The mixers are in the order provided by the platform, so
+	 * their indices can be used to identify them.
+	 */
+	public static List<String> getAudioMixers() {
+		ArrayList<String> mixerNames = new ArrayList<String>();
+		for (Mixer.Info info : AudioSystem.getMixerInfo()) {
+			Mixer mixer = AudioSystem.getMixer(info);
+			boolean hassrcline = false;
+			for (Line.Info linfo : mixer.getSourceLineInfo())
+				if (linfo instanceof javax.sound.sampled.DataLine.Info)
+					hassrcline = true;
+			if (hassrcline) {
+				mixerNames.add(info.getName());
+			}
+		}
+		return mixerNames;
+	}
+	
 }

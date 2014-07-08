@@ -23,7 +23,7 @@ public class PlayerJavaFXApp
 		throws Exception {
 		
 		Parent root = FXMLLoader.load(
-			getClass().getResource("../desktop/gui/AudioSettingsDialog.fxml"),
+			getClass().getResource("../desktop/gui/dialogs/AudioSettingsDialog.fxml"),
 			new LangResourceBundle(Voc.values())); //../gui/Player.fxml"));
 		Scene scene = new Scene(root);
 
