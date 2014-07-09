@@ -47,7 +47,7 @@ import com.xenoage.utils.jse.settings.Settings;
  */
 public class SynthManager {
 
-	public static final String CONFIG_FILE = "synth";
+	public static final String configFile = "synth";
 	private static SynthManager instance = null;
 
 	private Synthesizer synthesizer = null;
@@ -76,7 +76,7 @@ public class SynthManager {
 		if (readSettings) {
 			//load settings (or use default ones)
 			Settings s = Settings.getInstance();
-			String file = CONFIG_FILE;
+			String file = configFile;
 			String deviceName = s.getSetting("devicename", file);
 			float sampleRate = s.getSetting("samplerate", file, 44100);
 			int sampleSizeInBits = s.getSetting("bits", file, 16);

@@ -7,13 +7,12 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
-<BorderPane prefHeight="449.0" prefWidth="524.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.xenoage.zong.desktop.gui.dialogs.AudioSettingsDialogController">
+<BorderPane fx:id="root" prefHeight="449.0" prefWidth="524.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.xenoage.zong.desktop.gui.dialogs.AudioSettingsDialogController">
    <bottom>
       <HBox alignment="BOTTOM_RIGHT" minHeight="60.0" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
-            <Button defaultButton="true" mnemonicParsing="false" text="OK" />
-            <Button cancelButton="true" mnemonicParsing="false" text="Cancel" />
+            <Button defaultButton="true" mnemonicParsing="false" onAction="#onOK" text="%OK" />
+            <Button cancelButton="true" mnemonicParsing="false" onAction="#onCancel" text="%Cancel" />
          </children>
          <BorderPane.margin>
             <Insets />
@@ -54,15 +53,15 @@
                </GridPane.margin>
             </Label>
             <ComboBox fx:id="cmbDeviceName" minWidth="150.0" promptText="(Default)" GridPane.columnIndex="1" />
-            <ComboBox minWidth="150.0" promptText="44100" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <ComboBox minWidth="150.0" promptText="2" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <ComboBox minWidth="150.0" promptText="16" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <ComboBox minWidth="150.0" promptText="100" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <ComboBox minWidth="150.0" promptText="64" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <ComboBox minWidth="150.0" promptText="Linear" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <ComboBox fx:id="cmbSampleRateHz" minWidth="150.0" promptText="44100" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <ComboBox fx:id="cmbChannels" minWidth="150.0" promptText="2" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <ComboBox fx:id="cmbBits" minWidth="150.0" promptText="16" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <ComboBox fx:id="cmbLatencyMs" minWidth="150.0" promptText="100" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <ComboBox fx:id="cmbMaxPolyphony" minWidth="150.0" promptText="64" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <ComboBox fx:id="cmbInterpolation" minWidth="150.0" promptText="Linear" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             <VBox spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
                <children>
-                  <Label text="Default">
+                  <Label fx:id="lblSoundbank" text="%Default">
                      <padding>
                         <Insets top="10.0" />
                      </padding>

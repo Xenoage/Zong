@@ -1,7 +1,10 @@
 package com.xenoage.zong.gui;
 
+import static com.xenoage.zong.desktop.gui.utils.FXUtils.getStage;
 import static com.xenoage.zong.player.PlayerApp.pApp;
 
+import com.xenoage.zong.desktop.commands.dialog.AudioSettingsDialogShow;
+import com.xenoage.zong.desktop.gui.utils.FXUtils;
 import com.xenoage.zong.player.PlayerApp;
 
 import javafx.event.ActionEvent;
@@ -72,7 +75,7 @@ public class PlayerController {
 	}
 
 	@FXML void onSettings(ActionEvent event) {
-
+		pApp().getCommandPerformer().execute(new AudioSettingsDialogShow(getStage(lblTitle)));
 	}
 
 	@FXML void onReadme(ActionEvent event) {
