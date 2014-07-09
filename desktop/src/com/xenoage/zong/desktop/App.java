@@ -351,11 +351,12 @@ public class App<DocType extends Document> {
 	/**
 	 * Saves the current document at the given path in the given format.
 	 */
-	public void saveDocument(String filePath, FileFormat<DocType> format) {
+	public void saveDocument(String filePath, FileFormat<?> format) {
 		DocType doc = getActiveDocument();
 		if (doc == null)
 			return;
-		FileOutput<DocType> output = format.getOutput();
+		@SuppressWarnings("unchecked") FileOutput<DocType> output =
+			(FileOutput<DocType>) format.getOutput();
 		try {
 			if (output != null)
 				output.write(doc, new JseOutputStream(new File(filePath)), filePath);

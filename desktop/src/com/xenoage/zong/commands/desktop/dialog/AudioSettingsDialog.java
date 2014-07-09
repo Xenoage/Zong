@@ -1,4 +1,4 @@
-package com.xenoage.zong.desktop.commands.dialog;
+package com.xenoage.zong.commands.desktop.dialog;
 
 import static com.xenoage.utils.error.Err.handle;
 import static com.xenoage.utils.log.Report.error;
@@ -20,7 +20,7 @@ import com.xenoage.zong.desktop.gui.utils.FXUtils;
  * 
  * @author Andreas Wenger
  */
-@AllArgsConstructor public class AudioSettingsDialogShow
+@AllArgsConstructor public class AudioSettingsDialog
 	extends TransparentCommand {
 	
 	private Stage parentStage = null;

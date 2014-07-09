@@ -2,6 +2,7 @@ package com.xenoage.zong.commands.player.convert;
 
 import static com.xenoage.utils.jse.io.JseFileUtils.listFiles;
 import static com.xenoage.zong.desktop.App.app;
+import static com.xenoage.zong.desktop.gui.utils.FileChooserUtils.rememberDir;
 import static com.xenoage.zong.player.PlayerApp.pApp;
 
 import java.io.File;
@@ -9,9 +10,12 @@ import java.io.IOException;
 import java.util.List;
 
 import javafx.stage.DirectoryChooser;
+import javafx.stage.Window;
 
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequence;
+
+import lombok.AllArgsConstructor;
 
 import com.xenoage.utils.document.command.TransparentCommand;
 import com.xenoage.utils.filter.AllFilter;
@@ -34,8 +38,10 @@ import com.xenoage.zong.io.musicxml.in.FileTypeReader;
  * 
  * @author Andreas Wenger
  */
-public class DirToMidiConvert
+@AllArgsConstructor public class DirToMidiConvert
 	extends TransparentCommand {
+	
+	private Window ownerWindow;
 
 	@Override public void execute() {
 		DirectoryChooser dc = new DirectoryChooser();
@@ -52,11 +58,12 @@ public class DirToMidiConvert
 		boolean subDirs = true; //GOON
 		boolean cancelOnFirstError = false; //GOON
 
-		File dir = dc.showDialog(app().getMainWindow());
+		File dir = dc.showDialog(ownerWindow);
 
 		if (dir != null) {
-			//GOON JFileChooserUtil.rememberDir(fc);
-
+			//remember directory
+			rememberDir(dir);
+			//start conversion - TODO: show progress
 			List<File> files = listFiles(dir, subDirs);
 			int countOK = 0;
 			int countFailed = 0;

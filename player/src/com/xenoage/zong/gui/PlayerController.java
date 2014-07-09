@@ -2,11 +2,6 @@ package com.xenoage.zong.gui;
 
 import static com.xenoage.zong.desktop.gui.utils.FXUtils.getStage;
 import static com.xenoage.zong.player.PlayerApp.pApp;
-
-import com.xenoage.zong.desktop.commands.dialog.AudioSettingsDialogShow;
-import com.xenoage.zong.desktop.gui.utils.FXUtils;
-import com.xenoage.zong.player.PlayerApp;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -16,6 +11,12 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Slider;
 import javafx.scene.image.ImageView;
+
+import com.xenoage.zong.commands.desktop.dialog.AudioSettingsDialog;
+import com.xenoage.zong.commands.desktop.dialog.OpenDocumentDialog;
+import com.xenoage.zong.commands.desktop.dialog.SaveDocumentDialog;
+import com.xenoage.zong.commands.player.convert.DirToMidiConvert;
+import com.xenoage.zong.commands.player.convert.FileToMidiConvert;
 
 public class PlayerController {
 
@@ -51,11 +52,11 @@ public class PlayerController {
 	@FXML private Button btnInfo;
 	
 	@FXML void onOpen(ActionEvent event) {
-		pApp().showMessageDialog("Soso ist das!");
+		pApp().getCommandPerformer().execute(new OpenDocumentDialog(getStage(lblTitle)));
 	}
 
 	@FXML void onSave(ActionEvent event) {
-
+		pApp().getCommandPerformer().execute(new SaveDocumentDialog(getStage(lblTitle)));
 	}
 
 	@FXML void onInfo(ActionEvent event) {
@@ -67,15 +68,15 @@ public class PlayerController {
 	}
 
 	@FXML void onConvertFileToMidi(ActionEvent event) {
-
+		pApp().getCommandPerformer().execute(new FileToMidiConvert(getStage(lblTitle)));
 	}
 
 	@FXML void onConvertDirToMidi(ActionEvent event) {
-
+		pApp().getCommandPerformer().execute(new DirToMidiConvert(getStage(lblTitle)));
 	}
 
 	@FXML void onSettings(ActionEvent event) {
-		pApp().getCommandPerformer().execute(new AudioSettingsDialogShow(getStage(lblTitle)));
+		pApp().getCommandPerformer().execute(new AudioSettingsDialog(getStage(lblTitle)));
 	}
 
 	@FXML void onReadme(ActionEvent event) {

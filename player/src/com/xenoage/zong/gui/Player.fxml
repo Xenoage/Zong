@@ -12,9 +12,9 @@
    <children>
       <MenuBar>
         <menus>
-          <Menu fx:id="mnuFile" mnemonicParsing="false" onAction="#onOpen" text="File">
+          <Menu fx:id="mnuFile" mnemonicParsing="false" onAction="#onOpen" text="%Document">
             <items>
-              <MenuItem fx:id="mnuFileOpen" mnemonicParsing="false" text="Open">
+              <MenuItem fx:id="mnuFileOpen" mnemonicParsing="false" text="%Open...">
                      <graphic>
                         <ImageView pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -22,7 +22,7 @@
                            </image>
                         </ImageView>
                      </graphic></MenuItem>
-                  <MenuItem fx:id="mnuFileSaveAs" mnemonicParsing="false" onAction="#onSave" text="Save as">
+                  <MenuItem fx:id="mnuFileSaveAs" mnemonicParsing="false" onAction="#onSave" text="%SaveAs...">
                      <graphic>
                         <ImageView pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -31,7 +31,7 @@
                         </ImageView>
                      </graphic></MenuItem>
                   <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem fx:id="mnuFileInfo" mnemonicParsing="false" onAction="#onInfo" text="Show info">
+                  <MenuItem fx:id="mnuFileInfo" mnemonicParsing="false" onAction="#onInfo" text="%ShowInfo...">
                      <graphic>
                         <ImageView pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -40,25 +40,25 @@
                         </ImageView>
                      </graphic></MenuItem>
                   <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem fx:id="mnuFileExit" mnemonicParsing="false" onAction="#onExit" text="Exit" />
+                  <MenuItem fx:id="mnuFileExit" mnemonicParsing="false" onAction="#onExit" text="%Exit" />
             </items>
           </Menu>
-          <Menu fx:id="mnuConvert" mnemonicParsing="false" text="Convert">
+          <Menu fx:id="mnuConvert" mnemonicParsing="false" text="%Convert">
             <items>
-              <MenuItem fx:id="mnuConvertFileToMidi" mnemonicParsing="false" onAction="#onConvertFileToMidi" text="File to Midi" />
-                  <MenuItem fx:id="mnuConvertDirToMidi" mnemonicParsing="false" onAction="#onConvertDirToMidi" text="Dir to Midi" />
+              <MenuItem fx:id="mnuConvertFileToMidi" mnemonicParsing="false" onAction="#onConvertFileToMidi" text="%FileToMidi..." />
+                  <MenuItem fx:id="mnuConvertDirToMidi" mnemonicParsing="false" onAction="#onConvertDirToMidi" text="%DirToMidi..." />
             </items>
           </Menu>
-            <Menu fx:id="mnuSettings" mnemonicParsing="false" text="Settings">
+            <Menu fx:id="mnuSettings" mnemonicParsing="false" text="%Settings">
                <items>
-                  <MenuItem fx:id="mnuSettingsAudio" mnemonicParsing="false" onAction="#onSettings" text="Audio" />
+                  <MenuItem fx:id="mnuSettingsAudio" mnemonicParsing="false" onAction="#onSettings" text="%Audio..." />
                </items>
             </Menu>
-          <Menu fx:id="mnuHelp" mnemonicParsing="false" text="Help">
+          <Menu fx:id="mnuHelp" mnemonicParsing="false" text="%Help">
             <items>
-                  <MenuItem fx:id="mnuHelpReadme" mnemonicParsing="false" onAction="#onReadme" text="Read me" />
+                  <MenuItem fx:id="mnuHelpReadme" mnemonicParsing="false" onAction="#onReadme" text="%Readme" />
                   <SeparatorMenuItem mnemonicParsing="false" />
-              <MenuItem fx:id="mnuHelpAbout" mnemonicParsing="false" onAction="#onHelp" text="About" />
+              <MenuItem fx:id="mnuHelpAbout" mnemonicParsing="false" onAction="#onHelp" text="%About" />
             </items>
           </Menu>
         </menus>

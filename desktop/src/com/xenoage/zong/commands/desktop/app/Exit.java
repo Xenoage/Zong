@@ -1,4 +1,4 @@
-package com.xenoage.zong.desktop.commands.app;
+package com.xenoage.zong.commands.desktop.app;
 
 import static com.xenoage.zong.desktop.App.app;
 

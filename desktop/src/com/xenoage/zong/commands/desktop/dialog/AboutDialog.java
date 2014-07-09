@@ -1,4 +1,4 @@
-package com.xenoage.zong.desktop.commands.dialog;
+package com.xenoage.zong.commands.desktop.dialog;
 
 import static com.xenoage.zong.desktop.App.app;
 
@@ -10,7 +10,7 @@ import com.xenoage.zong.Zong;
  *
  * @author Andreas Wenger
  */
-public class AboutDialogShow
+public class AboutDialog
 	extends TransparentCommand {
 
 	@Override public void execute() {
