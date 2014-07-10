@@ -12,9 +12,9 @@
    <children>
       <MenuBar>
         <menus>
-          <Menu fx:id="mnuFile" mnemonicParsing="false" onAction="#onOpen" text="%Document">
+          <Menu fx:id="mnuFile" mnemonicParsing="false" text="%Document">
             <items>
-              <MenuItem fx:id="mnuFileOpen" mnemonicParsing="false" text="%Open...">
+              <MenuItem fx:id="mnuFileOpen" mnemonicParsing="false" onAction="#onOpen" text="%Open...">
                      <graphic>
                         <ImageView pickOnBounds="true" preserveRatio="true">
                            <image>

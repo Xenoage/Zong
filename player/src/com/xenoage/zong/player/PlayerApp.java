@@ -133,4 +133,11 @@ public class PlayerApp
 		player.start();
 	}
 
+	@Override public void close() {
+		player.stop();
+		super.close();
+	}
+	
+	
+
 }

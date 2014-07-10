@@ -12,11 +12,13 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Slider;
 import javafx.scene.image.ImageView;
 
+import com.xenoage.zong.commands.desktop.app.Exit;
 import com.xenoage.zong.commands.desktop.dialog.AudioSettingsDialog;
 import com.xenoage.zong.commands.desktop.dialog.OpenDocumentDialog;
 import com.xenoage.zong.commands.desktop.dialog.SaveDocumentDialog;
 import com.xenoage.zong.commands.player.convert.DirToMidiConvert;
 import com.xenoage.zong.commands.player.convert.FileToMidiConvert;
+import com.xenoage.zong.commands.player.dialog.AboutDialogShow;
 
 public class PlayerController {
 
@@ -64,7 +66,7 @@ public class PlayerController {
 	}
 
 	@FXML void onExit(ActionEvent event) {
-
+		pApp().getCommandPerformer().execute(new Exit());
 	}
 
 	@FXML void onConvertFileToMidi(ActionEvent event) {
@@ -84,7 +86,7 @@ public class PlayerController {
 	}
 
 	@FXML void onHelp(ActionEvent event) {
-
+		pApp().getCommandPerformer().execute(new AboutDialogShow(getStage(lblTitle)));
 	}
 
 	@FXML void onStart(ActionEvent event) {

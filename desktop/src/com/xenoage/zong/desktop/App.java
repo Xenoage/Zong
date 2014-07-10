@@ -290,6 +290,7 @@ public class App<DocType extends Document> {
 		if (getAppType() == AppType.DesktopApp) {
 			Log.close();
 			Platform.exit();
+			System.exit(0); //close all open threads
 		}
 	}
 	

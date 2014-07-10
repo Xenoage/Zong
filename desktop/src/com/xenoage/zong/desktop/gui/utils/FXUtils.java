@@ -1,6 +1,7 @@
 package com.xenoage.zong.desktop.gui.utils;
 
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -25,7 +26,9 @@ public class FXUtils {
 	 * The vocabulary from {@link Voc} is used.
 	 * @param fxmlName  the path to the FXML name within the classpath, e.g. "/my/package/Test.fxml"
 	 * @param title     the title of the stage
+	 * @deprecated just a test
 	 */
+	@Deprecated
 	public static Stage createStageFromFXML(String fxmlPath, String title)
 		throws IOException {
 		Parent root = createNodeFromFXML(fxmlPath);
@@ -40,11 +43,18 @@ public class FXUtils {
 	 * Creates and returns a {@link Parent} node from the given FXML file.
 	 * The vocabulary from {@link Voc} is used.
 	 * @param fxmlName  the path to the FXML name within the classpath, e.g. "/my/package/Test.fxml"
+	 * @deprecated just a test
 	 */
+	@Deprecated
 	public static Parent createNodeFromFXML(String fxmlPath)
 		throws IOException {
-		return FXMLLoader.load(
-			FXUtils.class.getResource(fxmlPath), new LangResourceBundle(Voc.values()));
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(FXUtils.class.getResource(fxmlPath));
+		loader.setResources(new LangResourceBundle(Voc.values()));
+		loader.load();
+		Parent root = loader.getRoot();
+		Object c = loader.getController();
+		return root;
 	}
 	
 	/**

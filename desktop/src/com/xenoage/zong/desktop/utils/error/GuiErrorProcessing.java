@@ -3,6 +3,8 @@ package com.xenoage.zong.desktop.utils.error;
 import static com.xenoage.utils.PlatformUtils.platformUtils;
 import static com.xenoage.zong.desktop.App.app;
 
+import org.controlsfx.dialog.Dialogs;
+
 import com.xenoage.utils.error.BasicErrorProcessing;
 import com.xenoage.utils.lang.Lang;
 import com.xenoage.utils.log.Level;
@@ -31,7 +33,11 @@ public class GuiErrorProcessing
 			if (report.filePaths != null && report.filePaths.size() > 0)
 				filePath = report.filePaths.get(0);
 			//create dialog - TODO: level and filepath - TODO: enhance with error report via HTTP
-			app().dialog().message(message).showException(report.error);
+			Dialogs dialog = app().dialog().message(message);
+			if (report.error != null)
+				dialog.showException(report.error);
+			else
+				dialog.showError();
 		}
 		//if it is a fatal error, close application
 		if (report.level == Level.Fatal) {

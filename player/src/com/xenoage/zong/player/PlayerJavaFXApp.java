@@ -25,4 +25,12 @@ public class PlayerJavaFXApp
 		stage.show();
 	}
 
+	@Override public void stop()
+		throws Exception {
+		super.stop();
+		pApp().close();
+	}
+	
+	
+
 }
