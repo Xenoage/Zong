@@ -1,6 +1,10 @@
 package com.xenoage.zong.gui;
 
+import static com.xenoage.utils.collections.CollectionUtils.map;
 import static com.xenoage.zong.player.Player.pApp;
+
+import java.util.Map;
+
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,7 +14,9 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Slider;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 
 import com.xenoage.utils.document.command.Command;
 import com.xenoage.zong.commands.desktop.app.Exit;
@@ -63,18 +69,40 @@ public class PlayerFrame
 	@FXML private Button btnSave;
 	@FXML private Button btnInfo;
 	
+	private Map<String, Image> volumeIcons = map();
+	
+	
 	public void initialize() {
+		//load icons
+		volumeIcons.put("high", readImage("audio-volume-high.png"));
+		volumeIcons.put("medium", readImage("audio-volume-medium.png"));
+		volumeIcons.put("low", readImage("audio-volume-low.png"));
+		volumeIcons.put("muted", readImage("audio-volume-muted.png"));
+		//reset values
+		lblTimePos.setText("");
+		lblTimeDuration.setText("");
+		progress.setProgress(0);
+		sliderVolume.setValue(70);
+		imgVolume.setImage(volumeIcons.get("medium"));
 		//handle progress bar clicks
 		pApp().getPlayer().addPlaybackListener(this);
-		progress.setOnMouseClicked(e -> {
-			MidiScorePlayer player = pApp().getPlayer();
-			if (player.getSequence() != null) {
-				double pos = e.getX() / progress.getWidth();
-				long mis = (long) (pos * player.getMicrosecondLength());
-				player.setMicrosecondPosition(mis);
-				playbackAtMs(mis / 1000);
-			}
+		//handle volume slider events
+		sliderVolume.valueProperty().addListener((property, oldValue, newValue) -> {
+			float value = newValue.floatValue() * 0.01f;
+			pApp().getPlayer().setVolume(value);
+			String s = "muted";
+			if (value > 0.8f)
+				s = "high";
+			else if (value > 0.4f)
+				s = "medium";
+			else if (value > 0f)
+				s = "low";
+			imgVolume.setImage(volumeIcons.get(s));
 		});
+	}
+	
+	private Image readImage(String filename) {
+		return new Image(getClass().getResourceAsStream("img/" + filename));
 	}
 
 	@Override public void playbackAtMP(MP mp, long ms) {
@@ -116,9 +144,10 @@ public class PlayerFrame
 		long timeS = timeMs / 1000;
 		String mins = String.valueOf(timeS / 60);
 		String secs = String.valueOf(timeS % 60);
-		if (secs.length() < 2) {
+		if (mins.length() < 2)
+			mins = "0" + mins;
+		if (secs.length() < 2)
 			secs = "0" + secs;
-		}
 		return mins + ":" + secs;
 	}
 
@@ -165,6 +194,16 @@ public class PlayerFrame
 
 	@FXML void onStop(ActionEvent event) {
 		execute(new PlaybackStop());
+	}
+	
+	@FXML void onProgressBarClick(MouseEvent event) {
+		MidiScorePlayer player = pApp().getPlayer();
+		if (player.getSequence() != null) {
+			double pos = event.getX() / progress.getWidth();
+			long mis = (long) (pos * player.getMicrosecondLength());
+			player.setMicrosecondPosition(mis);
+			playbackAtMs(mis / 1000);
+		}
 	}
 	
 	private void execute(Command command) {

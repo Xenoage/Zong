@@ -237,12 +237,7 @@ public class MidiScorePlayer
 
 	private void applyVolume() {
 		MidiChannel[] channels = SynthManager.getSynthesizer().getChannels();
-
-		//max should be 127, but we use 255 to allow more loudness (overdrive)
-		//TODO: we do this because it works and 127 is quite quiet. but may we do it
-		//according to the MIDI standard?
-		int max = 255;
-
+		int max = 127; //according to MIDI standard
 		for (int i = 0; i < channels.length; i++) {
 			channels[i].controlChange(7, Math.round(volume * max));
 		}

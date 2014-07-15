@@ -73,15 +73,15 @@
             <Insets bottom="5.0" left="10.0" right="10.0" top="10.0" />
          </VBox.margin>
       </AnchorPane>
-      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
          <children>
-            <Label fx:id="lblTimePos" text="00:15" />
+            <Label fx:id="lblTimePos" minWidth="40.0" text="00:15" />
             <AnchorPane HBox.hgrow="ALWAYS">
                <children>
-                  <ProgressBar fx:id="progress" progress="0.55" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <ProgressBar fx:id="progress" onMouseClicked="#onProgressBarClick" progress="0.55" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                </children>
             </AnchorPane>
-            <Label fx:id="lblTimeDuration" layoutX="20.0" layoutY="21.0" text="23:54" />
+            <Label fx:id="lblTimeDuration" alignment="CENTER_RIGHT" layoutX="20.0" layoutY="21.0" minWidth="40.0" text="23:54" />
          </children>
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -132,7 +132,7 @@
                   <Insets left="10.0" />
                </HBox.margin>
             </ImageView>
-            <Slider fx:id="sliderVolume" HBox.hgrow="ALWAYS">
+            <Slider fx:id="sliderVolume" majorTickUnit="50.0" minorTickCount="4" showTickMarks="true" value="70.0" HBox.hgrow="ALWAYS">
                <HBox.margin>
                   <Insets right="10.0" />
                </HBox.margin>
