@@ -3,7 +3,7 @@ package com.xenoage.zong.commands.player.convert;
 import static com.xenoage.utils.jse.io.JseFileUtils.listFiles;
 import static com.xenoage.zong.desktop.App.app;
 import static com.xenoage.zong.desktop.gui.utils.FileChooserUtils.rememberDir;
-import static com.xenoage.zong.player.PlayerApp.pApp;
+import static com.xenoage.zong.player.Player.pApp;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,10 +1,10 @@
 package com.xenoage.zong.commands.player.dialog;
 
-import static com.xenoage.zong.desktop.gui.utils.Dialog.dialog;
 import javafx.stage.Window;
 import lombok.AllArgsConstructor;
 
 import com.xenoage.utils.document.command.TransparentCommand;
+import com.xenoage.zong.desktop.gui.utils.Dialog;
 import com.xenoage.zong.gui.dialog.AboutDialog;
 
 /**
@@ -19,7 +19,7 @@ public class AboutDialogShow
 	private Window owner;
 
 	@Override public void execute() {
-		dialog(AboutDialog.class).showDialog(owner);
+		Dialog.dialog(AboutDialog.class).showDialog(owner);
 	}
 
 }

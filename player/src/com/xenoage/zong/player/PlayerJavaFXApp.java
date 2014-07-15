@@ -1,11 +1,11 @@
 package com.xenoage.zong.player;
 
-import static com.xenoage.zong.desktop.gui.utils.FXUtils.createNodeFromFXML;
-import static com.xenoage.zong.player.PlayerApp.pApp;
+import static com.xenoage.zong.player.Player.pApp;
 import javafx.application.Application;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
+
+import com.xenoage.zong.desktop.gui.utils.Dialog;
+import com.xenoage.zong.gui.PlayerFrame;
 
 /**
  * JavaFX main class.
@@ -15,14 +15,10 @@ import javafx.stage.Stage;
 public class PlayerJavaFXApp
 	extends Application {
 
-	@Override public void start(Stage stage)
+	@Override public void start(Stage ignored)
 		throws Exception {
 		
-		Parent root = createNodeFromFXML("/com/xenoage/zong/gui/Player.fxml");
-		Scene scene = new Scene(root);
-		stage.setTitle(pApp().getNameAndVersion());
-		stage.setScene(scene);
-		stage.show();
+		Dialog.dialog(PlayerFrame.class).showDialog(null);
 	}
 
 	@Override public void stop()

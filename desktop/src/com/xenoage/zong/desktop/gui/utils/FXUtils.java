@@ -59,8 +59,9 @@ public class FXUtils {
 	
 	/**
 	 * Gets the parent stage of the given node.
+	 * @deprecated use {@link Dialog} class
 	 */
-	public static Stage getStage(Node node) {
+	@Deprecated public static Stage getStage(Node node) {
 		return (Stage) node.getScene().getWindow();
 	}
 	

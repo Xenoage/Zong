@@ -21,7 +21,7 @@ import com.xenoage.zong.io.midi.out.MidiScorePlayer;
  * 
  * @author Andreas Wenger
  */
-public class PlayerFrame
+public class PlayerFrameOld
 	extends JFrame
 {
 	
@@ -29,7 +29,7 @@ public class PlayerFrame
 	private PlayerPanel panel;
 	
 	
-	public PlayerFrame(MidiScorePlayer player)
+	public PlayerFrameOld(MidiScorePlayer player)
 	{
 		//location and behavior
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

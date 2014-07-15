@@ -15,6 +15,7 @@ public class Zong {
 	//general information on this program
 	public static final String projectFamilyName = "Zong!";
 	public static final String projectVersion = "0.1-a";
+	public static final String projectVersionLong = projectVersion + "." + projectIteration;
 	public static final String projectIterationName = "Flute";
 
 	//package path
@@ -49,7 +50,7 @@ public class Zong {
 	 * using the given "first" name of the project (like "Viewer" or "Editor").
 	 */
 	public static String getNameAndVersion(String firstName) {
-		return projectFamilyName + " " + firstName + " " + projectVersion + "." + projectIteration;
+		return projectFamilyName + " " + firstName + " " + projectVersionLong;
 	}
 
 	/**
@@ -60,8 +61,8 @@ public class Zong {
 		JOptionPane.showMessageDialog(null, "Warning: This version of " + projectFamilyName +
 			" is \"work in progress\" any may not work " + "as expected.\n" +
 			"If you need a working program, use version " + Zong.projectVersion + "." +
-			Zong.projectIterationLastWorking, projectFamilyName + " " + projectVersion + "." +
-			projectIteration, JOptionPane.WARNING_MESSAGE);
+			Zong.projectIterationLastWorking, projectFamilyName + " " + projectVersionLong,
+			JOptionPane.WARNING_MESSAGE);
 	}
 
 }

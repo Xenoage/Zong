@@ -19,6 +19,21 @@ import com.xenoage.utils.jse.settings.Settings;
  * @author Andreas Wenger
  */
 public class FileChooserUtils {
+	
+	/**
+	 * Sets the initial directory, if it exists.
+	 */
+	public static void setInitialDir(FileChooser fileChooser, String dir) {
+		if (dir == null)
+			return;
+		File file = new File(dir);
+		if (file.exists()) {
+			if (file.isFile())
+				file = file.getParentFile();
+			if (file != null)
+				fileChooser.setInitialDirectory(file);
+		}
+	}
 
 	/**
 	 * Adds an extension filter for the given {@link FileFormat} and returns it.

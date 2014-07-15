@@ -8,7 +8,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox prefHeight="27.0" prefWidth="541.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.xenoage.zong.gui.PlayerController">
+<VBox prefHeight="27.0" prefWidth="541.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.xenoage.zong.gui.PlayerFrame">
    <children>
       <MenuBar>
         <menus>
@@ -56,8 +56,6 @@
             </Menu>
           <Menu fx:id="mnuHelp" mnemonicParsing="false" text="%Help">
             <items>
-                  <MenuItem fx:id="mnuHelpReadme" mnemonicParsing="false" onAction="#onReadme" text="%Readme" />
-                  <SeparatorMenuItem mnemonicParsing="false" />
               <MenuItem fx:id="mnuHelpAbout" mnemonicParsing="false" onAction="#onHelp" text="%About" />
             </items>
           </Menu>

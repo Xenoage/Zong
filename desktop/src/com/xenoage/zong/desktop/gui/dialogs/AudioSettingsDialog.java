@@ -1,6 +1,5 @@
 package com.xenoage.zong.desktop.gui.dialogs;
 
-import static com.xenoage.zong.desktop.gui.utils.FXUtils.getStage;
 import static com.xenoage.zong.desktop.gui.utils.FXUtils.getValue;
 import static com.xenoage.zong.desktop.gui.utils.FXUtils.setValue;
 import static javafx.collections.FXCollections.observableArrayList;
@@ -15,10 +14,13 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
+import lombok.Getter;
 
 import com.xenoage.utils.jse.settings.Settings;
 import com.xenoage.utils.lang.Lang;
 import com.xenoage.zong.Voc;
+import com.xenoage.zong.desktop.gui.utils.Dialog;
+import com.xenoage.zong.desktop.gui.utils.FileChooserUtils;
 import com.xenoage.zong.desktop.io.filefilter.SoundbankFileFilter;
 import com.xenoage.zong.desktop.io.midi.out.SynthManager;
 
@@ -27,7 +29,8 @@ import com.xenoage.zong.desktop.io.midi.out.SynthManager;
  * @author andi
  *
  */
-public class AudioSettingsDialogController {
+public class AudioSettingsDialog
+	extends Dialog {
 
 	@FXML private Pane root;
 	@FXML private ComboBox<String> cmbDeviceName;
@@ -42,7 +45,7 @@ public class AudioSettingsDialogController {
 	@FXML private Button btnSoundbankUseDefault;
 	@FXML private Button btnSoundbankSelect;
 
-	private String soundbankPath = "";
+	@Getter private String soundbankPath = "";
 	
 	
 	public void initialize() {
@@ -92,12 +95,10 @@ public class AudioSettingsDialogController {
 
 	@FXML void onSoundbankSelect(ActionEvent event) {
 		FileChooser fc = new FileChooser();
-		if (soundbankPath != null)
-			fc.setInitialDirectory(new File(soundbankPath));
-		
+		FileChooserUtils.setInitialDir(fc, soundbankPath);
 		fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter(
 			SoundbankFileFilter.getDescription(), SoundbankFileFilter.getExtensions()));
-    File file = fc.showOpenDialog(getStage(root));
+    File file = fc.showOpenDialog(stage);
     if (file != null) {
       soundbankPath = file.getAbsolutePath();
 			lblSoundbank.setText(file.getName());
@@ -121,11 +122,11 @@ public class AudioSettingsDialogController {
 		s.setSetting("interpolation", file, getValue(cmbInterpolation));
 		s.setSetting("soundbank", file, soundbankPath);
 		s.save(file);
-		getStage(root).close();
+		onOK();
 	}
 
 	@FXML void onCancel(ActionEvent event) {
-		getStage(root).close();
+		onCancel();
 	}
 	
 }

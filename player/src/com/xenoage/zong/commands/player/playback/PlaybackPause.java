@@ -1,6 +1,6 @@
 package com.xenoage.zong.commands.player.playback;
 
-import static com.xenoage.zong.player.PlayerApp.pApp;
+import static com.xenoage.zong.player.Player.pApp;
 
 import com.xenoage.utils.document.command.TransparentCommand;
 

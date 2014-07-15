@@ -20,7 +20,7 @@ import com.xenoage.zong.core.Score;
 import com.xenoage.zong.desktop.App;
 import com.xenoage.zong.desktop.io.midi.out.MidiScorePlayer;
 import com.xenoage.zong.desktop.utils.error.GuiErrorProcessing;
-import com.xenoage.zong.gui.PlayerController;
+import com.xenoage.zong.gui.PlayerFrame;
 import com.xenoage.zong.io.PlayerSupportedFormats;
 
 /**
@@ -28,7 +28,7 @@ import com.xenoage.zong.io.PlayerSupportedFormats;
  * 
  * @author Andreas Wenger
  */
-public class PlayerApp
+public class Player
 	extends App<Score> {
 
 	public static final String appFirstName = "Player";
@@ -37,14 +37,14 @@ public class PlayerApp
 	@Getter private MidiScorePlayer player;
 	
 	/** The controller of the main frame. */
-	@Getter @Setter private PlayerController playerController = null;
+	@Getter @Setter private PlayerFrame playerController = null;
 
 
 	public static void main(String[] args) {
 		CommandLine.setArgs(args);
 		
 		try {
-			new PlayerApp();	
+			new Player();	
 		} catch (Throwable error) {
 			//here all uncaught exceptions and errors are caught. - TODO: really? not tested for JavaFX
 			try {
@@ -63,9 +63,9 @@ public class PlayerApp
 	}
 
 	/**
-	 * Creates a new {@link PlayerApp}.
+	 * Creates a new {@link Player}.
 	 */
-	public PlayerApp()
+	public Player()
 		throws Exception {
 		super(appFirstName, AppType.DesktopApp, DocumentInterface.SDI);
 
@@ -85,12 +85,12 @@ public class PlayerApp
 	}
 
 	/**
-	 * Gets the only instance of the {@link PlayerApp} class. If this
+	 * Gets the only instance of the {@link Player} class. If this
 	 * program is not running as this type, null is returned.
 	 */
-	public static PlayerApp pApp() {
-		if (app() instanceof PlayerApp)
-			return (PlayerApp) app();
+	public static Player pApp() {
+		if (app() instanceof Player)
+			return (Player) app();
 		else
 			return null;
 	}

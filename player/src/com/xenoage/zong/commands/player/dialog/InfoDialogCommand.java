@@ -1,7 +1,7 @@
 package com.xenoage.zong.commands.player.dialog;
 
 import static com.xenoage.zong.SwingApp.app;
-import static com.xenoage.zong.player.PlayerApp.pApp;
+import static com.xenoage.zong.player.Player.pApp;
 
 import com.xenoage.zong.commands.Command;
 import com.xenoage.zong.commands.CommandPerformer;
