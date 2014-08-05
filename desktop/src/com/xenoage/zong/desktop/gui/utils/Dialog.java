@@ -1,6 +1,8 @@
 package com.xenoage.zong.desktop.gui.utils;
 
+import static com.xenoage.utils.error.Err.handle;
 import static com.xenoage.utils.log.Log.log;
+import static com.xenoage.utils.log.Report.fatal;
 import static com.xenoage.utils.log.Report.warning;
 import static com.xenoage.zong.desktop.App.app;
 
@@ -14,7 +16,9 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import lombok.Getter;
 
+import com.xenoage.utils.error.Err;
 import com.xenoage.utils.jse.lang.LangResourceBundle;
+import com.xenoage.utils.log.Report;
 import com.xenoage.zong.Voc;
 
 /**
@@ -38,12 +42,25 @@ public class Dialog {
 	
 	/**
 	 * Creates a {@link Dialog} for the given controller, based on a FXML file
-	 * and the vocabulary found in {@link Voc}.
+	 * and the vocabulary found in {@link Voc}, in a new {@link Stage}.
 	 * If the loading fails, a fatal error is reported.
 	 * @param controllerType  the class of the controller. The FXML file is expected at the
 	 *                        same path, but ending with ".fxml".
 	 */
 	public static <T extends Dialog> T dialog(Class<T> controllerType) {
+		return dialog(controllerType, null);
+	}
+	
+	
+	/**
+	 * Creates a {@link Dialog} for the given controller, based on a FXML file
+	 * and the vocabulary found in {@link Voc}, in the given {@link Stage}.
+	 * If the loading fails, a fatal error is reported.
+	 * @param controllerType  the class of the controller. The FXML file is expected at the
+	 *                        same path, but ending with ".fxml".
+	 * @param stage           the stage to use, or null for a new stage
+	 */
+	public static <T extends Dialog> T dialog(Class<T> controllerType, Stage stage) {
 		//load scene
 		FXMLLoader loader = new FXMLLoader();
 		String fxmlName = controllerType.getSimpleName() + ".fxml";
@@ -52,12 +69,12 @@ public class Dialog {
 		try {
 			loader.load();
 		} catch (IOException ex) {
-			log(warning(ex));
+			handle(fatal(ex));
 		}
 		@SuppressWarnings("unchecked") T dialog = (T) loader.getController();
 		dialog.root = loader.getRoot();
 		//create stage
-		dialog.stage = new Stage();
+		dialog.stage = (stage != null ? stage : new Stage());
 		dialog.stage.setScene(new Scene(dialog.root));
 		dialog.stage.sizeToScene();
 		//return dialog
@@ -79,6 +96,13 @@ public class Dialog {
 	 */
 	public void setTitle(String title) {
 		stage.setTitle(title != null ? title : app().getName());
+	}
+	
+	/**
+	 * Shows the dialog.
+	 */
+	public void show() {
+		stage.show();
 	}
 
 	/**

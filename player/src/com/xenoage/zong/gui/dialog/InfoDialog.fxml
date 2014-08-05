@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import org.controlsfx.control.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.xenoage.zong.gui.dialog.InfoDialog">
+   <children>
+      <Label fx:id="lblTitle" text="Title">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+      <GridPane hgap="5.0" vgap="5.0" VBox.vgrow="SOMETIMES">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="250.0" minWidth="180.0" />
+          <ColumnConstraints hgrow="SOMETIMES" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints vgrow="NEVER" />
+          <RowConstraints vgrow="NEVER" />
+          <RowConstraints vgrow="NEVER" />
+            <RowConstraints vgrow="NEVER" />
+            <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label text="%WorkNumber:" GridPane.vgrow="NEVER" />
+            <Label alignment="TOP_LEFT" text="%WorkTitle:" GridPane.rowIndex="1" />
+            <Label text="%MovementNumber:" GridPane.rowIndex="2" />
+            <Label text="%MovementTitle:" GridPane.rowIndex="3" />
+            <TextField fx:id="txtWorkNumber" editable="false" focusTraversable="false" text="Lorem ipsum" GridPane.columnIndex="1" />
+            <Label text="%Creators:" GridPane.rowIndex="4" GridPane.valignment="TOP">
+               <GridPane.margin>
+                  <Insets top="5.0" />
+               </GridPane.margin>
+            </Label>
+            <Label text="%Rights:" GridPane.rowIndex="5" GridPane.valignment="TOP">
+               <GridPane.margin>
+                  <Insets top="5.0" />
+               </GridPane.margin></Label>
+            <Label text="%Parts:" GridPane.rowIndex="6" GridPane.valignment="TOP">
+               <GridPane.margin>
+                  <Insets top="5.0" />
+               </GridPane.margin></Label>
+            <TextField fx:id="txtWorkTitle" editable="false" focusTraversable="false" text="Lorem ipsum" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="txtMovementNumber" editable="false" focusTraversable="false" text="Lorem ipsum" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="txtMovementTitle" editable="false" focusTraversable="false" text="Lorem ipsum" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextArea fx:id="txtCreators" editable="false" focusTraversable="false" prefHeight="75.0" text="1. Lorem ipsum&#10;2. Lorem ipsum&#10;3. Lorem ipsum" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <TextArea fx:id="txtRights" focusTraversable="false" prefHeight="50.0" text="1. Lorem ipsum&#10;2. Lorem ipsum" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <TextArea fx:id="txtParts" editable="false" focusTraversable="false" prefHeight="100.0" text="1. Lorem ipsum&#10;2. Lorem ipsum&#10;3. Lorem ipsum&#10;4. Lorem ipsum" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+         </children>
+      </GridPane>
+      <HBox alignment="BOTTOM_RIGHT" minHeight="50.0">
+         <children>
+            <Button cancelButton="true" defaultButton="true" mnemonicParsing="false" onAction="#onOK" text="%OK" />
+         </children>
+      </HBox>
+   </children>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+</VBox>

@@ -8,7 +8,7 @@ import com.xenoage.zong.desktop.gui.utils.Dialog;
 import com.xenoage.zong.gui.dialog.AboutDialog;
 
 /**
- * Shows an about-dialog.
+ * Shows the {@link AboutDialog}.
  *
  * @author Andreas Wenger
  */

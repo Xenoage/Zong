@@ -81,7 +81,7 @@ public class Player
 		}
 
 		//start JavaFX app
-		Application.launch(PlayerJavaFXApp.class, CommandLine.getArgs());	
+		Application.launch(PlayerFXApp.class, CommandLine.getArgs());	
 	}
 
 	/**
@@ -127,7 +127,7 @@ public class Player
 
 	@Override public void addDocument(Score doc) {
 		super.addDocument(doc);
-		//((PlayerFrame) mainFrame).setScore(doc.getData());
+		PlayerFXApp.getInstance().getFrame().setScore(doc);
 		player.openScore(doc);
 		player.setMetronomeEnabled(false);
 		player.start();

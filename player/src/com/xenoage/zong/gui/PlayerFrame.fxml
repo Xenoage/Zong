@@ -39,6 +39,7 @@
                            </image>
                         </ImageView>
                      </graphic></MenuItem>
+                  <SeparatorMenuItem fx:id="mnuFileSepRecentFiles" mnemonicParsing="false" />
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem fx:id="mnuFileExit" mnemonicParsing="false" onAction="#onExit" text="%Exit" />
             </items>
@@ -51,14 +52,53 @@
           </Menu>
             <Menu fx:id="mnuSettings" mnemonicParsing="false" text="%Settings">
                <items>
-                  <MenuItem fx:id="mnuSettingsAudio" mnemonicParsing="false" onAction="#onSettings" text="%Audio..." />
+                  <MenuItem fx:id="mnuSettingsAudio" mnemonicParsing="false" onAction="#onSettings" text="%Audio...">
+                     <graphic>
+                        <ImageView pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@img/audio-x-generic.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></MenuItem>
                </items>
             </Menu>
           <Menu fx:id="mnuHelp" mnemonicParsing="false" text="%Help">
             <items>
-              <MenuItem fx:id="mnuHelpAbout" mnemonicParsing="false" onAction="#onHelp" text="%About" />
+              <MenuItem fx:id="mnuHelpReadme" mnemonicParsing="false" onAction="#onReadme" text="%Readme">
+                     <graphic>
+                        <ImageView pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@img/help-browser.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></MenuItem>
+                  <MenuItem fx:id="mnuHelpWebsite" mnemonicParsing="false" onAction="#onWebsite" text="%Website">
+                     <graphic>
+                        <ImageView pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@img/internet-web-browser.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+                  <MenuItem fx:id="mnuHelpBlog" mnemonicParsing="false" onAction="#onBlog" text="%Blog">
+                     <graphic>
+                        <ImageView pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@img/office-calendar.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem fx:id="mnuHelpAbout" mnemonicParsing="false" onAction="#onAbout" text="%About" />
             </items>
           </Menu>
+            <Menu fx:id="mnuBeta" mnemonicParsing="false" text="%Beta">
+              <items>
+                <MenuItem fx:id="mnuBetaReport" mnemonicParsing="false" onAction="#onErrorReport" text="%ErrorReportOrFeatureRequest" />
+              </items>
+            </Menu>
         </menus>
       </MenuBar>
       <AnchorPane prefHeight="200.0" prefWidth="200.0">

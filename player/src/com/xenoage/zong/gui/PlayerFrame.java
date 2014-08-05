@@ -1,8 +1,12 @@
 package com.xenoage.zong.gui;
 
+import static com.xenoage.utils.NullUtils.notNull;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.collections.CollectionUtils.map;
 import static com.xenoage.zong.player.Player.pApp;
 
+import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 import javafx.application.Platform;
@@ -13,12 +17,18 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
+import com.xenoage.utils.collections.CollectionUtils;
 import com.xenoage.utils.document.command.Command;
+import com.xenoage.utils.jse.files.RecentFiles;
+import com.xenoage.utils.lang.Lang;
+import com.xenoage.zong.Voc;
+import com.xenoage.zong.commands.desktop.app.DocumentOpen;
 import com.xenoage.zong.commands.desktop.app.Exit;
 import com.xenoage.zong.commands.desktop.dialog.AudioSettingsDialogShow;
 import com.xenoage.zong.commands.desktop.dialog.OpenDocumentDialog;
@@ -26,9 +36,11 @@ import com.xenoage.zong.commands.desktop.dialog.SaveDocumentDialog;
 import com.xenoage.zong.commands.player.convert.DirToMidiConvert;
 import com.xenoage.zong.commands.player.convert.FileToMidiConvert;
 import com.xenoage.zong.commands.player.dialog.AboutDialogShow;
+import com.xenoage.zong.commands.player.dialog.InfoDialogShow;
 import com.xenoage.zong.commands.player.playback.PlaybackPause;
 import com.xenoage.zong.commands.player.playback.PlaybackStart;
 import com.xenoage.zong.commands.player.playback.PlaybackStop;
+import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.desktop.gui.utils.Dialog;
 import com.xenoage.zong.desktop.io.midi.out.MidiScorePlayer;
@@ -43,6 +55,7 @@ public class PlayerFrame
 	@FXML private MenuItem mnuFileOpen;
 	@FXML private MenuItem mnuFileSaveAs;
 	@FXML private MenuItem mnuFileInfo;
+	@FXML private SeparatorMenuItem mnuFileSepRecentFiles;
 	@FXML private MenuItem mnuFileExit;
 	@FXML private Menu mnuConvert;
 	@FXML private MenuItem mnuConvertFileToMidi;
@@ -51,7 +64,14 @@ public class PlayerFrame
 	@FXML private MenuItem mnuSettingsAudio;
 	@FXML private Menu mnuHelp;
 	@FXML private MenuItem mnuHelpReadme;
+	@FXML private MenuItem mnuHelpWebsite;
+	@FXML private MenuItem mnuHelpBlog;
 	@FXML private MenuItem mnuHelpAbout;
+	@FXML private Menu mnuBeta;
+	@FXML private MenuItem mnuBetaReport;
+	
+	//recent files menu items
+	private List<MenuItem> mnusRecentFiles = alist();
 
 	//playback area
 	@FXML private Label lblTitle;
@@ -84,6 +104,9 @@ public class PlayerFrame
 		progress.setProgress(0);
 		sliderVolume.setValue(70);
 		imgVolume.setImage(volumeIcons.get("medium"));
+		//recent files list
+		RecentFiles.addListener(() -> updateRecentFiles());
+		updateRecentFiles();
 		//handle progress bar clicks
 		pApp().getPlayer().addPlaybackListener(this);
 		//handle volume slider events
@@ -103,6 +126,32 @@ public class PlayerFrame
 	
 	private Image readImage(String filename) {
 		return new Image(getClass().getResourceAsStream("img/" + filename));
+	}
+	
+	private void updateRecentFiles() {
+		//clear old menu items
+		for (MenuItem mnu : mnusRecentFiles) {
+			mnuFile.getItems().remove(mnu);
+		}
+		//add new menu items
+		List<File> recentFiles = RecentFiles.getRecentFiles();
+		int recentFilesMenuOffset = mnuFile.getItems().indexOf(mnuFileSepRecentFiles) + 1;
+		for (int i = 0; i < recentFiles.size() && i < 10; i++) {
+			final File file = recentFiles.get(i);
+			MenuItem mnu = new MenuItem((i + 1) + ": " + file.getName());
+			mnu.setOnAction(e -> new DocumentOpen(file.getAbsolutePath()).execute());
+			mnusRecentFiles.add(mnu);
+			mnuFile.getItems().add(recentFilesMenuOffset + i, mnu);
+		}
+	}
+	
+	public void setScore(Score score) {
+		//set title
+		String title = notNull(score.getInfo().getComposer());
+		if (title.length() > 0)
+			title += " - ";
+		title += notNull(score.getInfo().getTitle());
+		lblTitle.setText(title);
 	}
 
 	@Override public void playbackAtMP(MP mp, long ms) {
@@ -161,7 +210,12 @@ public class PlayerFrame
 	}
 
 	@FXML void onInfo(ActionEvent event) {
-
+		if (pApp().getActiveDocument() == null) {
+			pApp().showMessageDialog(Lang.get(Voc.NoFileLoaded));
+		}
+		else {
+			execute(new InfoDialogShow(pApp().getActiveDocument(), stage));
+		}
 	}
 
 	@FXML void onExit(ActionEvent event) {
@@ -179,8 +233,24 @@ public class PlayerFrame
 	@FXML void onSettings(ActionEvent event) {
 		execute(new AudioSettingsDialogShow(stage));
 	}
+	
+	@FXML void onReadme(ActionEvent event) {
+		execute(new AboutDialogShow(stage));
+	}
+	
+	@FXML void onWebsite(ActionEvent event) {
+		execute(new AboutDialogShow(stage));
+	}
+	
+	@FXML void onBlog(ActionEvent event) {
+		execute(new AboutDialogShow(stage));
+	}
 
-	@FXML void onHelp(ActionEvent event) {
+	@FXML void onAbout(ActionEvent event) {
+		execute(new AboutDialogShow(stage));
+	}
+	
+	@FXML void onErrorReport(ActionEvent event) {
 		execute(new AboutDialogShow(stage));
 	}
 
