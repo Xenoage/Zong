@@ -91,6 +91,10 @@ public class AudioSettingsDialog
 			}
 		}
 	}
+	
+	@Override public void onStageInit() {
+		stage.setTitle(Lang.get(Voc.AudioSettings));
+	}
 
 
 	@FXML void onSoundbankSelect(ActionEvent event) {

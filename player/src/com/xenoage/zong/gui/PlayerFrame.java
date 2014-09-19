@@ -3,6 +3,7 @@ package com.xenoage.zong.gui;
 import static com.xenoage.utils.NullUtils.notNull;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.collections.CollectionUtils.map;
+import static com.xenoage.zong.desktop.App.app;
 import static com.xenoage.zong.player.Player.pApp;
 
 import java.io.File;
@@ -23,13 +24,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
-import com.xenoage.utils.collections.CollectionUtils;
-import com.xenoage.utils.document.command.Command;
 import com.xenoage.utils.jse.files.RecentFiles;
 import com.xenoage.utils.lang.Lang;
 import com.xenoage.zong.Voc;
+import com.xenoage.zong.Zong;
 import com.xenoage.zong.commands.desktop.app.DocumentOpen;
 import com.xenoage.zong.commands.desktop.app.Exit;
+import com.xenoage.zong.commands.desktop.app.WebsiteOpen;
 import com.xenoage.zong.commands.desktop.dialog.AudioSettingsDialogShow;
 import com.xenoage.zong.commands.desktop.dialog.OpenDocumentDialog;
 import com.xenoage.zong.commands.desktop.dialog.SaveDocumentDialog;
@@ -202,11 +203,11 @@ public class PlayerFrame
 
 
 	@FXML void onOpen(ActionEvent event) {
-		execute(new OpenDocumentDialog(stage));
+		app().execute(new OpenDocumentDialog(stage));
 	}
 
 	@FXML void onSave(ActionEvent event) {
-		execute(new SaveDocumentDialog(stage));
+		app().execute(new SaveDocumentDialog(stage));
 	}
 
 	@FXML void onInfo(ActionEvent event) {
@@ -214,56 +215,56 @@ public class PlayerFrame
 			pApp().showMessageDialog(Lang.get(Voc.NoFileLoaded));
 		}
 		else {
-			execute(new InfoDialogShow(pApp().getActiveDocument(), stage));
+			app().execute(new InfoDialogShow(pApp().getActiveDocument(), stage));
 		}
 	}
 
 	@FXML void onExit(ActionEvent event) {
-		execute(new Exit());
+		app().execute(new Exit());
 	}
 
 	@FXML void onConvertFileToMidi(ActionEvent event) {
-		execute(new FileToMidiConvert(stage));
+		app().execute(new FileToMidiConvert(stage));
 	}
 
 	@FXML void onConvertDirToMidi(ActionEvent event) {
-		execute(new DirToMidiConvert(stage));
+		app().execute(new DirToMidiConvert(stage));
 	}
 
 	@FXML void onSettings(ActionEvent event) {
-		execute(new AudioSettingsDialogShow(stage));
+		app().execute(new AudioSettingsDialogShow(stage));
 	}
 	
 	@FXML void onReadme(ActionEvent event) {
-		execute(new AboutDialogShow(stage));
+		app().execute(new AboutDialogShow(stage));
 	}
 	
 	@FXML void onWebsite(ActionEvent event) {
-		execute(new AboutDialogShow(stage));
+		app().execute(new WebsiteOpen(Zong.website));
 	}
 	
 	@FXML void onBlog(ActionEvent event) {
-		execute(new AboutDialogShow(stage));
+		app().execute(new WebsiteOpen(Zong.blog));
 	}
 
 	@FXML void onAbout(ActionEvent event) {
-		execute(new AboutDialogShow(stage));
+		app().execute(new AboutDialogShow(stage));
 	}
 	
 	@FXML void onErrorReport(ActionEvent event) {
-		execute(new AboutDialogShow(stage));
+		app().execute(new AboutDialogShow(stage));
 	}
 
 	@FXML void onStart(ActionEvent event) {
-		execute(new PlaybackStart());
+		app().execute(new PlaybackStart());
 	}
 
 	@FXML void onPause(ActionEvent event) {
-		execute(new PlaybackPause());
+		app().execute(new PlaybackPause());
 	}
 
 	@FXML void onStop(ActionEvent event) {
-		execute(new PlaybackStop());
+		app().execute(new PlaybackStop());
 	}
 	
 	@FXML void onProgressBarClick(MouseEvent event) {
@@ -274,10 +275,6 @@ public class PlayerFrame
 			player.setMicrosecondPosition(mis);
 			playbackAtMs(mis / 1000);
 		}
-	}
-	
-	private void execute(Command command) {
-		pApp().getCommandPerformer().execute(command);
 	}
 
 }

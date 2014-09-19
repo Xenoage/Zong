@@ -27,7 +27,6 @@ import com.xenoage.zong.desktop.io.midi.out.SynthManager;
 
 	@Override public void execute() {
 		AudioSettingsDialog dialog = Dialog.dialog(AudioSettingsDialog.class);
-		dialog.setTitle(Lang.get(Voc.AudioSettings));
 		DialogResult result = dialog.showDialog(owner);
 		if (result == DialogResult.OK) {
 			//re-init midi

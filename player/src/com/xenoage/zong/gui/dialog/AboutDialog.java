@@ -1,6 +1,7 @@
 package com.xenoage.zong.gui.dialog;
 
 import static com.xenoage.zong.desktop.App.app;
+import static com.xenoage.zong.player.Player.pApp;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -12,6 +13,7 @@ import javafx.scene.control.Label;
 import org.controlsfx.control.HyperlinkLabel;
 
 import com.xenoage.zong.Zong;
+import com.xenoage.zong.commands.desktop.app.WebsiteOpen;
 import com.xenoage.zong.desktop.gui.utils.Dialog;
 
 /**
@@ -33,10 +35,7 @@ public class AboutDialog
 		lblCopyrightValue.setText(Zong.copyright);
 		lblWebsiteValue.setText("[" + Zong.website + "]");
 		lblWebsiteValue.setOnAction(e -> {
-			try {
-				app().openWebsite(new URL(Zong.website), true);
-			} catch (MalformedURLException ex) {
-			}
+			app().execute(new WebsiteOpen(Zong.website));
 		});
 	}
 	

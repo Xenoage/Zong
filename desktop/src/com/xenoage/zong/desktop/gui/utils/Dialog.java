@@ -1,9 +1,7 @@
 package com.xenoage.zong.desktop.gui.utils;
 
 import static com.xenoage.utils.error.Err.handle;
-import static com.xenoage.utils.log.Log.log;
 import static com.xenoage.utils.log.Report.fatal;
-import static com.xenoage.utils.log.Report.warning;
 import static com.xenoage.zong.desktop.App.app;
 
 import java.io.IOException;
@@ -16,9 +14,7 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import lombok.Getter;
 
-import com.xenoage.utils.error.Err;
 import com.xenoage.utils.jse.lang.LangResourceBundle;
-import com.xenoage.utils.log.Report;
 import com.xenoage.zong.Voc;
 
 /**
@@ -77,8 +73,20 @@ public class Dialog {
 		dialog.stage = (stage != null ? stage : new Stage());
 		dialog.stage.setScene(new Scene(dialog.root));
 		dialog.stage.sizeToScene();
+		//apply icons
+		app().applyIcons(dialog.stage);
+		//stage init event
+		dialog.onStageInit();
 		//return dialog
 		return dialog;
+	}
+	
+	/**
+	 * This method is called when the parent stage was initialized
+	 * and can be overridden, e.g. to register listeners or to set
+	 * the title of the stage.
+	 */
+	public void onStageInit() {
 	}
 	
 	public void onOK() {

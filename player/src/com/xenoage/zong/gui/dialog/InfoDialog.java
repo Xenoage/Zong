@@ -1,18 +1,23 @@
 package com.xenoage.zong.gui.dialog;
 
 import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.zong.desktop.App.app;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
+import com.xenoage.utils.lang.Lang;
+import com.xenoage.zong.Voc;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.info.Creator;
 import com.xenoage.zong.core.info.Rights;
 import com.xenoage.zong.core.info.ScoreInfo;
 import com.xenoage.zong.core.music.Part;
+import com.xenoage.zong.desktop.App;
 import com.xenoage.zong.desktop.gui.utils.Dialog;
+import com.xenoage.zong.player.Player;
 
 /**
  * Dialog with information about a {@link Score}.
@@ -30,6 +35,11 @@ public class InfoDialog
 	@FXML private TextArea txtCreators;
 	@FXML private TextArea txtRights;
 	@FXML private TextArea txtParts;
+	
+	
+	@Override public void onStageInit() {
+		stage.setTitle(app().getName() + " - " + Lang.get(Voc.Info));
+	}
 	
 	public void setScore(Score score) {
 		ScoreInfo info = score.getInfo();

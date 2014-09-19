@@ -31,20 +31,12 @@ public class PlayerFXApp
 		//create frame
 		frame = dialog(PlayerFrame.class, stage);
 		frame.setTitle(pApp().getName());
-		//set icons
-		for (String s : new String[]{"16", "32", "64", "128", "256", "512"}) {
-			frame.getStage().getIcons().add(readImage("logo" + s + ".png"));
-		}
 		//show frame
 		frame.show();
 		//test: translate
 		LangManager.loadLanguage("en");
 		ResourceUpdater.updateScene(frame,
 			PlayerFrame.class.getResourceAsStream("PlayerFrame.fxml"), new LangResourceBundle(Voc.values()));
-	}
-	
-	private Image readImage(String filename) {
-		return new Image(getClass().getResourceAsStream("../gui/img/" + filename));
 	}
 
 	@Override public void stop()

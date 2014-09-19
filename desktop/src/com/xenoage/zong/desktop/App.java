@@ -7,16 +7,16 @@ import static com.xenoage.utils.log.Report.error;
 import static com.xenoage.utils.log.Report.remark;
 import static com.xenoage.utils.log.Report.warning;
 
-import java.awt.Desktop;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import javafx.application.Platform;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import javax.sound.midi.MidiUnavailableException;
@@ -27,6 +27,7 @@ import org.controlsfx.dialog.DialogStyle;
 import org.controlsfx.dialog.Dialogs;
 
 import com.xenoage.utils.document.Document;
+import com.xenoage.utils.document.command.Command;
 import com.xenoage.utils.document.command.CommandPerformer;
 import com.xenoage.utils.document.io.FileFormat;
 import com.xenoage.utils.document.io.FileOutput;
@@ -101,6 +102,9 @@ public class App<DocType extends Document> {
 	//the open documents
 	private int activeDocumentIndex = -1;
 	private ArrayList<DocType> documents = new ArrayList<>();
+	
+	//the program icon in different resolutions
+	private List<Image> icons = new ArrayList<>();
 
 
 	/**
@@ -203,10 +207,17 @@ public class App<DocType extends Document> {
 	}
 
 	/**
-	 * Initializes the GUI.
-	 * There is no GUI by default.
+	 * This method can be overriden to initialize the GUI.
+	 * In the default implementation, the program icons are loaded.
 	 */
 	protected void initGUI() {
+		for (String s : new String[]{"16", "32", "64", "128", "256", "512"}) {
+			icons.add(readImage("logo" + s + ".png"));
+		}
+	}
+	
+	private Image readImage(String filename) {
+		return new Image(getClass().getResourceAsStream("../gui/img/" + filename));
 	}
 
 	/**
@@ -369,18 +380,6 @@ public class App<DocType extends Document> {
 	}
 
 	/**
-	 * Opens the given website in the web browser.
-	 * @param url        the URL to open
-	 * @param newWindow  if true, a new window is opened in the browser.
-	 */
-	public void openWebsite(URL url, boolean newWindow) {
-		try {
-			Desktop.getDesktop().browse(url.toURI());
-		} catch (Exception ex) {
-		}
-	}
-
-	/**
 	 * Loads a score from the given file. XML scores,
 	 * XML opera and compressed MusicXML files are supported.
 	 * When a compressed MusicXML file contains an opus,
@@ -430,6 +429,21 @@ public class App<DocType extends Document> {
 		} catch (Exception ex) {
 			handle(error(Voc.UnknownError, ex, filePath));
 		}
+	}
+	
+	/**
+	 * Convenience shortcut for {@link #getCommandPerformer()}.execute(...).
+	 */
+	public void execute(Command command) {
+		getCommandPerformer().execute(command);
+	}
+	
+	/**
+	 * Applies the icons of the app to the given {@link Stage}.
+	 */
+	public void applyIcons(Stage stage) {
+		stage.getIcons().clear();
+		stage.getIcons().addAll(icons);
 	}
 
 }
