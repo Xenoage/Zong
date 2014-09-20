@@ -3,10 +3,15 @@ package com.xenoage.zong.gui;
 import static com.xenoage.utils.NullUtils.notNull;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.collections.CollectionUtils.map;
+import static com.xenoage.utils.error.Err.handle;
+import static com.xenoage.utils.log.Report.fatal;
 import static com.xenoage.zong.desktop.App.app;
+import static com.xenoage.zong.desktop.utils.ImageUtils.imageOrNull;
 import static com.xenoage.zong.player.Player.pApp;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -14,22 +19,31 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.Slider;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
 import com.xenoage.utils.jse.files.RecentFiles;
+import com.xenoage.utils.jse.lang.LangManager;
+import com.xenoage.utils.jse.lang.LangResourceBundle;
+import com.xenoage.utils.jse.lang.LanguageInfo;
+import com.xenoage.utils.jse.lang.LanguageListener;
 import com.xenoage.utils.lang.Lang;
 import com.xenoage.zong.Voc;
 import com.xenoage.zong.Zong;
 import com.xenoage.zong.commands.desktop.app.DocumentOpen;
 import com.xenoage.zong.commands.desktop.app.Exit;
+import com.xenoage.zong.commands.desktop.app.ExternalFileOpen;
+import com.xenoage.zong.commands.desktop.app.LanguageChange;
 import com.xenoage.zong.commands.desktop.app.WebsiteOpen;
 import com.xenoage.zong.commands.desktop.dialog.AudioSettingsDialogShow;
 import com.xenoage.zong.commands.desktop.dialog.OpenDocumentDialog;
@@ -44,12 +58,13 @@ import com.xenoage.zong.commands.player.playback.PlaybackStop;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.desktop.gui.utils.Dialog;
+import com.xenoage.zong.desktop.gui.utils.ResourceUpdater;
 import com.xenoage.zong.desktop.io.midi.out.MidiScorePlayer;
 import com.xenoage.zong.io.midi.out.PlaybackListener;
 
 public class PlayerFrame
 	extends Dialog
-	implements PlaybackListener {
+	implements PlaybackListener, LanguageListener {
 
 	//menu
 	@FXML private Menu mnuFile;
@@ -63,6 +78,7 @@ public class PlayerFrame
 	@FXML private MenuItem mnuConvertDirToMidi;
 	@FXML private Menu mnuSettings;
 	@FXML private MenuItem mnuSettingsAudio;
+	@FXML private Menu mnuSettingsLanguage;
 	@FXML private Menu mnuHelp;
 	@FXML private MenuItem mnuHelpReadme;
 	@FXML private MenuItem mnuHelpWebsite;
@@ -108,6 +124,8 @@ public class PlayerFrame
 		//recent files list
 		RecentFiles.addListener(() -> updateRecentFiles());
 		updateRecentFiles();
+		//list of languages
+		createLanguageItems();
 		//handle progress bar clicks
 		pApp().getPlayer().addPlaybackListener(this);
 		//handle volume slider events
@@ -123,6 +141,8 @@ public class PlayerFrame
 				s = "low";
 			imgVolume.setImage(volumeIcons.get(s));
 		});
+		//register for language changes
+		LangManager.registerComponent(this);
 	}
 	
 	private Image readImage(String filename) {
@@ -140,9 +160,37 @@ public class PlayerFrame
 		for (int i = 0; i < recentFiles.size() && i < 10; i++) {
 			final File file = recentFiles.get(i);
 			MenuItem mnu = new MenuItem((i + 1) + ": " + file.getName());
-			mnu.setOnAction(e -> new DocumentOpen(file.getAbsolutePath()).execute());
+			mnu.setOnAction(e -> app().execute(new DocumentOpen(file.getAbsolutePath())));
 			mnusRecentFiles.add(mnu);
 			mnuFile.getItems().add(recentFilesMenuOffset + i, mnu);
+		}
+	}
+	
+	private void createLanguageItems() {
+		//clear old menu items
+		mnuSettingsLanguage.getItems().clear();
+		//add language menu items
+		List<LanguageInfo> langs = null;
+		try {
+			langs = LanguageInfo.getAvailableLanguages(LangManager.defaultLangPath);
+		} catch (Exception ex) {
+			handle(fatal(ex));
+		}
+		ToggleGroup toggleGroup = new ToggleGroup();
+		for (final LanguageInfo lang : langs) {
+			String name = lang.getLocalName();
+			String intName = lang.getInternationalName();
+			ImageView icon = null;
+			if (lang.getFlag16() != null)
+				icon = new ImageView(imageOrNull(lang.getFlag16()));
+			String text = name + (name.equals(intName) ? "" : " (" + intName + ")");
+			RadioMenuItem mnu = new RadioMenuItem(text, icon);
+			mnu.setToggleGroup(toggleGroup);
+			mnu.setOnAction(e -> app().execute(new LanguageChange(lang.getID())));
+			if (Lang.getCurrentLanguage().getID().equals(lang.getID()))
+				mnu.setSelected(true);
+			mnu.setUserData(lang.getID());
+			mnuSettingsLanguage.getItems().add(mnu);
 		}
 	}
 	
@@ -231,12 +279,12 @@ public class PlayerFrame
 		app().execute(new DirToMidiConvert(stage));
 	}
 
-	@FXML void onSettings(ActionEvent event) {
+	@FXML void onSettingsAudio(ActionEvent event) {
 		app().execute(new AudioSettingsDialogShow(stage));
 	}
 	
 	@FXML void onReadme(ActionEvent event) {
-		app().execute(new AboutDialogShow(stage));
+		app().execute(new ExternalFileOpen("readme.txt"));
 	}
 	
 	@FXML void onWebsite(ActionEvent event) {
@@ -274,6 +322,22 @@ public class PlayerFrame
 			long mis = (long) (pos * player.getMicrosecondLength());
 			player.setMicrosecondPosition(mis);
 			playbackAtMs(mis / 1000);
+		}
+	}
+
+	@Override public void languageChanged() {
+		//reload the resources of the frame
+		try {
+			ResourceUpdater.updateScene(this,
+				PlayerFrame.class.getResourceAsStream("PlayerFrame.fxml"),
+				new LangResourceBundle(Voc.values()));
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		//select the corresponding menu item (ID stored in user data)
+		for (MenuItem item : mnuSettingsLanguage.getItems()) {
+			if (Lang.getCurrentLanguage().getID().equals(item.getUserData()))
+				((RadioMenuItem) item).setSelected(true);
 		}
 	}
 

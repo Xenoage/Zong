@@ -52,7 +52,7 @@
           </Menu>
             <Menu fx:id="mnuSettings" mnemonicParsing="false" text="%Settings">
                <items>
-                  <MenuItem fx:id="mnuSettingsAudio" mnemonicParsing="false" onAction="#onSettings" text="%Audio...">
+                  <MenuItem fx:id="mnuSettingsAudio" mnemonicParsing="false" onAction="#onSettingsAudio" text="%Audio...">
                      <graphic>
                         <ImageView pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -60,6 +60,7 @@
                            </image>
                         </ImageView>
                      </graphic></MenuItem>
+                  <Menu fx:id="mnuSettingsLanguage" mnemonicParsing="false" text="%Language" />
                </items>
             </Menu>
           <Menu fx:id="mnuHelp" mnemonicParsing="false" text="%Help">

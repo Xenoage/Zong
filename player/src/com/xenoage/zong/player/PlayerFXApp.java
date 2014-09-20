@@ -3,7 +3,6 @@ package com.xenoage.zong.player;
 import static com.xenoage.zong.desktop.gui.utils.Dialog.dialog;
 import static com.xenoage.zong.player.Player.pApp;
 import javafx.application.Application;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import lombok.Getter;
 
@@ -33,10 +32,6 @@ public class PlayerFXApp
 		frame.setTitle(pApp().getName());
 		//show frame
 		frame.show();
-		//test: translate
-		LangManager.loadLanguage("en");
-		ResourceUpdater.updateScene(frame,
-			PlayerFrame.class.getResourceAsStream("PlayerFrame.fxml"), new LangResourceBundle(Voc.values()));
 	}
 
 	@Override public void stop()

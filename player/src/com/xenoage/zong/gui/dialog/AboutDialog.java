@@ -1,11 +1,6 @@
 package com.xenoage.zong.gui.dialog;
 
 import static com.xenoage.zong.desktop.App.app;
-import static com.xenoage.zong.player.Player.pApp;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

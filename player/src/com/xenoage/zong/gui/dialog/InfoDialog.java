@@ -15,9 +15,7 @@ import com.xenoage.zong.core.info.Creator;
 import com.xenoage.zong.core.info.Rights;
 import com.xenoage.zong.core.info.ScoreInfo;
 import com.xenoage.zong.core.music.Part;
-import com.xenoage.zong.desktop.App;
 import com.xenoage.zong.desktop.gui.utils.Dialog;
-import com.xenoage.zong.player.Player;
 
 /**
  * Dialog with information about a {@link Score}.

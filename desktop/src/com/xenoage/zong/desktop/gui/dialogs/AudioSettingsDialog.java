@@ -26,8 +26,8 @@ import com.xenoage.zong.desktop.io.midi.out.SynthManager;
 
 /**
  * Controller for the <code>AudioSettingsDialog.fxml</code>.
- * @author andi
- *
+ * 
+ * @author Andreas Wenger
  */
 public class AudioSettingsDialog
 	extends Dialog {
