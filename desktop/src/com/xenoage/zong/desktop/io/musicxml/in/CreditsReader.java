@@ -8,7 +8,6 @@ import static com.xenoage.zong.io.musicxml.in.readers.OtherReader.readAlignment;
 import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.color.Color;
 import com.xenoage.utils.font.FontInfo;
-import com.xenoage.utils.iterators.It;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.core.format.ScoreFormat;

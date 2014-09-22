@@ -75,7 +75,7 @@ import com.xenoage.zong.io.selection.Cursor;
  * @author Uli Teschemacher
  * @author Andreas Wenger
  */
-public class ScoreRevolutionary {
+@SuppressWarnings("unused") public class ScoreRevolutionary {
 
 	public static Score createScore() {
 		Score score = new Score();

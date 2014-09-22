@@ -7,11 +7,8 @@ import javafx.stage.Window;
 import lombok.AllArgsConstructor;
 
 import com.xenoage.utils.document.command.TransparentCommand;
-import com.xenoage.utils.lang.Lang;
-import com.xenoage.utils.log.Report;
 import com.xenoage.zong.Voc;
 import com.xenoage.zong.desktop.gui.dialogs.AudioSettingsDialog;
-import com.xenoage.zong.desktop.gui.utils.Dialog;
 import com.xenoage.zong.desktop.gui.utils.DialogResult;
 import com.xenoage.zong.desktop.io.midi.out.SynthManager;
 

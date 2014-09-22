@@ -11,8 +11,6 @@ import java.io.FileNotFoundException;
 
 import org.junit.Test;
 
-import com.xenoage.utils.PlatformUtils;
-import com.xenoage.utils.jse.io.DesktopIO;
 import com.xenoage.zong.core.music.StavesList;
 import com.xenoage.zong.core.music.group.BarlineGroup;
 import com.xenoage.zong.core.music.group.BracketGroup;

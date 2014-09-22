@@ -6,9 +6,6 @@ import static com.xenoage.utils.log.Log.log;
 import static com.xenoage.utils.log.Report.remark;
 
 import com.xenoage.utils.io.FileUtils;
-import com.xenoage.utils.jse.JsePlatformUtils;
-import com.xenoage.utils.log.Log;
-import com.xenoage.utils.log.Report;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.zong.symbols.PathSymbol;
 import com.xenoage.zong.symbols.Symbol;

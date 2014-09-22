@@ -6,8 +6,6 @@ import static com.xenoage.utils.log.Report.remark;
 import static com.xenoage.utils.log.Report.warning;
 import static com.xenoage.zong.desktop.App.app;
 import static com.xenoage.zong.desktop.gui.utils.FileChooserUtils.addFilter;
-import static com.xenoage.zong.desktop.gui.utils.FileChooserUtils.rememberDir;
-import static com.xenoage.zong.desktop.gui.utils.FileChooserUtils.setDirFromSettings;
 import static com.xenoage.zong.player.Player.pApp;
 
 import java.io.File;
@@ -29,6 +27,7 @@ import com.xenoage.utils.iterators.It;
 import com.xenoage.zong.Voc;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.desktop.io.midi.out.JseMidiSequenceWriter;
+import com.xenoage.zong.desktop.utils.settings.FileSettings;
 import com.xenoage.zong.io.midi.out.MidiConverter;
 
 /**
@@ -49,7 +48,9 @@ import com.xenoage.zong.io.midi.out.MidiConverter;
 	@Override public void execute() {
 		FileChooser fileChooser = new FileChooser();
 		//use last document directory
-		setDirFromSettings(fileChooser);
+		File initDir = FileSettings.getLastDir();
+		if (initDir != null)
+			fileChooser.setInitialDirectory(initDir);
 		//add filters
 		SupportedFormats<?> supportedFormats = app().getSupportedFormats();
 		for (FileFormat<?> fileFormat : supportedFormats.getReadFormats()) {
@@ -60,7 +61,7 @@ import com.xenoage.zong.io.midi.out.MidiConverter;
 		if (file != null) {
 			log(remark("Dialog closed (OK), converting file \"" + file.getName() + "\""));
 			//save document directory
-			rememberDir(file);
+			FileSettings.rememberDir(file);
 			//convert - TODO: show progress
 			String lastPath = file.getAbsolutePath();
 			List<Score> scores = pApp().loadMxlScores(lastPath, new AllFilter<String>());

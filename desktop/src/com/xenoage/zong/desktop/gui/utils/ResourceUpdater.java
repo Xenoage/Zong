@@ -1,11 +1,8 @@
 package com.xenoage.zong.desktop.gui.utils;
 
-import static com.xenoage.utils.jse.xml.XMLReader.elements;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
@@ -14,9 +11,7 @@ import org.w3c.dom.Element;
 
 import com.xenoage.utils.jse.xml.XMLReader;
 
-import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Labeled;
 
 /**
  * This class reloads the text properties of internationalized strings

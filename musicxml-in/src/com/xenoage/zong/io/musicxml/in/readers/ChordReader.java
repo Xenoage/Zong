@@ -44,7 +44,6 @@ import com.xenoage.zong.core.music.lyric.SyllableType;
 import com.xenoage.zong.core.music.rest.Rest;
 import com.xenoage.zong.core.music.slur.SlurType;
 import com.xenoage.zong.core.music.slur.SlurWaypoint;
-import com.xenoage.zong.musicxml.types.MxlAccent;
 import com.xenoage.zong.musicxml.types.MxlArticulations;
 import com.xenoage.zong.musicxml.types.MxlBeam;
 import com.xenoage.zong.musicxml.types.MxlDynamics;

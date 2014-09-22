@@ -102,8 +102,6 @@ import com.xenoage.zong.musicxml.types.choice.MxlDirectionTypeContent;
 import com.xenoage.zong.musicxml.types.choice.MxlDirectionTypeContent.MxlDirectionTypeContentType;
 import com.xenoage.zong.musicxml.types.choice.MxlMusicDataContent;
 import com.xenoage.zong.musicxml.types.choice.MxlMusicDataContent.MxlMusicDataContentType;
-import com.xenoage.zong.musicxml.types.choice.MxlNormalNote;
-import com.xenoage.zong.musicxml.types.choice.MxlNoteContent.MxlNoteContentType;
 import com.xenoage.zong.musicxml.types.choice.MxlTimeContent.MxlTimeContentType;
 import com.xenoage.zong.musicxml.types.enums.MxlBackwardForward;
 import com.xenoage.zong.musicxml.types.enums.MxlRightLeftMiddle;

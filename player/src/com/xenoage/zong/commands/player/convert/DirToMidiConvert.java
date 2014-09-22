@@ -2,7 +2,6 @@ package com.xenoage.zong.commands.player.convert;
 
 import static com.xenoage.utils.jse.io.JseFileUtils.listFiles;
 import static com.xenoage.zong.desktop.App.app;
-import static com.xenoage.zong.desktop.gui.utils.FileChooserUtils.rememberDir;
 import static com.xenoage.zong.player.Player.pApp;
 
 import java.io.File;
@@ -25,6 +24,7 @@ import com.xenoage.utils.lang.Lang;
 import com.xenoage.zong.Voc;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.desktop.io.midi.out.JseMidiSequenceWriter;
+import com.xenoage.zong.desktop.utils.settings.FileSettings;
 import com.xenoage.zong.io.midi.out.MidiConverter;
 import com.xenoage.zong.io.musicxml.FileType;
 import com.xenoage.zong.io.musicxml.in.FileTypeReader;
@@ -45,9 +45,14 @@ import com.xenoage.zong.io.musicxml.in.FileTypeReader;
 
 	@Override public void execute() {
 		DirectoryChooser dc = new DirectoryChooser();
-		//GOON JFileChooserUtil.setDirFromSettings(fc);
+		
+		//use last document directory
+		File initDir = FileSettings.getLastDir();
+		if (initDir != null)
+			dc.setInitialDirectory(initDir);
 
-		/* GOON
+		/* TODO - how to extend the DirectoryChooser in JavaFX?
+		//see http://stackoverflow.com/questions/25982945/javafx-filechooser-and-directorychooser-accessory-component
 		JCheckBox chkSubdir = new JCheckBox(Lang.get(Voc.IncludeSubdirectories), true);
 		JCheckBox chkCancel = new JCheckBox(Lang.get(Voc.CancelAtFirstError), false);
 		JPanel pnlOptions = new JPanel();
@@ -55,14 +60,14 @@ import com.xenoage.zong.io.musicxml.in.FileTypeReader;
 		pnlOptions.add(chkSubdir);
 		pnlOptions.add(chkCancel);
 		fc.setAccessory(pnlOptions); */
-		boolean subDirs = true; //GOON
-		boolean cancelOnFirstError = false; //GOON
+		boolean subDirs = true; //TODO
+		boolean cancelOnFirstError = false; //TODO
 
 		File dir = dc.showDialog(ownerWindow);
 
 		if (dir != null) {
 			//remember directory
-			rememberDir(dir);
+			FileSettings.rememberDir(dir);
 			//start conversion - TODO: show progress
 			List<File> files = listFiles(dir, subDirs);
 			int countOK = 0;
@@ -77,7 +82,7 @@ import com.xenoage.zong.io.musicxml.in.FileTypeReader;
 						String filePath = file.getAbsolutePath();
 						List<Score> scores = pApp().loadMxlScores(filePath, new AllFilter<String>());
 
-						if ((scores.size() == 0) /* GOON && chkCancel.isSelected() */) {
+						if ((scores.size() == 0) /* TODO && chkCancel.isSelected() */) {
 							countFailed++;
 							break;
 						}

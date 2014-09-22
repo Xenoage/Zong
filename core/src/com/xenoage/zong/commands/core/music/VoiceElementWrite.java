@@ -8,10 +8,6 @@ import static com.xenoage.zong.core.position.MP.atElement;
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-
-import com.xenoage.utils.NullUtils;
 import com.xenoage.utils.document.command.Command;
 import com.xenoage.utils.document.command.Undoability;
 import com.xenoage.utils.math.Fraction;

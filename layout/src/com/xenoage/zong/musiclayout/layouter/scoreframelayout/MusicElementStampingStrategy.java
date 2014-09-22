@@ -6,8 +6,6 @@ import static com.xenoage.zong.core.music.format.SP.sp;
 
 import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.color.Color;
-import com.xenoage.utils.log.Log;
-import com.xenoage.utils.log.Report;
 import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.StemDirection;

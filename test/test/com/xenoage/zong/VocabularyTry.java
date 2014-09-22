@@ -16,7 +16,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import com.xenoage.utils.document.command.Command;
-import com.xenoage.utils.jse.io.DesktopIO;
 import com.xenoage.utils.jse.io.JseFileUtils;
 import com.xenoage.utils.jse.lang.LangManager;
 import com.xenoage.utils.jse.lang.LanguageReader;

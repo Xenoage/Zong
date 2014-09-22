@@ -8,12 +8,10 @@ import static com.xenoage.zong.core.music.util.BeatE.beatE;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
 
 import lombok.Data;
 
 import com.xenoage.utils.collections.CList;
-import com.xenoage.utils.collections.CollectionUtils;
 import com.xenoage.utils.collections.IList;
 import com.xenoage.utils.math.Fraction;
 

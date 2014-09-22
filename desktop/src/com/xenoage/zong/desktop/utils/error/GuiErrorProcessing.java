@@ -9,7 +9,6 @@ import com.xenoage.utils.error.BasicErrorProcessing;
 import com.xenoage.utils.lang.Lang;
 import com.xenoage.utils.log.Level;
 import com.xenoage.utils.log.Report;
-import com.xenoage.zong.desktop.App;
 import com.xenoage.zong.desktop.App.AppType;
 
 /**

@@ -4,8 +4,6 @@ import static com.xenoage.utils.log.Log.log;
 import static com.xenoage.utils.log.Report.remark;
 import static com.xenoage.zong.desktop.App.app;
 import static com.xenoage.zong.desktop.gui.utils.FileChooserUtils.addFilter;
-import static com.xenoage.zong.desktop.gui.utils.FileChooserUtils.rememberDir;
-import static com.xenoage.zong.desktop.gui.utils.FileChooserUtils.setDirFromSettings;
 
 import java.io.File;
 
@@ -17,6 +15,7 @@ import com.xenoage.utils.document.command.TransparentCommand;
 import com.xenoage.utils.document.io.FileFormat;
 import com.xenoage.utils.document.io.SupportedFormats;
 import com.xenoage.zong.commands.desktop.app.DocumentOpen;
+import com.xenoage.zong.desktop.utils.settings.FileSettings;
 
 /**
  * This command shows a dialog that allows to
@@ -36,7 +35,9 @@ import com.xenoage.zong.commands.desktop.app.DocumentOpen;
 	@Override public void execute() {
 		FileChooser fileChooser = new FileChooser();
 		//use last document directory
-		setDirFromSettings(fileChooser);
+		File initDir = FileSettings.getLastDir();
+		if (initDir != null)
+			fileChooser.setInitialDirectory(initDir);
 		//add filters
 		SupportedFormats<?> supportedFormats = app().getSupportedFormats();
 		for (FileFormat<?> fileFormat : supportedFormats.getReadFormats()) {
@@ -48,7 +49,7 @@ import com.xenoage.zong.commands.desktop.app.DocumentOpen;
 			log(remark("Dialog closed (OK), opening file \"" + file.getName() + "\""));
 			new DocumentOpen(file.getAbsolutePath()).execute();
 			//save document directory
-			rememberDir(file);
+			FileSettings.rememberDir(file);
 		}
 		else {
 			log(remark("Dialog closed (Cancel)"));

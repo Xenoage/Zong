@@ -5,8 +5,6 @@ import static com.xenoage.utils.log.Log.log;
 import static com.xenoage.utils.log.Report.remark;
 import static com.xenoage.zong.desktop.App.app;
 import static com.xenoage.zong.desktop.gui.utils.FileChooserUtils.addFilter;
-import static com.xenoage.zong.desktop.gui.utils.FileChooserUtils.rememberDir;
-import static com.xenoage.zong.desktop.gui.utils.FileChooserUtils.setDirFromSettings;
 
 import java.io.File;
 import java.util.HashMap;
@@ -19,6 +17,7 @@ import lombok.AllArgsConstructor;
 import com.xenoage.utils.document.command.TransparentCommand;
 import com.xenoage.utils.document.io.FileFormat;
 import com.xenoage.utils.document.io.SupportedFormats;
+import com.xenoage.zong.desktop.utils.settings.FileSettings;
 
 /**
  * This command shows a dialog that allows to save
@@ -41,7 +40,9 @@ import com.xenoage.utils.document.io.SupportedFormats;
 	@Override public void execute() {
 		FileChooser fileChooser = new FileChooser();
 		//use last document directory, when running as a desktop application
-		setDirFromSettings(fileChooser);
+		File initDir = FileSettings.getLastDir();
+		if (initDir != null)
+			fileChooser.setInitialDirectory(initDir);
 		//add formats
 		HashMap<ExtensionFilter, FileFormat<?>> formats = map();
 		SupportedFormats<?> supportedFormats = app().getSupportedFormats();
@@ -64,7 +65,7 @@ import com.xenoage.utils.document.io.SupportedFormats;
 			}
 			app().saveDocument(file.getAbsolutePath(), format);
 			//save document directory
-			rememberDir(file);
+			FileSettings.rememberDir(file);
 		}
 		else {
 			log(remark("Dialog closed (Cancel)"));
