@@ -2,6 +2,7 @@ package com.xenoage.zong.commands.desktop.dialog;
 
 import static com.xenoage.utils.error.Err.handle;
 import static com.xenoage.utils.log.Report.warning;
+import static com.xenoage.zong.desktop.gui.utils.Dialog.dialog;
 import javafx.stage.Window;
 import lombok.AllArgsConstructor;
 
@@ -20,13 +21,14 @@ import com.xenoage.zong.desktop.io.midi.out.SynthManager;
  * 
  * @author Andreas Wenger
  */
-@AllArgsConstructor public class AudioSettingsDialogShow
+@AllArgsConstructor
+public class AudioSettingsDialogShow
 	extends TransparentCommand {
 	
 	private Window owner;
 
 	@Override public void execute() {
-		AudioSettingsDialog dialog = Dialog.dialog(AudioSettingsDialog.class);
+		AudioSettingsDialog dialog = dialog(AudioSettingsDialog.class);
 		DialogResult result = dialog.showDialog(owner);
 		if (result == DialogResult.OK) {
 			//re-init midi

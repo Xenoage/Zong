@@ -28,9 +28,9 @@ public class Zong {
 	public static final String copyright = "Copyright © 2006-2014 by Xenoage Software";
 
 	//other information
-	public static final String website = "http://www.zong-music.com";
+	public static final String website = "www.zong-music.com";
 	public static final String emailErrorReports = "support@zong-music.com";
-	public static final String bugtracker = "http://xenoage.atlassian.net";
+	public static final String bugtracker = "xenoage.atlassian.net";
 	public static final String blog = "http://blog.zong-music.com";
 
 	//last version, that was "complete" regarding its functions, and not a

@@ -10,7 +10,6 @@ import static com.xenoage.zong.desktop.utils.ImageUtils.imageOrNull;
 import static com.xenoage.zong.player.Player.pApp;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +18,6 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
@@ -46,6 +44,7 @@ import com.xenoage.zong.commands.desktop.app.ExternalFileOpen;
 import com.xenoage.zong.commands.desktop.app.LanguageChange;
 import com.xenoage.zong.commands.desktop.app.WebsiteOpen;
 import com.xenoage.zong.commands.desktop.dialog.AudioSettingsDialogShow;
+import com.xenoage.zong.commands.desktop.dialog.FeedbackDialogShow;
 import com.xenoage.zong.commands.desktop.dialog.OpenDocumentDialog;
 import com.xenoage.zong.commands.desktop.dialog.SaveDocumentDialog;
 import com.xenoage.zong.commands.player.convert.DirToMidiConvert;
@@ -300,7 +299,7 @@ public class PlayerFrame
 	}
 	
 	@FXML void onErrorReport(ActionEvent event) {
-		app().execute(new AboutDialogShow(stage));
+		app().execute(new FeedbackDialogShow(stage));
 	}
 
 	@FXML void onStart(ActionEvent event) {

@@ -59,6 +59,7 @@ public enum Voc
 	ErrorReportOrFeatureRequest("Error report or feature request"),
 	ErrorSavingFile("Error while saving the file."),
 	ErrorWhilePrinting("Error while printing."),
+	ExampleMailAdress("your@mail.com"),
 	Exit("Exit"),
 	FatalError("Fatal Error"),
 	FatalErrorMessage(
@@ -125,6 +126,7 @@ public enum Voc
 	SendOK("The feedback form was sent.\nThank you for your support."),
 	Settings("Settings"),
 	ShowInfo("Show information"),
+	ShowLog("Show log"),
 	Sinc("Sinc"),
 	Size("Size"),
 	Soundbank("Soundbank"),

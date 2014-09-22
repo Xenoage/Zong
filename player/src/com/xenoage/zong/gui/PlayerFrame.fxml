@@ -97,7 +97,7 @@
           </Menu>
             <Menu fx:id="mnuBeta" mnemonicParsing="false" text="%Beta">
               <items>
-                <MenuItem fx:id="mnuBetaReport" mnemonicParsing="false" onAction="#onErrorReport" text="%ErrorReportOrFeatureRequest" />
+                <MenuItem fx:id="mnuBetaReport" mnemonicParsing="false" onAction="#onErrorReport" text="%ErrorReportOrFeatureRequest..." />
               </items>
             </Menu>
         </menus>

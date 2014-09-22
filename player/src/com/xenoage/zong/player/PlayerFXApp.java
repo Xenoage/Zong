@@ -6,10 +6,6 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import lombok.Getter;
 
-import com.xenoage.utils.jse.lang.LangManager;
-import com.xenoage.utils.jse.lang.LangResourceBundle;
-import com.xenoage.zong.Voc;
-import com.xenoage.zong.desktop.gui.utils.ResourceUpdater;
 import com.xenoage.zong.gui.PlayerFrame;
 
 /**

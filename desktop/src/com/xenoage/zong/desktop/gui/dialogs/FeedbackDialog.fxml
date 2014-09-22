@@ -8,11 +8,11 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane fx:id="root" prefHeight="449.0" prefWidth="524.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.xenoage.zong.desktop.gui.dialogs.FeedbackDialog">
+<BorderPane fx:id="root" prefHeight="487.0" prefWidth="524.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.xenoage.zong.desktop.gui.dialogs.FeedbackDialog">
    <bottom>
-      <HBox alignment="BOTTOM_RIGHT" minHeight="60.0" spacing="10.0" BorderPane.alignment="CENTER">
+      <HBox alignment="BOTTOM_RIGHT" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
-            <Button defaultButton="true" mnemonicParsing="false" onAction="#onOK" text="%Send" />
+            <Button defaultButton="true" mnemonicParsing="false" onAction="#onSend" text="%Send" />
             <Button cancelButton="true" mnemonicParsing="false" onAction="#onCancel" text="%Cancel" />
          </children>
          <BorderPane.margin>
@@ -29,7 +29,7 @@
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
          <children>
-            <Label text="%FeedbackDescription" wrapText="true" />
+            <Label minHeight="-Infinity" text="%FeedbackDescription" wrapText="true" />
             <Hyperlink onAction="#onBugtracker" text="%UseBugtracker" />
             <Label text="%ProblemDescription">
                <VBox.margin>
@@ -39,20 +39,25 @@
                   <Font name="System Bold" size="15.0" />
                </font>
             </Label>
-            <TextArea prefHeight="150.0" prefWidth="200.0" wrapText="true" />
-            <CheckBox mnemonicParsing="false" text="%AttachLog" />
-            <CheckBox mnemonicParsing="false" text="%AttachFile" />
-            <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+            <TextArea fx:id="txaText" prefHeight="200.0" prefWidth="200.0" wrapText="true" />
+            <HBox fx:id="boxLog" alignment="BASELINE_LEFT" spacing="20.0">
                <children>
-                  <Label text="%MailForFurtherQuestions">
+                  <CheckBox fx:id="chkLog" mnemonicParsing="false" selected="true" text="%AttachLog" />
+                  <Button mnemonicParsing="false" onAction="#onShowLog" text="%ShowLog..." />
+               </children>
+            </HBox>
+            <CheckBox fx:id="chkFile" mnemonicParsing="false" text="%AttachFile" />
+            <HBox alignment="BASELINE_LEFT" spacing="10.0">
+               <children>
+                  <Label text="%MailForFurtherQuestions:">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
                   </Label>
-                  <TextField prefWidth="250.0" promptText="your@mail.com" />
+                  <TextField fx:id="txtEmail" prefWidth="250.0" promptText="%ExampleMailAdress" />
                </children>
                <padding>
-                  <Insets top="10.0" />
+                  <Insets bottom="10.0" top="10.0" />
                </padding>
             </HBox>
          </children>
