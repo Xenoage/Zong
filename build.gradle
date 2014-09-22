@@ -43,8 +43,10 @@ subprojects {
 //project dependencies
 project(':converter') { dependencies { compile project(':desktop') } }
 project(':desktop') {
+	sourceCompatibility = 8
 	dependencies {
 		compile project(':renderer'), project(':midi-out'), project(':musicxml-in'), project(':voc')
+		compile group: "org.controlsfx", name: "controlsfx", version: "8.0.6"
 		compile group: "com.itextpdf", name: "itextpdf", version: "5.4.5"
 		compile files('../lib/lib/vorbis-java-1.0.0-beta.jar')
 	}
