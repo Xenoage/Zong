@@ -55,6 +55,10 @@ project(':layout') { dependencies { compile project(':core') } }
 project(':midi-out') { dependencies { compile project(':core') } }
 project(':musicxml') { dependencies { compile project(':core') } }
 project(':musicxml-in') { dependencies { compile project(':musicxml') } }
+project(':player') {
+	sourceCompatibility = 8
+	dependencies { compile project(':desktop') }
+}
 project(':renderer') { dependencies { compile project(':layout') } }
 project(':test') { dependencies { compile project(':converter'), project(':webserver') } }
 project(':voc') { dependencies { compile project(':core') } }
