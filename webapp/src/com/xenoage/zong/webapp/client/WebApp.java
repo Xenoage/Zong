@@ -9,6 +9,7 @@ import java.util.HashMap;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.xenoage.utils.async.AsyncCallback;
@@ -21,6 +22,7 @@ import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.util.Interval;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.io.musiclayout.LayoutSettingsReader;
+import com.xenoage.zong.io.symbols.SvgPathReader;
 import com.xenoage.zong.musiclayout.ScoreLayout;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouter;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
@@ -33,6 +35,7 @@ import com.xenoage.zong.renderer.stampings.StampingRenderer;
 import com.xenoage.zong.symbols.Symbol;
 import com.xenoage.zong.symbols.SymbolPool;
 import com.xenoage.zong.util.demo.ScoreRevolutionary;
+import com.xenoage.zong.webapp.io.symbols.GwtSvgPathReader;
 import com.xenoage.zong.webapp.renderer.canvas.GwtCanvas;
 
 
@@ -165,6 +168,18 @@ public class WebApp
 				lblLayout.setText("Layout error: " + ex.toString());
 			}
 		});
+		
+		//test SVG loading and rendering
+		platformUtils().openFileAsync("data/clef-g.svg", new AsyncCallback<InputStream>() {
+
+			@Override public void onSuccess(InputStream data) {
+				
+			}
+
+			@Override public void onFailure(Exception ex) {
+				Window.alert("could not load svg");
+			}
+		};
 	}
 	
 	private String findAClef(Score score, MP mp) {

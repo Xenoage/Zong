@@ -4,7 +4,7 @@ Call this script each time before compiling this project.
 -->
 <project name="zong-src.delombok" default="zong-src.delombok">
 	<property name="target" value="src-zong"/>
-	<property name="lombok-path" value="../lib/lombok-1.12.5-xng.jar"/>
+	<property name="lombok-path" value="../lib/lib/lombok-1.14.2.jar"/>
 	<target name="zong-src.delombok">
 	    <echo>Delombok Zong! sources...</echo>
 	    <!-- clean target directory -->
@@ -25,6 +25,14 @@ Call this script each time before compiling this project.
 		<delombok verbose="true" encoding="UTF-8" to="${target}" from="../renderer/src">
 			<format value="suppressWarnings:skip" />
 		</delombok>
+		<!-- also remove @NonNull (necessary with lombok 1.14.2, maybe later not any more?)-->
+		<replace>
+			<fileset dir="${target}">
+				<include name="**/*.java"/>
+			</fileset>
+			<replacefilter token="import lombok.NonNull;"/>
+			<replacefilter token="@NonNull"/>
+		</replace>
 		<echo>Done.</echo>
 	</target>
 </project>
