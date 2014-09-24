@@ -1,7 +1,7 @@
 package com.xenoage.zong.desktop.io.musicxml.in;
 
 import static com.xenoage.utils.jse.JsePlatformUtils.jsePlatformUtils;
-import static com.xenoage.utils.jse.async.Blocking.blocking;
+import static com.xenoage.utils.jse.async.Sync.sync;
 import static com.xenoage.zong.util.ZongPlatformUtils.zongPlatformUtils;
 
 import java.io.IOException;
@@ -55,7 +55,7 @@ public class MusicXmlScoreDocFileInput
 
 		List<Score> scores;
 		try {
-			scores = blocking(new MusicXmlFileReader(stream, filePath, new AllFilter<String>()));
+			scores = sync(new MusicXmlFileReader(stream, filePath, new AllFilter<String>()));
 		} catch (InvalidFormatException ex) {
 			throw ex; //forward
 		} catch (IOException ex) {

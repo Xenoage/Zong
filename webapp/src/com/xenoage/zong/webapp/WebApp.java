@@ -1,10 +1,13 @@
-package com.xenoage.zong.webapp.client;
+package com.xenoage.zong.webapp;
 
 import static com.xenoage.utils.PlatformUtils.platformUtils;
 import static com.xenoage.utils.math.Fraction._0;
+import static com.xenoage.zong.util.ZongPlatformUtils.zongPlatformUtils;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
@@ -13,7 +16,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.xenoage.utils.async.AsyncCallback;
-import com.xenoage.utils.gwt.GwtPlatformUtils;
+import com.xenoage.utils.async.AsyncResult;
 import com.xenoage.utils.gwt.io.GwtInputStream;
 import com.xenoage.utils.io.InputStream;
 import com.xenoage.utils.math.geom.Point2i;
@@ -22,7 +25,6 @@ import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.util.Interval;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.io.musiclayout.LayoutSettingsReader;
-import com.xenoage.zong.io.symbols.SvgPathReader;
 import com.xenoage.zong.musiclayout.ScoreLayout;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouter;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
@@ -34,9 +36,12 @@ import com.xenoage.zong.renderer.canvas.CanvasIntegrity;
 import com.xenoage.zong.renderer.stampings.StampingRenderer;
 import com.xenoage.zong.symbols.Symbol;
 import com.xenoage.zong.symbols.SymbolPool;
+import com.xenoage.zong.symbols.common.CommonSymbol;
+import com.xenoage.zong.util.ZongPlatformUtils;
 import com.xenoage.zong.util.demo.ScoreRevolutionary;
-import com.xenoage.zong.webapp.io.symbols.GwtSvgPathReader;
 import com.xenoage.zong.webapp.renderer.canvas.GwtCanvas;
+import com.xenoage.zong.webapp.symbols.GwtPathSymbol;
+import com.xenoage.zong.webapp.utils.GwtZongPlatformUtils;
 
 
 /**
@@ -44,6 +49,8 @@ import com.xenoage.zong.webapp.renderer.canvas.GwtCanvas;
  */
 public class WebApp
 	implements EntryPoint {
+	
+	private Logger logger;
 	
 	private Canvas canvas;
 	private Context2d context;
@@ -54,7 +61,23 @@ public class WebApp
 	 * This is the entry point method.
 	 */
 	@Override public void onModuleLoad() {
+		//init logging
+		logger = Logger.getLogger("Zong");
+    
+		//init utils
+		GwtZongPlatformUtils.init(new AsyncCallback() {
+			
+			@Override public void onSuccess() {
+				step1_setup();
+			}
+			
+			@Override public void onFailure(Exception ex) {
+				logger.log(Level.SEVERE, "Could not init platform utils", ex);
+			}
+		});
+	}
 		
+	private void step1_setup() {
 		//test core
 		final Score score = ScoreRevolutionary.createScore();
 		//String t = score.getClef(MP.atBeat(0, 1, 0, _0), Interval.BeforeOrAt).getType().toString() + " found";
@@ -71,12 +94,11 @@ public class WebApp
 		container.add(new Label("Voice at " + mp + ": " + score.getVoice(mp)));
 		
 		//Test GWT IO
-		GwtPlatformUtils.init();
 		try {
 			container.add(new Label("File content:"));
 			final Label lblData = new Label("Loading...");
 			container.add(lblData);
-			platformUtils().openFileAsync("test.txt", new AsyncCallback<InputStream>() {
+			platformUtils().openFileAsync("test.txt", new AsyncResult<InputStream>() {
 				
 				@Override public void onSuccess(InputStream data) {
 					lblData.setText(((GwtInputStream) data).getData());
@@ -95,7 +117,7 @@ public class WebApp
 			container.add(new Label("XML content:"));
 			final Label lblData = new Label("Loading...");
 			container.add(lblData);
-			platformUtils().openFileAsync("test.xml", new AsyncCallback<InputStream>() {
+			platformUtils().openFileAsync("test.xml", new AsyncResult<InputStream>() {
 				
 				@Override public void onSuccess(InputStream data) {
 					try {
@@ -135,13 +157,18 @@ public class WebApp
     context.lineTo(25,0);
     context.fill();
     context.closePath(); */
+    context.translate(100, 100);
+    GwtPathSymbol symbol = (GwtPathSymbol)
+    	zongPlatformUtils().getSymbolPool().getSymbol(CommonSymbol.ClefG).getShape();
+    symbol.draw(context);
     
+   
     //test layout
 		container.add(new Label("And here is the layout data:"));
 		final SymbolPool symbolPool = new SymbolPool("default", new HashMap<String, Symbol>());
 		final Label lblLayout = new Label("Loading...");
 		container.add(lblLayout);
-		platformUtils().openFileAsync("test.xml", new AsyncCallback<InputStream>() {
+		platformUtils().openFileAsync("test.xml", new AsyncResult<InputStream>() {
 			
 			@Override public void onSuccess(InputStream data) {
 				try {
@@ -168,18 +195,6 @@ public class WebApp
 				lblLayout.setText("Layout error: " + ex.toString());
 			}
 		});
-		
-		//test SVG loading and rendering
-		platformUtils().openFileAsync("data/clef-g.svg", new AsyncCallback<InputStream>() {
-
-			@Override public void onSuccess(InputStream data) {
-				
-			}
-
-			@Override public void onFailure(Exception ex) {
-				Window.alert("could not load svg");
-			}
-		};
 	}
 	
 	private String findAClef(Score score, MP mp) {

@@ -4,12 +4,7 @@ import static com.xenoage.utils.collections.CollectionUtils.alist;
 
 import java.util.List;
 
-import lombok.Getter;
-import lombok.Setter;
-
-import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
-import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.zong.webapp.symbols.path.PathElement;
 
 /**

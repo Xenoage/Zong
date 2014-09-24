@@ -1,10 +1,15 @@
 package com.xenoage.zong.desktop.utils;
 
+import static com.xenoage.utils.error.Err.handle;
+import static com.xenoage.utils.jse.async.Sync.sync;
+import static com.xenoage.utils.log.Report.fatal;
+
 import com.xenoage.utils.PlatformUtils;
 import com.xenoage.utils.jse.JsePlatformUtils;
+import com.xenoage.zong.Voc;
 import com.xenoage.zong.desktop.io.symbols.AwtSvgPathReader;
-import com.xenoage.zong.desktop.io.symbols.SymbolPoolReader;
 import com.xenoage.zong.io.symbols.SvgPathReader;
+import com.xenoage.zong.io.symbols.SymbolPoolReader;
 import com.xenoage.zong.symbols.SymbolPool;
 import com.xenoage.zong.util.ZongPlatformUtils;
 
@@ -29,7 +34,11 @@ public class JseZongPlatformUtils
 		JsePlatformUtils.init(programName);
 		ZongPlatformUtils.init(instance);
 		//load default symbol pool
-		instance.symbolPool = SymbolPoolReader.readSymbolPool("default");
+		try {
+			instance.symbolPool = sync(new SymbolPoolReader("default"));
+		} catch (Exception ex) {
+			handle(fatal(Voc.CouldNotLoadSymbolPool, ex));
+		}
 	}
 
 	@Override public SymbolPool getSymbolPool() {

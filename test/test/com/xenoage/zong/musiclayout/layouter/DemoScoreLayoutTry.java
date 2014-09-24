@@ -1,13 +1,12 @@
 package com.xenoage.zong.musiclayout.layouter;
 
 import static com.xenoage.utils.jse.JsePlatformUtils.jsePlatformUtils;
-
-import java.io.IOException;
+import static com.xenoage.utils.jse.async.Sync.sync;
 
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.core.Score;
-import com.xenoage.zong.desktop.io.symbols.SymbolPoolReader;
 import com.xenoage.zong.io.musiclayout.LayoutSettingsReader;
+import com.xenoage.zong.io.symbols.SymbolPoolReader;
 import com.xenoage.zong.musiclayout.ScoreLayout;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.symbols.SymbolPool;
@@ -22,8 +21,8 @@ import com.xenoage.zong.util.demo.ScoreRevolutionary;
 public class DemoScoreLayoutTry {
 	
 	public static void main(String... args)
-		throws IOException {
-		SymbolPool symbolPool = SymbolPoolReader.readSymbolPool("default");
+		throws Exception {
+		SymbolPool symbolPool = sync(new SymbolPoolReader("default"));
 		LayoutSettings layoutSettings = LayoutSettingsReader.read(
 			jsePlatformUtils().openFile("data/test/layout/LayoutSettingsTest.xml"));
 		

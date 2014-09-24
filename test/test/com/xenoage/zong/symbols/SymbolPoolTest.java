@@ -1,5 +1,6 @@
 package com.xenoage.zong.symbols;
 
+import static com.xenoage.utils.jse.async.Sync.sync;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -8,8 +9,9 @@ import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.xenoage.utils.jse.async.Sync;
 import com.xenoage.utils.math.Delta;
-import com.xenoage.zong.desktop.io.symbols.SymbolPoolReader;
+import com.xenoage.zong.io.symbols.SymbolPoolReader;
 
 /**
  * Tests for {@link SymbolPool}.
@@ -24,7 +26,7 @@ public class SymbolPoolTest {
 	@Before public void setUp() {
 		//load default symbol pool, clef-g must exist
 		try {
-			symbolPool = SymbolPoolReader.readSymbolPool("default");
+			symbolPool = sync(new SymbolPoolReader("default"));
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			fail();

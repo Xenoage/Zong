@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.xenoage.utils.annotations.MaybeNull;
-import com.xenoage.utils.async.AsyncCallback;
+import com.xenoage.utils.async.AsyncResult;
 import com.xenoage.utils.async.AsyncProducer;
 import com.xenoage.utils.io.InputStream;
 import com.xenoage.utils.io.ZipReader;
@@ -38,7 +38,7 @@ public class OpusLinkResolver
 	//working data
 	private List<OpusItem> input;
 	private List<OpusItem> acc;
-	private AsyncCallback<Opus> callback;
+	private AsyncResult<Opus> callback;
 
 
 	public OpusLinkResolver(Opus opus, ZipReader zip, String basePath) {
@@ -47,7 +47,7 @@ public class OpusLinkResolver
 		this.basePath = basePath;
 	}
 
-	@Override public void produce(AsyncCallback<Opus> callback) {
+	@Override public void produce(AsyncResult<Opus> callback) {
 		this.input = alist(opus.getItems());
 		this.acc = alist();
 		this.callback = callback;
@@ -78,7 +78,7 @@ public class OpusLinkResolver
 				else if (basePath != null) {
 					//read plain opus file
 					platformUtils().openFileAsync(basePath + "/" + filePath,
-						new AsyncCallback<InputStream>() {
+						new AsyncResult<InputStream>() {
 
 							@Override public void onSuccess(InputStream opusStream) {
 								resolveItem(opusStream);
@@ -96,7 +96,7 @@ public class OpusLinkResolver
 			else if (inputItem instanceof Opus) {
 				//opus; can contain links which must be resolved
 				Opus childOpus = (Opus) inputItem;
-				new OpusLinkResolver(childOpus, zip, basePath).produce(new AsyncCallback<Opus>() {
+				new OpusLinkResolver(childOpus, zip, basePath).produce(new AsyncResult<Opus>() {
 
 					@Override public void onSuccess(Opus opus) {
 						acc.add(opus);
@@ -131,7 +131,7 @@ public class OpusLinkResolver
 			return;
 		}
 		//this opus can again have links. resolve them recursively.
-		new OpusLinkResolver(newOpus, zip, basePath).produce(new AsyncCallback<Opus>() {
+		new OpusLinkResolver(newOpus, zip, basePath).produce(new AsyncResult<Opus>() {
 
 			@Override public void onSuccess(Opus opus) {
 				acc.add(opus);

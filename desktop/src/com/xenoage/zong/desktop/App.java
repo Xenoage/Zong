@@ -1,7 +1,7 @@
 package com.xenoage.zong.desktop;
 
 import static com.xenoage.utils.error.Err.handle;
-import static com.xenoage.utils.jse.async.Blocking.blocking;
+import static com.xenoage.utils.jse.async.Sync.sync;
 import static com.xenoage.utils.log.Log.log;
 import static com.xenoage.utils.log.Report.error;
 import static com.xenoage.utils.log.Report.remark;
@@ -405,7 +405,7 @@ public class App<DocType extends Document> {
 	 */
 	public List<Score> loadMxlScores(String path, Filter<String> filter) {
 		try {
-			return blocking(new MusicXmlFileReader(new JseInputStream(new File(path)), path, filter));
+			return sync(new MusicXmlFileReader(new JseInputStream(new File(path)), path, filter));
 		} catch (Exception ex) {
 			reportOpenFileError(ex, path);
 			return new LinkedList<Score>();

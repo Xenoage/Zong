@@ -1,6 +1,8 @@
-package com.xenoage.zong;
+package com.xenoage.zong.tools.voc;
 
 import java.io.IOException;
+
+import com.xenoage.zong.Voc;
 
 /**
  * Creates a POT file (GNU gettext template) with all vocab from {@link Voc}.

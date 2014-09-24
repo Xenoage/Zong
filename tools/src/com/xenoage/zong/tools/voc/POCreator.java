@@ -1,4 +1,4 @@
-package com.xenoage.zong;
+package com.xenoage.zong.tools.voc;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -8,6 +8,8 @@ import com.xenoage.utils.jse.lang.LangManager;
 import com.xenoage.utils.jse.lang.LanguageReader;
 import com.xenoage.utils.lang.Language;
 import com.xenoage.utils.lang.VocID;
+import com.xenoage.zong.Voc;
+import com.xenoage.zong.Zong;
 
 /**
  * Creates a PO file (GNU gettext) with all vocab from {@link Voc}

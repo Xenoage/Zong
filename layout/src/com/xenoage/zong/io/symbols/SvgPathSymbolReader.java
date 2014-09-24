@@ -1,4 +1,4 @@
-package com.xenoage.zong.desktop.io.symbols;
+package com.xenoage.zong.io.symbols;
 
 import static com.xenoage.zong.util.ZongPlatformUtils.zongPlatformUtils;
 
@@ -6,7 +6,6 @@ import com.xenoage.utils.Parser;
 import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.utils.math.geom.Rectangle2f;
 import com.xenoage.utils.xml.XmlReader;
-import com.xenoage.zong.io.symbols.SvgPathReader;
 import com.xenoage.zong.symbols.PathSymbol;
 
 /**

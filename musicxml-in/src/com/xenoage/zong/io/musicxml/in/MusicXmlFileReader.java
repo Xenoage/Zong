@@ -6,7 +6,7 @@ import static com.xenoage.utils.collections.CollectionUtils.alist;
 import java.io.IOException;
 import java.util.List;
 
-import com.xenoage.utils.async.AsyncCallback;
+import com.xenoage.utils.async.AsyncResult;
 import com.xenoage.utils.async.AsyncProducer;
 import com.xenoage.utils.filter.Filter;
 import com.xenoage.utils.io.BufferedInputStream;
@@ -52,7 +52,7 @@ public class MusicXmlFileReader
 		this.scoreFileFilter = scoreFileFilter;
 	}
 
-	@Override public void produce(final AsyncCallback<List<Score>> callback) {
+	@Override public void produce(final AsyncResult<List<Score>> callback) {
 		final List<Score> ret = alist();
 		//open stream
 		BufferedInputStream bis = new BufferedInputStream(in);
@@ -79,7 +79,7 @@ public class MusicXmlFileReader
 					final String directory = FileUtils.getDirectoryName(path);
 					OpusFileInput opusInput = new OpusFileInput();
 					Opus opus = opusInput.readOpusFile(bis);
-					new OpusLinkResolver(opus, null, directory).produce(new AsyncCallback<Opus>() {
+					new OpusLinkResolver(opus, null, directory).produce(new AsyncResult<Opus>() {
 
 						@Override public void onSuccess(Opus opus) {
 							try {
@@ -123,17 +123,17 @@ public class MusicXmlFileReader
 	 */
 	private static void processNextScore(final String directory, final List<String> filePaths,
 		final Filter<String> scoreFileFilter, final List<Score> acc,
-		final AsyncCallback<List<Score>> callback) {
+		final AsyncResult<List<Score>> callback) {
 		if (filePaths.size() > 0) {
 			//another file to load
 			String filePath = filePaths.remove(0);
 			final String relativePath = directory + "/" + filePath;
-			platformUtils().openFileAsync(relativePath, new AsyncCallback<InputStream>() {
+			platformUtils().openFileAsync(relativePath, new AsyncResult<InputStream>() {
 
 				@Override public void onSuccess(InputStream stream) {
 					//input stream opened, read file
 					new MusicXmlFileReader(stream, relativePath, scoreFileFilter)
-						.produce(new AsyncCallback<List<Score>>() {
+						.produce(new AsyncResult<List<Score>>() {
 
 							@Override public void onSuccess(List<Score> scores) {
 								acc.addAll(scores);

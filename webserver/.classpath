@@ -14,7 +14,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/gson"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/desktop"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/utils-jse"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/voc"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jetty"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
