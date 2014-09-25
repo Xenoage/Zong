@@ -9,7 +9,6 @@ import com.xenoage.utils.error.BasicErrorProcessing;
 import com.xenoage.utils.lang.Lang;
 import com.xenoage.utils.log.Level;
 import com.xenoage.utils.log.Report;
-import com.xenoage.zong.desktop.App.AppType;
 
 /**
  * This class handles error and warning {@link Report}s by
@@ -40,13 +39,8 @@ public class GuiErrorProcessing
 		}
 		//if it is a fatal error, close application
 		if (report.level == Level.Fatal) {
-			if (app().getAppType() == AppType.DesktopApp) {
-				System.exit(1);
-			}
-			else {
-				app().showMessageDialog(platformUtils().getStackTraceString(report.error));
-				throw new Error("Fatal"); //TODO: find nice way to closedown applet
-			}
+			app().showMessageDialog(platformUtils().getStackTraceString(report.error));
+			platformUtils().exit(report.error);
 		}
 	}
 

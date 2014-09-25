@@ -12,11 +12,12 @@ import java.util.logging.Logger;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.xenoage.utils.async.AsyncCallback;
 import com.xenoage.utils.async.AsyncResult;
+import com.xenoage.utils.error.Err;
+import com.xenoage.utils.gwt.error.GwtErrorProcessing;
 import com.xenoage.utils.gwt.io.GwtInputStream;
 import com.xenoage.utils.io.InputStream;
 import com.xenoage.utils.math.geom.Point2i;
@@ -37,7 +38,6 @@ import com.xenoage.zong.renderer.stampings.StampingRenderer;
 import com.xenoage.zong.symbols.Symbol;
 import com.xenoage.zong.symbols.SymbolPool;
 import com.xenoage.zong.symbols.common.CommonSymbol;
-import com.xenoage.zong.util.ZongPlatformUtils;
 import com.xenoage.zong.util.demo.ScoreRevolutionary;
 import com.xenoage.zong.webapp.renderer.canvas.GwtCanvas;
 import com.xenoage.zong.webapp.symbols.GwtPathSymbol;
@@ -63,6 +63,8 @@ public class WebApp
 	@Override public void onModuleLoad() {
 		//init logging
 		logger = Logger.getLogger("Zong");
+		//init error handler
+		Err.init(new GwtErrorProcessing());
     
 		//init utils
 		GwtZongPlatformUtils.init(new AsyncCallback() {
@@ -92,6 +94,7 @@ public class WebApp
 		container.add(new Label(findAClef(score, MP.atBeat(1, 1, 0, _0))));
 		MP mp = MP.atBeat(0, 1, 0, _0);
 		container.add(new Label("Voice at " + mp + ": " + score.getVoice(mp)));
+		
 		
 		//Test GWT IO
 		try {
@@ -150,19 +153,21 @@ public class WebApp
     container.add(canvas);
     context = canvas.getContext2d();
     gwtCanvas = new GwtCanvas(canvas, CanvasFormat.Raster, CanvasDecoration.None, CanvasIntegrity.Perfect);
-    /* context.beginPath();
+
+    context.beginPath();
     context.moveTo(25,0);
     context.lineTo(0,20);
     context.lineTo(25,40);
-    context.lineTo(25,0);
+    context.closePath();
     context.fill();
-    context.closePath(); */
-    context.translate(100, 100);
+    
+    context.translate(200, 200);
+    context.scale(100, 100);
     GwtPathSymbol symbol = (GwtPathSymbol)
     	zongPlatformUtils().getSymbolPool().getSymbol(CommonSymbol.ClefG).getShape();
     symbol.draw(context);
+    context.fill();
     
-   
     //test layout
 		container.add(new Label("And here is the layout data:"));
 		final SymbolPool symbolPool = new SymbolPool("default", new HashMap<String, Symbol>());

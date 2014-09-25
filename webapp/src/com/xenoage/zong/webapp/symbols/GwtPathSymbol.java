@@ -25,8 +25,11 @@ public class GwtPathSymbol {
 	}
 	
 	public void draw(Context2d context) {
+		context.beginPath();
 		for (PathElement pathElement : path)
 			pathElement.draw(context);
 	}
+	
+	
 
 }

@@ -33,7 +33,8 @@ public class GwtZongPlatformUtils
 		//load default symbol pool
 		new SymbolPoolReader("default").produce(new AsyncResult<SymbolPool>() {
 
-			@Override public void onSuccess(SymbolPool data) {
+			@Override public void onSuccess(SymbolPool symbolPool) {
+				instance.symbolPool = symbolPool;
 				finished.onSuccess();
 			}
 

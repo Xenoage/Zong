@@ -7,7 +7,6 @@ import static com.xenoage.utils.error.Err.handle;
 import static com.xenoage.utils.log.Level.Warning;
 import static com.xenoage.utils.log.Report.createReport;
 
-import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +14,7 @@ import com.xenoage.utils.PlatformUtils;
 import com.xenoage.utils.async.AsyncResult;
 import com.xenoage.utils.async.AsyncProducer;
 import com.xenoage.utils.io.FileFilters;
+import com.xenoage.utils.io.FileNotFoundException;
 import com.xenoage.zong.Voc;
 import com.xenoage.zong.symbols.PathSymbol;
 import com.xenoage.zong.symbols.Symbol;
