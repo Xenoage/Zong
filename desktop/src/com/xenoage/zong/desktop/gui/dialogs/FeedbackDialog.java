@@ -1,7 +1,7 @@
 package com.xenoage.zong.desktop.gui.dialogs;
 
 import static com.xenoage.utils.error.Err.handle;
-import static com.xenoage.utils.jse.JsePlatformUtils.desktopIO;
+import static com.xenoage.utils.jse.JsePlatformUtils.io;
 import static com.xenoage.utils.log.Report.warning;
 import static com.xenoage.zong.desktop.App.app;
 
@@ -103,7 +103,7 @@ public class FeedbackDialog
 		}
 		if (chkLog.isSelected()) {
 			try {
-				report.registerData("app.log", desktopIO().openFile("data/app.log"));
+				report.registerData("app.log", io().openFile("data/app.log"));
 			} catch (Exception ex) {
 				report.registerData("app.log", "Error when inserting app.log");
 			}
@@ -111,7 +111,7 @@ public class FeedbackDialog
 		if (chkFile.isSelected() && documentPath != null) {
 			String filename = FileUtils.getFileName(documentPath);
 			try {
-				report.registerData(filename, desktopIO().openFile(documentPath));
+				report.registerData(filename, io().openFile(documentPath));
 			} catch (Exception ex) {
 				report.registerData(filename, "Error when inserting " + filename);
 			}

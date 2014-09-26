@@ -1,6 +1,6 @@
 package com.xenoage.zong.desktop.renderer.frames;
 
-import static com.xenoage.utils.jse.JsePlatformUtils.desktopIO;
+import static com.xenoage.utils.jse.JsePlatformUtils.io;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -51,7 +51,7 @@ public class AwtImageFrameRenderer
 			//otherwise, try to load image temporarily
 			if (image == null && canvas.getIntegrity() == CanvasIntegrity.Perfect) {
 				try {
-					image = ImageIO.read(desktopIO().findFile(imagePath));
+					image = ImageIO.read(io().findFile(imagePath));
 				} catch (IOException ex) {
 				}
 			}

@@ -1,6 +1,6 @@
 package com.xenoage.zong.commands.desktop.app;
 
-import static com.xenoage.utils.jse.JsePlatformUtils.desktopIO;
+import static com.xenoage.utils.jse.JsePlatformUtils.io;
 import static com.xenoage.utils.log.Log.log;
 import static com.xenoage.utils.log.Report.warning;
 
@@ -25,7 +25,7 @@ public class ExternalFileOpen
 
 	@Override public void execute() {
 		try {
-			Desktop.getDesktop().open(desktopIO().findFile(filepath));
+			Desktop.getDesktop().open(io().findFile(filepath));
 		} catch (Exception ex) {
 			log(warning("Could not open file: " + filepath + " (" + ex.getMessage() + ")"));
 		}

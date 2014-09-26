@@ -1,6 +1,6 @@
 package com.xenoage.zong.desktop.utils.image;
 
-import static com.xenoage.utils.jse.JsePlatformUtils.desktopIO;
+import static com.xenoage.utils.jse.JsePlatformUtils.io;
 
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
@@ -36,7 +36,7 @@ public class PlatformImageLoader {
 	 */
 	public static BufferedImage read(String imagePath, Alpha alpha)
 		throws IOException {
-		return read(new FileInputStream(desktopIO().findFile(imagePath)), alpha);
+		return read(new FileInputStream(io().findFile(imagePath)), alpha);
 	}
 
 	/**

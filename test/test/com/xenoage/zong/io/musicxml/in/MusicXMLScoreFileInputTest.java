@@ -2,7 +2,7 @@ package com.xenoage.zong.io.musicxml.in;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.io.FileFilters.xmlFilter;
-import static com.xenoage.utils.jse.JsePlatformUtils.desktopIO;
+import static com.xenoage.utils.jse.JsePlatformUtils.io;
 import static com.xenoage.utils.jse.JsePlatformUtils.jsePlatformUtils;
 import static org.junit.Assert.fail;
 
@@ -61,11 +61,11 @@ public class MusicXMLScoreFileInputTest {
 	 */
 	public static List<String> getSampleFiles() {
 		List<String> ret = alist();
-		List<String> files = desktopIO().listFiles(dir11, xmlFilter);
+		List<String> files = io().listFiles(dir11, xmlFilter);
 		for (String file : files) {
 			ret.add(dir11 + file);
 		}
-		files = desktopIO().listFiles(dir20, xmlFilter);
+		files = io().listFiles(dir20, xmlFilter);
 		for (String file : files) {
 			ret.add(dir20 + file);
 		}
