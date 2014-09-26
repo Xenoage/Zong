@@ -4,7 +4,6 @@ import static com.xenoage.utils.PlatformUtils.platformUtils;
 import static com.xenoage.utils.log.Log.log;
 import static com.xenoage.utils.log.Report.remark;
 
-import com.xenoage.utils.PlatformUtils;
 import com.xenoage.utils.async.AsyncProducer;
 import com.xenoage.utils.async.AsyncResult;
 import com.xenoage.utils.io.FileUtils;

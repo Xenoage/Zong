@@ -1,7 +1,5 @@
 package com.xenoage.zong.webapp.renderer.canvas;
 
-import static com.xenoage.utils.math.Units.pxToMm;
-
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.Context2d.LineCap;
@@ -23,6 +21,7 @@ import com.xenoage.zong.text.FormattedTextElement;
 import com.xenoage.zong.text.FormattedTextParagraph;
 import com.xenoage.zong.text.FormattedTextString;
 import com.xenoage.zong.text.FormattedTextSymbol;
+import com.xenoage.zong.webapp.renderer.symbols.GwtSymbolsRenderer;
 
 /**
  * This class contains methods for painting
@@ -106,10 +105,10 @@ public class GwtCanvas
 				else {
 					//symbol
 					FormattedTextSymbol fts = (FormattedTextSymbol) e;
-					/* TODO float scaling = fts.getScaling();
-					AndroidSymbolsRenderer.instance.draw(fts.getSymbol(), this, Color.black, new Point2f(
+					float scaling = fts.getScaling();
+					GwtSymbolsRenderer.instance.draw(fts.getSymbol(), this, Color.black, new Point2f(
 						offsetX + fts.getOffsetX(), offsetY + fts.getSymbol().baselineOffset * scaling),
-						new Point2f(scaling, scaling)); */
+						new Point2f(scaling, scaling));
 				}
 				offsetX += e.getMetrics().getWidth();
 			}
@@ -121,7 +120,7 @@ public class GwtCanvas
 	}
 
 	@Override public void drawSymbol(Symbol symbol, Color color, Point2f position, Point2f scaling) {
-		/* TODO AndroidSymbolsRenderer.instance.draw(symbol, this, color, position, scaling); */
+		GwtSymbolsRenderer.instance.draw(symbol, this, color, position, scaling);
 	}
 
 	@Override public void drawLine(Point2f p1, Point2f p2, Color color, float lineWidth) {
@@ -134,7 +133,6 @@ public class GwtCanvas
 		context.beginPath();
 		context.moveTo(p1.x, p1.y);
 		context.lineTo(p2.x, p2.y);
-		context.closePath();
 		context.stroke();
 	}
 

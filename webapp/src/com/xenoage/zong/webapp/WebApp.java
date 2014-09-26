@@ -1,14 +1,12 @@
 package com.xenoage.zong.webapp;
 
 import static com.xenoage.utils.PlatformUtils.platformUtils;
+import static com.xenoage.utils.log.Log.log;
+import static com.xenoage.utils.log.Report.fatal;
 import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.zong.util.ZongPlatformUtils.zongPlatformUtils;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.core.client.EntryPoint;
@@ -19,9 +17,12 @@ import com.xenoage.utils.async.AsyncResult;
 import com.xenoage.utils.error.Err;
 import com.xenoage.utils.gwt.error.GwtErrorProcessing;
 import com.xenoage.utils.gwt.io.GwtInputStream;
+import com.xenoage.utils.gwt.log.GwtLogProcessing;
 import com.xenoage.utils.io.InputStream;
+import com.xenoage.utils.log.Log;
 import com.xenoage.utils.math.geom.Point2i;
 import com.xenoage.utils.math.geom.Size2f;
+import com.xenoage.zong.Zong;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.util.Interval;
 import com.xenoage.zong.core.position.MP;
@@ -35,7 +36,6 @@ import com.xenoage.zong.renderer.canvas.CanvasDecoration;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
 import com.xenoage.zong.renderer.canvas.CanvasIntegrity;
 import com.xenoage.zong.renderer.stampings.StampingRenderer;
-import com.xenoage.zong.symbols.Symbol;
 import com.xenoage.zong.symbols.SymbolPool;
 import com.xenoage.zong.symbols.common.CommonSymbol;
 import com.xenoage.zong.util.demo.ScoreRevolutionary;
@@ -50,7 +50,7 @@ import com.xenoage.zong.webapp.utils.GwtZongPlatformUtils;
 public class WebApp
 	implements EntryPoint {
 	
-	private Logger logger;
+	public static final String appFirstName = "WebApp";
 	
 	private Canvas canvas;
 	private Context2d context;
@@ -62,7 +62,7 @@ public class WebApp
 	 */
 	@Override public void onModuleLoad() {
 		//init logging
-		logger = Logger.getLogger("Zong");
+		Log.init(new GwtLogProcessing(Zong.getNameAndVersion(appFirstName)));
 		//init error handler
 		Err.init(new GwtErrorProcessing());
     
@@ -74,7 +74,7 @@ public class WebApp
 			}
 			
 			@Override public void onFailure(Exception ex) {
-				logger.log(Level.SEVERE, "Could not init platform utils", ex);
+				log(fatal("Could not init platform utils", ex));
 			}
 		});
 	}
@@ -154,6 +154,7 @@ public class WebApp
     context = canvas.getContext2d();
     gwtCanvas = new GwtCanvas(canvas, CanvasFormat.Raster, CanvasDecoration.None, CanvasIntegrity.Perfect);
 
+    //TEST
     context.beginPath();
     context.moveTo(25,0);
     context.lineTo(0,20);
@@ -161,16 +162,19 @@ public class WebApp
     context.closePath();
     context.fill();
     
+    //TEST
+    context.save();
     context.translate(200, 200);
     context.scale(100, 100);
     GwtPathSymbol symbol = (GwtPathSymbol)
     	zongPlatformUtils().getSymbolPool().getSymbol(CommonSymbol.ClefG).getShape();
     symbol.draw(context);
     context.fill();
+    context.restore();
     
     //test layout
 		container.add(new Label("And here is the layout data:"));
-		final SymbolPool symbolPool = new SymbolPool("default", new HashMap<String, Symbol>());
+		final SymbolPool symbolPool = zongPlatformUtils().getSymbolPool();
 		final Label lblLayout = new Label("Loading...");
 		container.add(lblLayout);
 		platformUtils().openFileAsync("test.xml", new AsyncResult<InputStream>() {

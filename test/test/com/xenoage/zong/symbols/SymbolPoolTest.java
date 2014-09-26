@@ -9,7 +9,6 @@ import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.xenoage.utils.jse.async.Sync;
 import com.xenoage.utils.math.Delta;
 import com.xenoage.zong.io.symbols.SymbolPoolReader;
 

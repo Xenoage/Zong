@@ -52,7 +52,6 @@ public final class SymbolPoolReader
 		this.dir = symbolPoolPath + id;
 	}
 
-	//GOON caller: handle(fatal(Voc.CouldNotLoadSymbolPool, ex));
 	@Override public void produce(AsyncResult<SymbolPool> result) {
 		this.result = result;
 		step1_checkDir();

@@ -676,7 +676,6 @@ public abstract class MusicXMLTestSuite<T> {
 		loadTest("31a-Directions.xml");
 	}
 	
-	@SuppressWarnings("unchecked")
 	public List<Tuple2<MP, ?>> get_31a_Directions() {
 		//TODO: not all directions are supported yet. return only those which are supported now
 		Wedge w1, w2;

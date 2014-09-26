@@ -1,7 +1,5 @@
 package com.xenoage.zong;
 
-import javax.swing.JOptionPane;
-
 /**
  * Product and version information.
  * 
@@ -52,18 +50,6 @@ public class Zong {
 	 */
 	public static String getNameAndVersion(String firstName) {
 		return projectFamilyName + " " + firstName + " " + projectVersionLong;
-	}
-
-	/**
-	 * Shows a warning message using Swing, showing that this version is not usable but
-	 * "work in progress".
-	 */
-	public static void showWorkInProgressWarning() {
-		JOptionPane.showMessageDialog(null, "Warning: This version of " + projectFamilyName +
-			" is \"work in progress\" any may not work " + "as expected.\n" +
-			"If you need a working program, use version " + Zong.projectVersion + "." +
-			Zong.projectIterationLastWorking, projectFamilyName + " " + projectVersionLong,
-			JOptionPane.WARNING_MESSAGE);
 	}
 
 }

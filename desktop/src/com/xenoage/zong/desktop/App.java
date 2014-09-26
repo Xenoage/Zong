@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import javax.sound.midi.MidiUnavailableException;
+import javax.swing.JOptionPane;
 
 import lombok.Getter;
 
@@ -444,6 +445,18 @@ public class App<DocType extends Document> {
 	public void applyIcons(Stage stage) {
 		stage.getIcons().clear();
 		stage.getIcons().addAll(icons);
+	}
+	
+	/**
+	 * Shows a warning message using Swing, showing that this version is not usable but
+	 * "work in progress".
+	 */
+	public static void showWorkInProgressWarning() {
+		JOptionPane.showMessageDialog(null, "Warning: This version of " + Zong.projectFamilyName +
+			" is \"work in progress\" any may not work " + "as expected.\n" +
+			"If you need a working program, use version " + Zong.projectVersion + "." +
+			Zong.projectIterationLastWorking, Zong.projectFamilyName + " " + Zong.projectVersionLong,
+			JOptionPane.WARNING_MESSAGE);
 	}
 
 }
