@@ -22,7 +22,7 @@
 			<fileset dir="musicxml/src"/>
 			<fileset dir="musicxml-in/src"/>
 			<fileset dir="renderer/src"/>
-			<fileset dir="voc/src"/>
+			<fileset dir="tools/src"/>
 			<fileset dir="webserver/src"/>
 		</copy>
 		<delombok verbose="true" encoding="UTF-8" from="${tempdir}/src" to="${tempdir}/src_delomboked">

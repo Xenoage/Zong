@@ -1,1 +1,1 @@
-include "converter", "core", "desktop", "layout", "midi-out", "musicxml", "musicxml-in", "player", "renderer", "test", "voc", "webserver"
+include "converter", "core", "desktop", "layout", "midi-out", "musicxml", "musicxml-in", "player", "renderer", "test", "tools", "webserver"

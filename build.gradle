@@ -51,7 +51,7 @@ project(':desktop') {
 		compile files('../lib/lib/vorbis-java-1.0.0-beta.jar')
 	}
 }
-project(':layout') { dependencies { compile project(':core'), project(':voc') } }
+project(':layout') { dependencies { compile project(':core') } }
 project(':midi-out') { dependencies { compile project(':core') } }
 project(':musicxml') { dependencies { compile project(':core') } }
 project(':musicxml-in') { dependencies { compile project(':musicxml') } }
@@ -61,7 +61,7 @@ project(':player') {
 }
 project(':renderer') { dependencies { compile project(':layout') } }
 project(':test') { dependencies { compile project(':converter'), project(':webserver') } }
-project(':voc') { dependencies { compile project(':core') } }
+project(':tools') { dependencies { compile project(':core') } }
 project(':webserver') {
 	dependencies {
 		compile project(':desktop')
