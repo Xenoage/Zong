@@ -3,9 +3,11 @@ package com.xenoage.zong.desktop.io.mp3.out;
 import static com.xenoage.utils.error.Err.handle;
 import static com.xenoage.utils.log.Report.warning;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 import com.xenoage.utils.document.io.FileOutput;
 import com.xenoage.utils.io.OutputStream;
@@ -27,6 +29,9 @@ import com.xenoage.zong.desktop.io.wav.out.WavScoreFileOutput;
  */
 public class Mp3ScoreFileOutput
 	implements FileOutput<Score> {
+	
+	private static boolean debugToConsole = false;
+	
 
 	@Override public void write(Score score, OutputStream stream, String filePath)
 		throws IOException {
@@ -54,12 +59,14 @@ public class Mp3ScoreFileOutput
 		try {
 			Process process = new ProcessBuilder("lame", tempWAVFile.getAbsolutePath(),
 				tempMP3File.getAbsolutePath()).start();
-			////forward LAME error output to console
-			//BufferedReader br = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-			//String line;
-			//while ((line = br.readLine()) != null) {
-			//   System.out.println(line);
-			//}
+			if (debugToConsole) {
+				//forward LAME error output to console
+				BufferedReader br = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+				String line;
+				while ((line = br.readLine()) != null) {
+				   System.out.println(line);
+				}
+			}
 			process.waitFor();
 			int exitValue = process.exitValue();
 			if (exitValue != 0)

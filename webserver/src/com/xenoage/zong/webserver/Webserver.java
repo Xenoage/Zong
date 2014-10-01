@@ -27,12 +27,12 @@ import com.google.gson.Gson;
 import com.xenoage.utils.Parser;
 import com.xenoage.utils.error.BasicErrorProcessing;
 import com.xenoage.utils.error.Err;
-import com.xenoage.utils.jse.JsePlatformUtils;
 import com.xenoage.utils.jse.log.DesktopLogProcessing;
 import com.xenoage.utils.jse.settings.Settings;
 import com.xenoage.utils.log.Log;
 import com.xenoage.zong.Zong;
 import com.xenoage.zong.desktop.io.midi.out.SynthManager;
+import com.xenoage.zong.desktop.utils.JseZongPlatformUtils;
 import com.xenoage.zong.webserver.init.DBInit;
 import com.xenoage.zong.webserver.servlet.ActionServlet;
 
@@ -68,7 +68,7 @@ public class Webserver {
 
 	public Webserver() {
 		//init IO and logging
-		JsePlatformUtils.init(filename);
+		JseZongPlatformUtils.init(filename);
 		Log.init(new DesktopLogProcessing(Zong.getNameAndVersion(projectName)));
 		Err.init(new BasicErrorProcessing());
 

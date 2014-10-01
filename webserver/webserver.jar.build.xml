@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project webserver">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <target name="create_run_jar">
+        <jar destfile="webserver.jar" filesetmanifest="mergewithoutmain">
+            <manifest>
+                <attribute name="Main-Class" value="com.xenoage.zong.webserver.Webserver"/>
+                <attribute name="Class-Path" value="."/>
+            </manifest>
+            <fileset dir="../webserver/bin"/>
+            <fileset dir="../core/bin"/>
+            <fileset dir="../utils/utils-base/bin"/>
+            <fileset dir="../utils/utils-kernel/bin"/>
+            <fileset dir="../layout/bin"/>
+            <fileset dir="../utils/utils-pdlib/bin"/>
+            <fileset dir="../utils/utils-serialize/bin"/>
+            <fileset dir="../utils/utils-jse/bin"/>
+            <fileset dir="../midi-out/bin"/>
+            <fileset dir="../musicxml/bin"/>
+            <fileset dir="../musicxml-in/bin"/>
+            <fileset dir="../renderer/bin"/>
+            <zipfileset excludes="META-INF/*.SF" src="../lib/lib/h2-1.3.174.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="../lib/lib/gson-2.2.4.jar"/>
+            <fileset dir="../desktop/bin"/>
+            <zipfileset excludes="META-INF/*.SF" src="../lib/lib/itextpdf-5.4.5.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="../lib/lib/vorbis-java-1.0.0-beta.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="../lib/lib/controlsfx-8.0.6.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="../lib/lib/jetty-all-9.1.0.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="../lib/lib/servlet-api-3.1.jar"/>
+        </jar>
+    </target>
+</project>
