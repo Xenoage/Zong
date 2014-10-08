@@ -218,7 +218,7 @@ public class App<DocType extends Document> {
 	}
 	
 	private Image readImage(String filename) {
-		return new Image(getClass().getResourceAsStream("../gui/img/" + filename));
+		return new Image(Zong.class.getResourceAsStream("gui/img/" + filename));
 	}
 
 	/**

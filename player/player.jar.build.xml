@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project player">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <target name="create_run_jar">
+        <jar destfile="player.jar" filesetmanifest="mergewithoutmain">
+            <manifest>
+                <attribute name="Main-Class" value="com.xenoage.zong.player.Player"/>
+                <attribute name="Class-Path" value="."/>
+            </manifest>
+            <fileset dir="bin"/>
+            <fileset dir="../converter/bin"/>
+            <fileset dir="../core/bin"/>
+            <fileset dir="../utils/utils-base/bin"/>
+            <fileset dir="../utils/utils-kernel/bin"/>
+            <fileset dir="../layout/bin"/>
+            <fileset dir="../utils/utils-pdlib/bin"/>
+            <fileset dir="../utils/utils-serialize/bin"/>
+            <fileset dir="../utils/utils-jse/bin"/>
+            <fileset dir="../midi-out/bin"/>
+            <fileset dir="../musicxml/bin"/>
+            <fileset dir="../musicxml-in/bin"/>
+            <fileset dir="../renderer/bin"/>
+            <fileset dir="../desktop/bin"/>
+            <zipfileset excludes="META-INF/*.SF" src="../lib/lib/vorbis-java-1.0.0-beta.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="../lib/lib/controlsfx-8.0.6.jar"/>
+        </jar>
+    </target>
+</project>
