@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<index>
+  <file name=".classpath" size="525"/>
+  <file name=".index" size="2496"/>
+  <file name=".project" size="381"/>
+  <directory name=".settings">
+    <file name="org.eclipse.jdt.core.prefs" size="598"/>
+  </directory>
+  <directory name="bin">
+    <directory name="com">
+      <directory name="xenoage">
+        <directory name="zong">
+          <directory name="tools">
+            <directory name="index">
+              <file name="FilesystemIndexCreator.class" size="2380"/>
+            </directory>
+            <directory name="voc">
+              <file name="POCreator.class" size="3182"/>
+              <file name="POTCreator.class" size="745"/>
+            </directory>
+          </directory>
+        </directory>
+      </directory>
+    </directory>
+  </directory>
+  <directory name="build">
+    <directory name="classes">
+      <directory name="main">
+        <directory name="com">
+          <directory name="xenoage">
+            <directory name="zong">
+              <directory name="tools">
+                <directory name="voc">
+                  <file name="POCreator.class" size="3231"/>
+                  <file name="POTCreator.class" size="745"/>
+                </directory>
+              </directory>
+            </directory>
+          </directory>
+        </directory>
+      </directory>
+    </directory>
+    <directory name="dependency-cache"/>
+    <directory name="libs">
+      <file name="tools.jar" size="3228"/>
+    </directory>
+    <directory name="tmp">
+      <directory name="jar">
+        <file name="MANIFEST.MF" size="55"/>
+      </directory>
+    </directory>
+  </directory>
+  <file name="de.po" size="12219"/>
+  <file name="default.pot" size="8848"/>
+  <file name="FilesystemIndexCreator.jar" size="447396"/>
+  <file name="FilesystemIndexCreator.jar.build.xml" size="902"/>
+  <directory name="src">
+    <directory name="com">
+      <directory name="xenoage">
+        <directory name="zong">
+          <directory name="tools">
+            <directory name="index">
+              <file name="FilesystemIndexCreator.java" size="1574"/>
+            </directory>
+            <directory name="voc">
+              <file name="POCreator.java" size="2149"/>
+              <file name="POTCreator.java" size="388"/>
+            </directory>
+          </directory>
+        </directory>
+      </directory>
+    </directory>
+  </directory>
+</index>

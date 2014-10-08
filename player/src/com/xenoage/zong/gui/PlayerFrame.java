@@ -180,8 +180,8 @@ public class PlayerFrame
 			String name = lang.getLocalName();
 			String intName = lang.getInternationalName();
 			ImageView icon = null;
-			if (lang.getFlag16() != null)
-				icon = new ImageView(imageOrNull(lang.getFlag16()));
+			if (lang.getFlag16Path() != null)
+				icon = new ImageView(imageOrNull(lang.getFlag16Path()));
 			String text = name + (name.equals(intName) ? "" : " (" + intName + ")");
 			RadioMenuItem mnu = new RadioMenuItem(text, icon);
 			mnu.setToggleGroup(toggleGroup);

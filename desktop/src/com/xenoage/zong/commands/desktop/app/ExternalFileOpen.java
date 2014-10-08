@@ -21,13 +21,13 @@ import com.xenoage.utils.document.command.TransparentCommand;
 public class ExternalFileOpen
 	extends TransparentCommand {
 	
-	private String filepath;
+	private String filePath;
 
 	@Override public void execute() {
 		try {
-			Desktop.getDesktop().open(io().findFile(filepath));
+			Desktop.getDesktop().open(io().findNormalFile(filePath));
 		} catch (Exception ex) {
-			log(warning("Could not open file: " + filepath + " (" + ex.getMessage() + ")"));
+			log(warning("Could not open file: " + filePath + " (" + ex.getMessage() + ")"));
 		}
 	}
 

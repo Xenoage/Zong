@@ -7,7 +7,6 @@ import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsEnvironment;
 import java.awt.Transparency;
 import java.awt.image.BufferedImage;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -36,7 +35,7 @@ public class PlatformImageLoader {
 	 */
 	public static BufferedImage read(String imagePath, Alpha alpha)
 		throws IOException {
-		return read(new FileInputStream(io().findFile(imagePath)), alpha);
+		return read(io().openFile(imagePath), alpha);
 	}
 
 	/**

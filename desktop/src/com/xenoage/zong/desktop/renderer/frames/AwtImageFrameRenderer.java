@@ -51,7 +51,7 @@ public class AwtImageFrameRenderer
 			//otherwise, try to load image temporarily
 			if (image == null && canvas.getIntegrity() == CanvasIntegrity.Perfect) {
 				try {
-					image = ImageIO.read(io().findFile(imagePath));
+					image = ImageIO.read(io().openFile(imagePath));
 				} catch (IOException ex) {
 				}
 			}
