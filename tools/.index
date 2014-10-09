@@ -1,74 +1,309 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <index>
-  <file name=".classpath" size="525"/>
-  <file name=".index" size="2496"/>
-  <file name=".project" size="381"/>
-  <directory name=".settings">
-    <file name="org.eclipse.jdt.core.prefs" size="598"/>
-  </directory>
-  <directory name="bin">
-    <directory name="com">
-      <directory name="xenoage">
-        <directory name="zong">
-          <directory name="tools">
-            <directory name="index">
-              <file name="FilesystemIndexCreator.class" size="2380"/>
+  <directory name="com">
+    <directory name="xenoage">
+      <directory name="utils">
+        <directory name="annotations">
+          <file name="Const.class" size="160"/>
+          <file name="Demo.class" size="298"/>
+          <file name="Experimental.class" size="314"/>
+          <file name="MaybeEmpty.class" size="309"/>
+          <file name="MaybeNull.class" size="307"/>
+          <file name="NeverEmpty.class" size="328"/>
+          <file name="NeverNull.class" size="326"/>
+          <file name="NonEmpty.class" size="305"/>
+          <file name="NonNull.class" size="303"/>
+          <file name="Unneeded.class" size="306"/>
+          <file name="Untested.class" size="306"/>
+        </directory>
+        <directory name="async">
+          <file name="AsyncCallback.class" size="204"/>
+          <file name="AsyncProducer.class" size="311"/>
+          <file name="AsyncResult.class" size="298"/>
+        </directory>
+        <file name="base.gwt.xml" size="331"/>
+        <file name="CheckUtils.class" size="2890"/>
+        <directory name="collections">
+          <file name="ArrayUtils.class" size="3992"/>
+          <file name="CList.class" size="9377"/>
+          <file name="CMap.class" size="4586"/>
+          <file name="CollectionUtils.class" size="6907"/>
+          <file name="IList.class" size="1254"/>
+          <file name="IMap.class" size="670"/>
+          <file name="ISet.class" size="665"/>
+          <file name="NullableList.class" size="2197"/>
+          <file name="SortedList.class" size="5009"/>
+        </directory>
+        <directory name="color">
+          <file name="Color.class" size="1877"/>
+          <file name="ColorUtils.class" size="2118"/>
+        </directory>
+        <directory name="document">
+          <directory name="command">
+            <file name="Command.class" size="247"/>
+            <file name="CommandHistory.class" size="2357"/>
+            <file name="CommandListener.class" size="283"/>
+            <file name="CommandPerformer.class" size="5260"/>
+            <file name="StopperCommand.class" size="802"/>
+            <file name="TransparentCommand.class" size="818"/>
+            <file name="Undoability.class" size="1198"/>
+          </directory>
+          <file name="Document.class" size="408"/>
+          <directory name="exceptions">
+            <file name="CancelledException.class" size="365"/>
+            <file name="PropertyAlreadySetException.class" size="456"/>
+            <file name="UselessException.class" size="359"/>
+          </directory>
+          <directory name="io">
+            <file name="FileFormat.class" size="3403"/>
+            <file name="FileInput.class" size="594"/>
+            <file name="FileOutput.class" size="533"/>
+            <file name="SupportedFormats.class" size="2848"/>
+          </directory>
+          <file name="package-info.class" size="132"/>
+        </directory>
+        <file name="document.gwt.xml" size="335"/>
+        <file name="EnumUtils.class" size="2076"/>
+        <directory name="error">
+          <file name="BasicErrorProcessing.class" size="1214"/>
+          <file name="Err.class" size="1141"/>
+          <file name="ErrorProcessing.class" size="188"/>
+          <file name="NoErrorProcessing.class" size="817"/>
+        </directory>
+        <directory name="exceptions">
+          <file name="InvalidFormatException.class" size="703"/>
+          <file name="UnsupportedClassException.class" size="752"/>
+        </directory>
+        <directory name="filter">
+          <file name="AllFilter.class" size="778"/>
+          <file name="Filter.class" size="290"/>
+        </directory>
+        <directory name="font">
+          <file name="FontInfo.class" size="3829"/>
+          <file name="FontStyle.class" size="1400"/>
+          <file name="TextMeasurer.class" size="238"/>
+          <file name="TextMetrics.class" size="807"/>
+        </directory>
+        <directory name="io">
+          <file name="BufferedInputStream.class" size="2008"/>
+          <file name="Directory.class" size="286"/>
+          <file name="File.class" size="199"/>
+          <file name="FileFilter.class" size="172"/>
+          <file name="FileFilters$1.class" size="780"/>
+          <file name="FileFilters$2.class" size="778"/>
+          <file name="FileFilters$3.class" size="779"/>
+          <file name="FileFilters$4.class" size="779"/>
+          <file name="FileFilters$5.class" size="779"/>
+          <file name="FileFilters$6.class" size="1104"/>
+          <file name="FileFilters$7.class" size="994"/>
+          <file name="FileFilters.class" size="1485"/>
+          <file name="FilenameUtils.class" size="2184"/>
+          <file name="FileNotFoundException.class" size="397"/>
+          <file name="FilesystemInput.class" size="902"/>
+          <file name="FilesystemItem.class" size="171"/>
+          <file name="FileUtils.class" size="2783"/>
+          <directory name="index">
+            <file name="FilesystemIndex.class" size="4994"/>
+            <file name="FilesystemIndexReader.class" size="3365"/>
+            <file name="IndexedDirectory.class" size="2143"/>
+            <file name="IndexedFile.class" size="717"/>
+          </directory>
+          <file name="InputStream.class" size="269"/>
+          <file name="OutputStream.class" size="273"/>
+          <file name="StreamUtils.class" size="1343"/>
+          <file name="ZipReader.class" size="377"/>
+        </directory>
+        <directory name="iterators">
+          <file name="ClassFilterIt.class" size="2366"/>
+          <file name="It.class" size="2186"/>
+          <file name="ListIt.class" size="2112"/>
+          <file name="MultiIt.class" size="2240"/>
+          <file name="ReverseIterator.class" size="2115"/>
+        </directory>
+        <directory name="jse">
+          <file name="AppletUtil.class" size="657"/>
+          <file name="AppWatcher.class" size="3805"/>
+          <directory name="async">
+            <file name="Sync$1.class" size="1493"/>
+            <file name="Sync$State.class" size="856"/>
+            <file name="Sync.class" size="1565"/>
+          </directory>
+          <file name="CastUtils.class" size="813"/>
+          <directory name="collections">
+            <file name="WeakList.class" size="2462"/>
+          </directory>
+          <directory name="color">
+            <file name="AwtColorUtils.class" size="911"/>
+          </directory>
+          <file name="CommandLine.class" size="595"/>
+          <directory name="components">
+            <file name="FontChooserComboBox$FontChooserComboBoxEditor$AutoCompletionDocument.class" size="3307"/>
+            <file name="FontChooserComboBox$FontChooserComboBoxEditor.class" size="2782"/>
+            <file name="FontChooserComboBox$FontChooserComboBoxRenderer.class" size="2404"/>
+            <file name="FontChooserComboBox.class" size="5766"/>
+            <file name="FontChooserComboBoxItem.class" size="1932"/>
+            <file name="FontStyleChooserComboBox$FontChooserComboBoxEditor$AutoCompletionDocument.class" size="3111"/>
+            <file name="FontStyleChooserComboBox$FontChooserComboBoxEditor.class" size="3530"/>
+            <file name="FontStyleChooserComboBox$FontChooserComboBoxRenderer.class" size="2354"/>
+            <file name="FontStyleChooserComboBox$Item.class" size="2190"/>
+            <file name="FontStyleChooserComboBox.class" size="5026"/>
+          </directory>
+          <directory name="files">
+            <file name="RecentFiles.class" size="3836"/>
+            <file name="RecentFilesListener.class" size="182"/>
+          </directory>
+          <directory name="font">
+            <file name="AwtFontUtils.class" size="3010"/>
+            <file name="AwtTextMeasurer.class" size="1671"/>
+            <file name="FontReplacements.class" size="1374"/>
+            <file name="FontUtils.class" size="4147"/>
+          </directory>
+          <file name="IconReader.class" size="1951"/>
+          <file name="ImageUtils.class" size="2433"/>
+          <directory name="io">
+            <file name="BundledIO.class" size="5084"/>
+            <file name="DesktopIO.class" size="5456"/>
+            <file name="DownloadTools.class" size="1994"/>
+            <file name="FilesIO.class" size="8444"/>
+            <file name="JseFile.class" size="734"/>
+            <file name="JseFileUtils$1.class" size="834"/>
+            <file name="JseFileUtils$2.class" size="1059"/>
+            <file name="JseFileUtils$3.class" size="1001"/>
+            <file name="JseFileUtils.class" size="8165"/>
+            <file name="JseInputStream.class" size="1617"/>
+            <file name="JseOutputStream.class" size="1664"/>
+            <file name="JseStreamUtils.class" size="2003"/>
+            <file name="JseZipReader.class" size="3003"/>
+            <file name="URLUtils.class" size="620"/>
+          </directory>
+          <file name="JFileChooserUtil$1.class" size="1077"/>
+          <file name="JFileChooserUtil.class" size="3238"/>
+          <file name="JseParser.class" size="815"/>
+          <file name="JsePlatformUtils.class" size="5180"/>
+          <file name="Key.class" size="2017"/>
+          <directory name="lang">
+            <file name="LangManager.class" size="2883"/>
+            <file name="LangResourceBundle.class" size="2278"/>
+            <file name="LanguageInfo.class" size="4608"/>
+            <file name="LanguageListener.class" size="172"/>
+            <file name="LanguageReader.class" size="8481"/>
+          </directory>
+          <directory name="log">
+            <file name="DesktopLogProcessing.class" size="2935"/>
+          </directory>
+          <file name="OSUtils$OS.class" size="1267"/>
+          <file name="OSUtils.class" size="3029"/>
+          <directory name="security">
+            <file name="Md5Sum.class" size="1822"/>
+          </directory>
+          <directory name="settings">
+            <file name="Settings.class" size="7116"/>
+          </directory>
+          <file name="SwingUtil.class" size="824"/>
+          <directory name="thread">
+            <file name="ThreadUtils.class" size="657"/>
+          </directory>
+          <directory name="xml">
+            <directory name="indent">
+              <file name="Indentation.class" size="387"/>
+              <file name="IndentingXMLStreamWriter.class" size="6404"/>
+              <file name="StreamWriterDelegate.class" size="4916"/>
             </directory>
-            <directory name="voc">
-              <file name="POCreator.class" size="3182"/>
-              <file name="POTCreator.class" size="745"/>
-            </directory>
+            <file name="InvalidXMLData.class" size="2153"/>
+            <file name="JseXmlReader.class" size="4319"/>
+            <file name="JseXmlWriter.class" size="2833"/>
+            <file name="NoResolver.class" size="901"/>
+            <file name="NoXMLResolver.class" size="690"/>
+            <file name="Parse.class" size="4201"/>
+            <file name="XMLReader.class" size="7498"/>
+            <file name="XMLWriter.class" size="4434"/>
+          </directory>
+          <directory name="zip">
+            <file name="ZipUtils.class" size="2697"/>
+          </directory>
+        </directory>
+        <directory name="kernel">
+          <file name="Range$1.class" size="1294"/>
+          <file name="Range.class" size="2873"/>
+          <file name="Tuple2.class" size="2293"/>
+          <file name="Tuple3.class" size="2711"/>
+        </directory>
+        <file name="kernel.gwt.xml" size="333"/>
+        <directory name="lang">
+          <file name="Lang.class" size="2857"/>
+          <file name="Language.class" size="2617"/>
+          <directory name="text">
+            <file name="FixedTextItem.class" size="551"/>
+            <file name="TextItem.class" size="166"/>
+            <file name="VocTextItem.class" size="675"/>
+          </directory>
+          <file name="VocByString.class" size="826"/>
+          <file name="VocID.class" size="179"/>
+        </directory>
+        <directory name="log">
+          <file name="Level.class" size="1608"/>
+          <file name="Log.class" size="1646"/>
+          <file name="LogProcessing.class" size="201"/>
+          <file name="NoLogProcessing.class" size="573"/>
+          <file name="Report.class" size="6408"/>
+        </directory>
+        <directory name="math">
+          <file name="Delta.class" size="602"/>
+          <file name="Fraction$1.class" size="907"/>
+          <file name="Fraction.class" size="4888"/>
+          <file name="Gauss.class" size="1156"/>
+          <directory name="geom">
+            <file name="CompositeShape.class" size="1174"/>
+            <file name="ConvexHull$ExtremumType.class" size="1238"/>
+            <file name="ConvexHull.class" size="3005"/>
+            <file name="Line2f.class" size="507"/>
+            <file name="Point2d.class" size="5501"/>
+            <file name="Point2f.class" size="5456"/>
+            <file name="Point2i.class" size="1501"/>
+            <file name="Rectangle2d.class" size="5262"/>
+            <file name="Rectangle2f.class" size="4778"/>
+            <file name="Rectangle2i.class" size="2608"/>
+            <file name="Shape.class" size="181"/>
+            <file name="Size2d.class" size="2373"/>
+            <file name="Size2f.class" size="2435"/>
+            <file name="Size2i.class" size="1355"/>
+          </directory>
+          <file name="MathUtils.class" size="6213"/>
+          <file name="QuadraticCurve.class" size="962"/>
+          <file name="RandomUtils.class" size="463"/>
+          <file name="Units.class" size="1471"/>
+          <file name="VSide.class" size="1123"/>
+        </directory>
+        <file name="NullUtils.class" size="1601"/>
+        <file name="Parser.class" size="2479"/>
+        <file name="PlatformUtils.class" size="2336"/>
+        <file name="PlatformUtilsBootstrap.class" size="993"/>
+        <file name="StringUtils.class" size="2535"/>
+        <directory name="xml">
+          <file name="EnumWithXmlNames.class" size="179"/>
+          <file name="XmlAttribute.class" size="461"/>
+          <file name="XmlDataException.class" size="399"/>
+          <file name="XmlException.class" size="528"/>
+          <file name="XmlReader.class" size="3375"/>
+          <file name="XmlWriter.class" size="1303"/>
+        </directory>
+      </directory>
+      <directory name="zong">
+        <directory name="tools">
+          <directory name="index">
+            <file name="DirCollector.class" size="1445"/>
+            <file name="FilesystemIndexCreator.class" size="2109"/>
+            <file name="JarCollector.class" size="991"/>
+          </directory>
+          <directory name="voc">
+            <file name="POCreator.class" size="3182"/>
+            <file name="POTCreator.class" size="745"/>
           </directory>
         </directory>
       </directory>
     </directory>
   </directory>
-  <directory name="build">
-    <directory name="classes">
-      <directory name="main">
-        <directory name="com">
-          <directory name="xenoage">
-            <directory name="zong">
-              <directory name="tools">
-                <directory name="voc">
-                  <file name="POCreator.class" size="3231"/>
-                  <file name="POTCreator.class" size="745"/>
-                </directory>
-              </directory>
-            </directory>
-          </directory>
-        </directory>
-      </directory>
-    </directory>
-    <directory name="dependency-cache"/>
-    <directory name="libs">
-      <file name="tools.jar" size="3228"/>
-    </directory>
-    <directory name="tmp">
-      <directory name="jar">
-        <file name="MANIFEST.MF" size="55"/>
-      </directory>
-    </directory>
-  </directory>
-  <file name="de.po" size="12219"/>
-  <file name="default.pot" size="8848"/>
-  <file name="FilesystemIndexCreator.jar" size="447396"/>
-  <file name="FilesystemIndexCreator.jar.build.xml" size="902"/>
-  <directory name="src">
-    <directory name="com">
-      <directory name="xenoage">
-        <directory name="zong">
-          <directory name="tools">
-            <directory name="index">
-              <file name="FilesystemIndexCreator.java" size="1574"/>
-            </directory>
-            <directory name="voc">
-              <file name="POCreator.java" size="2149"/>
-              <file name="POTCreator.java" size="388"/>
-            </directory>
-          </directory>
-        </directory>
-      </directory>
-    </directory>
+  <directory name="META-INF">
+    <file name="MANIFEST.MF" size="105"/>
   </directory>
 </index>

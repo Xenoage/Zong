@@ -11,8 +11,16 @@ import com.xenoage.utils.jse.xml.XMLWriter;
 
 /**
  * This little program creates a {@link FilesystemIndex} file
- * in the current directory, recursively listing all files
- * and directories in the given directories.
+ * for directories or for a JAR file.
+ * 
+ * Possible arguments:
+ * <ul>
+ *   <li>(none): list all content in the current directory</li>
+ *   <li>-jar myjar1.jar myjar2.jar ...: lists the content of the given jar files</li>
+ *   <li>-dir mydir1 mydir2 mydir3 ...: lists the content of the given directories</li>
+ * </ul>
+ * 
+ * The resulting index file is written to the current directory.
  * 
  * @author Andreas Wenger
  */
@@ -27,36 +35,28 @@ public class FilesystemIndexCreator {
 		Document doc = XMLWriter.createEmptyDocument();
 		Element root = XMLWriter.addElement("index", doc);
 		if (args.length == 0) {
-			processChildren(new File("."), root);
+			DirCollector.processDirChildren(new File("."), root);
+		}
+		else if (args.length >= 2 && args[0].equals("-jar")) {
+			for (int i = 1; i < args.length; i++) {
+				JarCollector.process(new File(args[i]), root);
+			}
+		}
+		else if (args.length >= 2 && args[0].equals("-dir")) {
+			for (int i = 1; i < args.length; i++) {
+				DirCollector.processDir(new File(args[i]), root);
+			}
 		}
 		else {
-			for (String dir : args) {
-				processFileOrDir(new File(dir), root);
-			}
+			System.out.println("Wrong syntax. See class JavaDoc.");
+			return;
 		}
 		XMLWriter.writeFile(doc, new FileOutputStream(FilesystemIndex.indexFile));
 		System.out.println(FilesystemIndexCreator.class.getSimpleName() + " finished.");
 		System.out.println("Index written to file " + FilesystemIndex.indexFile);
 	}
 	
-	private static void processChildren(File dir, Element eParent) {
-		for (File child : dir.listFiles()) {
-			processFileOrDir(child, eParent);
-		}
-	}
 	
-	private static void processFileOrDir(File file, Element eParent) {
-		if (file.isFile()) {
-			Element eFile = XMLWriter.addElement("file", eParent);
-			eFile.setAttribute("name", file.getName());
-			eFile.setAttribute("size", ""+file.length());
-		}
-		else if (file.isDirectory()) {
-			Element eDir = XMLWriter.addElement("directory", eParent);
-			eDir.setAttribute("name", file.getName());
-			processChildren(file, eDir);
-		}
-	}
 	
 	
 }

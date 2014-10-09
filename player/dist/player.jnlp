@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jnlp spec="1.0+" codebase="http://apps.xenoage.com/zong/player/" href="">
+    <information>
+        <title>Zong! Player</title>
+        <vendor>Xenoage Software</vendor>
+		<homepage href="http://www.zong-music.com"/>
+        <icon href="logo.png"/>
+        <offline-allowed/>
+		<desktop/>
+    </information>
+	<security>
+		<all-permissions/>
+	</security>
+    <resources>
+        <j2se version="1.8+" href="http://java.sun.com/products/autodl/j2se"/>
+        <jar href="player.jar" main="true"/>
+		<jar href="data.jar"/>
+    </resources>
+    <application-desc
+         name="Zong! Player"
+         main-class="com.xenoage.zong.player.Player">
+     </application-desc>
+     <update check="background"/>
+</jnlp>

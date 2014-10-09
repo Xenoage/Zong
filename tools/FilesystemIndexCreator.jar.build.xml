@@ -9,7 +9,6 @@
                 <attribute name="Class-Path" value="."/>
             </manifest>
             <fileset dir="bin"/>
-            <fileset dir="../core/bin"/>
             <fileset dir="../utils/utils-base/bin"/>
             <fileset dir="../utils/utils-kernel/bin"/>
             <fileset dir="../utils/utils-jse/bin"/>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="player_dist" name="Create signed JARs for Player (desktop, webstart and applet)">
+    
+    <!--
+    
+      Running this file requires:
+    
+       - a keystore with alias "Xenoage"
+         and a file ".keystore.passwd.properties" in the home folder,
+         containing the keystore passwort ("keystore.passwd=012345")
+       - the project to be already compiled within Eclipse (i.e. "bin" folders
+         of the projects contain the compiled class files)
+       - ../tools/FilesystemIndexCreator.jar must be available
+         
+      This file is not part of the automatic build process, since the files
+      are signed, which is only possible on the machine of the developer at
+      Xenoage Software.
+      
+      However, this could be changed later by just signing if the certificate
+      and the password is available, and otherwise skipping this step.
+       
+    -->
+         
+    <property name="dist" value="dist"/>
+    <property file="${user.home}/.keystore.passwd.properties"/>
+    <target name="player_dist">
+        <!-- create player.jar, containing the Player code and required libraries -->
+        <jar destfile="${dist}/player.jar">
+            <manifest>
+                <attribute name="Main-Class" value="com.xenoage.zong.player.Player"/>
+                <attribute name="Class-Path" value=". data.jar"/>
+                <attribute name="Application-Name" value="Zong! Player"/>
+                <attribute name="Permissions" value="all-permissions"/>
+                <attribute name="Codebase" value="*"/>
+                <attribute name="Created-By" value="Xenoage Software"/>
+            </manifest>
+            <fileset dir="bin"/>
+            <fileset dir="../converter/bin"/>
+            <fileset dir="../core/bin"/>
+            <fileset dir="../utils/utils-base/bin"/>
+            <fileset dir="../utils/utils-kernel/bin"/>
+            <fileset dir="../layout/bin"/>
+            <fileset dir="../utils/utils-pdlib/bin"/>
+            <fileset dir="../utils/utils-serialize/bin"/>
+            <fileset dir="../utils/utils-jse/bin"/>
+            <fileset dir="../midi-out/bin"/>
+            <fileset dir="../musicxml/bin"/>
+            <fileset dir="../musicxml-in/bin"/>
+            <fileset dir="../renderer/bin"/>
+            <fileset dir="../desktop/bin"/>
+            <zipfileset excludes="META-INF/*.SF" src="../lib/lib/vorbis-java-1.0.0-beta.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="../lib/lib/controlsfx-8.0.6.jar"/>
+        </jar>
+        
+        <!-- create data.jar, containing the data files required by the webstart app and the applet -->
+        <jar destfile="${dist}/data.jar">
+            <manifest>
+                <attribute name="Created-By" value="Xenoage Software"/>
+            </manifest>
+            <fileset dir="../shared/" includes="data/lang/"/>
+        </jar>
+        <!-- list contents of data.jar and add the index to data.jar -->
+        <java jar="../tools/FilesystemIndexCreator.jar" dir="${dist}/" fork="true">
+            <arg value="-jar"/>
+            <arg value="data.jar"/>
+        </java>
+        <jar destfile="${dist}/data.jar" update="true">
+            <fileset file="${dist}/.index"/>
+        </jar>
+        <delete file="${dist}/.index"/>
+        
+        <!-- sign the JARs -->
+        <signjar jar="${dist}/player.jar" alias="Xenoage" storepass="${keystore.passwd}"/>
+        <signjar jar="${dist}/data.jar" alias="Xenoage" storepass="${keystore.passwd}"/>
+        
+    </target>
+</project>
