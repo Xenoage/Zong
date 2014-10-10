@@ -4,6 +4,9 @@ defaultTasks 'dist'
 subprojects {
 	apply plugin: 'java'
 	
+	compileJava.options.encoding = 'UTF-8'
+	compileTestJava.options.encoding = 'UTF-8'
+	
 	sourceCompatibility = 6
 	
 	repositories {
