@@ -40,6 +40,8 @@
                         </ImageView>
                      </graphic></MenuItem>
                   <SeparatorMenuItem fx:id="mnuFileSepRecentFiles" mnemonicParsing="false" />
+                  <SeparatorMenuItem fx:id="mnuFileSepDemoScores" mnemonicParsing="false" />
+                  <Menu fx:id="mnuFileDemoScores" mnemonicParsing="false" text="%DemoScores" />
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem fx:id="mnuFileExit" mnemonicParsing="false" onAction="#onExit" text="%Exit" />
             </items>

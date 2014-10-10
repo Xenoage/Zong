@@ -49,7 +49,7 @@
             <fileset dir="../renderer/bin"/>
             <fileset dir="../desktop/bin"/>
             <zipfileset excludes="META-INF/*.SF" src="../lib/lib/vorbis-java-1.0.0-beta.jar"/>
-            <zipfileset excludes="META-INF/*.SF" src="../lib/lib/controlsfx-8.0.6.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="../lib/lib/controlsfx-8.20.7.jar"/>
         </jar>
         
         <!-- create data.jar, containing the data files required by the webstart app and the applet -->
@@ -58,6 +58,7 @@
                 <attribute name="Created-By" value="Xenoage Software"/>
             </manifest>
             <fileset dir="../shared/" includes="data/lang/"/>
+            <fileset dir="../shared/" includes="data/demo/"/>
         </jar>
         <!-- list contents of data.jar and add the index to data.jar -->
         <java jar="../tools/FilesystemIndexCreator.jar" dir="${dist}/" fork="true">

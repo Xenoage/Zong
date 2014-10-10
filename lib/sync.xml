@@ -9,8 +9,8 @@
 		<file name="android-midi-lib-license.txt" md5="cafc597722cfad668c26d84e214993bb"/>
 	</fileset>
 	<!-- controlsfx -->
-	<fileset sourcedir="controlsfx/8.0.6/">
-		<file name="controlsfx-8.0.6.jar" md5="aa3b85f9514c420576174a46e72abc65"/>
+	<fileset sourcedir="controlsfx/8.20.7/">
+		<file name="controlsfx-8.20.7.jar" md5="1f0e08dfef6e990bd6ca1d9d8bdaa28d"/>
 		<file name="controlsfx-license.txt" md5="fd298eb980b38ea8806dddb8c334b90b"/>
 	</fileset>
 	<!-- gson -->

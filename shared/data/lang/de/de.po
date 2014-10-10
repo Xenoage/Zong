@@ -135,6 +135,10 @@ msgctxt "Default"
 msgid "Default"
 msgstr "Standard"
 
+msgctxt "DemoScores"
+msgid "Demo scores"
+msgstr "Demo-Stücke"
+
 msgctxt "Description"
 msgid "Description"
 msgstr "Beschreibung"

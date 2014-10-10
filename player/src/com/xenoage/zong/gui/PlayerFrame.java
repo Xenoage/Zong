@@ -4,6 +4,7 @@ import static com.xenoage.utils.NullUtils.notNull;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.collections.CollectionUtils.map;
 import static com.xenoage.utils.error.Err.handle;
+import static com.xenoage.utils.jse.JsePlatformUtils.io;
 import static com.xenoage.utils.log.Report.fatal;
 import static com.xenoage.zong.desktop.App.app;
 import static com.xenoage.zong.desktop.utils.ImageUtils.imageOrNull;
@@ -30,7 +31,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
+import com.xenoage.utils.jse.JsePlatformUtils;
 import com.xenoage.utils.jse.files.RecentFiles;
+import com.xenoage.utils.jse.io.DesktopIO;
 import com.xenoage.utils.jse.lang.LangManager;
 import com.xenoage.utils.jse.lang.LangResourceBundle;
 import com.xenoage.utils.jse.lang.LanguageInfo;
@@ -60,6 +63,7 @@ import com.xenoage.zong.desktop.gui.utils.Dialog;
 import com.xenoage.zong.desktop.gui.utils.ResourceUpdater;
 import com.xenoage.zong.desktop.io.midi.out.MidiScorePlayer;
 import com.xenoage.zong.io.midi.out.PlaybackListener;
+import com.xenoage.zong.musicxml.util.MusicXMLFilenameFilter;
 
 public class PlayerFrame
 	extends Dialog
@@ -71,6 +75,8 @@ public class PlayerFrame
 	@FXML private MenuItem mnuFileSaveAs;
 	@FXML private MenuItem mnuFileInfo;
 	@FXML private SeparatorMenuItem mnuFileSepRecentFiles;
+	@FXML private Menu mnuFileDemoScores;
+	@FXML private SeparatorMenuItem mnuFileSepDemoScores;
 	@FXML private MenuItem mnuFileExit;
 	@FXML private Menu mnuConvert;
 	@FXML private MenuItem mnuConvertFileToMidi;
@@ -123,6 +129,8 @@ public class PlayerFrame
 		//recent files list
 		RecentFiles.addListener(() -> updateRecentFiles());
 		updateRecentFiles();
+		//demo files list
+		updateDemoFiles();
 		//list of languages
 		createLanguageItems();
 		//handle progress bar clicks
@@ -163,6 +171,26 @@ public class PlayerFrame
 			mnusRecentFiles.add(mnu);
 			mnuFile.getItems().add(recentFilesMenuOffset + i, mnu);
 		}
+		//show seperator only, if there is at least one file
+		mnuFileSepRecentFiles.setVisible(recentFiles.size() > 0);
+	}
+	
+	private void updateDemoFiles() {
+		//clear old menu items
+		mnuFileDemoScores.getItems().clear();
+		//add menu items
+		final String dir = "data/demo/scores/";
+		List<String> files = io().listFiles(dir);
+		files.sort((n1, n2) -> n1.compareTo(n2));
+		for (String file : files) {
+			MenuItem mnu = new MenuItem(file);
+			mnu.setOnAction(e -> app().execute(new DocumentOpen(dir + file)));
+			mnuFileDemoScores.getItems().add(mnu);
+		}
+		//show menu and separator only, if there is at least one file
+		boolean visible = files.size() > 0;
+		mnuFileDemoScores.setVisible(visible);
+		mnuFileSepDemoScores.setVisible(visible);
 	}
 	
 	private void createLanguageItems() {

@@ -44,6 +44,7 @@ public enum Voc
 	Cubic("Cubic"),
 	CurrentMemoryUsage("Current memory usage"),
 	Default("Default"),
+	DemoScores("Demo scores"),
 	Description("Description"),
 	Details("Details"),
 	DeviceName("Device name"),

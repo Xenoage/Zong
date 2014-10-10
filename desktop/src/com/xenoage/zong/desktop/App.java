@@ -1,6 +1,7 @@
 package com.xenoage.zong.desktop;
 
 import static com.xenoage.utils.error.Err.handle;
+import static com.xenoage.utils.jse.JsePlatformUtils.io;
 import static com.xenoage.utils.jse.async.Sync.sync;
 import static com.xenoage.utils.log.Log.log;
 import static com.xenoage.utils.log.Report.error;
@@ -24,7 +25,7 @@ import javax.swing.JOptionPane;
 
 import lombok.Getter;
 
-import org.controlsfx.dialog.DialogStyle;
+import org.controlsfx.dialog.Dialog;
 import org.controlsfx.dialog.Dialogs;
 
 import com.xenoage.utils.document.Document;
@@ -312,7 +313,7 @@ public class App<DocType extends Document> {
 	 * and with for native style dialogs.
 	 */
 	public Dialogs dialog() {
-		return Dialogs.create().title(getName()).style(DialogStyle.NATIVE);
+		return Dialogs.create().title(getName()).styleClass(Dialog.STYLE_CLASS_NATIVE);
 	}
 
 	/**
@@ -406,7 +407,7 @@ public class App<DocType extends Document> {
 	 */
 	public List<Score> loadMxlScores(String path, Filter<String> filter) {
 		try {
-			return sync(new MusicXmlFileReader(new JseInputStream(new File(path)), path, filter));
+			return sync(new MusicXmlFileReader(io().openFile(path), path, filter));
 		} catch (Exception ex) {
 			reportOpenFileError(ex, path);
 			return new LinkedList<Score>();

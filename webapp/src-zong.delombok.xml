@@ -31,6 +31,7 @@ Call this script each time before compiling this project.
 				<include name="**/*.java"/>
 			</fileset>
 			<replacefilter token="import lombok.NonNull;"/>
+			<replacefilter token="import com.xenoage.utils.annotations.NonNull;"/>
 			<replacefilter token="@NonNull"/>
 		</replace>
 		<echo>Done.</echo>
