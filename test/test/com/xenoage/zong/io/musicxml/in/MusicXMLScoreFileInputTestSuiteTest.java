@@ -58,6 +58,8 @@ import com.xenoage.zong.musicxml.MusicXMLTestSuite;
  * <a href="http://lilypond.org/doc/v2.12/input/regression/musicxml/collated-files">
  * Unofficial MusicXML test suite</a>, published under the GPL license.
  * 
+ * This class tests the loading of MusicXML into core data structures.
+ * 
  * @author Andreas Wenger
  */
 public class MusicXMLScoreFileInputTestSuiteTest
@@ -562,6 +564,19 @@ public class MusicXMLScoreFileInputTestSuiteTest
 				//for (int i : range(l))
 				//	assertEquals(""+mp+"["+i+"]", l.get(i).getClass(), directions.get(i).getClass());
 			}
+		}
+	}
+	
+	@Override public void test_31c() {
+		super.test_31c();
+		List<Tuple2<MP, Tempo>> tempos = get_31c_Tempos();
+		for (Tuple2<MP, Tempo> tempo : tempos) {
+			MP mp = tempo.get1();
+			List<Tempo> temposAtBeat = score.getColumnHeader(mp.measure).getTempos().getAll(mp.beat);
+			assertEquals(1, temposAtBeat.size());
+			//TODO: add equals for tempo
+			assertEquals(tempo.get2().getBaseBeat(), temposAtBeat.get(0).getBaseBeat());
+			assertEquals(tempo.get2().getBeatsPerMinute(), temposAtBeat.get(0).getBeatsPerMinute());
 		}
 	}
 	

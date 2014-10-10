@@ -7,8 +7,8 @@ import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.io.score.ScoreInputOptions;
-import com.xenoage.zong.util.exceptions.IllegalMPException;
-import com.xenoage.zong.util.exceptions.MeasureFullException;
+import com.xenoage.zong.utils.exceptions.IllegalMPException;
+import com.xenoage.zong.utils.exceptions.MeasureFullException;
 
 
 /**

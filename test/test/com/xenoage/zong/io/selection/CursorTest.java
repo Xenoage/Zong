@@ -25,7 +25,7 @@ import com.xenoage.zong.core.music.key.TraditionalKey;
 import com.xenoage.zong.core.music.key.TraditionalKey.Mode;
 import com.xenoage.zong.core.music.rest.Rest;
 import com.xenoage.zong.core.music.util.BeatEList;
-import com.xenoage.zong.util.demo.ScoreRevolutionary;
+import com.xenoage.zong.utils.demo.ScoreRevolutionary;
 
 
 /**

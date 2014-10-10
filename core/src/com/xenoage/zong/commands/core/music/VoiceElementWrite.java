@@ -17,7 +17,7 @@ import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.core.music.rest.Rest;
 import com.xenoage.zong.core.music.time.Time;
 import com.xenoage.zong.core.position.MP;
-import com.xenoage.zong.util.exceptions.MeasureFullException;
+import com.xenoage.zong.utils.exceptions.MeasureFullException;
 
 /**
  * Replaces the {@link VoiceElement}s between the given {@link MP}

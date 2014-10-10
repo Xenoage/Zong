@@ -47,7 +47,7 @@ import com.xenoage.zong.core.music.util.Column;
 import com.xenoage.zong.core.music.util.Interval;
 import com.xenoage.zong.core.music.util.MPE;
 import com.xenoage.zong.core.position.MP;
-import com.xenoage.zong.util.exceptions.IllegalMPException;
+import com.xenoage.zong.utils.exceptions.IllegalMPException;
 
 
 /**

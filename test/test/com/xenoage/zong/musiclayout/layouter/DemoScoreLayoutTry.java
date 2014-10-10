@@ -10,7 +10,7 @@ import com.xenoage.zong.io.symbols.SymbolPoolReader;
 import com.xenoage.zong.musiclayout.ScoreLayout;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.symbols.SymbolPool;
-import com.xenoage.zong.util.demo.ScoreRevolutionary;
+import com.xenoage.zong.utils.demo.ScoreRevolutionary;
 
 /**
  * Outputs the layout of the {@link ScoreRevolutionary} demo score

@@ -1,4 +1,4 @@
-package com.xenoage.zong.util.exceptions;
+package com.xenoage.zong.utils.exceptions;
 
 import com.xenoage.zong.core.position.MP;
 

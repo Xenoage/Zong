@@ -29,7 +29,7 @@ import com.xenoage.zong.core.music.util.StartOrStop;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.position.MPContainer;
 import com.xenoage.zong.core.position.MPElement;
-import com.xenoage.zong.util.exceptions.IllegalMPException;
+import com.xenoage.zong.utils.exceptions.IllegalMPException;
 
 
 /**

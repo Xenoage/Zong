@@ -12,7 +12,7 @@
 		<all-permissions/>
 	</security>
     <resources>
-        <j2se version="1.8+" href="http://java.sun.com/products/autodl/j2se"/>
+        <j2se version="1.8.0_20+" href="http://java.sun.com/products/autodl/j2se"/>
         <jar href="player.jar" main="true"/>
 		<jar href="data.jar"/>
     </resources>

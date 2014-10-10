@@ -46,7 +46,7 @@ import com.xenoage.zong.core.util.InconsistentScoreException;
 import com.xenoage.zong.io.musicxml.in.util.MusicReaderException;
 import com.xenoage.zong.io.musicxml.in.util.OpenElements;
 import com.xenoage.zong.io.musicxml.in.util.OpenSlur;
-import com.xenoage.zong.util.exceptions.MeasureFullException;
+import com.xenoage.zong.utils.exceptions.MeasureFullException;
 
 /**
  * This class stores the current context when

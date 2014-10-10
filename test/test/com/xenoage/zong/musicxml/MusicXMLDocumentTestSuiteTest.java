@@ -46,6 +46,8 @@ import com.xenoage.zong.musicxml.types.partwise.MxlPart;
  * <a href="http://lilypond.org/doc/v2.12/input/regression/musicxml/collated-files">
  * Unofficial MusicXML test suite</a>, published under the GPL license.
  * 
+ * This class tests the loading of MusicXML files into MusicXML data structures.
+ * 
  * @author Andreas Wenger
  */
 public class MusicXMLDocumentTestSuiteTest

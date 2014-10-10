@@ -17,7 +17,7 @@ import com.xenoage.zong.core.music.group.BracketGroup;
 import com.xenoage.zong.core.music.group.StavesRange;
 import com.xenoage.zong.core.music.util.Column;
 import com.xenoage.zong.core.position.MP;
-import com.xenoage.zong.util.exceptions.IllegalMPException;
+import com.xenoage.zong.utils.exceptions.IllegalMPException;
 
 /**
  * A {@link StavesList} manages the staves of a score

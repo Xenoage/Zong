@@ -731,9 +731,24 @@ public abstract class MusicXMLTestSuite<T> {
 				new Dynamics(DynamicsType.ffff))));
 	}
 	
-	//TODO: 31a-Directions.xml (60 min) (partly supported) 
+	/**
+	 * Tempo Markings: note=bpm, text (note=bpm), note=note, (note=note), (note=bpm)  
+	 */
+	@Test public void test_31c() {
+		loadTest("31c-MetronomeMarks.xml");
+	}
 	
-	//TODO: not supported yet: 31c-MetronomeMarks.xml
+	public List<Tuple2<MP, Tempo>> get_31c_Tempos() {
+		//TODO: not all tempos are supported yet. return only those which are supported now
+		return alist(
+			t(atBeat(0, 0, 0, fr(0, 4)), new Tempo(fr(3, 8), 100))
+			//TODO: atBeat(0, 0, 0, fr(3, 4)): longa = 100
+			//TODO: atBeat(0, 1, 0, fr(0, 4)): fr(3, 8) = fr(3, 4)
+			//TODO: atBeat(0, 1, 0, fr(3, 4)): longa = fr(3, 64)
+			//TODO: atBeat(0, 2, 0, fr(0, 4)): fr(3, 8) = fr(3, 4) in parens
+			//TODO: atBeat(0, 2, 0, fr(3, 4)): fr(3, 8) = 77 in parens
+			);
+	}
 	
 	//TODO: 32a-Notations.xml (60 min) (partly supported) 
 	//TODO: 32b-Articulations-Texts.xml (30 min) (partly supported) 

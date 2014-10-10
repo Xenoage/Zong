@@ -38,6 +38,7 @@ import com.xenoage.utils.error.BasicErrorProcessing;
 import com.xenoage.utils.error.Err;
 import com.xenoage.utils.exceptions.InvalidFormatException;
 import com.xenoage.utils.filter.Filter;
+import com.xenoage.utils.io.InputStream;
 import com.xenoage.utils.jse.JsePlatformUtils;
 import com.xenoage.utils.jse.io.JseInputStream;
 import com.xenoage.utils.jse.io.JseOutputStream;
@@ -407,7 +408,15 @@ public class App<DocType extends Document> {
 	 */
 	public List<Score> loadMxlScores(String path, Filter<String> filter) {
 		try {
-			return sync(new MusicXmlFileReader(io().openFile(path), path, filter));
+			
+			//GOON: integrate absolute path in DesktopIO
+			InputStream is;
+			if (new File(path).isAbsolute())
+				is = new JseInputStream(new File(path));
+			else
+				is = io().openFile(path);
+				
+			return sync(new MusicXmlFileReader(is, path, filter));
 		} catch (Exception ex) {
 			reportOpenFileError(ex, path);
 			return new LinkedList<Score>();

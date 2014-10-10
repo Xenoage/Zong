@@ -8,7 +8,7 @@ import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.desktop.io.midi.out.MidiScorePlayer;
 import com.xenoage.zong.desktop.io.midi.out.SynthManager;
-import com.xenoage.zong.util.demo.ScoreRevolutionary;
+import com.xenoage.zong.utils.demo.ScoreRevolutionary;
 
 /**
  * Tests for {@link MidiScorePlayer}.

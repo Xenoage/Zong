@@ -17,7 +17,7 @@ import com.xenoage.zong.core.format.SystemLayout;
 import com.xenoage.zong.core.music.layout.SystemBreak;
 import com.xenoage.zong.core.music.time.Time;
 import com.xenoage.zong.core.position.MP;
-import com.xenoage.zong.util.exceptions.IllegalMPException;
+import com.xenoage.zong.utils.exceptions.IllegalMPException;
 
 
 /**

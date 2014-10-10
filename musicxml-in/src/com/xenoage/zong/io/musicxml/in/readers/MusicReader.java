@@ -26,6 +26,8 @@ import static com.xenoage.zong.io.musicxml.in.util.CommandPerformer.execute;
 
 import java.util.List;
 
+import javax.xml.datatype.Duration;
+
 import com.xenoage.utils.font.FontInfo;
 import com.xenoage.utils.iterators.It;
 import com.xenoage.utils.math.Fraction;
@@ -68,6 +70,7 @@ import com.xenoage.zong.core.music.layout.SystemBreak;
 import com.xenoage.zong.core.music.rest.Rest;
 import com.xenoage.zong.core.music.time.Time;
 import com.xenoage.zong.core.music.time.TimeType;
+import com.xenoage.zong.core.music.util.DurationInfo;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.io.musicxml.in.util.MusicReaderException;
 import com.xenoage.zong.musicxml.types.MxlAttributes;
@@ -564,7 +567,12 @@ public final class MusicReader {
 						position = readPosition(mxlPrintStyle.getPosition(),
 							context.getTenthMm(), context.getStaffLinesCount(staff));
 					}
-					direction = new Tempo(mxlMetronome.getBeatUnit().getDuration(), mxlMetronome.getPerMinute()); //text: TODO
+					
+					//compute base beat
+					Fraction baseBeat = mxlMetronome.getBeatUnit().getDuration();
+					baseBeat = DurationInfo.getDuration(baseBeat, mxlMetronome.getDotsCount());
+					
+					direction = new Tempo(baseBeat, mxlMetronome.getPerMinute()); //text: TODO
 					//direction.setFont(fontInfo); //TODO
 					direction.setPositioning(position);
 					break;
