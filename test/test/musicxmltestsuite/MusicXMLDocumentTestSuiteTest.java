@@ -1,4 +1,4 @@
-package com.xenoage.zong.musicxml;
+package musicxmltestsuite;
 
 import static com.xenoage.utils.EnumUtils.getEnumValue;
 import static com.xenoage.utils.jse.JsePlatformUtils.jsePlatformUtils;
@@ -21,6 +21,7 @@ import com.xenoage.zong.core.music.key.TraditionalKey;
 import com.xenoage.zong.core.music.key.TraditionalKey.Mode;
 import com.xenoage.zong.core.music.time.TimeType;
 import com.xenoage.zong.core.position.MP;
+import com.xenoage.zong.musicxml.MusicXMLDocument;
 import com.xenoage.zong.musicxml.types.MxlAttributes;
 import com.xenoage.zong.musicxml.types.MxlDirection;
 import com.xenoage.zong.musicxml.types.MxlDynamics;
@@ -51,7 +52,7 @@ import com.xenoage.zong.musicxml.types.partwise.MxlPart;
  * @author Andreas Wenger
  */
 public class MusicXMLDocumentTestSuiteTest
-	extends MusicXMLTestSuite<MusicXMLDocument> {
+	extends MusicXMLTestSuiteBase<MusicXMLDocument> {
 	
 	//the currently tested document
 	private MusicXMLDocument doc;
@@ -65,47 +66,6 @@ public class MusicXMLDocumentTestSuiteTest
 			Assert.fail("Could not load " + file + ": " + ex.toString());
 			return null;
 		}
-	}
-
-	@Override public void test_01a() {
-		super.test_01a();
-		Pitch[] expectedPitches = get_01a_Pitches();
-		MxlPart part = doc.getScore().getParts().get(0);
-		assertEquals(26, part.getMeasures().size());
-		int iPitch = 0;
-		for (int iM = 0; iM < part.getMeasures().size(); iM++) {
-			MxlMeasure measure = part.getMeasures().get(iM);
-			for (MxlMusicDataContent data : measure.getMusicData().getContent()) {
-				if (data.getMusicDataContentType() == MxlMusicDataContentType.Note) {
-					//check note and pitch
-					MxlFullNote note = ((MxlNote) data).getContent().getFullNote();
-					MxlPitch pitch = (MxlPitch) (note.getContent());
-					assertEquals("note " + iPitch, expectedPitches[iPitch++], pitch.getPitch());
-				}
-			}
-		}
-		assertEquals("not all notes found", expectedPitches.length, iPitch);
-		//TODO: the editiorial sharp (sharp in parenthesis) in the last measure
-		//is not supported yet
-	}
-
-	@Override public void test_01b() {
-		super.test_01b();
-		Pitch[] expectedPitches = get_01b_Pitches();
-		MxlPart part = doc.getScore().getParts().get(0);
-		int iPitch = 0;
-		for (int iM = 0; iM < part.getMeasures().size(); iM++) {
-			MxlMeasure measure = part.getMeasures().get(iM);
-			for (MxlMusicDataContent data : measure.getMusicData().getContent()) {
-				if (data.getMusicDataContentType() == MxlMusicDataContentType.Note) {
-					//check note and pitch
-					MxlFullNote note = ((MxlNote) data).getContent().getFullNote();
-					MxlPitch pitch = (MxlPitch) (note.getContent());
-					assertEquals("note " + iPitch, expectedPitches[iPitch++], pitch.getPitch());
-				}
-			}
-		}
-		assertEquals("not all notes found", expectedPitches.length, iPitch);
 	}
 
 	@Override public void test_01c() {

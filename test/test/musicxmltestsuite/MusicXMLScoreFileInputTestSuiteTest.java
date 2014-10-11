@@ -1,4 +1,4 @@
-package com.xenoage.zong.io.musicxml.in;
+package musicxmltestsuite;
 
 import static com.xenoage.utils.jse.JsePlatformUtils.jsePlatformUtils;
 import static com.xenoage.utils.kernel.Range.range;
@@ -51,7 +51,7 @@ import com.xenoage.zong.core.music.slur.Slur;
 import com.xenoage.zong.core.music.time.TimeType;
 import com.xenoage.zong.core.music.util.Interval;
 import com.xenoage.zong.core.position.MP;
-import com.xenoage.zong.musicxml.MusicXMLTestSuite;
+import com.xenoage.zong.io.musicxml.in.MusicXmlScoreFileInput;
 
 /**
  * Test the {@link MusicXmlScoreFileInput} class for the documents in the
@@ -63,7 +63,7 @@ import com.xenoage.zong.musicxml.MusicXMLTestSuite;
  * @author Andreas Wenger
  */
 public class MusicXMLScoreFileInputTestSuiteTest
-	extends MusicXMLTestSuite<Score> {
+	extends MusicXMLTestSuiteBase<Score> {
 	
 	//the currently tested score
 	private Score score;
@@ -77,49 +77,6 @@ public class MusicXMLScoreFileInputTestSuiteTest
 			Assert.fail("Could not load " + file + ": " + ex.toString());
 			return null;
 		}
-	}
-
-	@Override public void test_01a() {
-		super.test_01a();
-		Pitch[] expectedPitches = get_01a_Pitches();
-		Staff staff = score.getStaff(0);
-		assertEquals(26, staff.getMeasures().size());
-		int iPitch = 0;
-		for (int iM = 0; iM < staff.getMeasures().size(); iM++) {
-			Measure measure = staff.getMeasures().get(iM);
-			Voice voice = measure.getVoice(0);
-			for (VoiceElement e : voice.getElements()) {
-				if (e instanceof Chord) {
-					//check note and pitch
-					Chord chord = (Chord) e;
-					assertEquals(expectedPitches[iPitch++], chord.getNotes().get(0).getPitch());
-				}
-			}
-		}
-		assertEquals("not all notes found", expectedPitches.length, iPitch);
-		//TODO: the editiorial sharp (sharp in parenthesis) in the last measure
-		//is not supported yet
-	}
-
-	@Override public void test_01b() {
-		super.test_01b();
-		Pitch[] expectedPitches = get_01b_Pitches();
-		int iPitch = 0;
-		Staff staff = score.getStaff(0);
-		for (int iM = 0; iM < staff.getMeasures().size(); iM++) {
-			Measure measure = staff.getMeasures().get(iM);
-			Voice voice = measure.getVoice(0);
-			for (VoiceElement e : voice.getElements()) {
-				if (e instanceof Chord) {
-					//check note and pitch
-					Chord chord = (Chord) e;
-					assertEquals(expectedPitches[iPitch++], chord.getNotes().get(0).getPitch());
-				}
-			}
-		}
-		//TODO - ignore this test, since MusicXML input file has a bug (only a single measure),
-		//so currently only the first measure is tested
-		//assertEquals("not all notes found", expectedPitches.length, iPitch);
 	}
 
 	@Override public void test_01c() {

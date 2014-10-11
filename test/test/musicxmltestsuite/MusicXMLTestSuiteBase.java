@@ -1,4 +1,4 @@
-package com.xenoage.zong.musicxml;
+package musicxmltestsuite;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
@@ -51,6 +51,7 @@ import com.xenoage.zong.core.music.slur.SlurWaypoint;
 import com.xenoage.zong.core.music.time.TimeType;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.text.UnformattedText;
+import com.xenoage.zong.musicxml.MusicXMLDocument;
 
 /**
  * Abstract tests for the
@@ -66,7 +67,7 @@ import com.xenoage.zong.core.text.UnformattedText;
  * 
  * @author Andreas Wenger
  */
-public abstract class MusicXMLTestSuite<T> {
+public abstract class MusicXMLTestSuiteBase<T> {
 
 	public final String dir = "data/test/scores/MusicXML-TestSuite-0.1/";
 
@@ -93,98 +94,6 @@ public abstract class MusicXMLTestSuite<T> {
 	private void loadTest(String file) {
 		this.file = file;
 		this.data = loadData(file);
-	}
-
-	/**
-	 * All pitches from G to c”” in ascending steps; First without accidentals,
-	 * then with a sharp and then with a flat accidental.
-	 * Double alterations and cautionary accidentals are tested at the end. 
-	 */
-	@Test public void test_01a() {
-		loadTest("01a-Pitches-Pitches.xml");
-	}
-
-	public Pitch[] get_01a_Pitches() {
-		Pitch[] expectedPitches = new Pitch[24 * 4 + 6];
-		int iPitch = 0;
-		for (int alter : new int[] { 0, 1, -1 }) {
-			Pitch nextPitch = pi('G', alter, 2);
-			for (int i = 0; i < 8 * 4; i++) {
-				expectedPitches[iPitch++] = nextPitch;
-				int newStep = nextPitch.getStep() + 1;
-				int newOctave = nextPitch.getOctave();
-				if (newStep > 6) {
-					newStep = 0;
-					newOctave += 1;
-				}
-				nextPitch = pi(newStep, alter, newOctave);
-			}
-		}
-		expectedPitches[iPitch++] = pi(0, 2, 5);
-		expectedPitches[iPitch++] = pi(0, -2, 5);
-		expectedPitches[iPitch++] = pi(0, 1, 5);
-		expectedPitches[iPitch++] = pi(0, 1, 5);
-		expectedPitches[iPitch++] = pi(0, 1, 5);
-		expectedPitches[iPitch++] = pi(0, 1, 5);
-		return expectedPitches;
-	}
-
-	/**
-	 * All pitch intervals in ascending jump size. 
-	 */
-	@Test public void test_01b() {
-		loadTest("01b-Pitches-Intervals.xml");
-	}
-	
-	public Pitch[] get_01b_Pitches() {
-		Pitch[] expectedPitches = new Pitch[41 * 2];
-		Pitch pi1 = pi(0, 0, 5);
-		Pitch pi2 = pi(0, 0, 5);
-		for (int i = 0; i < expectedPitches.length / 2; i++) {
-			expectedPitches[i * 2 + 0] = pi1;
-			expectedPitches[i * 2 + 1] = pi2;
-			pi1 = incHalftoneWithEnharmonicChange(pi1);
-			pi2 = decHalftoneWithEnharmonicChange(pi2);
-		}
-		return expectedPitches;
-	}
-
-	private Pitch incHalftoneWithEnharmonicChange(Pitch p) {
-		int step = p.getStep();
-		int alter = p.getAlter();
-		int octave = p.getOctave();
-		if (alter == 1) {
-			//next step
-			alter = -1;
-			step += 1;
-			if (step > 6) {
-				step = 0;
-				octave += 1;
-			}
-		}
-		else {
-			alter += 1;
-		}
-		return pi(step, alter, octave);
-	}
-
-	private Pitch decHalftoneWithEnharmonicChange(Pitch p) {
-		int step = p.getStep();
-		int alter = p.getAlter();
-		int octave = p.getOctave();
-		if (alter == -1) {
-			//next step
-			alter = 1;
-			step -= 1;
-			if (step < 0) {
-				step = 6;
-				octave -= 1;
-			}
-		}
-		else {
-			alter -= 1;
-		}
-		return pi(step, alter, octave);
 	}
 
 	/**
