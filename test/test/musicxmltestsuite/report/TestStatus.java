@@ -5,5 +5,6 @@ public enum TestStatus {
 	Success,
 	ToDo,
 	Failure,
-	NotAvailable
+	NotAvailable,
+	Unneeded
 }

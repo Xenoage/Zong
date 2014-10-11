@@ -25,8 +25,15 @@ public class HtmlReport {
 	
 	
 	public void report(String testName, String project, TestStatus status) {
-		TestRow row = getRow(testName);
-		row.set(project, status);
+		getRow(testName).set(project, status);
+	}
+	
+	public void reportUnsupported(String testName) {
+		getRow(testName);
+	}
+	
+	public void reportUnneeded(String testName) {
+		getRow(testName).setUnneeded(true);
 	}
 	
 	private TestRow getRow(String testName) {
@@ -41,6 +48,7 @@ public class HtmlReport {
 	}
 	
 	public void writeToHtmlFile() {
+		rows.sort((r1, r2) -> r1.getTestName().compareTo(r2.getTestName()));
 		String template = loadHtmlTemplate("template");
 		template = template.replaceAll(Pattern.quote("[[rows]]"), createHtmlRows());
 		JseFileUtils.writeFile(template, getHtmlFilePath());
@@ -86,7 +94,10 @@ public class HtmlReport {
 				status = "todo";
 				break;
 			default:
-				status = "notavailable";
+				if (row.isUnneeded())
+					status = "unneeded";
+				else
+					status = "notavailable";
 		}
 		template = template.replaceAll(Pattern.quote("[[status]]"), status);
 		return template;

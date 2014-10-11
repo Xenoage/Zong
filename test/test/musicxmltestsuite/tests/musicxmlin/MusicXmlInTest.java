@@ -1,12 +1,16 @@
 package musicxmltestsuite.tests.musicxmlin;
 
 import static com.xenoage.utils.jse.JsePlatformUtils.jsePlatformUtils;
+import static org.junit.Assert.assertEquals;
 import musicxmltestsuite.tests.base.Base;
 
 import org.junit.Assert;
 
+import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.Staff;
+import com.xenoage.zong.core.music.Voice;
+import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.io.musicxml.in.MusicXmlScoreFileInput;
 
 /**
@@ -36,6 +40,18 @@ public interface MusicXmlInTest
 	
 	default Staff getFirstStaff() {
 		return getScore().getStaff(0);
+	}
+	
+	default void checkDurations(Staff staff, Fraction[] expectedDurations) {
+		int iDuration = 0;
+		for (int iM = 0; iM < staff.getMeasures().size(); iM++) {
+			Voice voice = staff.getMeasure(iM).getVoice(0);
+			for (VoiceElement e : voice.getElements()) {
+				//check duration
+				assertEquals("element " + iDuration, expectedDurations[iDuration++], e.getDuration());
+			}
+		}
+		assertEquals("not all element found", expectedDurations.length, iDuration);
 	}
 
 }

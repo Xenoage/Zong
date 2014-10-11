@@ -1,8 +1,12 @@
 package musicxmltestsuite;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
 import musicxmltestsuite.report.HtmlReport;
 import musicxmltestsuite.report.TestStatus;
 import musicxmltestsuite.tests.base.Base;
+import musicxmltestsuite.tests.base.OtherTests;
 
 import org.junit.extensions.cpsuite.ClasspathSuite;
 import org.junit.extensions.cpsuite.ClasspathSuite.BaseTypeFilter;
@@ -34,6 +38,8 @@ public class MusicXmlTestSuite
 		runner = new JUnitCore();
 		runner.addListener(new MusicXmlTestSuite());
 		runner.run(MusicXmlTestSuite.class);
+		Arrays.stream(OtherTests.unsupported).forEach(t -> report.reportUnsupported(t));
+		Arrays.stream(OtherTests.unneeded).forEach(t -> report.reportUnneeded(t));
 		report.writeToHtmlFile();
 	}
 	

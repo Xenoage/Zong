@@ -6,6 +6,7 @@ import static com.xenoage.utils.collections.CollectionUtils.map;
 import java.util.Map;
 
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Results for each test row, i.e. for
@@ -17,6 +18,7 @@ public class TestRow {
 	
 	@Getter private String testName;
 	private Map<String, TestStatus> results = map();
+	@Getter @Setter private boolean unneeded;
 	
 	public TestRow(String testName) {
 		this.testName = testName;

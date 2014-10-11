@@ -96,30 +96,6 @@ public abstract class MusicXMLTestSuiteBase<T> {
 		this.data = loadData(file);
 	}
 
-	//TODO: not supported yet: 01d-Pitches-Microtones.xml
-	//TODO: not supported yet: 01e-Pitches-ParenthesizedAccidentals.xml
-	//TODO: not supported yet: 01f-Pitches-ParenthesizedMicrotoneAccidentals.xml
-
-	/**
-	 * All pitch intervals in ascending jump size. 
-	 */
-	@Test public void test_02a() {
-		//TODO: <multiple-rest> not yet supported
-		loadTest("02a-Rests-Durations.xml");
-	}
-	
-	@Getter private Fraction[] _02a_Durations = {
-		//undotted
-		fr(1), fr(1), fr(1), fr(1, 2), fr(1, 4), fr(1, 8), fr(1, 16), fr(1, 32), fr(1, 64),
-		fr(1, 128), fr(1, 128),
-		//dotted
-		fr(3, 4), fr(1, 4), fr(1, 4), fr(3, 8), fr(3, 16), fr(3, 32), fr(3, 64), fr(3, 128),
-		fr(3, 256), fr(3, 256) };
-
-	//TODO: not supported yet: 02b-Rests-PitchedRests.xml
-	//TODO: not supported yet: 02c-Rests-MultiMeasureRests.xml
-	//not tested: 02e-Rests-NoType.xml - we ignore the type attribute anyway
-
 	/**
 	 * All note durations, from long, brevis, whole until 128th;
 	 * First with their plain values, then dotted and finally doubly-dotted. 

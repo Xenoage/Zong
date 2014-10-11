@@ -79,12 +79,6 @@ public class MusicXMLScoreFileInputTestSuiteTest
 		}
 	}
 
-	@Override public void test_02a() {
-		super.test_02a();
-		//multirests are not supported yet - TODO
-		checkDurations(score.getStaff(0), get_02a_Durations());
-	}
-
 	@Override public void test_03a() {
 		super.test_03a();
 		checkDurations(score.getStaff(0), get_03a_Durations());

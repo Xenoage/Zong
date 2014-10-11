@@ -67,29 +67,6 @@ public class MusicXMLDocumentTestSuiteTest
 			return null;
 		}
 	}
-
-	@Override public void test_02a() {
-		super.test_02a();
-		Fraction[] expectedDurations = get_02a_Durations();
-		//multirests are not supported yet - TODO
-		MxlPart part = doc.getScore().getParts().get(0);
-		int iDuration = 0;
-		int divisions = 64; //from MusicXML file
-		for (int iM = 0; iM < part.getMeasures().size(); iM++) {
-			MxlMeasure measure = part.getMeasures().get(iM);
-			for (MxlMusicDataContent data : measure.getMusicData().getContent()) {
-				if (data.getMusicDataContentType() == MxlMusicDataContentType.Note) {
-					//check type and duration
-					MxlNormalNote note = (MxlNormalNote) ((MxlNote) data).getContent();
-					assertEquals(MxlFullNoteContentType.Rest, note.getFullNote().getContent()
-						.getFullNoteContentType());
-					assertEquals("rest " + iDuration, expectedDurations[iDuration++],
-						fr(note.getDuration(), divisions * 4));
-				}
-			}
-		}
-		assertEquals("not all rests found", expectedDurations.length, iDuration);
-	}
 	
 	@Override public void test_03a() {
 		super.test_03a();
