@@ -79,23 +79,6 @@ public class MusicXMLScoreFileInputTestSuiteTest
 		}
 	}
 
-	@Override public void test_01c() {
-		super.test_01c();
-		Voice voice = score.getVoice(mp0);
-		for (VoiceElement e : voice.getElements()) {
-			if (e instanceof Chord) {
-				Chord chord = (Chord) e;
-				//check pitch
-				assertEquals(pi('G', 0, 4), chord.getNotes().get(0).getPitch());
-				//check lyric
-				assertEquals(1, chord.getLyrics().size());
-				assertEquals("A", chord.getLyrics().get(0).getText().toString());
-				return;
-			}
-		}
-		fail("note not found");
-	}
-
 	@Override public void test_02a() {
 		super.test_02a();
 		//multirests are not supported yet - TODO

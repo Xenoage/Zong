@@ -7,6 +7,7 @@ import org.junit.Assert;
 
 import com.xenoage.zong.musicxml.MusicXMLDocument;
 import com.xenoage.zong.musicxml.types.MxlScorePartwise;
+import com.xenoage.zong.musicxml.types.partwise.MxlMeasure;
 import com.xenoage.zong.musicxml.types.partwise.MxlPart;
 
 /**
@@ -40,6 +41,10 @@ public interface MusicXmlTest
 	
 	default MxlPart getFirstPart() {
 		return getDoc().getScore().getParts().get(0);
+	}
+	
+	default MxlMeasure getFirstMeasure() {
+		return getDoc().getScore().getParts().get(0).getMeasures().get(0);
 	}
 
 }

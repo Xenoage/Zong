@@ -96,15 +96,6 @@ public abstract class MusicXMLTestSuiteBase<T> {
 		this.data = loadData(file);
 	}
 
-	/**
-	 * The {@literal <voice>} element of notes is optional in MusicXML (although Dolet always writes it out).
-	 * Here, there is one note with lyrics, but without a voice assigned.
-	 * It should still be correctly converted.  
-	 */
-	@Test public void test_01c() {
-		loadTest("01c-Pitches-NoVoiceElement.xml");
-	}
-
 	//TODO: not supported yet: 01d-Pitches-Microtones.xml
 	//TODO: not supported yet: 01e-Pitches-ParenthesizedAccidentals.xml
 	//TODO: not supported yet: 01f-Pitches-ParenthesizedMicrotoneAccidentals.xml

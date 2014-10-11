@@ -68,26 +68,6 @@ public class MusicXMLDocumentTestSuiteTest
 		}
 	}
 
-	@Override public void test_01c() {
-		super.test_01c();
-		MxlMeasure measure = doc.getScore().getParts().get(0).getMeasures().get(0);
-		for (MxlMusicDataContent data : measure.getMusicData().getContent()) {
-			if (data.getMusicDataContentType() == MxlMusicDataContentType.Note) {
-				//check pitch
-				MxlNote note = (MxlNote) data;
-				MxlFullNote fullNote = note.getContent().getFullNote();
-				MxlPitch pitch = (MxlPitch) (fullNote.getContent());
-				assertEquals(pi('G', 0, 4), pitch.getPitch());
-				//check lyric
-				assertEquals(1, note.getLyrics().size());
-				assertEquals("A", ((MxlSyllabicText) note.getLyrics().get(0).getContent()).getText()
-					.getValue());
-				return;
-			}
-		}
-		fail("note not found");
-	}
-
 	@Override public void test_02a() {
 		super.test_02a();
 		Fraction[] expectedDurations = get_02a_Durations();
