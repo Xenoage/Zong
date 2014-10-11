@@ -38,7 +38,10 @@ public class MusicXmlTestSuite
 
 	@Override public void testFinished(Description description)
 		throws Exception {
-		report(TestStatus.Success, description.getClassName());
+		if (description.getAnnotation(ToDo.class) != null)
+			report(TestStatus.SuccessButToDo, description.getClassName());
+		else
+			report(TestStatus.Success, description.getClassName());
 	}
 
 	@Override public void testIgnored(Description description)
@@ -60,8 +63,12 @@ public class MusicXmlTestSuite
 	}
 	
 	private String getProjectName(String className) {
-		String[] path = className.split(Pattern.quote("."));
-		return path[path.length - 2];
+		try {
+			Base base = (Base) Class.forName(className).newInstance();
+			return base.getProjectName();
+		} catch (Exception ex) {
+			return "?";
+		}
 	}
 
 }

@@ -1,6 +1,7 @@
 package musicxmltestsuite.tests.musicxml;
 
 import static org.junit.Assert.assertEquals;
+import musicxmltestsuite.ToDo;
 import musicxmltestsuite.tests.base.Base01a;
 
 import org.junit.Test;
@@ -18,6 +19,8 @@ import com.xenoage.zong.musicxml.types.partwise.MxlPart;
 public class Test01a
 	implements Base01a, MusicXmlTest {
 
+	@ToDo("the editiorial sharp (sharp in parenthesis) in the last measure is not supported yet")
+	
 	@Test public void test() {
 		Pitch[] expectedPitches = getExpectedPitches();
 		MxlPart part = getFirstPart();
@@ -35,8 +38,6 @@ public class Test01a
 			}
 		}
 		assertEquals("not all notes found", expectedPitches.length, iPitch);
-		//TODO: the editiorial sharp (sharp in parenthesis) in the last measure
-		//is not supported yet
 	}
 
 }

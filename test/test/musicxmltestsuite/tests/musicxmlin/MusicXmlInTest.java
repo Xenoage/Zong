@@ -15,7 +15,12 @@ import com.xenoage.zong.io.musicxml.in.MusicXmlScoreFileInput;
  * 
  * @author Andreas Wenger
  */
-public interface MusicXmlInTest {
+public interface MusicXmlInTest
+	extends Base {
+	
+	@Override default String getProjectName() {
+		return "musicxml-in";
+	}
 	
 	default Score getScore() {
 		Base base = (Base) this;

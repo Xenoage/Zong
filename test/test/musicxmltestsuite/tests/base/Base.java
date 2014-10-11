@@ -15,5 +15,7 @@ public interface Base {
 	}
 	
 	String getFileName();
+	
+	String getProjectName();
 
 }

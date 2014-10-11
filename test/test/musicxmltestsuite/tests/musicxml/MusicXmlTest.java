@@ -15,7 +15,12 @@ import com.xenoage.zong.musicxml.types.partwise.MxlPart;
  * 
  * @author Andreas Wenger
  */
-public interface MusicXmlTest {
+public interface MusicXmlTest
+	extends Base {
+	
+	@Override default String getProjectName() {
+		return "musicxml";
+	}
 	
 	default MusicXMLDocument getDoc() {
 		Base base = (Base) this;
