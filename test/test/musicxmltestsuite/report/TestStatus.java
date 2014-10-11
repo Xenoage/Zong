@@ -3,7 +3,7 @@ package musicxmltestsuite.report;
 
 public enum TestStatus {
 	Success,
-	SuccessButToDo,
+	ToDo,
 	Failure,
 	NotAvailable
 }

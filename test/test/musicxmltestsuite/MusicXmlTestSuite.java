@@ -1,7 +1,5 @@
 package musicxmltestsuite;
 
-import java.util.regex.Pattern;
-
 import musicxmltestsuite.report.HtmlReport;
 import musicxmltestsuite.report.TestStatus;
 import musicxmltestsuite.tests.base.Base;
@@ -14,6 +12,15 @@ import org.junit.runner.RunWith;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 
+/**
+ * Suite for running the unofficial MusicXML Test Suite tests.
+ * 
+ * Running this file as a JUnit suite runs all the tests in the suite.
+ * Running thus file as a Java application creates a report HTML file
+ * (see {@link HtmlReport}).
+ * 
+ * @author Andreas Wenger
+ */
 @RunWith(ClasspathSuite.class)
 @BaseTypeFilter(Base.class)
 public class MusicXmlTestSuite
@@ -26,30 +33,27 @@ public class MusicXmlTestSuite
 	{
 		runner = new JUnitCore();
 		runner.addListener(new MusicXmlTestSuite());
-		report.begin();
 		runner.run(MusicXmlTestSuite.class);
-		report.finish();
+		report.writeToHtmlFile();
 	}
 	
-	@Override public void testFailure(Failure failure)
-		throws Exception {
-		report(TestStatus.Failure, failure.getDescription().getClassName());
+	@Override public void testFailure(Failure failure) {
+		report(TestStatus.Failure, failure.getDescription());
 	}
 
-	@Override public void testFinished(Description description)
-		throws Exception {
+	@Override public void testFinished(Description description) {
 		if (description.getAnnotation(ToDo.class) != null)
-			report(TestStatus.SuccessButToDo, description.getClassName());
+			report(TestStatus.ToDo, description);
 		else
-			report(TestStatus.Success, description.getClassName());
+			report(TestStatus.Success, description);
 	}
 
-	@Override public void testIgnored(Description description)
-		throws Exception {
-		report(TestStatus.NotAvailable, description.getClassName());
+	@Override public void testIgnored(Description description) {
+		report(TestStatus.NotAvailable, description);
 	}
 	
-	private void report(TestStatus status, String className) {
+	private void report(TestStatus status, Description description) {
+		String className = description.getClassName();
 		report.report(getTestFile(className), getProjectName(className), status);
 	}
 	

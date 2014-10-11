@@ -14,8 +14,10 @@ public interface Base {
 		return "data/test/scores/MusicXML-TestSuite-0.1/";
 	}
 	
+	/** The filename of the MusicXML test suite test, like "01a-Pitches-Pitches.xml". */
 	String getFileName();
 	
+	/** The Zong! subproject which is tested with this test, like "musicxml" or "layout". */
 	String getProjectName();
 
 }

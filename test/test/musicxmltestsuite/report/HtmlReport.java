@@ -1,19 +1,14 @@
 package musicxmltestsuite.report;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.utils.kernel.Tuple2.t;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 import musicxmltestsuite.MusicXmlTestSuite;
 
 import com.xenoage.utils.jse.io.JseFileUtils;
 import com.xenoage.utils.jse.io.JseStreamUtils;
-import com.xenoage.utils.kernel.Tuple2;
 
 /**
  * Creates an HTML report of the MusicXML implementation status
@@ -24,53 +19,77 @@ import com.xenoage.utils.kernel.Tuple2;
 public class HtmlReport {
 	
 	public static final String[] projects = { "musicxml", "musicxml-in", "layout", "midi-out"};
+	public static final String dirReport = "reports/";
 	
-	public List<Tuple2<String, Map<String, TestStatus>>> results = alist();
+	private List<TestRow> rows = alist();
 	
-	public void begin() {
+	
+	public void report(String testName, String project, TestStatus status) {
+		TestRow row = getRow(testName);
+		row.set(project, status);
 	}
 	
-	public void report(String test, String project, TestStatus status) {
-		Tuple2<String, Map<String, TestStatus>> row = results.get(getTestIndex(test));
-		row.get2().put(project, status);
-	}
-	
-	private int getTestIndex(String test) {
+	private TestRow getRow(String testName) {
 		//find existing row for test
-		for (int i : range(results))
-			if (results.get(i).get1().equals(test))
-				return i;
+		for (TestRow r : rows)
+			if (r.getTestName().equals(testName))
+				return r;
 		//not found, so add one
-		results.add(t(test, new HashMap<String, TestStatus>()));
-		return results.size() - 1;
+		TestRow r = new TestRow(testName);
+		rows.add(r);
+		return r;
 	}
 	
-	public void finish() {
-		String template = JseStreamUtils.readToString(
-			getClass().getResourceAsStream("templates/template.html"));
-		StringBuilder rows = new StringBuilder();
-		for (Tuple2<String, Map<String, TestStatus>> result : results) {
-			String row = JseStreamUtils.readToString(getClass().getResourceAsStream("templates/row.html"));
-			row = row.replaceAll(Pattern.quote("[[test]]"), result.get1());
-			for (String project : projects) {
-				String statusHtml = JseStreamUtils.readToString(
-					getClass().getResourceAsStream("templates/status.html"));
-				String img = "notavailable";
-				TestStatus status = result.get2().get(project);
-				if (status == TestStatus.Success)
-					img = "success";
-				else if (status == TestStatus.Failure)
-					img = "failure";
-				else if (status == TestStatus.SuccessButToDo)
-					img = "todo";
-				statusHtml = statusHtml.replaceAll(Pattern.quote("[[status]]"), img);
-				row = row.replaceAll(Pattern.quote("[[" + project + "]]"), statusHtml);
-			}
-			rows.append(row);
-		}
-		template = template.replaceAll(Pattern.quote("[[rows]]"), rows.toString());
-		JseFileUtils.writeFile(template, "reports/" +
-			MusicXmlTestSuite.class.getSimpleName() + ".html");
+	public void writeToHtmlFile() {
+		String template = loadHtmlTemplate("template");
+		template = template.replaceAll(Pattern.quote("[[rows]]"), createHtmlRows());
+		JseFileUtils.writeFile(template, getHtmlFilePath());
 	}
 
+	private String loadHtmlTemplate(String name) {
+		return JseStreamUtils.readToString(
+			getClass().getResourceAsStream("templates/" + name + ".html"));
+	}
+	
+	private String getHtmlFilePath() {
+		return "reports/" + MusicXmlTestSuite.class.getSimpleName() + ".html";
+	}
+
+	private String createHtmlRows() {
+		StringBuilder ret = new StringBuilder();
+		for (TestRow row : rows)
+			ret.append(createHtmlRow(row));
+		return ret.toString();
+	}
+
+	private String createHtmlRow(TestRow row) {
+		String template = loadHtmlTemplate("row");
+		template = template.replaceAll(Pattern.quote("[[test]]"), row.getTestName());
+		for (String project : projects) {
+			String cellHtml = createHtmlCell(row, project);
+			template = template.replaceAll(Pattern.quote("[[" + project + "]]"), cellHtml);
+		}
+		return template;
+	}
+
+	private String createHtmlCell(TestRow row, String project) {
+		String template = loadHtmlTemplate("cell");
+		String status;
+		switch (row.get(project)) {
+			case Success:
+				status = "success";
+				break;
+			case Failure:
+				status = "failure";
+				break;
+			case ToDo:
+				status = "todo";
+				break;
+			default:
+				status = "notavailable";
+		}
+		template = template.replaceAll(Pattern.quote("[[status]]"), status);
+		return template;
+	}
+	
 }
