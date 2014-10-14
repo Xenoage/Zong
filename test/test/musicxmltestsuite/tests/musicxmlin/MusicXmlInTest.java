@@ -29,7 +29,7 @@ public interface MusicXmlInTest
 	default Score getScore() {
 		Base base = (Base) this;
 		try {
-			String filepath = base.getDirPath() + base.getFileName();
+			String filepath = Base.dirPath + base.getFileName();
 			return new MusicXmlScoreFileInput().read(jsePlatformUtils().openFile(filepath), filepath);
 		} catch (Exception ex) {
 			ex.printStackTrace();

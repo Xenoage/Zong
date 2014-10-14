@@ -78,158 +78,6 @@ public class MusicXMLScoreFileInputTestSuiteTest
 			return null;
 		}
 	}
-
-	@Override public void test_03a() {
-		super.test_03a();
-		checkDurations(score.getStaff(0), get_03a_Durations());
-	}
-
-	@Override public void test_03b() {
-		super.test_03b();
-		Measure measure = score.getMeasure(mp0);
-		//two voices
-		assertEquals(2, measure.getVoices().size());
-		//check first voice
-		Voice voice = measure.getVoice(0);
-		assertEquals(2, voice.getElements().size());
-		assertEquals(pi(0, 0, 4), ((Chord) voice.getElement(0)).getNotes().get(0).getPitch());
-		assertEquals(fr(1, 4), voice.getElement(0).getDuration());
-		assertEquals(pi(0, 0, 4), ((Chord) voice.getElement(1)).getNotes().get(0).getPitch());
-		assertEquals(fr(1, 4), voice.getElement(1).getDuration());
-		//check second voice
-		//in Zong!, there is no "empty" space in voices. Instead, an invisible rest is used
-		voice = measure.getVoice(1);
-		assertTrue(voice.getElement(0) instanceof Rest);
-		assertTrue(((Rest) voice.getElement(0)).isHidden());
-		assertEquals(fr(1, 4), voice.getElement(0).getDuration());
-		assertEquals(pi(5, 0, 3), ((Chord) voice.getElement(1)).getNotes().get(0).getPitch());
-		assertEquals(fr(1, 4), voice.getElement(1).getDuration());
-		assertEquals(pi(5, 0, 3), ((Chord) voice.getElement(2)).getNotes().get(0).getPitch());
-		assertEquals(fr(1, 4), voice.getElement(2).getDuration());
-	}
-
-	@Override public void test_03c() {
-		super.test_03c();
-		checkDurations(score.getStaff(0), get_03c_Durations());
-	}
-	
-	private void checkDurations(Staff staff, Fraction[] expectedDurations) {
-		int iDuration = 0;
-		for (int iM = 0; iM < staff.getMeasures().size(); iM++) {
-			Voice voice = staff.getMeasure(iM).getVoice(0);
-			for (VoiceElement e : voice.getElements()) {
-				//check duration
-				assertEquals("element " + iDuration, expectedDurations[iDuration++], e.getDuration());
-			}
-		}
-		assertEquals("not all element found", expectedDurations.length, iDuration);
-	}
-
-	@Override public void test_11a() {
-		super.test_11a();
-		TimeType[] expectedTimes = get_11a_Times();
-		int iTime = 0;
-		for (int iM = 0; iM < score.getMeasuresCount(); iM++) {
-			//TODO: first time is wrong in MusicXML file - ignore
-			if (iTime == 0) {
-				iTime++;
-				continue;
-			}
-			//check time
-			assertEquals("element " + iTime, expectedTimes[iTime++],
-				score.getColumnHeader(iM).getTime().getType());
-		}
-		assertEquals("not all times found", expectedTimes.length, iTime);
-	}
-
-	@Override public void test_11h() {
-		super.test_11h();
-		//time signature must be senza misura
-		assertEquals(TimeType.timeSenzaMisura, score.getColumnHeader(0).getTime().getType());
-		//measure must contain 3 notes and have a length of 3/8
-		assertEquals(3, score.getVoice(mp0).getElements().size());
-		assertEquals(fr(3, 8), score.getVoice(mp0).getFilledBeats());
-	}
-	
-	@Override public void test_12a() {
-		super.test_12a();
-		//check clefs and line position of c4
-		int m = 0;
-		checkClef(score, m++, ClefSymbol.G, 2, -2);
-		checkClef(score, m++, ClefSymbol.C, 4, 4);
-		checkClef(score, m++, ClefSymbol.C, 6, 6);
-		checkClef(score, m++, ClefSymbol.F, 6, 10);
-		checkClef(score, m++, ClefSymbol.PercTwoRects, 4, -2); //in Zong!, we use Perc = Treble
-		checkClef(score, m++, ClefSymbol.G8vb, 2, 5);
-		checkClef(score, m++, ClefSymbol.F8vb, 6, 17);
-		checkClef(score, m++, ClefSymbol.F, 4, 8);
-		checkClef(score, m++, ClefSymbol.G, 0, -4);
-		checkClef(score, m++, ClefSymbol.C, 8, 8);
-		checkClef(score, m++, ClefSymbol.C, 2, 2);
-		checkClef(score, m++, ClefSymbol.C, 0, 0);
-		checkClef(score, m++, ClefSymbol.PercTwoRects, 4, -2); //in Zong!, we use Perc = Treble
-		checkClef(score, m++, ClefSymbol.G8va, 2, -9);
-		checkClef(score, m++, ClefSymbol.F8va, 6, 3);
-		checkClef(score, m++, ClefSymbol.Tab, 4, -2); //in Zong!, we use Tab = Treble
-		checkClef(score, m++, ClefSymbol.None, 4, -2); //in Zong!, we use None = Treble
-		checkClef(score, m++, ClefSymbol.G, 2, -2);
-	}
-	
-	private void checkClef(Score score, int measure, ClefSymbol expectedSymbol, int expectedClefLP,
-		int expectedC4LP) {
-		ClefType clef = score.getMeasure(atMeasure(0, measure)).getClefs().getFirst().getElement().getType();
-		assertEquals("measure " + measure, expectedSymbol, clef.getSymbol());
-		assertEquals("measure " + measure, expectedClefLP, clef.getLp());
-		assertEquals("measure " + measure, expectedC4LP, clef.getLp(pi('C', 0, 4)));
-	}
-	
-	@Override public void test_12b() {
-		super.test_12b();
-		//musical context must be 4/4, C clef and no accidentals
-		MusicContext context = score.getMusicContext(mp0, Interval.At, Interval.At);
-		assertEquals(fr(4, 4), score.getMeasureBeats(0));
-		assertEquals(ClefType.clefTreble, context.getClef().getType());
-		for (int i = 0; i < 7; i++)
-			assertEquals(0, context.getKey().getAlterations()[i]);
-		//there should be a C clef in the first measure
-		assertEquals(ClefType.clefTreble, score.getMeasure(mp0).getClefs().get(_0).getType());
-		//there should be a time signature and key signature in the measure column
-		ColumnHeader header = score.getHeader().getColumnHeader(0);
-		assertEquals(TimeType.time_4_4, header.getTime().getType());
-		assertNotNull(header.getKeys().get(_0));
-	}
-
-	@Override public void test_13a() {
-		super.test_13a();
-		TraditionalKey[] expectedKeys = get_13a_Keys();
-		//TODO: Zong! supports only -7 to +7, starting in measure 9,
-		//ending in measure 38
-		int iKey = 0;
-		for (int i = 8; i <= 37; i++) {
-			ColumnHeader column = score.getColumnHeader(i);
-			TraditionalKey key = (TraditionalKey) column.getKeys().get(_0);
-			assertEquals("measure " + i, expectedKeys[iKey].getFifths(), key.getFifths());
-			assertEquals("measure " + i, expectedKeys[iKey].getMode(), key.getMode());
-			iKey++;
-		}
-	}
-	
-	@Override public void test_13b() {
-		super.test_13b();
-		TraditionalKey[] expectedKeys = get_13b_Keys();
-		MP mp = mp0;
-		for (int iKey : range(expectedKeys)) {
-			ColumnHeader column = score.getColumnHeader(mp.measure);
-			TraditionalKey key = (TraditionalKey) column.getKeys().get(mp.beat);
-			assertNotNull("mp " + mp, key);
-			assertEquals("mp " + mp, expectedKeys[iKey].getFifths(), key.getFifths());
-			assertEquals("mp " + mp, expectedKeys[iKey].getMode(), key.getMode());
-			mp = mp.withBeat(mp.beat.add(fr(1, 4)));
-			if (mp.beat.compareTo(_1) >= 0) {
-				mp = mp.withMeasure(mp.measure + 1).withBeat(_0);
-			}
-		}
-	}
 	
 	@Override public void test_21a() {
 		super.test_21a();
@@ -512,6 +360,18 @@ public class MusicXMLScoreFileInputTestSuiteTest
 			assertEquals(tempo.get2().getBaseBeat(), temposAtBeat.get(0).getBaseBeat());
 			assertEquals(tempo.get2().getBeatsPerMinute(), temposAtBeat.get(0).getBeatsPerMinute());
 		}
+	}
+	
+	private void checkDurations(Staff staff, Fraction[] expectedDurations) {
+		int iDuration = 0;
+		for (int iM = 0; iM < staff.getMeasures().size(); iM++) {
+			Voice voice = staff.getMeasure(iM).getVoice(0);
+			for (VoiceElement e : voice.getElements()) {
+				//check duration
+				assertEquals("element " + iDuration, expectedDurations[iDuration++], e.getDuration());
+			}
+		}
+		assertEquals("not all element found", expectedDurations.length, iDuration);
 	}
 	
 }

@@ -27,7 +27,7 @@ public interface MusicXmlTest
 		Base base = (Base) this;
 		try {
 			return MusicXMLDocument.read(jsePlatformUtils().createXmlReader(
-				jsePlatformUtils().openFile(base.getDirPath() + base.getFileName())));
+				jsePlatformUtils().openFile(Base.dirPath + base.getFileName())));
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			Assert.fail("Could not load " + base.getFileName() + ": " + ex.toString());

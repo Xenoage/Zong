@@ -3,9 +3,9 @@ package musicxmltestsuite.report;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 
 import java.util.List;
-import java.util.regex.Pattern;
 
 import musicxmltestsuite.MusicXmlTestSuite;
+import musicxmltestsuite.tests.base.Base;
 
 import com.xenoage.utils.jse.io.JseFileUtils;
 import com.xenoage.utils.jse.io.JseStreamUtils;
@@ -28,12 +28,8 @@ public class HtmlReport {
 		getRow(testName).set(project, status);
 	}
 	
-	public void reportUnsupported(String testName) {
-		getRow(testName);
-	}
-	
-	public void reportUnneeded(String testName) {
-		getRow(testName).setUnneeded(true);
+	public void report(String testName, TestStatus status) {
+		getRow(testName).setDefaultStatus(status);
 	}
 	
 	private TestRow getRow(String testName) {
@@ -50,7 +46,7 @@ public class HtmlReport {
 	public void writeToHtmlFile() {
 		rows.sort((r1, r2) -> r1.getTestName().compareTo(r2.getTestName()));
 		String template = loadHtmlTemplate("template");
-		template = template.replaceAll(Pattern.quote("[[rows]]"), createHtmlRows());
+		template = template.replace("[[rows]]", createHtmlRows());
 		JseFileUtils.writeFile(template, getHtmlFilePath());
 	}
 
@@ -72,34 +68,24 @@ public class HtmlReport {
 
 	private String createHtmlRow(TestRow row) {
 		String template = loadHtmlTemplate("row");
-		template = template.replaceAll(Pattern.quote("[[test]]"), row.getTestName());
+		String testLink = createTestLink(row.getTestName());
+		template = template.replace("[[test]]", testLink);
 		for (String project : projects) {
 			String cellHtml = createHtmlCell(row, project);
-			template = template.replaceAll(Pattern.quote("[[" + project + "]]"), cellHtml);
+			template = template.replace("[[" + project + "]]", cellHtml);
 		}
 		return template;
+	}
+	
+	private String createTestLink(String testName) {
+		return "<a href=\"" + Base.onlinePath + "#" + testName.replace(".xml", ".ly") +
+			"\">" + testName + "</a>";
 	}
 
 	private String createHtmlCell(TestRow row, String project) {
 		String template = loadHtmlTemplate("cell");
-		String status;
-		switch (row.get(project)) {
-			case Success:
-				status = "success";
-				break;
-			case Failure:
-				status = "failure";
-				break;
-			case ToDo:
-				status = "todo";
-				break;
-			default:
-				if (row.isUnneeded())
-					status = "unneeded";
-				else
-					status = "notavailable";
-		}
-		template = template.replaceAll(Pattern.quote("[[status]]"), status);
+		TestStatus status = row.get(project);
+		template = template.replace("[[status]]", ""+status);
 		return template;
 	}
 	

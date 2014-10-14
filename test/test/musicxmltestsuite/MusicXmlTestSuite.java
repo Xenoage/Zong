@@ -1,7 +1,7 @@
 package musicxmltestsuite;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.Map;
 
 import musicxmltestsuite.report.HtmlReport;
 import musicxmltestsuite.report.TestStatus;
@@ -38,8 +38,10 @@ public class MusicXmlTestSuite
 		runner = new JUnitCore();
 		runner.addListener(new MusicXmlTestSuite());
 		runner.run(MusicXmlTestSuite.class);
-		Arrays.stream(OtherTests.unsupported).forEach(t -> report.reportUnsupported(t));
-		Arrays.stream(OtherTests.unneeded).forEach(t -> report.reportUnneeded(t));
+		Map<TestStatus, String[]> otherTests = OtherTests.getOtherTests();
+		for (TestStatus status : otherTests.keySet())
+			Arrays.stream(otherTests.get(status)).forEach(
+				t -> report.report(t, status));
 		report.writeToHtmlFile();
 	}
 	
@@ -48,14 +50,14 @@ public class MusicXmlTestSuite
 	}
 
 	@Override public void testFinished(Description description) {
-		if (description.getAnnotation(ToDo.class) != null)
-			report(TestStatus.ToDo, description);
+		if (isToDoAnnotated(description))
+			report(TestStatus.Incomplete, description);
 		else
-			report(TestStatus.Success, description);
+			report(TestStatus.Complete, description);
 	}
 
 	@Override public void testIgnored(Description description) {
-		report(TestStatus.NotAvailable, description);
+		report(TestStatus.UnsupportedToDo, description);
 	}
 	
 	private void report(TestStatus status, Description description) {
@@ -79,6 +81,17 @@ public class MusicXmlTestSuite
 		} catch (Exception ex) {
 			return "?";
 		}
+	}
+	
+	private boolean isToDoAnnotated(Description description) {
+		if (description.getAnnotation(ToDo.class) != null) //@Test method annotated
+			return true;
+		if (description.getTestClass().isAnnotationPresent(ToDo.class)) //test class annotated
+			return true;
+		for (Class<?> interf : description.getTestClass().getInterfaces())
+			if (interf.isAnnotationPresent(ToDo.class)) //interface class annotated
+				return true;
+		return false;
 	}
 
 }

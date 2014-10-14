@@ -18,7 +18,7 @@ public class TestRow {
 	
 	@Getter private String testName;
 	private Map<String, TestStatus> results = map();
-	@Getter @Setter private boolean unneeded;
+	@Getter @Setter private TestStatus defaultStatus = TestStatus.UnsupportedToDo;
 	
 	public TestRow(String testName) {
 		this.testName = testName;
@@ -29,7 +29,7 @@ public class TestRow {
 	}
 	
 	public TestStatus get(String project) {
-		return notNull(results.get(project), TestStatus.NotAvailable);
+		return notNull(results.get(project), defaultStatus);
 	}
 
 }
