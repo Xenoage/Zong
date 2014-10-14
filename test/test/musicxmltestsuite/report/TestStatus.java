@@ -1,19 +1,17 @@
 package musicxmltestsuite.report;
 
+import lombok.AllArgsConstructor;
 
+
+@AllArgsConstructor
 public enum TestStatus {
-	/** Test complete and successful. */
-	Complete,
-	/** Test successful, but incomplete. */
-	Incomplete,
-	/** Test fails. */
-	Failure,
-	/** Feature is supported, but no tests exists yet. */
-	SupportedButNotTestedYet,
-	/** Feature is supported, but the test is not useful and so there is none. */
-	SupportedButTestUnneeded,
-	/** Feature is unsupported, but will probably be added in the future. */
-	UnsupportedToDo,
-	/** Feature is unsupported, and will probably not be added in the future. */
-	Unsupported,
+	Complete("Test complete and successful"),
+	Incomplete("Test successful, but incomplete (missing features or tests)"),
+	Failure("Test fails"),
+	SupportedButNotTestedYet("Feature is probably supported, but no tests exists yet"),
+	SupportedButTestUnneeded("Feature is supported, but a test would not be useful or the feature is implicitly tested by another test"),
+	UnsupportedToDo("Feature is unsupported, but will probably be added in the future"),
+	Unsupported("Feature is unsupported, and will probably not be added in the future");
+	
+	public final String description;
 }

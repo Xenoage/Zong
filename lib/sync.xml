@@ -13,6 +13,11 @@
 		<file name="controlsfx-8.20.7.jar" md5="1f0e08dfef6e990bd6ca1d9d8bdaa28d"/>
 		<file name="controlsfx-license.txt" md5="fd298eb980b38ea8806dddb8c334b90b"/>
 	</fileset>
+	<!-- cpsuite -->
+	<fileset sourcedir="cpsuite/1.2.6/" targetdir="lib/dev/">
+		<file name="cpsuite-1.2.6.jar" md5="002ca9fadd662276d19d223baaf1ee09"/>
+		<file name="cpsuite-license.txt" md5="65fa1fa339b54717af3ffb059ac4b68d"/>
+	</fileset>
 	<!-- gson -->
 	<fileset sourcedir="gson/2.2.4/">
 		<file name="gson-2.2.4.jar" md5="232ea9ab7ec43b8b2ef36181ee7d693b"/>
@@ -41,7 +46,7 @@
 		<file name="servlet-api-license.txt" md5="338ba0dde2df89b6fb5bb74266546839"/>
 	</fileset>
 	<!-- lombok -->
-	<fileset sourcedir="lombok/1.14.2/">
+	<fileset sourcedir="lombok/1.14.2/" targetdir="lib/dev/">
 		<file name="lombok-1.14.2.jar" md5="9aebd8dc07dbc70b466feeea7cf297dc"/>
 		<file name="lombok-license.txt" md5="9f4c84f112c6f211c8c7d7c4ac376b25"/>
 	</fileset>

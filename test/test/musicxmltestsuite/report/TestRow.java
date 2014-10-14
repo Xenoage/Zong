@@ -18,7 +18,7 @@ public class TestRow {
 	
 	@Getter private String testName;
 	private Map<String, TestStatus> results = map();
-	@Getter @Setter private TestStatus defaultStatus = TestStatus.UnsupportedToDo;
+	@Getter @Setter private TestStatus defaultStatus = TestStatus.SupportedButNotTestedYet;
 	
 	public TestRow(String testName) {
 		this.testName = testName;

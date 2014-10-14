@@ -10,7 +10,7 @@ package musicxmltestsuite.tests.base;
  */
 public interface Base {
 	
-	String onlinePath = "http://www.lilypond.org/doc/v2.12/input/regression/musicxml/collated-files.html";
+	String onlinePath = "http://www.lilypond.org/doc/v2.18/input/regression/musicxml/collated-files.html";
 	String dirPath = "data/test/scores/MusicXML-TestSuite-0.1/";
 	
 	/** The filename of the MusicXML test suite test, like "01a-Pitches-Pitches.xml". */

@@ -6,6 +6,9 @@
     <library name="controlsfx" systemlibrary="false">
         <archive path="/lib/lib/controlsfx-8.20.7.jar"/>
     </library>
+    <library name="cpsuite" systemlibrary="false">
+        <archive path="/lib/lib/dev/cpsuite-1.2.6.jar"/>
+    </library>
     <library name="gson" systemlibrary="false">
         <archive path="/lib/lib/gson-2.2.4.jar" source="/lib/lib/dev/gson-2.2.4-sources.jar"/>
     </library>
@@ -20,7 +23,7 @@
         <archive path="/lib/lib/servlet-api-3.1.jar"/>
     </library>
     <library name="lombok" systemlibrary="false">
-        <archive path="/lib/lib/lombok-1.14.2.jar"/>
+        <archive path="/lib/lib/dev/lombok-1.14.2.jar"/>
     </library>
     <library name="vorbis-java" systemlibrary="false">
         <archive path="/lib/lib/vorbis-java-1.0.0-beta.jar"/>

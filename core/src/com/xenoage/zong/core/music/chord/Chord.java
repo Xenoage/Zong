@@ -206,5 +206,11 @@ public class Chord
 		}
 		return ret;
 	}
+	
+	public void addAnnotation(Annotation a) {
+		if (annotations == null)
+			annotations = new ArrayList<Annotation>(1);
+		annotations.add(a);
+	}
 
 }

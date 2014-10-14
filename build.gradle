@@ -28,10 +28,12 @@ subprojects {
 	sourceSets {
 		main {
 			java { srcDir 'src' }
+			resources { srcDir 'src' }
 			compileClasspath += configurations.compileOnly
 		}
 		test {
 			java { srcDir 'test' }
+			resources { srcDir 'test' }
 			compileClasspath += configurations.compileOnly + configurations.testCompileOnly
 		}
 	}
@@ -63,7 +65,13 @@ project(':player') {
 	dependencies { compile project(':desktop') }
 }
 project(':renderer') { dependencies { compile project(':layout') } }
-project(':test') { dependencies { compile project(':converter'), project(':webserver') } }
+project(':test') {
+	sourceCompatibility = 8
+	dependencies {
+		compile project(':converter'), project(':webserver')
+		compile files('../lib/lib/dev/cpsuite-1.2.6.jar')
+	}
+}
 project(':tools') { dependencies { compile project(':core') } }
 project(':webserver') {
 	dependencies {

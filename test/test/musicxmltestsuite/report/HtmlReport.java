@@ -45,9 +45,19 @@ public class HtmlReport {
 	
 	public void writeToHtmlFile() {
 		rows.sort((r1, r2) -> r1.getTestName().compareTo(r2.getTestName()));
-		String template = loadHtmlTemplate("template");
-		template = template.replace("[[rows]]", createHtmlRows());
-		JseFileUtils.writeFile(template, getHtmlFilePath());
+		String html = createHtmlReport();
+		JseFileUtils.writeFile(html, getHtmlFilePath());
+	}
+	
+	private String getHtmlFilePath() {
+		return "reports/" + MusicXmlTestSuite.class.getSimpleName() + ".html";
+	}
+	
+	private String createHtmlReport() {
+		String html = loadHtmlTemplate("template");
+		html = html.replace("[[legend]]", createHtmlLegend());
+		html = html.replace("[[rows]]", createHtmlRows());
+		return html;
 	}
 
 	private String loadHtmlTemplate(String name) {
@@ -55,8 +65,12 @@ public class HtmlReport {
 			getClass().getResourceAsStream("templates/" + name + ".html"));
 	}
 	
-	private String getHtmlFilePath() {
-		return "reports/" + MusicXmlTestSuite.class.getSimpleName() + ".html";
+	private String createHtmlLegend() {
+		String item = loadHtmlTemplate("legenditem");
+		StringBuilder ret = new StringBuilder();
+		for (TestStatus status : TestStatus.values())
+			ret.append(item.replace("[[status]]", ""+status).replace("[[description]]", status.description));
+		return ret.toString();
 	}
 
 	private String createHtmlRows() {
@@ -78,8 +92,7 @@ public class HtmlReport {
 	}
 	
 	private String createTestLink(String testName) {
-		return "<a href=\"" + Base.onlinePath + "#" + testName.replace(".xml", ".ly") +
-			"\">" + testName + "</a>";
+		return "<a href=\"" + Base.onlinePath + "#" + testName + "\">" + testName + "</a>";
 	}
 
 	private String createHtmlCell(TestRow row, String project) {
