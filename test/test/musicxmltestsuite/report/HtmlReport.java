@@ -19,7 +19,7 @@ import com.xenoage.utils.jse.io.JseStreamUtils;
 public class HtmlReport {
 	
 	public static final String[] projects = { "musicxml", "musicxml-in", "layout", "midi-out"};
-	public static final String dirReport = "reports/";
+	public static final String dirReport = "reports/musicxmltestsuite/";
 	
 	private List<TestRow> rows = alist();
 	
@@ -50,7 +50,7 @@ public class HtmlReport {
 	}
 	
 	private String getHtmlFilePath() {
-		return "reports/" + MusicXmlTestSuite.class.getSimpleName() + ".html";
+		return dirReport + "index.html";
 	}
 	
 	private String createHtmlReport() {
