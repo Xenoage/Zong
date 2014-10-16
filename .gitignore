@@ -9,6 +9,7 @@ Thumbs.db
 # Directories #
 .metadata
 .metadata*
+.recommenders
 .gradle
 bin
 build

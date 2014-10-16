@@ -23,7 +23,6 @@ public class OtherTests {
 	}
 	
 	public static final String[] unsupportedToDo = {
-		"01d-Pitches-Microtones.xml",
 		"01e-Pitches-ParenthesizedAccidentals.xml",
 		"01f-Pitches-ParenthesizedMicrotoneAccidentals.xml",
 		"02b-Rests-PitchedRests.xml",
@@ -125,6 +124,7 @@ public class OtherTests {
 	};
 		
 	public static final String[] unsupported = {
+		"01d-Pitches-Microtones.xml", //microtones are not supported
 		"11f-TimeSignatures-SymbolMeaning.xml", //3/8 time with cut symbol is not supported
 		"13d-KeySignatures-Microtones.xml", //microtones are not supported
 		"99a-Sibelius5-IgnoreBeaming.xml", //irrelevant

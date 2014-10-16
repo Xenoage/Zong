@@ -1,9 +1,11 @@
 package com.xenoage.zong.core.music.chord;
 
 import static com.xenoage.utils.CheckUtils.checkArgsNotNull;
+import static com.xenoage.utils.collections.CollectionUtils.addOrNew;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Fraction._0;
+import static java.util.Collections.emptyList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +52,7 @@ public class Chord
 	implements VoiceElement, DirectionContainer {
 
 	/** The notes within this chord, sorted ascending (begin with lowest notated pitch). */
-	@Getter @Setter @NonEmpty private List<Note> notes;
+	@Getter @Setter @NonNull @NonEmpty private List<Note> notes;
 	/** The duration of this chord. For a grace chord, this is 0. */
 	@Getter @Setter @NonNull private Fraction duration;
 	/** The stem of this chord, or null if a default stem is used. */
@@ -59,19 +61,19 @@ public class Chord
 	@Getter @Setter private boolean cue = false;
 	/** The grace value of this chord, or null if it is a normal chord. */
 	@Getter @Setter @MaybeNull private Grace grace = null;
-	/** The articulation, ornament and other annitations on this chord,
-	 * sorted by ascending distance to the chord. */
-	@Getter @Setter @MaybeNull private List<Annotation> annotations = null;
+	/** The articulation, ornament and other annotations on this chord,
+	 * sorted by ascending distance to the chord. The empty list may be immutable. */
+	@Getter @Setter @NonNull private List<Annotation> annotations = emptyList();
 	/** The beam this chord is part of, or null. */
 	@Getter @Setter @MaybeNull private Beam beam = null;
-	/** The slurs which start or end at this chord, or null. */
-	@Getter @Setter @MaybeNull private List<Slur> slurs = null;
+	/** The slurs which start or end at this chord. The empty list may be immutable. */
+	@Getter @Setter @NonNull private List<Slur> slurs = emptyList();
 	/** The tuplet this chord is part of, or null. */
 	@Getter @Setter @MaybeNull private Tuplet tuplet = null;
-	/** The lyrics attached to this chord, or null. */
-	@Getter @Setter @MaybeNull private List<Lyric> lyrics = null;
-	/** The directions attached to this chord, or null. */
-	@Getter @Setter @MaybeNull private List<Direction> directions = null;
+	/** The lyrics attached to this chord. The empty list may be immutable. */
+	@Getter @Setter @NonNull private List<Lyric> lyrics = emptyList();
+	/** The directions attached to this chord. The empty list may be immutable. */
+	@Getter @Setter @NonNull private List<Direction> directions = emptyList();
 
 	/** Back reference: the parent voice, or null if not part of a score. */
 	@Getter @Setter private Voice parent = null;
@@ -178,9 +180,7 @@ public class Chord
 	}
 	
 	public void addDirection(Direction direction) {
-		if (directions == null)
-			directions = new ArrayList<Direction>();
-		directions.add(direction);
+		directions = addOrNew(directions, direction);
 	}
 
 	@Override public String toString() {
@@ -205,12 +205,6 @@ public class Chord
 				ret.add((Articulation) a);
 		}
 		return ret;
-	}
-	
-	public void addAnnotation(Annotation a) {
-		if (annotations == null)
-			annotations = new ArrayList<Annotation>(1);
-		annotations.add(a);
 	}
 
 }

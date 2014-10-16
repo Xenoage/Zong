@@ -1,6 +1,7 @@
 package com.xenoage.zong.commands.core.music.slur;
 
-import com.xenoage.utils.collections.NullableList;
+import static com.xenoage.utils.collections.CollectionUtils.removeOrEmpty;
+
 import com.xenoage.utils.document.command.Command;
 import com.xenoage.utils.document.command.Undoability;
 import com.xenoage.zong.core.music.chord.Chord;
@@ -29,7 +30,7 @@ public class SlurRemove
 		//remove slur from chords
 		for (SlurWaypoint wp : slur.getWaypoints()) {
 			Chord chord = wp.getChord();
-			chord.setSlurs(NullableList.remove(chord.getSlurs(), slur));
+			chord.setSlurs(removeOrEmpty(chord.getSlurs(), slur));
 		}
 	}
 

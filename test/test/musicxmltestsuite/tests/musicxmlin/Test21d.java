@@ -5,10 +5,13 @@ import static com.xenoage.utils.math.Fraction._1;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.music.Pitch.pi;
 import static com.xenoage.zong.core.position.MP.mp0;
+import static musicxmltestsuite.Utils.articulation;
+import static musicxmltestsuite.Utils.fermata;
 import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
+import musicxmltestsuite.Utils;
 import musicxmltestsuite.tests.base.Base21d;
 
 import org.junit.Before;
@@ -16,7 +19,6 @@ import org.junit.Test;
 
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.MeasureElement;
-import com.xenoage.zong.core.music.annotation.Articulation;
 import com.xenoage.zong.core.music.annotation.ArticulationType;
 import com.xenoage.zong.core.music.annotation.Fermata;
 import com.xenoage.zong.core.music.chord.Chord;
@@ -42,9 +44,9 @@ public class Test21d
 		assertEquals(pi('F', 0, 4), chord.getNotes().get(0).getPitch());
 		assertEquals(_1, chord.getDuration());
 		assertEquals(2, chord.getAnnotations().size());
-		assertEquals(new Articulation(ArticulationType.Accent, Placement.Below), chord
+		assertEquals(articulation(ArticulationType.Accent, Placement.Below), chord
 			.getAnnotations().get(0));
-		assertEquals(new Fermata(Placement.Above), chord.getAnnotations().get(1));
+		assertEquals(fermata(Placement.Above), chord.getAnnotations().get(1));
 		//words "Largo"
 		List<MeasureElement> directions = score.getMeasure(mp0).getMeasureElements().getAll(_0);
 		assertEquals(3, directions.size()); //clef, words, dynamics

@@ -241,8 +241,7 @@ public final class NotationStrategy
 
 		//lyric width
 		float lyricWidth = 0;
-		List<Lyric> lyrics = chord.getLyrics();
-		for (Lyric lyric : it(lyrics)) {
+		for (Lyric lyric : chord.getLyrics()) {
 			if (lyric != null && lyric.getText() != null) {
 				//width of lyric in interline spaces
 				//OBSOLETE float l = textMeasurer(lyricsFont, lyric.getText()).getWidth() / interlineSpace;

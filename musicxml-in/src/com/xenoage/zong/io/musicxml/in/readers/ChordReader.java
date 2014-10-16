@@ -388,7 +388,9 @@ public final class ChordReader {
 							placement = readPlacement(mxlPlacement.getPlacement());
 						}
 						if (a != null) {
-							annotations.add(new Articulation(a, placement));
+							Articulation articulation = new Articulation(a);
+							articulation.setPlacement(placement);
+							annotations.add(articulation);
 						}
 					}
 					break;
@@ -408,9 +410,13 @@ public final class ChordReader {
 						else if (mxlFermata.getType() == MxlUprightInverted.Inverted)
 							positioning = Placement.Below;
 					}
-					annotations.add(new Fermata(positioning));
+					Fermata fermata = new Fermata();
+					fermata.setPositioning(positioning);
+					annotations.add(fermata);
 					break;
 				}
+				
+				//GOON: Ornaments
 			}
 		}
 		

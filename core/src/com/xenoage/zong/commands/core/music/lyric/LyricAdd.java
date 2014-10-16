@@ -1,8 +1,9 @@
 package com.xenoage.zong.commands.core.music.lyric;
 
+import static com.xenoage.utils.collections.CollectionUtils.addOrNew;
+import static com.xenoage.utils.collections.CollectionUtils.removeOrEmpty;
 import lombok.AllArgsConstructor;
 
-import com.xenoage.utils.collections.NullableList;
 import com.xenoage.utils.document.command.Command;
 import com.xenoage.utils.document.command.Undoability;
 import com.xenoage.zong.core.music.chord.Chord;
@@ -22,7 +23,7 @@ import com.xenoage.zong.core.music.lyric.Lyric;
 	private Chord chord;
 
 	@Override public void execute() {
-		chord.setLyrics(NullableList.add(chord.getLyrics(), lyric));
+		chord.setLyrics(addOrNew(chord.getLyrics(), lyric));
 	}
 
 	@Override public Undoability getUndoability() {
@@ -30,7 +31,7 @@ import com.xenoage.zong.core.music.lyric.Lyric;
 	}
 
 	@Override public void undo() {
-		chord.setLyrics(NullableList.remove(chord.getLyrics(), lyric));
+		chord.setLyrics(removeOrEmpty(chord.getLyrics(), lyric));
 	}
 
 }

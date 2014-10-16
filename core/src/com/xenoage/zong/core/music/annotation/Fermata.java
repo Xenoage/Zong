@@ -15,6 +15,6 @@ import com.xenoage.zong.core.music.format.Positioning;
 	implements Annotation {
 	
 	/** The positioning of the fermata, or null (default position). */
-	@MaybeNull private final Positioning positioning;
+	@MaybeNull private Positioning positioning;
 
 }

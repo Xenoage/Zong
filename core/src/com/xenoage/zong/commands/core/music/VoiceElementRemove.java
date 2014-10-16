@@ -52,10 +52,8 @@ import com.xenoage.zong.core.music.tuplet.Tuplet;
 		if (element instanceof Chord) {
 			Chord chord = (Chord) element;
 			//remove slurs
-			if (chord.getSlurs() != null) {
-				for (int i : rangeReverse(chord.getSlurs()))
-					executeAndRemember(new SlurRemove(chord.getSlurs().get(i)));
-			}
+			for (int i : rangeReverse(chord.getSlurs()))
+				executeAndRemember(new SlurRemove(chord.getSlurs().get(i)));
 			//remove beam
 			if (chord.getBeam() != null)
 				executeAndRemember(new BeamRemove(chord.getBeam()));

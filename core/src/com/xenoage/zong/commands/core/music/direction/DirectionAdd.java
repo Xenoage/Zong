@@ -1,8 +1,8 @@
 package com.xenoage.zong.commands.core.music.direction;
 
+import static com.xenoage.utils.collections.CollectionUtils.addOrNew;
 import lombok.AllArgsConstructor;
 
-import com.xenoage.utils.collections.NullableList;
 import com.xenoage.utils.document.command.Command;
 import com.xenoage.utils.document.command.Undoability;
 import com.xenoage.zong.core.music.chord.Chord;
@@ -22,7 +22,7 @@ import com.xenoage.zong.core.music.direction.Direction;
 	private Chord chord;
 
 	@Override public void execute() {
-		chord.setDirections(NullableList.add(chord.getDirections(), direction));
+		chord.setDirections(addOrNew(chord.getDirections(), direction));
 	}
 
 	@Override public Undoability getUndoability() {
@@ -30,7 +30,7 @@ import com.xenoage.zong.core.music.direction.Direction;
 	}
 
 	@Override public void undo() {
-		chord.setDirections(NullableList.remove(chord.getDirections(), direction));
+		chord.setDirections(addOrNew(chord.getDirections(), direction));
 	}
 
 }

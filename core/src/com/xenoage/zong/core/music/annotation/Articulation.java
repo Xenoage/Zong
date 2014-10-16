@@ -19,6 +19,6 @@ import com.xenoage.zong.core.music.format.Placement;
 	@NonNull private final ArticulationType type;
 	
 	/** The placement of the articulation: above, below or default (null). */
-	@MaybeNull private final Placement placement;
+	@MaybeNull private Placement placement;
 	
 }

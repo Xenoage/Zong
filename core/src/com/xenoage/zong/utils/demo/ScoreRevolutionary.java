@@ -1,5 +1,6 @@
 package com.xenoage.zong.utils.demo;
 
+import static com.xenoage.utils.collections.CollectionUtils.addOrNew;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.utils.math.Fraction.fr;
@@ -120,7 +121,7 @@ import com.xenoage.zong.io.selection.Cursor;
 		tempo.setPositioning(new Position(null, 22f, -5f, -5f));
 		cursor.write((ColumnElement) tempo);
 		cursor.write(attachC = chord(f2, accent, pi(B, 4), pi(D, 5), pi(F, 5), pi(G, 5), pi(B, 5)));
-		attachC.setDirections(NullableList.add(attachC.getDirections(), new Dynamics(DynamicsType.f)));
+		attachC.setDirections(addOrNew(attachC.getDirections(), new Dynamics(DynamicsType.f)));
 		cursor.write(new Rest(f2));
 
 		//measure 2
@@ -314,7 +315,7 @@ import com.xenoage.zong.io.selection.Cursor;
 		if (articulations != null) {
 			ArrayList<Annotation> a = alist(articulations.length);
 			for (ArticulationType at : articulations)
-				a.add(new Articulation(at, null));
+				a.add(new Articulation(at));
 			chord.setAnnotations(a);
 		}
 		return chord;

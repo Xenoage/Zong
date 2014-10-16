@@ -5,14 +5,15 @@ import static com.xenoage.utils.kernel.Tuple2.t;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.music.Pitch.pi;
 import static com.xenoage.zong.core.position.MP.mp0;
+import static musicxmltestsuite.Utils.articulation;
 import static musicxmltestsuite.Utils.ch;
+import static musicxmltestsuite.Utils.fermata;
 
 import java.util.List;
 
+import com.xenoage.utils.collections.CollectionUtils;
 import com.xenoage.utils.kernel.Tuple2;
-import com.xenoage.zong.core.music.annotation.Articulation;
 import com.xenoage.zong.core.music.annotation.ArticulationType;
-import com.xenoage.zong.core.music.annotation.Fermata;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.direction.Direction;
 import com.xenoage.zong.core.music.direction.Dynamics;
@@ -43,8 +44,9 @@ public interface Base21d
 			ch(fr(1, 4), pi('G', 0, 4), pi('B', -1, 4)),
 			ch(fr(1, 4), pi('G', 0, 4), pi('B', -1, 4))
 		};
-		expectedChords[0].addAnnotation(new Articulation(ArticulationType.Accent, Placement.Below));
-		expectedChords[0].addAnnotation(new Fermata(Placement.Above));
+		expectedChords[0].setAnnotations(alist(
+			articulation(ArticulationType.Accent, Placement.Below),
+			fermata(Placement.Above)));
 		return expectedChords;
 	}
 	

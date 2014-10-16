@@ -1,6 +1,7 @@
 package com.xenoage.zong.commands.core.music.slur;
 
-import com.xenoage.utils.collections.NullableList;
+import static com.xenoage.utils.collections.CollectionUtils.addOrNew;
+
 import com.xenoage.utils.document.command.Command;
 import com.xenoage.utils.document.command.Undoability;
 import com.xenoage.zong.core.music.chord.Chord;
@@ -29,7 +30,7 @@ public class SlurAdd
 		//add slur to chords
 		for (SlurWaypoint wp : slur.getWaypoints()) {
 			Chord chord = wp.getChord();
-			chord.setSlurs(NullableList.add(chord.getSlurs(), slur));
+			chord.setSlurs(addOrNew(chord.getSlurs(), slur));
 		}
 	}
 

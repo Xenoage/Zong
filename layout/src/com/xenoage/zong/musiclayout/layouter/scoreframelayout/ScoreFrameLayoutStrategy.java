@@ -563,7 +563,7 @@ public class ScoreFrameLayoutStrategy
 
 		//lyric
 		List<Lyric> lyrics = chordElement.getLyrics();
-		if (lyrics != null && lyrics.size() > 0) {
+		if (lyrics.size() > 0) {
 			float baseLine = -10;
 
 			for (Lyric lyric : lyrics) {

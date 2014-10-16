@@ -4,7 +4,6 @@ import static com.xenoage.utils.collections.CollectionUtils.alist;
 
 import java.util.List;
 
-import musicxmltestsuite.MusicXmlTestSuite;
 import musicxmltestsuite.tests.base.Base;
 
 import com.xenoage.utils.jse.io.JseFileUtils;

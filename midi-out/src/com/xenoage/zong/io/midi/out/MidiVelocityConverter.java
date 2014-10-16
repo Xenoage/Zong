@@ -1,6 +1,5 @@
 package com.xenoage.zong.io.midi.out;
 
-import static com.xenoage.utils.iterators.It.it;
 import static com.xenoage.utils.iterators.ReverseIterator.reverseIt;
 import static com.xenoage.utils.kernel.Tuple2.t;
 
@@ -38,7 +37,7 @@ public final class MidiVelocityConverter {
 				for (VoiceElement element : elements) {
 					if (element instanceof Chord) { //TODO: may also be attached to rests?
 						Chord chord = (Chord) element;
-						for (Direction direction : it(chord.getDirections())) {
+						for (Direction direction : chord.getDirections()) {
 							if (direction instanceof Dynamics) {
 								return true;
 							}
@@ -177,7 +176,7 @@ public final class MidiVelocityConverter {
 			if (elementBeat.compareTo(position.beat) < 1) {
 				if (element instanceof Chord) { //TODO: can dynamics also be attached to rests?
 					Chord chord = (Chord) element;
-					for (Direction direction : it(chord.getDirections())) {
+					for (Direction direction : chord.getDirections()) {
 						if (direction instanceof Dynamics) {
 							attached = t(((Dynamics) direction).getType(), elementBeat);
 						}
@@ -214,7 +213,7 @@ public final class MidiVelocityConverter {
 			for (VoiceElement element : reverseIt(voice.getElements())) {
 				if (element instanceof Chord) { //TODO: can dynamics also be attached to rests?
 					Chord chord = (Chord) element;
-					for (Direction direction : it(chord.getDirections())) {
+					for (Direction direction : chord.getDirections()) {
 						if (direction instanceof Dynamics) {
 							attached = t(((Dynamics) direction).getType(), voice.getBeat(chord));
 						}

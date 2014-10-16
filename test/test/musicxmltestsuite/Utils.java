@@ -10,9 +10,14 @@ import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.music.Staff;
 import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.VoiceElement;
+import com.xenoage.zong.core.music.annotation.Articulation;
+import com.xenoage.zong.core.music.annotation.ArticulationType;
+import com.xenoage.zong.core.music.annotation.Fermata;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.Grace;
 import com.xenoage.zong.core.music.chord.Note;
+import com.xenoage.zong.core.music.format.Placement;
+import com.xenoage.zong.core.music.format.Positioning;
 import com.xenoage.zong.core.music.rest.Rest;
 import com.xenoage.zong.core.music.slur.Slur;
 import com.xenoage.zong.core.music.slur.SlurType;
@@ -49,6 +54,18 @@ public class Utils {
 	public static Slur slur(Chord start, Chord end) {
 		return new Slur(SlurType.Slur, new SlurWaypoint(start, 0, null),
 			new SlurWaypoint(end, 0, null), null);
+	}
+	
+	public static Articulation articulation(ArticulationType type, Placement placement) {
+		Articulation ret = new Articulation(type);
+		ret.setPlacement(placement);
+		return ret;
+	}
+	
+	public static Fermata fermata(Positioning positioning) {
+		Fermata ret = new Fermata();
+		ret.setPositioning(positioning);
+		return ret;
 	}
 	
 	public static void checkDurations(Staff staff, Fraction[] expectedDurations) {
