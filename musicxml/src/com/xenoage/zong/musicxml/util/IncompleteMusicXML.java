@@ -34,7 +34,7 @@ public @interface IncompleteMusicXML
 	 * Comma-separated list of incompletly implemented child elements.
 	 * This is used, if a children, a children of a children, and so on, is incomplete.
 	 * That means, if any element of the whole tree is incomplete, all elements from there
-	 * up to the root are marked with this annotation.
+	 * up to the root should be marked with this annotation.
 	 */
 	String children() default "";
 	

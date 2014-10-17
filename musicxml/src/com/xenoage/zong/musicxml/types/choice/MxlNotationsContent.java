@@ -16,9 +16,11 @@ public interface MxlNotationsContent {
 	 * for finding out the type of the element.
 	 */
 	public enum MxlNotationsContentType {
+		AccidentalMark,
 		Articulations,
 		Dynamics,
 		Fermata,
+		Ornaments,
 		SlurOrTied;
 	}
 

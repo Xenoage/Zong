@@ -29,6 +29,8 @@ import com.xenoage.zong.core.music.annotation.Annotation;
 import com.xenoage.zong.core.music.annotation.Articulation;
 import com.xenoage.zong.core.music.annotation.ArticulationType;
 import com.xenoage.zong.core.music.annotation.Fermata;
+import com.xenoage.zong.core.music.annotation.Ornament;
+import com.xenoage.zong.core.music.annotation.OrnamentType;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.Grace;
 import com.xenoage.zong.core.music.chord.Note;
@@ -51,6 +53,7 @@ import com.xenoage.zong.musicxml.types.MxlFermata;
 import com.xenoage.zong.musicxml.types.MxlLyric;
 import com.xenoage.zong.musicxml.types.MxlNotations;
 import com.xenoage.zong.musicxml.types.MxlNote;
+import com.xenoage.zong.musicxml.types.MxlOrnaments;
 import com.xenoage.zong.musicxml.types.MxlPitch;
 import com.xenoage.zong.musicxml.types.MxlSlurOrTied;
 import com.xenoage.zong.musicxml.types.MxlSlurOrTied.MxlElementType;
@@ -70,6 +73,8 @@ import com.xenoage.zong.musicxml.types.choice.MxlNormalNote;
 import com.xenoage.zong.musicxml.types.choice.MxlNotationsContent;
 import com.xenoage.zong.musicxml.types.choice.MxlNotationsContent.MxlNotationsContentType;
 import com.xenoage.zong.musicxml.types.choice.MxlNoteContent.MxlNoteContentType;
+import com.xenoage.zong.musicxml.types.choice.MxlOrnamentsContent;
+import com.xenoage.zong.musicxml.types.choice.MxlOrnamentsContent.MxlOrnamentsContentType;
 import com.xenoage.zong.musicxml.types.enums.MxlStartStopContinue;
 import com.xenoage.zong.musicxml.types.enums.MxlUprightInverted;
 import com.xenoage.zong.musicxml.types.groups.MxlEditorialVoice;
@@ -416,7 +421,40 @@ public final class ChordReader {
 					break;
 				}
 				
-				//GOON: Ornaments
+				case Ornaments: {
+					//ornaments
+					MxlOrnaments mxlOrnaments = (MxlOrnaments) mxlNC;
+					for (MxlOrnamentsContent mxlOC : mxlOrnaments.getContent()) {
+						MxlOrnamentsContentType mxlOCType = mxlOC.getOrnamentsContentType();
+						//read type
+						OrnamentType o = null;
+						switch (mxlOCType) {
+							case TrillMark:
+								o = OrnamentType.Trill;
+								break;
+							case Turn:
+								o = OrnamentType.Turn;
+								break;
+							case DelayedTurn:
+								o = OrnamentType.DelayedTurn;
+								break;
+							case InvertedTurn:
+								o = OrnamentType.InvertedTurn;
+								break;
+							case Mordent:
+								o = OrnamentType.Mordent;
+								break;
+							case InvertedMordent:
+								o = OrnamentType.InvertedMordent;
+								break;
+						}
+						if (o != null) {
+							Ornament ornament = new Ornament(o);
+							annotations.add(ornament);
+						}
+					}
+					break;
+				}
 			}
 		}
 		

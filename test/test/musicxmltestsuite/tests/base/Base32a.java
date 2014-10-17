@@ -10,7 +10,6 @@ import static musicxmltestsuite.Utils.fermata;
 import java.util.List;
 
 import musicxmltestsuite.ToDo;
-import musicxmltestsuite.Utils;
 
 import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.zong.core.music.annotation.Articulation;
@@ -20,9 +19,7 @@ import com.xenoage.zong.core.music.annotation.Ornament;
 import com.xenoage.zong.core.music.annotation.OrnamentType;
 import com.xenoage.zong.core.music.direction.Dynamics;
 import com.xenoage.zong.core.music.direction.DynamicsType;
-import com.xenoage.zong.core.music.direction.Wedge;
 import com.xenoage.zong.core.music.format.Placement;
-import com.xenoage.zong.core.music.format.Positioning;
 import com.xenoage.zong.core.position.MP;
 
 /**
@@ -62,15 +59,15 @@ public interface Base32a
 			t(atBeat(0, 6, 0, fr(0, 4)), new Ornament(OrnamentType.Trill)),
 			t(atBeat(0, 6, 0, fr(1, 4)), new Ornament(OrnamentType.Turn)),
 			//TODO: del.turn
-			t(atBeat(0, 6, 0, fr(4, 4)), new Ornament(OrnamentType.InvertedTurn)),
+			t(atBeat(0, 6, 0, fr(3, 4)), new Ornament(OrnamentType.InvertedTurn)),
 			//TODO: ... more notations ...
 			t(atBeat(0, 8, 0, fr(0, 4)), new Ornament(OrnamentType.Mordent)),
-			t(atBeat(0, 6, 0, fr(1, 4)), new Ornament(OrnamentType.InvertedMordent)),
+			t(atBeat(0, 8, 0, fr(1, 4)), new Ornament(OrnamentType.InvertedMordent)),
 			//TODO: ... more notations ...
 			t(atBeat(0, 21, 0, fr(0, 4)), new Dynamics(DynamicsType.f)),
 			t(atBeat(0, 21, 0, fr(1, 4)), new Dynamics(DynamicsType.ppp)),
 			t(atBeat(0, 21, 0, fr(2, 4)), new Dynamics(DynamicsType.sfp)),
-			t(atBeat(0, 21, 0, fr(3, 4)), new Dynamics(DynamicsType.sffz)),
+			//TODO: other dynamic "sfffz"
 			t(atBeat(0, 22, 0, fr(0, 4)), alist(
 				articulation(ArticulationType.Staccato, Placement.Above),
 				articulation(ArticulationType.Marcato, Placement.Above))),

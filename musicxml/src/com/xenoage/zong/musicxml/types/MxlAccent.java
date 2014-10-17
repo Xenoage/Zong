@@ -22,7 +22,7 @@ public final class MxlAccent
 
 	public static final String elemName = "accent";
 
-	@MaybeNull private final MxlEmptyPlacement emptyPlacement;
+	@MaybeNull private MxlEmptyPlacement emptyPlacement;
 	
 	public static final MxlAccent defaultInstance = new MxlAccent(null);
 

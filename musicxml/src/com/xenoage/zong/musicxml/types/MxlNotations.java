@@ -19,8 +19,8 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
  * 
  * @author Andreas Wenger
  */
-@IncompleteMusicXML(missing = "tuplet,glissando,slide,ornaments,technical,"
-	+ "arpeggiate,non-arpeggiate,accidental-mark,other-notation", children = "slur,tied,articulations,dynamics")
+@IncompleteMusicXML(missing = "tuplet,glissando,slide,technical,arpeggiate," +
+ "non-arpeggiate,other-notation", children = "slur,tied,articulations,dynamics,ornaments")
 @AllArgsConstructor @Getter @Setter
 public final class MxlNotations {
 
@@ -34,6 +34,9 @@ public final class MxlNotations {
 		while (reader.openNextChildElement()) {
 			String childName = reader.getElementName();
 			MxlNotationsContent element = null;
+			if (childName.equals(MxlAccidentalMark.elemName)) {
+				element = MxlAccidentalMark.read(reader);
+			}
 			if (childName.equals(MxlArticulations.elemName)) {
 				element = MxlArticulations.read(reader);
 			}
@@ -42,6 +45,9 @@ public final class MxlNotations {
 			}
 			else if (childName.equals(MxlFermata.elemName)) {
 				element = MxlFermata.read(reader);
+			}
+			else if (childName.equals(MxlOrnaments.elemName)) {
+				element = MxlOrnaments.read(reader);
 			}
 			else if (childName.equals(MxlSlurOrTied.elemNameSlur) ||
 				childName.equals(MxlSlurOrTied.elemNameTied)) {
