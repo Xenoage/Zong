@@ -12,5 +12,6 @@ import lombok.Getter;
 public class MusicReaderSettings {
 
 	private final boolean ignoringErrors;
+	private final TextReader textReader = new FormattedTextReader();
 
 }

@@ -1,7 +1,7 @@
 package com.xenoage.zong.musiclayout.stampings;
 
 import com.xenoage.utils.annotations.Const;
-import com.xenoage.zong.text.FormattedText;
+import com.xenoage.zong.core.text.FormattedText;
 
 /**
  * Class for a tuplet stamping.

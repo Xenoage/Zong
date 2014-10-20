@@ -2,8 +2,8 @@ package com.xenoage.zong.musiclayout.layouter.scoreframelayout;
 
 import static com.xenoage.utils.collections.CList.clist;
 import static com.xenoage.zong.core.music.format.SP.sp;
-import static com.xenoage.zong.text.FormattedText.fText;
-import static com.xenoage.zong.text.FormattedTextUtils.styleText;
+import static com.xenoage.zong.core.text.FormattedText.fText;
+import static com.xenoage.zong.core.text.FormattedTextUtils.styleText;
 
 import java.util.List;
 
@@ -15,12 +15,12 @@ import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.core.music.lyric.Lyric;
 import com.xenoage.zong.core.music.lyric.SyllableType;
 import com.xenoage.zong.core.text.Alignment;
+import com.xenoage.zong.core.text.FormattedText;
+import com.xenoage.zong.core.text.FormattedTextStyle;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.stampings.NoteheadStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffTextStamping;
-import com.xenoage.zong.text.FormattedText;
-import com.xenoage.zong.text.FormattedTextStyle;
 
 /**
  * This strategy computes the stamping of a lyric.

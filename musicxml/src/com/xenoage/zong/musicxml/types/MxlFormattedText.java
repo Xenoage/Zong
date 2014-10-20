@@ -24,8 +24,8 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 public final class MxlFormattedText {
 
 	@NonNull private String value;
-	@MaybeNull private MxlLeftCenterRight justify;
-	@MaybeNull private MxlLeftCenterRight hAlign;
+	@MaybeNull private MxlLeftCenterRight justify; //alignment within the text box
+	@MaybeNull private MxlLeftCenterRight hAlign; //alignment of the text box, see halign documentation
 	@MaybeNull private MxlVAlign vAlign;
 	@MaybeNull private MxlPrintStyle printStyle;
 

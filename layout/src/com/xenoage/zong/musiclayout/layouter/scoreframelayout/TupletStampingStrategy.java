@@ -1,10 +1,14 @@
 package com.xenoage.zong.musiclayout.layouter.scoreframelayout;
 
-import static com.xenoage.zong.text.FormattedText.fText;
-import static com.xenoage.zong.text.FormattedTextParagraph.fPara;
+import static com.xenoage.zong.core.text.FormattedText.fText;
+import static com.xenoage.zong.core.text.FormattedTextParagraph.fPara;
 
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.tuplet.Tuplet;
+import com.xenoage.zong.core.text.FormattedText;
+import com.xenoage.zong.core.text.FormattedTextParagraph;
+import com.xenoage.zong.core.text.FormattedTextStyle;
+import com.xenoage.zong.core.text.FormattedTextSymbol;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenTupletsCache;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.ChordStampings;
@@ -12,10 +16,6 @@ import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import com.xenoage.zong.musiclayout.stampings.TupletStamping;
 import com.xenoage.zong.symbols.SymbolPool;
 import com.xenoage.zong.symbols.common.CommonSymbol;
-import com.xenoage.zong.text.FormattedText;
-import com.xenoage.zong.text.FormattedTextParagraph;
-import com.xenoage.zong.text.FormattedTextStyle;
-import com.xenoage.zong.text.FormattedTextSymbol;
 
 /**
  * This strategy computes the {@link TupletStamping}s

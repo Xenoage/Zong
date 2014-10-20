@@ -7,7 +7,7 @@ import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Shape;
 import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.core.music.format.SP;
-import com.xenoage.zong.text.FormattedText;
+import com.xenoage.zong.core.text.FormattedText;
 
 /**
  * Class for a text stamping belonging to a staff, e.g. for lyric

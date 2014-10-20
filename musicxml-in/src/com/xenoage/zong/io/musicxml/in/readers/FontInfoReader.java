@@ -29,7 +29,7 @@ public final class FontInfoReader {
 		//font
 		List<String> mxlFamilies = mxlFont.getFontFamily();
 		IList<String> families = null;
-		if (mxlFamilies == null)
+		if (mxlFamilies.size() == 0)
 			mxlFamilies = defaultFont.getFamiliesOrNull();
 		if (mxlFamilies != null)
 			families = ilist(mxlFamilies);

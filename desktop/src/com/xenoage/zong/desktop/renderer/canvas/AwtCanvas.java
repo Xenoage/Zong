@@ -15,6 +15,7 @@ import com.xenoage.utils.color.Color;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Rectangle2f;
 import com.xenoage.utils.math.geom.Size2f;
+import com.xenoage.zong.core.text.FormattedText;
 import com.xenoage.zong.desktop.renderer.slur.AwtSlurRenderer;
 import com.xenoage.zong.desktop.renderer.symbols.AwtSymbolsRenderer;
 import com.xenoage.zong.desktop.utils.text.TextLayoutTools;
@@ -26,7 +27,6 @@ import com.xenoage.zong.renderer.canvas.CanvasFormat;
 import com.xenoage.zong.renderer.canvas.CanvasIntegrity;
 import com.xenoage.zong.renderer.slur.SimpleSlurShape;
 import com.xenoage.zong.symbols.Symbol;
-import com.xenoage.zong.text.FormattedText;
 
 /**
  * AWT implementation of a {@link Canvas}

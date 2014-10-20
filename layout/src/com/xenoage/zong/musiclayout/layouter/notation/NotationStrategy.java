@@ -8,7 +8,7 @@ import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.zong.core.music.Pitch.pi;
 import static com.xenoage.zong.core.music.util.Interval.Before;
 import static com.xenoage.zong.core.music.util.Interval.BeforeOrAt;
-import static com.xenoage.zong.text.FormattedTextUtils.styleText;
+import static com.xenoage.zong.core.text.FormattedTextUtils.styleText;
 
 import java.util.List;
 
@@ -41,6 +41,8 @@ import com.xenoage.zong.core.music.util.Column;
 import com.xenoage.zong.core.music.util.Interval;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.position.MPElement;
+import com.xenoage.zong.core.text.FormattedText;
+import com.xenoage.zong.core.text.FormattedTextStyle;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
@@ -58,8 +60,6 @@ import com.xenoage.zong.musiclayout.settings.ChordWidths;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.musiclayout.spacing.horizontal.ElementWidth;
 import com.xenoage.zong.symbols.SymbolPool;
-import com.xenoage.zong.text.FormattedText;
-import com.xenoage.zong.text.FormattedTextStyle;
 
 /**
  * This strategy computes information about the layout

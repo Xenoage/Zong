@@ -12,8 +12,8 @@ import javax.swing.text.View;
 
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.utils.math.geom.Size2i;
+import com.xenoage.zong.core.text.FormattedText;
 import com.xenoage.zong.desktop.gui.components.util.ScaledEditorKit;
-import com.xenoage.zong.text.FormattedText;
 
 /**
  * This is a Swing component which allows to edit

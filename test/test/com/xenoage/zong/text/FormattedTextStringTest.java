@@ -6,6 +6,9 @@ import org.junit.Test;
 
 import com.xenoage.utils.font.FontInfo;
 import com.xenoage.utils.math.Units;
+import com.xenoage.zong.core.text.FormattedTextElement;
+import com.xenoage.zong.core.text.FormattedTextString;
+import com.xenoage.zong.core.text.FormattedTextStyle;
 
 /**
  * Tests for {@link FormattedTextElement}

@@ -3,6 +3,7 @@ package com.xenoage.zong.renderer.stampings;
 import com.xenoage.utils.math.Units;
 import com.xenoage.utils.color.Color;
 import com.xenoage.utils.math.geom.Point2f;
+import com.xenoage.zong.core.text.FormattedText;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import com.xenoage.zong.musiclayout.stampings.Stamping;
 import com.xenoage.zong.musiclayout.stampings.TupletStamping;
@@ -11,7 +12,6 @@ import com.xenoage.zong.musiclayout.stampings.bitmap.BitmapStaff;
 import com.xenoage.zong.renderer.RendererArgs;
 import com.xenoage.zong.renderer.canvas.Canvas;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
-import com.xenoage.zong.text.FormattedText;
 
 /**
  * Renderer for the {@link TupletStamping} class.

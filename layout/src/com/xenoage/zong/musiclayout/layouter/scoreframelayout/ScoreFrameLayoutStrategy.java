@@ -6,7 +6,7 @@ import static com.xenoage.utils.iterators.It.it;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.core.music.format.SP.sp;
 import static com.xenoage.zong.core.position.MP.atBeat;
-import static com.xenoage.zong.text.FormattedText.fText;
+import static com.xenoage.zong.core.text.FormattedText.fText;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -53,6 +53,10 @@ import com.xenoage.zong.core.music.util.BeatE;
 import com.xenoage.zong.core.music.util.BeatEList;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.text.Alignment;
+import com.xenoage.zong.core.text.FormattedText;
+import com.xenoage.zong.core.text.FormattedTextElement;
+import com.xenoage.zong.core.text.FormattedTextString;
+import com.xenoage.zong.core.text.FormattedTextStyle;
 import com.xenoage.zong.musiclayout.FrameArrangement;
 import com.xenoage.zong.musiclayout.ScoreFrameLayout;
 import com.xenoage.zong.musiclayout.SystemArrangement;
@@ -95,10 +99,6 @@ import com.xenoage.zong.musiclayout.stampings.Stamping;
 import com.xenoage.zong.musiclayout.stampings.VoltaStamping;
 import com.xenoage.zong.musiclayout.stampings.WedgeStamping;
 import com.xenoage.zong.symbols.SymbolPool;
-import com.xenoage.zong.text.FormattedText;
-import com.xenoage.zong.text.FormattedTextElement;
-import com.xenoage.zong.text.FormattedTextString;
-import com.xenoage.zong.text.FormattedTextStyle;
 
 /**
  * This strategy creates the {@link ScoreFrameLayout}

@@ -133,8 +133,7 @@ public final class MusicReader {
 	 * Reads the given MusicXML document and returns the score.
 	 */
 	public static void read(MxlScorePartwise doc, Score score, boolean ignoreErrors) {
-		MusicReaderContext context = new MusicReaderContext(score, new MusicReaderSettings(
-			ignoreErrors));
+		MusicReaderContext context = new MusicReaderContext(score, new MusicReaderSettings(ignoreErrors));
 		
 		//create the measures of the parts
 		It<MxlPart> mxlParts = it(doc.getParts());
@@ -645,7 +644,7 @@ public final class MusicReader {
 					if (direction == null) {
 						MxlWords mxlWords = (MxlWords) mxlDTC;
 						MxlFormattedText mxlFormattedText = mxlWords.getFormattedText();
-						direction = new Words(ut(mxlFormattedText.getValue()));
+						direction = new Words(context.getSettings().getTextReader().readText(mxlFormattedText));
 						
 						MxlPrintStyle mxlPrintStyle = notNull(mxlFormattedText.getPrintStyle(), MxlPrintStyle.empty);
 						Positioning positioning = readPositioning(mxlPrintStyle.getPosition(),

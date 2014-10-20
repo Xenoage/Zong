@@ -1,8 +1,8 @@
 package com.xenoage.zong.text;
 
 import static com.xenoage.utils.font.FontStyle.fontStyle;
-import static com.xenoage.zong.text.FormattedTextParagraph.fPara;
-import static com.xenoage.zong.text.FormattedTextString.fString;
+import static com.xenoage.zong.core.text.FormattedTextParagraph.fPara;
+import static com.xenoage.zong.core.text.FormattedTextString.fString;
 import static org.junit.Assert.assertEquals;
 
 import java.util.List;
@@ -16,6 +16,11 @@ import com.xenoage.utils.color.Color;
 import com.xenoage.utils.font.FontInfo;
 import com.xenoage.utils.font.FontStyle;
 import com.xenoage.utils.math.Delta;
+import com.xenoage.zong.core.text.FormattedTextElement;
+import com.xenoage.zong.core.text.FormattedTextParagraph;
+import com.xenoage.zong.core.text.FormattedTextString;
+import com.xenoage.zong.core.text.FormattedTextStyle;
+import com.xenoage.zong.core.text.Superscript;
 
 /**
  * Tests for {@link FormattedTextParagraph}

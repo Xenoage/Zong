@@ -1,4 +1,4 @@
-package com.xenoage.zong.text;
+package com.xenoage.zong.core.text;
 
 import static com.xenoage.utils.CheckUtils.checkArgsNotNull;
 import static com.xenoage.utils.PlatformUtils.platformUtils;

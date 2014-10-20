@@ -1,4 +1,4 @@
-package com.xenoage.zong.text;
+package com.xenoage.zong.core.text;
 
 import static com.xenoage.utils.collections.CList.clist;
 import static com.xenoage.utils.collections.CList.ilist;
@@ -13,7 +13,6 @@ import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.collections.IList;
 import com.xenoage.utils.font.TextMetrics;
-import com.xenoage.zong.core.text.Alignment;
 
 /**
  * One paragraph within a {@link FormattedText}.

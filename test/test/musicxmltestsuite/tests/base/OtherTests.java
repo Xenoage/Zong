@@ -66,8 +66,6 @@ public class OtherTests {
 	};
 	
 	public static final String[] supportedButNotTestedYet = {
-		"32a-Notations.xml", // (60 min) (partly supported) 
-		"32b-Articulations-Texts.xml", // (30 min) (partly supported) 
 		"32c-MultipleNotationChildren.xml", // (30 min) 
 		"33b-Spanners-Tie.xml", // (15 min) 
 		"33c-Spanners-Slurs.xml", // (30 min)

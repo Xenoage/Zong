@@ -4,9 +4,9 @@ import static com.xenoage.utils.NullUtils.notNull;
 import static com.xenoage.utils.collections.CList.clist;
 import static com.xenoage.zong.core.music.format.Position.asPosition;
 import static com.xenoage.zong.core.music.format.SP.sp;
+import static com.xenoage.zong.core.text.FormattedText.fText;
+import static com.xenoage.zong.core.text.FormattedTextUtils.styleText;
 import static com.xenoage.zong.musiclayout.text.DefaultTexts.getTempoTextNotNull;
-import static com.xenoage.zong.text.FormattedText.fText;
-import static com.xenoage.zong.text.FormattedTextUtils.styleText;
 
 import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.collections.IList;
@@ -24,6 +24,11 @@ import com.xenoage.zong.core.music.format.Positioning;
 import com.xenoage.zong.core.music.format.SP;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.text.Alignment;
+import com.xenoage.zong.core.text.FormattedText;
+import com.xenoage.zong.core.text.FormattedTextElement;
+import com.xenoage.zong.core.text.FormattedTextParagraph;
+import com.xenoage.zong.core.text.FormattedTextStyle;
+import com.xenoage.zong.core.text.FormattedTextSymbol;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.ChordStampings;
 import com.xenoage.zong.musiclayout.stampings.PedalStamping;
@@ -34,11 +39,6 @@ import com.xenoage.zong.musiclayout.stampings.WedgeStamping;
 import com.xenoage.zong.symbols.Symbol;
 import com.xenoage.zong.symbols.SymbolPool;
 import com.xenoage.zong.symbols.common.CommonSymbol;
-import com.xenoage.zong.text.FormattedText;
-import com.xenoage.zong.text.FormattedTextElement;
-import com.xenoage.zong.text.FormattedTextParagraph;
-import com.xenoage.zong.text.FormattedTextStyle;
-import com.xenoage.zong.text.FormattedTextSymbol;
 
 /**
  * This strategy computes the text stampings of {@link Direction}s.

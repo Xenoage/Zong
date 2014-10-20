@@ -3,17 +3,20 @@ package com.xenoage.zong.musicxml.types.attributes;
 import static com.xenoage.utils.StringUtils.concatenate;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 
+import java.util.Collections;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import com.xenoage.utils.annotations.MaybeEmpty;
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.enums.MxlFontStyle;
 import com.xenoage.zong.musicxml.types.enums.MxlFontWeight;
+import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 
 /**
  * MusicXML font.
@@ -21,14 +24,17 @@ import com.xenoage.zong.musicxml.types.enums.MxlFontWeight;
  * @author Andreas Wenger
  */
 @AllArgsConstructor @Getter @Setter
+@IncompleteMusicXML(partly="font-family") //font-family: enum for font names like "handwritten, cursive, fantasy"
 public final class MxlFont {
 
 	/** Generated from the comma-separated list of font names. */
-	@MaybeNull private List<String> fontFamily;
+	@MaybeEmpty private List<String> fontFamily;
 	@MaybeNull private MxlFontStyle fontStyle;
 	@MaybeNull private MxlFontSize fontSize;
 	@MaybeNull private MxlFontWeight fontWeight;
 
+	public static MxlFont empty = new MxlFont(Collections.<String>emptyList(), null, null, null);
+	
 
 	@MaybeNull public static MxlFont read(XmlReader reader) {
 		List<String> fontFamily = alist();

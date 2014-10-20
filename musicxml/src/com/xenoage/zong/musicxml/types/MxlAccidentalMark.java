@@ -47,11 +47,11 @@ public final class MxlAccidentalMark
 
 	@Override public void write(XmlWriter writer) {
 		writer.writeElementStart(elemName);
-		accidentalText.write(writer);
 		if (printStyle != null)
 			printStyle.write(writer);
 		if (placement != null)
 			placement.write(writer);
+		accidentalText.write(writer);
 		writer.writeElementEnd();
 	}
 

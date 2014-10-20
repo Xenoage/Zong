@@ -12,6 +12,11 @@ import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.core.format.ScoreFormat;
 import com.xenoage.zong.core.text.Alignment;
+import com.xenoage.zong.core.text.FormattedText;
+import com.xenoage.zong.core.text.FormattedTextElement;
+import com.xenoage.zong.core.text.FormattedTextParagraph;
+import com.xenoage.zong.core.text.FormattedTextString;
+import com.xenoage.zong.core.text.FormattedTextStyle;
 import com.xenoage.zong.layout.Layout;
 import com.xenoage.zong.layout.Page;
 import com.xenoage.zong.layout.frames.TextFrame;
@@ -23,11 +28,6 @@ import com.xenoage.zong.musicxml.types.attributes.MxlColor;
 import com.xenoage.zong.musicxml.types.attributes.MxlPosition;
 import com.xenoage.zong.musicxml.types.choice.MxlCreditContent.MxlCreditContentType;
 import com.xenoage.zong.musicxml.types.enums.MxlVAlign;
-import com.xenoage.zong.text.FormattedText;
-import com.xenoage.zong.text.FormattedTextElement;
-import com.xenoage.zong.text.FormattedTextParagraph;
-import com.xenoage.zong.text.FormattedTextString;
-import com.xenoage.zong.text.FormattedTextStyle;
 
 /**
  * This class reads the credit elements of a MusicXML 2.0

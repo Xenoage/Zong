@@ -1,18 +1,16 @@
-package com.xenoage.zong.text;
+package com.xenoage.zong.core.text;
 
 import static com.xenoage.utils.collections.CList.clist;
 import static com.xenoage.utils.iterators.It.it;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.kernel.Tuple2.t;
-import static com.xenoage.zong.text.FormattedText.fText;
-import static com.xenoage.zong.text.FormattedTextParagraph.fPara;
-import static com.xenoage.zong.text.FormattedTextString.fString;
+import static com.xenoage.zong.core.text.FormattedText.fText;
+import static com.xenoage.zong.core.text.FormattedTextParagraph.fPara;
+import static com.xenoage.zong.core.text.FormattedTextString.fString;
 
 import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.iterators.It;
 import com.xenoage.utils.kernel.Tuple2;
-import com.xenoage.zong.core.text.Alignment;
-import com.xenoage.zong.core.text.Text;
 
 /**
  * This class creates {@link FormattedText} instances.

@@ -2,11 +2,11 @@ package com.xenoage.zong.text;
 
 import static com.xenoage.utils.collections.CList.ilist;
 import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.zong.text.FormattedText.fText;
-import static com.xenoage.zong.text.FormattedTextParagraph.fPara;
-import static com.xenoage.zong.text.FormattedTextUtils.insert;
-import static com.xenoage.zong.text.FormattedTextUtils.merge;
-import static com.xenoage.zong.text.FormattedTextUtils.split;
+import static com.xenoage.zong.core.text.FormattedText.fText;
+import static com.xenoage.zong.core.text.FormattedTextParagraph.fPara;
+import static com.xenoage.zong.core.text.FormattedTextUtils.insert;
+import static com.xenoage.zong.core.text.FormattedTextUtils.merge;
+import static com.xenoage.zong.core.text.FormattedTextUtils.split;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
@@ -15,6 +15,11 @@ import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.color.Color;
 import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.zong.core.text.Alignment;
+import com.xenoage.zong.core.text.FormattedText;
+import com.xenoage.zong.core.text.FormattedTextElement;
+import com.xenoage.zong.core.text.FormattedTextString;
+import com.xenoage.zong.core.text.FormattedTextStyle;
+import com.xenoage.zong.core.text.FormattedTextUtils;
 
 /**
  * Tests for {@link FormattedTextUtils}.

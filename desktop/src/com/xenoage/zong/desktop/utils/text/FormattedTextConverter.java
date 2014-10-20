@@ -21,12 +21,12 @@ import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.font.FontInfo;
 import com.xenoage.utils.font.FontStyle;
 import com.xenoage.zong.core.text.Alignment;
-import com.xenoage.zong.text.FormattedText;
-import com.xenoage.zong.text.FormattedTextElement;
-import com.xenoage.zong.text.FormattedTextParagraph;
-import com.xenoage.zong.text.FormattedTextString;
-import com.xenoage.zong.text.FormattedTextStyle;
-import com.xenoage.zong.text.Superscript;
+import com.xenoage.zong.core.text.FormattedText;
+import com.xenoage.zong.core.text.FormattedTextElement;
+import com.xenoage.zong.core.text.FormattedTextParagraph;
+import com.xenoage.zong.core.text.FormattedTextString;
+import com.xenoage.zong.core.text.FormattedTextStyle;
+import com.xenoage.zong.core.text.Superscript;
 
 /**
  * This class converts a {@link StyledDocument} or a {@link TextLayout}

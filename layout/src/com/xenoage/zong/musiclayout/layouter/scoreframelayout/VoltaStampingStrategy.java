@@ -1,14 +1,14 @@
 package com.xenoage.zong.musiclayout.layouter.scoreframelayout;
 
-import static com.xenoage.zong.text.FormattedText.fText;
+import static com.xenoage.zong.core.text.FormattedText.fText;
 
 import com.xenoage.zong.core.music.volta.Volta;
 import com.xenoage.zong.core.text.Alignment;
+import com.xenoage.zong.core.text.FormattedText;
+import com.xenoage.zong.core.text.FormattedTextStyle;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import com.xenoage.zong.musiclayout.stampings.VoltaStamping;
-import com.xenoage.zong.text.FormattedText;
-import com.xenoage.zong.text.FormattedTextStyle;
 
 
 /**
