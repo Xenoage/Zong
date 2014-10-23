@@ -12,7 +12,6 @@ import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import musicxmltestsuite.ToDo;
 
 import com.xenoage.utils.color.Color;
 import com.xenoage.utils.font.FontStyle;
@@ -25,7 +24,6 @@ import com.xenoage.zong.core.position.MP;
  * 
  * @author Andreas Wenger
  */
-@ToDo("text styling")
 public interface Base32b
 	extends Base {
 
@@ -52,6 +50,7 @@ public interface Base32b
 		ret.add(t(atBeat(0, 0, 0, fr(0, 8)),
 			new Text("Normal, Medium", medium, FontStyle.normal, Color.black, Placement.Above)));
 		ret.add(t(atBeat(0, 0, 0, fr(1, 1)), //TODO: wrong duration in MusicXML file, must be 48
+			//bug reported: https://code.google.com/p/lilypond/issues/detail?id=4172
 			new Text("Bold, Medium", medium, fontStyle(Bold), Color.black, Placement.Below)));
 		ret.add(t(atBeat(0, 1, 0, fr(0, 4)),
 			new Text("Normal, Large", large, FontStyle.normal, Color.black, Placement.Above)));

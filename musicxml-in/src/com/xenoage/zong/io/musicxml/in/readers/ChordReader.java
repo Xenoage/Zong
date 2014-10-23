@@ -218,8 +218,8 @@ public final class ChordReader {
 			}
 
 			//notations of first note
-			for (MxlNotations mxlNotations : it(mxlFirstNote.getNotations())) {
-				readNotations(context, mxlNotations, chord, 0, staff); //first note has index 0
+			if (mxlFirstNote.getNotations() != null) {
+				readNotations(context, mxlFirstNote.getNotations(), chord, 0, staff); //first note has index 0
 			}
 
 			//lyric
@@ -282,12 +282,10 @@ public final class ChordReader {
 			Pitch pitch = ((MxlPitch) mxlFNC).getPitch();
 			Note note = new Note(pitch);
 			chord.addNote(note);
-			//notations. we are only interested in the first element.
+			//notations
 			if (mxlNote.getNotations() != null) {
-				for (MxlNotations notations : mxlNote.getNotations()) {
-					readNotations(context, notations, chord,
-						chord.getNotes().indexOf(note), staffIndexInPart);
-				}
+				readNotations(context, mxlNote.getNotations(), chord,
+					chord.getNotes().indexOf(note), staffIndexInPart);
 			}
 		}
 	}
@@ -297,163 +295,165 @@ public final class ChordReader {
 	 * The beginnings and endings of the slurs are saved in the context.
 	 */
 	private static void readNotations(MusicReaderContext context,
-		MxlNotations mxlNotations, Chord chord, int noteIndex, int staffIndexInPart) {
+		List<MxlNotations> mxlNotations, Chord chord, int noteIndex, int staffIndexInPart) {
 		
 		ArrayList<Annotation> annotations = alist(0);
-		for (MxlNotationsContent mxlNC : mxlNotations.getElements()) {
-			MxlNotationsContentType mxlNCType = mxlNC.getNotationsContentType();
-
-			switch (mxlNCType) {
-				case SlurOrTied: {
-					//slur or tied
-					MxlSlurOrTied mxlSlur = (MxlSlurOrTied) mxlNC;
-					Pitch pitch = chord.getNotes().get(noteIndex).getPitch();
-					float noteLP = context.getMusicContext(staffIndexInPart).getLp(pitch);
-
-					//type
-					SlurType type;
-					if (mxlSlur.getElementType() == MxlElementType.Slur)
-						type = SlurType.Slur;
-					else
-						type = SlurType.Tie;
-
-					//number (tied does usually not use number, but distinguishes by pitch)
-					Integer number = mxlSlur.getNumber();
-					BezierPoint bezierPoint = readBezierPoint(mxlSlur.getPosition(),
-						mxlSlur.getBezier(), context.getTenthMm(),
-						context.getStaffLinesCount(staffIndexInPart), noteLP, chord.getDuration());
-					VSide side = readVSide(mxlSlur.getPlacement());
-
-					//waypoint
-					SlurWaypoint wp = new SlurWaypoint(chord, noteIndex, bezierPoint);
-					if (type == SlurType.Tie && number == null) {
-						//unnumbered tied
-						if (mxlSlur.getType() == MxlStartStopContinue.Start)
-							context.openUnnumberedTied(pitch, wp, side);
+		for (MxlNotations mxlNotationsElement : mxlNotations) {
+			for (MxlNotationsContent mxlNC : mxlNotationsElement.getElements()) {
+				MxlNotationsContentType mxlNCType = mxlNC.getNotationsContentType();
+	
+				switch (mxlNCType) {
+					case SlurOrTied: {
+						//slur or tied
+						MxlSlurOrTied mxlSlur = (MxlSlurOrTied) mxlNC;
+						Pitch pitch = chord.getNotes().get(noteIndex).getPitch();
+						float noteLP = context.getMusicContext(staffIndexInPart).getLp(pitch);
+	
+						//type
+						SlurType type;
+						if (mxlSlur.getElementType() == MxlElementType.Slur)
+							type = SlurType.Slur;
 						else
-							context.closeUnnumberedTied(pitch, wp, side);
-					}
-					else {
-						//numbered curved line
-						WaypointPosition wpPos;
-						if (mxlSlur.getType() == MxlStartStopContinue.Start)
-							wpPos = WaypointPosition.Start;
-						else if (mxlSlur.getType() == MxlStartStopContinue.Stop)
-							wpPos = WaypointPosition.Stop;
-						else
-							wpPos = WaypointPosition.Continue;
-						context.registerSlur(type, wpPos, number, wp, side);
-					}
-					break;
-				}
-
-				case Dynamics: {
-					//dynamics
-					MxlDynamics mxlDynamics = (MxlDynamics) mxlNC;
-					DynamicsType type = mxlDynamics.getElement();
-					MxlPrintStyle printStyle = mxlDynamics.getPrintStyle();
-					MxlPosition position = (printStyle != null ? printStyle.getPosition() : null);
-					Positioning positioning = readPositioning(position,
-						mxlDynamics.getPlacement(), null, context.getTenthMm(),
-						context.getStaffLinesCount(staffIndexInPart));
-					Dynamics dynamics = new Dynamics(type);
-					dynamics.setPositioning(positioning);
-					new DirectionAdd(dynamics, chord).execute();
-					break;
-				}
-
-				case Articulations: {
-					//articulations
-					MxlArticulations mxlArticulations = (MxlArticulations) mxlNC;
-					for (MxlArticulationsContent mxlAC : mxlArticulations.getContent()) {
-						MxlArticulationsContentType mxlACType = mxlAC.getArticulationsContentType();
-						//read type
-						ArticulationType a = null;
-						switch (mxlACType) {
-							case Accent:
-								a = ArticulationType.Accent;
-								break;
-							case Staccatissimo:
-								a = ArticulationType.Staccatissimo;
-								break;
-							case Staccato:
-								a = ArticulationType.Staccato;
-								break;
-							case StrongAccent:
-								a = ArticulationType.Marcato;
-								break;
-							case Tenuto:
-								a = ArticulationType.Tenuto;
-								break;
+							type = SlurType.Tie;
+	
+						//number (tied does usually not use number, but distinguishes by pitch)
+						Integer number = mxlSlur.getNumber();
+						BezierPoint bezierPoint = readBezierPoint(mxlSlur.getPosition(),
+							mxlSlur.getBezier(), context.getTenthMm(),
+							context.getStaffLinesCount(staffIndexInPart), noteLP, chord.getDuration());
+						VSide side = readVSide(mxlSlur.getPlacement());
+	
+						//waypoint
+						SlurWaypoint wp = new SlurWaypoint(chord, noteIndex, bezierPoint);
+						if (type == SlurType.Tie && number == null) {
+							//unnumbered tied
+							if (mxlSlur.getType() == MxlStartStopContinue.Start)
+								context.openUnnumberedTied(pitch, wp, side);
+							else
+								context.closeUnnumberedTied(pitch, wp, side);
 						}
-						//read placement
-						Placement placement = null;
-						MxlEmptyPlacement mxlPlacement = mxlAC.getEmptyPlacement();
-						if (mxlPlacement != null) {
-							placement = readPlacement(mxlPlacement.getPlacement());
+						else {
+							//numbered curved line
+							WaypointPosition wpPos;
+							if (mxlSlur.getType() == MxlStartStopContinue.Start)
+								wpPos = WaypointPosition.Start;
+							else if (mxlSlur.getType() == MxlStartStopContinue.Stop)
+								wpPos = WaypointPosition.Stop;
+							else
+								wpPos = WaypointPosition.Continue;
+							context.registerSlur(type, wpPos, number, wp, side);
 						}
-						if (a != null) {
-							Articulation articulation = new Articulation(a);
-							articulation.setPlacement(placement);
-							annotations.add(articulation);
-						}
+						break;
 					}
-					break;
-				}
-				
-				case Fermata: {
-					//fermata
-					MxlFermata mxlFermata = (MxlFermata) mxlNC;
-					//determine position
-					MxlPrintStyle printStyle = mxlFermata.getPrintStyle();
-					MxlPosition position = (printStyle != null ? printStyle.getPosition() : null);
-					Positioning positioning = readPositioning(position,
-						null, null, context.getTenthMm(), context.getStaffLinesCount(staffIndexInPart));
-					if (positioning == null) {
-						if (mxlFermata.getType() == MxlUprightInverted.Upright)
-							positioning = Placement.Above;
-						else if (mxlFermata.getType() == MxlUprightInverted.Inverted)
-							positioning = Placement.Below;
+	
+					case Dynamics: {
+						//dynamics
+						MxlDynamics mxlDynamics = (MxlDynamics) mxlNC;
+						DynamicsType type = mxlDynamics.getElement();
+						MxlPrintStyle printStyle = mxlDynamics.getPrintStyle();
+						MxlPosition position = (printStyle != null ? printStyle.getPosition() : null);
+						Positioning positioning = readPositioning(position,
+							mxlDynamics.getPlacement(), null, context.getTenthMm(),
+							context.getStaffLinesCount(staffIndexInPart));
+						Dynamics dynamics = new Dynamics(type);
+						dynamics.setPositioning(positioning);
+						new DirectionAdd(dynamics, chord).execute();
+						break;
 					}
-					Fermata fermata = new Fermata();
-					fermata.setPositioning(positioning);
-					annotations.add(fermata);
-					break;
-				}
-				
-				case Ornaments: {
-					//ornaments
-					MxlOrnaments mxlOrnaments = (MxlOrnaments) mxlNC;
-					for (MxlOrnamentsContent mxlOC : mxlOrnaments.getContent()) {
-						MxlOrnamentsContentType mxlOCType = mxlOC.getOrnamentsContentType();
-						//read type
-						OrnamentType o = null;
-						switch (mxlOCType) {
-							case TrillMark:
-								o = OrnamentType.Trill;
-								break;
-							case Turn:
-								o = OrnamentType.Turn;
-								break;
-							case DelayedTurn:
-								o = OrnamentType.DelayedTurn;
-								break;
-							case InvertedTurn:
-								o = OrnamentType.InvertedTurn;
-								break;
-							case Mordent:
-								o = OrnamentType.Mordent;
-								break;
-							case InvertedMordent:
-								o = OrnamentType.InvertedMordent;
-								break;
+	
+					case Articulations: {
+						//articulations
+						MxlArticulations mxlArticulations = (MxlArticulations) mxlNC;
+						for (MxlArticulationsContent mxlAC : mxlArticulations.getContent()) {
+							MxlArticulationsContentType mxlACType = mxlAC.getArticulationsContentType();
+							//read type
+							ArticulationType a = null;
+							switch (mxlACType) {
+								case Accent:
+									a = ArticulationType.Accent;
+									break;
+								case Staccatissimo:
+									a = ArticulationType.Staccatissimo;
+									break;
+								case Staccato:
+									a = ArticulationType.Staccato;
+									break;
+								case StrongAccent:
+									a = ArticulationType.Marcato;
+									break;
+								case Tenuto:
+									a = ArticulationType.Tenuto;
+									break;
+							}
+							//read placement
+							Placement placement = null;
+							MxlEmptyPlacement mxlPlacement = mxlAC.getEmptyPlacement();
+							if (mxlPlacement != null) {
+								placement = readPlacement(mxlPlacement.getPlacement());
+							}
+							if (a != null) {
+								Articulation articulation = new Articulation(a);
+								articulation.setPlacement(placement);
+								annotations.add(articulation);
+							}
 						}
-						if (o != null) {
-							Ornament ornament = new Ornament(o);
-							annotations.add(ornament);
-						}
+						break;
 					}
-					break;
+					
+					case Fermata: {
+						//fermata
+						MxlFermata mxlFermata = (MxlFermata) mxlNC;
+						//determine position
+						MxlPrintStyle printStyle = mxlFermata.getPrintStyle();
+						MxlPosition position = (printStyle != null ? printStyle.getPosition() : null);
+						Positioning positioning = readPositioning(position,
+							null, null, context.getTenthMm(), context.getStaffLinesCount(staffIndexInPart));
+						if (positioning == null) {
+							if (mxlFermata.getType() == MxlUprightInverted.Upright)
+								positioning = Placement.Above;
+							else if (mxlFermata.getType() == MxlUprightInverted.Inverted)
+								positioning = Placement.Below;
+						}
+						Fermata fermata = new Fermata();
+						fermata.setPositioning(positioning);
+						annotations.add(fermata);
+						break;
+					}
+					
+					case Ornaments: {
+						//ornaments
+						MxlOrnaments mxlOrnaments = (MxlOrnaments) mxlNC;
+						for (MxlOrnamentsContent mxlOC : mxlOrnaments.getContent()) {
+							MxlOrnamentsContentType mxlOCType = mxlOC.getOrnamentsContentType();
+							//read type
+							OrnamentType o = null;
+							switch (mxlOCType) {
+								case TrillMark:
+									o = OrnamentType.Trill;
+									break;
+								case Turn:
+									o = OrnamentType.Turn;
+									break;
+								case DelayedTurn:
+									o = OrnamentType.DelayedTurn;
+									break;
+								case InvertedTurn:
+									o = OrnamentType.InvertedTurn;
+									break;
+								case Mordent:
+									o = OrnamentType.Mordent;
+									break;
+								case InvertedMordent:
+									o = OrnamentType.InvertedMordent;
+									break;
+							}
+							if (o != null) {
+								Ornament ornament = new Ornament(o);
+								annotations.add(ornament);
+							}
+						}
+						break;
+					}
 				}
 			}
 		}

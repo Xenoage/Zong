@@ -1,5 +1,7 @@
 Already submitted to gmane.comp.gnu.lilypond.bugs:
 - 11a-TimeSignatures.xml: the symbol attribute of the first time signature should be "Cut", not "Common"
+- 32b-Articulations-Texts.xml: wrong default-x and default-y, wrong duration in first note
+  - https://code.google.com/p/lilypond/issues/detail?id=4172
 
 Fixed locally:
 - 01b-Pitches-Intervals.xml: only a single measure in MusicXML
@@ -8,4 +10,3 @@ Fixed locally:
   - fixed by p.l.schmidt
 - 24e-GraceNote-StaffChange.xml
   - <staves>2</staves> is missing in the attributes element
-- 32b-Articulations-Texts.xml: wrong default-x and default-y, wrong duration in first note
