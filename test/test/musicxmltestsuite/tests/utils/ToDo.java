@@ -1,4 +1,4 @@
-package musicxmltestsuite;
+package musicxmltestsuite.tests.utils;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

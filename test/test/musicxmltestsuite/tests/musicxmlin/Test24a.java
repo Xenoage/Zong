@@ -1,6 +1,6 @@
 package musicxmltestsuite.tests.musicxmlin;
 
-import static musicxmltestsuite.Utils.checkGraceChords;
+import static musicxmltestsuite.tests.utils.Utils.checkGraceChords;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;

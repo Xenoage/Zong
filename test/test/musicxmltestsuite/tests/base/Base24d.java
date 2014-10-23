@@ -4,9 +4,9 @@ import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.music.Pitch.pi;
 import static com.xenoage.zong.core.music.beam.Beam.beamFromChords;
-import static musicxmltestsuite.Utils.ch;
-import static musicxmltestsuite.Utils.gr;
-import musicxmltestsuite.ToDo;
+import static musicxmltestsuite.tests.utils.Utils.ch;
+import static musicxmltestsuite.tests.utils.Utils.gr;
+import musicxmltestsuite.tests.utils.ToDo;
 
 import com.xenoage.zong.commands.core.music.beam.BeamAdd;
 import com.xenoage.zong.core.music.chord.Chord;

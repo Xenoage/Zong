@@ -2,7 +2,7 @@ package musicxmltestsuite.tests.base;
 
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.music.Pitch.pi;
-import static musicxmltestsuite.Utils.ch;
+import static musicxmltestsuite.tests.utils.Utils.ch;
 
 import com.xenoage.zong.core.music.chord.Chord;
 

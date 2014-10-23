@@ -4,12 +4,12 @@ import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Tuple2.t;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.position.MP.atBeat;
-import static musicxmltestsuite.Utils.articulation;
-import static musicxmltestsuite.Utils.fermata;
+import static musicxmltestsuite.tests.utils.Utils.articulation;
+import static musicxmltestsuite.tests.utils.Utils.fermata;
 
 import java.util.List;
 
-import musicxmltestsuite.ToDo;
+import musicxmltestsuite.tests.utils.ToDo;
 
 import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.zong.core.music.annotation.Articulation;

@@ -1,7 +1,7 @@
 package musicxmltestsuite.tests.base;
 
 import static com.xenoage.utils.math.Fraction.fr;
-import musicxmltestsuite.ToDo;
+import musicxmltestsuite.tests.utils.ToDo;
 
 import com.xenoage.utils.math.Fraction;
 

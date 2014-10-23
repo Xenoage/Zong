@@ -5,9 +5,9 @@ import static com.xenoage.utils.kernel.Tuple2.t;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.music.Pitch.pi;
 import static com.xenoage.zong.core.position.MP.mp0;
-import static musicxmltestsuite.Utils.articulation;
-import static musicxmltestsuite.Utils.ch;
-import static musicxmltestsuite.Utils.fermata;
+import static musicxmltestsuite.tests.utils.Utils.articulation;
+import static musicxmltestsuite.tests.utils.Utils.ch;
+import static musicxmltestsuite.tests.utils.Utils.fermata;
 
 import java.util.List;
 

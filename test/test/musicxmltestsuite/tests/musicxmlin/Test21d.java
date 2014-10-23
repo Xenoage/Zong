@@ -5,14 +5,14 @@ import static com.xenoage.utils.math.Fraction._1;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.music.Pitch.pi;
 import static com.xenoage.zong.core.position.MP.mp0;
-import static musicxmltestsuite.Utils.articulation;
-import static musicxmltestsuite.Utils.fermata;
+import static musicxmltestsuite.tests.utils.Utils.articulation;
+import static musicxmltestsuite.tests.utils.Utils.fermata;
 import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
-import musicxmltestsuite.Utils;
 import musicxmltestsuite.tests.base.Base21d;
+import musicxmltestsuite.tests.utils.Utils;
 
 import org.junit.Before;
 import org.junit.Test;

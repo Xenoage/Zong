@@ -1,8 +1,8 @@
 package musicxmltestsuite.tests.musicxmlin;
 
 import static org.junit.Assert.assertEquals;
-import musicxmltestsuite.ToDo;
 import musicxmltestsuite.tests.base.Base01a;
+import musicxmltestsuite.tests.utils.ToDo;
 
 import org.junit.Test;
 

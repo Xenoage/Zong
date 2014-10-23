@@ -3,7 +3,7 @@ package musicxmltestsuite.tests.musicxmlin;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.position.MP.mp0;
-import static musicxmltestsuite.Utils.checkGraceChords;
+import static musicxmltestsuite.tests.utils.Utils.checkGraceChords;
 import static org.junit.Assert.assertEquals;
 import musicxmltestsuite.tests.base.Base24e;
 

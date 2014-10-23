@@ -2,8 +2,8 @@ package musicxmltestsuite.tests.musicxml;
 
 import static com.xenoage.utils.math.Fraction.fr;
 import static org.junit.Assert.assertEquals;
-import musicxmltestsuite.ToDo;
 import musicxmltestsuite.tests.base.Base03a;
+import musicxmltestsuite.tests.utils.ToDo;
 
 import org.junit.Test;
 

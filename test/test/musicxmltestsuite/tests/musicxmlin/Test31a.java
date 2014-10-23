@@ -4,8 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
-import musicxmltestsuite.ToDo;
 import musicxmltestsuite.tests.base.Base31a;
+import musicxmltestsuite.tests.utils.ToDo;
 
 import org.junit.Test;
 

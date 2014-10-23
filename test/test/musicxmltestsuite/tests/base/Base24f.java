@@ -2,9 +2,9 @@ package musicxmltestsuite.tests.base;
 
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.music.Pitch.pi;
-import static musicxmltestsuite.Utils.ch;
-import static musicxmltestsuite.Utils.gr;
-import static musicxmltestsuite.Utils.slur;
+import static musicxmltestsuite.tests.utils.Utils.ch;
+import static musicxmltestsuite.tests.utils.Utils.gr;
+import static musicxmltestsuite.tests.utils.Utils.slur;
 
 import com.xenoage.zong.commands.core.music.slur.SlurAdd;
 import com.xenoage.zong.core.music.chord.Chord;

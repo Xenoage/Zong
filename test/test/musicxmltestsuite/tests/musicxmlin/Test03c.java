@@ -1,6 +1,6 @@
 package musicxmltestsuite.tests.musicxmlin;
 
-import static musicxmltestsuite.Utils.checkDurations;
+import static musicxmltestsuite.tests.utils.Utils.checkDurations;
 import musicxmltestsuite.tests.base.Base03c;
 
 import org.junit.Test;

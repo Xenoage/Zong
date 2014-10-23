@@ -1,4 +1,4 @@
-package musicxmltestsuite;
+package musicxmltestsuite.tests.utils;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static org.junit.Assert.assertEquals;

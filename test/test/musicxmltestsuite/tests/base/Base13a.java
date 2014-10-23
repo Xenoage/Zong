@@ -1,6 +1,6 @@
 package musicxmltestsuite.tests.base;
 
-import musicxmltestsuite.ToDo;
+import musicxmltestsuite.tests.utils.ToDo;
 
 import com.xenoage.zong.core.music.key.TraditionalKey;
 import com.xenoage.zong.core.music.key.TraditionalKey.Mode;

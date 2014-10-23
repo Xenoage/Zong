@@ -161,10 +161,6 @@ public final class ChordReader {
 			}
 			chord.setCue(cue);
 			context.writeVoiceElement(chord, staff, staffVoice);
-			//collect the following notes of this chord
-			for (int i = 1; i < mxlNotes.size(); i++) {
-				addChordNote(context, mxlNotes.get(i), chord, staff);
-			}
 		}
 		else if (mxlFNCType == MxlFullNoteContentType.Rest) {
 			//write a rest
@@ -263,6 +259,10 @@ public final class ChordReader {
 				}
 			}
 
+			//collect the following notes of this chord
+			for (int i = 1; i < mxlNotes.size(); i++) {
+				addChordNote(context, mxlNotes.get(i), chord, staff);
+			}
 		}
 
 		context.moveCursorForward(duration);
@@ -333,7 +333,7 @@ public final class ChordReader {
 								context.closeUnnumberedTied(pitch, wp, side);
 						}
 						else {
-							//numbered curved line
+							//numbered
 							WaypointPosition wpPos;
 							if (mxlSlur.getType() == MxlStartStopContinue.Start)
 								wpPos = WaypointPosition.Start;

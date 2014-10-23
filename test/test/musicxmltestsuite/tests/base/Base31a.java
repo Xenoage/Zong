@@ -7,7 +7,7 @@ import static com.xenoage.zong.core.position.MP.atBeat;
 
 import java.util.List;
 
-import musicxmltestsuite.ToDo;
+import musicxmltestsuite.tests.utils.ToDo;
 
 import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.zong.core.music.direction.Coda;
