@@ -31,6 +31,7 @@ import com.xenoage.zong.core.music.Measure;
 import com.xenoage.zong.core.music.MusicContext;
 import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.music.Voice;
+import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.core.music.clef.Clef;
 import com.xenoage.zong.core.music.clef.ClefType;
 import com.xenoage.zong.core.music.key.Key;
@@ -293,6 +294,46 @@ public class ScoreTest {
 		Assert.assertEquals(clefs.get(3), musicContext.getClef());
 		Assert.assertEquals(keys.get(2), musicContext.getKey());
 		assertEquals(0, musicContext.getAccidentals().size());
+	}
+	
+	
+	@Test public void getGapBetweenTest() {
+		Score score = ScoreFactory.create1Staff4Measures();
+		VoiceElement[] e = new VoiceElement[6];
+		//4/4 measure
+		score.getColumnHeader(0).setTime(new Time(TimeType.time_4_4));
+		//first measure (filled only with 7/8)
+		//  voice 0: 1/4, 1/4, 1/4  (1/4 is missing)
+		//  voice 1: 3/4, 1/8       (1/8 is missing)
+		score.getVoice(atVoice(0, 0, 0)).addElement(e[0] = new Rest(fr(1, 4)));
+		score.getVoice(atVoice(0, 0, 0)).addElement(e[1] = new Rest(fr(1, 4)));
+		score.getVoice(atVoice(0, 0, 0)).addElement(e[2] = new Rest(fr(1, 4)));
+		new VoiceAdd(score.getMeasure(atMeasure(0, 0)), 1).execute();
+		score.getVoice(atVoice(0, 0, 1)).addElement(new Rest(fr(3, 4)));
+		score.getVoice(atVoice(0, 0, 1)).addElement(new Rest(fr(1, 8)));
+		//second measure: 1/4, 3/4
+		score.getVoice(atVoice(0, 1, 0)).addElement(e[3] = new Rest(fr(1, 4)));
+		score.getVoice(atVoice(0, 1, 0)).addElement(e[4] = new Rest(fr(3, 4)));
+		//third measure: 4/4
+		score.getVoice(atVoice(0, 1, 0)).addElement(e[5] = new Rest(fr(4, 4)));
+		//test gaps between adjacent elements
+		assertEquals(_0, score.getGapBetween(e[0], e[1]));
+		assertEquals(_0, score.getGapBetween(e[1], e[2]));
+		assertEquals(fr(1, 8), score.getGapBetween(e[2], e[3])); //1/8 from second voice
+		assertEquals(_0, score.getGapBetween(e[3], e[4]));
+		assertEquals(_0, score.getGapBetween(e[4], e[5]));
+		//test some gaps between non-adjacent elements
+		assertEquals(fr(1, 4), score.getGapBetween(e[0], e[2]));
+		assertEquals(fr(3, 8), score.getGapBetween(e[1], e[3])); //includes 1/8 from second voice
+		assertEquals(fr(3, 8), score.getGapBetween(e[2], e[4])); //includes 1/8 from second voice
+		assertEquals(fr(5, 8).add(fr(4, 4)), score.getGapBetween(e[0], e[5])); //includes 1/8 from second voice
+		assertEquals(fr(3, 8).add(fr(4, 4)), score.getGapBetween(e[1], e[5])); //includes 1/8 from second voice
+		//test in reverse direction
+		assertEquals(fr(-2, 4), score.getGapBetween(e[1], e[0]));
+		assertEquals(fr(-2, 4), score.getGapBetween(e[2], e[1]));
+		assertEquals(fr(-5, 8), score.getGapBetween(e[3], e[2])); //includes 1/8 from second voice
+		assertEquals(fr(-23, 8), score.getGapBetween(e[5], e[0])); //includes 1/8 from second voice
+		assertEquals(fr(-21, 8), score.getGapBetween(e[5], e[1])); //includes 1/8 from second voice
 	}
 
 }

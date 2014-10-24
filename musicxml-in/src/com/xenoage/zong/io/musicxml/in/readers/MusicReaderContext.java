@@ -280,11 +280,26 @@ public final class MusicReaderContext {
 	 * Creates and writes a slur or tie from the given {@link OpenSlur} object.
 	 */
 	private void createSlur(OpenSlur openSlur) {
-		if (openSlur.start != null && openSlur.stop != null) {
+		if (checkSlur(openSlur)) {
 			Slur slur = new Slur(openSlur.type, alist(openSlur.start.wp,
 				openSlur.stop.wp), openSlur.start.side);
 			writeSlur(slur);
 		}
+	}
+	
+	private boolean checkSlur(OpenSlur slur) {
+		if (slur.start == null || slur.stop == null)
+			return false;
+		Fraction gap = score.getGapBetween(slur.start.wp.getChord(), slur.stop.wp.getChord());
+		if (slur.type == SlurType.Slur) {
+			//slur must end after the start chord
+			return gap.compareTo(_0) >= 0;
+		}
+		else if (slur.type == SlurType.Tie) {
+			//tie must end directly after the start chord (no gap)
+			return gap.compareTo(_0) == 0;
+		}
+		return false;
 	}
 
 	/**

@@ -3,6 +3,7 @@ package com.xenoage.zong.core;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.kernel.Range.rangeReverse;
 import static com.xenoage.utils.math.Fraction._0;
+import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.header.ScoreHeader.scoreHeader;
 import static com.xenoage.zong.core.music.util.BeatE.selectLatest;
 import static com.xenoage.zong.core.music.util.Interval.At;
@@ -410,6 +411,44 @@ public final class Score
 			}
 		}
 		return format.getInterlineSpace();
+	}
+	
+	/**
+	 * Gets the gap in beats between the end of the left element and
+	 * the start of the right element.
+	 */
+	public Fraction getGapBetween(VoiceElement left, VoiceElement right) {
+		MP mpLeft = MP.getMP(left);
+		mpLeft = mpLeft.withBeat(mpLeft.beat.add(left.getDuration()));
+		MP mpRight = MP.getMP(right);
+		if (mpRight.measure == mpLeft.measure) {
+			//simple case: same measure. just subtract beats
+			return mpRight.beat.sub(mpLeft.beat);
+		}
+		else if (mpRight.measure > mpLeft.measure) {
+			//right element is in a following measure. add the following:
+			//- beats between end of left element and its measure end
+			//- beats in the following measures (until the measure which contains the right element)
+			//- start beat of the right element in its measure
+			Fraction gap = getMeasureFilledBeats(mpLeft.measure).sub(mpLeft.beat);
+			for (int iMeasure : range(mpLeft.measure + 1, mpRight.measure - 1))
+				gap = gap.add(getMeasureFilledBeats(iMeasure));
+			gap = gap.add(mpRight.beat);
+			return gap;
+		}
+		else {
+			//right element is not really at the right, but actually before the left element
+			//add the following and sign with minus:
+			//- betweens between the start of the right element and the end of its measure
+			//- beats in the following measures (until the measure which contains the left element)
+			//- end beat of the left element in its measure
+			Fraction gap = getMeasureFilledBeats(mpRight.measure).sub(mpRight.beat);
+			for (int iMeasure : range(mpRight.measure + 1, mpLeft.measure - 1))
+				gap = gap.add(getMeasureFilledBeats(iMeasure));
+			gap = gap.add(mpLeft.beat);
+			gap = gap.mult(fr(-1));
+			return gap;
+		}
 	}
 
 }

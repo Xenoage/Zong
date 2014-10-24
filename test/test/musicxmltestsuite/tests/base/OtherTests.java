@@ -66,8 +66,6 @@ public class OtherTests {
 	};
 	
 	public static final String[] supportedButNotTestedYet = {
-		"33g-Slur-ChordedNotes.xml", // (30 min) 
-		"33i-Ties-NotEnded.xml", // (45 min) 
 		"41a-MultiParts-Partorder.xml", // (30 min) 
 		"41b-MultiParts-MoreThan10.xml", // (15 min) 
 		"41c-StaffGroups.xml", // (60 min) 

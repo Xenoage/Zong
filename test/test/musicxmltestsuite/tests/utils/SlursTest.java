@@ -28,6 +28,11 @@ public class SlursTest {
 		assertEquals(chords[chord2Index], waypoints.get(1).getChord());
 	}
 	
+	public static void assertNoSlurAt(Chord[] chords, int chord1Index) {
+		assertEquals("Unexpected slur at chord " + chord1Index,
+			0, chords[chord1Index].getSlurs().size());
+	}
+	
 	private static Slur getStartSlur(Chord[] chords, int chordIndex) {
 		for (Slur slur : chords[chordIndex].getSlurs()) {
 			if (slur.getStart().getChord() == chords[chordIndex])
