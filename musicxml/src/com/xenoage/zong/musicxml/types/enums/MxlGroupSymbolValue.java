@@ -14,7 +14,8 @@ public enum MxlGroupSymbolValue {
 	None,
 	Brace,
 	Line,
-	Bracket;
+	Bracket,
+	Square;
 
 	@NonNull public static MxlGroupSymbolValue read(XmlReader reader) {
 		return Utils.read("group-symbol-value", reader.getText(), values());

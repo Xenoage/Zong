@@ -4,7 +4,7 @@ import java.util.function.Function;
 
 import com.xenoage.utils.kernel.Range;
 
-
+//TODO: move into utils-jse8 project
 public class LambdaUtils {
 
 	public static String[] buildArray(Range range, Function<Integer, String> conversion) {

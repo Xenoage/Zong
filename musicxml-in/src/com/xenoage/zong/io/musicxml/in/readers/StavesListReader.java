@@ -4,6 +4,7 @@ import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.collections.CollectionUtils.map;
 import static com.xenoage.utils.iterators.MultiIt.multiIt;
 import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.zong.io.musicxml.Equivalents.bracketGroupStyles;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +19,7 @@ import com.xenoage.zong.core.music.StavesList;
 import com.xenoage.zong.core.music.group.BarlineGroup;
 import com.xenoage.zong.core.music.group.BracketGroup;
 import com.xenoage.zong.core.music.group.StavesRange;
+import com.xenoage.zong.io.musicxml.Equivalents;
 import com.xenoage.zong.musicxml.types.MxlAttributes;
 import com.xenoage.zong.musicxml.types.MxlGroupBarline;
 import com.xenoage.zong.musicxml.types.MxlGroupSymbol;
@@ -64,13 +66,13 @@ public final class StavesListReader {
 	private static final class PartsBarlineGroup
 		extends PartsGroup {
 
-		public BarlineGroup.Style style = null;
+		public BarlineGroup.Style style = BarlineGroup.Style.Single;
 	}
 
 	private static final class PartsBracketGroup
 		extends PartsGroup {
 
-		public BracketGroup.Style style = null;
+		public BracketGroup.Style style = BracketGroup.Style.None;
 	}
 
 	private static final class PartsGroups {
@@ -161,13 +163,13 @@ public final class StavesListReader {
 			}
 			//read group-barline and group-symbol (bracket)
 			BarlineGroup.Style barlineStyle = readBarlineGroupStyle(mxlPartGroup.getGroupBarline());
-			if (barlineStyle != null) {
+			if (barlineStyle != BarlineGroup.Style.Single) {
 				openBarlineGroups[number] = new PartsBarlineGroup();
 				openBarlineGroups[number].startPartIndex = currentPartIndex;
 				openBarlineGroups[number].style = barlineStyle;
 			}
 			BracketGroup.Style bracketStyle = readBracketGroupStyle(mxlPartGroup.getGroupSymbol());
-			if (bracketStyle != null) {
+			if (bracketStyle != BracketGroup.Style.None) {
 				openBracketGroups[number] = new PartsBracketGroup();
 				openBracketGroups[number].startPartIndex = currentPartIndex;
 				openBracketGroups[number].style = bracketStyle;
@@ -297,17 +299,7 @@ public final class StavesListReader {
 	}
 
 	private static BracketGroup.Style readBracketGroupStyle(MxlGroupSymbol mxlGroupSymbol) {
-		if (mxlGroupSymbol != null) {
-			switch (mxlGroupSymbol.getValue()) {
-				case Brace:
-					return BracketGroup.Style.Brace;
-				case Bracket:
-					return BracketGroup.Style.Bracket;
-				default:
-					return null;
-			}
-		}
-		return null;
+		return bracketGroupStyles.get1OrDefault(mxlGroupSymbol.getValue(), BracketGroup.Style.None);
 	}
 
 	private static BarlineGroup.Style readBarlineGroupStyle(MxlGroupBarline mxlGroupBarline) {
@@ -321,7 +313,7 @@ public final class StavesListReader {
 					return BarlineGroup.Style.Mensurstrich;
 			}
 		}
-		return null;
+		return BarlineGroup.Style.Single;
 	}
 
 	/**

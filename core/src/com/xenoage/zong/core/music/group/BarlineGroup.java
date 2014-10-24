@@ -14,7 +14,7 @@ import com.xenoage.utils.annotations.NonNull;
 
 	/** Visual styles of barline grouping. */
 	public enum Style {
-		/** Each staff has its own barlines. */
+		/** Each staff has its own barlines, i.e. no grouping. Use this value instead of null. */
 		Single,
 		/** The barlines of the staves are connected. */
 		Common,
