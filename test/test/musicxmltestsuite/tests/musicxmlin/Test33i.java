@@ -5,7 +5,6 @@ import static com.xenoage.zong.core.position.MP.atVoice;
 import static musicxmltestsuite.tests.utils.SlursTest.assertNoSlurAt;
 import static musicxmltestsuite.tests.utils.SlursTest.assertSlurBetween;
 import musicxmltestsuite.tests.base.Base33i;
-import musicxmltestsuite.tests.utils.SlursTest;
 
 import org.junit.Before;
 import org.junit.Test;

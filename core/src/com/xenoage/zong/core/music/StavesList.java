@@ -58,7 +58,7 @@ public final class StavesList {
 		int iStaff = 0;
 		for (Part part : parts) {
 			iStaff += part.getStavesCount();
-			if (staffIndex <= iStaff)
+			if (staffIndex < iStaff)
 				return part;
 		}
 		return null;
