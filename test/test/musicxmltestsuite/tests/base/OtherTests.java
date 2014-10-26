@@ -66,8 +66,6 @@ public class OtherTests {
 	};
 	
 	public static final String[] supportedButNotTestedYet = {
-		"41e-StaffGroups-InstrumentNames-Linebroken.xml", // (30 min) 
-		"41f-StaffGroups-Overlapping.xml", // (30 min) 
 		"41g-PartNoId.xml", // (15 min) 
 		"41h-TooManyParts.xml", // (15 min) 
 		"41i-PartNameDisplay-Override.xml", // (30 min) 

@@ -174,7 +174,7 @@ public final class StavesList {
 	/**
 	 * Adds a staff group for the given staves with the given style.
 	 * Since a staff may only have one barline group, existing barline groups
-	 * at the given positions are removed.
+	 * at the given positions are merged with the given group.
 	 */
 	public void addBarlineGroup(StavesRange stavesRange, BarlineGroup.Style style) {
 		if (stavesRange.getStop() >= staves.size())
@@ -188,11 +188,13 @@ public final class StavesList {
 				return;
 		}
 
-		//delete existing groups intersecting the given range
+		//delete existing groups intersecting the given range, but merge
+		//the affected staves into the given group
 		for (int i : rangeReverse(barlineGroups)) {
 			BarlineGroup group = barlineGroups.get(i);
 			if (group.getStaves().intersects(stavesRange)) {
 				barlineGroups.remove(i);
+				stavesRange = stavesRange.merge(group.getStaves());
 			}
 		}
 

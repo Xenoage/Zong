@@ -57,6 +57,15 @@ public final class StavesRange {
 	public boolean contains(int index) {
 		return (index >= start && index <= stop);
 	}
+	
+	/**
+	 * Adds the given staves to this range.
+	 */
+	public StavesRange merge(StavesRange staves) {
+		int mergedStart = Math.min(staves.start, start);
+		int mergedStop = Math.max(staves.stop, stop);
+		return new StavesRange(mergedStart, mergedStop);
+	}
 
 	/**
 	 * Gets this range as a {@link Range}.

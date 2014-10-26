@@ -2,6 +2,8 @@ Already submitted to gmane.comp.gnu.lilypond.bugs:
 - 11a-TimeSignatures.xml: the symbol attribute of the first time signature should be "Cut", not "Common"
 - 32b-Articulations-Texts.xml: wrong default-x and default-y, wrong duration in first note
   - https://code.google.com/p/lilypond/issues/detail?id=4172
+- 41f-StaffGroups-Overlapping.xml: wrong description. first group goes from staff 1 to 4. and there is no square bracket.
+  - TODO (already mailed)
 
 Fixed locally:
 - 01b-Pitches-Intervals.xml: only a single measure in MusicXML
