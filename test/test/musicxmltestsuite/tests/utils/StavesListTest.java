@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import java.util.List;
+import java.util.function.Function;
 
 import com.xenoage.zong.core.music.Part;
 import com.xenoage.zong.core.music.StavesList;
@@ -20,10 +21,19 @@ import com.xenoage.zong.core.music.group.BracketGroup;
 public class StavesListTest {
 	
 	public static void checkPartNames(StavesList stavesList, String[] expectedPartNames) {
+		checkPartProperty(stavesList, expectedPartNames, (Part p) -> p.getName());
+	}
+	
+	public static void checkPartAbbreviations(StavesList stavesList, String[] expectedPartAbbreviations) {
+		checkPartProperty(stavesList, expectedPartAbbreviations, (Part p) -> p.getAbbreviation());
+	}
+	
+	private static void checkPartProperty(StavesList stavesList, String[] expectedValues,
+		Function<Part, String> property) {
 		List<Part> parts = stavesList.getParts();
-		assertEquals(expectedPartNames.length, parts.size());
+		assertEquals(expectedValues.length, parts.size());
 		for (int i : range(parts)) {
-			assertEquals(expectedPartNames[i], parts.get(i).getName());
+			assertEquals(expectedValues[i], property.apply(parts.get(i)));
 		}
 	}
 	
