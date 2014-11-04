@@ -66,7 +66,6 @@ public class OtherTests {
 	};
 	
 	public static final String[] supportedButNotTestedYet = {
-		"41g-PartNoId.xml", // (15 min) 
 		"41h-TooManyParts.xml", // (15 min) 
 		"41i-PartNameDisplay-Override.xml", // (30 min) 
 		"42a-MultiVoice-TwoVoicesOnStaff-Lyrics.xml", // (60 min) 
@@ -114,6 +113,7 @@ public class OtherTests {
 		"01d-Pitches-Microtones.xml", //microtones are not supported
 		"11f-TimeSignatures-SymbolMeaning.xml", //3/8 time with cut symbol is not supported
 		"13d-KeySignatures-Microtones.xml", //microtones are not supported
+		"41g-PartNoId.xml", //id for part is required by MusicXML schema
 		"99a-Sibelius5-IgnoreBeaming.xml", //irrelevant
 		"99b-Lyrics-BeamsMelismata-IgnoreBeams.xml", //irrelevant
 	};
