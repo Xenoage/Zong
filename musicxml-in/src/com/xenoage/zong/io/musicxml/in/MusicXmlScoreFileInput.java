@@ -68,29 +68,35 @@ public class MusicXmlScoreFileInput
 	 */
 	public Score read(MxlScorePartwise mxlScore, boolean ignoreErrors)
 		throws InvalidFormatException {
-		//create new score
-		Score score = new Score();
-
-		//read information about the score
-		score.setInfo(ScoreInfoReader.read(mxlScore));
-
-		//read score format
-		ScoreFormatReader.Value scoreFormatValue = ScoreFormatReader.read(mxlScore);
-		score.setFormat(scoreFormatValue.scoreFormat);
-		score.setMetaData("layoutformat", scoreFormatValue.layoutFormat); //TIDY
-
-		//create the list of staves
-		StavesListReader.Value stavesListValue = StavesListReader.read(mxlScore);
-		stavesListValue.stavesList.setScore(score);
-		score.setStavesList(stavesListValue.stavesList);
-
-		//read the musical contents
-		MusicReader.read(mxlScore, score, ignoreErrors);
-
-		//remember the XML document for further application-dependend processing
-		score.setMetaData("mxldoc", mxlScore); //TIDY
-
-		return score;
+		try {
+			//create new score
+			Score score = new Score();
+	
+			//read information about the score
+			score.setInfo(ScoreInfoReader.read(mxlScore));
+	
+			//read score format
+			ScoreFormatReader.Value scoreFormatValue = ScoreFormatReader.read(mxlScore);
+			score.setFormat(scoreFormatValue.scoreFormat);
+			score.setMetaData("layoutformat", scoreFormatValue.layoutFormat); //TIDY
+	
+			//create the list of staves
+			StavesListReader.Value stavesListValue = StavesListReader.read(mxlScore);
+			stavesListValue.stavesList.setScore(score);
+			score.setStavesList(stavesListValue.stavesList);
+	
+			//read the musical contents
+			MusicReader.read(mxlScore, score, ignoreErrors);
+	
+			//remember the XML document for further application-dependend processing
+			score.setMetaData("mxldoc", mxlScore); //TIDY
+	
+			return score;
+		}
+		catch (RuntimeException ex) {
+			//catch runtime exceptions and rethrow them in the expected type
+			throw new InvalidFormatException(ex);
+		}
 	}
 
 }

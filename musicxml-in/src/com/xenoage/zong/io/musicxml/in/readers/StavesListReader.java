@@ -125,17 +125,17 @@ public final class StavesListReader {
 		//if there are unclosed score-groups, throw an exception
 		if (false == ArrayUtils.containsOnlyNull(openBarlineGroups) ||
 			false == ArrayUtils.containsOnlyNull(openBracketGroups)) {
-			throw new RuntimeException("There are unclosed score-groups");
+			throw new IllegalStateException("There are unclosed score-groups");
 		}
 		//count the number of staves and measures used by each part
 		HashMap<String, Integer> partsStaves = countStaves(mxlScore);
 		for (String partID : partsStaves.keySet()) {
 			Integer partIndex = partsIDtoIndex.get(partID);
 			if (partIndex == null)
-				throw new RuntimeException("Unknown part \"" + partID + "\"");
+				throw new IllegalStateException("Unknown part \"" + partID + "\"");
 			Integer partStaves = partsStaves.get(partID);
 			if (partStaves == null)
-				throw new RuntimeException("Unused part \"" + partID + "\"");
+				throw new IllegalStateException("Unused part \"" + partID + "\"");
 			if (partStaves > 1)
 				parts.get(partIndex).setStavesCount(partStaves);
 		}
@@ -326,7 +326,7 @@ public final class StavesListReader {
 			if (part.getId().equals(mxlScorePart.getId()))
 				return part;
 		}
-		throw new RuntimeException("There is no part for score-part \"" + mxlScorePart.getId() + "\"");
+		throw new IllegalStateException("There is no part for score-part \"" + mxlScorePart.getId() + "\"");
 	}
 
 }
