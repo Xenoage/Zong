@@ -278,7 +278,7 @@ public final class Cursor
 	/**
 	 * Opens a slur of the given type. All following chords will be added to it.
 	 */
-	public void openCurvedLine(SlurType type) {
+	public void openSlur(SlurType type) {
 		if (openSlurWaypoints != null)
 			throw new IllegalStateException("Slur is already open");
 		checkArgsNotNull(type);
@@ -289,6 +289,7 @@ public final class Cursor
 
 	/**
 	 * Closes a slur and adds it to the score.
+	 * @deprecated Does not work yet. Slur waypoints are not collected in this class.
 	 */
 	public void closeSlur() {
 		if (openSlurWaypoints == null)

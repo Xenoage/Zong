@@ -3,7 +3,9 @@ Already submitted to gmane.comp.gnu.lilypond.bugs:
 - 32b-Articulations-Texts.xml: wrong default-x and default-y, wrong duration in first note
   - https://code.google.com/p/lilypond/issues/detail?id=4172
 - 41f-StaffGroups-Overlapping.xml: wrong description. first group goes from staff 1 to 4. and there is no square bracket.
-  - TODO (already mailed)
+  - https://code.google.com/p/lilypond/issues/detail?id=4177&thanks=4177
+- 42a-MultiVoice-TwoVoicesOnStaff-Lyrics.xml: the very last lyric element should be "Voice2" instead of "Voice1"
+  - TODO
 
 Fixed locally:
 - 01b-Pitches-Intervals.xml: only a single measure in MusicXML
@@ -12,3 +14,4 @@ Fixed locally:
   - fixed by p.l.schmidt
 - 24e-GraceNote-StaffChange.xml
   - <staves>2</staves> is missing in the attributes element
+- 42a-MultiVoice-TwoVoicesOnStaff-Lyrics.xml (see above)
