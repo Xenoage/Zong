@@ -1,11 +1,6 @@
 package musicxmltestsuite.tests.base;
 
 
-/**
- * Two simple tied whole notes.
- * 
- * @author Andreas Wenger
- */
 public interface Base33b
 	extends Base {
 

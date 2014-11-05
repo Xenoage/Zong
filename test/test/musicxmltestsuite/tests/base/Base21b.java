@@ -6,11 +6,7 @@ import static musicxmltestsuite.tests.utils.Utils.ch;
 
 import com.xenoage.zong.core.music.chord.Chord;
 
-/**
- * Some subsequent (identical) two-note chords.
- * 
- * @author Andreas Wenger
- */
+
 public interface Base21b
 	extends Base {
 

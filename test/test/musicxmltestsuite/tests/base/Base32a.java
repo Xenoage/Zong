@@ -22,12 +22,7 @@ import com.xenoage.zong.core.music.direction.DynamicsType;
 import com.xenoage.zong.core.music.format.Placement;
 import com.xenoage.zong.core.position.MP;
 
-/**
- * All {@literal <notation>} elements defined in MusicXML.
- * The lyrics show the notation assigned to each note.  
- * 
- * @author Andreas Wenger
- */
+
 @ToDo("several yet unsupported notation elements")
 public interface Base32a
 	extends Base {

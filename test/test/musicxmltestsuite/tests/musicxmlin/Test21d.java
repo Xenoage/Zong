@@ -12,7 +12,6 @@ import static org.junit.Assert.assertEquals;
 import java.util.List;
 
 import musicxmltestsuite.tests.base.Base21d;
-import musicxmltestsuite.tests.utils.Utils;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,7 +19,6 @@ import org.junit.Test;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.MeasureElement;
 import com.xenoage.zong.core.music.annotation.ArticulationType;
-import com.xenoage.zong.core.music.annotation.Fermata;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.direction.Dynamics;
 import com.xenoage.zong.core.music.direction.DynamicsType;

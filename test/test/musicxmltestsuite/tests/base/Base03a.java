@@ -5,12 +5,6 @@ import static com.xenoage.utils.math.Fraction.fr;
 import com.xenoage.utils.math.Fraction;
 
 
-/**
- * All note durations, from long, brevis, whole until 128th;
- * First with their plain values, then dotted and finally doubly-dotted.  
- * 
- * @author Andreas Wenger
- */
 public interface Base03a
 	extends Base {
 

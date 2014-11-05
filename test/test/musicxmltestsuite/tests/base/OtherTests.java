@@ -48,6 +48,7 @@ public class OtherTests {
 		"33e-Spanners-OctaveShifts-InvalidSize.xml",
 		"33f-Trill-EndingOnGraceNote.xml",
 		"33h-Spanners-Glissando.xml",
+		"41i-PartNameDisplay-Override.xml",
 		"43b-MultiStaff-DifferentKeys.xml",
 		"43c-MultiStaff-DifferentKeysAfterBackup.xml",
 		"46g-PickupMeasure-Chordnames-FiguredBass.xml",
@@ -66,8 +67,6 @@ public class OtherTests {
 	};
 	
 	public static final String[] supportedButNotTestedYet = {
-		"41h-TooManyParts.xml", // (15 min) 
-		"41i-PartNameDisplay-Override.xml", // (30 min) 
 		"42a-MultiVoice-TwoVoicesOnStaff-Lyrics.xml", // (60 min) 
 		"42b-MultiVoice-MidMeasureClefChange.xml", // (60 min) 
 		"43a-PianoStaff.xml", // (15 min) 
@@ -113,7 +112,6 @@ public class OtherTests {
 		"01d-Pitches-Microtones.xml", //microtones are not supported
 		"11f-TimeSignatures-SymbolMeaning.xml", //3/8 time with cut symbol is not supported
 		"13d-KeySignatures-Microtones.xml", //microtones are not supported
-		"41g-PartNoId.xml", //id for part is required by MusicXML schema
 		"99a-Sibelius5-IgnoreBeaming.xml", //irrelevant
 		"99b-Lyrics-BeamsMelismata-IgnoreBeams.xml", //irrelevant
 	};

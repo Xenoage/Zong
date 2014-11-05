@@ -23,12 +23,7 @@ import com.xenoage.zong.core.music.format.Placement;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.text.UnformattedText;
 
-/**
- * Chords in the second measure, after several ornaments in the first measure
- * and a p at the beginning of the second measure. 
- * 
- * @author Andreas Wenger
- */
+
 public interface Base21d
 	extends Base {
 

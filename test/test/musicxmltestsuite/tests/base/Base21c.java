@@ -6,11 +6,7 @@ import static musicxmltestsuite.tests.utils.Utils.ch;
 
 import com.xenoage.zong.core.music.chord.Chord;
 
-/**
- * Some three-note chords, with various durations.
- * 
- * @author Andreas Wenger
- */
+
 public interface Base21c
 	extends Base {
 

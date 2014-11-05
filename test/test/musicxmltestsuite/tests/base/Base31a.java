@@ -24,12 +24,7 @@ import com.xenoage.zong.core.music.direction.Words;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.text.UnformattedText;
 
-/**
- * All {@literal <direction>} elements defined in MusicXML.
- * The lyrics for each note describes the direction element assigned to that note.  
- * 
- * @author Andreas Wenger
- */
+
 @ToDo("several yet unsupported direction elements")
 public interface Base31a
 	extends Base {

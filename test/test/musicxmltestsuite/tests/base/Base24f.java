@@ -9,12 +9,7 @@ import static musicxmltestsuite.tests.utils.Utils.slur;
 import com.xenoage.zong.commands.core.music.slur.SlurAdd;
 import com.xenoage.zong.core.music.chord.Chord;
 
-/**
- * A grace note with a slur to the actual note. This can be interpreted
- * as acciaccatura or appoggiatura, depending on the existence of a slash. 
- * 
- * @author Andreas Wenger
- */
+
 public interface Base24f
 	extends Base {
 

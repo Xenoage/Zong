@@ -5,12 +5,6 @@ import static com.xenoage.zong.core.music.Pitch.pi;
 import com.xenoage.zong.core.music.Pitch;
 
 
-/**
- * A piece with four parts (P0, P1, P2, P3; different from what Finale creates!).
- * Are they converted in the correct order? 
- * 
- * @author Andreas Wenger
- */
 public interface Base41a
 	extends Base {
 

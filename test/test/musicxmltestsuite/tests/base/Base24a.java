@@ -10,12 +10,7 @@ import static musicxmltestsuite.tests.utils.Utils.gr;
 import com.xenoage.zong.commands.core.music.beam.BeamAdd;
 import com.xenoage.zong.core.music.chord.Chord;
 
-/**
- * Different kinds of grace notes: acciaccatura, appoggiatura; beamed grace notes;
- * grace notes with accidentals; different durations of the grace notes. 
- * 
- * @author Andreas Wenger
- */
+
 public interface Base24a
 	extends Base {
 

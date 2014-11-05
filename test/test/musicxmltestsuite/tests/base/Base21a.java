@@ -6,11 +6,7 @@ import static musicxmltestsuite.tests.utils.Utils.ch;
 
 import com.xenoage.zong.core.music.chord.Chord;
 
-/**
- * One simple chord consisting of two notes.
- * 
- * @author Andreas Wenger
- */
+
 public interface Base21a
 	extends Base {
 

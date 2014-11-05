@@ -5,14 +5,7 @@ import musicxmltestsuite.tests.utils.ToDo;
 
 import com.xenoage.utils.math.Fraction;
 
-/**
- * Some "triplets" on the end of the first and in the second staff, using only
- * {@literal <time-modification>}, but not explicit tuplet bracket. Thus, the duration of the
- * notes in the second staff should be scaled properly in comparison to staff 1,
- * but no visual indication about the tuplets is given. 
- * 
- * @author Andreas Wenger
- */
+
 @ToDo("add layout test for this case. notes must be properly aligned.")
 public interface Base23f
 	extends Base {

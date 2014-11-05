@@ -10,12 +10,7 @@ import static musicxmltestsuite.tests.utils.Utils.gr;
 import com.xenoage.zong.commands.core.music.beam.BeamAdd;
 import com.xenoage.zong.core.music.chord.Chord;
 
-/**
- * A grace note that appears at the measure end (without any steal-from-* attribute set).
- * Some applications need to convert this into an after-grace. 
- * 
- * @author Andreas Wenger
- */
+
 public interface Base24c
 	extends Base {
 

@@ -19,11 +19,7 @@ import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.zong.core.music.format.Placement;
 import com.xenoage.zong.core.position.MP;
 
-/**
- * Text markup: different font sizes, weights and colors.  
- * 
- * @author Andreas Wenger
- */
+
 public interface Base32b
 	extends Base {
 

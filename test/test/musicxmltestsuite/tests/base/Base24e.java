@@ -12,11 +12,7 @@ import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.commands.core.music.beam.BeamAdd;
 import com.xenoage.zong.core.music.chord.Chord;
 
-/**
- * A grace note on a different staff than the actual note.
- * 
- * @author Andreas Wenger
- */
+
 public interface Base24e
 	extends Base {
 

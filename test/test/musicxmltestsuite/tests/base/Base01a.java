@@ -4,13 +4,7 @@ import static com.xenoage.zong.core.music.Pitch.pi;
 
 import com.xenoage.zong.core.music.Pitch;
 
-/**
- * All pitches from G to c”” in ascending steps; First without accidentals,
- * then with a sharp and then with a flat accidental.
- * Double alterations and cautionary accidentals are tested at the end. 
- * 
- * @author Andreas Wenger
- */
+
 public interface Base01a
 	extends Base {
 

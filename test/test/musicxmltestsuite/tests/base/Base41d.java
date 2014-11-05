@@ -4,12 +4,7 @@ import com.xenoage.zong.core.music.group.BarlineGroup;
 import com.xenoage.zong.core.music.group.BracketGroup;
 import com.xenoage.zong.core.music.group.StavesRange;
 
-/**
- * Two properly nested part groups: One group (with a square bracket) goes from
- * staff 1 to 4) and another group (with a curly bracket) goes from staff 3 to 5. 
- * 
- * @author Andreas Wenger
- */
+
 public interface Base41d
 	extends Base {
 

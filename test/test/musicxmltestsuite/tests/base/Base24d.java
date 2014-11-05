@@ -11,12 +11,7 @@ import musicxmltestsuite.tests.utils.ToDo;
 import com.xenoage.zong.commands.core.music.beam.BeamAdd;
 import com.xenoage.zong.core.music.chord.Chord;
 
-/**
- * Some grace notes and after-graces (indicated by steal-time-previous
- * and steal-time-following). 
- * 
- * @author Andreas Wenger
- */
+
 @ToDo("concept of steal-time-previous and steal-time-following is not implemented yet")
 public interface Base24d
 	extends Base {

@@ -1,10 +1,6 @@
 package musicxmltestsuite.tests.base;
 
-/**
- * Part names and abbreviations can contain line breaks.
- * 
- * @author Andreas Wenger
- */
+
 public interface Base41e
 	extends Base {
 

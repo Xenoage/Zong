@@ -7,11 +7,7 @@ import static musicxmltestsuite.tests.utils.Utils.gr;
 
 import com.xenoage.zong.core.music.chord.Chord;
 
-/**
- * Chords as grace notes. 
- * 
- * @author Andreas Wenger
- */
+
 public interface Base24b
 	extends Base {
 

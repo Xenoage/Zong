@@ -5,10 +5,7 @@ import com.xenoage.zong.core.music.group.BracketGroup;
 import com.xenoage.zong.core.music.group.StavesRange;
 
 /**
- * MusicXML allows for overlapping part-groups, while many applications
- * do not allow overlapping groups, but require them to be properly nested.
- * In this case, one group goes from staff 1 to 4)
- * and another group goes from staff 3 to 5. 
+ * Wrong test description: First group goes from staff 1 to 4, and there is no square bracket.
  * 
  * @author Andreas Wenger
  */

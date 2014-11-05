@@ -26,15 +26,20 @@ public interface MusicXmlInTest
 	}
 	
 	default Score getScore() {
-		Base base = (Base) this;
 		try {
-			String filepath = Base.dirPath + base.getFileName();
-			return new MusicXmlScoreFileInput().read(jsePlatformUtils().openFile(filepath), filepath);
+			return getScoreOrException();
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			Assert.fail("Could not load " + base.getFileName() + ": " + ex.toString());
+			Assert.fail("Could not load " + ((Base) this).getFileName() + ": " + ex.toString());
 			return null;
 		}
+	}
+	
+	default Score getScoreOrException()
+		throws Exception {
+		Base base = (Base) this;
+		String filepath = Base.dirPath + base.getFileName();
+		return new MusicXmlScoreFileInput().read(jsePlatformUtils().openFile(filepath), filepath);
 	}
 	
 	default Staff getFirstStaff() {
@@ -47,6 +52,19 @@ public interface MusicXmlInTest
 	
 	default Voice getFirstVoice() {
 		return getScore().getVoice(mp0);
+	}
+	
+	default void assertLoadScoreFailure(Class<? extends Exception> exceptionClass) {
+		try {
+			getScoreOrException();
+			Assert.fail("Could load " + ((Base) this).getFileName() + ", although a " +
+				exceptionClass.getSimpleName() + " was expected");
+		}
+		catch (Exception ex) {
+			if (false == exceptionClass.isAssignableFrom(ex.getClass()))
+				Assert.fail(exceptionClass.getSimpleName() + " was expected, but " +
+					ex.getClass().getSimpleName() + " was thrown");
+		}
 	}
 
 }

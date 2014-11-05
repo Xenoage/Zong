@@ -1,23 +1,23 @@
 package musicxmltestsuite.tests.musicxmlin;
 
-import static org.junit.Assert.assertEquals;
 import musicxmltestsuite.tests.base.Base41h;
 
 import org.junit.Test;
 
-import com.xenoage.zong.core.Score;
-import com.xenoage.zong.core.music.StavesList;
+import com.xenoage.utils.exceptions.InvalidFormatException;
 
-
+/**
+ * The MusicXML documentation implies, that each score-part in the part-list
+ * has a corresponding part and vice versa.
+ * We do not support inconsistent MusicXML files. Loading should fail.
+ * 
+ * @author Andreas Wenger
+ */
 public class Test41h
 	implements Base41h, MusicXmlInTest {
 	
 	@Test public void test() {
-		Score score = getScore();
-		StavesList stavesList = score.getStavesList();
-		//we read only the correctly declared parts, and ignore the others
-		assertEquals(1, stavesList.getParts().size());
-		assertEquals("MusicXML Part", stavesList.getParts().get(0).getName());
+		assertLoadScoreFailure(InvalidFormatException.class);
 	}
 	
 }

@@ -13,11 +13,7 @@ import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.zong.core.music.direction.Tempo;
 import com.xenoage.zong.core.position.MP;
 
-/**
- * Tempo Markings: note=bpm, text (note=bpm), note=note, (note=note), (note=bpm) 
- * 
- * @author Andreas Wenger
- */
+
 @ToDo("not all tempos are supported yet")
 public interface Base31c
 	extends Base {

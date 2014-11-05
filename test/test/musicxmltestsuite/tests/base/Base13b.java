@@ -5,12 +5,7 @@ import static com.xenoage.utils.kernel.Range.range;
 import com.xenoage.zong.core.music.key.TraditionalKey;
 import com.xenoage.zong.core.music.key.TraditionalKey.Mode;
 
-/**
- * All different modes: major, minor, ionian, dorian, phrygian, lydian, mixolydian,
- * aeolian, and locrian; All modes are given with 2 sharps.
- * 
- * @author Andreas Wenger
- */
+
 public interface Base13b
 	extends Base {
 
