@@ -1,11 +1,8 @@
 package musicxmltestsuite.tests.utils;
 
-import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
 import static musicxmltestsuite.tests.utils.ChordTest.assertEqualsChord;
 import static org.junit.Assert.assertEquals;
-
-import java.util.List;
 
 import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.VoiceElement;

@@ -7,7 +7,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import musicxmltestsuite.tests.base.Base42b;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import com.xenoage.utils.kernel.Tuple2;
@@ -22,11 +21,8 @@ import com.xenoage.zong.core.position.MP;
 public class Test42b
 	implements Base42b, MusicXmlInTest {
 	
-	private Score score;
-	
-	@Before public void before() {
-		score = getScore();
-	}
+	private Score score = getScore();
+
 	
 	@Test public void test() {
 		testVoiceElements();
