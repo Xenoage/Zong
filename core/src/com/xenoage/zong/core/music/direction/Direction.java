@@ -1,7 +1,6 @@
 package com.xenoage.zong.core.music.direction;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import com.xenoage.zong.core.music.ColumnElement;
 import com.xenoage.zong.core.music.MeasureElement;
@@ -18,13 +17,14 @@ import com.xenoage.zong.core.music.format.Positioning;
  *
  * @author Andreas Wenger
  */
+@Data
 public abstract class Direction
 	implements MeasureElement, ColumnElement {
 
 	/** Custom position, or null for the default position. */
-	@Getter @Setter private Positioning positioning = null;
+	private Positioning positioning = null;
 
 	/** Back reference: the element this direction is attached to, or null if not part of a score. */
-	@Getter @Setter private DirectionContainer parent;
+	private DirectionContainer parent;
 
 }

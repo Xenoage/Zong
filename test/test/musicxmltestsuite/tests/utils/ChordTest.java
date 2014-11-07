@@ -7,7 +7,6 @@ import static org.junit.Assert.fail;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.core.music.chord.Chord;
-import com.xenoage.zong.core.music.lyric.Lyric;
 import com.xenoage.zong.core.position.MP;
 
 
@@ -28,14 +27,8 @@ public class ChordTest {
 	private static void assertEqualsChordLyrics(Chord expectedChord, Chord chord, MP chordMP) {
 		assertEquals(""+chordMP, expectedChord.getLyrics().size(), chord.getLyrics().size());
 		for (int i : range(expectedChord.getLyrics()))
-			assertEqualsLyric(expectedChord.getLyrics().get(i), chord.getLyrics().get(i), chordMP, i);
-	}
-	
-	private static void assertEqualsLyric(Lyric expectedLyric, Lyric lyric, MP chordMP, int lyricIndex) {
-		String msg = ""+chordMP + ", lyric " + lyricIndex;
-		assertEquals(msg, expectedLyric.getSyllableType(), lyric.getSyllableType());
-		assertEquals(msg, expectedLyric.getText().toString(), lyric.getText().toString());
-		assertEquals(msg, expectedLyric.getVerse(), lyric.getVerse());
+			assertEquals(""+chordMP + ", lyric " + i,
+				expectedChord.getLyrics().get(i), chord.getLyrics().get(i));
 	}
 	
 	public static Chord getChordAtBeat(Score score, MP mp) {

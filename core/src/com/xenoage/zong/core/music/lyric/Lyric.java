@@ -1,6 +1,7 @@
 package com.xenoage.zong.core.music.lyric;
 
 import static com.xenoage.utils.CheckUtils.checkArgsNotNull;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,6 +16,7 @@ import com.xenoage.zong.core.text.Text;
  * 
  * @author Andreas Wenger
  */
+@EqualsAndHashCode(exclude="parent")
 public class Lyric
 	implements TextElement {
 
@@ -53,6 +55,7 @@ public class Lyric
 		this.text = text;
 	}
 
+	
 
 	@Override public String toString() {
 		return "Lyric (\"" + text + "\")";

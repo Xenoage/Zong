@@ -1,8 +1,7 @@
 package com.xenoage.zong.core.music.clef;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.zong.core.music.MeasureElement;
@@ -14,14 +13,15 @@ import com.xenoage.zong.core.position.MPContainer;
  * 
  * @author Andreas Wenger
  */
-@RequiredArgsConstructor public final class Clef
+@Data @EqualsAndHashCode(exclude="parent")
+public final class Clef
 	implements MeasureElement
 {
 
 	/** The type of the clef. */
-	@Getter @Setter @NonNull private ClefType type;
+	@NonNull private ClefType type;
 	
 	/** Back reference: the parent element, or null, if not part of a score. */
-	@Getter @Setter private MPContainer parent;
+	private MPContainer parent;
 
 }

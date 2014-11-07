@@ -17,6 +17,7 @@ import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.ScoreFactory;
 import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.music.Staff;
+import com.xenoage.zong.core.music.clef.Clef;
 import com.xenoage.zong.core.music.clef.ClefType;
 import com.xenoage.zong.core.music.rest.Rest;
 import com.xenoage.zong.core.music.time.Time;
@@ -33,7 +34,7 @@ public interface Base42b
 	}
 	
 	Staff[] expectedStaves = getExpectedStaves();
-	List<Tuple2<MP, ClefType>> expectedClefs = getExpectedClefs();
+	List<Tuple2<MP, Clef>> expectedClefs = getExpectedClefs();
 	
 	/**
 	 * Gets the expected musical data, but without the dynamics, articulations and slurs
@@ -73,12 +74,12 @@ public interface Base42b
 		return new Staff[]{score.getStaff(0), score.getStaff(1)};
 	}
 	
-	static List<Tuple2<MP, ClefType>> getExpectedClefs() {
-		List<Tuple2<MP, ClefType>> clefs = alist();
-		clefs.add(t(atBeat(0, 0, unknown, fr(0, 8)), ClefType.clefTreble));
-		clefs.add(t(atBeat(0, 0, unknown, fr(3, 8)), ClefType.clefBass));
-		clefs.add(t(atBeat(0, 1, unknown, fr(0, 8)), ClefType.clefTreble));
-		clefs.add(t(atBeat(1, 0, unknown, fr(0, 8)), ClefType.clefBass));
+	static List<Tuple2<MP, Clef>> getExpectedClefs() {
+		List<Tuple2<MP, Clef>> clefs = alist();
+		clefs.add(t(atBeat(0, 0, unknown, fr(0, 8)), new Clef(ClefType.clefTreble)));
+		clefs.add(t(atBeat(0, 0, unknown, fr(3, 8)), new Clef(ClefType.clefBass)));
+		clefs.add(t(atBeat(0, 1, unknown, fr(0, 8)), new Clef(ClefType.clefTreble)));
+		clefs.add(t(atBeat(1, 0, unknown, fr(0, 8)), new Clef(ClefType.clefBass)));
 		return clefs;
 	}
 

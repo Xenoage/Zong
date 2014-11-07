@@ -1,7 +1,7 @@
 package com.xenoage.zong.core.music.direction;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 
 /**
@@ -9,10 +9,11 @@ import lombok.RequiredArgsConstructor;
  *
  * @author Andreas Wenger
  */
-@RequiredArgsConstructor public final class Dynamics
+@Data @EqualsAndHashCode(callSuper=false)
+public final class Dynamics
 	extends Direction {
 
-	@Getter private final DynamicsType type;
+	private final DynamicsType type;
 
 
 }

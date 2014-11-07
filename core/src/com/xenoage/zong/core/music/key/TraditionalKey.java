@@ -2,6 +2,7 @@ package com.xenoage.zong.core.music.key;
 
 import static com.xenoage.utils.NullUtils.notNull;
 import static com.xenoage.zong.core.music.Pitch.pi;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +17,7 @@ import com.xenoage.zong.core.position.MPContainer;
  * @author Andreas Wenger
  * @author Uli Teschemacher
  */
+@EqualsAndHashCode(exclude="parent")
 public final class TraditionalKey
 	implements Key {
 
@@ -200,10 +202,6 @@ public final class TraditionalKey
 			default:
 				throw new IllegalArgumentException("Invalid index: " + index);
 		}
-	}
-
-	public boolean equalsValue(TraditionalKey k) {
-		return this.fifths == k.fifths && this.mode == k.mode;
 	}
 
 }

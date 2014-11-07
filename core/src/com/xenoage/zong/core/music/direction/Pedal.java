@@ -1,7 +1,7 @@
 package com.xenoage.zong.core.music.direction;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 
 
@@ -10,7 +10,8 @@ import lombok.RequiredArgsConstructor;
  *
  * @author Andreas Wenger
  */
-@RequiredArgsConstructor public final class Pedal
+@Data @EqualsAndHashCode(callSuper=false)
+public final class Pedal
 	extends Direction {
 
 	/** Start and stop marking type. */
@@ -22,6 +23,6 @@ import lombok.RequiredArgsConstructor;
 	}
 
 	/** The start or stop marking type. */
-	@Getter private final Type type;
+	private final Type type;
 
 }

@@ -51,6 +51,7 @@ public class OtherTests {
 		"41i-PartNameDisplay-Override.xml",
 		"43b-MultiStaff-DifferentKeys.xml",
 		"43c-MultiStaff-DifferentKeysAfterBackup.xml",
+		"43d-MultiStaff-StaffChange.xml",
 		"46g-PickupMeasure-Chordnames-FiguredBass.xml",
 		"71a-Chordnames.xml",
 		"71c-ChordsFrets.xml",
@@ -67,7 +68,6 @@ public class OtherTests {
 	};
 	
 	public static final String[] supportedButNotTestedYet = {
-		"43d-MultiStaff-StaffChange.xml", // (60 min) 
 		"43e-Multistaff-ClefDynamics.xml", // (60 min) 
 		"45a-SimpleRepeat.xml", // (30 min) 
 		"45b-RepeatWithAlternatives.xml", // (30 min) 

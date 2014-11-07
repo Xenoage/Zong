@@ -1,8 +1,7 @@
 package com.xenoage.zong.core.music.direction;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 
 /**
@@ -15,14 +14,15 @@ import lombok.Setter;
  * 
  * @author Andreas Wenger
  */
-@RequiredArgsConstructor public final class Wedge
+@Data @EqualsAndHashCode(callSuper=false)
+public final class Wedge
 	extends Direction {
 
 	/** Crescendo or diminuendo. */
-	@Getter private final WedgeType type;
+	private final WedgeType type;
 	/** End marker of this wedge. */
-	@Getter private final WedgeEnd wedgeEnd = new WedgeEnd(this);
+	private final WedgeEnd wedgeEnd = new WedgeEnd(this);
 	/** Height of the opening in IS, or null for default. */
-	@Getter @Setter private Float spread;
+	private Float spread;
 
 }

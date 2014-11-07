@@ -1,5 +1,6 @@
 package com.xenoage.zong.core.text;
 
+import lombok.Data;
 
 /**
  * The simplest implementation of {@link Text}:
@@ -7,26 +8,19 @@ package com.xenoage.zong.core.text;
  * 
  * @author Andreas Wenger
  */
-public class UnformattedText
+@Data public class UnformattedText
 	implements Text {
 
 	private final String text;
-
-
-	public UnformattedText(String text) {
-		this.text = text;
-	}
 
 
 	public static UnformattedText ut(String text) {
 		return new UnformattedText(text);
 	}
 
-
 	@Override public int getLength() {
 		return text.length();
 	}
-
 
 	@Override public String toString() {
 		return text;
