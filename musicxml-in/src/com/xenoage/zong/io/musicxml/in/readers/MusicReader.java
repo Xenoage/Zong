@@ -496,9 +496,8 @@ public final class MusicReader {
 				}
 			}
 		}
-		else {
+		else if (style != null) {
 			//regular barline
-			style = notNull(style, BarlineStyle.Regular);
 			if (location == MxlRightLeftMiddle.Left) {
 				//left barline
 				new ColumnElementWrite(barline(style), context.getScore().getColumnHeader(measureIndex),

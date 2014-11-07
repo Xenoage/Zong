@@ -1,14 +1,11 @@
 package com.xenoage.zong.core.music.volta;
 
-import static com.xenoage.utils.CheckUtils.checkArgsNotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.kernel.Range;
 import com.xenoage.zong.core.header.ColumnHeader;
 import com.xenoage.zong.core.music.ColumnElement;
-
 
 /**
  * Class for a volta (also informally called "Haus" in German).
@@ -25,58 +22,52 @@ import com.xenoage.zong.core.music.ColumnElement;
  * @author Andreas Wenger
  * @author Uli Teschemacher
  */
+@Data @EqualsAndHashCode(exclude="parent")
 public final class Volta
-  implements ColumnElement
-{
-	
+	implements ColumnElement {
+
 	/** The number of measures this volta spans, at least one. */
-	@Getter @Setter private int length;
+	private int length;
 	/** The repetitions (beginning with 1) where this volta is entered, or null for the default case.
 	 * E.g. [1,1] for the 1st time, ..., null for "else". */
-	@Getter @Setter @NonNull private Range numbers;
+	private Range numbers;
 	/** The caption, or null to use a default caption, generated from the numbers:
 	 * [x,x] results to "x.", [x,y] to "x.–y.", null to "". */
-	@Setter private String caption;
+	private String caption;
 	/** True, iff there is a downward hook on the right side. */
-	@Getter @Setter private boolean rightHook;
-	
-	/** The parent measure column, or null if not part of a score. */
-	@Getter @Setter private ColumnHeader parent;
-	
-	
-  public Volta(int length, Range numbers, String caption, boolean rightHook)
-  {
-  	checkArgsNotNull(numbers);
-  	if (length < 1)
-  		throw new IllegalArgumentException("Volta must span at least 1 measure");
-  	this.length = length;
-  	this.numbers = numbers;
-  	this.caption = caption;
-  	this.rightHook = rightHook;
-  }
+	private boolean rightHook;
 
+	/** The parent measure column, or null if not part of a score. */
+	private ColumnHeader parent;
+
+
+	public Volta(int length, Range numbers, String caption, boolean rightHook) {
+		if (length < 1)
+			throw new IllegalArgumentException("Volta must span at least 1 measure");
+		this.length = length;
+		this.numbers = numbers;
+		this.caption = caption;
+		this.rightHook = rightHook;
+	}
 
 	/**
 	 * Gets the caption of this volta.
 	 * This is never null, but may be the empty string.
 	 */
-	public String getCaption()
-	{
+	public String getCaption() {
 		if (caption != null)
-  		return caption;
-  	else if (numbers.getCount() == 1)
-  		return numbers.getStart() + ".";
-  	else
-  		return numbers.getStart() + ".–" + numbers.getStop() + ".";
+			return caption;
+		else if (numbers.getCount() == 1)
+			return numbers.getStart() + ".";
+		else
+			return numbers.getStart() + ".–" + numbers.getStop() + ".";
 	}
-	
-	
+
 	/**
 	 * Gets the caption of this volta, or null if unset.
 	 */
-	public String getCaptionOrNull()
-	{
-  	return caption;
+	public String getCaptionOrNull() {
+		return caption;
 	}
 
 }

@@ -84,4 +84,8 @@ public final class Barline
 		this.repeatTimes = repeatTimes;
 	}
 
+	@Override public String toString() {
+		return "Barline [style=" + style + ", repeat=" + repeat + ", repeatTimes=" + repeatTimes + "]";
+	}
+
 }
