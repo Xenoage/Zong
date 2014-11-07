@@ -5,7 +5,7 @@ Already submitted to gmane.comp.gnu.lilypond.bugs:
 - 41f-StaffGroups-Overlapping.xml: wrong description. first group goes from staff 1 to 4. and there is no square bracket.
   - https://code.google.com/p/lilypond/issues/detail?id=4177&thanks=4177
 - 42a-MultiVoice-TwoVoicesOnStaff-Lyrics.xml: the very last lyric element should be "Voice2" instead of "Voice1"
-  - TODO
+  - http://code.google.com/p/lilypond/issues/detail?id=4188 
 
 Fixed locally:
 - 01b-Pitches-Intervals.xml: only a single measure in MusicXML

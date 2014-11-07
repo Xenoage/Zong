@@ -14,8 +14,8 @@ import lombok.AllArgsConstructor;
 import com.xenoage.utils.document.command.TransparentCommand;
 import com.xenoage.utils.document.io.FileFormat;
 import com.xenoage.utils.document.io.SupportedFormats;
+import com.xenoage.utils.jse.settings.FileSettings;
 import com.xenoage.zong.commands.desktop.app.DocumentOpen;
-import com.xenoage.zong.desktop.utils.settings.FileSettings;
 
 /**
  * This command shows a dialog that allows to

@@ -24,10 +24,10 @@ import com.xenoage.utils.document.io.FileFormat;
 import com.xenoage.utils.document.io.SupportedFormats;
 import com.xenoage.utils.filter.AllFilter;
 import com.xenoage.utils.iterators.It;
+import com.xenoage.utils.jse.settings.FileSettings;
 import com.xenoage.zong.Voc;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.desktop.io.midi.out.JseMidiSequenceWriter;
-import com.xenoage.zong.desktop.utils.settings.FileSettings;
 import com.xenoage.zong.io.midi.out.MidiConverter;
 
 /**

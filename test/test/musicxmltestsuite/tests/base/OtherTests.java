@@ -67,8 +67,6 @@ public class OtherTests {
 	};
 	
 	public static final String[] supportedButNotTestedYet = {
-		"42a-MultiVoice-TwoVoicesOnStaff-Lyrics.xml", // (60 min) 
-		"42b-MultiVoice-MidMeasureClefChange.xml", // (60 min) 
 		"43a-PianoStaff.xml", // (15 min) 
 		"43d-MultiStaff-StaffChange.xml", // (60 min) 
 		"43e-Multistaff-ClefDynamics.xml", // (60 min) 

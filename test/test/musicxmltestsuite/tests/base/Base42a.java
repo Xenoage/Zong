@@ -16,7 +16,6 @@ import com.xenoage.zong.core.music.lyric.SyllableType;
 import com.xenoage.zong.core.music.rest.Rest;
 import com.xenoage.zong.core.music.time.Time;
 import com.xenoage.zong.core.music.time.TimeType;
-import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.text.UnformattedText;
 import com.xenoage.zong.io.selection.Cursor;
 
