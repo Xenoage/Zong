@@ -59,6 +59,10 @@ public class ScoreTest {
 		}
 	}
 	
+	public static void assertEqualsStartBarlines(Barline[] expectedStartBarlines, Score score) {
+		testColumnElements(expectedStartBarlines, score, column -> column.getStartBarline());
+	}
+	
 	public static void assertEqualsEndBarlines(Barline[] expectedEndBarlines, Score score) {
 		testColumnElements(expectedEndBarlines, score, column -> column.getEndBarline());
 	}
