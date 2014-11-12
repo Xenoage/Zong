@@ -2,6 +2,7 @@ package com.xenoage.zong.io.musicxml.in.readers;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.iterators.It.it;
+import static com.xenoage.utils.kernel.Tuple2.t;
 import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.zong.core.position.MP.atBeat;
 import static com.xenoage.zong.io.musicxml.in.util.CommandPerformer.execute;
@@ -14,6 +15,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import com.xenoage.utils.kernel.Range;
+import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.utils.math.VSide;
 import com.xenoage.zong.commands.core.music.ColumnElementWrite;
@@ -411,6 +413,13 @@ public final class MusicReaderContext {
 	public void writeColumnElement(ColumnElement element) {
 		new ColumnElementWrite(element, score.getColumnHeader(mp.getMeasure()), mp.getBeat(), null).execute();
 	}
+	
+	/**
+	 * Writes the given {@link ColumnElement} at the given measure.
+	 */
+	public void writeColumnElement(int measure, ColumnElement element) {
+		new ColumnElementWrite(element, score.getColumnHeader(measure), MP.unknownBeat, null).execute();
+	}
 
 	/**
 	 * Writes the given {@link MeasureElement} at the given staff (index relative to first
@@ -499,9 +508,9 @@ public final class MusicReaderContext {
 	}
 
 	/**
-	 * Closes the wedge with the given number and returns it.
+	 * Closes the wedge with the given number and returns it with the start measure number.
 	 */
-	public Volta closeVolta(boolean rightHook) {
+	public Tuple2<Volta, Integer> closeVolta(boolean rightHook) {
 		OpenVolta openVolta = openElements.getOpenVolta();
 		if (openVolta == null) {
 			if (settings.isIgnoringErrors())
@@ -512,7 +521,7 @@ public final class MusicReaderContext {
 		int length = mp.measure - openVolta.startMeasure + 1;
 		Volta volta = new Volta(length, openVolta.numbers, openVolta.caption, rightHook);
 		openElements.setOpenVolta(null);
-		return volta;
+		return t(volta, openVolta.startMeasure);
 	}
 	
 	public MusicReaderSettings getSettings() {

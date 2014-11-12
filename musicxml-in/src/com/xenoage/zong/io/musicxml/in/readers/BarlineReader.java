@@ -9,6 +9,7 @@ import static com.xenoage.zong.core.music.barline.Barline.barlineBackwardRepeat;
 import static com.xenoage.zong.core.music.barline.Barline.barlineForwardRepeat;
 
 import com.xenoage.utils.kernel.Range;
+import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.zong.commands.core.music.ColumnElementWrite;
 import com.xenoage.zong.core.music.barline.BarlineStyle;
 import com.xenoage.zong.core.music.volta.Volta;
@@ -79,9 +80,9 @@ public class BarlineReader {
 		}
 		else if (type == MxlStartStopDiscontinue.Stop || type == MxlStartStopDiscontinue.Discontinue) {
 			boolean rightHook = (type == MxlStartStopDiscontinue.Stop);
-			Volta volta = context.closeVolta(rightHook);
+			Tuple2<Volta, Integer> volta = context.closeVolta(rightHook);
 			if (volta != null)
-				context.writeColumnElement(volta);
+				context.writeColumnElement(volta.get2(), volta.get1());
 		}
 	}
 	
