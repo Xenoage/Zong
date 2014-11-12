@@ -1,6 +1,6 @@
 package musicxmltestsuite.tests.base;
 
-import static com.xenoage.utils.kernel.Range.rangeReverse;
+import static com.xenoage.utils.kernel.Range.range;
 
 import com.xenoage.zong.core.music.barline.Barline;
 import com.xenoage.zong.core.music.barline.BarlineStyle;
@@ -22,8 +22,8 @@ public interface Base45b
 	
 	Volta[] expectedVoltas = {
 		null,
-		new Volta(1, rangeReverse(1, 1), "1.", true),
-		new Volta(1, null, "1.", true),
+		new Volta(1, range(1, 1), "1.", true),
+		new Volta(1, range(2, 2), "2.", false),
 		null,
 	};
 	

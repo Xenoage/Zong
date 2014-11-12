@@ -6,7 +6,7 @@ import com.xenoage.utils.xml.XmlWriter;
 
 /**
  * MusicXML right-left-middle.
- * Only named "location" in barline element.
+ * Only used in the barline element, named "location" .
  * 
  * @author Andreas Wenger
  */

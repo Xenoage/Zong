@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.music.chord.Chord;
@@ -25,6 +26,7 @@ public final class OpenElements {
 	private List<OpenSlur> openSlurs;
 	private List<OpenSlur> openTies;
 	private Map<Pitch, OpenSlur> openUnnumberedTies;
+	@Setter private OpenVolta openVolta;
 
 
 	@SuppressWarnings("unchecked") public OpenElements() {

@@ -2,6 +2,7 @@ package com.xenoage.zong.core.music.volta;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import com.xenoage.utils.kernel.Range;
 import com.xenoage.zong.core.header.ColumnHeader;
@@ -22,7 +23,7 @@ import com.xenoage.zong.core.music.ColumnElement;
  * @author Andreas Wenger
  * @author Uli Teschemacher
  */
-@Data @EqualsAndHashCode(exclude="parent")
+@Data @EqualsAndHashCode(exclude="parent") @ToString(exclude="parent")
 public final class Volta
 	implements ColumnElement {
 
@@ -57,6 +58,8 @@ public final class Volta
 	public String getCaption() {
 		if (caption != null)
 			return caption;
+		else if (numbers == null)
+			return "";
 		else if (numbers.getCount() == 1)
 			return numbers.getStart() + ".";
 		else

@@ -68,7 +68,7 @@ public class OtherTests {
 	};
 	
 	public static final String[] supportedButNotTestedYet = {
-		"45b-RepeatWithAlternatives.xml", // (30 min) 
+		//"45b-RepeatWithAlternatives.xml", // (30 min) 
 		"45c-RepeatMultipleTimes.xml", // (30 min) 
 		"45d-Repeats-Nested-Alternatives.xml", // (30 min) 
 		"45e-Repeats-Nested-Alternatives.xml", // (45 min) 

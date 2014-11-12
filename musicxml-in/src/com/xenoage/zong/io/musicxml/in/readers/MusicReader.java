@@ -8,16 +8,11 @@ import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.utils.math.MathUtils.clamp;
-import static com.xenoage.zong.core.music.MeasureSide.Left;
-import static com.xenoage.zong.core.music.MeasureSide.Right;
-import static com.xenoage.zong.core.music.barline.Barline.barline;
-import static com.xenoage.zong.core.music.barline.Barline.barlineBackwardRepeat;
-import static com.xenoage.zong.core.music.barline.Barline.barlineForwardRepeat;
 import static com.xenoage.zong.core.music.time.TimeType.timeSenzaMisura;
 import static com.xenoage.zong.core.music.time.TimeType.timeType;
 import static com.xenoage.zong.core.position.MP.atElement;
 import static com.xenoage.zong.core.position.MP.atStaff;
-import static com.xenoage.zong.core.text.UnformattedText.ut;
+import static com.xenoage.zong.io.musicxml.in.readers.BarlineReader.readBarline;
 import static com.xenoage.zong.io.musicxml.in.readers.ChordReader.readChord;
 import static com.xenoage.zong.io.musicxml.in.readers.FontInfoReader.readFontInfo;
 import static com.xenoage.zong.io.musicxml.in.readers.OtherReader.readPosition;
@@ -25,8 +20,6 @@ import static com.xenoage.zong.io.musicxml.in.readers.OtherReader.readPositionin
 import static com.xenoage.zong.io.musicxml.in.util.CommandPerformer.execute;
 
 import java.util.List;
-
-import javax.xml.datatype.Duration;
 
 import com.xenoage.utils.font.FontInfo;
 import com.xenoage.utils.iterators.It;
@@ -44,7 +37,6 @@ import com.xenoage.zong.core.music.Measure;
 import com.xenoage.zong.core.music.Part;
 import com.xenoage.zong.core.music.Staff;
 import com.xenoage.zong.core.music.Voice;
-import com.xenoage.zong.core.music.barline.BarlineStyle;
 import com.xenoage.zong.core.music.clef.Clef;
 import com.xenoage.zong.core.music.clef.ClefType;
 import com.xenoage.zong.core.music.direction.Coda;
@@ -100,14 +92,11 @@ import com.xenoage.zong.musicxml.types.MxlWedge;
 import com.xenoage.zong.musicxml.types.MxlWords;
 import com.xenoage.zong.musicxml.types.attributes.MxlPrintAttributes;
 import com.xenoage.zong.musicxml.types.attributes.MxlPrintStyle;
-import com.xenoage.zong.musicxml.types.attributes.MxlRepeat;
 import com.xenoage.zong.musicxml.types.choice.MxlDirectionTypeContent;
 import com.xenoage.zong.musicxml.types.choice.MxlDirectionTypeContent.MxlDirectionTypeContentType;
 import com.xenoage.zong.musicxml.types.choice.MxlMusicDataContent;
 import com.xenoage.zong.musicxml.types.choice.MxlMusicDataContent.MxlMusicDataContentType;
 import com.xenoage.zong.musicxml.types.choice.MxlTimeContent.MxlTimeContentType;
-import com.xenoage.zong.musicxml.types.enums.MxlBackwardForward;
-import com.xenoage.zong.musicxml.types.enums.MxlRightLeftMiddle;
 import com.xenoage.zong.musicxml.types.enums.MxlTimeSymbol;
 import com.xenoage.zong.musicxml.types.groups.MxlLayout;
 import com.xenoage.zong.musicxml.types.partwise.MxlMeasure;
@@ -462,52 +451,6 @@ public final class MusicReader {
 				}
 			}
 
-		}
-	}
-
-	/**
-	 * Reads the given barline element.
-	 * Currently only left and right barlines are supported.
-	 */
-	private static void readBarline(MusicReaderContext context, MxlBarline mxlBarline) {
-		MxlRightLeftMiddle location = mxlBarline.getLocation();
-		MxlRepeat repeat = mxlBarline.getRepeat();
-		int measureIndex = context.getMp().measure;
-		BarlineStyle style = null;
-		if (mxlBarline.getBarStyle() != null)
-			style = BarlineStyleReader.read(mxlBarline.getBarStyle().getBarStyle());
-		if (repeat != null) {
-			//repeat barline
-			if (location == MxlRightLeftMiddle.Left) {
-				//left barline
-				if (repeat.getDirection() == MxlBackwardForward.Forward) {
-					style = notNull(style, BarlineStyle.HeavyLight);
-					new ColumnElementWrite(barlineForwardRepeat(style),
-						context.getScore().getColumnHeader(measureIndex), null, Left).execute();
-				}
-			}
-			else if (location == MxlRightLeftMiddle.Right) {
-				//right barline
-				if (repeat.getDirection() == MxlBackwardForward.Backward) {
-					style = notNull(style, BarlineStyle.LightHeavy);
-					int times = notNull(repeat.getTimes(), 1).intValue();
-					new ColumnElementWrite(barlineBackwardRepeat(style, times),
-						context.getScore().getColumnHeader(measureIndex), null, Right).execute();
-				}
-			}
-		}
-		else if (style != null) {
-			//regular barline
-			if (location == MxlRightLeftMiddle.Left) {
-				//left barline
-				new ColumnElementWrite(barline(style), context.getScore().getColumnHeader(measureIndex),
-					null, Left).execute();
-			}
-			else if (location == MxlRightLeftMiddle.Right) {
-				//right barline
-				new ColumnElementWrite(barline(style), context.getScore().getColumnHeader(measureIndex),
-					null, Right).execute();
-			}
 		}
 	}
 

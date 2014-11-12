@@ -13,6 +13,7 @@ import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 
+import com.xenoage.utils.kernel.Range;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.utils.math.VSide;
 import com.xenoage.zong.commands.core.music.ColumnElementWrite;
@@ -41,11 +42,13 @@ import com.xenoage.zong.core.music.slur.Slur;
 import com.xenoage.zong.core.music.slur.SlurType;
 import com.xenoage.zong.core.music.slur.SlurWaypoint;
 import com.xenoage.zong.core.music.util.Interval;
+import com.xenoage.zong.core.music.volta.Volta;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.util.InconsistentScoreException;
 import com.xenoage.zong.io.musicxml.in.util.MusicReaderException;
 import com.xenoage.zong.io.musicxml.in.util.OpenElements;
 import com.xenoage.zong.io.musicxml.in.util.OpenSlur;
+import com.xenoage.zong.io.musicxml.in.util.OpenVolta;
 import com.xenoage.zong.utils.exceptions.MeasureFullException;
 
 /**
@@ -490,6 +493,28 @@ public final class MusicReaderContext {
 		new MeasureElementWrite(new InstrumentChange(newInstrument), score.getMeasure(this.mp), mp.beat).execute();
 	}
 
+	public void openVolta(Range numbers, String caption) {
+		if (openElements.getOpenVolta() == null)
+			openElements.setOpenVolta(new OpenVolta(mp.measure, numbers, caption));
+	}
+
+	/**
+	 * Closes the wedge with the given number and returns it.
+	 */
+	public Volta closeVolta(boolean rightHook) {
+		OpenVolta openVolta = openElements.getOpenVolta();
+		if (openVolta == null) {
+			if (settings.isIgnoringErrors())
+				return null;
+			else 
+				throw new InconsistentScoreException("No volta open at " + mp);
+		}
+		int length = mp.measure - openVolta.startMeasure + 1;
+		Volta volta = new Volta(length, openVolta.numbers, openVolta.caption, rightHook);
+		openElements.setOpenVolta(null);
+		return volta;
+	}
+	
 	public MusicReaderSettings getSettings() {
 		return settings;
 	}
