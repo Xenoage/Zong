@@ -87,6 +87,8 @@ public class MidiRepetitionCalculator {
 				int voltatime = 1;
 				while (voltatime <= voltaBlock.getRepeatCount()) {
 					Range range = voltaBlock.getRange(voltatime);
+					if (range == null)
+						range = range(iMeasure, iMeasure); //TODO...
 					MP stopPosition = atBeat(-1, range.getStop(), -1, score.getMeasureBeats(iMeasure));
 					if (iMeasure != range.getStart()) {
 						MP currentPosition = atBeat(-1, iMeasure, -1, _0);

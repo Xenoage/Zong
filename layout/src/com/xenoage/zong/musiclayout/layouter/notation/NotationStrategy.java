@@ -39,6 +39,7 @@ import com.xenoage.zong.core.music.time.Time;
 import com.xenoage.zong.core.music.util.BeatE;
 import com.xenoage.zong.core.music.util.Column;
 import com.xenoage.zong.core.music.util.Interval;
+import com.xenoage.zong.core.music.volta.Volta;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.position.MPElement;
 import com.xenoage.zong.core.text.FormattedText;
@@ -182,6 +183,10 @@ public final class NotationStrategy
 		}
 		else if (element instanceof Break) {
 			//ignore break
+			notation = null;
+		}
+		else if (element instanceof Volta) {
+			//ignore volta
 			notation = null;
 		}
 		else {
