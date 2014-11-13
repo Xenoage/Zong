@@ -26,6 +26,8 @@ import com.xenoage.zong.core.music.ColumnElement;
 @Data @EqualsAndHashCode(exclude="parent") @ToString(exclude="parent")
 public final class Volta
 	implements ColumnElement {
+	
+	public static final String dash = "–";
 
 	/** The number of measures this volta spans, at least one. */
 	private int length;
@@ -63,7 +65,7 @@ public final class Volta
 		else if (numbers.getCount() == 1)
 			return numbers.getStart() + ".";
 		else
-			return numbers.getStart() + ".–" + numbers.getStop() + ".";
+			return numbers.getStart() + "." + dash + numbers.getStop() + ".";
 	}
 
 	/**
