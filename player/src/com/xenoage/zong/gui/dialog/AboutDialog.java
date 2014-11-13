@@ -7,9 +7,9 @@ import javafx.scene.control.Label;
 
 import org.controlsfx.control.HyperlinkLabel;
 
+import com.xenoage.utils.jse.javafx.Dialog;
 import com.xenoage.zong.Zong;
 import com.xenoage.zong.commands.desktop.app.WebsiteOpen;
-import com.xenoage.zong.desktop.gui.utils.Dialog;
 
 /**
  * About dialog.

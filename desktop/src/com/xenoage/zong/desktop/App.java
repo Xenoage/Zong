@@ -42,9 +42,11 @@ import com.xenoage.utils.io.InputStream;
 import com.xenoage.utils.jse.JsePlatformUtils;
 import com.xenoage.utils.jse.io.JseInputStream;
 import com.xenoage.utils.jse.io.JseOutputStream;
+import com.xenoage.utils.jse.javafx.JavaFXApp;
 import com.xenoage.utils.jse.lang.LangManager;
 import com.xenoage.utils.jse.lang.LanguageInfo;
 import com.xenoage.utils.lang.Lang;
+import com.xenoage.utils.lang.VocID;
 import com.xenoage.utils.log.Log;
 import com.xenoage.zong.Voc;
 import com.xenoage.zong.Zong;
@@ -62,7 +64,8 @@ import com.xenoage.zong.io.musicxml.in.MusicXmlFileReader;
  * 
  * @author Andreas Wenger
  */
-public class App<DocType extends Document> {
+public class App<DocType extends Document>
+	extends JavaFXApp {
 
 	/**
 	 * Type of JavaFX app.
@@ -142,8 +145,9 @@ public class App<DocType extends Document> {
 	}
 	
 	private void init() {
-		//initialize platform utils, logging, error handling, language, audio and GUI
+		//initialize JavaFXApp, platform utils, logging, error handling, language, audio and GUI
 		//using the template method pattern
+		JavaFXApp.init(this);
 		initPlatformUtils();
 		initLog();
 		initErr();
@@ -234,7 +238,7 @@ public class App<DocType extends Document> {
 	/**
 	 * Gets the name of the program, like "Zong! Player".
 	 */
-	public String getName() {
+	@Override public String getName() {
 		return Zong.getName(getAppFirstName());
 	}
 
@@ -452,7 +456,7 @@ public class App<DocType extends Document> {
 	/**
 	 * Applies the icons of the app to the given {@link Stage}.
 	 */
-	public void applyIcons(Stage stage) {
+	@Override public void applyIcons(Stage stage) {
 		stage.getIcons().clear();
 		stage.getIcons().addAll(icons);
 	}
@@ -467,6 +471,10 @@ public class App<DocType extends Document> {
 			"If you need a working program, use version " + Zong.projectVersion + "." +
 			Zong.projectIterationLastWorking, Zong.projectFamilyName + " " + Zong.projectVersionLong,
 			JOptionPane.WARNING_MESSAGE);
+	}
+	
+	@Override public VocID[] getVoc() {
+		return Voc.values();
 	}
 
 }

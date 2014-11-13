@@ -31,9 +31,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
-import com.xenoage.utils.jse.JsePlatformUtils;
 import com.xenoage.utils.jse.files.RecentFiles;
-import com.xenoage.utils.jse.io.DesktopIO;
+import com.xenoage.utils.jse.javafx.Dialog;
+import com.xenoage.utils.jse.javafx.ResourceUpdater;
 import com.xenoage.utils.jse.lang.LangManager;
 import com.xenoage.utils.jse.lang.LangResourceBundle;
 import com.xenoage.utils.jse.lang.LanguageInfo;
@@ -59,11 +59,8 @@ import com.xenoage.zong.commands.player.playback.PlaybackStart;
 import com.xenoage.zong.commands.player.playback.PlaybackStop;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.position.MP;
-import com.xenoage.zong.desktop.gui.utils.Dialog;
-import com.xenoage.zong.desktop.gui.utils.ResourceUpdater;
 import com.xenoage.zong.desktop.io.midi.out.MidiScorePlayer;
 import com.xenoage.zong.io.midi.out.PlaybackListener;
-import com.xenoage.zong.musicxml.util.MusicXMLFilenameFilter;
 
 public class PlayerFrame
 	extends Dialog

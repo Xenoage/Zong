@@ -19,13 +19,13 @@ import lombok.Setter;
 
 import com.xenoage.utils.io.FileUtils;
 import com.xenoage.utils.jse.io.JseFileUtils;
+import com.xenoage.utils.jse.javafx.Dialog;
 import com.xenoage.utils.jse.log.DesktopLogProcessing;
 import com.xenoage.utils.lang.Lang;
 import com.xenoage.zong.Voc;
 import com.xenoage.zong.Zong;
 import com.xenoage.zong.commands.desktop.app.ExternalFileOpen;
 import com.xenoage.zong.commands.desktop.app.WebsiteOpen;
-import com.xenoage.zong.desktop.gui.utils.Dialog;
 import com.xenoage.zong.desktop.utils.http.HttpReport;
 
 /**

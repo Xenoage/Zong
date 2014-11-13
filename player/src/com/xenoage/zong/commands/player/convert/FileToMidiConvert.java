@@ -1,11 +1,11 @@
 package com.xenoage.zong.commands.player.convert;
 
 import static com.xenoage.utils.error.Err.handle;
+import static com.xenoage.utils.jse.javafx.FileChooserUtils.addFilter;
 import static com.xenoage.utils.log.Log.log;
 import static com.xenoage.utils.log.Report.remark;
 import static com.xenoage.utils.log.Report.warning;
 import static com.xenoage.zong.desktop.App.app;
-import static com.xenoage.zong.desktop.gui.utils.FileChooserUtils.addFilter;
 import static com.xenoage.zong.player.Player.pApp;
 
 import java.io.File;

@@ -1,15 +1,15 @@
 package com.xenoage.zong.commands.desktop.dialog;
 
 import static com.xenoage.utils.error.Err.handle;
+import static com.xenoage.utils.jse.javafx.Dialog.dialog;
 import static com.xenoage.utils.log.Report.warning;
-import static com.xenoage.zong.desktop.gui.utils.Dialog.dialog;
 import javafx.stage.Window;
 import lombok.AllArgsConstructor;
 
 import com.xenoage.utils.document.command.TransparentCommand;
+import com.xenoage.utils.jse.javafx.DialogResult;
 import com.xenoage.zong.Voc;
 import com.xenoage.zong.desktop.gui.dialogs.AudioSettingsDialog;
-import com.xenoage.zong.desktop.gui.utils.DialogResult;
 import com.xenoage.zong.desktop.io.midi.out.SynthManager;
 
 /**

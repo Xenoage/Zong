@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
+import com.xenoage.utils.jse.javafx.Dialog;
 import com.xenoage.utils.lang.Lang;
 import com.xenoage.zong.Voc;
 import com.xenoage.zong.core.Score;
@@ -15,7 +16,6 @@ import com.xenoage.zong.core.info.Creator;
 import com.xenoage.zong.core.info.Rights;
 import com.xenoage.zong.core.info.ScoreInfo;
 import com.xenoage.zong.core.music.Part;
-import com.xenoage.zong.desktop.gui.utils.Dialog;
 
 /**
  * Dialog with information about a {@link Score}.

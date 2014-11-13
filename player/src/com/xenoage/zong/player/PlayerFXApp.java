@@ -1,6 +1,6 @@
 package com.xenoage.zong.player;
 
-import static com.xenoage.zong.desktop.gui.utils.Dialog.dialog;
+import static com.xenoage.utils.jse.javafx.Dialog.dialog;
 import static com.xenoage.zong.player.Player.pApp;
 import javafx.application.Application;
 import javafx.stage.Stage;

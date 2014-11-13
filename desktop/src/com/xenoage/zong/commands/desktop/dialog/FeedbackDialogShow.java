@@ -1,6 +1,6 @@
 package com.xenoage.zong.commands.desktop.dialog;
 
-import static com.xenoage.zong.desktop.gui.utils.Dialog.dialog;
+import static com.xenoage.utils.jse.javafx.Dialog.dialog;
 import javafx.stage.Window;
 import lombok.AllArgsConstructor;
 

@@ -4,7 +4,7 @@ import javafx.stage.Window;
 import lombok.AllArgsConstructor;
 
 import com.xenoage.utils.document.command.TransparentCommand;
-import com.xenoage.zong.desktop.gui.utils.Dialog;
+import com.xenoage.utils.jse.javafx.Dialog;
 import com.xenoage.zong.gui.dialog.AboutDialog;
 
 /**

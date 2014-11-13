@@ -1,7 +1,7 @@
 package com.xenoage.zong.desktop.gui.dialogs;
 
-import static com.xenoage.zong.desktop.gui.utils.FXUtils.getValue;
-import static com.xenoage.zong.desktop.gui.utils.FXUtils.setValue;
+import static com.xenoage.utils.jse.javafx.FXUtils.getValue;
+import static com.xenoage.utils.jse.javafx.FXUtils.setValue;
 import static javafx.collections.FXCollections.observableArrayList;
 
 import java.io.File;
@@ -16,11 +16,11 @@ import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import lombok.Getter;
 
+import com.xenoage.utils.jse.javafx.Dialog;
+import com.xenoage.utils.jse.javafx.FileChooserUtils;
 import com.xenoage.utils.jse.settings.Settings;
 import com.xenoage.utils.lang.Lang;
 import com.xenoage.zong.Voc;
-import com.xenoage.zong.desktop.gui.utils.Dialog;
-import com.xenoage.zong.desktop.gui.utils.FileChooserUtils;
 import com.xenoage.zong.desktop.io.filefilter.SoundbankFileFilter;
 import com.xenoage.zong.desktop.io.midi.out.SynthManager;
 
