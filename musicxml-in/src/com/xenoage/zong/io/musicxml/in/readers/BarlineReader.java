@@ -10,7 +10,10 @@ import static com.xenoage.zong.core.music.barline.Barline.barlineForwardRepeat;
 
 import com.xenoage.utils.kernel.Range;
 import com.xenoage.utils.kernel.Tuple2;
+import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.commands.core.music.ColumnElementWrite;
+import com.xenoage.zong.core.music.MeasureSide;
+import com.xenoage.zong.core.music.barline.Barline;
 import com.xenoage.zong.core.music.barline.BarlineStyle;
 import com.xenoage.zong.core.music.volta.Volta;
 import com.xenoage.zong.musicxml.types.MxlBarline;
@@ -25,7 +28,6 @@ public class BarlineReader {
 
 	/**
 	 * Reads the given barline element.
-	 * Currently only left and right barlines are supported.
 	 */
 	public static void readBarline(MusicReaderContext context, MxlBarline mxlBarline) {
 		MxlRightLeftMiddle location = mxlBarline.getLocation();
@@ -34,37 +36,37 @@ public class BarlineReader {
 		BarlineStyle style = null;
 		if (mxlBarline.getBarStyle() != null)
 			style = BarlineStyleReader.read(mxlBarline.getBarStyle().getBarStyle());
+		Barline barline = null;
 		if (repeat != null) {
 			//repeat barline
-			if (location == MxlRightLeftMiddle.Left) {
-				//left barline
-				if (repeat.getDirection() == MxlBackwardForward.Forward) {
-					style = notNull(style, BarlineStyle.HeavyLight);
-					new ColumnElementWrite(barlineForwardRepeat(style),
-						context.getScore().getColumnHeader(measureIndex), null, Left).execute();
-				}
+			if (repeat.getDirection() == MxlBackwardForward.Forward) {
+				style = notNull(style, BarlineStyle.HeavyLight);
+				barline = barlineForwardRepeat(style);
 			}
-			else if (location == MxlRightLeftMiddle.Right) {
-				//right barline
-				if (repeat.getDirection() == MxlBackwardForward.Backward) {
-					style = notNull(style, BarlineStyle.LightHeavy);
-					int times = notNull(repeat.getTimes(), 1).intValue();
-					new ColumnElementWrite(barlineBackwardRepeat(style, times),
-						context.getScore().getColumnHeader(measureIndex), null, Right).execute();
-				}
+			else if (repeat.getDirection() == MxlBackwardForward.Backward) {
+				style = notNull(style, BarlineStyle.LightHeavy);
+				int times = notNull(repeat.getTimes(), 1).intValue();
+				barline = barlineBackwardRepeat(style, times);
 			}
 		}
 		else if (style != null) {
 			//regular barline
-			if (location == MxlRightLeftMiddle.Left) {
-				//left barline
-				new ColumnElementWrite(barline(style), context.getScore().getColumnHeader(measureIndex),
-					null, Left).execute();
-			}
-			else if (location == MxlRightLeftMiddle.Right) {
-				//right barline
-				new ColumnElementWrite(barline(style), context.getScore().getColumnHeader(measureIndex),
-					null, Right).execute();
+			barline = barline(style);
+		}
+		if (barline != null) {
+			//side / beat
+			MeasureSide side = null;
+			Fraction beat = null;
+			if (location == MxlRightLeftMiddle.Left)
+				side = Left;
+			else if (location == MxlRightLeftMiddle.Right)
+				side = Right;
+			else if (location == MxlRightLeftMiddle.Middle)
+				beat = context.getMp().beat;
+			//write barline
+			if (barline != null) {
+				new ColumnElementWrite(barline,
+					context.getScore().getColumnHeader(measureIndex), beat, side).execute();
 			}
 		}
 		if (mxlBarline.getEnding() != null) {

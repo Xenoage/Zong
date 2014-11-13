@@ -37,6 +37,10 @@ public class ScoreTest {
 		testColumnElements(expectedKeys, score, (column, beat) -> column.getKeys().get(beat));
 	}
 	
+	public static void testMiddleBarlines(List<Tuple2<MP, Barline>> expectedBarlines, Score score) {
+		testColumnElements(expectedBarlines, score, (measure, beat) -> measure.getMiddleBarlines().get(beat));
+	}
+	
 	private static <T> void testMeasureElements(List<Tuple2<MP, T>> expectedElements, Score score,
 		BiFunction<Measure, Fraction, T> getElementAtBeat) {
 		for (Tuple2<MP, T> expectedElement : expectedElements) {

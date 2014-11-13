@@ -68,8 +68,6 @@ public class OtherTests {
 	};
 	
 	public static final String[] supportedButNotTestedYet = {
-		"46a-Barlines.xml", // (30 min) 
-		"46b-MidmeasureBarline.xml", // (30 min) 
 		"46c-Midmeasure-Clef.xml", // (15 min) 
 		"46d-PickupMeasure-ImplicitMeasures.xml", // (15 min) 
 		"46e-PickupMeasure-SecondVoiceStartsLater.xml", // (15 min) 
