@@ -17,7 +17,5 @@ public class Test45c
 		assertEqualsStartBarlines(expectedStartBarlines, score);
 		assertEqualsEndBarlines(expectedEndBarlines, score);
 	}
-
-	
 	
 }

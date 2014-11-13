@@ -68,10 +68,6 @@ public class OtherTests {
 	};
 	
 	public static final String[] supportedButNotTestedYet = {
-		"45d-Repeats-Nested-Alternatives.xml", // (30 min) 
-		"45e-Repeats-Nested-Alternatives.xml", // (45 min) 
-		"45f-Repeats-InvalidEndings.xml", // (30 min) 
-		"45g-Repeats-NotEnded.xml", // (15 min) 
 		"46a-Barlines.xml", // (30 min) 
 		"46b-MidmeasureBarline.xml", // (30 min) 
 		"46c-Midmeasure-Clef.xml", // (15 min) 

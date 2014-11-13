@@ -19,7 +19,5 @@ public class Test45f
 		assertEqualsEndBarlines(expectedEndBarlines, score);
 		assertEqualsVoltas(expectedVoltas, score);
 	}
-
-	
 	
 }
