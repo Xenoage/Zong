@@ -3,13 +3,13 @@ package musicxmltestsuite.tests.musicxmlin;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.core.position.MP.atMeasure;
 import static com.xenoage.zong.core.position.MP.atVoice;
+import static musicxmltestsuite.tests.utils.StaffTest.testMeasureFilledBeats;
 import static musicxmltestsuite.tests.utils.VoiceTest.assertEqualsVoice;
 import static org.junit.Assert.assertEquals;
 import musicxmltestsuite.tests.base.Base46e;
 
 import org.junit.Test;
 
-import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.Measure;
 import com.xenoage.zong.core.music.Voice;
@@ -23,7 +23,7 @@ public class Test46e
 
 	
 	@Test public void test() {
-		testMeasureFilledBeats();
+		testMeasureFilledBeats(expectedMeasureFilledBeats, score.getStaff(0));
 		testVoiceElements();
 	}
 
@@ -39,14 +39,6 @@ public class Test46e
 				Voice voice = score.getVoice(mpVoice);
 				assertEqualsVoice(expectedVoice, voice, mpVoice);
 			}
-		}
-	}
-	
-	private void testMeasureFilledBeats() {
-		assertEquals(expectedMeasureFilledBeats.length, score.getMeasuresCount());
-		for (int i : range(expectedMeasureFilledBeats)) {
-			Fraction filledBeats = score.getMeasure(MP.atMeasure(0, i)).getFilledBeats();
-			assertEquals("Measure " + i, expectedMeasureFilledBeats[i], filledBeats);
 		}
 	}
 	
