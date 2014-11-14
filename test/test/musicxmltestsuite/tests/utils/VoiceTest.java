@@ -17,7 +17,7 @@ public class VoiceTest {
 	 * and the durations and notes of the chords.
 	 */
 	public static void assertEqualsVoice(Voice expectedVoice, Voice voice, MP voiceMP) {
-		assertEquals(expectedVoice.getElements().size(), voice.getElements().size());
+		assertEquals(""+voiceMP, expectedVoice.getElements().size(), voice.getElements().size());
 		for (int i : range(expectedVoice.getElements())) {
 			VoiceElement expElement = expectedVoice.getElement(i);
 			VoiceElement element = voice.getElement(i);
