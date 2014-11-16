@@ -68,7 +68,6 @@ public class OtherTests {
 	};
 	
 	public static final String[] supportedButNotTestedYet = {
-		"46f-IncompleteMeasures.xml", // (15 min)
 		"51b-Header-Quotes.xml", // (15 min) 
 		"51c-MultipleRights.xml", // (15 min) 
 		"51d-EmptyTitle.xml", // (15 min) 
