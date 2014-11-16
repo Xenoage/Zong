@@ -68,11 +68,6 @@ public class OtherTests {
 	};
 	
 	public static final String[] supportedButNotTestedYet = {
-		"51b-Header-Quotes.xml", // (15 min) 
-		"51c-MultipleRights.xml", // (15 min) 
-		"51d-EmptyTitle.xml", // (15 min) 
-		"52a-PageLayout.xml", // (30 min) 
-		"52b-Breaks.xml", // (15 min) 
 		"61a-Lyrics.xml", // (30 min) 
 		"61b-MultipleLyrics.xml", // (30 min)
 		"61c-Lyrics-Pianostaff.xml", // (30 min) 
@@ -89,6 +84,12 @@ public class OtherTests {
 		"72c-TransposingInstruments-Change.xml", // (60 min)
 		"73a-Percussion.xml", // (60 min)
 		"90a-Compressed-MusicXML.mxl", // (30 min)
+	};
+	
+	public static final String[] supportedButTestLater = {
+		"51d-EmptyTitle.xml", //add layout test
+		"52a-PageLayout.xml", //add layout test
+		
 	};
 		
 	public static final String[] unsupported = {

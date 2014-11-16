@@ -1,6 +1,7 @@
 package com.xenoage.zong.core.format;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.header.ColumnHeader;
@@ -16,7 +17,8 @@ import com.xenoage.zong.core.music.layout.SystemBreak;
  * 
  * @author Andreas Wenger
  */
-@Const @Data public final class Break
+@Const @Data @EqualsAndHashCode(exclude="parent")
+public final class Break
 	implements ColumnElement {
 
 	private final PageBreak pageBreak;

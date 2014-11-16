@@ -391,7 +391,10 @@ public final class MusicReader {
 			pageBreak = (newPage == null ? null : (newPage ? PageBreak.NewPage
 				: PageBreak.NoNewPage));
 			if (systemBreak != null || pageBreak != null) {
-				context.writeColumnElement(new Break(pageBreak, systemBreak));
+				//MusicXML print is in the first broken measure, but we
+				//store the break in the last measure before the break (thus -1)
+				int measure = context.getMp().measure - 1;
+				context.writeColumnElement(measure, new Break(pageBreak, systemBreak));
 			}
 		}
 
