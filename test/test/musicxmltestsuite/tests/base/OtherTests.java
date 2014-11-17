@@ -68,8 +68,6 @@ public class OtherTests {
 	};
 	
 	public static final String[] supportedButNotTestedYet = {
-		"61c-Lyrics-Pianostaff.xml", // (30 min) 
-		"61d-Lyrics-Melisma.xml", // (30 min) 
 		"61e-Lyrics-Chords.xml", // (15 min) 
 		"61f-Lyrics-GracedNotes.xml", // (30 min) 
 		"61g-Lyrics-NameNumber.xml", // (30 min) 
