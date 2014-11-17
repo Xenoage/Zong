@@ -13,18 +13,18 @@ public interface Base61a
 		return "61a-Lyrics.xml";
 	}
 	
-	Lyric[] expectedLyrics = {
-		new Lyric(ut("Tra"), SyllableType.Begin, 0),
-		new Lyric(ut("la"), SyllableType.Middle, 0),
-		new Lyric(ut("li"), SyllableType.End, 0),
-		new Lyric(ut("Ja!"), SyllableType.Single, 0),
-		null,
-		new Lyric(ut("Tra"), SyllableType.Begin, 0),
-		null,
-		new Lyric(ut("ra!"), SyllableType.End, 0),
-		null,
-		new Lyric(ut("Bah!"), SyllableType.Single, 0),
-		null,
+	Lyric[][] expectedLyrics = {
+		{ new Lyric(ut("Tra"), SyllableType.Begin, 0) },
+		{ new Lyric(ut("la"), SyllableType.Middle, 0) },
+		{ new Lyric(ut("li"), SyllableType.End, 0) },
+		{ new Lyric(ut("Ja!"), SyllableType.Single, 0) },
+		{ },
+		{ new Lyric(ut("Tra"), SyllableType.Begin, 0) },
+		{ },
+		{ new Lyric(ut("ra!"), SyllableType.End, 0) },
+		{ },
+		{ new Lyric(ut("Bah!"), SyllableType.Single, 0) },
+		{ },
 	};
 
 }

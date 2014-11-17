@@ -7,6 +7,7 @@ import static org.junit.Assert.fail;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.core.music.chord.Chord;
+import com.xenoage.zong.core.music.lyric.Lyric;
 import com.xenoage.zong.core.position.MP;
 
 
@@ -29,6 +30,12 @@ public class ChordTest {
 		for (int i : range(expectedChord.getLyrics()))
 			assertEquals(""+chordMP + ", lyric " + i,
 				expectedChord.getLyrics().get(i), chord.getLyrics().get(i));
+	}
+	
+	public static void assertEqualsChordLyrics(Lyric[] expectedLyrics, Chord chord, MP chordMP) {
+		assertEquals(""+chordMP, expectedLyrics.length, chord.getLyrics().size());
+		for (int i : range(expectedLyrics))
+			assertEquals(chordMP + ", lyric " + i, expectedLyrics[i], chord.getLyrics().get(i));
 	}
 	
 	public static Chord getChordAt(Score score, MP mp) {
