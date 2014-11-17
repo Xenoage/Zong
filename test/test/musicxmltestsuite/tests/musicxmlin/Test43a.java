@@ -4,7 +4,7 @@ import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.zong.core.music.Pitch.pi;
 import static com.xenoage.zong.core.position.MP.atBeat;
 import static com.xenoage.zong.core.position.MP.atMeasure;
-import static musicxmltestsuite.tests.utils.ChordTest.getChordAtBeat;
+import static musicxmltestsuite.tests.utils.ChordTest.getChordAt;
 import static org.junit.Assert.assertEquals;
 import musicxmltestsuite.tests.base.Base43a;
 
@@ -33,7 +33,7 @@ public class Test43a
 
 	private void testStaff(int staff, ClefType clefType, Pitch pitch) {
 		assertEquals(clefType, score.getMeasure(atMeasure(staff, 0)).getClefs().get(_0).getType());
-		assertEquals(pitch, getChordAtBeat(score, atBeat(staff, 0, 0, _0)).getNotes().get(0).getPitch());
+		assertEquals(pitch, getChordAt(score, atBeat(staff, 0, 0, _0)).getNotes().get(0).getPitch());
 	}
 	
 }

@@ -31,8 +31,12 @@ public class ChordTest {
 				expectedChord.getLyrics().get(i), chord.getLyrics().get(i));
 	}
 	
-	public static Chord getChordAtBeat(Score score, MP mp) {
-		VoiceElement e = score.getVoice(mp).getElementAt(mp.beat);
+	public static Chord getChordAt(Score score, MP mp) {
+		VoiceElement e = null;
+		if (mp.getBeat() != null)
+			e = score.getVoice(mp).getElementAt(mp.beat);
+		else
+			e = score.getVoice(mp).getElement(mp.element);
 		if (false == e instanceof Chord)
 			fail("No chord at " + mp);
 		return (Chord) e;
