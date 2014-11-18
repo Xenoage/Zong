@@ -220,42 +220,44 @@ public final class ChordReader {
 
 			//lyric
 			//not supported yet: in MusicXML also rests can have lyrics. see measure 36 in Echigo-Jishi
-			for (MxlLyric mxlLyric : it(mxlFirstNote.getLyrics())) {
-				//not supported yet: number which are not integer and
-				//name instead (?) of number attribute
-				String number = mxlLyric.getNumber();
-				int verse = 0;
-				if (number != null) {
-					Integer i = Parser.parseIntegerNull(number);
-					if (i != null)
-						verse = i - 1;
-				}
-				SyllableType syllableType = null;
-				MxlLyricContentType mxlLCType = mxlLyric.getContent().getLyricContentType();
-				if (mxlLCType == MxlLyricContentType.SyllabicText) {
-					MxlSyllabicText mxlSyllabicText = (MxlSyllabicText) mxlLyric.getContent();
-					//a syllable
-					switch (mxlSyllabicText.getSyllabic()) {
-						case Single:
-							syllableType = SyllableType.Single;
-							break;
-						case Begin:
-							syllableType = SyllableType.Begin;
-							break;
-						case Middle:
-							syllableType = SyllableType.Middle;
-							break;
-						case End:
-							syllableType = SyllableType.End;
-							break;
+			for (MxlNote mxlNote : mxlNotes) {
+				for (MxlLyric mxlLyric : it(mxlNote.getLyrics())) {
+					//not supported yet: number which are not integer and
+					//name instead of or additional to the number attribute (see MusicXML Test 61g)
+					String number = mxlLyric.getNumber();
+					int verse = 0;
+					if (number != null) {
+						Integer i = Parser.parseIntegerNull(number);
+						if (i != null)
+							verse = i - 1;
 					}
-					//the next element must be the text element
-					new LyricAdd(new Lyric(ut(mxlSyllabicText.getText().getValue()), syllableType, verse),
-						chord).execute();
-				}
-				else if (mxlLCType == MxlLyricContentType.Extend) {
-					//extend - TODO: extension to next chord!
-					new LyricAdd(Lyric.lyricExtend(verse), chord).execute();
+					SyllableType syllableType = null;
+					MxlLyricContentType mxlLCType = mxlLyric.getContent().getLyricContentType();
+					if (mxlLCType == MxlLyricContentType.SyllabicText) {
+						MxlSyllabicText mxlSyllabicText = (MxlSyllabicText) mxlLyric.getContent();
+						//a syllable
+						switch (mxlSyllabicText.getSyllabic()) {
+							case Single:
+								syllableType = SyllableType.Single;
+								break;
+							case Begin:
+								syllableType = SyllableType.Begin;
+								break;
+							case Middle:
+								syllableType = SyllableType.Middle;
+								break;
+							case End:
+								syllableType = SyllableType.End;
+								break;
+						}
+						//the next element must be the text element
+						new LyricAdd(new Lyric(ut(mxlSyllabicText.getText().getValue()), syllableType, verse),
+							chord).execute();
+					}
+					else if (mxlLCType == MxlLyricContentType.Extend) {
+						//extend - TODO: extension to next chord!
+						new LyricAdd(Lyric.lyricExtend(verse), chord).execute();
+					}
 				}
 			}
 
