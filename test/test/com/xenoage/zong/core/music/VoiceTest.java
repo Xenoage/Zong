@@ -158,7 +158,22 @@ public class VoiceTest {
 		}
 		return "n";
 	}
-
+	
+	@Test public void getElementAtTest() {
+		//our test example: (g: grace note)
+		//Beats:       0        1     2           3     4
+		//Elements     |g1|-----a-----|g2|g3|--b--|--c--|g4|
+		//Checked:     x  x           x  x  x     x     x  x
+		Rest a = new Rest(fr(2)), b = new Rest(fr(1)), c = new Rest(fr(1));
+		Chord g1 = grace(1), g2 = grace(2), g3 = grace(3), g4 = grace(4);
+		Voice voice = new Voice(ilist(g1, a, g2, g3, b, c, g4));
+		//test
+		assertEquals(a, voice.getElementAt(fr(0)));
+		assertEquals(null, voice.getElementAt(fr(1)));
+		assertEquals(b, voice.getElementAt(fr(2)));
+		assertEquals(c, voice.getElementAt(fr(3)));
+		assertEquals(g4, voice.getElementAt(fr(4)));
+	}
 
 	public static Chord grace(int step) {
 		Chord chord = new Chord(new Note(pi(step, 0)), fr(0, 4));

@@ -274,21 +274,23 @@ public final class Voice
 
 
 	/**
-	 * Gets the element at the given beat. If no element starts at exactly
-	 * the given beat, null is returned.
+	 * Gets the last element at the given beat.
+	 * That means, that if the beat starts with grace elements followed
+	 * by a full element, the full element is returned.
+	 * If no element starts at exactly the given beat, null is returned.
 	 */
 	public VoiceElement getElementAt(Fraction beat) {
 		Fraction currentBeat = Fraction._0;
+		VoiceElement foundElement = null;
 		for (VoiceElement e : elements) {
 			int compare = beat.compareTo(currentBeat);
 			if (compare == 0)
-				return e;
-			else if (compare > 0)
-				currentBeat = currentBeat.add(e.getDuration());
-			else
+				foundElement = e;
+			else if (compare < 0)
 				break;
+			currentBeat = currentBeat.add(e.getDuration());	
 		}
-		return null;
+		return foundElement;
 	}
 
 
