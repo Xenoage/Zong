@@ -19,7 +19,6 @@ import com.xenoage.zong.core.music.StavesList;
 import com.xenoage.zong.core.music.group.BarlineGroup;
 import com.xenoage.zong.core.music.group.BracketGroup;
 import com.xenoage.zong.core.music.group.StavesRange;
-import com.xenoage.zong.io.musicxml.Equivalents;
 import com.xenoage.zong.musicxml.types.MxlAttributes;
 import com.xenoage.zong.musicxml.types.MxlGroupBarline;
 import com.xenoage.zong.musicxml.types.MxlGroupSymbol;
