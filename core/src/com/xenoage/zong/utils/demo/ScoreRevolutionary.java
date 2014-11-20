@@ -18,8 +18,6 @@ import static com.xenoage.zong.core.text.UnformattedText.ut;
 
 import java.util.ArrayList;
 
-import com.xenoage.utils.collections.CollectionUtils;
-import com.xenoage.utils.collections.NullableList;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.commands.core.music.ColumnElementWrite;
 import com.xenoage.zong.commands.core.music.PartAdd;
@@ -30,9 +28,6 @@ import com.xenoage.zong.commands.core.music.slur.SlurAdd;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.format.StaffLayout;
 import com.xenoage.zong.core.instrument.Instrument;
-import com.xenoage.zong.core.instrument.InstrumentData;
-import com.xenoage.zong.core.instrument.PitchedInstrument;
-import com.xenoage.zong.core.instrument.Transpose;
 import com.xenoage.zong.core.music.ColumnElement;
 import com.xenoage.zong.core.music.MeasureElement;
 import com.xenoage.zong.core.music.MeasureSide;
@@ -81,8 +76,7 @@ import com.xenoage.zong.io.selection.Cursor;
 	public static Score createScore() {
 		Score score = new Score();
 		
-		Instrument instr = new PitchedInstrument("piano", new InstrumentData("Piano", "Pno.", null, null, null), 0,
-			Transpose.noTranspose, null, null, 0);
+		Instrument instr = Instrument.defaultInstrument;
 		float is = score.getFormat().getInterlineSpace();
 		StaffLayout staffLayout = new StaffLayout(is * 9);
 		score.setFormat(score.getFormat().withStaffLayoutOther(staffLayout));

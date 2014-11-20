@@ -5,9 +5,6 @@ import static com.xenoage.zong.core.music.Pitch.pi;
 
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.instrument.Instrument;
-import com.xenoage.zong.core.instrument.InstrumentData;
-import com.xenoage.zong.core.instrument.PitchedInstrument;
-import com.xenoage.zong.core.instrument.Transpose;
 import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.Note;
@@ -24,8 +21,7 @@ public class MidiChordPlayerTry {
 		SynthManager.init(false);
 
 		MidiChordPlayer player = new MidiChordPlayer();
-		Instrument instrument = new PitchedInstrument("kl", new InstrumentData("Klavier", "Kl", null,
-			null, null), 1, Transpose.noTranspose, pi(1, 0, 0), pi(6, 0, 0), 12);
+		Instrument instrument = Instrument.defaultInstrument;
 
 		Pitch pitch = pi(2, 0, 4);
 

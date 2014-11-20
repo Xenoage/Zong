@@ -94,7 +94,7 @@ public class CursorTest {
 		assertEquals(1, score.getMeasure(atMeasure(0, 0)).getPrivateKeys().size()); //key must still be there
 		assertEquals(2, score.getMeasure(atMeasure(0, 0)).getDirections().size()); //now two directions
 		//write instrument change at 1/4
-		InstrumentChange instrChange = new InstrumentChange(Instrument.defaultValue);
+		InstrumentChange instrChange = new InstrumentChange(Instrument.defaultInstrument);
 		cursor.setMP(atElement(0, 0, 0, 1));
 		cursor.write(instrChange);
 		assertEquals(2, score.getMeasure(atMeasure(0, 0)).getClefs().size()); //clefs must still be there

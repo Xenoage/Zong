@@ -15,7 +15,6 @@ import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.utils.math.MathUtils;
 import com.xenoage.zong.core.instrument.Instrument;
-import com.xenoage.zong.core.instrument.InstrumentData;
 import com.xenoage.zong.core.instrument.PitchedInstrument;
 import com.xenoage.zong.core.instrument.Transpose;
 import com.xenoage.zong.core.instrument.UnpitchedInstrument;
@@ -63,6 +62,11 @@ public final class InstrumentsReader {
 		}
 		//find transposition information
 		HashMap<String, MxlTranspose> instrumentTranspositions = map();
+		MxlTranspose partTranspose = null;
+		if (mxlInstr.size() == 0) {
+			//no instrument defined, but maybe we have a transposition anyway
+			partTranspose = findFirstTranspose(mxlPart);
+		}
 		if (mxlInstr.size() == 1) {
 			//only one instrument: find transposition (if any) in first attributes of first measure
 			instrumentTranspositions.put(mxlInstr.get(0).getId(), findFirstTranspose(mxlPart));
@@ -84,6 +88,9 @@ public final class InstrumentsReader {
 				log(warning("Unknown midi-instrument: " + id));
 				continue;
 			}
+			String name = baseValues.get1();
+			String abbr = baseValues.get2();
+			
 			Integer midiChannel = mxlMidiInstr.getMidiChannel();
 
 			//global volume
@@ -101,19 +108,34 @@ public final class InstrumentsReader {
 				pan /= 90f; //to -1..1
 			}
 
-			InstrumentData data = new InstrumentData(baseValues.get1(), baseValues.get2(), null, volume, pan);
+			Instrument instrument = null;
 			if (midiChannel != null && midiChannel.equals(10)) {
 				//unpitched instrument
-				ret.add(new UnpitchedInstrument(id, data));
+				instrument = new UnpitchedInstrument(id);
 			}
 			else {
 				//pitched instrument
+				PitchedInstrument pitchedInstrument;
+				instrument = pitchedInstrument = new PitchedInstrument(id);
 				//midi-program is 1-based in MusicXML but 0-based in MIDI
-				int midiProgram = notNull(mxlMidiInstr.getMidiChannel(), 1) - 1; //TODO: find value that matches instrument name
+				int midiProgram = notNull(mxlMidiInstr.getMidiProgram(), 1) - 1; //TODO: find value that matches instrument name
 				midiProgram = MathUtils.clamp(midiProgram, 0, 127);
+				pitchedInstrument.setMidiProgram(midiProgram);
 				Transpose transpose = readTranspose(instrumentTranspositions.get(id));
-				ret.add(new PitchedInstrument(id, data, midiProgram, transpose, null, null, 0));
+				pitchedInstrument.setTranspose(transpose);
 			}
+			instrument.setName(name);
+			instrument.setAbbreviation(abbr);
+			instrument.setVolume(volume);
+			instrument.setPan(pan);
+			ret.add(instrument);
+		}
+		//when no instrument was created, but a transposition was found, create
+		//a default instrument with this transposition
+		if (ret.size() == 0 && partTranspose != null) {
+			PitchedInstrument instrument = new PitchedInstrument(mxlPart.getId());
+			instrument.setTranspose(readTranspose(partTranspose));
+			ret.add(instrument);
 		}
 		return ret;
 	}

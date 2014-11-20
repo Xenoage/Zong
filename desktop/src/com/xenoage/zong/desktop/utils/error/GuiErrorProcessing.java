@@ -14,6 +14,9 @@ import com.xenoage.utils.log.Report;
  * This class handles error and warning {@link Report}s by
  * showing dialogs to the user and logging them.
  * 
+ * TODO: replace later by JavaFXErrorProcessing in utils-jse8,
+ * when Java 1.8.0_40 is released
+ * 
  * @author Andreas Wenger
  */
 public class GuiErrorProcessing

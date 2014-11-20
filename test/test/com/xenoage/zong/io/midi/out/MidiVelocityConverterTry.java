@@ -13,9 +13,6 @@ import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.commands.core.music.PartAdd;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.instrument.Instrument;
-import com.xenoage.zong.core.instrument.InstrumentData;
-import com.xenoage.zong.core.instrument.PitchedInstrument;
-import com.xenoage.zong.core.instrument.Transpose;
 import com.xenoage.zong.core.music.ColumnElement;
 import com.xenoage.zong.core.music.Part;
 import com.xenoage.zong.core.music.Pitch;
@@ -99,8 +96,7 @@ public class MidiVelocityConverterTry {
 
 	public static Score createTestScore() {
 		Score ret = new Score();
-		Instrument instr = new PitchedInstrument("piano", new InstrumentData("Piano", "Pno.", null,
-			null, null), 0, Transpose.noTranspose, null, null, 0);
+		Instrument instr = Instrument.defaultInstrument;
 		Part pianoPart = new Part("Test", "T", 1, ilist(instr));
 		new PartAdd(ret, pianoPart, 0, null).execute();
 

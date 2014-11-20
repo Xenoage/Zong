@@ -132,12 +132,12 @@ public class MidiConverter<T> {
 					writer.writeProgramChange(systemTrackIndex, channel, 0, (pitchedInstrument).getMidiProgram());
 				}
 				//general volume for this instrument
-				if (instrument.getData().getVolume() != null) {
-					writer.writeVolumeChange(systemTrackIndex, channel, 0, instrument.getData().getVolume());
+				if (instrument.getVolume() != null) {
+					writer.writeVolumeChange(systemTrackIndex, channel, 0, instrument.getVolume());
 				}
 				//general panning for this instrument
-				if (instrument.getData().getPan() != null) {
-					writer.writePanChange(systemTrackIndex, channel, 0, instrument.getData().getPan());
+				if (instrument.getPan() != null) {
+					writer.writePanChange(systemTrackIndex, channel, 0, instrument.getPan());
 				}
 			}
 			partFirstStaff += part.getStavesCount();

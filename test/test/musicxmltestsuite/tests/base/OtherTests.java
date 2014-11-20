@@ -54,6 +54,8 @@ public class OtherTests {
 		"43d-MultiStaff-StaffChange.xml",
 		"46g-PickupMeasure-Chordnames-FiguredBass.xml",
 		"61g-Lyrics-NameNumber.xml",
+		"61j-Lyrics-Elisions.xml",
+		"61k-Lyrics-SpannersExtenders.xml",
 		"71a-Chordnames.xml",
 		"71c-ChordsFrets.xml",
 		"71d-ChordsFrets-Multistaff.xml",
@@ -69,9 +71,6 @@ public class OtherTests {
 	};
 	
 	public static final String[] supportedButNotTestedYet = {
-		"61i-Lyrics-Chords.xml", // (15 min) 
-		"61j-Lyrics-Elisions.xml", // (30 min) 
-		"61k-Lyrics-SpannersExtenders.xml", // (30 min)
 		"72a-TransposingInstruments.xml", // (60 min)
 		"72b-TransposingInstruments-Full.xml", // (30 min)
 		"72c-TransposingInstruments-Change.xml", // (60 min)

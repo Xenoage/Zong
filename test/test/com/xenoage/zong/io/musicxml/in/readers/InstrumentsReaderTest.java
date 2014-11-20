@@ -35,17 +35,17 @@ public class InstrumentsReaderTest {
 
 		//clarinet
 		PitchedInstrument instr0 = (PitchedInstrument) part.getInstruments().get(0);
-		assertEquals("Clarinet in Bb", instr0.getData().getName());
+		assertEquals("Clarinet in Bb", instr0.getName());
 		assertEquals(new Integer(-1), instr0.getTranspose().getDiatonic());
 		assertEquals(-2, instr0.getTranspose().getChromatic());
 		//altosax
 		PitchedInstrument instr1 = (PitchedInstrument) part.getInstruments().get(1);
-		assertEquals("Alto Saxophone", instr1.getData().getName());
+		assertEquals("Alto Saxophone", instr1.getName());
 		assertEquals(new Integer(-5), instr1.getTranspose().getDiatonic());
 		assertEquals(-9, instr1.getTranspose().getChromatic());
 		//trombone
 		PitchedInstrument instr2 = (PitchedInstrument) part.getInstruments().get(2);
-		assertEquals("Trombone", instr2.getData().getName());
+		assertEquals("Trombone", instr2.getName());
 		assertEquals(new Integer(0), instr2.getTranspose().getDiatonic());
 		assertEquals(0, instr2.getTranspose().getChromatic());
 

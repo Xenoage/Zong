@@ -53,7 +53,7 @@ import com.xenoage.zong.core.instrument.Instrument;
 		if (instruments != null && instruments.size() > 0)
 			return instruments.get(0);
 		else
-			return Instrument.defaultValue;
+			return Instrument.defaultInstrument;
 	}
 
 }
