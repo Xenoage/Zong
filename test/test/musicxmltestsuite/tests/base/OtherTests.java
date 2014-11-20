@@ -71,8 +71,6 @@ public class OtherTests {
 	};
 	
 	public static final String[] supportedButNotTestedYet = {
-		"72a-TransposingInstruments.xml", // (60 min)
-		"72b-TransposingInstruments-Full.xml", // (30 min)
 		"72c-TransposingInstruments-Change.xml", // (60 min)
 		"73a-Percussion.xml", // (60 min)
 		"90a-Compressed-MusicXML.mxl", // (30 min)
