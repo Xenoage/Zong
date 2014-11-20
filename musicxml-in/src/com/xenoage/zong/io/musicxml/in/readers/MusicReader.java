@@ -32,7 +32,10 @@ import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.format.Break;
 import com.xenoage.zong.core.format.SystemLayout;
 import com.xenoage.zong.core.header.ScoreHeader;
+import com.xenoage.zong.core.instrument.PitchedInstrument;
+import com.xenoage.zong.core.instrument.Transpose;
 import com.xenoage.zong.core.music.ColumnElement;
+import com.xenoage.zong.core.music.InstrumentChange;
 import com.xenoage.zong.core.music.Measure;
 import com.xenoage.zong.core.music.Part;
 import com.xenoage.zong.core.music.Staff;
@@ -88,6 +91,7 @@ import com.xenoage.zong.musicxml.types.MxlSound;
 import com.xenoage.zong.musicxml.types.MxlStaffLayout;
 import com.xenoage.zong.musicxml.types.MxlSystemLayout;
 import com.xenoage.zong.musicxml.types.MxlTime;
+import com.xenoage.zong.musicxml.types.MxlTranspose;
 import com.xenoage.zong.musicxml.types.MxlWedge;
 import com.xenoage.zong.musicxml.types.MxlWords;
 import com.xenoage.zong.musicxml.types.attributes.MxlPrintAttributes;
@@ -323,20 +327,18 @@ public final class MusicReader {
 			}
 		}
 
-		/* TODO: transposition changes ~= instrument changes
-		//transposition changes
+		//transposition changes - TODO: clean solution for instrument changes
 		MxlTranspose mxlTranspose = mxlAttributes.getTranspose();
-		if (mxlTranspose != null)
-		{
-			int chromatic = mxlTranspose.getChromatic();
-			Transpose transpose = new Transpose(chromatic);
+		if (mxlTranspose != null) {
+			Transpose transpose = InstrumentsReader.readTranspose(mxlTranspose);
+			//create instrument change
+			PitchedInstrument instrument = new PitchedInstrument("");
+			instrument.setTranspose(transpose);
 			//write to all staves of this part
-			for (int staff = 0; staff < context.getPartStavesIndices().getCount(); staff++)
-			{
-				writeNoVoiceElement(transpose, staff);
-		  }
+			for (int staff = 0; staff < context.getPartStaffIndices().getCount(); staff++) {
+				context.writeMeasureElement(new InstrumentChange(instrument), staff);
+			}
 		}
-		*/
 
 		return context;
 	}

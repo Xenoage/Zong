@@ -185,7 +185,7 @@ public final class InstrumentsReader {
 	 * Returns the Transpose for the given MxlTranspose, or an instance with
 	 * no transposition if the argument was null.
 	 */
-	private static Transpose readTranspose(MxlTranspose mxlTranspose) {
+	public static Transpose readTranspose(MxlTranspose mxlTranspose) {
 		if (mxlTranspose != null) {
 			return new Transpose(mxlTranspose.getChromatic(), mxlTranspose.getDiatonic(), notNull(
 				mxlTranspose.getOctaveChange(), 0), mxlTranspose.isDoubleValue());
