@@ -62,6 +62,7 @@ public class OtherTests {
 		"71e-TabStaves.xml",
 		"71f-AllChordTypes.xml",
 		"71g-MultipleChordnames.xml",
+		"73a-Percussion.xml",
 		"74a-FiguredBass.xml",
 		"75a-AccordionRegistrations.xml",
 	};
@@ -71,9 +72,6 @@ public class OtherTests {
 	};
 	
 	public static final String[] supportedButNotTestedYet = {
-		"72c-TransposingInstruments-Change.xml", // (60 min)
-		"73a-Percussion.xml", // (60 min)
-		"90a-Compressed-MusicXML.mxl", // (30 min)
 	};
 	
 	public static final String[] supportedButTestLater = {
