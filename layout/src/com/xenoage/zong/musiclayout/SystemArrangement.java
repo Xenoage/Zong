@@ -93,7 +93,7 @@ import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 	 * Gets the total height of this system in mm.
 	 */
 	public float getHeight() {
-		if (height == Float.NaN)
+		if (Float.isNaN(height))
 			height = sum(staffHeights) + sum(staffDistances);
 		return height;
 	}
@@ -102,7 +102,7 @@ import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 	 * Gets the used width of the system.
 	 */
 	public float getUsedWidth() {
-		if (usedWidth == Float.NaN) {
+		if (Float.isNaN(usedWidth)) {
 			usedWidth = 0;
 			for (ColumnSpacing mcs : columnSpacings) {
 				usedWidth += mcs.getWidth();

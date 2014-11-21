@@ -32,7 +32,11 @@ import com.xenoage.utils.xml.XmlWriter;
 
 
 	@NonNull public static MxlBarStyle read(XmlReader reader) {
-		return Utils.read("bar-style", reader.getText(), values());
+		String text = reader.getText();
+		if (text != null)
+			return Utils.read("bar-style", text, values());
+		else //tolerate missing text
+			return Regular;
 	}
 
 	public void write(XmlWriter writer) {

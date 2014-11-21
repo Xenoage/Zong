@@ -591,6 +591,8 @@ public final class MusicReader {
 					if (direction == null) {
 						MxlWords mxlWords = (MxlWords) mxlDTC;
 						MxlFormattedText mxlFormattedText = mxlWords.getFormattedText();
+						if (mxlFormattedText.getValue().length() == 0)
+							break;
 						direction = new Words(context.getSettings().getTextReader().readText(mxlFormattedText));
 						
 						MxlPrintStyle mxlPrintStyle = notNull(mxlFormattedText.getPrintStyle(), MxlPrintStyle.empty);

@@ -35,7 +35,7 @@ public final class MxlFormattedText {
 		MxlLeftCenterRight hAlign = MxlLeftCenterRight.read(reader, "halign");
 		MxlVAlign vAlign = MxlVAlign.read(reader);
 		MxlPrintStyle printStyle = MxlPrintStyle.read(reader);
-		String value = reader.getText();
+		String value = reader.getTextNotNull();
 		return new MxlFormattedText(value, justify, hAlign, vAlign, printStyle);
 	}
 
