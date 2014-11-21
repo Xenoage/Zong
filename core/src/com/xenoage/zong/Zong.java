@@ -8,13 +8,13 @@ package com.xenoage.zong;
 public class Zong {
 
 	//the version of this program as an integer number
-	public static final int projectIteration = 69;
+	public static final int projectIteration = 70;
 
 	//general information on this program
 	public static final String projectFamilyName = "Zong!";
 	public static final String projectVersion = "0.1-a";
 	public static final String projectVersionLong = projectVersion + "." + projectIteration;
-	public static final String projectIterationName = "Horn";
+	public static final String projectIterationName = "Bow";
 
 	//package path
 	public static final String projectPackage = "com.xenoage.zong";
