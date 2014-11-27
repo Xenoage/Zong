@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.xenoage.zong.demos.simpledemo.MainWindow">
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#onFileOpen" text="Open MusicXML..." />
+                  <MenuItem mnemonicParsing="false" onAction="#onFileSaveAs" text="Save as..." />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem mnemonicParsing="false" onAction="#onExit" text="Exit" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Playback">
+            <items>
+              <MenuItem fx:id="mnuPlaybackStart" mnemonicParsing="false" onAction="#onPlaybackStart" text="Start" />
+                  <MenuItem fx:id="mnuPlaybackStop" mnemonicParsing="false" onAction="#onPlaybackStop" text="Stop" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#onAbout" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+   <center>
+      <BorderPane fx:id="pnlCanvas" prefHeight="800.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <center>
+            <Canvas fx:id="canvas" height="800.0" width="600.0" BorderPane.alignment="CENTER" />
+         </center>
+      </BorderPane>
+   </center>
+</BorderPane>
