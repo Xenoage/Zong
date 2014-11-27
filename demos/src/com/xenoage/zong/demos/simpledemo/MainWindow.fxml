@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.scene.canvas.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
@@ -12,8 +13,11 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-              <MenuItem mnemonicParsing="false" onAction="#onFileOpen" text="Open MusicXML..." />
-                  <MenuItem mnemonicParsing="false" onAction="#onFileSaveAs" text="Save as..." />
+              <MenuItem mnemonicParsing="false" onAction="#onFileOpen" text="Open next score" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem mnemonicParsing="false" onAction="#onFileSaveAsPDF" text="Save as PDF" />
+                  <MenuItem mnemonicParsing="false" onAction="#onFileSaveAsPNG" text="Save as PNG" />
+                  <MenuItem mnemonicParsing="false" onAction="#onFileSaveAsOGG" text="Save as OGG" />
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem mnemonicParsing="false" onAction="#onExit" text="Exit" />
             </items>
@@ -33,10 +37,14 @@
       </MenuBar>
    </top>
    <center>
-      <BorderPane fx:id="pnlCanvas" prefHeight="800.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-         <center>
-            <Canvas fx:id="canvas" height="800.0" width="600.0" BorderPane.alignment="CENTER" />
-         </center>
-      </BorderPane>
+      <ScrollPane prefHeight="600.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+        <content>
+            <BorderPane>
+               <center>
+                  <ImageView fx:id="scoreView" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
+               </center>
+            </BorderPane>
+        </content>
+      </ScrollPane>
    </center>
 </BorderPane>

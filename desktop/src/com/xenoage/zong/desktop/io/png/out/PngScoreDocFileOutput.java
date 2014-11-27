@@ -7,6 +7,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import lombok.Setter;
+
 import com.xenoage.utils.document.io.FileOutput;
 import com.xenoage.utils.io.FilenameUtils;
 import com.xenoage.utils.jse.io.JseOutputStream;
@@ -24,13 +26,16 @@ import com.xenoage.zong.layout.Layout;
  */
 public class PngScoreDocFileOutput
 	implements FileOutput<ScoreDoc> {
+	
+	@Setter private boolean justOnePage = false;
+	
 
 	@Override public void write(ScoreDoc document, com.xenoage.utils.io.OutputStream stream,
 		String filePath)
 		throws IOException {
 		Layout layout = document.getLayout();
-		if (layout.getPages().size() == 1 || filePath == null) {
-			//simple case: just one page (or if no path is given)
+		if (justOnePage || layout.getPages().size() == 1 || filePath == null) {
+			//simple case: just one page
 			PngPrinter.print(layout, 0, new JseOutputStream(stream));
 		}
 		else {

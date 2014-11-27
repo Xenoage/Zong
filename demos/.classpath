@@ -22,5 +22,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/utils-serialize"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/utils-test"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/webserver"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/controlsfx"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
