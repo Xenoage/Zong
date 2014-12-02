@@ -28,7 +28,7 @@ public class PngScoreDocFileOutput
 	implements FileOutput<ScoreDoc> {
 	
 	@Setter private boolean justOnePage = false;
-	
+
 
 	@Override public void write(ScoreDoc document, com.xenoage.utils.io.OutputStream stream,
 		String filePath)

@@ -46,7 +46,7 @@ public class AwtBitmapPageRenderer {
 		g2d.scale(zoom, zoom);
 		AwtPageLayoutRenderer renderer = AwtPageLayoutRenderer.getInstance();
 		renderer.paint(layout, pageIndex, new AwtCanvas(g2d, pageSize, CanvasFormat.Raster,
-			CanvasDecoration.None, CanvasIntegrity.Perfect));
+			CanvasDecoration.Interactive, CanvasIntegrity.Perfect));
 		g2d.dispose();
 
 		return img;

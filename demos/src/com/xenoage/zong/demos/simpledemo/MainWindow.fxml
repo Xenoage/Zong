@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.canvas.*?>
 <?import javafx.scene.control.*?>
@@ -17,6 +20,7 @@
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem mnemonicParsing="false" onAction="#onFileSaveAsPDF" text="Save as PDF" />
                   <MenuItem mnemonicParsing="false" onAction="#onFileSaveAsPNG" text="Save as PNG" />
+                  <MenuItem mnemonicParsing="false" onAction="#onFileSaveAsMID" text="Save as MID" />
                   <MenuItem mnemonicParsing="false" onAction="#onFileSaveAsOGG" text="Save as OGG" />
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem mnemonicParsing="false" onAction="#onExit" text="Exit" />
@@ -38,13 +42,13 @@
    </top>
    <center>
       <ScrollPane prefHeight="600.0" prefWidth="800.0" BorderPane.alignment="CENTER">
-        <content>
-            <BorderPane>
-               <center>
+         <content>
+            <AnchorPane>
+               <children>
                   <ImageView fx:id="scoreView" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
-               </center>
-            </BorderPane>
-        </content>
+               </children>
+            </AnchorPane>
+         </content>
       </ScrollPane>
    </center>
 </BorderPane>

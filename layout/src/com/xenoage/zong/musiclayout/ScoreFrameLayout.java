@@ -208,15 +208,15 @@ public final class ScoreFrameLayout {
 	}
 
 	/**
-	 * Gets the horizontal position in mm of the given {@link BMP} within the given frame,
+	 * Gets the horizontal position in mm of the given {@link MP} within the given frame,
 	 * or 0 if not found (should not happen).
-	 * Only the measure and the beat of the given {@link BMP} are used.
+	 * Only the measure and the beat of the given {@link MP} are used.
 	 */
-	public float getPositionX(MP bmp) {
+	public float getPositionX(MP mp) {
 		float minX = Float.MAX_VALUE;
 		//search all staves for the given musical position, beginning at the top staff
 		for (StaffStamping staff : staffStampings) {
-			Float x = staff.getXMmAt(bmp);
+			Float x = staff.getXMmAt(mp);
 			if (x != null && x < minX)
 				minX = x;
 		}

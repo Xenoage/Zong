@@ -33,19 +33,29 @@ import com.xenoage.zong.musiclayout.stampings.SystemCursorStamping;
 	public void setCursorAt(MP mp) {
 		//remove old playback cursors
 		removePlaybackStampings();
+		//create new one
+		SystemCursorStamping cursor = createCursorAt(mp);
 		//find frame
-		int measure = mp.measure;
-		ScoreFrameLayout frame = scoreLayout.getScoreFrameLayout(measure);
-		if (frame != null) {
-			StaffStamping topStaff = frame.getStaffStamping(0, measure);
-			StaffStamping bottomStaff = frame.getStaffStamping(scoreLayout.score.getStavesCount() - 1,
-				measure);
-			if (topStaff != null && bottomStaff != null) {
-				frame.setPlaybackStampings(ilist(
-					new SystemCursorStamping(topStaff, bottomStaff, frame.getPositionX(mp))));
-			}
-			return;
+		if (cursor != null) {
+			ScoreFrameLayout frame = scoreLayout.getScoreFrameLayout(mp.measure);
+			frame.setPlaybackStampings(ilist(cursor));
 		}
+	}
+	
+	/**
+	 * Returns a new {@link SystemCursorStamping} at the given {@link MP},
+	 * representing the current playback position, or null if there is none.
+	 */
+	public SystemCursorStamping createCursorAt(MP mp) {
+		ScoreFrameLayout frame = scoreLayout.getScoreFrameLayout(mp.measure);
+		if (frame != null) {
+			StaffStamping topStaff = frame.getStaffStamping(0, mp.measure);
+			StaffStamping bottomStaff = frame.getStaffStamping(scoreLayout.score.getStavesCount() - 1,
+				mp.measure);
+			if (topStaff != null && bottomStaff != null)
+				return new SystemCursorStamping(topStaff, bottomStaff, frame.getPositionX(mp));
+		}
+		return null;
 	}
 
 	/**
