@@ -47,6 +47,10 @@ subprojects {
 
 //project dependencies
 project(':converter') { dependencies { compile project(':desktop') } }
+project(':demos') {
+	sourceCompatibility = 8
+	dependencies { compile project(':desktop') }
+}
 project(':desktop') {
 	sourceCompatibility = 8
 	dependencies {
