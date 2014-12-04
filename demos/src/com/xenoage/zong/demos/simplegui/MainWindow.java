@@ -1,4 +1,4 @@
-package com.xenoage.zong.demos.simpledemo;
+package com.xenoage.zong.demos.simplegui;
 
 import java.awt.image.BufferedImage;
 
@@ -36,6 +36,7 @@ public class MainWindow {
 	
 	
 	@FXML public void initialize() {
+		//load the first demo score
 		content.loadNextScore();
 	}
 
@@ -60,15 +61,15 @@ public class MainWindow {
 	}
 
 	@FXML void onExit(ActionEvent event) {
-		Platform.exit();
+		SimpleGuiDemo.exit();
 	}
 
 	@FXML void onPlaybackStart(ActionEvent event) {
-		content.startPlayback();
+		Playback.start();
 	}
 
 	@FXML void onPlaybackStop(ActionEvent event) {
-		content.stopPlayback();
+		Playback.stop();
 	}
 	
 	@FXML void onAbout(ActionEvent event) {
@@ -95,7 +96,7 @@ public class MainWindow {
 	}
 	
 	private Dialogs dialog() {
-		return Dialogs.create().title(SimpleDemo.appName).styleClass(Dialog.STYLE_CLASS_NATIVE);
+		return Dialogs.create().title(SimpleGuiDemo.appName).styleClass(Dialog.STYLE_CLASS_NATIVE);
 	}
 
 }

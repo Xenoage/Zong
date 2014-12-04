@@ -1,19 +1,14 @@
-package com.xenoage.zong.demos.simpledemo;
+package com.xenoage.zong.demos.simplegui;
 
 import java.io.File;
 
-import javax.sound.midi.MidiUnavailableException;
-
 import com.xenoage.utils.document.io.FileOutput;
 import com.xenoage.utils.error.Err;
-import com.xenoage.utils.jse.JsePlatformUtils;
-import com.xenoage.utils.jse.io.JseInputStream;
-import com.xenoage.utils.jse.io.JseOutputStream;
 import com.xenoage.utils.log.Report;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.position.MP;
+import com.xenoage.zong.desktop.io.ScoreDocIO;
 import com.xenoage.zong.desktop.io.midi.out.MidiScoreDocFileOutput;
-import com.xenoage.zong.desktop.io.midi.out.MidiScorePlayer;
 import com.xenoage.zong.desktop.io.musicxml.in.MusicXmlScoreDocFileInput;
 import com.xenoage.zong.desktop.io.ogg.out.OggScoreDocFileOutput;
 import com.xenoage.zong.desktop.io.pdf.out.PdfScoreDocFileOutput;
@@ -37,11 +32,12 @@ public class Content
 	private ScoreDoc scoreDoc = null;
 	private Layout layout = null;
 	private PlaybackLayouter playbackLayouter = null;
-	private MidiScorePlayer player = null;
 	
 	
 	public Content(MainWindow mainWindow) {
 		this.mainWindow = mainWindow;
+		//listen for playback events (see method playbackAtMP)
+		Playback.registerListener(this);	
 	}
 	
 	/**
@@ -59,11 +55,9 @@ public class Content
 	private void loadScore(String filePath) {
 		try {
 			//stop current playback
-			stopPlayback();
+			Playback.stop();
 			//load the score
-			JseInputStream inStream = JsePlatformUtils.io().openFile(filePath);
-			MusicXmlScoreDocFileInput scoreDocInput = new MusicXmlScoreDocFileInput();
-			scoreDoc = scoreDocInput.read(inStream, filePath);
+			scoreDoc = ScoreDocIO.read(new File(filePath), new MusicXmlScoreDocFileInput());
 			//layout the first page
 			layout = scoreDoc.getLayout();
 			Score score = scoreDoc.getScore();
@@ -72,6 +66,8 @@ public class Content
 			playbackLayouter = new PlaybackLayouter(layout.getScoreFrameChain(score).getScoreLayout());
 			//set image to view
 			mainWindow.renderLayout(layout);
+			//load score into MIDI playback
+			Playback.openScore(scoreDoc.getScore());
 		}
 		catch (Exception ex) {
 			Err.handle(Report.error(ex));
@@ -97,42 +93,11 @@ public class Content
 		}
 		String filePath = "demo." + format;
 		try {
-			out.write(scoreDoc, new JseOutputStream(new File(filePath)), filePath);
+			ScoreDocIO.write(scoreDoc, new File(filePath), out);
 			mainWindow.showMessageDialog(filePath + " saved.");
 		} catch (Exception ex) {
 			Err.handle(Report.error(ex));
 		}
-	}
-	
-	/**
-	 * Starts the MIDI playback of the current score.
-	 */
-	public void startPlayback() {
-		initPlayer();
-		player.openScore(scoreDoc.getScore());
-		player.setMetronomeEnabled(true);
-		player.start();
-	}
-	
-	private void initPlayer() {
-		if (player == null) {
-			try {
-				MidiScorePlayer.init();
-				player = MidiScorePlayer.midiScorePlayer();
-				//listen for playback events (see method playbackAtMP)
-				player.addPlaybackListener(this);
-			} catch (MidiUnavailableException ex) {
-				Err.handle(Report.error("MIDI not available"));
-			}
-		}
-	}
-	
-	/**
-	 * Stops the MIDI playback.
-	 */
-	public void stopPlayback() {
-		if (player != null)
-			player.stop();
 	}
 	
 	/**
