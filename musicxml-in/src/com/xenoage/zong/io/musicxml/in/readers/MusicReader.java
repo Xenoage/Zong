@@ -12,8 +12,6 @@ import static com.xenoage.zong.core.music.time.TimeType.timeSenzaMisura;
 import static com.xenoage.zong.core.music.time.TimeType.timeType;
 import static com.xenoage.zong.core.position.MP.atElement;
 import static com.xenoage.zong.core.position.MP.atStaff;
-import static com.xenoage.zong.io.musicxml.in.readers.BarlineReader.readBarline;
-import static com.xenoage.zong.io.musicxml.in.readers.ChordReader.readChord;
 import static com.xenoage.zong.io.musicxml.in.readers.FontInfoReader.readFontInfo;
 import static com.xenoage.zong.io.musicxml.in.readers.OtherReader.readPosition;
 import static com.xenoage.zong.io.musicxml.in.readers.OtherReader.readPositioning;
@@ -68,6 +66,7 @@ import com.xenoage.zong.core.music.time.TimeType;
 import com.xenoage.zong.core.music.util.DurationInfo;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.io.musicxml.in.util.MusicReaderException;
+import com.xenoage.zong.io.musicxml.in.util.StaffDetails;
 import com.xenoage.zong.musicxml.types.MxlAttributes;
 import com.xenoage.zong.musicxml.types.MxlBackup;
 import com.xenoage.zong.musicxml.types.MxlBarline;
@@ -126,7 +125,7 @@ public final class MusicReader {
 	 * Reads the given MusicXML document and returns the score.
 	 */
 	public static void read(MxlScorePartwise doc, Score score, boolean ignoreErrors) {
-		MusicReaderContext context = new MusicReaderContext(score, new MusicReaderSettings(ignoreErrors));
+		Context context = new Context(score, new MusicReaderSettings(ignoreErrors));
 		
 		//create the measures of the parts
 		It<MxlPart> mxlParts = it(doc.getParts());
@@ -192,7 +191,7 @@ public final class MusicReader {
 	/**
 	 * Reads the given measure element.
 	 */
-	private static MusicReaderContext readMeasure(MusicReaderContext context, MxlMeasure mxlMeasure,
+	private static Context readMeasure(Context context, MxlMeasure mxlMeasure,
 		int measureIndex) {
 		//begin a new measure
 		context.beginNewMeasure(measureIndex);
@@ -238,7 +237,7 @@ public final class MusicReader {
 						if (!goOn)
 							break;
 					}
-					readChord(context, mxlNotes);
+					new ChordReader(mxlNotes).readIntoContext(context);
 					break;
 				}
 				case Attributes:
@@ -257,7 +256,7 @@ public final class MusicReader {
 					readDirection(context, (MxlDirection) mxlMDC);
 					break;
 				case Barline:
-					readBarline(context, (MxlBarline) mxlMDC);
+					new BarlineReader((MxlBarline) mxlMDC).readIntoContext(context);
 					break;
 			}
 		}
@@ -267,7 +266,7 @@ public final class MusicReader {
 	/**
 	 * Reads the given attributes element.
 	 */
-	private static MusicReaderContext readAttributes(MusicReaderContext context,
+	private static Context readAttributes(Context context,
 		MxlAttributes mxlAttributes) {
 
 		//divisions
@@ -316,7 +315,7 @@ public final class MusicReader {
 		//clefs
 		if (mxlAttributes.getClefs() != null) {
 			for (MxlClef mxlClef : mxlAttributes.getClefs()) {
-				ClefType clefType = ClefReader.readClef(mxlClef);
+				ClefType clefType = new ClefReader(mxlClef).read();
 				Clef clef = (clefType != null ? new Clef(clefType) : null);
 				//staff (called "number" in MusicXML), first staff is default
 				int staff = mxlClef.getNumber() - 1;
@@ -346,9 +345,9 @@ public final class MusicReader {
 	/**
 	 * Reads the given backup element.
 	 */
-	private static void readBackup(MusicReaderContext context, MxlBackup mxlBackup) {
+	private static void readBackup(Context context, MxlBackup mxlBackup) {
 		//duration
-		Fraction duration = readDuration(context, mxlBackup.getDuration()).invert();
+		Fraction duration = readDuration(mxlBackup.getDuration(), context.getDivisions()).invert();
 		//move cursor
 		context.moveCurrentBeat(duration);
 	}
@@ -356,9 +355,9 @@ public final class MusicReader {
 	/**
 	 * Reads the given forward element.
 	 */
-	private static void readForward(MusicReaderContext context, MxlForward mxlForward) {
+	private static void readForward(Context context, MxlForward mxlForward) {
 		//duration
-		Fraction duration = readDuration(context, mxlForward.getDuration());
+		Fraction duration = readDuration(mxlForward.getDuration(), context.getDivisions());
 		//move cursor
 		context.moveCurrentBeat(duration);
 	}
@@ -366,18 +365,18 @@ public final class MusicReader {
 	/**
 	 * Returns the duration as a {@link Fraction} from the given duration in divisions.
 	 */
-	public static Fraction readDuration(MusicReaderContext context, int duration) {
+	public static Fraction readDuration(int duration, int divisionsPerQuarter) {
 		if (duration == 0) {
 			throw new RuntimeException("Element has a duration of 0.");
 		}
-		Fraction ret = fr(duration, 4 * context.getDivisions());
+		Fraction ret = fr(duration, 4 * divisionsPerQuarter);
 		return ret;
 	}
 
 	/**
 	 * Reads the given print element.
 	 */
-	private static void readPrint(MusicReaderContext context, MxlPrint mxlPrint) {
+	private static void readPrint(Context context, MxlPrint mxlPrint) {
 		MxlLayout mxlLayout = mxlPrint.getLayout();
 		ScoreHeader header = context.getScore().getHeader();
 
@@ -396,7 +395,7 @@ public final class MusicReader {
 				//MusicXML print is in the first broken measure, but we
 				//store the break in the last measure before the break (thus -1)
 				int measure = context.getMp().measure - 1;
-				context.writeColumnElement(measure, new Break(pageBreak, systemBreak));
+				context.writeColumnElement(new Break(pageBreak, systemBreak), measure);
 			}
 		}
 
@@ -465,11 +464,13 @@ public final class MusicReader {
 	/**
 	 * Reads the given direction element.
 	 */
-	private static void readDirection(MusicReaderContext context,
+	private static void readDirection(Context context,
 		MxlDirection mxlDirection) {
+		
 		//staff
 		int staff = notNull(mxlDirection.getStaff(), 1) - 1;
-
+		StaffDetails staffDetails = StaffDetails.fromContext(context, staff);
+		
 		//direction-types
 		Direction direction = null;
 		FontInfo defaultFont = context.getScore().getFormat().lyricFont;
@@ -481,9 +482,8 @@ public final class MusicReader {
 					//code
 					MxlCoda mxlCoda = (MxlCoda) mxlDTC;
 					MxlPrintStyle printStyle = notNull(mxlCoda.getPrintStyle(), MxlPrintStyle.empty);
-					Positioning positioning = readPositioning(printStyle.getPosition(),
-						null, mxlDirection.getPlacement(), context.getTenthMm(),
-						context.getStaffLinesCount(staff));
+					Positioning positioning = readPositioning(printStyle.getPosition(), staffDetails,
+						mxlDirection.getPlacement());
 					Coda coda = new Coda();
 					coda.setPositioning(positioning);
 					context.writeColumnElement(coda);
@@ -494,9 +494,8 @@ public final class MusicReader {
 					MxlDynamics mxlDynamics = (MxlDynamics) mxlDTC;
 					DynamicsType type = mxlDynamics.getElement();
 					MxlPrintStyle printStyle = notNull(mxlDynamics.getPrintStyle(), MxlPrintStyle.empty);
-					Positioning positioning = readPositioning(printStyle.getPosition(),
-						mxlDynamics.getPlacement(), mxlDirection.getPlacement(), context.getTenthMm(),
-						context.getStaffLinesCount(staff));
+					Positioning positioning = readPositioning(printStyle.getPosition(), staffDetails,
+						mxlDynamics.getPlacement(), mxlDirection.getPlacement());
 					Dynamics dynamics = new Dynamics(type);
 					dynamics.setPositioning(positioning);
 					context.writeMeasureElement(dynamics, staff);
@@ -510,8 +509,7 @@ public final class MusicReader {
 					MxlPrintStyle mxlPrintStyle = mxlMetronome.getPrintStyle();
 					if (mxlPrintStyle != null) {
 						fontInfo = readFontInfo(mxlPrintStyle.getFont(), defaultFont);
-						position = readPosition(mxlPrintStyle.getPosition(),
-							context.getTenthMm(), context.getStaffLinesCount(staff));
+						position = readPosition(mxlPrintStyle.getPosition(), staffDetails);
 					}
 					
 					//compute base beat
@@ -537,8 +535,7 @@ public final class MusicReader {
 					}
 					if (type != null) {
 						Pedal pedal = new Pedal(type);
-						pedal.setPositioning(readPosition(mxlPedal.getPrintStyle(),
-							context.getTenthMm(), context.getStaffLinesCount(staff)));
+						pedal.setPositioning(readPosition(mxlPedal.getPrintStyle(), staffDetails));
 						context.writeMeasureElement(pedal, staff);
 					}
 					break;
@@ -547,9 +544,8 @@ public final class MusicReader {
 					//segno
 					MxlSegno mxlSegno = (MxlSegno) mxlDTC;
 					MxlPrintStyle printStyle = notNull(mxlSegno.getPrintStyle(), MxlPrintStyle.empty);
-					Positioning positioning = readPositioning(printStyle.getPosition(),
-						null, mxlDirection.getPlacement(), context.getTenthMm(),
-						context.getStaffLinesCount(staff));
+					Positioning positioning = readPositioning(printStyle.getPosition(), staffDetails,
+						mxlDirection.getPlacement());
 					Segno segno = new Segno();
 					segno.setPositioning(positioning);
 					context.writeColumnElement(segno);
@@ -559,8 +555,7 @@ public final class MusicReader {
 					//wedge
 					MxlWedge mxlWedge = (MxlWedge) mxlDTC;
 					int number = mxlWedge.getNumber();
-					Position pos = readPosition(mxlWedge.getPosition(), context.getTenthMm(),
-						context.getStaffLinesCount(staff));
+					Position pos = readPosition(mxlWedge.getPosition(), staffDetails);
 					switch (mxlWedge.getType()) {
 						case Crescendo:
 							Wedge crescendo = new Wedge(WedgeType.Crescendo);
@@ -596,9 +591,8 @@ public final class MusicReader {
 						direction = new Words(context.getSettings().getTextReader().readText(mxlFormattedText));
 						
 						MxlPrintStyle mxlPrintStyle = notNull(mxlFormattedText.getPrintStyle(), MxlPrintStyle.empty);
-						Positioning positioning = readPositioning(mxlPrintStyle.getPosition(),
-							mxlDirection.getPlacement(), null, context.getTenthMm(),
-							context.getStaffLinesCount(staff));
+						Positioning positioning = readPositioning(mxlPrintStyle.getPosition(), staffDetails,
+							mxlDirection.getPlacement());
 						direction.setPositioning(positioning);
 						
 						//TODO

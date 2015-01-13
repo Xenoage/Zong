@@ -6,77 +6,29 @@ import static com.xenoage.utils.iterators.It.it;
 import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.position.MP.getMP;
-import static com.xenoage.zong.core.text.UnformattedText.ut;
 import static com.xenoage.zong.io.musicxml.in.readers.MusicReader.readDuration;
-import static com.xenoage.zong.io.musicxml.in.readers.OtherReader.readBezierPoint;
-import static com.xenoage.zong.io.musicxml.in.readers.OtherReader.readPlacement;
-import static com.xenoage.zong.io.musicxml.in.readers.OtherReader.readPositioning;
-import static com.xenoage.zong.io.musicxml.in.readers.OtherReader.readVSide;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import com.xenoage.utils.Parser;
+import lombok.RequiredArgsConstructor;
+
 import com.xenoage.utils.math.Fraction;
-import com.xenoage.utils.math.VSide;
-import com.xenoage.zong.commands.core.music.direction.DirectionAdd;
-import com.xenoage.zong.commands.core.music.lyric.LyricAdd;
-import com.xenoage.zong.core.Score;
-import com.xenoage.zong.core.music.MusicContext;
 import com.xenoage.zong.core.music.Pitch;
-import com.xenoage.zong.core.music.WaypointPosition;
-import com.xenoage.zong.core.music.annotation.Annotation;
-import com.xenoage.zong.core.music.annotation.Articulation;
-import com.xenoage.zong.core.music.annotation.ArticulationType;
-import com.xenoage.zong.core.music.annotation.Fermata;
-import com.xenoage.zong.core.music.annotation.Ornament;
-import com.xenoage.zong.core.music.annotation.OrnamentType;
+import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.Grace;
 import com.xenoage.zong.core.music.chord.Note;
 import com.xenoage.zong.core.music.chord.Stem;
-import com.xenoage.zong.core.music.chord.StemDirection;
-import com.xenoage.zong.core.music.direction.Dynamics;
-import com.xenoage.zong.core.music.direction.DynamicsType;
-import com.xenoage.zong.core.music.format.BezierPoint;
-import com.xenoage.zong.core.music.format.Placement;
-import com.xenoage.zong.core.music.format.Positioning;
-import com.xenoage.zong.core.music.lyric.Lyric;
-import com.xenoage.zong.core.music.lyric.SyllableType;
 import com.xenoage.zong.core.music.rest.Rest;
-import com.xenoage.zong.core.music.slur.SlurType;
-import com.xenoage.zong.core.music.slur.SlurWaypoint;
-import com.xenoage.zong.musicxml.types.MxlArticulations;
 import com.xenoage.zong.musicxml.types.MxlBeam;
-import com.xenoage.zong.musicxml.types.MxlDynamics;
-import com.xenoage.zong.musicxml.types.MxlFermata;
-import com.xenoage.zong.musicxml.types.MxlLyric;
-import com.xenoage.zong.musicxml.types.MxlNotations;
 import com.xenoage.zong.musicxml.types.MxlNote;
-import com.xenoage.zong.musicxml.types.MxlOrnaments;
 import com.xenoage.zong.musicxml.types.MxlPitch;
-import com.xenoage.zong.musicxml.types.MxlSlurOrTied;
-import com.xenoage.zong.musicxml.types.MxlSlurOrTied.MxlElementType;
-import com.xenoage.zong.musicxml.types.MxlStem;
-import com.xenoage.zong.musicxml.types.MxlSyllabicText;
-import com.xenoage.zong.musicxml.types.attributes.MxlEmptyPlacement;
-import com.xenoage.zong.musicxml.types.attributes.MxlPosition;
-import com.xenoage.zong.musicxml.types.attributes.MxlPrintStyle;
-import com.xenoage.zong.musicxml.types.choice.MxlArticulationsContent;
-import com.xenoage.zong.musicxml.types.choice.MxlArticulationsContent.MxlArticulationsContentType;
 import com.xenoage.zong.musicxml.types.choice.MxlCueNote;
 import com.xenoage.zong.musicxml.types.choice.MxlFullNoteContent;
 import com.xenoage.zong.musicxml.types.choice.MxlFullNoteContent.MxlFullNoteContentType;
 import com.xenoage.zong.musicxml.types.choice.MxlGraceNote;
-import com.xenoage.zong.musicxml.types.choice.MxlLyricContent.MxlLyricContentType;
 import com.xenoage.zong.musicxml.types.choice.MxlNormalNote;
-import com.xenoage.zong.musicxml.types.choice.MxlNotationsContent;
-import com.xenoage.zong.musicxml.types.choice.MxlNotationsContent.MxlNotationsContentType;
 import com.xenoage.zong.musicxml.types.choice.MxlNoteContent.MxlNoteContentType;
-import com.xenoage.zong.musicxml.types.choice.MxlOrnamentsContent;
-import com.xenoage.zong.musicxml.types.choice.MxlOrnamentsContent.MxlOrnamentsContentType;
-import com.xenoage.zong.musicxml.types.enums.MxlStartStopContinue;
-import com.xenoage.zong.musicxml.types.enums.MxlUprightInverted;
 import com.xenoage.zong.musicxml.types.groups.MxlEditorialVoice;
 import com.xenoage.zong.musicxml.types.groups.MxlFullNote;
 
@@ -86,15 +38,66 @@ import com.xenoage.zong.musicxml.types.groups.MxlFullNote;
  * 
  * @author Andreas Wenger
  */
+@RequiredArgsConstructor
 public final class ChordReader {
 
+	private final List<MxlNote> mxlNotes;
+	
+	private Context context;
+	private MxlNote mxlFirstNote;
+	private VoiceElement chordOrRest;
+	private Chord chord;
+	private int staff;
+	
+	
 	/**
 	 * Reads the given chord, consisting of the given list of note elements,
 	 * including beams, notations and lyrics.
 	 * All but the first given note must have a chord-element inside.
 	 */
-	public static void readChord(MusicReaderContext context, List<MxlNote> mxlNotes) {
-		MxlNote mxlFirstNote = mxlNotes.get(0);
+	public void readIntoContext(Context context) {
+		this.context = context;
+		
+		readFirstNote();
+		
+		//find staff
+		//(not supported yet: multi-staff chords)
+		staff = notNull(mxlFirstNote.getStaff(), 1) - 1;
+			
+		//find voice
+		//TODO: might not exist! we have to use a helper algorithm to determine the right voice
+		//then, see MusicReader class documentation.
+		int staffVoice = 0;
+		MxlEditorialVoice editorialVoice = mxlFirstNote.getEditorialVoice();
+		if (editorialVoice != null) {
+			String mxlVoice = editorialVoice.getVoice();
+			if (mxlVoice != null) {
+				staffVoice = context.getVoice(staff, mxlVoice);
+			}
+		}
+		
+		//write chord or rest
+		if (chordOrRest != null)
+			context.writeVoiceElement(chordOrRest, staff, staffVoice);
+		
+		//more details for chord
+		if (chord != null) {
+			//check if chord could be written. if not, return
+			if (getMP(chord) == null)
+				return;
+			readStem();
+			readBeams();
+			readFirstNoteNotations();
+			new LyricReader(mxlNotes).readToChord(chord);
+			readOtherChordNotes();
+		}
+		
+		if (chordOrRest != null)
+			context.moveCursorForward(chordOrRest.getDuration());
+	}
+	
+	private void readFirstNote() {
+		mxlFirstNote = mxlNotes.get(0);
 		MxlNoteContentType mxlFirstNoteType = mxlFirstNote.getContent().getNoteContentType();
 
 		//type of chord/rest
@@ -120,30 +123,13 @@ public final class ChordReader {
 		//duration. here, the first duration is the duration of the whole chord.
 		Fraction duration = _0;
 		if (mxlFirstNormalNote != null) {
-			duration = readDuration(context, mxlFirstNormalNote.getDuration());
+			duration = readDuration(mxlFirstNormalNote.getDuration(), context.getDivisions());
 		}
 		else if (mxlFirstCueNote != null) {
-			duration = readDuration(context, mxlFirstCueNote.getDuration());
-		}
-
-		//staff
-		//(not supported yet: multi-staff chords)
-		int staff = notNull(mxlFirstNote.getStaff(), 1) - 1;
-
-		//voice
-		//TODO: might not exist! we have to use a helper algorithm to determine the right voice
-		//then, see MusicReader class documentation.
-		int staffVoice = 0;
-		MxlEditorialVoice editorialVoice = mxlFirstNote.getEditorialVoice();
-		if (editorialVoice != null) {
-			String mxlVoice = editorialVoice.getVoice();
-			if (mxlVoice != null) {
-				staffVoice = context.getVoice(staff, mxlVoice);
-			}
+			duration = readDuration(mxlFirstCueNote.getDuration(), context.getDivisions());
 		}
 
 		//create new chord or rest
-		Chord chord = null;
 		if (mxlFNCType == MxlFullNoteContentType.Pitch) {
 			//create a chord
 			Pitch pitch = ((MxlPitch) mxlFirstFullNote.getContent()).getPitch();
@@ -160,114 +146,68 @@ public final class ChordReader {
 				chord = new Chord(alist(new Note(pitch)), duration);
 			}
 			chord.setCue(cue);
-			context.writeVoiceElement(chord, staff, staffVoice);
+			chordOrRest = chord;
 		}
 		else if (mxlFNCType == MxlFullNoteContentType.Rest) {
-			//write a rest
+			//create a rest
 			Rest rest = new Rest(duration);
 			rest.setCue(cue);
-			context.writeVoiceElement(rest, staff, staffVoice);
+			chordOrRest = rest;
 		}
-
-		//more details for chord
-		if (chord != null) {
-			//check if chord could be written. if not, return
-			if (getMP(chord) == null)
-				return;
-
-			//stem
-			Stem stem = readStem(context, mxlFirstNote, chord, staff);
-			if (stem != null) {
-				chord.setStem(stem);
-			}
-
-			//add beams
-			//TODO: also read beams for grace and cue chords
-			if (mxlFirstGraceNote == null && !cue) {
-				//currently we read only the beam elements with number 1
-				for (MxlBeam mxlBeam : it(mxlFirstNote.getBeams())) {
-					int number = mxlBeam.getNumber();
-					//read only level 1 beams
-					if (number != 1)
-						continue;
-					switch (mxlBeam.getValue()) {
-						case Begin: {
-							//open new beam
-							context.openBeam(number);
-							context.addBeamChord(chord, number);
-							break;
-						}
-						case ForwardHook:
-						case BackwardHook:
-						case Continue: {
-							//add chord to beam
-							context.addBeamChord(chord, number);
-							break;
-						}
-						case End: {
-							//close the beam and create it
-							context.addBeamChord(chord, number);
-							context.closeBeam(number);
-						}
+	}
+		
+	private void readStem() {
+		Stem stem = StemReader.readStem(context, mxlFirstNote, chord, staff);
+		if (stem != null)
+			chord.setStem(stem);
+	}
+		
+	private void readBeams() {
+		//add beams
+		//TODO: also read beams for grace and cue chords
+		if (false == (chord.isGrace() || chord.isCue())) {
+			//currently we read only the beam elements with number 1
+			for (MxlBeam mxlBeam : it(mxlFirstNote.getBeams())) {
+				int number = mxlBeam.getNumber();
+				//read only level 1 beams
+				if (number != 1)
+					continue;
+				switch (mxlBeam.getValue()) {
+					case Begin: {
+						//open new beam
+						context.openBeam(number);
+						context.addBeamChord(chord, number);
+						break;
+					}
+					case ForwardHook:
+					case BackwardHook:
+					case Continue: {
+						//add chord to beam
+						context.addBeamChord(chord, number);
+						break;
+					}
+					case End: {
+						//close the beam and create it
+						context.addBeamChord(chord, number);
+						context.closeBeam(number);
 					}
 				}
 			}
-
-			//notations of first note
-			if (mxlFirstNote.getNotations() != null) {
-				readNotations(context, mxlFirstNote.getNotations(), chord, 0, staff); //first note has index 0
-			}
-
-			//lyric
-			//not supported yet: in MusicXML also rests can have lyrics. see measure 36 in Echigo-Jishi
-			for (MxlNote mxlNote : mxlNotes) {
-				for (MxlLyric mxlLyric : it(mxlNote.getLyrics())) {
-					//not supported yet: number which are not integer and
-					//name instead of or additional to the number attribute (see MusicXML Test 61g)
-					String number = mxlLyric.getNumber();
-					int verse = 0;
-					if (number != null) {
-						Integer i = Parser.parseIntegerNull(number);
-						if (i != null)
-							verse = i - 1;
-					}
-					SyllableType syllableType = null;
-					MxlLyricContentType mxlLCType = mxlLyric.getContent().getLyricContentType();
-					if (mxlLCType == MxlLyricContentType.SyllabicText) {
-						MxlSyllabicText mxlSyllabicText = (MxlSyllabicText) mxlLyric.getContent();
-						//a syllable
-						switch (mxlSyllabicText.getSyllabic()) {
-							case Single:
-								syllableType = SyllableType.Single;
-								break;
-							case Begin:
-								syllableType = SyllableType.Begin;
-								break;
-							case Middle:
-								syllableType = SyllableType.Middle;
-								break;
-							case End:
-								syllableType = SyllableType.End;
-								break;
-						}
-						//the next element must be the text element
-						new LyricAdd(new Lyric(ut(mxlSyllabicText.getText().getValue()), syllableType, verse),
-							chord).execute();
-					}
-					else if (mxlLCType == MxlLyricContentType.Extend) {
-						//extend - TODO: extension to next chord!
-						new LyricAdd(Lyric.lyricExtend(verse), chord).execute();
-					}
-				}
-			}
-
-			//collect the following notes of this chord
-			for (int i = 1; i < mxlNotes.size(); i++) {
-				addChordNote(context, mxlNotes.get(i), chord, staff);
-			}
 		}
-
-		context.moveCursorForward(duration);
+	}
+		
+	private void readFirstNoteNotations() { //TIDY: merge with notations of other notes?
+		if (mxlFirstNote.getNotations() != null) {
+			new NotationsReader(mxlFirstNote.getNotations()).readToNote(
+				chord, 0, staff, context); //first note has index 0
+		}
+	}
+		
+	private void readOtherChordNotes() {
+		//collect the following notes of this chord
+		for (int i = 1; i < mxlNotes.size(); i++) {
+			addChordNote(context, mxlNotes.get(i), chord, staff);
+		}
 	}
 
 	/**
@@ -275,7 +215,7 @@ public final class ChordReader {
 	 * a chord (but not the first note element of the chord), and adds it to the given chord.
 	 * Also the notations of this note are read.
 	 */
-	private static void addChordNote(MusicReaderContext context,
+	private static void addChordNote(Context context,
 		MxlNote mxlNote, Chord chord, int staffIndexInPart) {
 		//only pitch is interesting for us, since we do not allow
 		//different durations for notes within a chord or other strange stuff
@@ -286,261 +226,9 @@ public final class ChordReader {
 			chord.addNote(note);
 			//notations
 			if (mxlNote.getNotations() != null) {
-				readNotations(context, mxlNote.getNotations(), chord,
-					chord.getNotes().indexOf(note), staffIndexInPart);
+				new NotationsReader(mxlNote.getNotations()).readToNote(chord,
+					chord.getNotes().indexOf(note), staffIndexInPart, context);
 			}
-		}
-	}
-
-	/**
-	 * Reads the slurs, ties and dynamics belonging to the given chord and note.
-	 * The beginnings and endings of the slurs are saved in the context.
-	 */
-	private static void readNotations(MusicReaderContext context,
-		List<MxlNotations> mxlNotations, Chord chord, int noteIndex, int staffIndexInPart) {
-		
-		ArrayList<Annotation> annotations = alist(0);
-		for (MxlNotations mxlNotationsElement : mxlNotations) {
-			for (MxlNotationsContent mxlNC : mxlNotationsElement.getElements()) {
-				MxlNotationsContentType mxlNCType = mxlNC.getNotationsContentType();
-	
-				switch (mxlNCType) {
-					case SlurOrTied: {
-						//slur or tied
-						MxlSlurOrTied mxlSlur = (MxlSlurOrTied) mxlNC;
-						Pitch pitch = chord.getNotes().get(noteIndex).getPitch();
-						float noteLP = context.getMusicContext(staffIndexInPart).getLp(pitch);
-	
-						//type
-						SlurType type;
-						if (mxlSlur.getElementType() == MxlElementType.Slur)
-							type = SlurType.Slur;
-						else
-							type = SlurType.Tie;
-	
-						//number (tied does usually not use number, but distinguishes by pitch)
-						Integer number = mxlSlur.getNumber();
-						BezierPoint bezierPoint = readBezierPoint(mxlSlur.getPosition(),
-							mxlSlur.getBezier(), context.getTenthMm(),
-							context.getStaffLinesCount(staffIndexInPart), noteLP, chord.getDuration());
-						VSide side = readVSide(mxlSlur.getPlacement());
-	
-						//waypoint
-						SlurWaypoint wp = new SlurWaypoint(chord, noteIndex, bezierPoint);
-						if (type == SlurType.Tie && number == null) {
-							//unnumbered tied
-							if (mxlSlur.getType() == MxlStartStopContinue.Start)
-								context.openUnnumberedTied(pitch, wp, side);
-							else
-								context.closeUnnumberedTied(pitch, wp, side);
-						}
-						else {
-							//numbered
-							WaypointPosition wpPos;
-							if (mxlSlur.getType() == MxlStartStopContinue.Start)
-								wpPos = WaypointPosition.Start;
-							else if (mxlSlur.getType() == MxlStartStopContinue.Stop)
-								wpPos = WaypointPosition.Stop;
-							else
-								wpPos = WaypointPosition.Continue;
-							context.registerSlur(type, wpPos, number, wp, side);
-						}
-						break;
-					}
-	
-					case Dynamics: {
-						//dynamics
-						MxlDynamics mxlDynamics = (MxlDynamics) mxlNC;
-						DynamicsType type = mxlDynamics.getElement();
-						MxlPrintStyle printStyle = mxlDynamics.getPrintStyle();
-						MxlPosition position = (printStyle != null ? printStyle.getPosition() : null);
-						Positioning positioning = readPositioning(position,
-							mxlDynamics.getPlacement(), null, context.getTenthMm(),
-							context.getStaffLinesCount(staffIndexInPart));
-						Dynamics dynamics = new Dynamics(type);
-						dynamics.setPositioning(positioning);
-						new DirectionAdd(dynamics, chord).execute();
-						break;
-					}
-	
-					case Articulations: {
-						//articulations
-						MxlArticulations mxlArticulations = (MxlArticulations) mxlNC;
-						for (MxlArticulationsContent mxlAC : mxlArticulations.getContent()) {
-							MxlArticulationsContentType mxlACType = mxlAC.getArticulationsContentType();
-							//read type
-							ArticulationType a = null;
-							switch (mxlACType) {
-								case Accent:
-									a = ArticulationType.Accent;
-									break;
-								case Staccatissimo:
-									a = ArticulationType.Staccatissimo;
-									break;
-								case Staccato:
-									a = ArticulationType.Staccato;
-									break;
-								case StrongAccent:
-									a = ArticulationType.Marcato;
-									break;
-								case Tenuto:
-									a = ArticulationType.Tenuto;
-									break;
-							}
-							//read placement
-							Placement placement = null;
-							MxlEmptyPlacement mxlPlacement = mxlAC.getEmptyPlacement();
-							if (mxlPlacement != null) {
-								placement = readPlacement(mxlPlacement.getPlacement());
-							}
-							if (a != null) {
-								Articulation articulation = new Articulation(a);
-								articulation.setPlacement(placement);
-								annotations.add(articulation);
-							}
-						}
-						break;
-					}
-					
-					case Fermata: {
-						//fermata
-						MxlFermata mxlFermata = (MxlFermata) mxlNC;
-						//determine position
-						MxlPrintStyle printStyle = mxlFermata.getPrintStyle();
-						MxlPosition position = (printStyle != null ? printStyle.getPosition() : null);
-						Positioning positioning = readPositioning(position,
-							null, null, context.getTenthMm(), context.getStaffLinesCount(staffIndexInPart));
-						if (positioning == null) {
-							if (mxlFermata.getType() == MxlUprightInverted.Upright)
-								positioning = Placement.Above;
-							else if (mxlFermata.getType() == MxlUprightInverted.Inverted)
-								positioning = Placement.Below;
-						}
-						Fermata fermata = new Fermata();
-						fermata.setPositioning(positioning);
-						annotations.add(fermata);
-						break;
-					}
-					
-					case Ornaments: {
-						//ornaments
-						MxlOrnaments mxlOrnaments = (MxlOrnaments) mxlNC;
-						for (MxlOrnamentsContent mxlOC : mxlOrnaments.getContent()) {
-							MxlOrnamentsContentType mxlOCType = mxlOC.getOrnamentsContentType();
-							//read type
-							OrnamentType o = null;
-							switch (mxlOCType) {
-								case TrillMark:
-									o = OrnamentType.Trill;
-									break;
-								case Turn:
-									o = OrnamentType.Turn;
-									break;
-								case DelayedTurn:
-									o = OrnamentType.DelayedTurn;
-									break;
-								case InvertedTurn:
-									o = OrnamentType.InvertedTurn;
-									break;
-								case Mordent:
-									o = OrnamentType.Mordent;
-									break;
-								case InvertedMordent:
-									o = OrnamentType.InvertedMordent;
-									break;
-							}
-							if (o != null) {
-								Ornament ornament = new Ornament(o);
-								annotations.add(ornament);
-							}
-						}
-						break;
-					}
-				}
-			}
-		}
-		
-		if (annotations.size() > 0)
-			chord.setAnnotations(annotations);
-	}
-
-	/**
-	 * Reads and returns the stem of the given chord.
-	 * If not available, null is returned.
-	 * @param context   the global context
-	 * @param xmlNote   the note element, that contains the interesting
-	 *                  stem element. if not, null is returned.
-	 * @param chord     the chord, whose notes are already collected
-	 * @param staff     the staff index of the current chord
-	 */
-	private static Stem readStem(MusicReaderContext context, MxlNote mxlNote, Chord chord, int staff) {
-		Stem ret = null;
-		MxlStem mxlStem = mxlNote.getStem();
-		if (mxlStem != null) {
-			//direction
-			StemDirection direction = null;
-			switch (mxlStem.getValue()) {
-				case None:
-					direction = StemDirection.None;
-					break;
-				case Up:
-					direction = StemDirection.Up;
-					break;
-				case Down:
-					direction = StemDirection.Down;
-					break;
-				case Double:
-					direction = StemDirection.Up; //currently double is not supported
-					break;
-			}
-			//length
-			Float length = null;
-			MxlPosition yPos = mxlStem.getYPosition();
-			if (yPos != null && yPos.getDefaultY() != null) {
-				//convert position in tenths relative to topmost staff line into
-				//a length in interline spaces measured from the outermost chord note on stem side
-				float stemEndLinePosition = convertDefaultYToLinePosition(context, yPos.getDefaultY(), staff);
-				length = Math.abs(stemEndLinePosition -
-					getNoteLinePosition(context, chord, stemEndLinePosition, staff)) / 2;
-			}
-			//create stem
-			ret = new Stem(direction, length);
-		}
-		return ret;
-	}
-
-	/**
-	 * Converts the given default-y position in global tenths (that is always
-	 * relative to the topmost staff line) to a line position, using the
-	 * musical context from the given staff.
-	 */
-	private static float convertDefaultYToLinePosition(MusicReaderContext context, float defaultY,
-		int staff) {
-		Score score = context.getScore();
-		float defaultYInMm = defaultY * score.getFormat().getInterlineSpace() / 10;
-		float interlineSpace = score.getInterlineSpace(context.getPartStaffIndices().getStart() +
-			staff);
-		int linesCount = context.getStaffLinesCount(staff);
-		return 2 * (linesCount - 1) + 2 * defaultYInMm / interlineSpace;
-	}
-
-	/**
-	 * Gets the line position of the note which is nearest to the given line position,
-	 * using the musical context from the given staff.
-	 */
-	private static float getNoteLinePosition(MusicReaderContext context, Chord chord, float nearTo,
-		int staff) {
-		MusicContext mc = context.getMusicContext(staff);
-		List<Pitch> pitches = chord.getPitches();
-		//if there is just one note, it's easy
-		if (pitches.size() == 1) {
-			return mc.getLp(pitches.get(0));
-		}
-		//otherwise, test for the topmost and bottommost note
-		else {
-			float top = mc.getLp(pitches.get(pitches.size() - 1));
-			float bottom = mc.getLp(pitches.get(0));
-			return (Math.abs(top - nearTo) < Math.abs(bottom - nearTo) ? top : bottom);
 		}
 	}
 

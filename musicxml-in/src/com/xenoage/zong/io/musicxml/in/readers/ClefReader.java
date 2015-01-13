@@ -1,7 +1,10 @@
 package com.xenoage.zong.io.musicxml.in.readers;
 
+import lombok.RequiredArgsConstructor;
+
 import com.xenoage.zong.core.music.clef.ClefSymbol;
 import com.xenoage.zong.core.music.clef.ClefType;
+import com.xenoage.zong.io.musicxml.Equivalents;
 import com.xenoage.zong.musicxml.types.MxlClef;
 
 /**
@@ -9,25 +12,29 @@ import com.xenoage.zong.musicxml.types.MxlClef;
  * 
  * @author Andreas Wenger
  */
+@RequiredArgsConstructor
 public class ClefReader {
+	
+	private final MxlClef mxlClef;
+	
+	private ClefSymbol symbol;
+	private ClefType clefType;
 	
 	/**
 	 * Reads the given clef, or returns null if the clef is unsupported.
 	 */
-	public static ClefType readClef(MxlClef clef) {
-		//read symbol
-		ClefSymbol symbol = null;
-		switch (clef.getSign()) {
-			case G: symbol = ClefSymbol.G; break;
-			case F: symbol = ClefSymbol.F; break;
-			case C: symbol = ClefSymbol.C; break;
-			case Percussion: symbol = ClefSymbol.PercTwoRects; break;
-			case TAB: symbol = ClefSymbol.Tab; break;
-			case None: symbol = ClefSymbol.None; break;
-			default: return null; //unsupported
-		}
+	public ClefType read() {
+		symbol = Equivalents.clefSymbols.get1(mxlClef.getSign());
+		if (symbol == null)
+			return null;
+		readOctaveShift();
+		readLine();
+		return clefType;
+	}
+	
+	private void readOctaveShift() {
 		//for some clefs, we provide octave shifting. If unsupported, we ignore it
-		int octaveChange = clef.getClefOctaveChange();
+		int octaveChange = mxlClef.getClefOctaveChange();
 		if (octaveChange != 0) {
 			if (symbol == ClefSymbol.G) {
 				switch (octaveChange) {
@@ -46,10 +53,13 @@ public class ClefReader {
 				}
 			}
 		}
+	}
+	
+	private void readLine() {
 		//read line or use default position
-		Integer line = clef.getLine();
+		Integer line = mxlClef.getLine();
 		if (line == null) {
-			return ClefType.commonClefs.get(symbol);
+			clefType = ClefType.commonClefs.get(symbol);
 		}
 		else {
 			//convert MusicXML line number (1 based) to LP (0 based)
@@ -58,7 +68,7 @@ public class ClefReader {
 			//in Zong!, it is centered, so move it 2 interline spaces down (= 4 LPs)
 			if (symbol == ClefSymbol.Tab || symbol == ClefSymbol.TabSmall)
 				lp -= 4;
-			return new ClefType(symbol, lp);
+			clefType = new ClefType(symbol, lp);
 		}
 	}
 

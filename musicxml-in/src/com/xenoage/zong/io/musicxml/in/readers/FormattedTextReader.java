@@ -40,7 +40,7 @@ public class FormattedTextReader
 	}
 	
 	public Alignment readAlignment(MxlFormattedText mxlText) {
-		return Equivalents.hAlignments.get1OrDefault(mxlText.getJustify(), Alignment.Left);
+		return Equivalents.alignments.get1(mxlText.getJustify());
 	}
 	
 	@NonNull public MxlPrintStyle getPrintStyle(MxlFormattedText mxlText) {

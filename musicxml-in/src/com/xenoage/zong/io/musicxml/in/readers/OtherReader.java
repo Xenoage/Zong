@@ -13,6 +13,7 @@ import com.xenoage.zong.core.music.format.Position;
 import com.xenoage.zong.core.music.format.Positioning;
 import com.xenoage.zong.core.music.format.SP;
 import com.xenoage.zong.core.text.Alignment;
+import com.xenoage.zong.io.musicxml.in.util.StaffDetails;
 import com.xenoage.zong.musicxml.types.MxlBezier;
 import com.xenoage.zong.musicxml.types.attributes.MxlPosition;
 import com.xenoage.zong.musicxml.types.attributes.MxlPrintStyle;
@@ -81,15 +82,13 @@ public final class OtherReader {
 		return null;
 	}
 	
-	@MaybeNull public static Position readPosition(MxlPrintStyle printStyle, float tenthsMm,
-		int staffLinesCount) {
+	@MaybeNull public static Position readPosition(MxlPrintStyle printStyle, StaffDetails staffDetails) {
 		if (printStyle == null)
 			return null;
-		return readPosition(printStyle.getPosition(), tenthsMm, staffLinesCount);
+		return readPosition(printStyle.getPosition(), staffDetails);
 	}
 
-	@MaybeNull public static Position readPosition(MxlPosition mxlPosition, float tenthsMm,
-		int staffLinesCount) {
+	@MaybeNull public static Position readPosition(MxlPosition mxlPosition, StaffDetails staffDetails) {
 		Float x = (mxlPosition != null ? mxlPosition.getDefaultX() : null);
 		Float y = (mxlPosition != null ? mxlPosition.getDefaultY() : null);
 		Float rx = (mxlPosition != null ? mxlPosition.getRelativeX() : null);
@@ -100,15 +99,15 @@ public final class OtherReader {
 		else {
 			Float fx = null;
 			if (x != null) {
-				fx = x / 10 * tenthsMm;
+				fx = x / 10 * staffDetails.tenthsMm;
 			}
 			Float fy = null;
 			if (y != null) {
-				fy = (staffLinesCount - 1) * 2 + y / 10 * 2;
+				fy = (staffDetails.linesCount - 1) * 2 + y / 10 * 2;
 			}
 			Float frx = null;
 			if (rx != null) {
-				frx = rx / 10 * tenthsMm;
+				frx = rx / 10 * staffDetails.tenthsMm;
 			}
 			Float fry = null;
 			if (ry != null) {
@@ -121,17 +120,16 @@ public final class OtherReader {
 	/**
 	 * Reads a {@link Position} or {@link Placement}. Arguments may be null.
 	 * {@link Position}s have higher priority than {@link Placement}s. The first
-	 * placement has higher priority than the second one.
+	 * placement has higher priority than the following ones.
 	 */
 	@MaybeNull public static Positioning readPositioning(MxlPosition mxlPosition,
-		MxlPlacement mxlPlacement1, MxlPlacement mxlPlacement2, float tenthsMm, int staffLinesCount) {
-		Position position = readPosition(mxlPosition, tenthsMm, staffLinesCount);
+		StaffDetails staffDetails, MxlPlacement... mxlPlacements) {
+		Position position = readPosition(mxlPosition, staffDetails);
 		if (position != null)
 			return position;
-		else if (mxlPlacement1 != null)
-			return readPlacement(mxlPlacement1);
-		else if (mxlPlacement2 != null)
-			return readPlacement(mxlPlacement2);
+		for (MxlPlacement mxlPlacement : mxlPlacements)
+			if (mxlPlacement != null)
+				return readPlacement(mxlPlacement);
 		return null;
 	}
 

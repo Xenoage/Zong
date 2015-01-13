@@ -2,7 +2,6 @@ package com.xenoage.zong.io.musicxml.in.readers;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.iterators.It.it;
-import static com.xenoage.utils.kernel.Tuple2.t;
 import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.zong.core.position.MP.atBeat;
 import static com.xenoage.zong.io.musicxml.in.util.CommandPerformer.execute;
@@ -15,7 +14,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import com.xenoage.utils.kernel.Range;
-import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.utils.math.VSide;
 import com.xenoage.zong.commands.core.music.ColumnElementWrite;
@@ -30,6 +28,7 @@ import com.xenoage.zong.core.music.ColumnElement;
 import com.xenoage.zong.core.music.InstrumentChange;
 import com.xenoage.zong.core.music.Measure;
 import com.xenoage.zong.core.music.MeasureElement;
+import com.xenoage.zong.core.music.MeasureSide;
 import com.xenoage.zong.core.music.MusicContext;
 import com.xenoage.zong.core.music.Part;
 import com.xenoage.zong.core.music.Pitch;
@@ -47,6 +46,7 @@ import com.xenoage.zong.core.music.util.Interval;
 import com.xenoage.zong.core.music.volta.Volta;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.util.InconsistentScoreException;
+import com.xenoage.zong.io.musicxml.in.util.ClosedVolta;
 import com.xenoage.zong.io.musicxml.in.util.MusicReaderException;
 import com.xenoage.zong.io.musicxml.in.util.OpenElements;
 import com.xenoage.zong.io.musicxml.in.util.OpenSlur;
@@ -63,7 +63,7 @@ import com.xenoage.zong.utils.exceptions.MeasureFullException;
  * @author Andreas Wenger
  */
 @Getter @Setter
-public final class MusicReaderContext {
+public final class Context {
 
 	private Score score;
 	private MP mp = MP.mp0;
@@ -87,7 +87,7 @@ public final class MusicReaderContext {
 	private VoiceElementWrite.Options writeVoicElementOptions;
 
 
-	public MusicReaderContext(Score score, MusicReaderSettings settings) {
+	public Context(Score score, MusicReaderSettings settings) {
 		this.score = score;
 		this.settings = settings;
 		
@@ -417,8 +417,17 @@ public final class MusicReaderContext {
 	/**
 	 * Writes the given {@link ColumnElement} at the given measure.
 	 */
-	public void writeColumnElement(int measure, ColumnElement element) {
+	public void writeColumnElement(ColumnElement element, int measure) {
 		new ColumnElementWrite(element, score.getColumnHeader(measure), MP.unknownBeat, null).execute();
+	}
+	
+	/**
+	 * Writes the given {@link ColumnElement} at the current measure.
+	 * @param side     the side of the measure. If null, the current beat is used.
+	 */
+	public void writeColumnElement(ColumnElement element, MeasureSide side) {
+		Fraction beat = (side == null ? mp.beat : MP.unknownBeat);
+		new ColumnElementWrite(element, score.getColumnHeader(mp.measure), beat, side).execute();
 	}
 
 	/**
@@ -507,10 +516,7 @@ public final class MusicReaderContext {
 			openElements.setOpenVolta(new OpenVolta(mp.measure, numbers, caption));
 	}
 
-	/**
-	 * Closes the wedge with the given number and returns it with the start measure number.
-	 */
-	public Tuple2<Volta, Integer> closeVolta(boolean rightHook) {
+	public ClosedVolta closeVolta(boolean rightHook) {
 		OpenVolta openVolta = openElements.getOpenVolta();
 		if (openVolta == null) {
 			if (settings.isIgnoringErrors())
@@ -521,7 +527,7 @@ public final class MusicReaderContext {
 		int length = mp.measure - openVolta.startMeasure + 1;
 		Volta volta = new Volta(length, openVolta.numbers, openVolta.caption, rightHook);
 		openElements.setOpenVolta(null);
-		return t(volta, openVolta.startMeasure);
+		return new ClosedVolta(volta, openVolta.startMeasure);
 	}
 	
 	public MusicReaderSettings getSettings() {

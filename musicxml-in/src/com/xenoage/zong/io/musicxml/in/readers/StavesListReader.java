@@ -300,7 +300,7 @@ public final class StavesListReader {
 	private static BracketGroup.Style readBracketGroupStyle(MxlGroupSymbol mxlGroupSymbol) {
 		if (mxlGroupSymbol == null)
 			return BracketGroup.Style.None;
-		return bracketGroupStyles.get1OrDefault(mxlGroupSymbol.getValue(), BracketGroup.Style.None);
+		return bracketGroupStyles.get1(mxlGroupSymbol.getValue());
 	}
 
 	private static BarlineGroup.Style readBarlineGroupStyle(MxlGroupBarline mxlGroupBarline) {
