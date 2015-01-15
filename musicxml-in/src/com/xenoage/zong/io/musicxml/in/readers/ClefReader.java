@@ -2,6 +2,7 @@ package com.xenoage.zong.io.musicxml.in.readers;
 
 import lombok.RequiredArgsConstructor;
 
+import com.xenoage.zong.core.music.clef.Clef;
 import com.xenoage.zong.core.music.clef.ClefSymbol;
 import com.xenoage.zong.core.music.clef.ClefType;
 import com.xenoage.zong.io.musicxml.Equivalents;
@@ -20,10 +21,21 @@ public class ClefReader {
 	private ClefSymbol symbol;
 	private ClefType clefType;
 	
-	/**
-	 * Reads the given clef, or returns null if the clef is unsupported.
-	 */
-	public ClefType read() {
+	
+	public Clef read() {
+		if (mxlClef == null)
+			return null;
+		ClefType clefType = readType();
+		Clef clef = (clefType != null ? new Clef(clefType) : null);
+		return clef;
+	}
+	
+	public int readStaff() {
+		//staff (called "number" in MusicXML), first staff is default
+		return mxlClef.getNumber() - 1;
+	}
+	
+	private ClefType readType() {
 		symbol = Equivalents.clefSymbols.get1(mxlClef.getSign());
 		if (symbol == null)
 			return null;

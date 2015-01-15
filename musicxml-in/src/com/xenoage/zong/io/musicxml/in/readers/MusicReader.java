@@ -1,15 +1,11 @@
 package com.xenoage.zong.io.musicxml.in.readers;
 
-import static com.xenoage.utils.EnumUtils.getEnumValue;
 import static com.xenoage.utils.NullUtils.notNull;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.iterators.It.it;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.utils.math.Fraction.fr;
-import static com.xenoage.utils.math.MathUtils.clamp;
-import static com.xenoage.zong.core.music.time.TimeType.timeSenzaMisura;
-import static com.xenoage.zong.core.music.time.TimeType.timeType;
 import static com.xenoage.zong.core.position.MP.atElement;
 import static com.xenoage.zong.core.position.MP.atStaff;
 import static com.xenoage.zong.io.musicxml.in.readers.OtherReader.readPosition;
@@ -26,13 +22,7 @@ import com.xenoage.zong.commands.core.music.MeasureAddUpTo;
 import com.xenoage.zong.commands.core.music.MeasureElementWrite;
 import com.xenoage.zong.commands.core.music.VoiceElementWrite;
 import com.xenoage.zong.core.Score;
-import com.xenoage.zong.core.format.Break;
-import com.xenoage.zong.core.format.SystemLayout;
-import com.xenoage.zong.core.header.ScoreHeader;
-import com.xenoage.zong.core.instrument.PitchedInstrument;
-import com.xenoage.zong.core.instrument.Transpose;
 import com.xenoage.zong.core.music.ColumnElement;
-import com.xenoage.zong.core.music.InstrumentChange;
 import com.xenoage.zong.core.music.Measure;
 import com.xenoage.zong.core.music.Part;
 import com.xenoage.zong.core.music.Staff;
@@ -54,11 +44,7 @@ import com.xenoage.zong.core.music.direction.Words;
 import com.xenoage.zong.core.music.format.Position;
 import com.xenoage.zong.core.music.format.Positioning;
 import com.xenoage.zong.core.music.group.StavesRange;
-import com.xenoage.zong.core.music.key.Key;
 import com.xenoage.zong.core.music.key.TraditionalKey;
-import com.xenoage.zong.core.music.key.TraditionalKey.Mode;
-import com.xenoage.zong.core.music.layout.PageBreak;
-import com.xenoage.zong.core.music.layout.SystemBreak;
 import com.xenoage.zong.core.music.rest.Rest;
 import com.xenoage.zong.core.music.time.Time;
 import com.xenoage.zong.core.music.time.TimeType;
@@ -69,7 +55,6 @@ import com.xenoage.zong.io.musicxml.in.util.StaffDetails;
 import com.xenoage.zong.musicxml.types.MxlAttributes;
 import com.xenoage.zong.musicxml.types.MxlBackup;
 import com.xenoage.zong.musicxml.types.MxlBarline;
-import com.xenoage.zong.musicxml.types.MxlClef;
 import com.xenoage.zong.musicxml.types.MxlCoda;
 import com.xenoage.zong.musicxml.types.MxlDirection;
 import com.xenoage.zong.musicxml.types.MxlDirectionType;
@@ -77,30 +62,20 @@ import com.xenoage.zong.musicxml.types.MxlDynamics;
 import com.xenoage.zong.musicxml.types.MxlFormattedText;
 import com.xenoage.zong.musicxml.types.MxlForward;
 import com.xenoage.zong.musicxml.types.MxlInstrument;
-import com.xenoage.zong.musicxml.types.MxlKey;
 import com.xenoage.zong.musicxml.types.MxlMetronome;
-import com.xenoage.zong.musicxml.types.MxlNormalTime;
 import com.xenoage.zong.musicxml.types.MxlNote;
 import com.xenoage.zong.musicxml.types.MxlPedal;
 import com.xenoage.zong.musicxml.types.MxlPrint;
 import com.xenoage.zong.musicxml.types.MxlScorePartwise;
 import com.xenoage.zong.musicxml.types.MxlSegno;
 import com.xenoage.zong.musicxml.types.MxlSound;
-import com.xenoage.zong.musicxml.types.MxlStaffLayout;
-import com.xenoage.zong.musicxml.types.MxlSystemLayout;
-import com.xenoage.zong.musicxml.types.MxlTime;
-import com.xenoage.zong.musicxml.types.MxlTranspose;
 import com.xenoage.zong.musicxml.types.MxlWedge;
 import com.xenoage.zong.musicxml.types.MxlWords;
-import com.xenoage.zong.musicxml.types.attributes.MxlPrintAttributes;
 import com.xenoage.zong.musicxml.types.attributes.MxlPrintStyle;
 import com.xenoage.zong.musicxml.types.choice.MxlDirectionTypeContent;
 import com.xenoage.zong.musicxml.types.choice.MxlDirectionTypeContent.MxlDirectionTypeContentType;
 import com.xenoage.zong.musicxml.types.choice.MxlMusicDataContent;
 import com.xenoage.zong.musicxml.types.choice.MxlMusicDataContent.MxlMusicDataContentType;
-import com.xenoage.zong.musicxml.types.choice.MxlTimeContent.MxlTimeContentType;
-import com.xenoage.zong.musicxml.types.enums.MxlTimeSymbol;
-import com.xenoage.zong.musicxml.types.groups.MxlLayout;
 import com.xenoage.zong.musicxml.types.partwise.MxlMeasure;
 import com.xenoage.zong.musicxml.types.partwise.MxlPart;
 
@@ -240,7 +215,7 @@ public final class MusicReader {
 					break;
 				}
 				case Attributes:
-					readAttributes(context, (MxlAttributes) mxlMDC);
+					new AttributesReader((MxlAttributes) mxlMDC).readToContext(context);
 					break;
 				case Backup:
 					readBackup(context, (MxlBackup) mxlMDC);
@@ -249,7 +224,7 @@ public final class MusicReader {
 					readForward(context, (MxlForward) mxlMDC);
 					break;
 				case Print:
-					readPrint(context, (MxlPrint) mxlMDC);
+					new PrintReader((MxlPrint) mxlMDC).readToContext(context);
 					break;
 				case Direction:
 					readDirection(context, (MxlDirection) mxlMDC);
@@ -259,85 +234,6 @@ public final class MusicReader {
 					break;
 			}
 		}
-		return context;
-	}
-
-	/**
-	 * Reads the given attributes element.
-	 */
-	private static Context readAttributes(Context context,
-		MxlAttributes mxlAttributes) {
-
-		//divisions
-		Integer divisions = mxlAttributes.getDivisions();
-		if (divisions != null) {
-			context.setDivisions(divisions);
-		}
-
-		//key signature
-		MxlKey mxlKey = mxlAttributes.getKey();
-		if (mxlKey != null) {
-			//read fifths. currently, only -7 to 7 is supported (clamp, if needed)
-			int mxlFifths = clamp(mxlKey.fifths, -7, 7);
-			//write to column header (TODO: attribute "number" for single staves)
-			Mode mode = getEnumValue(mxlKey.mode, Mode.values());
-			Key key = new TraditionalKey(mxlFifths, mode);
-			context.writeColumnElement(key);
-		}
-
-		//time signature
-		MxlTime mxlTime = mxlAttributes.getTime();
-		if (mxlTime != null) {
-			Time time = null;
-			MxlTimeContentType type = mxlTime.getContent().getTimeContentType();
-			if (type == MxlTimeContentType.SenzaMisura) {
-				//senza misura
-				time = new Time(timeSenzaMisura);
-			}
-			else if (type == MxlTimeContentType.NormalTime) {
-				//normal time
-				MxlNormalTime mxlNormalTime = (MxlNormalTime) mxlTime.getContent();
-				//common, cut or fractional?
-				if (mxlTime.getSymbol() == MxlTimeSymbol.Cut)
-					time = new Time(TimeType.timeAllaBreve);
-				else if (mxlTime.getSymbol() == MxlTimeSymbol.Common)
-					time = new Time(TimeType.timeCommon);
-				else //otherwise, we currently support only normal fractional time signatures
-					time = new Time(timeType(mxlNormalTime.getBeats(), mxlNormalTime.getBeatType()));
-			}
-			//write to column header (TODO: attribute "number" for single staves)
-			if (time != null) {
-				context.writeColumnElement(time);
-			}
-		}
-
-		//clefs
-		if (mxlAttributes.getClefs() != null) {
-			for (MxlClef mxlClef : mxlAttributes.getClefs()) {
-				ClefType clefType = new ClefReader(mxlClef).read();
-				Clef clef = (clefType != null ? new Clef(clefType) : null);
-				//staff (called "number" in MusicXML), first staff is default
-				int staff = mxlClef.getNumber() - 1;
-				//add to staff
-				if (clef != null) {
-					context.writeMeasureElement(clef, staff);
-				}
-			}
-		}
-
-		//transposition changes - TODO: clean solution for instrument changes
-		MxlTranspose mxlTranspose = mxlAttributes.getTranspose();
-		if (mxlTranspose != null) {
-			Transpose transpose = InstrumentsReader.readTranspose(mxlTranspose);
-			//create instrument change
-			PitchedInstrument instrument = new PitchedInstrument("");
-			instrument.setTranspose(transpose);
-			//write to all staves of this part
-			for (int staff = 0; staff < context.getPartStaffIndices().getCount(); staff++) {
-				context.writeMeasureElement(new InstrumentChange(instrument), staff);
-			}
-		}
-
 		return context;
 	}
 
@@ -370,91 +266,6 @@ public final class MusicReader {
 		}
 		Fraction ret = fr(duration, 4 * divisionsPerQuarter);
 		return ret;
-	}
-
-	/**
-	 * Reads the given print element.
-	 */
-	private static void readPrint(Context context, MxlPrint mxlPrint) {
-		MxlLayout mxlLayout = mxlPrint.getLayout();
-		ScoreHeader header = context.getScore().getHeader();
-
-		//system and page break
-		SystemBreak systemBreak = null;
-		PageBreak pageBreak = null;
-		MxlPrintAttributes mxlPA = mxlPrint.getPrintAttributes();
-		if (mxlPA != null) {
-			Boolean newSystem = mxlPA.getNewSystem();
-			systemBreak = (newSystem == null ? null : (newSystem ? SystemBreak.NewSystem
-				: SystemBreak.NoNewSystem));
-			Boolean newPage = mxlPA.getNewPage();
-			pageBreak = (newPage == null ? null : (newPage ? PageBreak.NewPage
-				: PageBreak.NoNewPage));
-			if (systemBreak != null || pageBreak != null) {
-				//MusicXML print is in the first broken measure, but we
-				//store the break in the last measure before the break (thus -1)
-				int measure = context.getMp().measure - 1;
-				context.writeColumnElement(new Break(pageBreak, systemBreak), measure);
-			}
-		}
-
-		//we assume that custom system layout information is just used in combination with
-		//forced system/page breaks. so we ignore system-layout elements which are not combined
-		//with system/page breaks.
-		//the first measure of a score is also ok.
-		if (context.getMp().measure == 0 || systemBreak == SystemBreak.NewSystem ||
-			pageBreak == PageBreak.NewPage) {
-
-			//first page or new page?
-			boolean isPageBreak = pageBreak == PageBreak.NewPage;
-			boolean isPageStarted = (context.getMp().measure == 0 || isPageBreak);
-			if (isPageBreak) {
-				//increment page index
-				context.incPageIndex();
-			}
-
-			//first system or new system?
-			boolean isSystemBreak = isPageBreak || systemBreak == SystemBreak.NewSystem;
-			if (isSystemBreak) {
-				//increment system index 
-				context.incSystemIndex();
-			}
-
-			//read system layout, if there
-			if (mxlLayout != null) {
-				MxlSystemLayout mxlSystemLayout = mxlLayout.getSystemLayout();
-				if (mxlSystemLayout != null) {
-					SystemLayoutReader.Value sl = SystemLayoutReader
-						.read(mxlSystemLayout, context.getTenthMm());
-					SystemLayout systemLayout = sl.systemLayout;
-	
-					//for first systems on a page, use top-system-distance
-					if (isPageStarted && sl.topSystemDistance != null) {
-						systemLayout.setDistance(sl.topSystemDistance);
-					}
-	
-					//apply values
-					header.setSystemLayout(context.getSystemIndex(), systemLayout);
-				}
-			}
-			
-			//staff layouts
-			if (mxlLayout != null) {
-				for (MxlStaffLayout mxlStaffLayout : it(mxlLayout.getStaffLayouts())) {
-					int staffIndex = mxlStaffLayout.getNumberNotNull() - 1;
-					//get system layout. if it does not exist yet, create it
-					SystemLayout systemLayout = header.getSystemLayout(context.getSystemIndex());
-					if (systemLayout == null) {
-						systemLayout = new SystemLayout();
-						header.setSystemLayout(context.getSystemIndex(), systemLayout);
-					}
-					systemLayout.setStaffLayout(
-						context.getPartStaffIndices().getStart() + staffIndex,
-						StaffLayoutReader.readStaffLayout(mxlStaffLayout, context.getTenthMm()).staffLayout);
-				}
-			}
-
-		}
 	}
 
 	//TIDY: move into own class, and read formatting info

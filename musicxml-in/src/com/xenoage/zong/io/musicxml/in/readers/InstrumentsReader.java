@@ -4,22 +4,13 @@ import static com.xenoage.utils.CheckUtils.checkNotNull;
 import static com.xenoage.utils.NullUtils.notNull;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.collections.CollectionUtils.map;
-import static com.xenoage.utils.kernel.Tuple2.t;
-import static com.xenoage.utils.log.Log.log;
-import static com.xenoage.utils.log.Report.warning;
 
 import java.util.HashMap;
 import java.util.List;
 
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-import com.xenoage.utils.CheckUtils;
-import com.xenoage.utils.NullUtils;
 import com.xenoage.utils.annotations.MaybeEmpty;
-import com.xenoage.utils.annotations.NonNull;
-import com.xenoage.utils.collections.CollectionUtils;
-import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.utils.math.MathUtils;
 import com.xenoage.zong.core.instrument.Instrument;
 import com.xenoage.zong.core.instrument.PitchedInstrument;
@@ -59,14 +50,15 @@ public class InstrumentsReader {
 		String id;
 		String name;
 		String abbreviation;
-		MxlTranspose transpose;
-		MxlMidiInstrument midiInstrument = new MxlMidiInstrument(null, null, null, null, ""); //GOON
+		Transpose transpose = Transpose.noTranspose;
+		Integer midiProgram;
+		Integer midiChannel;
+		Float volume;
+		Float pan;
 	}
 	
-	private List<MxlScoreInstrument> mxlScoreInstruments;
-	private List<MxlMidiInstrument> mxlMidiInstruments;
 	private HashMap<String, Info> infos = map();
-	private MxlTranspose partTranspose;
+	private Transpose partTranspose = Transpose.noTranspose;
 	
 	
 	/**
@@ -76,22 +68,10 @@ public class InstrumentsReader {
 	 * which is needed to find transposition information.
 	 */
 	@MaybeEmpty public List<Instrument> read() {
-		mxlScoreInstruments = mxlScorePart.getScoreInstruments();
-		mxlMidiInstruments = mxlScorePart.getMidiInstruments();
-
 		readScoreInstruments();
 		readTranspositions();
 		readMidiInstruments();
-		
 		List<Instrument> ret = createInstruments();
-		
-		//when no instrument was created, but a transposition was found, create
-		//a default instrument with this transposition
-		if (ret.size() == 0 && partTranspose != null) {
-			PitchedInstrument instrument = new PitchedInstrument(mxlPart.getId());
-			instrument.setTranspose(readTranspose(partTranspose));
-			ret.add(instrument);
-		}
 		return ret;
 	}
 	
@@ -100,7 +80,7 @@ public class InstrumentsReader {
 	}
 
 	private void readScoreInstruments() {
-		for (MxlScoreInstrument mxlScoreInstr : mxlScoreInstruments) {
+		for (MxlScoreInstrument mxlScoreInstr : mxlScorePart.getScoreInstruments()) {
 			String id = mxlScoreInstr.getId();
 			Info info = new Info();
 			info.id = id;
@@ -111,6 +91,7 @@ public class InstrumentsReader {
 	}
 	
 	private void readTranspositions() {
+		List<MxlScoreInstrument> mxlScoreInstruments = mxlScorePart.getScoreInstruments();
 		if (mxlScoreInstruments.size() == 0) {
 			//no instrument defined, but maybe we have a transposition anyway
 			partTranspose = findFirstTranspose();
@@ -130,29 +111,29 @@ public class InstrumentsReader {
 	}
 
 	/**
-	 * Returns the {@link MxlTranspose} of the first measure of this part,
-	 * or null if there is none.
+	 * Returns the {@link Transpose} of the first measure of this part,
+	 * or {@link Transpose#noTranspose} if there is none.
 	 */
-	private MxlTranspose findFirstTranspose() {
+	private Transpose findFirstTranspose() {
 		List<MxlMeasure> mxlMeasures = mxlPart.getMeasures();
 		if (mxlMeasures.size() > 0) {
 			MxlMeasure mxlMeasure = mxlMeasures.get(0);
 			for (MxlMusicDataContent c : mxlMeasure.getMusicData().getContent()) {
 				if (c.getMusicDataContentType() == MxlMusicDataContentType.Attributes) {
 					MxlAttributes a = (MxlAttributes) c;
-					return a.getTranspose();
+					return new TransposeReader(a.getTranspose()).read();
 				}
 			}
 		}
-		return null;
+		return Transpose.noTranspose;
 	}
 
 	/**
-	 * Returns the last {@link MxlTranspose} of this part that can be found
+	 * Returns the last {@link Transpose} of this part that can be found
 	 * before the first note that is played by the instrument with the given ID,
-	 * or null if there is none.
+	 * or {@link Transpose#noTranspose} if there is none.
 	 */
-	private MxlTranspose findLastTransposeBeforeFirstNote(String instrumentID) {
+	private Transpose findLastTransposeBeforeFirstNote(String instrumentID) {
 		for (MxlMeasure mxlMeasure : mxlPart.getMeasures()) {
 			MxlAttributes lastAttributes = null;
 			for (MxlMusicDataContent c : mxlMeasure.getMusicData().getContent()) {
@@ -163,16 +144,33 @@ public class InstrumentsReader {
 					MxlNote n = (MxlNote) c;
 					if (n.getInstrument() != null && n.getInstrument().getId().equals(instrumentID) &&
 						lastAttributes != null)
-						return lastAttributes.getTranspose();
+						return new TransposeReader(lastAttributes.getTranspose()).read();
 				}
 			}
 		}
-		return null;
+		return Transpose.noTranspose;
 	}
 	
 	private void readMidiInstruments() {
 		for (MxlMidiInstrument mxlMidiInstr : mxlScorePart.getMidiInstruments()) {
-			getInfo(mxlMidiInstr.id).midiInstrument = mxlMidiInstr;
+			Info info = getInfo(mxlMidiInstr.id);
+			//midi program
+			info.midiProgram = mxlMidiInstr.getMidiProgram();
+			//midi channel
+			info.midiChannel = mxlMidiInstr.getMidiChannel();
+			//global volume
+			info.volume = mxlMidiInstr.getVolume();
+			if (info.volume != null)
+				info.volume /= 100; //to 0..1
+			//global panning
+			info.pan = mxlMidiInstr.getPan();
+			if (info.pan != null) {
+				if (info.pan > 90)
+					info.pan = 90 - (info.pan - 90); //e.g. convert 120° to 60°
+				else if (info.pan < -90)
+					info.pan = -90 - (info.pan + 90); //e.g. convert -120° to -60°
+				info.pan /= 90f; //to -1..1
+			}
 		}
 	}
 	
@@ -182,30 +180,19 @@ public class InstrumentsReader {
 			Instrument instrument = readInstrument(getInfo(mxlScoreInstr.getId()));
 			ret.add(instrument);
 		}
+		//when no instrument was created, but a transposition was found, create
+		//a default instrument with this transposition
+		if (ret.size() == 0 && partTranspose != Transpose.noTranspose) {
+			PitchedInstrument instrument = new PitchedInstrument(mxlPart.getId());
+			instrument.setTranspose(partTranspose);
+			ret.add(instrument);
+		}
 		return ret;
 	}
 	
 	private Instrument readInstrument(Info info) {
-		
-		Integer midiChannel = info.midiInstrument.getMidiChannel();
-
-		//global volume
-		Float volume = info.midiInstrument.getVolume();
-		if (volume != null)
-			volume /= 100f; //to 0..1
-
-		//global panning
-		Float pan = info.midiInstrument.getPan();
-		if (pan != null) {
-			if (pan > 90)
-				pan = 90 - (pan - 90); //e.g. convert 120° to 60°
-			else if (pan < -90)
-				pan = -90 - (pan + 90); //e.g. convert -120° to -60°
-			pan /= 90f; //to -1..1
-		}
-
 		Instrument instrument = null;
-		if (midiChannel != null && midiChannel.equals(10)) {
+		if (info.midiChannel != null && info.midiChannel == 10) {
 			//unpitched instrument
 			instrument = new UnpitchedInstrument(info.id);
 		}
@@ -214,29 +201,16 @@ public class InstrumentsReader {
 			PitchedInstrument pitchedInstrument;
 			instrument = pitchedInstrument = new PitchedInstrument(info.id);
 			//midi-program is 1-based in MusicXML but 0-based in MIDI
-			int midiProgram = notNull(info.midiInstrument.getMidiProgram(), 1) - 1; //TODO: find value that matches instrument name
+			int midiProgram = notNull(info.midiProgram, 1) - 1; //TODO: find value that matches instrument name
 			midiProgram = MathUtils.clamp(midiProgram, 0, 127);
 			pitchedInstrument.setMidiProgram(midiProgram);
-			Transpose transpose = readTranspose(info.transpose);
-			pitchedInstrument.setTranspose(transpose);
+			pitchedInstrument.setTranspose(info.transpose);
 		}
 		instrument.setName(info.name);
 		instrument.setAbbreviation(info.abbreviation);
-		instrument.setVolume(volume);
-		instrument.setPan(pan);
+		instrument.setVolume(info.volume);
+		instrument.setPan(info.pan);
 		return instrument;
-	}
-	
-	/**
-	 * Returns the Transpose for the given MxlTranspose, or an instance with
-	 * no transposition if the argument was null.
-	 */
-	public static Transpose readTranspose(MxlTranspose mxlTranspose) {
-		if (mxlTranspose != null) {
-			return new Transpose(mxlTranspose.getChromatic(), mxlTranspose.getDiatonic(), notNull(
-				mxlTranspose.getOctaveChange(), 0), mxlTranspose.isDoubleValue());
-		}
-		return Transpose.noTranspose;
 	}
 
 }
