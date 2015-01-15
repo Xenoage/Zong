@@ -96,8 +96,8 @@ public final class ScoreFormatReader {
 			//(only one lyric font is supported)
 			MxlLyricFont mxlLyricFont = mxlDefaults.getLyricFont();
 			if (mxlLyricFont != null) {
-				FontInfo defaultLyricFont = FontInfoReader.readFontInfo(mxlLyricFont.getFont(),
-					scoreFormat.lyricFont);
+				FontInfo defaultLyricFont = new FontInfoReader(mxlLyricFont.getFont(),
+					scoreFormat.lyricFont).read();
 				if (defaultLyricFont != null)
 					scoreFormat = scoreFormat.withLyricFont(defaultLyricFont);
 			}

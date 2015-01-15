@@ -12,7 +12,6 @@ import static com.xenoage.zong.core.music.time.TimeType.timeSenzaMisura;
 import static com.xenoage.zong.core.music.time.TimeType.timeType;
 import static com.xenoage.zong.core.position.MP.atElement;
 import static com.xenoage.zong.core.position.MP.atStaff;
-import static com.xenoage.zong.io.musicxml.in.readers.FontInfoReader.readFontInfo;
 import static com.xenoage.zong.io.musicxml.in.readers.OtherReader.readPosition;
 import static com.xenoage.zong.io.musicxml.in.readers.OtherReader.readPositioning;
 import static com.xenoage.zong.io.musicxml.in.util.CommandPerformer.execute;
@@ -508,7 +507,7 @@ public final class MusicReader {
 					Position position = null;
 					MxlPrintStyle mxlPrintStyle = mxlMetronome.getPrintStyle();
 					if (mxlPrintStyle != null) {
-						fontInfo = readFontInfo(mxlPrintStyle.getFont(), defaultFont);
+						fontInfo = new FontInfoReader(mxlPrintStyle.getFont(), defaultFont).read();
 						position = readPosition(mxlPrintStyle.getPosition(), staffDetails);
 					}
 					

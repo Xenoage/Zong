@@ -4,6 +4,8 @@ import static com.xenoage.utils.collections.CList.ilist;
 
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
+
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.collections.IList;
 import com.xenoage.utils.font.FontInfo;
@@ -20,33 +22,23 @@ import com.xenoage.zong.musicxml.types.enums.MxlFontWeight;
  * 
  * @author Andreas Wenger
  */
-public final class FontInfoReader {
+@RequiredArgsConstructor
+public class FontInfoReader {
+	
+	private final MxlFont mxlFont;
+	private final FontInfo defaultFont;
+	
 
-	@MaybeNull public static FontInfo readFontInfo(MxlFont mxlFont, FontInfo defaultFont) {
+	@MaybeNull public FontInfo read() {
 		if (mxlFont == null)
 			return null;
-		
-		//font
-		List<String> mxlFamilies = mxlFont.getFontFamily();
-		IList<String> families = null;
-		if (mxlFamilies.size() == 0)
-			mxlFamilies = defaultFont.getFamiliesOrNull();
-		if (mxlFamilies != null)
-			families = ilist(mxlFamilies);
+		IList<String> families = readFamilies();
+		Float size = readSize();
+		FontStyle style = readStyle();
+		return new FontInfo(families, size, style);
+	}
 
-		//size
-		Float size = defaultFont.getSizeOrNull();
-		MxlFontSize mxlSize = mxlFont.getFontSize();
-		if (mxlSize != null) {
-			if (mxlSize.isSizePt()) {
-				size = mxlSize.getValuePt();
-			}
-			else {
-				size = readCSSFontSize(mxlSize.getValueCSS());
-			}
-		}
-
-		//style and weight
+	private FontStyle readStyle() {
 		FontStyle style = defaultFont.getStyleOrNull();
 		if (mxlFont.getFontStyle() != null || mxlFont.getFontWeight() != null) {
 			style = FontStyle.normal;
@@ -57,11 +49,32 @@ public final class FontInfoReader {
 				style = style.with(FontStyle.Bold, true);
 			}
 		}
-
-		return new FontInfo(families, size, style);
+		return style;
 	}
 
-	private static float readCSSFontSize(MxlCSSFontSize mxlCSSSize) {
+	private IList<String> readFamilies() {
+		List<String> mxlFamilies = mxlFont.getFontFamily();
+		IList<String> families = null;
+		if (mxlFamilies.size() == 0)
+			mxlFamilies = defaultFont.getFamiliesOrNull();
+		if (mxlFamilies != null)
+			families = ilist(mxlFamilies);
+		return families;
+	}
+	
+	private Float readSize() {
+		MxlFontSize mxlSize = mxlFont.getFontSize();
+		Float size = defaultFont.getSizeOrNull();
+		if (mxlSize != null) {
+			if (mxlSize.isSizePt())
+				size = mxlSize.getValuePt();
+			else
+				size = readCSSFontSize(mxlSize.getValueCSS());
+		}
+		return size;
+	}
+
+	private float readCSSFontSize(MxlCSSFontSize mxlCSSSize) {
 		switch (mxlCSSSize) {
 			case XXSmall:
 				return 6f;

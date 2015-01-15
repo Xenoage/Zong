@@ -59,51 +59,45 @@ public class NotationsReader {
 	
 	private final List<MxlNotations> mxlNotations;
 	
-	
-	/**
-	 * The beginnings and endings of the slurs are saved in the context.
-	 */
+
 	public void readToNote(Chord chord, int noteIndex, int staffIndexInPart, Context context) {
 		StaffDetails staffDetails = StaffDetails.fromContext(context, staffIndexInPart);
 		ArrayList<Annotation> annotations = alist(0);
 		for (MxlNotations mxlNotationsElement : mxlNotations) {
 			for (MxlNotationsContent mxlNC : mxlNotationsElement.getElements()) {
 				MxlNotationsContentType mxlNCType = mxlNC.getNotationsContentType();
-	
 				switch (mxlNCType) {
+					
 					case SlurOrTied: {
-						//slur or tied
 						SlurReader.readToContext(chord, noteIndex, staffIndexInPart, context, (MxlSlurOrTied) mxlNC);
 						break;
 					}
 	
 					case Dynamics: {
-						//dynamics
 						Dynamics dynamics = DynamicsReader.read((MxlDynamics) mxlNC, staffDetails);
 						new DirectionAdd(dynamics, chord).execute();
 						break;
 					}
 	
 					case Articulations: {
-						//articulations
 						MxlArticulations mxlArticulations = (MxlArticulations) mxlNC;
 						annotations.addAll(ArticulationReader.read(mxlArticulations));
 						break;
 					}
 					
 					case Fermata: {
-						//fermata
 						Fermata fermata = FermataReader.read((MxlFermata) mxlNC, staffDetails);
 						annotations.add(fermata);
 						break;
 					}
 					
 					case Ornaments: {
-						//ornaments
 						MxlOrnaments mxlOrnaments = (MxlOrnaments) mxlNC;
 						annotations.addAll(OrnamentReader.read(mxlOrnaments));
 						break;
 					}
+					
+					default:
 				}
 			}
 		}

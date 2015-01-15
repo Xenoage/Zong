@@ -28,7 +28,7 @@ public class FormattedTextReader
 	
 	@NonNull public FormattedTextStyle readStyle(MxlFormattedText mxlText) {
 		MxlPrintStyle mxlPrintStyle = getPrintStyle(mxlText);
-		FontInfo font = FontInfoReader.readFontInfo(mxlPrintStyle.getFont(), FontInfo.defaultValue);
+		FontInfo font = new FontInfoReader(mxlPrintStyle.getFont(), FontInfo.defaultValue).read();
 		Color color = readColor(mxlPrintStyle);
 		return new FormattedTextStyle(font, color, Superscript.Normal);
 	}

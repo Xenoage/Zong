@@ -20,7 +20,7 @@ public final class PartReader {
 	 * which is needed to find transposition information.
 	 */
 	public static Part readPart(MxlScorePart mxlScorePart, MxlPart mxlPart) {
-		List<Instrument> instruments = InstrumentsReader.read(mxlScorePart, mxlPart);
+		List<Instrument> instruments = new InstrumentsReader(mxlScorePart, mxlPart).read();
 		return new Part(mxlScorePart.getPartName(), mxlScorePart.getPartAbbreviation(), 1,
 			instruments.size() > 0 ? instruments : null);
 	}

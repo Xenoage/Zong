@@ -2,7 +2,6 @@ package com.xenoage.zong.desktop.io.musicxml.in;
 
 import static com.xenoage.utils.collections.CList.clist;
 import static com.xenoage.utils.iterators.It.it;
-import static com.xenoage.zong.io.musicxml.in.readers.FontInfoReader.readFontInfo;
 import static com.xenoage.zong.io.musicxml.in.readers.OtherReader.readAlignment;
 
 import com.xenoage.utils.collections.CList;
@@ -17,6 +16,7 @@ import com.xenoage.zong.core.text.FormattedTextElement;
 import com.xenoage.zong.core.text.FormattedTextParagraph;
 import com.xenoage.zong.core.text.FormattedTextString;
 import com.xenoage.zong.core.text.FormattedTextStyle;
+import com.xenoage.zong.io.musicxml.in.readers.FontInfoReader;
 import com.xenoage.zong.layout.Layout;
 import com.xenoage.zong.layout.Page;
 import com.xenoage.zong.layout.frames.TextFrame;
@@ -149,7 +149,7 @@ public final class CreditsReader {
 				String textLine = textLines[iLine];
 				if (textLine.length() > 0) {
 					//font
-					FontInfo fontInfo = readFontInfo(mxlFormattedText.getPrintStyle().getFont(), defaultFont);
+					FontInfo fontInfo = new FontInfoReader(mxlFormattedText.getPrintStyle().getFont(), defaultFont).read();
 					//color
 					Color color = null;
 					MxlColor mxlColor = mxlFormattedText.getPrintStyle().getColor();
