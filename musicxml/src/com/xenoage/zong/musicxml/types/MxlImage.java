@@ -13,6 +13,7 @@ import com.xenoage.zong.musicxml.types.choice.MxlCreditContent;
 import com.xenoage.zong.musicxml.types.choice.MxlDirectionTypeContent;
 import com.xenoage.zong.musicxml.types.enums.MxlLeftCenterRight;
 import com.xenoage.zong.musicxml.types.enums.MxlVAlignImage;
+import com.xenoage.zong.musicxml.types.util.MxlPositionContent;
 
 /**
  * MusicXML image or credit-image.
@@ -21,7 +22,7 @@ import com.xenoage.zong.musicxml.types.enums.MxlVAlignImage;
  */
 @AllArgsConstructor @Getter @Setter
 public final class MxlImage
-	implements MxlCreditContent, MxlDirectionTypeContent {
+	implements MxlCreditContent, MxlDirectionTypeContent, MxlPositionContent {
 
 	@NonNull private String elemName; //"image" or "credit-image"
 

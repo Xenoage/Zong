@@ -21,7 +21,6 @@ import com.xenoage.zong.musicxml.types.MxlMidiInstrument;
 import com.xenoage.zong.musicxml.types.MxlNote;
 import com.xenoage.zong.musicxml.types.MxlScoreInstrument;
 import com.xenoage.zong.musicxml.types.MxlScorePart;
-import com.xenoage.zong.musicxml.types.MxlTranspose;
 import com.xenoage.zong.musicxml.types.choice.MxlMusicDataContent;
 import com.xenoage.zong.musicxml.types.choice.MxlMusicDataContent.MxlMusicDataContentType;
 import com.xenoage.zong.musicxml.types.partwise.MxlMeasure;

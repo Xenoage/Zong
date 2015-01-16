@@ -11,6 +11,7 @@ import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.attributes.MxlColor;
 import com.xenoage.zong.musicxml.types.attributes.MxlPosition;
 import com.xenoage.zong.musicxml.types.enums.MxlStemValue;
+import com.xenoage.zong.musicxml.types.util.MxlPositionContent;
 
 /**
  * MusicXML stem.
@@ -18,12 +19,13 @@ import com.xenoage.zong.musicxml.types.enums.MxlStemValue;
  * @author Andreas Wenger
  */
 @AllArgsConstructor @Getter @Setter
-public final class MxlStem {
+public final class MxlStem
+	implements MxlPositionContent {
 
 	public static final String elemName = "stem";
 
 	@NonNull private MxlStemValue value;
-	@MaybeNull private MxlPosition yPosition;
+	@MaybeNull private MxlPosition position;
 	@MaybeNull private MxlColor color;
 
 
@@ -36,8 +38,8 @@ public final class MxlStem {
 
 	public void write(XmlWriter writer) {
 		writer.writeElementStart(elemName);
-		if (yPosition != null)
-			yPosition.write(writer);
+		if (position != null)
+			position.write(writer);
 		if (color != null)
 			color.write(writer);
 		value.write(writer);

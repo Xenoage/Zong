@@ -11,6 +11,7 @@ import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.attributes.MxlPrintStyle;
 import com.xenoage.zong.musicxml.types.enums.MxlLeftCenterRight;
 import com.xenoage.zong.musicxml.types.enums.MxlVAlign;
+import com.xenoage.zong.musicxml.types.util.MxlPrintStyleContent;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 
 /**
@@ -21,7 +22,8 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 @IncompleteMusicXML(missing = "text-decoration,text-rotation,"
 	+ "letter-spacing,line-height,xml:lang,text-direction,enclosure")
 @AllArgsConstructor @Getter @Setter
-public final class MxlFormattedText {
+public final class MxlFormattedText
+	implements MxlPrintStyleContent {
 
 	@NonNull private String value;
 	@MaybeNull private MxlLeftCenterRight justify; //alignment within the text box

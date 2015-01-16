@@ -1,6 +1,5 @@
 package com.xenoage.zong.io.musicxml.in.readers;
 
-import static com.xenoage.utils.NullUtils.notNull;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.iterators.It.it;
 import static com.xenoage.utils.kernel.Range.range;
@@ -8,13 +7,10 @@ import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.position.MP.atElement;
 import static com.xenoage.zong.core.position.MP.atStaff;
-import static com.xenoage.zong.io.musicxml.in.readers.OtherReader.readPosition;
-import static com.xenoage.zong.io.musicxml.in.readers.OtherReader.readPositioning;
 import static com.xenoage.zong.io.musicxml.in.util.CommandPerformer.execute;
 
 import java.util.List;
 
-import com.xenoage.utils.font.FontInfo;
 import com.xenoage.utils.iterators.It;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.commands.core.music.ColumnElementWrite;
@@ -22,58 +18,28 @@ import com.xenoage.zong.commands.core.music.MeasureAddUpTo;
 import com.xenoage.zong.commands.core.music.MeasureElementWrite;
 import com.xenoage.zong.commands.core.music.VoiceElementWrite;
 import com.xenoage.zong.core.Score;
-import com.xenoage.zong.core.music.ColumnElement;
 import com.xenoage.zong.core.music.Measure;
 import com.xenoage.zong.core.music.Part;
 import com.xenoage.zong.core.music.Staff;
 import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.clef.Clef;
 import com.xenoage.zong.core.music.clef.ClefType;
-import com.xenoage.zong.core.music.direction.Coda;
-import com.xenoage.zong.core.music.direction.Direction;
-import com.xenoage.zong.core.music.direction.Dynamics;
-import com.xenoage.zong.core.music.direction.DynamicsType;
-import com.xenoage.zong.core.music.direction.NavigationMarker;
-import com.xenoage.zong.core.music.direction.Pedal;
-import com.xenoage.zong.core.music.direction.Pedal.Type;
-import com.xenoage.zong.core.music.direction.Segno;
-import com.xenoage.zong.core.music.direction.Tempo;
-import com.xenoage.zong.core.music.direction.Wedge;
-import com.xenoage.zong.core.music.direction.WedgeType;
-import com.xenoage.zong.core.music.direction.Words;
-import com.xenoage.zong.core.music.format.Position;
-import com.xenoage.zong.core.music.format.Positioning;
 import com.xenoage.zong.core.music.group.StavesRange;
 import com.xenoage.zong.core.music.key.TraditionalKey;
 import com.xenoage.zong.core.music.rest.Rest;
 import com.xenoage.zong.core.music.time.Time;
 import com.xenoage.zong.core.music.time.TimeType;
-import com.xenoage.zong.core.music.util.DurationInfo;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.io.musicxml.in.util.MusicReaderException;
-import com.xenoage.zong.io.musicxml.in.util.StaffDetails;
 import com.xenoage.zong.musicxml.types.MxlAttributes;
 import com.xenoage.zong.musicxml.types.MxlBackup;
 import com.xenoage.zong.musicxml.types.MxlBarline;
-import com.xenoage.zong.musicxml.types.MxlCoda;
 import com.xenoage.zong.musicxml.types.MxlDirection;
-import com.xenoage.zong.musicxml.types.MxlDirectionType;
-import com.xenoage.zong.musicxml.types.MxlDynamics;
-import com.xenoage.zong.musicxml.types.MxlFormattedText;
 import com.xenoage.zong.musicxml.types.MxlForward;
 import com.xenoage.zong.musicxml.types.MxlInstrument;
-import com.xenoage.zong.musicxml.types.MxlMetronome;
 import com.xenoage.zong.musicxml.types.MxlNote;
-import com.xenoage.zong.musicxml.types.MxlPedal;
 import com.xenoage.zong.musicxml.types.MxlPrint;
 import com.xenoage.zong.musicxml.types.MxlScorePartwise;
-import com.xenoage.zong.musicxml.types.MxlSegno;
-import com.xenoage.zong.musicxml.types.MxlSound;
-import com.xenoage.zong.musicxml.types.MxlWedge;
-import com.xenoage.zong.musicxml.types.MxlWords;
-import com.xenoage.zong.musicxml.types.attributes.MxlPrintStyle;
-import com.xenoage.zong.musicxml.types.choice.MxlDirectionTypeContent;
-import com.xenoage.zong.musicxml.types.choice.MxlDirectionTypeContent.MxlDirectionTypeContentType;
 import com.xenoage.zong.musicxml.types.choice.MxlMusicDataContent;
 import com.xenoage.zong.musicxml.types.choice.MxlMusicDataContent.MxlMusicDataContentType;
 import com.xenoage.zong.musicxml.types.partwise.MxlMeasure;
@@ -123,7 +89,7 @@ public final class MusicReader {
 		mxlParts = it(doc.getParts());
 		for (MxlPart mxlPart : mxlParts) {
 			//clear part-dependent context values
-			Part part = context.beginNewPart(mxlParts.getIndex());
+			context.beginNewPart(mxlParts.getIndex());
 			//read the measures
 			It<MxlMeasure> mxlMeasures = it(mxlPart.getMeasures());
 			for (MxlMeasure mxlMeasure : mxlMeasures) {
@@ -227,7 +193,7 @@ public final class MusicReader {
 					new PrintReader((MxlPrint) mxlMDC).readToContext(context);
 					break;
 				case Direction:
-					readDirection(context, (MxlDirection) mxlMDC);
+					new DirectionReader((MxlDirection) mxlMDC).readToContext(context);
 					break;
 				case Barline:
 					new BarlineReader((MxlBarline) mxlMDC).readIntoContext(context);
@@ -266,177 +232,6 @@ public final class MusicReader {
 		}
 		Fraction ret = fr(duration, 4 * divisionsPerQuarter);
 		return ret;
-	}
-
-	//TIDY: move into own class, and read formatting info
-	//TIDY: read print-style/positioning from all directions together (use common interface?)
-	//TODO: add support for multiple direction-types within a single MusicXML direction
-	/**
-	 * Reads the given direction element.
-	 */
-	private static void readDirection(Context context,
-		MxlDirection mxlDirection) {
-		
-		//staff
-		int staff = notNull(mxlDirection.getStaff(), 1) - 1;
-		StaffDetails staffDetails = StaffDetails.fromContext(context, staff);
-		
-		//direction-types
-		Direction direction = null;
-		FontInfo defaultFont = context.getScore().getFormat().lyricFont;
-		for (MxlDirectionType mxlType : mxlDirection.getDirectionTypes()) {
-			MxlDirectionTypeContent mxlDTC = mxlType.getContent();
-			MxlDirectionTypeContentType mxlDTCType = mxlDTC.getDirectionTypeContentType();
-			switch (mxlDTCType) {
-				case Coda: {
-					//code
-					MxlCoda mxlCoda = (MxlCoda) mxlDTC;
-					MxlPrintStyle printStyle = notNull(mxlCoda.getPrintStyle(), MxlPrintStyle.empty);
-					Positioning positioning = readPositioning(printStyle.getPosition(), staffDetails,
-						mxlDirection.getPlacement());
-					Coda coda = new Coda();
-					coda.setPositioning(positioning);
-					context.writeColumnElement(coda);
-					break;
-				}
-				case Dynamics: {
-					//dynamics
-					MxlDynamics mxlDynamics = (MxlDynamics) mxlDTC;
-					DynamicsType type = mxlDynamics.getElement();
-					MxlPrintStyle printStyle = notNull(mxlDynamics.getPrintStyle(), MxlPrintStyle.empty);
-					Positioning positioning = readPositioning(printStyle.getPosition(), staffDetails,
-						mxlDynamics.getPlacement(), mxlDirection.getPlacement());
-					Dynamics dynamics = new Dynamics(type);
-					dynamics.setPositioning(positioning);
-					context.writeMeasureElement(dynamics, staff);
-					break;
-				}
-				case Metronome: {
-					//metronome
-					MxlMetronome mxlMetronome = (MxlMetronome) mxlDTC;
-					FontInfo fontInfo = null;
-					Position position = null;
-					MxlPrintStyle mxlPrintStyle = mxlMetronome.getPrintStyle();
-					if (mxlPrintStyle != null) {
-						fontInfo = new FontInfoReader(mxlPrintStyle.getFont(), defaultFont).read();
-						position = readPosition(mxlPrintStyle.getPosition(), staffDetails);
-					}
-					
-					//compute base beat
-					Fraction baseBeat = mxlMetronome.getBeatUnit().getDuration();
-					baseBeat = DurationInfo.getDuration(baseBeat, mxlMetronome.getDotsCount());
-					
-					direction = new Tempo(baseBeat, mxlMetronome.getPerMinute()); //text: TODO
-					//direction.setFont(fontInfo); //TODO
-					direction.setPositioning(position);
-					break;
-				}
-				case Pedal: {
-					//pedal
-					MxlPedal mxlPedal = (MxlPedal) mxlDTC;
-					Pedal.Type type = null;
-					switch (mxlPedal.getType()) {
-						case Start:
-							type = Type.Start;
-							break;
-						case Stop:
-							type = Type.Stop;
-							break;
-					}
-					if (type != null) {
-						Pedal pedal = new Pedal(type);
-						pedal.setPositioning(readPosition(mxlPedal.getPrintStyle(), staffDetails));
-						context.writeMeasureElement(pedal, staff);
-					}
-					break;
-				}
-				case Segno: {
-					//segno
-					MxlSegno mxlSegno = (MxlSegno) mxlDTC;
-					MxlPrintStyle printStyle = notNull(mxlSegno.getPrintStyle(), MxlPrintStyle.empty);
-					Positioning positioning = readPositioning(printStyle.getPosition(), staffDetails,
-						mxlDirection.getPlacement());
-					Segno segno = new Segno();
-					segno.setPositioning(positioning);
-					context.writeColumnElement(segno);
-					break;
-				}
-				case Wedge: {
-					//wedge
-					MxlWedge mxlWedge = (MxlWedge) mxlDTC;
-					int number = mxlWedge.getNumber();
-					Position pos = readPosition(mxlWedge.getPosition(), staffDetails);
-					switch (mxlWedge.getType()) {
-						case Crescendo:
-							Wedge crescendo = new Wedge(WedgeType.Crescendo);
-							crescendo.setPositioning(pos);
-							context.writeMeasureElement(crescendo, staff);
-							context.openWedge(number, crescendo);
-							break;
-						case Diminuendo:
-							Wedge diminuendo = new Wedge(WedgeType.Diminuendo);
-							diminuendo.setPositioning(pos);
-							context.writeMeasureElement(diminuendo, staff);
-							context.openWedge(number, diminuendo);
-							break;
-						case Stop:
-							Wedge wedge = context.closeWedge(number);
-							if (wedge == null) {
-								if (false == context.getSettings().isIgnoringErrors())
-									throw new RuntimeException("Wedge " + (number + 1) + " is not open!");
-							}
-							else
-								context.writeMeasureElement(wedge.getWedgeEnd(), staff);
-							break;
-					}
-					break;
-				}
-				case Words: {
-					//words (currently only one element is supported)
-					if (direction == null) {
-						MxlWords mxlWords = (MxlWords) mxlDTC;
-						MxlFormattedText mxlFormattedText = mxlWords.getFormattedText();
-						if (mxlFormattedText.getValue().length() == 0)
-							break;
-						direction = new Words(context.getSettings().getTextReader().readText(mxlFormattedText));
-						
-						MxlPrintStyle mxlPrintStyle = notNull(mxlFormattedText.getPrintStyle(), MxlPrintStyle.empty);
-						Positioning positioning = readPositioning(mxlPrintStyle.getPosition(), staffDetails,
-							mxlDirection.getPlacement());
-						direction.setPositioning(positioning);
-						
-						//TODO
-						//FontInfo fontInfo = readFontInfo(mxlPrintStyle.getFont(), defaultFont); 
-						//direction.setFont(fontInfo);
-					}
-					break;
-				}
-			}
-		}
-
-		//sound for words: tempo
-		MxlSound mxlSound = mxlDirection.getSound();
-		if (mxlSound != null && mxlSound.getTempo() != null && direction instanceof Words) {
-			Words words = (Words) direction;
-			//always expressed in quarter notes per minute
-			int quarterNotesPerMinute = mxlSound.getTempo().intValue();
-			//convert words into a tempo direction
-			direction = new Tempo(fr(1, 4), quarterNotesPerMinute); //TODO: words.getText()
-			//direction.setFontInfo(words.getFontInfo()); //TODO
-			direction.setPositioning(words.getPositioning());
-		}
-
-		//write direction to score
-		//TODO: find out if measure direction or column direction.
-		//currently, we write a column element only for tempo or navigation markers
-		if (direction != null) {
-			if (direction instanceof Tempo || direction instanceof NavigationMarker) {
-				context.writeColumnElement((ColumnElement) direction);
-			}
-			else {
-				context.writeMeasureElement(direction, staff);
-			}
-		}
 	}
 
 }

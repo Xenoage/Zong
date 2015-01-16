@@ -13,6 +13,8 @@ import com.xenoage.zong.musicxml.types.choice.MxlNotationsContent;
 import com.xenoage.zong.musicxml.types.choice.MxlOrnamentsContent;
 import com.xenoage.zong.musicxml.types.enums.MxlAccidentalText;
 import com.xenoage.zong.musicxml.types.enums.MxlPlacement;
+import com.xenoage.zong.musicxml.types.util.MxlPlacementContent;
+import com.xenoage.zong.musicxml.types.util.MxlPrintStyleContent;
 
 /**
  * MusicXML accidental-mark.
@@ -21,7 +23,7 @@ import com.xenoage.zong.musicxml.types.enums.MxlPlacement;
  */
 @AllArgsConstructor @Getter @Setter
 public final class MxlAccidentalMark
-	implements MxlNotationsContent, MxlOrnamentsContent {
+	implements MxlNotationsContent, MxlOrnamentsContent, MxlPrintStyleContent, MxlPlacementContent {
 
 	public static final String elemName = "accidental-mark";
 

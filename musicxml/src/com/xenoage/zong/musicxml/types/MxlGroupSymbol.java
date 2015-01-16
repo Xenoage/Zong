@@ -11,6 +11,7 @@ import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.attributes.MxlColor;
 import com.xenoage.zong.musicxml.types.attributes.MxlPosition;
 import com.xenoage.zong.musicxml.types.enums.MxlGroupSymbolValue;
+import com.xenoage.zong.musicxml.types.util.MxlPositionContent;
 
 /**
  * MusicXML group-symbol.
@@ -18,7 +19,8 @@ import com.xenoage.zong.musicxml.types.enums.MxlGroupSymbolValue;
  * @author Andreas Wenger
  */
 @AllArgsConstructor @Getter @Setter
-public final class MxlGroupSymbol {
+public final class MxlGroupSymbol
+	implements MxlPositionContent {
 
 	public static final String elemName = "group-symbol";
 

@@ -10,6 +10,7 @@ import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.attributes.MxlPrintStyle;
 import com.xenoage.zong.musicxml.types.choice.MxlNotationsContent;
 import com.xenoage.zong.musicxml.types.enums.MxlUprightInverted;
+import com.xenoage.zong.musicxml.types.util.MxlPrintStyleContent;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 
 /**
@@ -20,7 +21,7 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 @IncompleteMusicXML(missing = "fermata-shape")
 @AllArgsConstructor @Getter @Setter
 public final class MxlFermata
-	implements MxlNotationsContent {
+	implements MxlNotationsContent, MxlPrintStyleContent {
 
 	public static final String elemName = "fermata";
 

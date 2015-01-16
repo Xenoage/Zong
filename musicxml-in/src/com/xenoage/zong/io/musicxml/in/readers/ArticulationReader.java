@@ -2,13 +2,11 @@ package com.xenoage.zong.io.musicxml.in.readers;
 
 import static com.xenoage.utils.collections.CollectionUtils.addNotNull;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.zong.io.musicxml.in.readers.OtherReader.readPlacement;
 
 import java.util.List;
 
 import com.xenoage.zong.core.music.annotation.Articulation;
 import com.xenoage.zong.core.music.annotation.ArticulationType;
-import com.xenoage.zong.core.music.format.Placement;
 import com.xenoage.zong.io.musicxml.Equivalents;
 import com.xenoage.zong.musicxml.types.MxlArticulations;
 import com.xenoage.zong.musicxml.types.attributes.MxlEmptyPlacement;
@@ -37,10 +35,8 @@ public class ArticulationReader {
 		Articulation articulation = new Articulation(type);
 		//read placement
 		MxlEmptyPlacement mxlPlacement = mxlAC.getEmptyPlacement();
-		if (mxlPlacement != null) {
-			Placement placement = readPlacement(mxlPlacement.getPlacement());
-			articulation.setPlacement(placement);
-		}
+		if (mxlPlacement != null)
+			articulation.setPlacement(PositioningReader.readPlacement(mxlPlacement.getPlacement()));
 		return articulation;
 	}
 	

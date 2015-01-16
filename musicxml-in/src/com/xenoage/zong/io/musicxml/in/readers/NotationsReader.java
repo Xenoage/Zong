@@ -1,34 +1,17 @@
 package com.xenoage.zong.io.musicxml.in.readers;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.zong.io.musicxml.in.readers.OtherReader.readBezierPoint;
-import static com.xenoage.zong.io.musicxml.in.readers.OtherReader.readPlacement;
-import static com.xenoage.zong.io.musicxml.in.readers.OtherReader.readPositioning;
-import static com.xenoage.zong.io.musicxml.in.readers.OtherReader.readVSide;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 
-import com.xenoage.utils.math.VSide;
 import com.xenoage.zong.commands.core.music.direction.DirectionAdd;
-import com.xenoage.zong.core.music.Pitch;
-import com.xenoage.zong.core.music.WaypointPosition;
 import com.xenoage.zong.core.music.annotation.Annotation;
-import com.xenoage.zong.core.music.annotation.Articulation;
-import com.xenoage.zong.core.music.annotation.ArticulationType;
 import com.xenoage.zong.core.music.annotation.Fermata;
-import com.xenoage.zong.core.music.annotation.Ornament;
-import com.xenoage.zong.core.music.annotation.OrnamentType;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.direction.Dynamics;
-import com.xenoage.zong.core.music.direction.DynamicsType;
-import com.xenoage.zong.core.music.format.BezierPoint;
-import com.xenoage.zong.core.music.format.Placement;
-import com.xenoage.zong.core.music.format.Positioning;
-import com.xenoage.zong.core.music.slur.SlurType;
-import com.xenoage.zong.core.music.slur.SlurWaypoint;
 import com.xenoage.zong.io.musicxml.in.util.StaffDetails;
 import com.xenoage.zong.musicxml.types.MxlArticulations;
 import com.xenoage.zong.musicxml.types.MxlDynamics;
@@ -36,18 +19,8 @@ import com.xenoage.zong.musicxml.types.MxlFermata;
 import com.xenoage.zong.musicxml.types.MxlNotations;
 import com.xenoage.zong.musicxml.types.MxlOrnaments;
 import com.xenoage.zong.musicxml.types.MxlSlurOrTied;
-import com.xenoage.zong.musicxml.types.MxlSlurOrTied.MxlElementType;
-import com.xenoage.zong.musicxml.types.attributes.MxlEmptyPlacement;
-import com.xenoage.zong.musicxml.types.attributes.MxlPosition;
-import com.xenoage.zong.musicxml.types.attributes.MxlPrintStyle;
-import com.xenoage.zong.musicxml.types.choice.MxlArticulationsContent;
-import com.xenoage.zong.musicxml.types.choice.MxlArticulationsContent.MxlArticulationsContentType;
 import com.xenoage.zong.musicxml.types.choice.MxlNotationsContent;
 import com.xenoage.zong.musicxml.types.choice.MxlNotationsContent.MxlNotationsContentType;
-import com.xenoage.zong.musicxml.types.choice.MxlOrnamentsContent;
-import com.xenoage.zong.musicxml.types.choice.MxlOrnamentsContent.MxlOrnamentsContentType;
-import com.xenoage.zong.musicxml.types.enums.MxlStartStopContinue;
-import com.xenoage.zong.musicxml.types.enums.MxlUprightInverted;
 
 /**
  * Reads the slurs, ties and dynamics from the {@link MxlNotations} of a chord.

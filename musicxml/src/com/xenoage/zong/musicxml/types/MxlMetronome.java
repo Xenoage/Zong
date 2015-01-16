@@ -12,6 +12,7 @@ import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.attributes.MxlPrintStyle;
 import com.xenoage.zong.musicxml.types.choice.MxlDirectionTypeContent;
 import com.xenoage.zong.musicxml.types.enums.MxlNoteTypeValue;
+import com.xenoage.zong.musicxml.types.util.MxlPrintStyleContent;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 
 /**
@@ -28,7 +29,7 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 @IncompleteMusicXML(missing = "metronome-note,metronome-relation,parentheses")
 @AllArgsConstructor @Getter @Setter
 public final class MxlMetronome
-	implements MxlDirectionTypeContent {
+	implements MxlDirectionTypeContent, MxlPrintStyleContent {
 
 	public static final String elemName = "metronome";
 

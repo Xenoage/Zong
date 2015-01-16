@@ -8,6 +8,8 @@ import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.enums.MxlPlacement;
+import com.xenoage.zong.musicxml.types.util.MxlPlacementContent;
+import com.xenoage.zong.musicxml.types.util.MxlPrintStyleContent;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 
 /**
@@ -17,7 +19,8 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
  */
 @IncompleteMusicXML(missing = "trill-sound")
 @AllArgsConstructor @Getter @Setter
-public class MxlEmptyTrillSound {
+public class MxlEmptyTrillSound
+	implements MxlPrintStyleContent, MxlPlacementContent {
 
 	@MaybeNull private MxlPrintStyle printStyle;
 	@MaybeNull private MxlPlacement placement;

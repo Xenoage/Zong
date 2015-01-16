@@ -13,6 +13,8 @@ import com.xenoage.zong.musicxml.types.attributes.MxlPosition;
 import com.xenoage.zong.musicxml.types.choice.MxlNotationsContent;
 import com.xenoage.zong.musicxml.types.enums.MxlPlacement;
 import com.xenoage.zong.musicxml.types.enums.MxlStartStopContinue;
+import com.xenoage.zong.musicxml.types.util.MxlPlacementContent;
+import com.xenoage.zong.musicxml.types.util.MxlPositionContent;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 
 /**
@@ -23,7 +25,7 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 @IncompleteMusicXML(missing = "line-type,orientation,color")
 @AllArgsConstructor @Getter @Setter
 public final class MxlSlurOrTied
-	implements MxlNotationsContent {
+	implements MxlNotationsContent, MxlPositionContent, MxlPlacementContent {
 
 	public static final String elemNameSlur = "slur";
 	public static final String elemNameTied = "tied";

@@ -2,6 +2,7 @@ package com.xenoage.zong.musicxml.types.choice;
 
 import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.attributes.MxlEmptyPlacement;
+import com.xenoage.zong.musicxml.types.util.MxlEmptyPlacementContent;
 
 /**
  * Interface for all types of content that may appear within
@@ -9,7 +10,8 @@ import com.xenoage.zong.musicxml.types.attributes.MxlEmptyPlacement;
  * 
  * @author Andreas Wenger
  */
-public interface MxlArticulationsContent {
+public interface MxlArticulationsContent
+	extends MxlEmptyPlacementContent {
 
 	/**
 	 * This enum allows using quick switch-case statements
@@ -26,7 +28,7 @@ public interface MxlArticulationsContent {
 	/**
 	 * Not in MusicXML spec, but all types of articulations have a placement.
 	 */
-	public MxlEmptyPlacement getEmptyPlacement();
+	@Override public MxlEmptyPlacement getEmptyPlacement();
 
 	public MxlArticulationsContentType getArticulationsContentType();
 

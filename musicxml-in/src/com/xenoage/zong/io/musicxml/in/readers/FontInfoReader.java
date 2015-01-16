@@ -12,9 +12,11 @@ import com.xenoage.utils.font.FontInfo;
 import com.xenoage.utils.font.FontStyle;
 import com.xenoage.zong.musicxml.types.attributes.MxlFont;
 import com.xenoage.zong.musicxml.types.attributes.MxlFontSize;
+import com.xenoage.zong.musicxml.types.attributes.MxlPrintStyle;
 import com.xenoage.zong.musicxml.types.enums.MxlCSSFontSize;
 import com.xenoage.zong.musicxml.types.enums.MxlFontStyle;
 import com.xenoage.zong.musicxml.types.enums.MxlFontWeight;
+import com.xenoage.zong.musicxml.types.util.MxlPrintStyleContent;
 
 /**
  * This class reads elements containing a font-group into
@@ -28,6 +30,19 @@ public class FontInfoReader {
 	private final MxlFont mxlFont;
 	private final FontInfo defaultFont;
 	
+	/**
+	 * Reads the font from the given element, if it is a {@link MxlPrintStyleContent} element
+	 * and contains font information. The returned font is based on the given default font.
+	 */
+	@MaybeNull public static FontInfo read(Object printStyleElement, FontInfo defaultFont) {
+		if (false == printStyleElement instanceof MxlPrintStyleContent)
+			return null;
+		MxlPrintStyle mxlPrintStyle = ((MxlPrintStyleContent) printStyleElement).getPrintStyle();
+		MxlFont mxlFont = mxlPrintStyle.getFont();
+		if (mxlFont == null)
+			return null;
+		return new FontInfoReader(mxlFont, defaultFont).read();
+	}
 
 	@MaybeNull public FontInfo read() {
 		if (mxlFont == null)

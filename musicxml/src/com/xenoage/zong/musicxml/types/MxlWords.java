@@ -8,6 +8,7 @@ import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.choice.MxlDirectionTypeContent;
+import com.xenoage.zong.musicxml.types.util.MxlFormattedTextContent;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 
 /**
@@ -18,7 +19,7 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 @IncompleteMusicXML(children = "formatted-text")
 @AllArgsConstructor @Getter @Setter
 public final class MxlWords
-	implements MxlDirectionTypeContent {
+	implements MxlDirectionTypeContent, MxlFormattedTextContent {
 
 	public static final String elemName = "words";
 

@@ -1,14 +1,10 @@
 package com.xenoage.zong.io.musicxml.in.readers;
 
-import static com.xenoage.zong.io.musicxml.in.readers.OtherReader.readPositioning;
-
 import com.xenoage.zong.core.music.annotation.Fermata;
 import com.xenoage.zong.core.music.format.Placement;
 import com.xenoage.zong.core.music.format.Positioning;
 import com.xenoage.zong.io.musicxml.in.util.StaffDetails;
 import com.xenoage.zong.musicxml.types.MxlFermata;
-import com.xenoage.zong.musicxml.types.attributes.MxlPosition;
-import com.xenoage.zong.musicxml.types.attributes.MxlPrintStyle;
 import com.xenoage.zong.musicxml.types.enums.MxlUprightInverted;
 
 /**
@@ -20,9 +16,7 @@ public class FermataReader {
 
 	public static Fermata read(MxlFermata mxlFermata, StaffDetails staffDetails) {
 		//determine position
-		MxlPrintStyle printStyle = mxlFermata.getPrintStyle();
-		MxlPosition position = (printStyle != null ? printStyle.getPosition() : null);
-		Positioning positioning = readPositioning(position, staffDetails);
+		Positioning positioning = new PositioningReader(staffDetails).readFromAny(mxlFermata);
 		if (positioning == null) {
 			if (mxlFermata.getType() == MxlUprightInverted.Upright)
 				positioning = Placement.Above;

@@ -14,6 +14,8 @@ import com.xenoage.zong.musicxml.types.attributes.MxlPrintStyle;
 import com.xenoage.zong.musicxml.types.choice.MxlDirectionTypeContent;
 import com.xenoage.zong.musicxml.types.choice.MxlNotationsContent;
 import com.xenoage.zong.musicxml.types.enums.MxlPlacement;
+import com.xenoage.zong.musicxml.types.util.MxlPlacementContent;
+import com.xenoage.zong.musicxml.types.util.MxlPrintStyleContent;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 
 /**
@@ -27,7 +29,7 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 @IncompleteMusicXML(partly = "")
 @AllArgsConstructor @Getter @Setter
 public final class MxlDynamics
-	implements MxlNotationsContent, MxlDirectionTypeContent {
+	implements MxlNotationsContent, MxlDirectionTypeContent, MxlPrintStyleContent, MxlPlacementContent {
 
 	public static final String elemName = "dynamics";
 

@@ -14,6 +14,7 @@ import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.choice.MxlMusicDataContent;
 import com.xenoage.zong.musicxml.types.enums.MxlPlacement;
+import com.xenoage.zong.musicxml.types.util.MxlPlacementContent;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 
 /**
@@ -25,7 +26,7 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 	partly = "direction-type", children = "direction-type,sound")
 @AllArgsConstructor @Getter @Setter
 public final class MxlDirection
-	implements MxlMusicDataContent {
+	implements MxlMusicDataContent, MxlPlacementContent {
 
 	public static final String elemName = "direction";
 

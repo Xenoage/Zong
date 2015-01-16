@@ -8,6 +8,8 @@ import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.enums.MxlPlacement;
+import com.xenoage.zong.musicxml.types.util.MxlPlacementContent;
+import com.xenoage.zong.musicxml.types.util.MxlPrintStyleContent;
 
 /**
  * MusicXML empty-placement.
@@ -15,7 +17,8 @@ import com.xenoage.zong.musicxml.types.enums.MxlPlacement;
  * @author Andreas Wenger
  */
 @AllArgsConstructor @Getter @Setter
-public final class MxlEmptyPlacement {
+public final class MxlEmptyPlacement
+	implements MxlPrintStyleContent, MxlPlacementContent {
 
 	@MaybeNull private MxlPrintStyle printStyle;
 	@MaybeNull private MxlPlacement placement;

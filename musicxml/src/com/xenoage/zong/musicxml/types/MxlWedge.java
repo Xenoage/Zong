@@ -13,6 +13,7 @@ import com.xenoage.zong.musicxml.types.attributes.MxlColor;
 import com.xenoage.zong.musicxml.types.attributes.MxlPosition;
 import com.xenoage.zong.musicxml.types.choice.MxlDirectionTypeContent;
 import com.xenoage.zong.musicxml.types.enums.MxlWedgeType;
+import com.xenoage.zong.musicxml.types.util.MxlPositionContent;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 
 /**
@@ -23,7 +24,7 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 @IncompleteMusicXML(missing = "spread")
 @AllArgsConstructor @Getter @Setter
 public final class MxlWedge
-	implements MxlDirectionTypeContent {
+	implements MxlDirectionTypeContent, MxlPositionContent {
 
 	public static final String elemName = "wedge";
 

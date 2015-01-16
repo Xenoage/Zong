@@ -10,6 +10,7 @@ import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.attributes.MxlPrintStyle;
 import com.xenoage.zong.musicxml.types.choice.MxlDirectionTypeContent;
+import com.xenoage.zong.musicxml.types.util.MxlPrintStyleContent;
 
 /**
  * MusicXML segno.
@@ -18,7 +19,7 @@ import com.xenoage.zong.musicxml.types.choice.MxlDirectionTypeContent;
  */
 @AllArgsConstructor @Getter @Setter
 public final class MxlSegno
-	implements MxlDirectionTypeContent {
+	implements MxlDirectionTypeContent, MxlPrintStyleContent {
 
 	public static final String elemName = "segno";
 

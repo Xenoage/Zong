@@ -8,15 +8,10 @@ import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.utils.math.VSide;
 import com.xenoage.zong.core.music.format.BezierPoint;
-import com.xenoage.zong.core.music.format.Placement;
-import com.xenoage.zong.core.music.format.Position;
-import com.xenoage.zong.core.music.format.Positioning;
 import com.xenoage.zong.core.music.format.SP;
 import com.xenoage.zong.core.text.Alignment;
-import com.xenoage.zong.io.musicxml.in.util.StaffDetails;
 import com.xenoage.zong.musicxml.types.MxlBezier;
 import com.xenoage.zong.musicxml.types.attributes.MxlPosition;
-import com.xenoage.zong.musicxml.types.attributes.MxlPrintStyle;
 import com.xenoage.zong.musicxml.types.enums.MxlLeftCenterRight;
 import com.xenoage.zong.musicxml.types.enums.MxlPlacement;
 
@@ -68,69 +63,6 @@ public final class OtherReader {
 			return new BezierPoint(point, control);
 		else
 			return null;
-	}
-
-	@MaybeNull public static Placement readPlacement(MxlPlacement mxlPlacement) {
-		if (mxlPlacement == null)
-			return null;
-		switch (mxlPlacement) {
-			case Above:
-				return Placement.Above;
-			case Below:
-				return Placement.Below;
-		}
-		return null;
-	}
-	
-	@MaybeNull public static Position readPosition(MxlPrintStyle printStyle, StaffDetails staffDetails) {
-		if (printStyle == null)
-			return null;
-		return readPosition(printStyle.getPosition(), staffDetails);
-	}
-
-	@MaybeNull public static Position readPosition(MxlPosition mxlPosition, StaffDetails staffDetails) {
-		Float x = (mxlPosition != null ? mxlPosition.getDefaultX() : null);
-		Float y = (mxlPosition != null ? mxlPosition.getDefaultY() : null);
-		Float rx = (mxlPosition != null ? mxlPosition.getRelativeX() : null);
-		Float ry = (mxlPosition != null ? mxlPosition.getRelativeY() : null);
-		if (x == null && y == null && rx == null && ry == null) {
-			return null;
-		}
-		else {
-			Float fx = null;
-			if (x != null) {
-				fx = x / 10 * staffDetails.tenthsMm;
-			}
-			Float fy = null;
-			if (y != null) {
-				fy = (staffDetails.linesCount - 1) * 2 + y / 10 * 2;
-			}
-			Float frx = null;
-			if (rx != null) {
-				frx = rx / 10 * staffDetails.tenthsMm;
-			}
-			Float fry = null;
-			if (ry != null) {
-				fry = ry / 10 * 2;
-			}
-			return new Position(fx, fy, frx, fry);
-		}
-	}
-
-	/**
-	 * Reads a {@link Position} or {@link Placement}. Arguments may be null.
-	 * {@link Position}s have higher priority than {@link Placement}s. The first
-	 * placement has higher priority than the following ones.
-	 */
-	@MaybeNull public static Positioning readPositioning(MxlPosition mxlPosition,
-		StaffDetails staffDetails, MxlPlacement... mxlPlacements) {
-		Position position = readPosition(mxlPosition, staffDetails);
-		if (position != null)
-			return position;
-		for (MxlPlacement mxlPlacement : mxlPlacements)
-			if (mxlPlacement != null)
-				return readPlacement(mxlPlacement);
-		return null;
 	}
 
 	@MaybeNull public static VSide readVSide(MxlPlacement mxlPlacement) {
