@@ -57,7 +57,7 @@ public final class CreditsReader {
 		if (credit.getContent().getCreditContentType() == MxlCreditContentType.CreditWords) {
 			MxlCreditWords mxlCreditWords = (MxlCreditWords) credit.getContent();
 			//create formatted text
-			FormattedText text = createFormattedText(mxlCreditWords, scoreFormat.lyricFont);
+			FormattedText text = createFormattedText(mxlCreditWords, scoreFormat.getLyricFont());
 			//compute position (read only the position of the first credit-words element)
 			Page firstPage = layout.getPages().get(0);
 			float tenths = scoreFormat.getInterlineSpace() / 10;

@@ -1,16 +1,17 @@
 package com.xenoage.zong.core.format;
 
 import static com.xenoage.utils.NullUtils.notNull;
-import static com.xenoage.utils.collections.CList.clist;
+import static com.xenoage.utils.collections.CollectionUtils.getOrNull;
+import static com.xenoage.utils.collections.CollectionUtils.setExtend;
 import static com.xenoage.zong.core.format.Defaults.defaultFont;
-import lombok.Data;
-import lombok.NonNull;
-import lombok.experimental.Wither;
 
-import com.xenoage.utils.annotations.Const;
+import java.util.List;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
 import com.xenoage.utils.annotations.MaybeNull;
-import com.xenoage.utils.collections.CList;
-import com.xenoage.utils.collections.IList;
+import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.font.FontInfo;
 
 /**
@@ -18,22 +19,23 @@ import com.xenoage.utils.font.FontInfo;
  *
  * @author Andreas Wenger
  */
-@Const @Data @Wither public final class ScoreFormat {
+@AllArgsConstructor @Data
+public class ScoreFormat {
 
 	/** The default space between two staff lines in mm ("Rastralgröße" in German). */
-	private final float interlineSpace;
+	private float interlineSpace;
 	/** The default distance between the first line of the top system to the top page margin in mm. */
-	private final float topSystemDistance;
+	private float topSystemDistance;
 	/** The default layout information for systems. */
-	@NonNull private final SystemLayout systemLayout;
+	@NonNull private SystemLayout systemLayout;
 	/** Default staff layout information (may also be or contain null). */
-	@MaybeNull public final IList<StaffLayout> staffLayouts;
+	@MaybeNull private List<StaffLayout> staffLayouts;
 	/** The default layout information for staves which have no own default layout. */
-	@NonNull public final StaffLayout staffLayoutOther;
+	@NonNull private StaffLayout staffLayoutOther;
 	/** The default font used for lyrics. */
-	@NonNull public final FontInfo lyricFont;
+	@NonNull private FontInfo lyricFont;
 	/** The style of measure numbering. */
-	@NonNull public final MeasureNumbering measureNumbering;
+	@NonNull private MeasureNumbering measureNumbering;
 
 	/** Default score format. */
 	public static final ScoreFormat defaultValue = new ScoreFormat(1.6f, 15,
@@ -43,13 +45,8 @@ import com.xenoage.utils.font.FontInfo;
 	/**
 	 * Gets the default layout information for the given staff, or null if undefined.
 	 */
-	public StaffLayout getStaffLayout(int staff) {
-		if (staffLayouts != null && staff < staffLayouts.size()) {
-			return staffLayouts.get(staff);
-		}
-		else {
-			return null;
-		}
+	@MaybeNull public StaffLayout getStaffLayout(int staff) {
+		return getOrNull(staffLayouts, staff);
 	}
 
 	/**
@@ -57,22 +54,15 @@ import com.xenoage.utils.font.FontInfo;
 	 * the default information for all other staves if unknown.
 	 * Thus, null is never returned.
 	 */
-	public StaffLayout getStaffLayoutNotNull(int staff) {
+	@NonNull public StaffLayout getStaffLayoutNotNull(int staff) {
 		return notNull(getStaffLayout(staff), staffLayoutOther);
 	}
 	
 	/**
 	 * Sets the {@link StaffLayout} of the staff with the given index.
 	 */
-	public ScoreFormat withStaffLayout(int staff, StaffLayout staffLayout) {
-		CList<StaffLayout> staffLayouts = clist();
-		if (this.staffLayouts != null)
-			staffLayouts.addAll(this.staffLayouts);
-		while (staffLayouts.size() < staff + 1) {
-			staffLayouts.add(null);
-		}
-		staffLayouts.set(staff, staffLayout);
-		return withStaffLayouts(staffLayouts.close());
+	public void setStaffLayout(int staff, StaffLayout staffLayout) {
+		staffLayouts = setExtend(staffLayouts, staff, staffLayout, null);
 	}
 
 }

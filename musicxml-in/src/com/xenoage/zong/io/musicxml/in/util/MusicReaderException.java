@@ -1,10 +1,10 @@
 package com.xenoage.zong.io.musicxml.in.util;
 
-import com.xenoage.zong.io.musicxml.in.readers.MusicReader;
+import com.xenoage.zong.io.musicxml.in.readers.ScoreReader;
 import com.xenoage.zong.io.musicxml.in.readers.Context;
 
 /**
- * Exception within a {@link MusicReader}.
+ * Exception within a {@link ScoreReader}.
  * 
  * @author Andreas Wenger
  */

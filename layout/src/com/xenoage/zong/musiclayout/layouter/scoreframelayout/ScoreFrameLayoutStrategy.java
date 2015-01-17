@@ -153,10 +153,10 @@ public class ScoreFrameLayoutStrategy
 		StavesList stavesList = score.getStavesList();
 		ArrayList<StaffStamping> staffStampsPool = alist();
 		ArrayList<Stamping> otherStampsPool = alist();
-		MeasureNumbering measureNumbering = score.getFormat().measureNumbering;
+		MeasureNumbering measureNumbering = score.getFormat().getMeasureNumbering();
 
 		//default lyric style
-		FormattedTextStyle defaultLyricStyle = new FormattedTextStyle(score.getFormat().lyricFont);
+		FormattedTextStyle defaultLyricStyle = new FormattedTextStyle(score.getFormat().getLyricFont());
 
 		//caches
 		OpenBeamsCache openBeamsCache = new OpenBeamsCache();

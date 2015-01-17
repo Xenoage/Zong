@@ -1,9 +1,7 @@
 package com.xenoage.zong.core.format;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.experimental.Wither;
-
-import com.xenoage.utils.annotations.Const;
 
 
 /**
@@ -11,15 +9,15 @@ import com.xenoage.utils.annotations.Const;
  *
  * @author Andreas Wenger
  */
-@Const @Data @Wither public final class StaffLayout
-{
+@AllArgsConstructor @Data
+public class StaffLayout {
+	
+  /** Default top distance: 10 mm. */
+  public static final StaffLayout defaultValue = new StaffLayout(10);
   
   /** The distance between the bottom line of the previous staff to the top line
    * of this staff in mm. This value has no meaning for the first staff of a system. */
-  private final float distance;
-  
-  /** Default top distance: 10 mm. */
-  public static final StaffLayout defaultValue = new StaffLayout(10);
+  private float distance;
 
   
 }

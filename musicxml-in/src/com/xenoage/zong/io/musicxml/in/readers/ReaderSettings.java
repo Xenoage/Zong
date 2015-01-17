@@ -4,12 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * General settings for the {@link MusicReader}.
+ * General settings for the MusicXML reader.
  * 
  * @author Andreas Wenger
  */
 @AllArgsConstructor @Getter
-public class MusicReaderSettings {
+public class ReaderSettings {
 
 	private final boolean ignoringErrors;
 	private final TextReader textReader = new FormattedTextReader();

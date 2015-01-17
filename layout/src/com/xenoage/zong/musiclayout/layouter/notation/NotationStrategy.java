@@ -207,7 +207,7 @@ public final class NotationStrategy
 		MP mp = MP.getMP(chord);
 		MusicContext mc = score.getMusicContext(mp, BeforeOrAt, Before);
 		//compute the notation
-		return computeChord(chord, mc, score.getInterlineSpace(mp), score.getFormat().lyricFont,
+		return computeChord(chord, mc, score.getInterlineSpace(mp), score.getFormat().getLyricFont(),
 			stemDirection, layoutSettings);
 	}
 

@@ -6,7 +6,7 @@ import static com.xenoage.utils.iterators.It.it;
 import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.position.MP.getMP;
-import static com.xenoage.zong.io.musicxml.in.readers.MusicReader.readDuration;
+import static com.xenoage.zong.io.musicxml.in.readers.OtherReader.readDuration;
 
 import java.util.List;
 
@@ -55,7 +55,7 @@ public final class ChordReader {
 	 * including beams, notations and lyrics.
 	 * All but the first given note must have a chord-element inside.
 	 */
-	public void readIntoContext(Context context) {
+	public void readToContext(Context context) {
 		this.context = context;
 		
 		readFirstNote();

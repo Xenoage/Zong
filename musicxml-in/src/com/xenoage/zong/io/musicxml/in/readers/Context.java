@@ -82,12 +82,12 @@ public final class Context {
 
 	private String instrumentID = null;
 
-	private MusicReaderSettings settings;
+	private ReaderSettings settings;
 	
 	private VoiceElementWrite.Options writeVoicElementOptions;
 
 
-	public Context(Score score, MusicReaderSettings settings) {
+	public Context(Score score, ReaderSettings settings) {
 		this.score = score;
 		this.settings = settings;
 		
@@ -530,7 +530,7 @@ public final class Context {
 		return new ClosedVolta(volta, openVolta.startMeasure);
 	}
 	
-	public MusicReaderSettings getSettings() {
+	public ReaderSettings getSettings() {
 		return settings;
 	}
 

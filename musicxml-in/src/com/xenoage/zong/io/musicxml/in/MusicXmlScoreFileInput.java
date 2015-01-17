@@ -11,12 +11,18 @@ import com.xenoage.utils.io.InputStream;
 import com.xenoage.utils.xml.XmlDataException;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.zong.core.Score;
-import com.xenoage.zong.io.musicxml.in.readers.MusicReader;
+import com.xenoage.zong.core.format.LayoutFormat;
+import com.xenoage.zong.core.format.ScoreFormat;
+import com.xenoage.zong.io.musicxml.in.readers.LayoutFormatReader;
 import com.xenoage.zong.io.musicxml.in.readers.ScoreFormatReader;
 import com.xenoage.zong.io.musicxml.in.readers.ScoreInfoReader;
+import com.xenoage.zong.io.musicxml.in.readers.ScoreReader;
 import com.xenoage.zong.io.musicxml.in.readers.StavesListReader;
 import com.xenoage.zong.musicxml.MusicXMLDocument;
+import com.xenoage.zong.musicxml.types.MxlDefaults;
 import com.xenoage.zong.musicxml.types.MxlScorePartwise;
+import com.xenoage.zong.musicxml.types.groups.MxlLayout;
+import com.xenoage.zong.musicxml.types.groups.MxlScoreHeader;
 
 /**
  * This class reads a MusicXML 2.0 file
@@ -76,9 +82,16 @@ public class MusicXmlScoreFileInput
 			score.setInfo(ScoreInfoReader.read(mxlScore));
 	
 			//read score format
-			ScoreFormatReader.Value scoreFormatValue = ScoreFormatReader.read(mxlScore);
-			score.setFormat(scoreFormatValue.scoreFormat);
-			score.setMetaData("layoutformat", scoreFormatValue.layoutFormat); //TIDY
+			MxlScoreHeader mxlScoreHeader = mxlScore.getScoreHeader();
+			MxlDefaults mxlDefaults = mxlScoreHeader.getDefaults();
+			ScoreFormat scoreFormat = new ScoreFormatReader(mxlDefaults).read();
+			score.setFormat(scoreFormat);
+			
+			//read layout format
+			MxlLayout mxlLayout = (mxlDefaults != null ? mxlDefaults.getLayout() : null);
+			LayoutFormat layoutFormat = new LayoutFormatReader(
+				mxlLayout, scoreFormat.getInterlineSpace() / 10).read();
+			score.setMetaData("layoutformat", layoutFormat); //TIDY
 	
 			//create the list of staves
 			StavesListReader.Value stavesListValue = StavesListReader.read(mxlScore);
@@ -86,7 +99,7 @@ public class MusicXmlScoreFileInput
 			score.setStavesList(stavesListValue.stavesList);
 	
 			//read the musical contents
-			MusicReader.read(mxlScore, score, ignoreErrors);
+			ScoreReader.readToScore(mxlScore, score, ignoreErrors);
 	
 			//remember the XML document for further application-dependend processing
 			score.setMetaData("mxldoc", mxlScore); //TIDY

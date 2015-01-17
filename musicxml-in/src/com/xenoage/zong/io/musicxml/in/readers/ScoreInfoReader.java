@@ -15,8 +15,7 @@ import com.xenoage.zong.musicxml.types.MxlWork;
 import com.xenoage.zong.musicxml.types.groups.MxlScoreHeader;
 
 /**
- * This class reads information about a score
- * from a MusicXML 2.0 document.
+ * This class reads general information about a score.
  *
  * @author Andreas Wenger
  */

@@ -2,6 +2,7 @@ package com.xenoage.zong.io.musicxml.in.readers;
 
 import static com.xenoage.utils.NullUtils.notNull;
 import static com.xenoage.utils.math.Fraction._1;
+import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.music.format.SP.sp;
 
 import com.xenoage.utils.annotations.MaybeNull;
@@ -63,6 +64,17 @@ public final class OtherReader {
 			return new BezierPoint(point, control);
 		else
 			return null;
+	}
+	
+	/**
+	 * Returns the duration as a {@link Fraction} from the given duration in divisions.
+	 */
+	public static Fraction readDuration(int duration, int divisionsPerQuarter) {
+		if (duration == 0) {
+			throw new RuntimeException("Element has a duration of 0.");
+		}
+		Fraction ret = fr(duration, 4 * divisionsPerQuarter);
+		return ret;
 	}
 
 	@MaybeNull public static VSide readVSide(MxlPlacement mxlPlacement) {

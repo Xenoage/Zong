@@ -22,8 +22,6 @@ import com.xenoage.zong.musicxml.types.util.MxlPrintStyleContent;
 /**
  * Reads {@link Positioning} information from any MusicXML element.
  * 
- * {@link Position}s have higher priority than {@link Placement}s.
- * 
  * @author Andreas Wenger
  */
 @RequiredArgsConstructor

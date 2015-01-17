@@ -71,7 +71,7 @@ import com.xenoage.zong.io.selection.Cursor;
  * @author Uli Teschemacher
  * @author Andreas Wenger
  */
-@SuppressWarnings("unused") public class ScoreRevolutionary {
+public class ScoreRevolutionary {
 
 	public static Score createScore() {
 		Score score = new Score();
@@ -79,7 +79,7 @@ import com.xenoage.zong.io.selection.Cursor;
 		Instrument instr = Instrument.defaultInstrument;
 		float is = score.getFormat().getInterlineSpace();
 		StaffLayout staffLayout = new StaffLayout(is * 9);
-		score.setFormat(score.getFormat().withStaffLayoutOther(staffLayout));
+		score.getFormat().setStaffLayoutOther(staffLayout);
 
 		ArticulationType[] accent = { ArticulationType.Accent };
 		ArticulationType[] staccato = { ArticulationType.Staccato };
