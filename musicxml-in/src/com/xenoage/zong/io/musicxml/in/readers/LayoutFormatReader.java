@@ -69,8 +69,9 @@ public class LayoutFormatReader {
 			}
 		}
 
-		layoutFormat.setLeftPageFormat(new PageFormat(size, pageMarginsLeft));
-		layoutFormat.setRightPageFormat(new PageFormat(size, pageMarginsRight));
+		layoutFormat = new LayoutFormat(
+			new PageFormat(size, pageMarginsLeft),
+			new PageFormat(size, pageMarginsRight));
 	}
 
 }

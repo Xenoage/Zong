@@ -18,23 +18,23 @@ import com.xenoage.zong.core.format.ScoreFormat;
  */
 public class StaffStampingTest {
 
-	private ScoreFormat scoreFormat = ScoreFormat.defaultValue;
+	private ScoreFormat scoreFormat = ScoreFormat.getDefault();
 
 
 	@Test public void createStaffLayoutElement() {
 		//create default staff layout element.
 		//drawing element must have 5 lines and the default interline space.
 		StaffStamping staff1 = new StaffStamping(new Point2f(40, 80), 160, 5, 1.6f, null);
-		assertEquals(staff1.linesCount, 5);
-		assertEquals(staff1.is, scoreFormat.getInterlineSpace(), Delta.DELTA_FLOAT);
-		assertEquals(staff1.position.x, 40, Delta.DELTA_FLOAT);
-		assertEquals(staff1.position.y, 80, Delta.DELTA_FLOAT);
-		assertEquals(staff1.length, 160, Delta.DELTA_FLOAT);
+		assertEquals(5, staff1.linesCount);
+		assertEquals(scoreFormat.getInterlineSpace(), staff1.is, Delta.DELTA_FLOAT);
+		assertEquals(40, staff1.position.x, Delta.DELTA_FLOAT);
+		assertEquals(80, staff1.position.y, Delta.DELTA_FLOAT);
+		assertEquals(160, staff1.length, Delta.DELTA_FLOAT);
 		//create another staff layout element
 		//with 3 lines and 4 mm interline space.
 		StaffStamping staff2 = new StaffStamping(new Point2f(40, 160), 160, 3, 4, null);
-		assertEquals(staff2.linesCount, 3);
-		assertEquals(staff2.is, 4, Delta.DELTA_FLOAT);
+		assertEquals(3, staff2.linesCount);
+		assertEquals(4, staff2.is, Delta.DELTA_FLOAT);
 	}
 
 	@Test public void containsPoint() {

@@ -21,6 +21,9 @@ import com.xenoage.utils.font.FontInfo;
  */
 @AllArgsConstructor @Data
 public class ScoreFormat {
+	
+	public static final float defaultInterlineSpace = 1.6f;
+	public static final float defaultTopSystemDistance = 15f;
 
 	/** The default space between two staff lines in mm ("Rastralgröße" in German). */
 	private float interlineSpace;
@@ -36,10 +39,12 @@ public class ScoreFormat {
 	@NonNull private FontInfo lyricFont;
 	/** The style of measure numbering. */
 	@NonNull private MeasureNumbering measureNumbering;
+	
 
-	/** Default score format. */
-	public static final ScoreFormat defaultValue = new ScoreFormat(1.6f, 15,
-		new SystemLayout(), null, StaffLayout.defaultValue, defaultFont, MeasureNumbering.System);
+	public static ScoreFormat getDefault() {
+		return new ScoreFormat(defaultInterlineSpace, defaultTopSystemDistance,
+			new SystemLayout(), null, StaffLayout.defaultValue, defaultFont, MeasureNumbering.System);
+	}
 
 
 	/**

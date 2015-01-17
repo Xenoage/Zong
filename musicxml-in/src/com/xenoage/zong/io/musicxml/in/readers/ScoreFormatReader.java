@@ -30,9 +30,8 @@ public class ScoreFormatReader {
 	
 	
 	@NonNull public ScoreFormat read() {
-		scoreFormat = ScoreFormat.defaultValue;
+		scoreFormat = ScoreFormat.getDefault();
 		if (mxlDefaults != null) {
-			tenthsMm = scoreFormat.getInterlineSpace() / 10;
 			readInterlineSpace();
 			mxlLayout = mxlDefaults.getLayout();
 			if (mxlLayout != null) {
@@ -52,6 +51,9 @@ public class ScoreFormatReader {
 			float interlineSpace = millimeters * 10 / tenths;
 			scoreFormat.setInterlineSpace(interlineSpace);
 			tenthsMm = interlineSpace / 10;	
+		}
+		else {
+			tenthsMm = ScoreFormat.defaultInterlineSpace / 10;
 		}
 	}
 	

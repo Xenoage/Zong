@@ -34,7 +34,7 @@ public final class StaffLayoutReader {
 		//staff-distance
 		Float mxlStaffDistance = mxlStaffLayout.getStaffDistance();
 		if (mxlStaffDistance != null) {
-			staffLayout.setDistance(tenthMm * mxlStaffDistance);
+			staffLayout = new StaffLayout(tenthMm * mxlStaffDistance);
 		}
 
 		//number

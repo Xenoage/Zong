@@ -1,7 +1,8 @@
 package com.xenoage.zong.core.format;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
+
+import com.xenoage.utils.annotations.Const;
 
 
 /**
@@ -9,13 +10,13 @@ import lombok.Data;
  *
  * @author Andreas Wenger
  */
-@AllArgsConstructor @Data
+@Const @Data
 public class LayoutFormat {
 
 	/** Default layout format, consisting of the default {@link PageFormat} for both sides. */
 	public static final LayoutFormat defaultValue = new LayoutFormat(PageFormat.defaultValue, PageFormat.defaultValue);
 	
-	private PageFormat leftPageFormat, rightPageFormat;
+	private final PageFormat leftPageFormat, rightPageFormat;
 	
 
 	/**

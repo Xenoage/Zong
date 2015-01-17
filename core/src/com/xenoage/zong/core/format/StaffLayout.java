@@ -17,7 +17,7 @@ public class StaffLayout {
   
   /** The distance between the bottom line of the previous staff to the top line
    * of this staff in mm. This value has no meaning for the first staff of a system. */
-  private float distance;
+  private final float distance;
 
   
 }
