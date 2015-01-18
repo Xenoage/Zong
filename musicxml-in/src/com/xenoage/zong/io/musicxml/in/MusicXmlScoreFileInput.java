@@ -13,6 +13,7 @@ import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.format.LayoutFormat;
 import com.xenoage.zong.core.format.ScoreFormat;
+import com.xenoage.zong.core.info.ScoreInfo;
 import com.xenoage.zong.io.musicxml.in.readers.LayoutFormatReader;
 import com.xenoage.zong.io.musicxml.in.readers.ScoreFormatReader;
 import com.xenoage.zong.io.musicxml.in.readers.ScoreInfoReader;
@@ -79,7 +80,8 @@ public class MusicXmlScoreFileInput
 			Score score = new Score();
 	
 			//read information about the score
-			score.setInfo(ScoreInfoReader.read(mxlScore));
+			ScoreInfo scoreInfo = new ScoreInfoReader(mxlScore.getScoreHeader()).read();
+			score.setInfo(scoreInfo);
 	
 			//read score format
 			MxlScoreHeader mxlScoreHeader = mxlScore.getScoreHeader();

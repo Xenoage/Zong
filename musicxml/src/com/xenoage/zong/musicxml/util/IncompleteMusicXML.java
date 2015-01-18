@@ -5,7 +5,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-
 /**
  * Annotation for types that do not completely meet the MusicXML
  * specification, since some values are missing.
@@ -15,21 +14,19 @@ import java.lang.annotation.Target;
  *
  * @author Andreas Wenger
  */
-@Retention(RetentionPolicy.CLASS)
-@Target(ElementType.TYPE)
-public @interface IncompleteMusicXML
-{
-	
+@Retention(RetentionPolicy.CLASS) @Target(ElementType.TYPE)
+public @interface IncompleteMusicXML {
+
 	/**
 	 * Comma-separated list of locally completely missing elements, attributes, ...
 	 */
 	String missing() default "";
-	
+
 	/**
 	 * Comma-separated list of locally partly implemented elements, attributes, ...
 	 */
 	String partly() default "";
-	
+
 	/**
 	 * Comma-separated list of incompletly implemented child elements.
 	 * This is used, if a children, a children of a children, and so on, is incomplete.
@@ -37,5 +34,5 @@ public @interface IncompleteMusicXML
 	 * up to the root should be marked with this annotation.
 	 */
 	String children() default "";
-	
+
 }

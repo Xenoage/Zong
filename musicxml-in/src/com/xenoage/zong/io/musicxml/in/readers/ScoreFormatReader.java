@@ -30,7 +30,7 @@ public class ScoreFormatReader {
 	
 	
 	@NonNull public ScoreFormat read() {
-		scoreFormat = ScoreFormat.getDefault();
+		scoreFormat = new ScoreFormat();
 		if (mxlDefaults != null) {
 			readInterlineSpace();
 			mxlLayout = mxlDefaults.getLayout();

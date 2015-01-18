@@ -18,7 +18,7 @@ import com.xenoage.zong.core.format.ScoreFormat;
  */
 public class StaffStampingTest {
 
-	private ScoreFormat scoreFormat = ScoreFormat.getDefault();
+	private ScoreFormat scoreFormat = new ScoreFormat();
 
 
 	@Test public void createStaffLayoutElement() {

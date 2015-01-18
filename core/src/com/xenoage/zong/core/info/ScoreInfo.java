@@ -1,16 +1,17 @@
 package com.xenoage.zong.core.info;
 
 import static com.xenoage.utils.NullUtils.notNull;
-import lombok.Data;
-import lombok.experimental.Wither;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 
-import com.xenoage.utils.annotations.Const;
+import java.util.List;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
+
 import com.xenoage.utils.annotations.MaybeEmpty;
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.NonNull;
-import com.xenoage.utils.collections.CList;
-import com.xenoage.utils.collections.IList;
-
 
 /**
  * Information about a single score,
@@ -18,24 +19,21 @@ import com.xenoage.utils.collections.IList;
  *
  * @author Andreas Wenger
  */
-@Const @Data @Wither public final class ScoreInfo {
+@AllArgsConstructor @RequiredArgsConstructor @Data
+public class ScoreInfo {
 
 	/** Title of the work. */
-	@MaybeNull private final String workTitle;
+	@MaybeNull private String workTitle;
 	/** Number of the work. */
-	@MaybeNull private final String workNumber;
+	@MaybeNull private String workNumber;
 	/** Title of the movement. */
-	@MaybeNull private final String movementTitle;
+	@MaybeNull private String movementTitle;
 	/** Number of the movement. */
-	@MaybeNull private final String movementNumber;
+	@MaybeNull private String movementNumber;
 	/** List of creators (composers, arrangers, ...). */
-	@NonNull @MaybeEmpty private final IList<Creator> creators;
+	@NonNull @MaybeEmpty private List<Creator> creators = alist();
 	/** List of rights. */
-	@NonNull @MaybeEmpty private final IList<Rights> rights;
-
-	/** Empty instance. */
-	public static final ScoreInfo empty = new ScoreInfo(null, null, null, null, CList.<Creator>ilist(),
-		CList.<Rights>ilist());
+	@NonNull @MaybeEmpty private List<Rights> rights = alist();
 
 
 	/**
@@ -49,7 +47,6 @@ import com.xenoage.utils.collections.IList;
 		}
 		return null;
 	}
-
 
 	/**
 	 * Gets the title of the score. This is the movement-title, or if unknown,

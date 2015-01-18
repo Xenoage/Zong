@@ -7,8 +7,8 @@ import static com.xenoage.zong.core.format.Defaults.defaultFont;
 
 import java.util.List;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.NonNull;
@@ -19,32 +19,26 @@ import com.xenoage.utils.font.FontInfo;
  *
  * @author Andreas Wenger
  */
-@AllArgsConstructor @Data
+@RequiredArgsConstructor @Data
 public class ScoreFormat {
 	
 	public static final float defaultInterlineSpace = 1.6f;
 	public static final float defaultTopSystemDistance = 15f;
 
 	/** The default space between two staff lines in mm ("Rastralgröße" in German). */
-	private float interlineSpace;
+	private float interlineSpace = defaultInterlineSpace;
 	/** The default distance between the first line of the top system to the top page margin in mm. */
-	private float topSystemDistance;
+	private float topSystemDistance = defaultTopSystemDistance;
 	/** The default layout information for systems. */
-	@NonNull private SystemLayout systemLayout;
+	@NonNull private SystemLayout systemLayout = new SystemLayout();
 	/** Default staff layout information (may also be or contain null). */
-	@MaybeNull private List<StaffLayout> staffLayouts;
+	@MaybeNull private List<StaffLayout> staffLayouts = null;
 	/** The default layout information for staves which have no own default layout. */
-	@NonNull private StaffLayout staffLayoutOther;
+	@NonNull private StaffLayout staffLayoutOther = StaffLayout.defaultValue;
 	/** The default font used for lyrics. */
-	@NonNull private FontInfo lyricFont;
+	@NonNull private FontInfo lyricFont = defaultFont;
 	/** The style of measure numbering. */
-	@NonNull private MeasureNumbering measureNumbering;
-	
-
-	public static ScoreFormat getDefault() {
-		return new ScoreFormat(defaultInterlineSpace, defaultTopSystemDistance,
-			new SystemLayout(), null, StaffLayout.defaultValue, defaultFont, MeasureNumbering.System);
-	}
+	@NonNull private MeasureNumbering measureNumbering = MeasureNumbering.System;
 
 
 	/**

@@ -1,48 +1,68 @@
 package com.xenoage.zong.io.musicxml.in.readers;
 
 import static com.xenoage.utils.NullUtils.notNull;
-import static com.xenoage.utils.collections.CList.clist;
 import static com.xenoage.utils.iterators.It.it;
+import lombok.RequiredArgsConstructor;
 
-import com.xenoage.utils.collections.CList;
 import com.xenoage.zong.core.info.Creator;
 import com.xenoage.zong.core.info.Rights;
 import com.xenoage.zong.core.info.ScoreInfo;
 import com.xenoage.zong.musicxml.types.MxlIdentification;
-import com.xenoage.zong.musicxml.types.MxlScorePartwise;
 import com.xenoage.zong.musicxml.types.MxlTypedText;
 import com.xenoage.zong.musicxml.types.MxlWork;
 import com.xenoage.zong.musicxml.types.groups.MxlScoreHeader;
 
 /**
- * This class reads general information about a score.
+ * Reads a {@link ScoreInfo} from a {@link MxlScoreHeader}.
  *
  * @author Andreas Wenger
  */
+@RequiredArgsConstructor
 public final class ScoreInfoReader {
 
-	/**
-	 * Reads general information about a score
-	 * from the given {@link MxlScorePartwise}.
-	 */
-	public static ScoreInfo read(MxlScorePartwise mxlScore) {
-		MxlScoreHeader mxlHeader = mxlScore.getScoreHeader();
+	private final MxlScoreHeader mxlHeader;
+	
+	private ScoreInfo scoreInfo;
+	
+	
+	public ScoreInfo read() {
+		scoreInfo = new ScoreInfo();
+		readWork();
+		readMovement();
+		readCreators();
+		readRights();
+		return scoreInfo;
+	}
+
+	private void readWork() {
 		MxlWork mxlWork = notNull(mxlHeader.getWork(), MxlWork.empty);
+		scoreInfo.setWorkTitle(mxlWork.getWorkTitle());
+		scoreInfo.setWorkNumber(mxlWork.getWorkNumber());
+	}
+	
+	private void readMovement() {
+		scoreInfo.setMovementTitle(mxlHeader.getMovementTitle());
+		scoreInfo.setMovementNumber(mxlHeader.getMovementNumber());
+	}
 
+	private void readCreators() {
 		MxlIdentification mxlIdentification = mxlHeader.getIdentification();
-		CList<Creator> creators = clist();
-		CList<Rights> rights = clist();
 		if (mxlIdentification != null) {
-			for (MxlTypedText creator : it(mxlIdentification.getCreators()))
-				creators.add(new Creator(creator.getValue(), creator.getType()));
-			for (MxlTypedText right : it(mxlIdentification.getRights()))
-				rights.add(new Rights(right.getValue(), right.getType()));
+			for (MxlTypedText mxlCreator : it(mxlIdentification.getCreators())) {
+				Creator creator = new Creator(mxlCreator.getValue(), mxlCreator.getType());
+				scoreInfo.getCreators().add(creator);
+			}
 		}
-		creators.close();
-		rights.close();
-
-		return new ScoreInfo(mxlWork.getWorkTitle(), mxlWork.getWorkNumber(),
-			mxlHeader.getMovementTitle(), mxlHeader.getMovementNumber(), creators, rights);
+	}
+	
+	private void readRights() {
+		MxlIdentification mxlIdentification = mxlHeader.getIdentification();
+		if (mxlIdentification != null) {
+			for (MxlTypedText mxlRights : it(mxlIdentification.getRights())) {
+				Rights rights = new Rights(mxlRights.getValue(), mxlRights.getType());
+				scoreInfo.getRights().add(rights);
+			}
+		}
 	}
 
 }

@@ -1,6 +1,7 @@
 package com.xenoage.zong.core.music.chord;
 
 import static com.xenoage.utils.CheckUtils.checkArgsNotNull;
+import static com.xenoage.utils.annotations.Optimized.Reason.MemorySaving;
 import static com.xenoage.utils.collections.CollectionUtils.addOrNew;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
@@ -16,6 +17,7 @@ import lombok.Setter;
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.NonEmpty;
 import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.annotations.Optimized;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.music.Voice;
@@ -48,32 +50,33 @@ import com.xenoage.zong.core.util.InconsistentScoreException;
  *
  * @author Andreas Wenger
  */
+@Getter @Setter
 public class Chord
 	implements VoiceElement, DirectionContainer {
 
 	/** The notes within this chord, sorted ascending (begin with lowest notated pitch). */
-	@Getter @Setter @NonNull @NonEmpty private List<Note> notes;
+	@NonNull @NonEmpty private List<Note> notes;
 	/** The duration of this chord. For a grace chord, this is 0. */
-	@Getter @Setter @NonNull private Fraction duration;
+	@NonNull private Fraction duration;
 	/** The stem of this chord, or null if a default stem is used. */
-	@Getter @Setter @MaybeNull private Stem stem = null;
+	@MaybeNull private Stem stem = null;
 	/** True, if this chord has cue size, otherwise false. */
-	@Getter @Setter private boolean cue = false;
+	private boolean cue = false;
 	/** The grace value of this chord, or null if it is a normal chord. */
-	@Getter @Setter @MaybeNull private Grace grace = null;
+	@MaybeNull private Grace grace = null;
 	/** The articulation, ornament and other annotations on this chord,
 	 * sorted by ascending distance to the chord. The empty list may be immutable. */
-	@Getter @Setter @NonNull private List<Annotation> annotations = emptyList();
+	@NonNull @Optimized(MemorySaving) private List<Annotation> annotations = emptyList();
 	/** The beam this chord is part of, or null. */
-	@Getter @Setter @MaybeNull private Beam beam = null;
+	@MaybeNull private Beam beam = null;
 	/** The slurs which start or end at this chord. The empty list may be immutable. */
-	@Getter @Setter @NonNull private List<Slur> slurs = emptyList();
+	@NonNull @Optimized(MemorySaving) private List<Slur> slurs = emptyList();
 	/** The tuplet this chord is part of, or null. */
-	@Getter @Setter @MaybeNull private Tuplet tuplet = null;
+	@MaybeNull private Tuplet tuplet = null;
 	/** The lyrics attached to this chord. The empty list may be immutable. */
-	@Getter @Setter @NonNull private List<Lyric> lyrics = emptyList();
+	@NonNull @Optimized(MemorySaving) private List<Lyric> lyrics = emptyList();
 	/** The directions attached to this chord. The empty list may be immutable. */
-	@Getter @Setter @NonNull private List<Direction> directions = emptyList();
+	@NonNull @Optimized(MemorySaving) private List<Direction> directions = emptyList();
 
 	/** Back reference: the parent voice, or null if not part of a score. */
 	@Getter @Setter private Voice parent = null;
