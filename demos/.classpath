@@ -15,6 +15,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/utils-kernel"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/controlsfx"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/desktop"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/awt"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/renderer-awt"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

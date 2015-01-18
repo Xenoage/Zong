@@ -7,6 +7,7 @@ import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.zong.util.ZongPlatformUtils.zongPlatformUtils;
 
 import java.io.IOException;
+
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.core.client.EntryPoint;
@@ -38,7 +39,7 @@ import com.xenoage.zong.renderer.canvas.CanvasIntegrity;
 import com.xenoage.zong.renderer.stampings.StampingRenderer;
 import com.xenoage.zong.symbols.SymbolPool;
 import com.xenoage.zong.symbols.common.CommonSymbol;
-import com.xenoage.zong.util.demo.ScoreRevolutionary;
+import com.xenoage.zong.utils.demo.ScoreRevolutionary;
 import com.xenoage.zong.webapp.renderer.canvas.GwtCanvas;
 import com.xenoage.zong.webapp.symbols.GwtPathSymbol;
 import com.xenoage.zong.webapp.utils.GwtZongPlatformUtils;

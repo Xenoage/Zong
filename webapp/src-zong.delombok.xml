@@ -4,7 +4,7 @@ Call this script each time before compiling this project.
 -->
 <project name="zong-src.delombok" default="zong-src.delombok">
 	<property name="target" value="src-zong"/>
-	<property name="lombok-path" value="../lib/lib/lombok-1.14.2.jar"/>
+	<property name="lombok-path" value="../lib/lib/dev/lombok-1.14.8.jar"/>
 	<target name="zong-src.delombok">
 	    <echo>Delombok Zong! sources...</echo>
 	    <!-- clean target directory -->
