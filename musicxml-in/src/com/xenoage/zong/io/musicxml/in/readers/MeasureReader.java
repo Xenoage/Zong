@@ -92,7 +92,7 @@ public class MeasureReader {
 					new DirectionReader((MxlDirection) mxlMDC).readToContext(context);
 					break;
 				case Barline:
-					new BarlineReader((MxlBarline) mxlMDC).readIntoContext(context);
+					new BarlineReader((MxlBarline) mxlMDC).readToContext(context);
 					break;
 			}
 		}

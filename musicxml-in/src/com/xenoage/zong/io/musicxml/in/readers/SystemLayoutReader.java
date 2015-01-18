@@ -1,53 +1,55 @@
 package com.xenoage.zong.io.musicxml.in.readers;
 
-import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import com.xenoage.zong.core.format.SystemLayout;
 import com.xenoage.zong.musicxml.types.MxlSystemLayout;
 import com.xenoage.zong.musicxml.types.MxlSystemMargins;
 
 /**
- * This class reads system-layout elements into
- * {@link SystemLayout} objects.
+ * Reads a {@link SystemLayout} from a {@link MxlSystemLayout}.
  * 
  * @author Andreas Wenger
  */
-public final class SystemLayoutReader {
+@RequiredArgsConstructor
+public class SystemLayoutReader {
 
-	@AllArgsConstructor
-	public static final class Value {
+	private final MxlSystemLayout mxlSystemLayout;
+	private final float tenthMm;
+	
+	private SystemLayout systemLayout;
+	@Getter private Float topSystemDistance;
 
-		public final SystemLayout systemLayout;
-		public final Float topSystemDistance;
+
+	public SystemLayout read() {
+		systemLayout = new SystemLayout();
+		readSystemMargins();
+		readSystemDistance();
+		readTopSystemDistance();
+		return systemLayout;
 	}
-
-
-	/**
-	 * Reads a {@link MxlSystemLayout}.
-	 */
-	public static Value read(MxlSystemLayout mxlSystemLayout, float tenthMm) {
-		SystemLayout systemLayout = new SystemLayout();
-
-		//system-margins
+	
+	private void readSystemMargins() {
 		MxlSystemMargins mxlMargins = mxlSystemLayout.getSystemMargins();
 		if (mxlMargins != null) {
 			systemLayout.setMarginLeft(tenthMm * mxlMargins.getLeftMargin());
 			systemLayout.setMarginRight(tenthMm * mxlMargins.getRightMargin());
 		}
+	}
 
-		//system-distance
+	private void readSystemDistance() {
 		Float mxlSystemDistance = mxlSystemLayout.getSystemDistance();
 		if (mxlSystemDistance != null) {
 			systemLayout.setDistance(tenthMm * mxlSystemDistance);
 		}
+	}
 
-		//top-system-distance
-		Float topSystemDistance = null;
-		Float xmlTopSystemDistance = mxlSystemLayout.getTopSystemDistance();
-		if (xmlTopSystemDistance != null)
-			topSystemDistance = tenthMm * xmlTopSystemDistance.floatValue();
-
-		return new Value(systemLayout, topSystemDistance);
+	private void readTopSystemDistance() {
+		topSystemDistance = null;
+		Float mxlTopSystemDistance = mxlSystemLayout.getTopSystemDistance();
+		if (mxlTopSystemDistance != null)
+			topSystemDistance = tenthMm * mxlTopSystemDistance.floatValue();
 	}
 
 }

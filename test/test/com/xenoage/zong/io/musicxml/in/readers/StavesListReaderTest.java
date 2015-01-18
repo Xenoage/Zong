@@ -89,13 +89,14 @@ public class StavesListReaderTest {
 		} catch (Exception ex) {
 			fail(ex.toString());
 		}
-		StavesListReader.Value sl = null;
+		StavesListReader stavesListReader = new StavesListReader(doc.getScore());
+		StavesList stavesList = null;
 		try {
-			sl = StavesListReader.read(doc.getScore());
+			stavesList = stavesListReader.read();
 		} catch (Exception ex) {
 			fail(ex.toString());
 		}
-		return sl.stavesList;
+		return stavesList;
 	}
 
 }

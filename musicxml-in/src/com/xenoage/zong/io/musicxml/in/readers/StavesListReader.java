@@ -1,5 +1,6 @@
 package com.xenoage.zong.io.musicxml.in.readers;
 
+import static com.xenoage.utils.collections.ArrayUtils.containsOnlyNull;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.collections.CollectionUtils.map;
 import static com.xenoage.utils.iterators.MultiIt.multiIt;
@@ -10,9 +11,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-import com.xenoage.utils.collections.ArrayUtils;
 import com.xenoage.zong.core.music.Part;
 import com.xenoage.zong.core.music.Staff;
 import com.xenoage.zong.core.music.StavesList;
@@ -43,19 +44,16 @@ import com.xenoage.zong.musicxml.types.partwise.MxlPart;
  *
  * @author Andreas Wenger
  */
-public final class StavesListReader {
+@RequiredArgsConstructor
+public class StavesListReader {
 
-	@AllArgsConstructor
-	public static final class Value {
-
-		public final StavesList stavesList;
-		public final Map<String, Integer> partsIDtoIndex;
-	}
+	private final MxlScorePartwise mxlScore;
+	
+	private StavesList stavesList;
+	@Getter private Map<String, Integer> partsIDtoIndex;
 
 	private static abstract class PartsGroup {
-
 		public int startPartIndex = -1, stopPartIndex = -1;
-
 
 		@Override public String toString() {
 			return "[" + startPartIndex + " to " + stopPartIndex + "]";
@@ -64,30 +62,24 @@ public final class StavesListReader {
 
 	private static final class PartsBarlineGroup
 		extends PartsGroup {
-
 		public BarlineGroup.Style style = BarlineGroup.Style.Single;
 	}
 
 	private static final class PartsBracketGroup
 		extends PartsGroup {
-
 		public BracketGroup.Style style = BracketGroup.Style.None;
 	}
 
 	private static final class PartsGroups {
-
 		public PartsBarlineGroup barlineGroup = null;
 		public PartsBracketGroup bracketsGroup = null;
 	}
 
 
-	/**
-	 * Creates a {@link StavesList} from the given partwise MusicXML 2.0 document.
-	 */
-	public static Value read(MxlScorePartwise mxlScore) {
+	public StavesList read() {
 		//list of parts
 		List<Part> parts = alist();
-		Map<String, Integer> partsIDtoIndex = map();
+		partsIDtoIndex = map();
 		//list of groups
 		List<PartsBarlineGroup> barlineGroups = alist();
 		List<PartsBracketGroup> bracketGroups = alist();
@@ -102,8 +94,7 @@ public final class StavesListReader {
 			//score-part
 			if (mxlItem.getPartListContentType() == PartListContentType.ScorePart) {
 				MxlScorePart mxlScorePart = (MxlScorePart) mxlItem;
-				Part part = PartReader
-					.readPart(mxlScorePart, findCorrespondingPart(mxlScorePart, mxlScore));
+				Part part = PartReader.read(mxlScorePart, findCorrespondingPart(mxlScorePart, mxlScore));
 				parts.add(part);
 				partsIDtoIndex.put(mxlScorePart.getId(), currentPartIndex);
 				currentPartIndex++;
@@ -122,8 +113,8 @@ public final class StavesListReader {
 			}
 		}
 		//if there are unclosed score-groups, throw an exception
-		if (false == ArrayUtils.containsOnlyNull(openBarlineGroups) ||
-			false == ArrayUtils.containsOnlyNull(openBracketGroups)) {
+		if (false == containsOnlyNull(openBarlineGroups) ||
+			false == containsOnlyNull(openBracketGroups)) {
 			throw new IllegalStateException("There are unclosed score-groups");
 		}
 		//count the number of staves and measures used by each part
@@ -139,9 +130,8 @@ public final class StavesListReader {
 				parts.get(partIndex).setStavesCount(partStaves);
 		}
 		//creates the final StavesList for this document
-		StavesList stavesList = createStavesList(parts, barlineGroups, bracketGroups);
-		//return staves list and index mapping
-		return new Value(stavesList, partsIDtoIndex);
+		stavesList = createStavesList(parts, barlineGroups, bracketGroups);
+		return stavesList;
 	}
 
 	/**
@@ -151,7 +141,7 @@ public final class StavesListReader {
 	 * these are separated values in Zong!. This is why they are returned as a tuple
 	 * (with null if not set).
 	 */
-	private static PartsGroups readPartGroup(int currentPartIndex, MxlPartGroup mxlPartGroup,
+	private PartsGroups readPartGroup(int currentPartIndex, MxlPartGroup mxlPartGroup,
 		PartsBarlineGroup[] openBarlineGroups, PartsBracketGroup[] openBracketGroups) {
 		int number = mxlPartGroup.getNumber();
 		MxlStartStop type = mxlPartGroup.getType();
@@ -205,7 +195,7 @@ public final class StavesListReader {
 	 * Counts the number of staves used in each part and returns them.
 	 * @return a hashmap which maps a part ID to the number of staves in this part
 	 */
-	private static HashMap<String, Integer> countStaves(MxlScorePartwise mxlScore) {
+	private HashMap<String, Integer> countStaves(MxlScorePartwise mxlScore) {
 		HashMap<String, Integer> ret = map();
 		//check all parts
 		for (MxlPart mxlPart : mxlScore.getParts()) {
@@ -231,7 +221,7 @@ public final class StavesListReader {
 	/**
 	 * Creates the (still empty) {@link StavesList} for this document.
 	 */
-	private static StavesList createStavesList(List<Part> parts,
+	private StavesList createStavesList(List<Part> parts,
 		List<PartsBarlineGroup> barlineGroups, List<PartsBracketGroup> bracketGroups) {
 		StavesList ret = new StavesList();
 		//add parts
@@ -270,7 +260,7 @@ public final class StavesListReader {
 	/**
 	 * Gets the index of the first staff of the given part.
 	 */
-	private static int getFirstStaffIndex(int partIndex, List<Part> parts) {
+	private int getFirstStaffIndex(int partIndex, List<Part> parts) {
 		int ret = 0;
 		for (int i : range(partIndex))
 			ret += parts.get(i).getStavesCount();
@@ -280,7 +270,7 @@ public final class StavesListReader {
 	/**
 	 * Gets the index of the last staff of the given part.
 	 */
-	private static int getLastStaffIndex(int partIndex, List<Part> parts) {
+	private int getLastStaffIndex(int partIndex, List<Part> parts) {
 		return getFirstStaffIndex(partIndex, parts) + parts.get(partIndex).getStavesCount() - 1;
 	}
 
@@ -297,13 +287,13 @@ public final class StavesListReader {
 		return false;
 	}
 
-	private static BracketGroup.Style readBracketGroupStyle(MxlGroupSymbol mxlGroupSymbol) {
+	private BracketGroup.Style readBracketGroupStyle(MxlGroupSymbol mxlGroupSymbol) {
 		if (mxlGroupSymbol == null)
 			return BracketGroup.Style.None;
 		return bracketGroupStyles.get1(mxlGroupSymbol.getValue());
 	}
 
-	private static BarlineGroup.Style readBarlineGroupStyle(MxlGroupBarline mxlGroupBarline) {
+	private BarlineGroup.Style readBarlineGroupStyle(MxlGroupBarline mxlGroupBarline) {
 		if (mxlGroupBarline != null) {
 			switch (mxlGroupBarline.getValue()) {
 				case Yes:
@@ -321,7 +311,7 @@ public final class StavesListReader {
 	 * Returns the {@link MxlPart}, which belongs to the given {@link MxlScorePart},
 	 * i.e. the part with an equal ID.
 	 */
-	private static MxlPart findCorrespondingPart(MxlScorePart mxlScorePart,
+	private MxlPart findCorrespondingPart(MxlScorePart mxlScorePart,
 		MxlScorePartwise mxlScorePartwise) {
 		for (MxlPart part : mxlScorePartwise.getParts()) {
 			if (part.getId().equals(mxlScorePart.getId()))

@@ -7,6 +7,7 @@ import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.position.MP.atElement;
 import static com.xenoage.zong.core.position.MP.atStaff;
 import static com.xenoage.zong.io.musicxml.in.util.CommandPerformer.execute;
+import lombok.RequiredArgsConstructor;
 
 import com.xenoage.utils.iterators.It;
 import com.xenoage.utils.math.Fraction;
@@ -46,9 +47,13 @@ import com.xenoage.zong.musicxml.types.partwise.MxlPart;
  *
  * @author Andreas Wenger
  */
-public final class ScoreReader {
+@RequiredArgsConstructor
+public class ScoreReader {
 
-	public static void readToScore(MxlScorePartwise doc, Score score, boolean ignoreErrors) {
+	private final MxlScorePartwise doc;
+	
+	
+	public void readToScore(Score score, boolean ignoreErrors) {
 		Context context = new Context(score, new ReaderSettings(ignoreErrors));
 		
 		//create the measures of the parts

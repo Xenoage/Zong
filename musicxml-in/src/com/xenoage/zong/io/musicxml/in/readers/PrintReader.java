@@ -4,6 +4,7 @@ import static com.xenoage.utils.iterators.It.it;
 import lombok.RequiredArgsConstructor;
 
 import com.xenoage.zong.core.format.Break;
+import com.xenoage.zong.core.format.StaffLayout;
 import com.xenoage.zong.core.format.SystemLayout;
 import com.xenoage.zong.core.header.ScoreHeader;
 import com.xenoage.zong.core.music.layout.PageBreak;
@@ -76,9 +77,9 @@ public class PrintReader {
 						systemLayout = new SystemLayout();
 						header.setSystemLayout(context.getSystemIndex(), systemLayout);
 					}
+					StaffLayout staffLayout = new StaffLayoutReader(mxlStaffLayout, context.getTenthMm()).read();
 					systemLayout.setStaffLayout(
-						context.getPartStaffIndices().getStart() + staffIndex,
-						StaffLayoutReader.readStaffLayout(mxlStaffLayout, context.getTenthMm()).staffLayout);
+						context.getPartStaffIndices().getStart() + staffIndex, staffLayout);
 				}
 			}
 
@@ -107,12 +108,12 @@ public class PrintReader {
 		if (mxlLayout != null) {
 			MxlSystemLayout mxlSystemLayout = mxlLayout.getSystemLayout();
 			if (mxlSystemLayout != null) {
-				SystemLayoutReader.Value sl = SystemLayoutReader
-					.read(mxlSystemLayout, tenthMm);
-				SystemLayout systemLayout = sl.systemLayout;
+				SystemLayoutReader systemLayoutReader = new SystemLayoutReader(mxlSystemLayout, tenthMm);
+				SystemLayout systemLayout = systemLayoutReader.read();
+				Float topSystemDistance = systemLayoutReader.getTopSystemDistance();
 				//for first systems on a page, use top-system-distance
-				if (isPageStarted && sl.topSystemDistance != null)
-					systemLayout.setDistance(sl.topSystemDistance);
+				if (isPageStarted && topSystemDistance != null)
+					systemLayout.setDistance(topSystemDistance);
 				return systemLayout;
 			}
 		}

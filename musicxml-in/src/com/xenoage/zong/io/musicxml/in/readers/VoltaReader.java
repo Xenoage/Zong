@@ -20,7 +20,7 @@ public class VoltaReader {
 	private final MxlEnding mxlEnding;
 	
 	
-	public void readIntoContext(Context context) {
+	public void readToContext(Context context) {
 		MxlStartStopDiscontinue type = mxlEnding.getType();
 		if (type == MxlStartStopDiscontinue.Start) {
 			Range range = readEndingRange(mxlEnding.getNumber());

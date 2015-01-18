@@ -157,7 +157,7 @@ public final class ChordReader {
 	}
 		
 	private void readStem() {
-		Stem stem = StemReader.readStem(context, mxlFirstNote, chord, staff);
+		Stem stem = new StemReader(mxlFirstNote.getStem()).read(context, chord, staff);
 		if (stem != null)
 			chord.setStem(stem);
 	}

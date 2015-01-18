@@ -1,12 +1,12 @@
 package com.xenoage.zong.io.musicxml.in.readers;
 
-import static com.xenoage.zong.io.musicxml.in.readers.StaffLayoutReader.readStaffLayout;
 import lombok.RequiredArgsConstructor;
 
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.font.FontInfo;
 import com.xenoage.zong.core.format.ScoreFormat;
+import com.xenoage.zong.core.format.StaffLayout;
 import com.xenoage.zong.musicxml.types.MxlDefaults;
 import com.xenoage.zong.musicxml.types.MxlLyricFont;
 import com.xenoage.zong.musicxml.types.MxlScaling;
@@ -62,10 +62,11 @@ public class ScoreFormatReader {
 		if (mxlSystemLayout == null)
 			return;
 		
-		SystemLayoutReader.Value v = SystemLayoutReader.read(mxlSystemLayout, tenthsMm);
-		scoreFormat.setSystemLayout(v.systemLayout);
-		if (v.topSystemDistance != null)
-			scoreFormat.setTopSystemDistance(v.topSystemDistance);
+		SystemLayoutReader systemLayoutReader = new SystemLayoutReader(mxlSystemLayout, tenthsMm);
+		scoreFormat.setSystemLayout(systemLayoutReader.read());
+		Float topSystemDistance = systemLayoutReader.getTopSystemDistance();
+		if (topSystemDistance != null)
+			scoreFormat.setTopSystemDistance(topSystemDistance);
 	}
 
 	private void readStaffLayouts() {
@@ -73,11 +74,13 @@ public class ScoreFormatReader {
 			return;
 
 		for (MxlStaffLayout mxlStaffLayout : mxlLayout.getStaffLayouts()) {
-			StaffLayoutReader.Value v = readStaffLayout(mxlStaffLayout, tenthsMm);
-			if (v.number == null)
-				scoreFormat.setStaffLayoutOther(v.staffLayout);
+			StaffLayoutReader staffLayoutReader = new StaffLayoutReader(mxlStaffLayout, tenthsMm);
+			StaffLayout staffLayout = staffLayoutReader.read();
+			Integer number = staffLayoutReader.getNumber();
+			if (number == null)
+				scoreFormat.setStaffLayoutOther(staffLayout);
 			else
-				scoreFormat.setStaffLayout(v.number - 1, v.staffLayout);
+				scoreFormat.setStaffLayout(number - 1, staffLayout);
 		}
 	}
 

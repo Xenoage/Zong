@@ -34,7 +34,7 @@ public class BarlineReader {
 	private MeasureSide side;
 	
 	
-	public void readIntoContext(Context context) {
+	public void readToContext(Context context) {
 		read();
 		//write barline
 		if (barline != null)
@@ -42,7 +42,7 @@ public class BarlineReader {
 		//write volta
 		MxlEnding mxlEnding = mxlBarline.getEnding();
 		if (mxlEnding != null)
-			new VoltaReader(mxlEnding).readIntoContext(context);
+			new VoltaReader(mxlEnding).readToContext(context);
 	}
 
 	private void read() {

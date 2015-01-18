@@ -14,6 +14,7 @@ import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.format.LayoutFormat;
 import com.xenoage.zong.core.format.ScoreFormat;
 import com.xenoage.zong.core.info.ScoreInfo;
+import com.xenoage.zong.core.music.StavesList;
 import com.xenoage.zong.io.musicxml.in.readers.LayoutFormatReader;
 import com.xenoage.zong.io.musicxml.in.readers.ScoreFormatReader;
 import com.xenoage.zong.io.musicxml.in.readers.ScoreInfoReader;
@@ -96,12 +97,13 @@ public class MusicXmlScoreFileInput
 			score.setMetaData("layoutformat", layoutFormat); //TIDY
 	
 			//create the list of staves
-			StavesListReader.Value stavesListValue = StavesListReader.read(mxlScore);
-			stavesListValue.stavesList.setScore(score);
-			score.setStavesList(stavesListValue.stavesList);
+			StavesListReader stavesListReader = new StavesListReader(mxlScore);
+			StavesList stavesList = stavesListReader.read();
+			stavesList.setScore(score);
+			score.setStavesList(stavesList);
 	
 			//read the musical contents
-			ScoreReader.readToScore(mxlScore, score, ignoreErrors);
+			new ScoreReader(mxlScore).readToScore(score, ignoreErrors);
 	
 			//remember the XML document for further application-dependend processing
 			score.setMetaData("mxldoc", mxlScore); //TIDY
