@@ -1,13 +1,13 @@
-package com.xenoage.zong.desktop.renderer;
+package com.xenoage.zong.renderer.awt;
 
-import static com.xenoage.zong.desktop.renderer.frames.AwtFramesRenderer.awtFramesRenderer;
+import static com.xenoage.zong.renderer.awt.frames.AwtFramesRenderer.awtFramesRenderer;
 
 import com.xenoage.utils.math.geom.Point2i;
-import com.xenoage.zong.desktop.renderer.canvas.AwtCanvas;
 import com.xenoage.zong.layout.Layout;
 import com.xenoage.zong.layout.Page;
 import com.xenoage.zong.layout.frames.Frame;
 import com.xenoage.zong.renderer.RendererArgs;
+import com.xenoage.zong.renderer.awt.canvas.AwtCanvas;
 
 /**
  * This class renders a {@link Layout} on an {@link AwtCanvas}.

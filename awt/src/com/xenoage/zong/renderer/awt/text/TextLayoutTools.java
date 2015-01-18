@@ -1,4 +1,4 @@
-package com.xenoage.zong.desktop.utils.text;
+package com.xenoage.zong.renderer.awt.text;
 
 import static com.xenoage.utils.NullUtils.notNull;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
@@ -24,7 +24,7 @@ import com.xenoage.zong.core.text.FormattedTextParagraph;
 import com.xenoage.zong.core.text.FormattedTextString;
 import com.xenoage.zong.core.text.FormattedTextStyle;
 import com.xenoage.zong.core.text.FormattedTextSymbol;
-import com.xenoage.zong.desktop.renderer.symbols.SymbolGraphicAttribute;
+import com.xenoage.zong.renderer.awt.symbols.SymbolGraphicAttribute;
 import com.xenoage.zong.symbols.Symbol;
 
 /**

@@ -1,17 +1,17 @@
-package com.xenoage.zong.desktop.renderer.frames;
+package com.xenoage.zong.renderer.awt.frames;
 
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 
-import com.xenoage.zong.desktop.renderer.background.AwtBackgroundRenderer;
-import com.xenoage.zong.desktop.renderer.canvas.AwtCanvas;
 import com.xenoage.zong.layout.frames.Frame;
 import com.xenoage.zong.layout.frames.ScoreFrame;
 import com.xenoage.zong.musiclayout.ScoreFrameLayout;
 import com.xenoage.zong.musiclayout.stampings.Stamping;
 import com.xenoage.zong.renderer.RendererArgs;
+import com.xenoage.zong.renderer.awt.background.AwtBackgroundRenderer;
+import com.xenoage.zong.renderer.awt.canvas.AwtCanvas;
 import com.xenoage.zong.renderer.canvas.Canvas;
 import com.xenoage.zong.renderer.canvas.CanvasDecoration;
 import com.xenoage.zong.renderer.frames.FrameRenderer;

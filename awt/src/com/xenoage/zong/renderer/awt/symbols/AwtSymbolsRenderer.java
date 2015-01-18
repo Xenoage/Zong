@@ -1,4 +1,4 @@
-package com.xenoage.zong.desktop.renderer.symbols;
+package com.xenoage.zong.renderer.awt.symbols;
 
 import static com.xenoage.utils.jse.color.AwtColorUtils.toAwtColor;
 
@@ -8,7 +8,7 @@ import java.awt.geom.AffineTransform;
 
 import com.xenoage.utils.color.Color;
 import com.xenoage.utils.math.geom.Point2f;
-import com.xenoage.zong.desktop.renderer.canvas.AwtCanvas;
+import com.xenoage.zong.renderer.awt.canvas.AwtCanvas;
 import com.xenoage.zong.renderer.canvas.Canvas;
 import com.xenoage.zong.renderer.canvas.CanvasDecoration;
 import com.xenoage.zong.renderer.symbols.SymbolsRenderer;

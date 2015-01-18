@@ -1,4 +1,4 @@
-package com.xenoage.zong.desktop.renderer.canvas;
+package com.xenoage.zong.renderer.awt.canvas;
 
 import static com.xenoage.utils.jse.color.AwtColorUtils.toAwtColor;
 
@@ -16,11 +16,11 @@ import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Rectangle2f;
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.core.text.FormattedText;
-import com.xenoage.zong.desktop.renderer.slur.AwtSlurRenderer;
-import com.xenoage.zong.desktop.renderer.symbols.AwtSymbolsRenderer;
-import com.xenoage.zong.desktop.utils.text.TextLayoutTools;
-import com.xenoage.zong.desktop.utils.text.TextLayouts;
 import com.xenoage.zong.io.selection.text.TextSelection;
+import com.xenoage.zong.renderer.awt.slur.AwtSlurRenderer;
+import com.xenoage.zong.renderer.awt.symbols.AwtSymbolsRenderer;
+import com.xenoage.zong.renderer.awt.text.TextLayoutTools;
+import com.xenoage.zong.renderer.awt.text.TextLayouts;
 import com.xenoage.zong.renderer.canvas.Canvas;
 import com.xenoage.zong.renderer.canvas.CanvasDecoration;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;

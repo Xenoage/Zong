@@ -1,4 +1,4 @@
-package com.xenoage.zong.desktop.renderer.slur;
+package com.xenoage.zong.renderer.awt.slur;
 
 import java.awt.Shape;
 import java.awt.geom.GeneralPath;

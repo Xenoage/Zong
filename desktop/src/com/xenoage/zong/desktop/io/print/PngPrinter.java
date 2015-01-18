@@ -10,8 +10,8 @@ import java.io.OutputStream;
 
 import javax.imageio.ImageIO;
 
-import com.xenoage.zong.desktop.renderer.AwtBitmapPageRenderer;
 import com.xenoage.zong.layout.Layout;
+import com.xenoage.zong.renderer.awt.AwtBitmapPageRenderer;
 
 /**
  * This class allows to print out the current score into a PNG file.

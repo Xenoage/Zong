@@ -14,8 +14,8 @@ import javafx.scene.layout.BorderPane;
 import org.controlsfx.dialog.Dialog;
 import org.controlsfx.dialog.Dialogs;
 
-import com.xenoage.zong.desktop.renderer.AwtBitmapPageRenderer;
 import com.xenoage.zong.layout.Layout;
+import com.xenoage.zong.renderer.awt.AwtBitmapPageRenderer;
 
 /**
  * Controller for the JavaFX main window (MainWindow.fxml).

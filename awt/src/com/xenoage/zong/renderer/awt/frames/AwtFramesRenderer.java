@@ -1,4 +1,4 @@
-package com.xenoage.zong.desktop.renderer.frames;
+package com.xenoage.zong.renderer.awt.frames;
 
 import static com.xenoage.utils.collections.CollectionUtils.map;
 

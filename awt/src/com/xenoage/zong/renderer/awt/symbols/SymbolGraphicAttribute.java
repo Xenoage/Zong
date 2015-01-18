@@ -1,4 +1,4 @@
-package com.xenoage.zong.desktop.renderer.symbols;
+package com.xenoage.zong.renderer.awt.symbols;
 
 import java.awt.Graphics2D;
 import java.awt.Shape;

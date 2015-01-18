@@ -1,4 +1,4 @@
-package com.xenoage.zong.desktop.utils.text;
+package com.xenoage.zong.renderer.awt.text;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
@@ -9,15 +9,15 @@ import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.xenoage.utils.math.Units;
 import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.utils.kernel.Tuple3;
+import com.xenoage.utils.math.Units;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Rectangle2f;
-import com.xenoage.zong.desktop.utils.math.DesktopMathUtils;
 
 /**
  * This class combines several {@link TextLayout}s with
@@ -57,13 +57,19 @@ public class TextLayouts {
 		Rectangle2f boundingRect = null;
 		for (int i : range(items)) {
 			Item item = items.get(i);
-			Rectangle2f r = DesktopMathUtils.createRectangle2f(item.textLayout.getBounds()).move(item.position);
+			Rectangle2f r = getTextLayoutBounds(item.textLayout).move(item.position);
 			if (boundingRect == null)
 				boundingRect = r;
 			else
 				boundingRect = boundingRect.extend(r);
 		}
 		this.boundingRect = boundingRect;
+	}
+	
+	private Rectangle2f getTextLayoutBounds(TextLayout textLayout) {
+		Rectangle2D r = textLayout.getBounds();
+		return new Rectangle2f((float) r.getMinX(), (float) r.getMinY(), (float) r.getWidth(),
+			(float) r.getHeight());
 	}
 
 	public void draw(Graphics2D g) {

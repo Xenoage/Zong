@@ -1,4 +1,4 @@
-package com.xenoage.zong.desktop.renderer.frames;
+package com.xenoage.zong.renderer.awt.frames;
 
 import static com.xenoage.utils.jse.JsePlatformUtils.io;
 
@@ -13,10 +13,10 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import com.xenoage.zong.desktop.renderer.canvas.AwtCanvas;
 import com.xenoage.zong.layout.frames.Frame;
 import com.xenoage.zong.layout.frames.ImageFrame;
 import com.xenoage.zong.renderer.RendererArgs;
+import com.xenoage.zong.renderer.awt.canvas.AwtCanvas;
 import com.xenoage.zong.renderer.canvas.Canvas;
 import com.xenoage.zong.renderer.canvas.CanvasIntegrity;
 import com.xenoage.zong.renderer.frames.FrameRenderer;

@@ -1,4 +1,4 @@
-package com.xenoage.zong.desktop.renderer;
+package com.xenoage.zong.renderer.awt;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -7,9 +7,9 @@ import java.awt.image.BufferedImage;
 
 import com.xenoage.utils.math.Units;
 import com.xenoage.utils.math.geom.Size2f;
-import com.xenoage.zong.desktop.renderer.canvas.AwtCanvas;
 import com.xenoage.zong.layout.Layout;
 import com.xenoage.zong.layout.Page;
+import com.xenoage.zong.renderer.awt.canvas.AwtCanvas;
 import com.xenoage.zong.renderer.canvas.CanvasDecoration;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
 import com.xenoage.zong.renderer.canvas.CanvasIntegrity;

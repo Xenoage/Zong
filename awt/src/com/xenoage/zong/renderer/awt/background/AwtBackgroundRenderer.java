@@ -1,4 +1,4 @@
-package com.xenoage.zong.desktop.renderer.background;
+package com.xenoage.zong.renderer.awt.background;
 
 import java.awt.Paint;
 
