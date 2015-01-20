@@ -4,11 +4,9 @@ import com.xenoage.utils.PlatformUtils;
 import com.xenoage.utils.async.AsyncCallback;
 import com.xenoage.utils.async.AsyncResult;
 import com.xenoage.utils.gwt.GwtPlatformUtils;
-import com.xenoage.zong.io.symbols.SvgPathReader;
 import com.xenoage.zong.io.symbols.SymbolPoolReader;
 import com.xenoage.zong.symbols.SymbolPool;
 import com.xenoage.zong.util.ZongPlatformUtils;
-import com.xenoage.zong.webapp.io.symbols.GwtSvgPathReader;
 
 /**
  * GWT implementation of {@link ZongPlatformUtils}.
@@ -46,10 +44,6 @@ public class GwtZongPlatformUtils
 
 	@Override public SymbolPool getSymbolPool() {
 		return symbolPool;
-	}
-
-	@Override public SvgPathReader<?> getSvgPathReader() {
-		return new GwtSvgPathReader();
 	}
 
 }

@@ -25,6 +25,8 @@ public class AwtSymbolsRenderer
 
 	public static final AwtSymbolsRenderer instance = new AwtSymbolsRenderer();
 
+	private AwtSymbolsCache cache = new AwtSymbolsCache();
+	
 
 	@Override public void draw(PathSymbol symbol, Canvas canvas, Color color, Point2f position,
 		Point2f scaling) {
@@ -32,8 +34,10 @@ public class AwtSymbolsRenderer
 		AffineTransform g2dTransform = g2d.getTransform();
 		g2d.translate(position.x, position.y);
 		g2d.scale(scaling.x, scaling.y);
+		
 		g2d.setColor(toAwtColor(color));
-		g2d.fill((Shape) symbol.path);
+		Shape shape = cache.getShape(symbol.getPath());
+		g2d.fill(shape);
 
 		/* TEST
 		g2d.setColor(Color.green);

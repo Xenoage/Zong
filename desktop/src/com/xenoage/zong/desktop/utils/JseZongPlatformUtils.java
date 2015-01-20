@@ -7,8 +7,6 @@ import static com.xenoage.utils.log.Report.fatal;
 import com.xenoage.utils.PlatformUtils;
 import com.xenoage.utils.jse.JsePlatformUtils;
 import com.xenoage.zong.Voc;
-import com.xenoage.zong.desktop.io.symbols.AwtSvgPathReader;
-import com.xenoage.zong.io.symbols.SvgPathReader;
 import com.xenoage.zong.io.symbols.SymbolPoolReader;
 import com.xenoage.zong.symbols.SymbolPool;
 import com.xenoage.zong.util.ZongPlatformUtils;
@@ -43,10 +41,6 @@ public class JseZongPlatformUtils
 
 	@Override public SymbolPool getSymbolPool() {
 		return symbolPool;
-	}
-
-	@Override public SvgPathReader<?> getSvgPathReader() {
-		return new AwtSvgPathReader();
 	}
 
 }

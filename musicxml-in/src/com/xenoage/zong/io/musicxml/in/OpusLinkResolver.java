@@ -3,13 +3,12 @@ package com.xenoage.zong.io.musicxml.in;
 import static com.xenoage.utils.PlatformUtils.platformUtils;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
 import com.xenoage.utils.annotations.MaybeNull;
-import com.xenoage.utils.async.AsyncResult;
 import com.xenoage.utils.async.AsyncProducer;
+import com.xenoage.utils.async.AsyncResult;
 import com.xenoage.utils.io.InputStream;
 import com.xenoage.utils.io.ZipReader;
 import com.xenoage.zong.io.musicxml.opus.Opus;
@@ -71,7 +70,7 @@ public class OpusLinkResolver
 					try {
 						opusStream = zip.openFile(filePath);
 						resolveItem(opusStream);
-					} catch (FileNotFoundException ex) {
+					} catch (com.xenoage.utils.io.FileNotFoundException ex) {
 						callback.onFailure(ex);
 					}
 				}

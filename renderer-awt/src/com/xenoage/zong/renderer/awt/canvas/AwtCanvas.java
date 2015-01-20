@@ -1,6 +1,7 @@
 package com.xenoage.zong.renderer.awt.canvas;
 
 import static com.xenoage.utils.jse.color.AwtColorUtils.toAwtColor;
+import static com.xenoage.utils.kernel.Range.range;
 
 import java.awt.BasicStroke;
 import java.awt.Graphics2D;
@@ -98,10 +99,8 @@ public class AwtCanvas
 	@Override public void drawStaff(Point2f pos, float length, int lines, Color color,
 		float lineWidth, float interlineSpace) {
 		g2d.setColor(toAwtColor(color));
-		for (int i = 0; i < lines; i++) {
-			g2d.fill(new Rectangle2D.Float(pos.x, pos.y + i * interlineSpace - lineWidth / 2, length,
-				lineWidth));
-		}
+		for (int i : range(lines))
+			g2d.fill(new Rectangle2D.Float(pos.x, pos.y + i * interlineSpace - lineWidth / 2, length, lineWidth));
 	}
 
 	@Override public void drawSimplifiedStaff(Point2f pos, float length, float height, Color color) {
@@ -136,9 +135,6 @@ public class AwtCanvas
 		g2d.setTransform(g2dTransform);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override public void drawCurvedLine(Point2f p1, Point2f p2, Point2f c1, Point2f c2,
 		float interlineSpace, Color color) {
 		g2d.setColor(toAwtColor(color));
@@ -146,9 +142,6 @@ public class AwtCanvas
 		g2d.fill(AwtSlurRenderer.getShape(slurShape));
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override public void fillRect(Rectangle2f rect, Color color) {
 		g2d.setColor(toAwtColor(color));
 		g2d.fill(new Rectangle2D.Float(rect.position.x, rect.position.y, rect.size.width,

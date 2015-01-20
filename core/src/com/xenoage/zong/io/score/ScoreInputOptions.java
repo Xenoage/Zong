@@ -1,9 +1,6 @@
 package com.xenoage.zong.io.score;
 
 import static com.xenoage.utils.math.Fraction.fr;
-
-import java.util.Observable;
-
 import lombok.Getter;
 
 import com.xenoage.utils.math.Fraction;
@@ -21,8 +18,7 @@ import com.xenoage.zong.io.selection.ScoreSelection;
  *
  * @author Andreas Wenger
  */
-public class ScoreInputOptions
-	extends Observable {
+public class ScoreInputOptions {
 
 	/**
 	 * The error level: show and log errors, log errors, ignore.
@@ -67,29 +63,16 @@ public class ScoreInputOptions
 		octave = 4;
 	}
 
-
 	public void setDuration(Fraction duration) {
 		this.duration = duration;
-		//notify the observers
-		setChanged();
-		notifyObservers();
 	}
 	
-
 	public void setErrorLevel(ErrorLevel errorLevel) {
 		this.errorLevel = errorLevel;
-		//notify the observers
-		setChanged();
-		notifyObservers();
 	}
-
 
 	public void setWriteMode(WriteMode writeMode) {
 		this.writeMode = writeMode;
-		//notify the observers
-		setChanged();
-		notifyObservers();
 	}
-
 
 }

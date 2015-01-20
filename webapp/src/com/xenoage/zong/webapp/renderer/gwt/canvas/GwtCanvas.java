@@ -1,4 +1,4 @@
-package com.xenoage.zong.webapp.renderer.canvas;
+package com.xenoage.zong.webapp.renderer.gwt.canvas;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
@@ -21,7 +21,7 @@ import com.xenoage.zong.renderer.canvas.CanvasDecoration;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
 import com.xenoage.zong.renderer.canvas.CanvasIntegrity;
 import com.xenoage.zong.symbols.Symbol;
-import com.xenoage.zong.webapp.renderer.symbols.GwtSymbolsRenderer;
+import com.xenoage.zong.webapp.renderer.gwt.symbols.GwtSymbolsRenderer;
 
 /**
  * This class contains methods for painting

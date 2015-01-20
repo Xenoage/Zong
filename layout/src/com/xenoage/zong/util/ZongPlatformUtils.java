@@ -45,10 +45,5 @@ public abstract class ZongPlatformUtils {
 	 * Gets the default SymbolPool.
 	 */
 	public abstract SymbolPool getSymbolPool();
-	
-	/**
-	 * Gets the {@link SvgPathReader} for the current platform.
-	 */
-	public abstract SvgPathReader<?> getSvgPathReader();
 
 }

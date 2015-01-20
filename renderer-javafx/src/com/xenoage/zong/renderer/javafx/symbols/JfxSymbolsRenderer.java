@@ -1,37 +1,37 @@
-package com.xenoage.zong.webapp.renderer.symbols;
+package com.xenoage.zong.renderer.javafx.symbols;
 
-import com.google.gwt.canvas.dom.client.Context2d;
+import javafx.scene.canvas.GraphicsContext;
+
 import com.xenoage.utils.color.Color;
-import com.xenoage.utils.gwt.color.GwtColorUtils;
+import com.xenoage.utils.jse.javafx.color.JfxColorUtils;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.zong.renderer.canvas.Canvas;
+import com.xenoage.zong.renderer.canvas.CanvasDecoration;
+import com.xenoage.zong.renderer.javafx.canvas.JfxCanvas;
 import com.xenoage.zong.renderer.symbols.SymbolsRenderer;
 import com.xenoage.zong.symbols.PathSymbol;
 import com.xenoage.zong.symbols.WarningSymbol;
-import com.xenoage.zong.webapp.renderer.canvas.GwtCanvas;
-import com.xenoage.zong.webapp.symbols.GwtPathSymbol;
 
 /**
- * GWT implementation of a {@link SymbolsRenderer}.
+ * JavaFX implementation of a {@link SymbolsRenderer}.
  * 
  * @author Andreas Wenger
  */
-public class GwtSymbolsRenderer
+public class JfxSymbolsRenderer
 	extends SymbolsRenderer {
 
-	public static final GwtSymbolsRenderer instance = new GwtSymbolsRenderer();
+	public static final JfxSymbolsRenderer instance = new JfxSymbolsRenderer();
 
 
 	@Override public void draw(PathSymbol symbol, Canvas canvas, Color color, Point2f position,
 		Point2f scaling) {
-		Context2d context = GwtCanvas.getCanvas(canvas).getContext2d();
+		GraphicsContext context = JfxCanvas.getGraphicsContext(canvas);
 		context.save();
-		
 		context.translate(position.x, position.y);
 		context.scale(scaling.x, scaling.y);
-		context.setFillStyle(GwtColorUtils.createColor(color));
 		
-		((GwtPathSymbol) symbol.path).draw(context);
+		context.setFill(JfxColorUtils.toJavaFXColor(color));
+		JfxPath.drawPath(symbol.getPath(), context);
 		context.fill();
 
 		context.restore();
@@ -39,7 +39,11 @@ public class GwtSymbolsRenderer
 
 	@Override public void draw(WarningSymbol symbol, Canvas canvas, Color color,
 		Point2f position, Point2f scaling) {
+		//the warning symbol is not visible on the rendering of the result
+		if (canvas.getDecoration() == CanvasDecoration.Interactive)
+			return;
 		//TODO: paint warning symbol
+		//...
 	}
 
 }

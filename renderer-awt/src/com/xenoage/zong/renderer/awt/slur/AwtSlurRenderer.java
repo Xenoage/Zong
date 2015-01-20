@@ -7,7 +7,7 @@ import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.zong.renderer.slur.SimpleSlurShape;
 
 /**
- * Java2D renderer for a slur.
+ * AWT renderer for a slur.
  * 
  * @author Andreas Wenger
  */

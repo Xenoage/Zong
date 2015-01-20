@@ -1,12 +1,9 @@
 package com.xenoage.zong.io.symbols;
 
-import static com.xenoage.zong.util.ZongPlatformUtils.zongPlatformUtils;
-
 import com.xenoage.utils.Parser;
-import com.xenoage.utils.kernel.Tuple2;
-import com.xenoage.utils.math.geom.Rectangle2f;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.zong.symbols.PathSymbol;
+import com.xenoage.zong.symbols.path.Path;
 
 /**
  * A {@link SvgPathSymbolReader} creates a {@link PathSymbol}
@@ -24,8 +21,7 @@ final class SvgPathSymbolReader {
 	 *                   not be closed by this this method.
 	 */
 	public static PathSymbol read(String id, XmlReader xmlReader) {
-		SvgPathReader<?> svgPathReader = zongPlatformUtils().getSvgPathReader();
-
+		
 		//read baseline and ascent, if there
 		Float baseline = null;
 		Float ascent = null;
@@ -52,9 +48,8 @@ final class SvgPathSymbolReader {
 		//if the path was found, parse it and create a PathSymbol,
 		//otherwise throw exception.
 		if (d != null) {
-			Tuple2<?, Rectangle2f> path = svgPathReader.read(d);
-			PathSymbol ret = new PathSymbol(id, path.get1(), path.get2(),
-				baseline, ascent, leftBorder, rightBorder);
+			Path path = new SvgPathReader(d).read();
+			PathSymbol ret = new PathSymbol(id, path, baseline, ascent, leftBorder, rightBorder);
 			return ret;
 		}
 		else {

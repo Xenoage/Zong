@@ -37,11 +37,12 @@ import com.xenoage.zong.renderer.canvas.CanvasDecoration;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
 import com.xenoage.zong.renderer.canvas.CanvasIntegrity;
 import com.xenoage.zong.renderer.stampings.StampingRenderer;
+import com.xenoage.zong.symbols.PathSymbol;
 import com.xenoage.zong.symbols.SymbolPool;
 import com.xenoage.zong.symbols.common.CommonSymbol;
 import com.xenoage.zong.utils.demo.ScoreRevolutionary;
-import com.xenoage.zong.webapp.renderer.canvas.GwtCanvas;
-import com.xenoage.zong.webapp.symbols.GwtPathSymbol;
+import com.xenoage.zong.webapp.renderer.gwt.canvas.GwtCanvas;
+import com.xenoage.zong.webapp.renderer.gwt.symbols.GwtPath;
 import com.xenoage.zong.webapp.utils.GwtZongPlatformUtils;
 
 
@@ -167,9 +168,8 @@ public class WebApp
     context.save();
     context.translate(200, 200);
     context.scale(100, 100);
-    GwtPathSymbol symbol = (GwtPathSymbol)
-    	zongPlatformUtils().getSymbolPool().getSymbol(CommonSymbol.ClefG).getShape();
-    symbol.draw(context);
+    PathSymbol symbol = (PathSymbol) zongPlatformUtils().getSymbolPool().getSymbol(CommonSymbol.ClefG);
+    GwtPath.drawPath(symbol.getPath(), context);
     context.fill();
     context.restore();
     
