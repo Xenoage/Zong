@@ -157,7 +157,7 @@ public class WebApp
     gwtCanvas = new GwtCanvas(canvas, CanvasFormat.Raster, CanvasDecoration.None, CanvasIntegrity.Perfect);
 
     //TEST
-    context.beginPath();
+   /* context.beginPath();
     context.moveTo(25,0);
     context.lineTo(0,20);
     context.lineTo(25,40);
@@ -180,7 +180,7 @@ public class WebApp
     symbol = (PathSymbol) zongPlatformUtils().getSymbolPool().getSymbol(CommonSymbol.ClefF);
     GwtPath.drawPath(symbol.getPath(), context);
     context.fill();
-    context.restore();
+    context.restore(); */
     
     //test layout
 		container.add(new Label("And here is the layout data:"));
