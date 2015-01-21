@@ -16,9 +16,7 @@ import com.xenoage.zong.renderer.canvas.Canvas;
 import com.xenoage.zong.renderer.canvas.CanvasDecoration;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
 import com.xenoage.zong.renderer.canvas.CanvasIntegrity;
-import com.xenoage.zong.renderer.javafx.symbols.JfxPath;
-import com.xenoage.zong.renderer.javafx.symbols.JfxSymbolsRenderer;
-import com.xenoage.zong.symbols.Symbol;
+import com.xenoage.zong.renderer.javafx.path.JfxPath;
 import com.xenoage.zong.symbols.path.Path;
 
 /**
@@ -72,10 +70,6 @@ public class JfxCanvas
 		g2d.translate(position.x, position.y);
 		textLayouts.draw(g2d);
 		g2d.setTransform(oldTransform); */
-	}
-
-	@Override public void drawSymbol(Symbol symbol, Color color, Point2f position, Point2f scaling) {
-		JfxSymbolsRenderer.instance.draw(symbol, this, color, position, scaling);
 	}
 
 	@Override public void drawLine(Point2f p1, Point2f p2, Color color, float lineWidth) {

@@ -10,7 +10,6 @@ import com.xenoage.utils.math.geom.Rectangle2f;
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.core.text.FormattedText;
 import com.xenoage.zong.io.selection.text.TextSelection;
-import com.xenoage.zong.symbols.Symbol;
 import com.xenoage.zong.symbols.path.Path;
 
 /**
@@ -77,12 +76,6 @@ public abstract class Canvas {
 	 */
 	public abstract void drawText(FormattedText text, @MaybeNull TextSelection selection,
 		Point2f position, boolean yIsBaseline, float width);
-
-	/**
-	 * Draws the given Symbol using the given color to the given
-	 * position with the given scaling.
-	 */
-	public abstract void drawSymbol(Symbol symbol, Color color, Point2f position, Point2f scaling);
 
 	/**
 	 * Draws a beam using the given quad and color.

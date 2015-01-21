@@ -24,7 +24,7 @@ import com.xenoage.zong.core.text.FormattedTextParagraph;
 import com.xenoage.zong.core.text.FormattedTextString;
 import com.xenoage.zong.core.text.FormattedTextStyle;
 import com.xenoage.zong.core.text.FormattedTextSymbol;
-import com.xenoage.zong.renderer.awt.symbols.SymbolGraphicAttribute;
+import com.xenoage.zong.renderer.awt.symbol.SymbolGraphicAttribute;
 import com.xenoage.zong.symbols.Symbol;
 
 /**

@@ -36,13 +36,13 @@ import com.xenoage.zong.renderer.RendererArgs;
 import com.xenoage.zong.renderer.canvas.CanvasDecoration;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
 import com.xenoage.zong.renderer.canvas.CanvasIntegrity;
-import com.xenoage.zong.renderer.stampings.StampingRenderer;
+import com.xenoage.zong.renderer.stamping.StampingRenderer;
 import com.xenoage.zong.symbols.PathSymbol;
 import com.xenoage.zong.symbols.SymbolPool;
 import com.xenoage.zong.symbols.common.CommonSymbol;
 import com.xenoage.zong.utils.demo.ScoreRevolutionary;
-import com.xenoage.zong.webapp.renderer.gwt.GwtCanvas;
-import com.xenoage.zong.webapp.renderer.gwt.GwtPath;
+import com.xenoage.zong.webapp.renderer.gwt.canvas.GwtCanvas;
+import com.xenoage.zong.webapp.renderer.gwt.path.GwtPath;
 import com.xenoage.zong.webapp.utils.GwtZongPlatformUtils;
 
 
@@ -169,6 +169,15 @@ public class WebApp
     context.translate(200, 200);
     context.scale(100, 100);
     PathSymbol symbol = (PathSymbol) zongPlatformUtils().getSymbolPool().getSymbol(CommonSymbol.ClefG);
+    GwtPath.drawPath(symbol.getPath(), context);
+    context.fill();
+    context.restore();
+    
+    //TEST
+    context.save();
+    context.translate(400, 300);
+    context.scale(100, 100);
+    symbol = (PathSymbol) zongPlatformUtils().getSymbolPool().getSymbol(CommonSymbol.ClefF);
     GwtPath.drawPath(symbol.getPath(), context);
     context.fill();
     context.restore();

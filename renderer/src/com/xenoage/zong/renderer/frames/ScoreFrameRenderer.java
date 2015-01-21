@@ -8,7 +8,7 @@ import com.xenoage.zong.musiclayout.stampings.Stamping;
 import com.xenoage.zong.renderer.RendererArgs;
 import com.xenoage.zong.renderer.canvas.Canvas;
 import com.xenoage.zong.renderer.canvas.CanvasDecoration;
-import com.xenoage.zong.renderer.stampings.StampingRenderer;
+import com.xenoage.zong.renderer.stamping.StampingRenderer;
 
 /**
  * Renderer for a {@link ScoreFrame}.
@@ -25,8 +25,10 @@ public class ScoreFrameRenderer
 		ScoreFrame scoreFrame = (ScoreFrame) frame;
 		ScoreFrameLayout scoreLayout = scoreFrame.getScoreFrameLayout();
 		if (scoreLayout != null) {
+			
 			//the coordinates of the layout elements are relative to the upper left
 			//corner, so we have to translate them
+			canvas.transformSave();
 			canvas.transformTranslate(rect.x1(), rect.y1());
 
 			//get musical stampings, and in interactive mode, also

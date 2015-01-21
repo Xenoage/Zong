@@ -20,15 +20,13 @@ import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.core.text.FormattedText;
 import com.xenoage.zong.io.selection.text.TextSelection;
 import com.xenoage.zong.renderer.awt.image.AwtImageRenderer;
-import com.xenoage.zong.renderer.awt.symbols.AwtShape;
-import com.xenoage.zong.renderer.awt.symbols.AwtSymbolsRenderer;
+import com.xenoage.zong.renderer.awt.path.AwtPath;
 import com.xenoage.zong.renderer.awt.text.TextLayoutTools;
 import com.xenoage.zong.renderer.awt.text.TextLayouts;
 import com.xenoage.zong.renderer.canvas.Canvas;
 import com.xenoage.zong.renderer.canvas.CanvasDecoration;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
 import com.xenoage.zong.renderer.canvas.CanvasIntegrity;
-import com.xenoage.zong.symbols.Symbol;
 import com.xenoage.zong.symbols.path.Path;
 
 /**
@@ -88,10 +86,6 @@ public class AwtCanvas
 		g2d.setTransform(oldTransform);
 	}
 
-	@Override public void drawSymbol(Symbol symbol, Color color, Point2f position, Point2f scaling) {
-		AwtSymbolsRenderer.instance.draw(symbol, this, color, position, scaling);
-	}
-
 	@Override public void drawLine(Point2f p1, Point2f p2, Color color, float lineWidth) {
 		g2d.setColor(toAwtColor(color));
 		g2d.setStroke(new BasicStroke(lineWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL));
@@ -139,7 +133,7 @@ public class AwtCanvas
 
 	@Override public void drawPath(Path path, Color color) {
 		g2d.setColor(toAwtColor(color));
-		Shape shape = AwtShape.createShape(path);
+		Shape shape = AwtPath.createShape(path);
 		g2d.fill(shape);
 	}
 
