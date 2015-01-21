@@ -170,6 +170,7 @@ public class GwtCanvas
 	@Override public void drawPath(Path path, Color color) {
 		context.setFillStyle(GwtColorUtils.createColor(color));
 		GwtPath.drawPath(path, context);
+		context.fill();
 	}
 
 	@Override public void fillRect(Rectangle2f rect, Color color) {
