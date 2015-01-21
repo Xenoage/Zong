@@ -22,6 +22,8 @@
 			<fileset dir="musicxml/src"/>
 			<fileset dir="musicxml-in/src"/>
 			<fileset dir="renderer/src"/>
+			<fileset dir="renderer-awt/src"/>
+			<fileset dir="renderer-javafx/src"/>
 			<fileset dir="tools/src"/>
 			<fileset dir="webserver/src"/>
 		</copy>
