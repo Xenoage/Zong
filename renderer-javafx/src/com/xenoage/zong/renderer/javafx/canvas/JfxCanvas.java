@@ -4,7 +4,6 @@ import static com.xenoage.utils.jse.javafx.color.JfxColorUtils.toJavaFXColor;
 import static com.xenoage.utils.kernel.Range.range;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.StrokeLineCap;
-import javafx.scene.transform.Affine;
 
 import com.xenoage.utils.color.Color;
 import com.xenoage.utils.math.geom.Point2f;
@@ -91,36 +90,10 @@ public class JfxCanvas
 		context.fillRect(pos.x, pos.y, length, height);
 	}
 
-	public void fillEllipse(Point2f pCenter, float width, float height, Color color) {
-		context.setFill(toJavaFXColor(color));
-		context.fillOval(pCenter.x - width / 2, pCenter.y - height / 2, width, height);
-	}
-
-	@Override public void drawBeam(Point2f[] points, Color color, float interlineSpace) {
-		Rectangle2f beamSymbol = new Rectangle2f(-1f, -0.25f, 2f, 0.5f);
-
-		context.save();
-		context.setFill(toJavaFXColor(color));
-
-		float imageWidth = points[2].x - points[0].x;
-		float imageHeight = points[3].y - points[0].y;
-		float beamGrowthHeight = points[2].y - points[0].y;
-
-		Affine transform = new Affine();
-		transform.appendTranslation(points[0].x + imageWidth / 2, points[0].y + imageHeight / 2);
-		transform.appendShear(0, beamGrowthHeight / imageWidth);
-		transform.appendScale(imageWidth / beamSymbol.width(),
-			(points[1].y - points[0].y) / beamSymbol.height());
-		//g2d.fillRect(-5000000, -50000, 10000000, 100000);
-		context.setTransform(transform);
-		context.fillRect(beamSymbol.x1(), beamSymbol.y1(), beamSymbol.width(), beamSymbol.height());
-
-		context.restore();
-	}
-
-	@Override public void drawPath(Path path, Color color) {
+	@Override public void fillPath(Path path, Color color) {
 		context.setFill(toJavaFXColor(color));
 		JfxPath.drawPath(path, context);
+		context.fill();
 	}
 
 	@Override public void fillRect(Rectangle2f rect, Color color) {

@@ -1,5 +1,9 @@
 package com.xenoage.zong.renderer.stamping;
 
+import static com.xenoage.utils.collections.CollectionUtils.alist;
+
+import java.util.List;
+
 import com.xenoage.utils.color.Color;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.zong.musiclayout.stampings.BeamStamping;
@@ -9,6 +13,11 @@ import com.xenoage.zong.musiclayout.stampings.bitmap.BitmapStaff;
 import com.xenoage.zong.renderer.RendererArgs;
 import com.xenoage.zong.renderer.canvas.Canvas;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
+import com.xenoage.zong.symbols.path.ClosePath;
+import com.xenoage.zong.symbols.path.LineTo;
+import com.xenoage.zong.symbols.path.MoveTo;
+import com.xenoage.zong.symbols.path.Path;
+import com.xenoage.zong.symbols.path.PathElement;
 
 /**
  * Renderer for a {@link BeamStamping}.
@@ -58,18 +67,20 @@ public class BeamStampingRenderer
 
 		//TODO: avoid edges at the stem end points
 
-		//left lower point
-		Point2f[] points = new Point2f[4];
-		points[0] = new Point2f(x1Mm, leftYStart - 0.5f * beamHeightMm);
-		//left upper point
-		points[1] = new Point2f(x1Mm, points[0].y + beamHeightMm);
-		//right lower point
-		points[2] = new Point2f(x2Mm, rightYStart - 0.5f * beamHeightMm);
-		//right upper point
-		points[3] = new Point2f(x2Mm, points[2].y + beamHeightMm);
+		Point2f sw = new Point2f(x1Mm, leftYStart - 0.5f * beamHeightMm);
+		Point2f nw = new Point2f(x1Mm, sw.y + beamHeightMm);
+		Point2f se = new Point2f(x2Mm, rightYStart - 0.5f * beamHeightMm);
+		Point2f ne = new Point2f(x2Mm, se.y + beamHeightMm);
+		
+		List<PathElement> elements = alist(4);
+		elements.add(new MoveTo(sw));
+		elements.add(new LineTo(nw));
+		elements.add(new LineTo(ne));
+		elements.add(new LineTo(se));
+		elements.add(new ClosePath());
+		Path path = new Path(elements);
 
-		canvas.drawBeam(points, /* Color.green /*/color /**/, staff1.is);
-
+		canvas.fillPath(path, color);
 	}
 
 }

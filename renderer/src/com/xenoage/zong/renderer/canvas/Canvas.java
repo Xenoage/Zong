@@ -76,20 +76,11 @@ public abstract class Canvas {
 	 */
 	public abstract void drawText(FormattedText text, @MaybeNull TextSelection selection,
 		Point2f position, boolean yIsBaseline, float width);
-
-	/**
-	 * Draws a beam using the given quad and color.
-	 * @param points  the four points in mm in clockwise order,
-	 *                beginning with the lower left point
-	 * @param color   the color of the beam
-	 * @param interlineSpace  the interline space in mm
-	 */
-	public abstract void drawBeam(Point2f[] points, Color color, float interlineSpace);
 	
 	/**
-	 * Draws a path using the given color.
+	 * Fills a path using the given color.
 	 */
-	public abstract void drawPath(Path path, Color color);
+	public abstract void fillPath(Path path, Color color);
 
 	/**
 	 * Fills a rectangle.

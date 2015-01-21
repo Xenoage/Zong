@@ -8,7 +8,6 @@ import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Stack;
@@ -104,34 +103,7 @@ public class AwtCanvas
 		g2d.fill(new Rectangle2D.Float(pos.x, pos.y, length, height));
 	}
 
-	public void fillEllipse(Point2f pCenter, float width, float height, Color color) {
-		g2d.setColor(toAwtColor(color));
-		//use float coordinates to allow Java2D to optimize quality
-		g2d.fill(new Ellipse2D.Float(pCenter.x - width / 2, pCenter.y - height / 2, width, height));
-	}
-
-	@Override public void drawBeam(Point2f[] points, Color color, float interlineSpace) {
-		Rectangle2D beamSymbol = new Rectangle2D.Float(-1f, -0.25f, 2f, 0.5f);
-
-		g2d.setColor(toAwtColor(color));
-
-		AffineTransform g2dTransform = g2d.getTransform();
-
-		float imageWidth = points[2].x - points[0].x;
-		float imageHeight = points[3].y - points[0].y;
-		float beamGrowthHeight = points[2].y - points[0].y;
-
-		g2d.translate(points[0].x + imageWidth / 2, points[0].y + imageHeight / 2);
-		g2d.shear(0, beamGrowthHeight / imageWidth);
-		g2d.scale(imageWidth / beamSymbol.getWidth(),
-			(points[1].y - points[0].y) / beamSymbol.getHeight());
-		//g2d.fillRect(-5000000, -50000, 10000000, 100000);
-		g2d.fill(beamSymbol);
-
-		g2d.setTransform(g2dTransform);
-	}
-
-	@Override public void drawPath(Path path, Color color) {
+	@Override public void fillPath(Path path, Color color) {
 		g2d.setColor(toAwtColor(color));
 		Shape shape = AwtPath.createShape(path);
 		g2d.fill(shape);

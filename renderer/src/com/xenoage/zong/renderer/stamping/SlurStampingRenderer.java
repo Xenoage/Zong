@@ -71,7 +71,7 @@ public class SlurStampingRenderer
 		} */
 
 		SimpleSlurShape slurShape = new SimpleSlurShape(p1, p2, c1, c2, parentStaff.is);
-		canvas.drawPath(slurShape.getPath(), color);
+		canvas.fillPath(slurShape.getPath(), color);
 	}
 
 }

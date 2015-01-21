@@ -147,27 +147,8 @@ public class GwtCanvas
 		context.setFillStyle(GwtColorUtils.createColor(color));
 		context.fillRect(pos.x, pos.y, length, height);
 	}
-
-	@Override public void drawBeam(Point2f[] points, Color color, float interlineSpace) {
-		/* TODO RectF beamSymbol = new RectF(-1f, -0.25f, 1f, 0.25f);
-
-		Paint paint = AndroidColorUtils.createPaintFill(color);
-
-		int oldTransform = canvas.save();
-
-		float imageWidth = points[2].x - points[0].x;
-		float imageHeight = points[3].y - points[0].y;
-		float beamGrowthHeight = points[2].y - points[0].y;
-
-		canvas.translate(points[0].x + imageWidth / 2, points[0].y + imageHeight / 2);
-		canvas.skew(0, beamGrowthHeight / imageWidth);
-		canvas.scale(imageWidth / beamSymbol.width(), (points[1].y - points[0].y) / beamSymbol.height());
-		canvas.drawRect(beamSymbol, paint);
-
-		canvas.restoreToCount(oldTransform); */
-	}
 	
-	@Override public void drawPath(Path path, Color color) {
+	@Override public void fillPath(Path path, Color color) {
 		context.setFillStyle(GwtColorUtils.createColor(color));
 		GwtPath.drawPath(path, context);
 		context.fill();

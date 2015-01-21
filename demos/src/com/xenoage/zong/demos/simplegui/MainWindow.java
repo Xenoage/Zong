@@ -2,6 +2,7 @@ package com.xenoage.zong.demos.simplegui;
 
 import java.awt.image.BufferedImage;
 
+
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
@@ -11,11 +12,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.BorderPane;
 
+
 import org.controlsfx.dialog.Dialog;
 import org.controlsfx.dialog.Dialogs;
 
+
 import com.xenoage.zong.layout.Layout;
-import com.xenoage.zong.renderer.awt.AwtLayoutRenderer;
+import com.xenoage.zong.renderer.awt.AwtLayoutRenderer;import com.xenoage.zong.renderer.javafx.JfxLayoutRenderer;
+
 
 /**
  * Controller for the JavaFX main window (MainWindow.fxml).
@@ -33,6 +37,9 @@ public class MainWindow {
 	//loaded content
 	private Content content = new Content(this);
 	private WritableImage scoreImage = null;
+	
+	//rendering engine
+	private boolean useJavaFX = true;
 	
 	
 	@FXML public void initialize() {
@@ -81,10 +88,17 @@ public class MainWindow {
 	public void renderLayout(Layout layout) {
 		//run in JavaFX application thread
 		Platform.runLater(() -> {
-			//we have still no JavaFX renderer in Zong!, so we have to use
-			//the Java2D/AWT renderer at the moment
-			BufferedImage awtImage = AwtLayoutRenderer.paintToImage(layout, 0, 2f);
-			scoreImage = SwingFXUtils.toFXImage(awtImage, scoreImage);
+			
+			if (useJavaFX) {
+				//JavaFX renderer
+				scoreImage = JfxLayoutRenderer.paintToImage(layout, 0, 2f);
+			}
+			else {
+				//AWT renderer
+				BufferedImage awtImage = AwtLayoutRenderer.paintToImage(layout, 0, 2f);
+				scoreImage = SwingFXUtils.toFXImage(awtImage, scoreImage);
+			}
+
 			scoreView.setImage(scoreImage);
 			scoreView.setFitWidth(scoreImage.getWidth());
 			scoreView.setFitHeight(scoreImage.getHeight());

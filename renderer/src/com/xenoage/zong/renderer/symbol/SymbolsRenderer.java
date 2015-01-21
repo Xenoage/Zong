@@ -35,7 +35,7 @@ public class SymbolsRenderer {
 		canvas.transformSave();
 		canvas.transformTranslate(position.x, position.y);
 		canvas.transformScale(scaling.x, scaling.y);
-		canvas.drawPath(symbol.path, color);
+		canvas.fillPath(symbol.path, color);
 		canvas.transformRestore();
 	}
 

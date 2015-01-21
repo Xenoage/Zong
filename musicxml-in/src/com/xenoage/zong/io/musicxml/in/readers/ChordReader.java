@@ -189,7 +189,8 @@ public final class ChordReader {
 					case End: {
 						//close the beam and create it
 						context.addBeamChord(chord, number);
-						context.closeBeam(number);
+						List<Chord> beamedChords = context.closeBeam(number);
+						context.writeBeam(beamedChords);
 					}
 				}
 			}

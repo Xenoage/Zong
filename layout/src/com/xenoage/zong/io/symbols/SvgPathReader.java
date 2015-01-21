@@ -1,7 +1,6 @@
 package com.xenoage.zong.io.symbols;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.utils.math.geom.Point2f.origin;
 import static com.xenoage.utils.math.geom.Point2f.p;
 
 import java.util.List;
@@ -30,7 +29,7 @@ public class SvgPathReader {
 	
 	private int pos = 0;
 	private List<PathElement> elements = alist();
-	private Point2f pCurrent = origin, pStart = origin;
+	private Point2f pCurrent = p(-10, -10), pStart = pCurrent;
 	
 
 	/**
@@ -63,12 +62,12 @@ public class SvgPathReader {
 			switch (tokenChar) {
 			//MoveTo (absolute)
 				case 'M':
-					p = readPoint();
+					p = readPointAbs();
 					moveTo(p);
 					break;
 				//MoveTo (relative)
 				case 'm':
-					p = readPoint();
+					p = readPointRel();
 					moveTo(pCurrent.add(p));
 					break;
 				//ClosePath
@@ -78,58 +77,58 @@ public class SvgPathReader {
 					break;
 				//LineTo (absolute)
 				case 'L':
-					p = readPoint();
+					p = readPointAbs();
 					lineTo(p);
 					break;
 				//LineTo (relative)
 				case 'l':
-					p = readPoint();
+					p = readPointRel();
 					lineTo(pCurrent.add(p));
 					break;
 				//Horizontal LineTo (absolute)
 				case 'H':
-					x = parseNumericToken(getNextToken());
+					x = readCoordAbs();
 					lineTo(p(x, pCurrent.y));
 					break;
 				//Horizontal LineTo (relative)
 				case 'h':
-					x = parseNumericToken(getNextToken());
+					x = readCoordRel();
 					lineTo(p(pCurrent.x + x, pCurrent.y));
 					break;
 				//Vertical LineTo (absolute)
 				case 'V':
-					y = parseNumericToken(getNextToken());
+					y = readCoordAbs();
 					lineTo(p(pCurrent.x, y));
 					break;
 				//Vertical LineTo (relative)
 				case 'v':
-					y = parseNumericToken(getNextToken());
+					y = readCoordRel();
 					lineTo(p(pCurrent.x, pCurrent.y + y));
 					break;
 				//Cubic CurveTo (absolute)
 				case 'C':
-					cp1 = readPoint();
-					cp2 = readPoint();
-					p = readPoint();
+					cp1 = readPointAbs();
+					cp2 = readPointAbs();
+					p = readPointAbs();
 					cubicCurveTo(cp1, cp2, p);
 					break;
 				//Cubic CurveTo (relative)
 				case 'c':
-					cp1 = readPoint();
-					cp2 = readPoint();
-					p = readPoint();
+					cp1 = readPointRel();
+					cp2 = readPointRel();
+					p = readPointRel();
 					cubicCurveTo(pCurrent.add(cp1), pCurrent.add(cp2), pCurrent.add(p));
 					break;
 				//Quadratic CurveTo (absolute)
 				case 'Q':
-					cp1 = readPoint();
-					p = readPoint();
+					cp1 = readPointAbs();
+					p = readPointAbs();
 					quadraticCurveTo(cp1, p);
 					break;
 				//Quadratic CurveTo (relative)
 				case 'q':
-					cp1 = readPoint();
-					p = readPoint();
+					cp1 = readPointRel();
+					p = readPointRel();
 					quadraticCurveTo(pCurrent.add(cp1), pCurrent.add(p));
 					break;
 				//not implemented commands
@@ -232,6 +231,22 @@ public class SvgPathReader {
 	private boolean isWhitespace(char c) {
 		return (c == ' ' || c == ',' || c == '\n' || c == '\r');
 	}
+	
+	private Point2f readPointAbs() {
+		return readPoint().sub(1000, 1000).scale(0.01f);
+	}
+	
+	private Point2f readPointRel() {
+		return readPoint().scale(0.01f);
+	}
+	
+	private float readCoordAbs() {
+		return (parseNumericToken(getNextToken()) - 1000) * 0.01f;
+	}
+	
+	private float readCoordRel() {
+		return parseNumericToken(getNextToken()) * 0.01f;
+	}
 
 	/**
 	 * Parse a numeric token.
@@ -249,8 +264,6 @@ public class SvgPathReader {
 		throws NumberFormatException {
 		float x = parseNumericToken(getNextToken());
 		float y = parseNumericToken(getNextToken());
-		x = (x - 1000) * 0.01f;
-		y = (y - 1000) * 0.01f;
 		return new Point2f(x, y);
 	}
 
