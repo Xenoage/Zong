@@ -9,24 +9,24 @@ import com.xenoage.utils.math.Units;
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.layout.Layout;
 import com.xenoage.zong.layout.Page;
+import com.xenoage.zong.renderer.LayoutRenderer;
 import com.xenoage.zong.renderer.awt.canvas.AwtCanvas;
 import com.xenoage.zong.renderer.canvas.CanvasDecoration;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
 import com.xenoage.zong.renderer.canvas.CanvasIntegrity;
 
 /**
- * This class paints a page of a {@link Layout} into a {@link BufferedImage}
- * using the {@link AwtPageLayoutRenderer}.
- * 
+ * Like {@link LayoutRenderer}, but more AWT specific rendering methods.
+ *
  * @author Andreas Wenger
  */
-public class AwtBitmapPageRenderer {
-
+public class AwtLayoutRenderer {
+	
 	/**
 	 * Returns a {@link BufferedImage} with the given page of the given {@link Layout}
 	 * which is rendered at the given zoom level.
 	 */
-	public static BufferedImage paint(Layout layout, int pageIndex, float zoom) {
+	public static BufferedImage paintToImage(Layout layout, int pageIndex, float zoom) {
 		Page page = layout.getPages().get(pageIndex);
 		Size2f pageSize = page.getFormat().getSize();
 
@@ -44,8 +44,7 @@ public class AwtBitmapPageRenderer {
 		g2d.fillRect(0, 0, width, height);
 
 		g2d.scale(zoom, zoom);
-		AwtPageLayoutRenderer renderer = AwtPageLayoutRenderer.getInstance();
-		renderer.paint(layout, pageIndex, new AwtCanvas(g2d, pageSize, CanvasFormat.Raster,
+		LayoutRenderer.paintToCanvas(layout, pageIndex, new AwtCanvas(g2d, pageSize, CanvasFormat.Raster,
 			CanvasDecoration.Interactive, CanvasIntegrity.Perfect));
 		g2d.dispose();
 

@@ -1,1 +1,1 @@
-include "converter", "core", "demos", "desktop", "layout", "midi-out", "musicxml", "musicxml-in", "player", "renderer", "renderer-awt", "test", "tools", "webserver"
+include "converter", "core", "demos", "desktop", "layout", "midi-out", "musicxml", "musicxml-in", "player", "renderer", "renderer-awt", "renderer-javafx", "test", "tools", "webserver"

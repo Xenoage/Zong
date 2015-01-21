@@ -2,6 +2,7 @@ package com.xenoage.zong.renderer.frames;
 
 import com.xenoage.utils.math.Units;
 import com.xenoage.utils.math.geom.Point2f;
+import com.xenoage.utils.math.geom.Rectangle2f;
 import com.xenoage.zong.layout.frames.Frame;
 import com.xenoage.zong.renderer.RendererArgs;
 import com.xenoage.zong.renderer.canvas.Canvas;
@@ -33,14 +34,11 @@ public abstract class FrameRenderer {
 		//apply rotation
 		canvas.transformRotate(-frame.getAbsoluteRotation());
 
-		//DEMO
-		/*
-		g2d.setColor(java.awt.Color.green);
-		g2d.setStroke(new java.awt.BasicStroke(1));
-		float w = frame.getSize().width;
-		float h = frame.getSize().height;
-		g2d.draw(new java.awt.geom.Rectangle2D.Float(-w/2, -h/2, w, h));
-		//*/
+		//if there is a background, draw it
+		if (frame.getBackground() != null) {
+			Rectangle2f rect = getLocalRect(frame);
+			canvas.fillRect(rect, frame.getBackground());
+		}
 
 		//paint the frame
 		paintTransformed(frame, canvas, args);
@@ -57,5 +55,12 @@ public abstract class FrameRenderer {
 	 * to 1 mm, and the center point is in the middle of the frame.
 	 */
 	protected abstract void paintTransformed(Frame frame, Canvas canvas, RendererArgs args);
+	
+	protected Rectangle2f getLocalRect(Frame frame) {
+		float x = frame.getSize().width;
+		float y = frame.getSize().height;
+		Rectangle2f rect = new Rectangle2f(-x/2, -y/2, x, y);
+		return rect;
+	}
 
 }

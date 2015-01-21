@@ -8,6 +8,7 @@ import lombok.Data;
 
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.Untested;
+import com.xenoage.utils.color.Color;
 import com.xenoage.utils.math.MathUtils;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Size2f;
@@ -15,7 +16,6 @@ import com.xenoage.zong.layout.LP;
 import com.xenoage.zong.layout.Layout;
 import com.xenoage.zong.layout.LayoutContainer;
 import com.xenoage.zong.layout.Page;
-import com.xenoage.zong.layout.frames.background.Background;
 
 /**
  * A frame is the abstract base class for
@@ -42,7 +42,7 @@ import com.xenoage.zong.layout.frames.background.Background;
 	protected float rotation = 0;
 
 	/** Background of the frame, or null. */
-	@MaybeNull protected Background background = null;
+	@MaybeNull protected Color background = null;
 
 
 	/**

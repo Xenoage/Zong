@@ -41,8 +41,8 @@ import com.xenoage.zong.symbols.PathSymbol;
 import com.xenoage.zong.symbols.SymbolPool;
 import com.xenoage.zong.symbols.common.CommonSymbol;
 import com.xenoage.zong.utils.demo.ScoreRevolutionary;
-import com.xenoage.zong.webapp.renderer.gwt.canvas.GwtCanvas;
-import com.xenoage.zong.webapp.renderer.gwt.symbols.GwtPath;
+import com.xenoage.zong.webapp.renderer.gwt.GwtCanvas;
+import com.xenoage.zong.webapp.renderer.gwt.GwtPath;
 import com.xenoage.zong.webapp.utils.GwtZongPlatformUtils;
 
 
@@ -192,7 +192,7 @@ public class WebApp
 					gwtCanvas.transformScale(20, 20);
 					Iterable<Stamping> stampings = layout.getScoreFrameLayout(0).getMusicalStampings();
 					//render them
-					RendererArgs args = new RendererArgs(1, 1, new Point2i(0, 0), symbolPool, null);
+					RendererArgs args = new RendererArgs(1, 1, new Point2i(0, 0), symbolPool);
 					for (Stamping s : stampings) {
 						StampingRenderer.drawAny(s, gwtCanvas, args);
 					}

@@ -39,12 +39,12 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.document.io.FileOutput;
-import com.xenoage.utils.math.Units;
 import com.xenoage.utils.jse.io.JseInputStream;
 import com.xenoage.utils.jse.io.JseOutputStream;
 import com.xenoage.utils.jse.io.JseStreamUtils;
 import com.xenoage.utils.jse.io.URLUtils;
 import com.xenoage.utils.kernel.Tuple2;
+import com.xenoage.utils.math.Units;
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.desktop.io.mp3.out.Mp3ScoreFileOutput;
@@ -52,7 +52,7 @@ import com.xenoage.zong.desktop.io.musicxml.in.MusicXmlScoreDocFileInput;
 import com.xenoage.zong.desktop.io.ogg.out.OggScoreFileOutput;
 import com.xenoage.zong.documents.ScoreDoc;
 import com.xenoage.zong.layout.Layout;
-import com.xenoage.zong.renderer.awt.AwtBitmapPageRenderer;
+import com.xenoage.zong.renderer.awt.AwtLayoutRenderer;
 import com.xenoage.zong.webserver.Webserver;
 import com.xenoage.zong.webserver.io.CursorOutput;
 import com.xenoage.zong.webserver.model.Doc;
@@ -377,7 +377,7 @@ public class OpenAction
 	private static synchronized List<BufferedImage> renderTiles(Layout layout, float scaling) {
 		List<BufferedImage> ret = alist();
 		for (int iPage : range(layout.getPages())) {
-			ret.add(AwtBitmapPageRenderer.paint(layout, iPage, scaling));
+			ret.add(AwtLayoutRenderer.paintToImage(layout, iPage, scaling));
 		}
 		return ret;
 	}

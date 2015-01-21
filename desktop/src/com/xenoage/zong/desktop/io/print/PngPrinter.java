@@ -11,7 +11,7 @@ import java.io.OutputStream;
 import javax.imageio.ImageIO;
 
 import com.xenoage.zong.layout.Layout;
-import com.xenoage.zong.renderer.awt.AwtBitmapPageRenderer;
+import com.xenoage.zong.renderer.awt.AwtLayoutRenderer;
 
 /**
  * This class allows to print out the current score into a PNG file.
@@ -25,7 +25,7 @@ public final class PngPrinter {
 	 */
 	public static void print(Layout layout, int pageIndex, OutputStream out) {
 		//create image
-		BufferedImage img = AwtBitmapPageRenderer.paint(layout, pageIndex, 1f);
+		BufferedImage img = AwtLayoutRenderer.paintToImage(layout, pageIndex, 1f);
 
 		//save file
 		try {

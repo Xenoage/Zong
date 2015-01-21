@@ -1,4 +1,4 @@
-package com.xenoage.zong.webapp.renderer.gwt.symbols;
+package com.xenoage.zong.webapp.renderer.gwt;
 
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.xenoage.zong.symbols.path.CubicCurveTo;

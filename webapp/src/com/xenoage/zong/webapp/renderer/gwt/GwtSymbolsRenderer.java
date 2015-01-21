@@ -1,4 +1,4 @@
-package com.xenoage.zong.webapp.renderer.gwt.symbols;
+package com.xenoage.zong.webapp.renderer.gwt;
 
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.xenoage.utils.color.Color;
@@ -8,7 +8,6 @@ import com.xenoage.zong.renderer.canvas.Canvas;
 import com.xenoage.zong.renderer.symbols.SymbolsRenderer;
 import com.xenoage.zong.symbols.PathSymbol;
 import com.xenoage.zong.symbols.WarningSymbol;
-import com.xenoage.zong.webapp.renderer.gwt.canvas.GwtCanvas;
 
 /**
  * GWT implementation of a {@link SymbolsRenderer}.

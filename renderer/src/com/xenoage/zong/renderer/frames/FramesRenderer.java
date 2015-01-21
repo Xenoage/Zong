@@ -1,5 +1,7 @@
 package com.xenoage.zong.renderer.frames;
 
+import static com.xenoage.utils.collections.CollectionUtils.map;
+
 import java.util.Map;
 
 import com.xenoage.utils.annotations.MaybeNull;
@@ -17,22 +19,26 @@ import com.xenoage.zong.renderer.canvas.Canvas;
  */
 public abstract class FramesRenderer {
 
-	protected Map<FrameType, FrameRenderer> renderers;
-
-	protected FramesRenderer() {
-		renderers = getRenderers();
+	private static Map<FrameType, FrameRenderer> renderers = getRenderers();
+	
+	private static Map<FrameType, FrameRenderer> getRenderers() {
+		Map<FrameType, FrameRenderer> renderers = map();
+		renderers.put(FrameType.GroupFrame, new GroupFrameRenderer());
+		renderers.put(FrameType.ImageFrame, new ImageFrameRenderer());
+		renderers.put(FrameType.ScoreFrame, new ScoreFrameRenderer());
+		renderers.put(FrameType.TextFrame, new TextFrameRenderer());
+		return renderers;
 	}
 	
-	protected abstract Map<FrameType, FrameRenderer> getRenderers();
 
-	@MaybeNull public FrameRenderer get(FrameType frameType) {
+	@MaybeNull public static FrameRenderer get(FrameType frameType) {
 		return renderers.get(frameType);
 	}
 
 	/**
 	 * Registers the given renderer for the given type of frame.
 	 */
-	public void registerRenderer(FrameType frameType, FrameRenderer renderer) {
+	public static void registerRenderer(FrameType frameType, FrameRenderer renderer) {
 		renderers.put(frameType, renderer);
 	}
 
@@ -40,14 +46,10 @@ public abstract class FramesRenderer {
 	 * Paints the given {@link Frame} on the
 	 * given {@link Canvas} using the given {@link RendererArgs}.
 	 */
-	public void paintAny(Frame frame, Canvas canvas, RendererArgs args) {
+	public static void paintAny(Frame frame, Canvas canvas, RendererArgs args) {
 		FrameRenderer renderer = get(frame.getType());
 		if (renderer != null)
 			renderer.paint(frame, canvas, args);
-		/* handles TEMP 
-		renderer = AWTFrameRenderer.getInstance().get(FrameType.FrameHandles);
-		if (renderer != null)
-			renderer.paint(frame, layout, (AWTCanvas) canvas, args); //*/
 	}
 
 }

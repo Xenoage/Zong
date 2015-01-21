@@ -1,8 +1,6 @@
 package com.xenoage.zong.renderer;
 
-import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.math.geom.Point2i;
-import com.xenoage.zong.renderer.pool.ImagePool;
 import com.xenoage.zong.symbols.SymbolPool;
 
 /**
@@ -25,17 +23,12 @@ public class RendererArgs {
 	/** The pool of musical symbols */
 	public final SymbolPool symbolPool;
 
-	/** The pool of images */
-	@MaybeNull public final ImagePool imagePool;
 
-
-	public RendererArgs(float scaling, float targetScaling, Point2i offsetPx, SymbolPool symbolPool,
-		ImagePool imagePool) {
+	public RendererArgs(float scaling, float targetScaling, Point2i offsetPx, SymbolPool symbolPool) {
 		this.scaling = scaling;
 		this.targetScaling = targetScaling;
 		this.offsetPx = offsetPx;
 		this.symbolPool = symbolPool;
-		this.imagePool = imagePool;
 	}
 
 }

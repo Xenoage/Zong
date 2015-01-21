@@ -5,6 +5,7 @@ import static com.xenoage.utils.kernel.Range.range;
 
 import java.awt.BasicStroke;
 import java.awt.Graphics2D;
+import java.awt.Shape;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
@@ -18,7 +19,8 @@ import com.xenoage.utils.math.geom.Rectangle2f;
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.core.text.FormattedText;
 import com.xenoage.zong.io.selection.text.TextSelection;
-import com.xenoage.zong.renderer.awt.slur.AwtSlurRenderer;
+import com.xenoage.zong.renderer.awt.image.AwtImageRenderer;
+import com.xenoage.zong.renderer.awt.symbols.AwtShape;
 import com.xenoage.zong.renderer.awt.symbols.AwtSymbolsRenderer;
 import com.xenoage.zong.renderer.awt.text.TextLayoutTools;
 import com.xenoage.zong.renderer.awt.text.TextLayouts;
@@ -26,8 +28,8 @@ import com.xenoage.zong.renderer.canvas.Canvas;
 import com.xenoage.zong.renderer.canvas.CanvasDecoration;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
 import com.xenoage.zong.renderer.canvas.CanvasIntegrity;
-import com.xenoage.zong.renderer.slur.SimpleSlurShape;
 import com.xenoage.zong.symbols.Symbol;
+import com.xenoage.zong.symbols.path.Path;
 
 /**
  * AWT implementation of a {@link Canvas}
@@ -37,7 +39,7 @@ import com.xenoage.zong.symbols.Symbol;
 public class AwtCanvas
 	extends Canvas {
 
-	//the AWT graphics context
+	/** The AWT graphics context. */
 	private final Graphics2D g2d;
 	
 	//stack for stored transformation states
@@ -135,17 +137,21 @@ public class AwtCanvas
 		g2d.setTransform(g2dTransform);
 	}
 
-	@Override public void drawCurvedLine(Point2f p1, Point2f p2, Point2f c1, Point2f c2,
-		float interlineSpace, Color color) {
+	@Override public void drawPath(Path path, Color color) {
 		g2d.setColor(toAwtColor(color));
-		SimpleSlurShape slurShape = new SimpleSlurShape(p1, p2, c1, c2, interlineSpace);
-		g2d.fill(AwtSlurRenderer.getShape(slurShape));
+		Shape shape = AwtShape.createShape(path);
+		g2d.fill(shape);
 	}
 
 	@Override public void fillRect(Rectangle2f rect, Color color) {
 		g2d.setColor(toAwtColor(color));
 		g2d.fill(new Rectangle2D.Float(rect.position.x, rect.position.y, rect.size.width,
 			rect.size.height));
+	}
+	
+	@Override public void drawImage(Rectangle2f rect, String imagePath) {
+		boolean force = integrity == CanvasIntegrity.Perfect;
+		AwtImageRenderer.drawImage(imagePath, g2d, rect, force);
 	}
 
 	@Override public void transformSave() {

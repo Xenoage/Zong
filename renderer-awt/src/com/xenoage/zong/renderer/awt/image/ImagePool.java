@@ -1,4 +1,6 @@
-package com.xenoage.zong.renderer.pool;
+package com.xenoage.zong.renderer.awt.image;
+
+import java.awt.image.BufferedImage;
 
 import com.xenoage.zong.layout.frames.ImageFrame;
 
@@ -12,9 +14,8 @@ import com.xenoage.zong.layout.frames.ImageFrame;
 public interface ImagePool {
 
 	/**
-	 * Gets the ImageFrame image with the given ID, or null.
-	 * If loaded, it is returned.
+	 * Gets the image at the given path, or null.
 	 */
-	public Object getImageFrameImage(String path);
+	public BufferedImage getImage(String path);
 
 }

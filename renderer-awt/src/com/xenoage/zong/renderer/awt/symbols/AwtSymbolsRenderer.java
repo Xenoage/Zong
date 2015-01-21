@@ -36,7 +36,7 @@ public class AwtSymbolsRenderer
 		g2d.scale(scaling.x, scaling.y);
 		
 		g2d.setColor(toAwtColor(color));
-		Shape shape = cache.getShape(symbol.getPath());
+		Shape shape = cache.getShape(symbol);
 		g2d.fill(shape);
 
 		/* TEST

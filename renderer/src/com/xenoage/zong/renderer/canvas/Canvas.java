@@ -11,6 +11,7 @@ import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.core.text.FormattedText;
 import com.xenoage.zong.io.selection.text.TextSelection;
 import com.xenoage.zong.symbols.Symbol;
+import com.xenoage.zong.symbols.path.Path;
 
 /**
  * Base class for a canvas into which can be rendered
@@ -71,7 +72,8 @@ public abstract class Canvas {
 
 	/**
 	 * Draws the given {@link FormattedText} with the given {@link TextSelection} (or null)
-	 * at the given position. The y-position is the baseline of the first paragraph.
+	 * at the given position.
+	 * @param yIsBaseline  if true, the y-position is the baseline of the first paragraph
 	 */
 	public abstract void drawText(FormattedText text, @MaybeNull TextSelection selection,
 		Point2f position, boolean yIsBaseline, float width);
@@ -90,18 +92,11 @@ public abstract class Canvas {
 	 * @param interlineSpace  the interline space in mm
 	 */
 	public abstract void drawBeam(Point2f[] points, Color color, float interlineSpace);
-
+	
 	/**
-	 * Draws a tie/slur using the given Bézier curve.
-	 * @param p1      the starting point in mm
-	 * @param p2      the ending point in mm
-	 * @param c1      the first control point in mm
-	 * @param c2      the second control point in mm
-	 * @param interlineSpace  the interline space in mm
-	 * @param color   the color of the slur
+	 * Draws a path using the given color.
 	 */
-	public abstract void drawCurvedLine(Point2f p1, Point2f p2, Point2f c1, Point2f c2,
-		float interlineSpace, Color color);
+	public abstract void drawPath(Path path, Color color);
 
 	/**
 	 * Fills a rectangle.
@@ -109,6 +104,15 @@ public abstract class Canvas {
 	 * @param color   the color of the rectangle
 	 */
 	public abstract void fillRect(Rectangle2f rect, Color color);
+	
+	/**
+	 * Draws an image.
+	 * Dependent on the {@link CanvasIntegrity} of this canvas, a placeholder
+	 * may be drawn instead of the image.
+	 * @param rect       the rectangle with coordinates in mm
+	 * @param imagePath  the file path of the image
+	 */
+	public abstract void drawImage(Rectangle2f rect, String imagePath);
 	
 	/**
 	 * Saves the current transformation state on the stack.

@@ -13,7 +13,7 @@ public final class PathSymbol
 	extends Symbol {
 	
 	/** The geometric path describing this symbol. */
-	@Getter private final Path path;
+	@Getter public final Path path;
 
 
 	public PathSymbol(String id, Path path, Float baselineOffset,

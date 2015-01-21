@@ -20,7 +20,7 @@ import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.Voc;
 import com.xenoage.zong.layout.Layout;
 import com.xenoage.zong.layout.Page;
-import com.xenoage.zong.renderer.awt.AwtPageLayoutRenderer;
+import com.xenoage.zong.renderer.LayoutRenderer;
 import com.xenoage.zong.renderer.awt.canvas.AwtCanvas;
 import com.xenoage.zong.renderer.canvas.CanvasDecoration;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
@@ -52,7 +52,6 @@ public final class PdfPrinter {
 
 		document.open();
 		PdfContentByte cb = writer.getDirectContent();
-		AwtPageLayoutRenderer renderer = AwtPageLayoutRenderer.getInstance();
 
 		It<Page> pages = it(layout.getPages());
 		for (Page page : pages) {
@@ -65,8 +64,8 @@ public final class PdfPrinter {
 			//fill PDF page
 			Graphics2D g2d = new PdfGraphics2D(cb, width, height);
 			log(remark("Printing page " + pages.getIndex() + "..."));
-			renderer.paint(layout, pages.getIndex(), new AwtCanvas(g2d, pageSize, CanvasFormat.Vector,
-				CanvasDecoration.None, CanvasIntegrity.Perfect));
+			LayoutRenderer.paintToCanvas(layout, pages.getIndex(), new AwtCanvas(g2d, pageSize,
+				CanvasFormat.Vector, CanvasDecoration.None, CanvasIntegrity.Perfect));
 			//finish page
 			g2d.dispose();
 			cb.addTemplate(tp, 0, 0);

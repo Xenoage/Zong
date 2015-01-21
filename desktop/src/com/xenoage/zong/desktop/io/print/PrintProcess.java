@@ -18,7 +18,7 @@ import com.xenoage.utils.math.Units;
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.Voc;
 import com.xenoage.zong.layout.Layout;
-import com.xenoage.zong.renderer.awt.AwtPageLayoutRenderer;
+import com.xenoage.zong.renderer.LayoutRenderer;
 import com.xenoage.zong.renderer.awt.canvas.AwtCanvas;
 import com.xenoage.zong.renderer.canvas.CanvasDecoration;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
@@ -103,9 +103,8 @@ public final class PrintProcess
 		//print page
 		log(remark("Printing page " + pageIndex + "..."));
 		Graphics2D g2d = (Graphics2D) g;
-		AwtPageLayoutRenderer renderer = AwtPageLayoutRenderer.getInstance();
 		Size2f pageSize = layout.getPages().get(pageIndex).getFormat().getSize();
-		renderer.paint(layout, pageIndex, new AwtCanvas(g2d, pageSize, CanvasFormat.Vector,
+		LayoutRenderer.paintToCanvas(layout, pageIndex, new AwtCanvas(g2d, pageSize, CanvasFormat.Vector,
 			CanvasDecoration.None, CanvasIntegrity.Perfect));
 
 		//DEMO

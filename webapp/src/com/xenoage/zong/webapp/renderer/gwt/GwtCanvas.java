@@ -1,4 +1,4 @@
-package com.xenoage.zong.webapp.renderer.gwt.canvas;
+package com.xenoage.zong.webapp.renderer.gwt;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
@@ -21,7 +21,7 @@ import com.xenoage.zong.renderer.canvas.CanvasDecoration;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
 import com.xenoage.zong.renderer.canvas.CanvasIntegrity;
 import com.xenoage.zong.symbols.Symbol;
-import com.xenoage.zong.webapp.renderer.gwt.symbols.GwtSymbolsRenderer;
+import com.xenoage.zong.symbols.path.Path;
 
 /**
  * This class contains methods for painting
@@ -151,10 +151,6 @@ public class GwtCanvas
 		context.fillRect(pos.x, pos.y, length, height);
 	}
 
-	public void fillEllipse(Point2f pCenter, float width, float height, Color color) {
-		//TODO
-	}
-
 	@Override public void drawBeam(Point2f[] points, Color color, float interlineSpace) {
 		/* TODO RectF beamSymbol = new RectF(-1f, -0.25f, 1f, 0.25f);
 
@@ -173,17 +169,19 @@ public class GwtCanvas
 
 		canvas.restoreToCount(oldTransform); */
 	}
-
-	@Override public void drawCurvedLine(Point2f p1, Point2f p2, Point2f c1, Point2f c2,
-		float interlineSpace, Color color) {
-		/* Paint paint = AndroidColorUtils.createPaintFill(color);
-		SimpleSlurShape slurShape = new SimpleSlurShape(p1, p2, c1, c2, interlineSpace);
-		canvas.drawPath(AndroidSlurRenderer.getPath(slurShape), paint); */ //TODO
+	
+	@Override public void drawPath(Path path, Color color) {
+		context.setFillStyle(GwtColorUtils.createColor(color));
+		GwtPath.drawPath(path, context);
 	}
 
 	@Override public void fillRect(Rectangle2f rect, Color color) {
 		context.setFillStyle(GwtColorUtils.createColor(color));
 		context.fillRect(rect.position.x, rect.position.y, rect.size.width, rect.size.height);
+	}
+	
+	@Override public void drawImage(Rectangle2f rect, String imagePath) {
+		//TODO
 	}
 
 	@Override public void transformSave() {

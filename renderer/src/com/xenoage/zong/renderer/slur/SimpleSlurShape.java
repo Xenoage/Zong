@@ -1,6 +1,16 @@
 package com.xenoage.zong.renderer.slur;
 
+import static com.xenoage.utils.collections.CollectionUtils.alist;
+
+import java.util.List;
+
+import lombok.Getter;
+
 import com.xenoage.utils.math.geom.Point2f;
+import com.xenoage.zong.symbols.path.CubicCurveTo;
+import com.xenoage.zong.symbols.path.MoveTo;
+import com.xenoage.zong.symbols.path.Path;
+import com.xenoage.zong.symbols.path.PathElement;
 
 /**
  * Shape of a slur, drawn in the Default style.
@@ -29,6 +39,8 @@ public class SimpleSlurShape {
 	public final float interlineSpace;
 	public final Point2f p1top, p2top, c1top, c2top, p1bottom, p2bottom, c1bottom, c2bottom;
 
+	@Getter private Path path;
+	
 
 	/**
 	 * Creates the shape of a slur, using the given Bézier curve.
@@ -61,6 +73,26 @@ public class SimpleSlurShape {
 		this.p2bottom = p2.add(0, -s);
 		this.c1bottom = c1.add(0, -(s + m));
 		this.c2bottom = c2.add(0, -(s + m));
+		
+		this.path = createPath();
+	}
+	
+	private Path createPath() {
+		List<PathElement> elements = alist(5);
+		float cap = interlineSpace / 4;
+		elements.add(new MoveTo(p1top));
+		//bezier curve from p1top to p2top
+		elements.add(new CubicCurveTo(c1top, c2top, p2top));
+		//cap at p2
+		Point2f capDir = p2top.sub(c2top).normalize().scale(cap);
+		elements.add(new CubicCurveTo(p2top.add(capDir), p2bottom.add(capDir), p2bottom));
+		//bezier curve back from p2bottom to p1bottom
+		elements.add(new CubicCurveTo(c2bottom, c1bottom, p1bottom));
+		//cap at p1
+		capDir = p1top.sub(c1top).normalize().scale(cap);
+		elements.add(new CubicCurveTo(p1bottom.add(capDir), p1top.add(capDir), p1top));
+		Path path = new Path(elements);
+		return path;
 	}
 
 }

@@ -15,7 +15,7 @@ import org.controlsfx.dialog.Dialog;
 import org.controlsfx.dialog.Dialogs;
 
 import com.xenoage.zong.layout.Layout;
-import com.xenoage.zong.renderer.awt.AwtBitmapPageRenderer;
+import com.xenoage.zong.renderer.awt.AwtLayoutRenderer;
 
 /**
  * Controller for the JavaFX main window (MainWindow.fxml).
@@ -83,7 +83,7 @@ public class MainWindow {
 		Platform.runLater(() -> {
 			//we have still no JavaFX renderer in Zong!, so we have to use
 			//the Java2D/AWT renderer at the moment
-			BufferedImage awtImage = AwtBitmapPageRenderer.paint(layout, 0, 2f);
+			BufferedImage awtImage = AwtLayoutRenderer.paintToImage(layout, 0, 2f);
 			scoreImage = SwingFXUtils.toFXImage(awtImage, scoreImage);
 			scoreView.setImage(scoreImage);
 			scoreView.setFitWidth(scoreImage.getWidth());

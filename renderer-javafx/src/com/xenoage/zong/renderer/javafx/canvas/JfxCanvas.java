@@ -1,16 +1,12 @@
 package com.xenoage.zong.renderer.javafx.canvas;
 
-import static com.xenoage.utils.jse.color.AwtColorUtils.toAwtColor;
 import static com.xenoage.utils.jse.javafx.color.JfxColorUtils.toJavaFXColor;
 import static com.xenoage.utils.kernel.Range.range;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.StrokeLineCap;
-import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.transform.Affine;
 
 import com.xenoage.utils.color.Color;
-import com.xenoage.utils.jse.javafx.color.JfxColorUtils;
-import com.xenoage.utils.kernel.Range;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Rectangle2f;
 import com.xenoage.utils.math.geom.Size2f;
@@ -20,9 +16,10 @@ import com.xenoage.zong.renderer.canvas.Canvas;
 import com.xenoage.zong.renderer.canvas.CanvasDecoration;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
 import com.xenoage.zong.renderer.canvas.CanvasIntegrity;
+import com.xenoage.zong.renderer.javafx.symbols.JfxPath;
 import com.xenoage.zong.renderer.javafx.symbols.JfxSymbolsRenderer;
-import com.xenoage.zong.renderer.slur.SimpleSlurShape;
 import com.xenoage.zong.symbols.Symbol;
+import com.xenoage.zong.symbols.path.Path;
 
 /**
  * JavaFX implementation of a {@link Canvas}
@@ -66,7 +63,7 @@ public class JfxCanvas
 		
 		if (decoration == CanvasDecoration.Interactive) {
 			//interactive mode: show text selection
-		}
+		}/* GOON
 
 		FontRenderContext frc = g2d.getFontRenderContext();
 		TextLayouts textLayouts = TextLayoutTools.create(text, frameWidth, yIsBaseline, frc);
@@ -74,7 +71,7 @@ public class JfxCanvas
 		AffineTransform oldTransform = g2d.getTransform();
 		g2d.translate(position.x, position.y);
 		textLayouts.draw(g2d);
-		g2d.setTransform(oldTransform);
+		g2d.setTransform(oldTransform); */
 	}
 
 	@Override public void drawSymbol(Symbol symbol, Color color, Point2f position, Point2f scaling) {
@@ -90,18 +87,18 @@ public class JfxCanvas
 
 	@Override public void drawStaff(Point2f pos, float length, int lines, Color color,
 		float lineWidth, float interlineSpace) {
-		context.setStroke(toJavaFXColor(color));
+		context.setFill(toJavaFXColor(color));
 		for (int i : range(lines))
 			context.fillRect(pos.x, pos.y + i * interlineSpace - lineWidth / 2, length, lineWidth);
 	}
 
 	@Override public void drawSimplifiedStaff(Point2f pos, float length, float height, Color color) {
-		context.setStroke(toJavaFXColor(color));
+		context.setFill(toJavaFXColor(color));
 		context.fillRect(pos.x, pos.y, length, height);
 	}
 
 	public void fillEllipse(Point2f pCenter, float width, float height, Color color) {
-		context.setStroke(toJavaFXColor(color));
+		context.setFill(toJavaFXColor(color));
 		context.fillOval(pCenter.x - width / 2, pCenter.y - height / 2, width, height);
 	}
 
@@ -109,7 +106,7 @@ public class JfxCanvas
 		Rectangle2f beamSymbol = new Rectangle2f(-1f, -0.25f, 2f, 0.5f);
 
 		context.save();
-		context.setStroke(toJavaFXColor(color));
+		context.setFill(toJavaFXColor(color));
 
 		float imageWidth = points[2].x - points[0].x;
 		float imageHeight = points[3].y - points[0].y;
@@ -127,16 +124,18 @@ public class JfxCanvas
 		context.restore();
 	}
 
-	@Override public void drawCurvedLine(Point2f p1, Point2f p2, Point2f c1, Point2f c2,
-		float interlineSpace, Color color) {
-		context.setStroke(toJavaFXColor(color));
-		SimpleSlurShape slurShape = new SimpleSlurShape(p1, p2, c1, c2, interlineSpace);
-		g2d.fill(JfxSlurRenderer.getShape(slurShape));
+	@Override public void drawPath(Path path, Color color) {
+		context.setFill(toJavaFXColor(color));
+		JfxPath.drawPath(path, context);
 	}
 
 	@Override public void fillRect(Rectangle2f rect, Color color) {
-		context.setStroke(toJavaFXColor(color));
+		context.setFill(toJavaFXColor(color));
 		context.fillRect(rect.position.x, rect.position.y, rect.size.width, rect.size.height);
+	}
+	
+	@Override public void drawImage(Rectangle2f rect, String imagePath) {
+		//TODO
 	}
 
 	@Override public void transformSave() {

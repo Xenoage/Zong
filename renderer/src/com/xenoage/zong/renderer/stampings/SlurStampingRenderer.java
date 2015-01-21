@@ -9,6 +9,7 @@ import com.xenoage.zong.musiclayout.stampings.bitmap.BitmapStaff;
 import com.xenoage.zong.renderer.RendererArgs;
 import com.xenoage.zong.renderer.canvas.Canvas;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
+import com.xenoage.zong.renderer.slur.SimpleSlurShape;
 
 /**
  * Renderer for a {@link SlurStamping}.
@@ -69,7 +70,8 @@ public class SlurStampingRenderer
 		  lastPoint = p;
 		} */
 
-		canvas.drawCurvedLine(p1, p2, c1, c2, parentStaff.is, color);
+		SimpleSlurShape slurShape = new SimpleSlurShape(p1, p2, c1, c2, parentStaff.is);
+		canvas.drawPath(slurShape.getPath(), color);
 	}
 
 }

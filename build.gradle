@@ -66,6 +66,12 @@ project(':renderer-awt') {
 		compile project(':renderer')
 	}
 }
+project(':renderer-javafx') {
+	sourceCompatibility = 8
+	dependencies {
+		compile project(':renderer')
+	}
+}
 project(':layout') { dependencies { compile project(':core') } }
 project(':midi-out') { dependencies { compile project(':core') } }
 project(':musicxml') { dependencies { compile project(':core') } }
