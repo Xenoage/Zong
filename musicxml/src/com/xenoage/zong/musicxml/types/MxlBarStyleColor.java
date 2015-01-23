@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
@@ -21,8 +20,8 @@ public final class MxlBarStyleColor {
 
 	public static final String elemName = "bar-style";
 
-	@NonNull private final MxlBarStyle barStyle;
-	@MaybeNull private final MxlColor color;
+	@NonNull private MxlBarStyle barStyle;
+	@NonNull private MxlColor color;
 
 
 	@NonNull public static MxlBarStyleColor read(XmlReader reader) {
@@ -34,8 +33,7 @@ public final class MxlBarStyleColor {
 	public void write(XmlWriter writer) {
 		writer.writeElementStart(elemName);
 		barStyle.write(writer);
-		if (color != null)
-			color.write(writer);
+		color.write(writer);
 		writer.writeElementEnd();
 	}
 

@@ -39,14 +39,10 @@ public class FontInfoReader {
 			return null;
 		MxlPrintStyle mxlPrintStyle = ((MxlPrintStyleContent) printStyleElement).getPrintStyle();
 		MxlFont mxlFont = mxlPrintStyle.getFont();
-		if (mxlFont == null)
-			return null;
 		return new FontInfoReader(mxlFont, defaultFont).read();
 	}
 
 	@MaybeNull public FontInfo read() {
-		if (mxlFont == null)
-			return null;
 		IList<String> families = readFamilies();
 		Float size = readSize();
 		FontStyle style = readStyle();
@@ -55,14 +51,17 @@ public class FontInfoReader {
 
 	private FontStyle readStyle() {
 		FontStyle style = defaultFont.getStyleOrNull();
-		if (mxlFont.getFontStyle() != null || mxlFont.getFontWeight() != null) {
-			style = FontStyle.normal;
-			if (mxlFont.getFontStyle() == MxlFontStyle.Italic) {
-				style = style.with(FontStyle.Italic, true);
-			}
-			if (mxlFont.getFontWeight() == MxlFontWeight.Bold) {
-				style = style.with(FontStyle.Bold, true);
-			}
+		//font style
+		MxlFontStyle mxlStyle = mxlFont.getFontStyle();
+		if (mxlStyle != MxlFontStyle.Unknown) {
+			boolean isItalic = mxlStyle == MxlFontStyle.Italic;
+			style = style.with(FontStyle.Italic, isItalic);
+		}
+		//font weight
+		MxlFontWeight mxlWeight = mxlFont.getFontWeight();
+		if (mxlWeight != null) {
+			boolean isBold = mxlWeight == MxlFontWeight.Bold;
+			style = style.with(FontStyle.Bold, isBold);
 		}
 		return style;
 	}
@@ -79,14 +78,12 @@ public class FontInfoReader {
 	
 	private Float readSize() {
 		MxlFontSize mxlSize = mxlFont.getFontSize();
-		Float size = defaultFont.getSizeOrNull();
-		if (mxlSize != null) {
-			if (mxlSize.isSizePt())
-				size = mxlSize.getValuePt();
-			else
-				size = readCSSFontSize(mxlSize.getValueCSS());
-		}
-		return size;
+		if (mxlSize.getValuePt() != null)
+			return mxlSize.getValuePt();
+		else if (mxlSize.getValueCSS() != null)
+			return readCSSFontSize(mxlSize.getValueCSS());
+		else
+			return defaultFont.getSizeOrNull();
 	}
 
 	private float readCSSFontSize(MxlCSSFontSize mxlCSSSize) {

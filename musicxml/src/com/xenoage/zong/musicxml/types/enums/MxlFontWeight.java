@@ -12,17 +12,19 @@ import com.xenoage.utils.xml.XmlWriter;
 public enum MxlFontWeight {
 
 	Normal,
-	Bold;
+	Bold,
+	Unknown;
 
 	public static final String attrName = "font-weight";
 
 
 	@MaybeNull public static MxlFontWeight read(XmlReader reader) {
-		return Utils.readOrNull(attrName, reader.getAttribute(attrName), values());
+		return Utils.readOr(attrName, reader.getAttribute(attrName), values(), Unknown);
 	}
 
 	public void write(XmlWriter writer) {
-		writer.writeAttribute(attrName, toString().toLowerCase());
+		if (this != Unknown)
+			writer.writeAttribute(attrName, toString().toLowerCase());
 	}
 
 }

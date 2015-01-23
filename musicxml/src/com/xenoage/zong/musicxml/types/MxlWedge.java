@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
@@ -30,8 +29,8 @@ public final class MxlWedge
 
 	@NonNull private MxlWedgeType type;
 	private int number;
-	@MaybeNull private MxlPosition position;
-	@MaybeNull private MxlColor color;
+	private MxlPosition position;
+	private MxlColor color;
 
 	private static final int defaultNumber = 1;
 
@@ -50,10 +49,8 @@ public final class MxlWedge
 		writer.writeElementStart(elemName);
 		writer.writeAttribute("type", type.write());
 		writer.writeAttribute("number", number);
-		if (position != null)
-			position.write(writer);
-		if (color != null)
-			color.write(writer);
+		position.write(writer);
+		color.write(writer);
 		writer.writeElementEnd();
 	}
 

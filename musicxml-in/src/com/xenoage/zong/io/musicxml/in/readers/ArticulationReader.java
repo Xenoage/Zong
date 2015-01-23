@@ -9,9 +9,9 @@ import com.xenoage.zong.core.music.annotation.Articulation;
 import com.xenoage.zong.core.music.annotation.ArticulationType;
 import com.xenoage.zong.io.musicxml.Equivalents;
 import com.xenoage.zong.musicxml.types.MxlArticulations;
-import com.xenoage.zong.musicxml.types.attributes.MxlEmptyPlacement;
 import com.xenoage.zong.musicxml.types.choice.MxlArticulationsContent;
 import com.xenoage.zong.musicxml.types.choice.MxlArticulationsContent.MxlArticulationsContentType;
+import com.xenoage.zong.musicxml.types.enums.MxlPlacement;
 
 /**
  * Reads {@link Articulation}s from {@link MxlArticulations}.
@@ -34,9 +34,8 @@ public class ArticulationReader {
 			return null;
 		Articulation articulation = new Articulation(type);
 		//read placement
-		MxlEmptyPlacement mxlPlacement = mxlAC.getEmptyPlacement();
-		if (mxlPlacement != null)
-			articulation.setPlacement(PositioningReader.readPlacement(mxlPlacement.getPlacement()));
+		MxlPlacement mxlPlacement = mxlAC.getEmptyPlacement().getPlacement();
+		articulation.setPlacement(PositioningReader.readPlacement(mxlPlacement));
 		return articulation;
 	}
 	

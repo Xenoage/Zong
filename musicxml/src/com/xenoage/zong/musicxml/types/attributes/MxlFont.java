@@ -8,7 +8,6 @@ import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 import com.xenoage.utils.annotations.MaybeEmpty;
 import com.xenoage.utils.annotations.MaybeNull;
@@ -23,17 +22,18 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
  * 
  * @author Andreas Wenger
  */
-@AllArgsConstructor @Getter @Setter
+@AllArgsConstructor @Getter
 @IncompleteMusicXML(partly="font-family") //font-family: enum for font names like "handwritten, cursive, fantasy"
 public final class MxlFont {
 
 	/** Generated from the comma-separated list of font names. */
-	@MaybeEmpty private List<String> fontFamily;
-	@MaybeNull private MxlFontStyle fontStyle;
-	@MaybeNull private MxlFontSize fontSize;
-	@MaybeNull private MxlFontWeight fontWeight;
+	@MaybeEmpty private final List<String> fontFamily;
+	private MxlFontStyle fontStyle;
+	private final MxlFontSize fontSize;
+	private final MxlFontWeight fontWeight;
 
-	public static MxlFont empty = new MxlFont(Collections.<String>emptyList(), null, null, null);
+	public static final MxlFont noFont = new MxlFont(Collections.<String>emptyList(), MxlFontStyle.Unknown,
+		MxlFontSize.noFontSize, MxlFontWeight.Unknown);
 	
 
 	@MaybeNull public static MxlFont read(XmlReader reader) {
@@ -47,21 +47,21 @@ public final class MxlFont {
 		MxlFontStyle fontStyle = MxlFontStyle.read(reader);
 		MxlFontSize fontSize = MxlFontSize.read(reader);
 		MxlFontWeight fontWeight = MxlFontWeight.read(reader);
-		if (fontFamily.size() > 0 || fontStyle != null || fontSize != null || fontWeight != null)
+		if (fontFamily.size() > 0 || fontStyle != MxlFontStyle.Unknown ||
+			fontSize != MxlFontSize.noFontSize || fontWeight != MxlFontWeight.Unknown)
 			return new MxlFont(fontFamily, fontStyle, fontSize, fontWeight);
 		else
-			return null;
+			return noFont;
 	}
 
 	public void write(XmlWriter writer) {
-		if (fontFamily != null && fontFamily.size() > 0)
-			writer.writeAttribute("font-family", concatenate(fontFamily, ","));
-		if (fontStyle != null)
+		if (this != noFont) {
+			if (fontFamily.size() > 0)
+				writer.writeAttribute("font-family", concatenate(fontFamily, ","));
 			fontStyle.write(writer);
-		if (fontSize != null)
 			fontSize.write(writer);
-		if (fontWeight != null)
 			fontWeight.write(writer);
+		}
 	}
 
 }

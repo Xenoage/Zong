@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
@@ -22,9 +21,7 @@ public final class MxlTrillMark
 
 	public static final String elemName = "trill-mark";
 
-	@MaybeNull private MxlEmptyTrillSound emptyTrillSound;
-	
-	public static final MxlTrillMark defaultInstance = new MxlTrillMark(null);
+	private MxlEmptyTrillSound emptyTrillSound;
 
 	
 	@Override public MxlOrnamentsContentType getOrnamentsContentType() {
@@ -33,16 +30,12 @@ public final class MxlTrillMark
 
 	@NonNull public static MxlTrillMark read(XmlReader reader) {
 		MxlEmptyTrillSound emptyTrillSound = MxlEmptyTrillSound.read(reader);
-		if (emptyTrillSound != null)
-			return new MxlTrillMark(emptyTrillSound);
-		else
-			return defaultInstance;
+		return new MxlTrillMark(emptyTrillSound);
 	}
 
 	@Override public void write(XmlWriter writer) {
 		writer.writeElementStart(elemName);
-		if (emptyTrillSound != null)
-			emptyTrillSound.write(writer);
+		emptyTrillSound.write(writer);
 		writer.writeElementEnd();
 	}
 

@@ -33,7 +33,7 @@ public final class MxlDirection
 	@NonNull private List<MxlDirectionType> directionTypes;
 	@MaybeNull private Integer staff;
 	@MaybeNull private MxlSound sound;
-	@MaybeNull private MxlPlacement placement;
+	private MxlPlacement placement;
 
 
 	@Override public MxlMusicDataContentType getMusicDataContentType() {
@@ -75,8 +75,7 @@ public final class MxlDirection
 
 	@Override public void write(XmlWriter writer) {
 		writer.writeElementStart(elemName);
-		if (placement != null)
-			placement.write(writer);
+		placement.write(writer);
 		for (MxlDirectionType directionType : directionTypes)
 			directionType.write(writer);
 		writer.writeElementText("staff", staff);

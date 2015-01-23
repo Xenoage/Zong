@@ -28,7 +28,7 @@ public final class MxlImage
 
 	@NonNull private String source;
 	@NonNull private String type;
-	@MaybeNull private MxlPosition position;
+	private MxlPosition position;
 	@MaybeNull private MxlLeftCenterRight hAlign;
 	@MaybeNull private MxlVAlignImage vAlign;
 
@@ -53,8 +53,7 @@ public final class MxlImage
 		writer.writeElementStart(elemName);
 		writer.writeAttribute("source", source);
 		writer.writeAttribute("type", type);
-		if (position != null)
-			position.write(writer);
+		position.write(writer);
 		if (hAlign != null)
 			hAlign.write(writer, "halign");
 		if (vAlign != null)

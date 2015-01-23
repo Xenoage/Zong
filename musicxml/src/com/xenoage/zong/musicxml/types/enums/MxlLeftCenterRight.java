@@ -16,7 +16,7 @@ public enum MxlLeftCenterRight {
 	Right;
 
 	@MaybeNull public static MxlLeftCenterRight read(XmlReader reader, String attrName) {
-		return Utils.readOrNull("left-center-right", reader.getAttribute(attrName), values());
+		return Utils.readOr("left-center-right", reader.getAttribute(attrName), values(), null);
 	}
 
 	public void write(XmlWriter writer, String attrName) {

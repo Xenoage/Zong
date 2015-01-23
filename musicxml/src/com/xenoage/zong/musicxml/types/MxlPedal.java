@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
@@ -26,8 +25,8 @@ public final class MxlPedal
 
 	public static final String elemName = "pedal";
 
-	@NonNull private MxlStartStopChange type;
-	@MaybeNull private MxlPrintStyle printStyle;
+	private MxlStartStopChange type;
+	private MxlPrintStyle printStyle;
 	
 
 	@Override public MxlDirectionTypeContentType getDirectionTypeContentType() {
@@ -43,8 +42,7 @@ public final class MxlPedal
 	@Override public void write(XmlWriter writer) {
 		writer.writeElementStart(elemName);
 		writer.writeAttribute("type", type.write());
-		if (printStyle != null)
-			printStyle.write(writer);
+		printStyle.write(writer);
 		writer.writeElementEnd();
 	}
 

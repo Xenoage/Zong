@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
@@ -25,8 +24,8 @@ public final class MxlGroupSymbol
 	public static final String elemName = "group-symbol";
 
 	@NonNull private MxlGroupSymbolValue value;
-	@MaybeNull private MxlPosition position;
-	@MaybeNull private MxlColor color;
+	private MxlPosition position;
+	@NonNull private MxlColor color;
 	
 
 	@NonNull public static MxlGroupSymbol read(XmlReader reader) {
@@ -38,10 +37,8 @@ public final class MxlGroupSymbol
 
 	public void write(XmlWriter writer) {
 		writer.writeElementStart(elemName);
-		if (position != null)
-			position.write(writer);
-		if (color != null)
-			color.write(writer);
+		position.write(writer);
+		color.write(writer);
 		value.write(writer);
 		writer.writeElementEnd();
 	}

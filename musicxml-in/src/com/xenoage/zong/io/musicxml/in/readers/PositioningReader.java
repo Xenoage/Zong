@@ -1,6 +1,5 @@
 package com.xenoage.zong.io.musicxml.in.readers;
 
-import static com.xenoage.utils.NullUtils.notNull;
 import lombok.RequiredArgsConstructor;
 
 import com.xenoage.utils.annotations.MaybeNull;
@@ -71,18 +70,15 @@ public class PositioningReader {
 	}
 	
 	@MaybeNull public Position readFromPrintStyle(MxlPrintStyleContent mxlPrintStyleContent) {
-		MxlPrintStyle mxlPrintStyle = notNull(mxlPrintStyleContent.getPrintStyle(), MxlPrintStyle.empty);
+		MxlPrintStyle mxlPrintStyle = mxlPrintStyleContent.getPrintStyle();
 		return readFromPosition(mxlPrintStyle);
 	}
 	
 	@MaybeNull public Position readFromPosition(MxlPositionContent mxlPositionContent) {
-		MxlPosition mxlPosition = mxlPositionContent.getPosition();
-		return readPosition(mxlPosition);
+		return readPosition(mxlPositionContent.getPosition());
 	}
 
 	@MaybeNull public Position readPosition(MxlPosition mxlPosition) {
-		if (mxlPosition == null)
-			return null;
 		Float x = mxlPosition.getDefaultX();
 		Float y = mxlPosition.getDefaultY();
 		Float rx = mxlPosition.getRelativeX();
@@ -117,15 +113,14 @@ public class PositioningReader {
 	}
 	
 	@MaybeNull public static Placement readPlacement(MxlPlacement mxlPlacement) {
-		if (mxlPlacement == null)
-			return null;
 		switch (mxlPlacement) {
 			case Above:
 				return Placement.Above;
 			case Below:
 				return Placement.Below;
+			default:
+				return null;
 		}
-		return null;
 	}
 
 }

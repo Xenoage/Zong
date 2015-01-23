@@ -1,8 +1,9 @@
 package com.xenoage.zong.musicxml.types.attributes;
 
+import static com.xenoage.zong.musicxml.types.attributes.MxlPrintStyle.noPrintStyle;
+import static com.xenoage.zong.musicxml.types.enums.MxlPlacement.noPlacement;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.xml.XmlReader;
@@ -18,28 +19,31 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
  * @author Andreas Wenger
  */
 @IncompleteMusicXML(missing = "trill-sound")
-@AllArgsConstructor @Getter @Setter
+@AllArgsConstructor @Getter
 public class MxlEmptyTrillSound
 	implements MxlPrintStyleContent, MxlPlacementContent {
+	
+	public static final MxlEmptyTrillSound noEmptyTrillSound = new MxlEmptyTrillSound(
+		noPrintStyle, noPlacement);
 
-	@MaybeNull private MxlPrintStyle printStyle;
-	@MaybeNull private MxlPlacement placement;
+	private final MxlPrintStyle printStyle;
+	private final MxlPlacement placement;
 
 
 	@MaybeNull public static MxlEmptyTrillSound read(XmlReader reader) {
 		MxlPrintStyle printStyle = MxlPrintStyle.read(reader);
 		MxlPlacement placement = MxlPlacement.read(reader);
-		if (printStyle != null || placement != null)
+		if (printStyle != noPrintStyle || placement != noPlacement)
 			return new MxlEmptyTrillSound(printStyle, placement);
 		else
-			return null;
+			return noEmptyTrillSound;
 	}
 
 	public void write(XmlWriter writer) {
-		if (printStyle != null)
+		if (this != noEmptyTrillSound) {
 			printStyle.write(writer);
-		if (placement != null)
 			placement.write(writer);
+		}
 	}
 	
 }

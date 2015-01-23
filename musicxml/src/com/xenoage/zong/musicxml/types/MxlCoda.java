@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
@@ -23,7 +22,7 @@ public final class MxlCoda
 
 	public static final String elemName = "coda";
 
-	@MaybeNull private MxlPrintStyle printStyle;
+	private MxlPrintStyle printStyle;
 	
 
 	@Override public MxlDirectionTypeContentType getDirectionTypeContentType() {
@@ -37,8 +36,7 @@ public final class MxlCoda
 
 	@Override public void write(XmlWriter writer) {
 		writer.writeElementStart(elemName);
-		if (printStyle != null)
-			printStyle.write(writer);
+		printStyle.write(writer);
 		writer.writeElementEnd();
 	}
 

@@ -1,8 +1,9 @@
 package com.xenoage.zong.musicxml.types.attributes;
 
+import static com.xenoage.zong.musicxml.types.attributes.MxlPrintStyle.noPrintStyle;
+import static com.xenoage.zong.musicxml.types.enums.MxlPlacement.noPlacement;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.xml.XmlReader;
@@ -16,28 +17,31 @@ import com.xenoage.zong.musicxml.types.util.MxlPrintStyleContent;
  * 
  * @author Andreas Wenger
  */
-@AllArgsConstructor @Getter @Setter
+@AllArgsConstructor @Getter
 public final class MxlEmptyPlacement
 	implements MxlPrintStyleContent, MxlPlacementContent {
+	
+	public static final MxlEmptyPlacement noEmptyPlacement = new MxlEmptyPlacement(
+		noPrintStyle, noPlacement);
 
-	@MaybeNull private MxlPrintStyle printStyle;
-	@MaybeNull private MxlPlacement placement;
+	private final MxlPrintStyle printStyle;
+	private final MxlPlacement placement;
 
 
 	@MaybeNull public static MxlEmptyPlacement read(XmlReader reader) {
 		MxlPrintStyle printStyle = MxlPrintStyle.read(reader);
 		MxlPlacement placement = MxlPlacement.read(reader);
-		if (printStyle != null || placement != null)
+		if (printStyle != noPrintStyle || placement != noPlacement)
 			return new MxlEmptyPlacement(printStyle, placement);
 		else
-			return null;
+			return noEmptyPlacement;
 	}
 
 	public void write(XmlWriter writer) {
-		if (printStyle != null)
+		if (this != noEmptyPlacement) {
 			printStyle.write(writer);
-		if (placement != null)
 			placement.write(writer);
+		}
 	}
 
 }

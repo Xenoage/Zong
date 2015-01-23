@@ -1,5 +1,7 @@
 package com.xenoage.zong.io.musicxml.in.readers;
 
+import static com.xenoage.utils.NullUtils.notNull;
+
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.color.Color;
 import com.xenoage.utils.font.FontInfo;
@@ -27,25 +29,18 @@ public class FormattedTextReader
 	}
 	
 	@NonNull public FormattedTextStyle readStyle(MxlFormattedText mxlText) {
-		MxlPrintStyle mxlPrintStyle = getPrintStyle(mxlText);
+		MxlPrintStyle mxlPrintStyle = mxlText.getPrintStyle();
 		FontInfo font = new FontInfoReader(mxlPrintStyle.getFont(), FontInfo.defaultValue).read();
 		Color color = readColor(mxlPrintStyle);
 		return new FormattedTextStyle(font, color, Superscript.Normal);
 	}
 	
 	@NonNull public Color readColor(MxlPrintStyle printStyle) {
-		if (printStyle.getColor() == null)
-			return FormattedTextStyle.defaultColor;
-		return printStyle.getColor().getValue();
+		return notNull(printStyle.getColor().getValue(), FormattedTextStyle.defaultColor);
 	}
 	
 	public Alignment readAlignment(MxlFormattedText mxlText) {
 		return Equivalents.alignments.get1(mxlText.getJustify());
-	}
-	
-	@NonNull public MxlPrintStyle getPrintStyle(MxlFormattedText mxlText) {
-		MxlPrintStyle mxlPrintStyle = mxlText.getPrintStyle();
-		return mxlPrintStyle != null ? mxlPrintStyle : MxlPrintStyle.empty;
 	}
 
 }

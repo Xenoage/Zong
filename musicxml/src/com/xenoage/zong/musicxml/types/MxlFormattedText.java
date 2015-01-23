@@ -29,7 +29,7 @@ public final class MxlFormattedText
 	@MaybeNull private MxlLeftCenterRight justify; //alignment within the text box
 	@MaybeNull private MxlLeftCenterRight hAlign; //alignment of the text box, see halign documentation
 	@MaybeNull private MxlVAlign vAlign;
-	@MaybeNull private MxlPrintStyle printStyle;
+	private MxlPrintStyle printStyle;
 
 
 	@NonNull public static MxlFormattedText read(XmlReader reader) {
@@ -48,8 +48,7 @@ public final class MxlFormattedText
 			hAlign.write(writer, "halign");
 		if (vAlign != null)
 			vAlign.write(writer);
-		if (printStyle != null)
-			printStyle.write(writer);
+		printStyle.write(writer);
 		writer.writeText(value);
 	}
 

@@ -1,8 +1,10 @@
 package com.xenoage.zong.musicxml.types.attributes;
 
+import static com.xenoage.zong.musicxml.types.attributes.MxlColor.noColor;
+import static com.xenoage.zong.musicxml.types.attributes.MxlFont.noFont;
+import static com.xenoage.zong.musicxml.types.attributes.MxlPosition.noPosition;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.xml.XmlReader;
@@ -14,34 +16,33 @@ import com.xenoage.zong.musicxml.types.util.MxlPositionContent;
  * 
  * @author Andreas Wenger
  */
-@AllArgsConstructor @Getter @Setter
+@AllArgsConstructor @Getter
 public final class MxlPrintStyle
 	implements MxlPositionContent {
 
-	public static final MxlPrintStyle empty = new MxlPrintStyle(null, null, null);
+	public static final MxlPrintStyle noPrintStyle = new MxlPrintStyle(noPosition, noFont, noColor);
 	
-	@MaybeNull private MxlPosition position;
-	@MaybeNull private MxlFont font;
-	@MaybeNull private MxlColor color;
+	private final MxlPosition position;
+	private final MxlFont font;
+	private final MxlColor color;
 
 
 	@MaybeNull public static MxlPrintStyle read(XmlReader reader) {
 		MxlPosition position = MxlPosition.read(reader);
 		MxlFont font = MxlFont.read(reader);
 		MxlColor color = MxlColor.read(reader);
-		if (position != null || font != null || color != null)
+		if (position != noPosition || font != noFont || color != noColor)
 			return new MxlPrintStyle(position, font, color);
 		else
-			return null;
+			return noPrintStyle;
 	}
 
 	public void write(XmlWriter writer) {
-		if (position != null)
+		if (this != noPrintStyle) {
 			position.write(writer);
-		if (font != null)
 			font.write(writer);
-		if (color != null)
 			color.write(writer);
+		}
 	}
 
 }

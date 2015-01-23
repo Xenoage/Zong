@@ -40,7 +40,7 @@ public class StemReader {
 		//length
 		Float length = null;
 		MxlPosition yPos = mxlStem.getPosition();
-		if (yPos != null && yPos.getDefaultY() != null) {
+		if (yPos.getDefaultY() != null) {
 			//convert position in tenths relative to topmost staff line into
 			//a length in interline spaces measured from the outermost chord note on stem side
 			float stemEndLinePosition = convertDefaultYToLP(context, yPos.getDefaultY(), staff);

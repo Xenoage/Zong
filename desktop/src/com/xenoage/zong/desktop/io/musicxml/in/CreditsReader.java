@@ -24,7 +24,6 @@ import com.xenoage.zong.musicxml.types.MxlCredit;
 import com.xenoage.zong.musicxml.types.MxlCreditWords;
 import com.xenoage.zong.musicxml.types.MxlFormattedText;
 import com.xenoage.zong.musicxml.types.MxlScorePartwise;
-import com.xenoage.zong.musicxml.types.attributes.MxlColor;
 import com.xenoage.zong.musicxml.types.attributes.MxlPosition;
 import com.xenoage.zong.musicxml.types.choice.MxlCreditContent.MxlCreditContentType;
 import com.xenoage.zong.musicxml.types.enums.MxlVAlign;
@@ -62,11 +61,8 @@ public final class CreditsReader {
 			Page firstPage = layout.getPages().get(0);
 			float tenths = scoreFormat.getInterlineSpace() / 10;
 			MxlFormattedText mxlFirstCreditWords = mxlCreditWords.getItems().get(0);
-			Point2f offsetFromBottomInTenths = new Point2f(10f, 10f);
-			if (mxlFirstCreditWords.getPrintStyle() != null && mxlFirstCreditWords.getPrintStyle().getPosition() != null) {
-				MxlPosition pos = mxlFirstCreditWords.getPrintStyle().getPosition();
-				offsetFromBottomInTenths = new Point2f(pos.getDefaultX(), pos.getDefaultY());
-			}
+			MxlPosition mxlPosition = mxlFirstCreditWords.getPrintStyle().getPosition();
+			Point2f offsetFromBottomInTenths = mxlPosition.getDefault().or(new Point2f(10f, 10f));
 			Point2f position = new Point2f(offsetFromBottomInTenths.x * tenths,
 				firstPage.getFormat().getSize().height - offsetFromBottomInTenths.y * tenths);
 			//compute size
@@ -151,10 +147,7 @@ public final class CreditsReader {
 					//font
 					FontInfo fontInfo = new FontInfoReader(mxlFormattedText.getPrintStyle().getFont(), defaultFont).read();
 					//color
-					Color color = null;
-					MxlColor mxlColor = mxlFormattedText.getPrintStyle().getColor();
-					if (mxlColor != null)
-						color = mxlColor.getValue();
+					Color color = mxlFormattedText.getPrintStyle().getColor().getValue();
 					//create text element
 					FormattedTextElement textElement = new FormattedTextString(textLine,
 						new FormattedTextStyle(fontInfo, color, null));

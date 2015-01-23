@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import com.xenoage.utils.annotations.MaybeNull;
-import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.core.music.direction.DynamicsType;
@@ -33,9 +32,9 @@ public final class MxlDynamics
 
 	public static final String elemName = "dynamics";
 
-	@NonNull private DynamicsType element;
-	@MaybeNull private MxlPrintStyle printStyle;
-	@MaybeNull private MxlPlacement placement;
+	private DynamicsType element;
+	private MxlPrintStyle printStyle;
+	private MxlPlacement placement;
 
 
 	@Override public MxlNotationsContentType getNotationsContentType() {
@@ -68,10 +67,8 @@ public final class MxlDynamics
 
 	@Override public void write(XmlWriter writer) {
 		writer.writeElementStart(elemName);
-		if (printStyle != null)
-			printStyle.write(writer);
-		if (placement != null)
-			placement.write(writer);
+		printStyle.write(writer);
+		placement.write(writer);
 		writer.writeElementEmpty(element.name());
 		writer.writeElementEnd();
 	}

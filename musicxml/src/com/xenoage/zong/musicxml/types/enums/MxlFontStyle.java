@@ -12,17 +12,19 @@ import com.xenoage.utils.xml.XmlWriter;
 public enum MxlFontStyle {
 
 	Normal,
-	Italic;
+	Italic,
+	Unknown;
 
 	public static final String attrName = "font-style";
 
 
 	@MaybeNull public static MxlFontStyle read(XmlReader reader) {
-		return Utils.readOrNull(attrName, reader.getAttribute(attrName), values());
+		return Utils.readOr(attrName, reader.getAttribute(attrName), values(), Unknown);
 	}
 
 	public void write(XmlWriter writer) {
-		writer.writeAttribute(attrName, toString().toLowerCase());
+		if (this != Unknown)
+			writer.writeAttribute(attrName, toString().toLowerCase());
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.xenoage.zong.musicxml.types.attributes;
 
+import static com.xenoage.zong.musicxml.types.attributes.MxlEmptyTrillSound.noEmptyTrillSound;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,24 +18,25 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
  */
 @IncompleteMusicXML(children = "empty-trill-sound")
 @AllArgsConstructor @Getter @Setter
-public class MxlMordentType {
+public final class MxlMordentType {
+	
+	public static final MxlMordentType noMordentType = new MxlMordentType(noEmptyTrillSound, null);
 
-	@MaybeNull private MxlEmptyTrillSound emptyTrillSound;
-	@MaybeNull private Boolean longValue;
+	private final MxlEmptyTrillSound emptyTrillSound;
+	@MaybeNull private final Boolean longValue;
 
 
-	@MaybeNull public static MxlMordentType read(XmlReader reader) {
+	public static MxlMordentType read(XmlReader reader) {
 		MxlEmptyTrillSound emptyTrillSound = MxlEmptyTrillSound.read(reader);
 		Boolean longValue = MxlYesNo.readNull(reader.getAttribute("long"));
-		if (emptyTrillSound != null || longValue != null)
+		if (longValue != null)
 			return new MxlMordentType(emptyTrillSound, longValue);
 		else
-			return null;
+			return noMordentType;
 	}
 
 	public void write(XmlWriter writer) {
-		if (emptyTrillSound != null)
-			emptyTrillSound.write(writer);
+		emptyTrillSound.write(writer);
 		if (longValue != null)
 			writer.writeAttribute("long", MxlYesNo.write(longValue));
 	}

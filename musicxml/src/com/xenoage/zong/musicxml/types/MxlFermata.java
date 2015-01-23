@@ -25,8 +25,8 @@ public final class MxlFermata
 
 	public static final String elemName = "fermata";
 
-	@MaybeNull private MxlUprightInverted type;
-	@MaybeNull private MxlPrintStyle printStyle;
+	private MxlUprightInverted type;
+	private MxlPrintStyle printStyle;
 
 
 	@Override public MxlNotationsContentType getNotationsContentType() {
@@ -45,10 +45,8 @@ public final class MxlFermata
 
 	@Override public void write(XmlWriter writer) {
 		writer.writeElementStart(elemName);
-		if (type != null)
-			type.write(writer, "type");
-		if (printStyle != null)
-			printStyle.write(writer);
+		type.write(writer, "type");
+		printStyle.write(writer);
 		writer.writeElementEnd();
 	}
 

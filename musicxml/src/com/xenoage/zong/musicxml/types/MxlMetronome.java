@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import com.xenoage.utils.annotations.MaybeNull;
-import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.attributes.MxlPrintStyle;
@@ -33,10 +32,10 @@ public final class MxlMetronome
 
 	public static final String elemName = "metronome";
 
-	@NonNull private MxlNoteTypeValue beatUnit;
+	private MxlNoteTypeValue beatUnit;
 	private int dotsCount;
 	private int perMinute;
-	@MaybeNull private MxlPrintStyle printStyle;
+	private MxlPrintStyle printStyle;
 
 
 	@Override public MxlDirectionTypeContentType getDirectionTypeContentType() {
@@ -74,8 +73,7 @@ public final class MxlMetronome
 
 	@Override public void write(XmlWriter writer) {
 		writer.writeElementStart(elemName);
-		if (printStyle != null)
-			printStyle.write(writer);
+		printStyle.write(writer);
 		writer.writeElementText("beat-unit", beatUnit.write());
 		for (int i = 0; i < dotsCount; i++)
 			writer.writeElementEmpty("beat-unit-dot");

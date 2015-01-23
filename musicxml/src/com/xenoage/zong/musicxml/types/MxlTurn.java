@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
@@ -17,14 +16,12 @@ import com.xenoage.zong.musicxml.types.choice.MxlOrnamentsContent;
  * @author Andreas Wenger
  */
 @AllArgsConstructor @Getter @Setter
-public final class MxlTurn
+public class MxlTurn
 	implements MxlOrnamentsContent {
 
 	public static final String elemName = "turn";
 
-	@MaybeNull private MxlEmptyTrillSound emptyTrillSound;
-	
-	public static final MxlTurn defaultInstance = new MxlTurn(null);
+	private MxlEmptyTrillSound emptyTrillSound;
 
 	
 	@Override public MxlOrnamentsContentType getOrnamentsContentType() {
@@ -33,16 +30,12 @@ public final class MxlTurn
 
 	@NonNull public static MxlTurn read(XmlReader reader) {
 		MxlEmptyTrillSound emptyTrillSound = MxlEmptyTrillSound.read(reader);
-		if (emptyTrillSound != null)
-			return new MxlTurn(emptyTrillSound);
-		else
-			return defaultInstance;
+		return new MxlTurn(emptyTrillSound);
 	}
 
 	@Override public void write(XmlWriter writer) {
 		writer.writeElementStart(elemName);
-		if (emptyTrillSound != null)
-			emptyTrillSound.write(writer);
+		emptyTrillSound.write(writer);
 		writer.writeElementEnd();
 	}
 

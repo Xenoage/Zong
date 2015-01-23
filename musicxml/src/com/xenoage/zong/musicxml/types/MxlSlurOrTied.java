@@ -41,8 +41,8 @@ public final class MxlSlurOrTied
 	@NonNull private MxlStartStopContinue type;
 	/** May be null for tied elements, but never null for slurs. */
 	@MaybeNull private Integer number;
-	@MaybeNull private MxlPosition position;
-	@MaybeNull private MxlPlacement placement;
+	private MxlPosition position;
+	private MxlPlacement placement;
 	@MaybeNull private MxlBezier bezier;
 
 	private static final int defaultNumberForSlur = 1;
@@ -80,10 +80,8 @@ public final class MxlSlurOrTied
 		writer.writeElementStart(elementType == MxlElementType.Slur ? elemNameSlur : elemNameTied);
 		writer.writeAttribute("type", type.write());
 		writer.writeAttribute("number", number);
-		if (position != null)
-			position.write(writer);
-		if (placement != null)
-			placement.write(writer);
+		position.write(writer);
+		placement.write(writer);
 		if (bezier != null)
 			bezier.write(writer);
 		writer.writeElementEnd();

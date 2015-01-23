@@ -1,6 +1,5 @@
 package com.xenoage.zong.musicxml.types.enums;
 
-import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
 
@@ -12,17 +11,19 @@ import com.xenoage.utils.xml.XmlWriter;
 public enum MxlPlacement {
 
 	Above,
-	Below;
+	Below,
+	noPlacement;
 
 	public static final String attrName = "placement";
 
 
-	@MaybeNull public static MxlPlacement read(XmlReader reader) {
-		return Utils.readOrNull(attrName, reader.getAttribute(attrName), values());
+	public static MxlPlacement read(XmlReader reader) {
+		return Utils.readOr(attrName, reader.getAttribute(attrName), values(), noPlacement);
 	}
 
 	public void write(XmlWriter writer) {
-		writer.writeAttribute(attrName, toString().toLowerCase());
+		if (this != noPlacement)
+			writer.writeAttribute(attrName, toString().toLowerCase());
 	}
 
 }

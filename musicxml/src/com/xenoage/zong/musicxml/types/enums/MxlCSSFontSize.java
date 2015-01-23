@@ -26,7 +26,7 @@ public enum MxlCSSFontSize
 	private final String xmlName;
 
 	@MaybeNull public static MxlCSSFontSize read(String s) {
-		return Utils.readOrNull("css-font-size", s, values());
+		return Utils.readOr("css-font-size", s, values(), null);
 	}
 	
 	public String write() {

@@ -39,8 +39,8 @@ public final class OtherReader {
 
 	@MaybeNull public static BezierPoint readBezierPoint(MxlPosition mxlPosition,
 		MxlBezier mxlBezier, float tenthsMm, int staffLinesCount, float noteLP, Fraction chordDuration) {
-		Float px = (mxlPosition != null ? mxlPosition.getDefaultX() : null);
-		Float py = (mxlPosition != null ? mxlPosition.getDefaultY() : null);
+		Float px = mxlPosition.getDefaultX();
+		Float py = mxlPosition.getDefaultY();
 		Float cx = (mxlBezier != null ? mxlBezier.getBezierX() : null);
 		Float cy = (mxlBezier != null ? mxlBezier.getBezierY() : null);
 		SP point = null;
@@ -78,12 +78,12 @@ public final class OtherReader {
 	}
 
 	@MaybeNull public static VSide readVSide(MxlPlacement mxlPlacement) {
-		if (mxlPlacement == null)
-			return null;
-		else if (mxlPlacement == MxlPlacement.Above)
+		if (mxlPlacement == MxlPlacement.Above)
 			return VSide.Top;
-		else
+		else if (mxlPlacement == MxlPlacement.Below)
 			return VSide.Bottom;
+		else
+			return null;
 	}
 
 	//TIDY: see ChordWidths, but is defined in layout project

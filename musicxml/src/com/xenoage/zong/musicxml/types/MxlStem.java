@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
@@ -25,8 +24,8 @@ public final class MxlStem
 	public static final String elemName = "stem";
 
 	@NonNull private MxlStemValue value;
-	@MaybeNull private MxlPosition position;
-	@MaybeNull private MxlColor color;
+	private MxlPosition position;
+	private MxlColor color;
 
 
 	@NonNull public static MxlStem read(XmlReader reader) {
@@ -38,10 +37,8 @@ public final class MxlStem
 
 	public void write(XmlWriter writer) {
 		writer.writeElementStart(elemName);
-		if (position != null)
-			position.write(writer);
-		if (color != null)
-			color.write(writer);
+		position.write(writer);
+		color.write(writer);
 		value.write(writer);
 		writer.writeElementEnd();
 	}

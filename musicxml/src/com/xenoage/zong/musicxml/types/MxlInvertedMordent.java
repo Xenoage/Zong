@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
@@ -22,9 +21,7 @@ public final class MxlInvertedMordent
 
 	public static final String elemName = "inverted-mordent";
 
-	@MaybeNull private MxlMordentType mordentType;
-	
-	public static final MxlInvertedMordent defaultInstance = new MxlInvertedMordent(null);
+	private MxlMordentType mordentType;
 
 	
 	@Override public MxlOrnamentsContentType getOrnamentsContentType() {
@@ -33,16 +30,12 @@ public final class MxlInvertedMordent
 
 	@NonNull public static MxlInvertedMordent read(XmlReader reader) {
 		MxlMordentType mordentType = MxlMordentType.read(reader);
-		if (mordentType != null)
-			return new MxlInvertedMordent(mordentType);
-		else
-			return defaultInstance;
+		return new MxlInvertedMordent(mordentType);
 	}
 
 	@Override public void write(XmlWriter writer) {
 		writer.writeElementStart(elemName);
-		if (mordentType != null)
-			mordentType.write(writer);
+		mordentType.write(writer);
 		writer.writeElementEnd();
 	}
 
