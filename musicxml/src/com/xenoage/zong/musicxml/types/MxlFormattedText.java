@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
@@ -26,9 +25,9 @@ public final class MxlFormattedText
 	implements MxlPrintStyleContent {
 
 	@NonNull private String value;
-	@MaybeNull private MxlLeftCenterRight justify; //alignment within the text box
-	@MaybeNull private MxlLeftCenterRight hAlign; //alignment of the text box, see halign documentation
-	@MaybeNull private MxlVAlign vAlign;
+	private MxlLeftCenterRight justify; //alignment within the text box
+	private MxlLeftCenterRight hAlign; //alignment of the text box, see halign documentation
+	private MxlVAlign vAlign;
 	private MxlPrintStyle printStyle;
 
 
@@ -42,12 +41,9 @@ public final class MxlFormattedText
 	}
 
 	public void write(XmlWriter writer) {
-		if (justify != null)
-			justify.write(writer, "justify");
-		if (hAlign != null)
-			hAlign.write(writer, "halign");
-		if (vAlign != null)
-			vAlign.write(writer);
+		justify.write(writer, "justify");
+		hAlign.write(writer, "halign");
+		vAlign.write(writer);
 		printStyle.write(writer);
 		writer.writeText(value);
 	}

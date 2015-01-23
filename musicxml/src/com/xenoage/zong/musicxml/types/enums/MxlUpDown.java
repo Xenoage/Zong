@@ -1,6 +1,5 @@
 package com.xenoage.zong.musicxml.types.enums;
 
-import com.xenoage.utils.annotations.MaybeNull;
 
 /**
  * MusicXML up-down.
@@ -12,7 +11,8 @@ public enum MxlUpDown {
 	Up,
 	Down;
 
-	@MaybeNull public static MxlUpDown readOr(String s, MxlUpDown replacement) {
+	
+	public static MxlUpDown readOr(String s, MxlUpDown replacement) {
 		return Utils.readOr("up-down", s, values(), replacement);
 	}
 

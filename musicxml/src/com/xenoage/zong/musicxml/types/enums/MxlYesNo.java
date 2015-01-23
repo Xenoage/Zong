@@ -1,8 +1,7 @@
 package com.xenoage.zong.musicxml.types.enums;
 
-import com.xenoage.utils.annotations.MaybeNull;
-import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.XmlDataException;
+import com.xenoage.utils.xml.XmlWriter;
 
 /**
  * Reader and writer methods for MusicXML's yes-no,
@@ -10,25 +9,31 @@ import com.xenoage.utils.xml.XmlDataException;
  * 
  * @author Andreas Wenger
  */
-public class MxlYesNo {
+public enum MxlYesNo {
+	
+	Yes,
+	No,
+	Unknown;
 
-	@NonNull public static boolean read(String s) {
+	
+	public static MxlYesNo readRequired(String s) {
 		if (s.equals("yes"))
-			return true;
+			return Yes;
 		else if (s.equals("no"))
-			return false;
+			return No;
 		throw new XmlDataException("yes-no = " + s);
 	}
 
-	@MaybeNull public static Boolean readNull(String s) {
+	public static MxlYesNo read(String s) {
 		if (s == null)
-			return null;
+			return Unknown;
 		else
-			return read(s);
+			return readRequired(s);
 	}
 
-	public static String write(boolean v) {
-		return v ? "yes" : "no";
+	public void write(XmlWriter writer, String attrName) {
+		if (this != Unknown)
+			writer.writeAttribute(attrName, toString().toLowerCase());
 	}
 
 }

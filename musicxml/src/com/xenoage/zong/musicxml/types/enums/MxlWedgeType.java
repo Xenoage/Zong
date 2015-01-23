@@ -1,6 +1,5 @@
 package com.xenoage.zong.musicxml.types.enums;
 
-import com.xenoage.utils.annotations.NonNull;
 
 /**
  * MusicXML wedge-type.
@@ -13,7 +12,8 @@ public enum MxlWedgeType {
 	Diminuendo,
 	Stop;
 
-	@NonNull public static MxlWedgeType read(String s) {
+	
+	public static MxlWedgeType read(String s) {
 		return Utils.read("wedge-type", s, values());
 	}
 

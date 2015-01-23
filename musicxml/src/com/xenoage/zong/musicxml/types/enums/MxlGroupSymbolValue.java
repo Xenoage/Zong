@@ -1,6 +1,5 @@
 package com.xenoage.zong.musicxml.types.enums;
 
-import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
 
@@ -17,7 +16,7 @@ public enum MxlGroupSymbolValue {
 	Bracket,
 	Square;
 
-	@NonNull public static MxlGroupSymbolValue read(XmlReader reader) {
+	public static MxlGroupSymbolValue read(XmlReader reader) {
 		return Utils.read("group-symbol-value", reader.getText(), values());
 	}
 

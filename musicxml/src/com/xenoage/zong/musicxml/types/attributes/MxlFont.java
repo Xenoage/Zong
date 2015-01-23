@@ -10,7 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import com.xenoage.utils.annotations.MaybeEmpty;
-import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.enums.MxlFontStyle;
@@ -36,7 +35,7 @@ public final class MxlFont {
 		MxlFontSize.noFontSize, MxlFontWeight.Unknown);
 	
 
-	@MaybeNull public static MxlFont read(XmlReader reader) {
+	public static MxlFont read(XmlReader reader) {
 		List<String> fontFamily = alist();
 		String fontFamilies = reader.getAttribute("font-family");
 		if (fontFamilies != null) {

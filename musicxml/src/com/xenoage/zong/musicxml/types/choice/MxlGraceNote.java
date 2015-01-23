@@ -3,8 +3,6 @@ package com.xenoage.zong.musicxml.types.choice;
 import lombok.Getter;
 import lombok.Setter;
 
-import com.xenoage.utils.annotations.MaybeNull;
-import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.enums.MxlYesNo;
@@ -23,18 +21,18 @@ public final class MxlGraceNote
 	
 	public static final String elemName = "grace";
 
-	@NonNull private MxlFullNote fullNote;
-	@MaybeNull private Boolean slash;
+	private MxlFullNote fullNote;
+	private MxlYesNo slash;
 
 
 	@Override public MxlNoteContentType getNoteContentType() {
 		return MxlNoteContentType.Grace;
 	}
 	
-	@NonNull public static MxlGraceNote read(XmlReader reader) {
+	public static MxlGraceNote read(XmlReader reader) {
 		MxlGraceNote ret = new MxlGraceNote();
 		ret.fullNote = new MxlFullNote();
-		ret.slash = MxlYesNo.readNull(reader.getAttribute("slash"));
+		ret.slash = MxlYesNo.read(reader.getAttribute("slash"));
 		return ret;
 	}
 
@@ -48,8 +46,7 @@ public final class MxlGraceNote
 
 	@Override public void write(XmlWriter writer) {
 		writer.writeElementEmpty(elemName);
-		if (slash != null)
-			writer.writeAttribute("slash", MxlYesNo.write(slash));
+		slash.write(writer, "slash");
 		fullNote.write(writer);
 	}
 

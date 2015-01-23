@@ -91,7 +91,7 @@ public final class CreditsReader {
 			}
 			//vertical alignment
 			MxlVAlign mxlVAlign = mxlFirstCreditWords.getVAlign();
-			if (mxlVAlign == null || mxlVAlign == MxlVAlign.Top) {
+			if (mxlVAlign == MxlVAlign.Top || mxlVAlign == MxlVAlign.Unknown) {
 				position = position.add(0, size.height / 2);
 			}
 			else if (mxlVAlign == MxlVAlign.Middle) {

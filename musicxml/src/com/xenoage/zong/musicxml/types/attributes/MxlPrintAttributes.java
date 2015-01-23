@@ -1,9 +1,9 @@
 package com.xenoage.zong.musicxml.types.attributes;
 
+import static com.xenoage.zong.musicxml.types.enums.MxlYesNo.Unknown;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.enums.MxlYesNo;
@@ -17,25 +17,27 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 @IncompleteMusicXML(missing = "staff-spacing,blank-page,page-number")
 @AllArgsConstructor @Getter
 public class MxlPrintAttributes {
+	
+	public static final MxlPrintAttributes noPrintAttributes = new MxlPrintAttributes(Unknown, Unknown);
 
-	@MaybeNull private Boolean newSystem;
-	@MaybeNull private Boolean newPage;
+	private MxlYesNo newSystem;
+	private MxlYesNo newPage;
 
 
-	@MaybeNull public static MxlPrintAttributes read(XmlReader reader) {
-		Boolean newSystem = MxlYesNo.readNull(reader.getAttribute("new-system"));
-		Boolean newPage = MxlYesNo.readNull(reader.getAttribute("new-page"));
-		if (newSystem != null || newPage != null)
+	public static MxlPrintAttributes read(XmlReader reader) {
+		MxlYesNo newSystem = MxlYesNo.read(reader.getAttribute("new-system"));
+		MxlYesNo newPage = MxlYesNo.read(reader.getAttribute("new-page"));
+		if (newSystem != Unknown || newPage != Unknown)
 			return new MxlPrintAttributes(newSystem, newPage);
 		else
-			return null;
+			return noPrintAttributes;
 	}
 
 	public void write(XmlWriter writer) {
-		if (newSystem != null)
-			writer.writeAttribute("new-system", MxlYesNo.write(newSystem));
-		if (newPage != null)
-			writer.writeAttribute("new-page", MxlYesNo.write(newPage));
+		if (this != noPrintAttributes) {
+			newSystem.write(writer, "new-system");
+			newPage.write(writer, "new-page");
+		}
 	}
 
 }

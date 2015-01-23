@@ -1,6 +1,5 @@
 package com.xenoage.zong.musicxml.types.enums;
 
-import com.xenoage.utils.annotations.NonNull;
 
 /**
  * MusicXML start-stop-change.
@@ -13,7 +12,8 @@ public enum MxlStartStopChange {
 	Stop,
 	Change;
 
-	@NonNull public static MxlStartStopChange read(String s) {
+	
+	public static MxlStartStopChange read(String s) {
 		return Utils.read("start-stop-change", s, values());
 	}
 

@@ -24,17 +24,16 @@ import com.xenoage.zong.musicxml.types.enums.MxlPlacement;
 public final class OtherReader {
 
 	@MaybeNull public static Alignment readAlignment(MxlLeftCenterRight mxlLeftCenterRight) {
-		if (mxlLeftCenterRight != null) {
-			switch (mxlLeftCenterRight) {
-				case Left:
-					return Alignment.Left;
-				case Center:
-					return Alignment.Center;
-				case Right:
-					return Alignment.Right;
-			}
+		switch (mxlLeftCenterRight) {
+			case Left:
+				return Alignment.Left;
+			case Center:
+				return Alignment.Center;
+			case Right:
+				return Alignment.Right;
+			default:
+				return null;
 		}
-		return null;
 	}
 
 	@MaybeNull public static BezierPoint readBezierPoint(MxlPosition mxlPosition,

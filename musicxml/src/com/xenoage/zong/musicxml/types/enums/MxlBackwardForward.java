@@ -1,6 +1,5 @@
 package com.xenoage.zong.musicxml.types.enums;
 
-import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
 
@@ -18,7 +17,7 @@ public enum MxlBackwardForward {
 	public static final String attrName = "direction";
 
 
-	@NonNull public static MxlBackwardForward read(XmlReader reader) {
+	public static MxlBackwardForward read(XmlReader reader) {
 		return Utils.read(attrName, reader.getAttribute(attrName), values());
 	}
 

@@ -3,7 +3,6 @@ package com.xenoage.zong.musicxml.types.choice;
 import lombok.Getter;
 import lombok.Setter;
 
-import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.groups.MxlFullNote;
@@ -19,7 +18,7 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 public final class MxlNormalNote
 	implements MxlNoteContent {
 
-	@NonNull MxlFullNote fullNote = new MxlFullNote();
+	private MxlFullNote fullNote = new MxlFullNote();
 	private int duration = 0;
 
 
@@ -27,7 +26,7 @@ public final class MxlNormalNote
 		return MxlNoteContentType.Normal;
 	}
 
-	@NonNull public static MxlNormalNote read() {
+	public static MxlNormalNote read() {
 		return new MxlNormalNote();
 	}
 

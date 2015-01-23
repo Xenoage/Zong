@@ -2,7 +2,6 @@ package com.xenoage.zong.musicxml.types.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NonNull;
 
 import com.xenoage.utils.xml.EnumWithXmlNames;
 import com.xenoage.utils.xml.XmlReader;
@@ -33,7 +32,7 @@ public enum MxlAccidentalText
 	private final String xmlName;
 
 
-	@NonNull public static MxlAccidentalText read(XmlReader reader) {
+	public static MxlAccidentalText read(XmlReader reader) {
 		return Utils.read("accidental-text", reader.getText(), values());
 	}
 

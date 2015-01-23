@@ -29,6 +29,7 @@ import com.xenoage.zong.musicxml.types.choice.MxlFullNoteContent.MxlFullNoteCont
 import com.xenoage.zong.musicxml.types.choice.MxlGraceNote;
 import com.xenoage.zong.musicxml.types.choice.MxlNormalNote;
 import com.xenoage.zong.musicxml.types.choice.MxlNoteContent.MxlNoteContentType;
+import com.xenoage.zong.musicxml.types.enums.MxlYesNo;
 import com.xenoage.zong.musicxml.types.groups.MxlEditorialVoice;
 import com.xenoage.zong.musicxml.types.groups.MxlFullNote;
 
@@ -139,7 +140,8 @@ public final class ChordReader {
 				Fraction graceDuration = fr(1, 8);
 				if (mxlFirstNote.getNoteType() != null)
 					graceDuration = mxlFirstNote.getNoteType().getDuration();
-				grace = new Grace(notNull(mxlFirstGraceNote.getSlash(), false), graceDuration);
+				boolean slash = mxlFirstGraceNote.getSlash() == MxlYesNo.Yes;
+				grace = new Grace(slash, graceDuration);
 				chord = new Chord(alist(new Note(pitch)), grace);
 			}
 			else {

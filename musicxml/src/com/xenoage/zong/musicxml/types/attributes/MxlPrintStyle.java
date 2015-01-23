@@ -6,7 +6,6 @@ import static com.xenoage.zong.musicxml.types.attributes.MxlPosition.noPosition;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.util.MxlPositionContent;
@@ -27,7 +26,7 @@ public final class MxlPrintStyle
 	private final MxlColor color;
 
 
-	@MaybeNull public static MxlPrintStyle read(XmlReader reader) {
+	public static MxlPrintStyle read(XmlReader reader) {
 		MxlPosition position = MxlPosition.read(reader);
 		MxlFont font = MxlFont.read(reader);
 		MxlColor color = MxlColor.read(reader);

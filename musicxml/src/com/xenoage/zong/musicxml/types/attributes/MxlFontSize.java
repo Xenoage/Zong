@@ -33,7 +33,6 @@ public final class MxlFontSize {
 			return new MxlFontSize(Float.parseFloat(s), null);
 		else
 			return new MxlFontSize(null, MxlCSSFontSize.read(s));
-	
 	}
 
 	public void write(XmlWriter writer) {

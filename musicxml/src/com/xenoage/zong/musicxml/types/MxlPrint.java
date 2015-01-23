@@ -1,5 +1,6 @@
 package com.xenoage.zong.musicxml.types;
 
+import static com.xenoage.zong.musicxml.types.attributes.MxlPrintAttributes.noPrintAttributes;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,7 +27,7 @@ public final class MxlPrint
 	public static final String elemName = "print";
 
 	@MaybeNull private MxlLayout layout;
-	@MaybeNull private MxlPrintAttributes printAttributes;
+	private MxlPrintAttributes printAttributes;
 
 
 	@Override public MxlMusicDataContentType getMusicDataContentType() {
@@ -42,7 +43,7 @@ public final class MxlPrint
 		}
 		if (false == layout.isUsed())
 			layout = null;
-		if (layout != null || printAttributes != null)
+		if (layout != null || printAttributes != noPrintAttributes)
 			return new MxlPrint(layout, printAttributes);
 		else
 			return null;
@@ -50,8 +51,7 @@ public final class MxlPrint
 
 	@Override public void write(XmlWriter writer) {
 		writer.writeElementStart(elemName);
-		if (printAttributes != null)
-			printAttributes.write(writer);
+		printAttributes.write(writer);
 		if (layout != null)
 			layout.write(writer);
 		writer.writeElementEnd();

@@ -3,6 +3,7 @@ package com.xenoage.zong.io.musicxml.in.readers;
 import static com.xenoage.utils.iterators.It.it;
 import lombok.RequiredArgsConstructor;
 
+import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.zong.core.format.Break;
 import com.xenoage.zong.core.format.StaffLayout;
 import com.xenoage.zong.core.format.SystemLayout;
@@ -13,6 +14,7 @@ import com.xenoage.zong.musicxml.types.MxlPrint;
 import com.xenoage.zong.musicxml.types.MxlStaffLayout;
 import com.xenoage.zong.musicxml.types.MxlSystemLayout;
 import com.xenoage.zong.musicxml.types.attributes.MxlPrintAttributes;
+import com.xenoage.zong.musicxml.types.enums.MxlYesNo;
 import com.xenoage.zong.musicxml.types.groups.MxlLayout;
 
 /**
@@ -87,20 +89,30 @@ public class PrintReader {
 	}
 	
 	private Break readBreak() {
-		SystemBreak systemBreak = null;
-		PageBreak pageBreak = null;
 		MxlPrintAttributes mxlPA = mxlPrint.getPrintAttributes();
-		if (mxlPA != null) {
-			Boolean newSystem = mxlPA.getNewSystem();
-			systemBreak = (newSystem == null ? null : (newSystem ? SystemBreak.NewSystem
-				: SystemBreak.NoNewSystem));
-			Boolean newPage = mxlPA.getNewPage();
-			pageBreak = (newPage == null ? null : (newPage ? PageBreak.NewPage
-				: PageBreak.NoNewPage));
-			if (systemBreak != null || pageBreak != null)
-				return new Break(pageBreak, systemBreak);
-		}
+		SystemBreak systemBreak = readSystemBreak(mxlPA.getNewSystem());
+		PageBreak pageBreak = readPageBreak(mxlPA.getNewPage());
+		if (systemBreak != null || pageBreak != null)
+			return new Break(pageBreak, systemBreak);
 		return null;
+	}
+	
+	@MaybeNull private SystemBreak readSystemBreak(MxlYesNo mxlSystemBreak) {
+		if (mxlSystemBreak == MxlYesNo.Yes)
+			return SystemBreak.NewSystem;
+		else if (mxlSystemBreak == MxlYesNo.No)
+			return SystemBreak.NoNewSystem;
+		else
+			return null;
+	}
+	
+	@MaybeNull private PageBreak readPageBreak(MxlYesNo mxlPageBreak) {
+		if (mxlPageBreak == MxlYesNo.Yes)
+			return PageBreak.NewPage;
+		else if (mxlPageBreak == MxlYesNo.No)
+			return PageBreak.NoNewPage;
+		else
+			return null;
 	}
 	
 	private SystemLayout readSystemLayout(boolean isPageStarted, float tenthMm) {

@@ -22,6 +22,7 @@ public final class MxlAllMargins {
 	private float topMargin;
 	private float bottomMargin;
 
+	
 	@MaybeNull public static MxlAllMargins read(XmlReader reader) {
 		float leftMargin = 0;
 		float rightMargin = 0;

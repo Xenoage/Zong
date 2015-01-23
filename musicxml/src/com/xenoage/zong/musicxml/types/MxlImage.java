@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
@@ -24,13 +23,13 @@ import com.xenoage.zong.musicxml.types.util.MxlPositionContent;
 public final class MxlImage
 	implements MxlCreditContent, MxlDirectionTypeContent, MxlPositionContent {
 
-	@NonNull private String elemName; //"image" or "credit-image"
+	private String elemName; //"image" or "credit-image"
 
-	@NonNull private String source;
-	@NonNull private String type;
+	private String source;
+	private String type;
 	private MxlPosition position;
-	@MaybeNull private MxlLeftCenterRight hAlign;
-	@MaybeNull private MxlVAlignImage vAlign;
+	private MxlLeftCenterRight hAlign;
+	private MxlVAlignImage vAlign;
 
 
 	@Override public MxlCreditContentType getCreditContentType() {
@@ -54,10 +53,8 @@ public final class MxlImage
 		writer.writeAttribute("source", source);
 		writer.writeAttribute("type", type);
 		position.write(writer);
-		if (hAlign != null)
-			hAlign.write(writer, "halign");
-		if (vAlign != null)
-			vAlign.write(writer);
+		hAlign.write(writer, "halign");
+		vAlign.write(writer);
 		writer.writeElementEnd();
 	}
 

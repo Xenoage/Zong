@@ -1,6 +1,5 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.NullUtils.notNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -41,7 +40,7 @@ public final class MxlBarline
 
 	public static MxlBarline read(XmlReader reader) {
 		//attributes
-		MxlRightLeftMiddle location = notNull(MxlRightLeftMiddle.read(reader), defaultLocation);
+		MxlRightLeftMiddle location = MxlRightLeftMiddle.readOr(reader, defaultLocation);
 		//elements
 		MxlBarStyleColor barStyle = null;
 		MxlEnding ending = null;

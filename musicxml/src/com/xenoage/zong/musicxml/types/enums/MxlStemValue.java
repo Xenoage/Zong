@@ -1,6 +1,5 @@
 package com.xenoage.zong.musicxml.types.enums;
 
-import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
 
@@ -16,7 +15,8 @@ public enum MxlStemValue {
 	Double,
 	None;
 
-	@NonNull public static MxlStemValue read(XmlReader reader) {
+	
+	public static MxlStemValue read(XmlReader reader) {
 		return Utils.read("stem-value", reader.getText(), values());
 	}
 

@@ -14,6 +14,7 @@ public enum MxlUprightInverted {
 	Inverted,
 	Unknown;
 
+	
 	public static MxlUprightInverted read(XmlReader reader, String attrName) {
 		return Utils.readOr(attrName, reader.getAttribute(attrName), values(), Unknown);
 	}

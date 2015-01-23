@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.enums.MxlYesNo;
@@ -20,16 +19,16 @@ import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
 @AllArgsConstructor @Getter @Setter
 public final class MxlMordentType {
 	
-	public static final MxlMordentType noMordentType = new MxlMordentType(noEmptyTrillSound, null);
+	public static final MxlMordentType noMordentType = new MxlMordentType(noEmptyTrillSound, MxlYesNo.Unknown);
 
 	private final MxlEmptyTrillSound emptyTrillSound;
-	@MaybeNull private final Boolean longValue;
+	private final MxlYesNo longValue;
 
 
 	public static MxlMordentType read(XmlReader reader) {
 		MxlEmptyTrillSound emptyTrillSound = MxlEmptyTrillSound.read(reader);
-		Boolean longValue = MxlYesNo.readNull(reader.getAttribute("long"));
-		if (longValue != null)
+		MxlYesNo longValue = MxlYesNo.read(reader.getAttribute("long"));
+		if (emptyTrillSound != noEmptyTrillSound || longValue != MxlYesNo.Unknown)
 			return new MxlMordentType(emptyTrillSound, longValue);
 		else
 			return noMordentType;
@@ -37,8 +36,7 @@ public final class MxlMordentType {
 
 	public void write(XmlWriter writer) {
 		emptyTrillSound.write(writer);
-		if (longValue != null)
-			writer.writeAttribute("long", MxlYesNo.write(longValue));
+		longValue.write(writer, "long");
 	}
 	
 }
