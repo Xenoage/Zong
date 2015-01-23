@@ -85,11 +85,11 @@ public final class ChordReader {
 			//check if chord could be written. if not, return
 			if (getMP(chord) == null)
 				return;
+			readFirstNoteNotations();
+			readOtherChordNotes();
 			readStem();
 			readBeams();
-			readFirstNoteNotations();
 			new LyricReader(mxlNotes).readToChord(chord);
-			readOtherChordNotes();
 		}
 		
 		if (chordOrRest != null)
