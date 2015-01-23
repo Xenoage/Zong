@@ -17,5 +17,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/controlsfx"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/utils-jse8"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/renderer-awt"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/renderer-javafx"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

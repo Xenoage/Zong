@@ -54,7 +54,7 @@ project(':demos') {
 project(':desktop') {
 	sourceCompatibility = 8
 	dependencies {
-		compile project(':renderer-awt'), project(':midi-out'), project(':musicxml-in')
+		compile project(':renderer-awt'), project(':renderer-javafx'), project(':midi-out'), project(':musicxml-in')
 		compile group: "org.controlsfx", name: "controlsfx", version: "8.20.7"
 		compile group: "com.itextpdf", name: "itextpdf", version: "5.4.5"
 		compile files('../lib/lib/vorbis-java-1.0.0-beta.jar')
