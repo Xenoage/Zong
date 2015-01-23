@@ -24,7 +24,8 @@ import com.xenoage.zong.core.text.FormattedTextParagraph;
 import com.xenoage.zong.core.text.FormattedTextString;
 import com.xenoage.zong.core.text.FormattedTextStyle;
 import com.xenoage.zong.core.text.FormattedTextSymbol;
-import com.xenoage.zong.renderer.awt.symbol.SymbolGraphicAttribute;
+import com.xenoage.zong.renderer.awt.symbol.PathSymbolGraphicAttribute;
+import com.xenoage.zong.symbols.PathSymbol;
 import com.xenoage.zong.symbols.Symbol;
 
 /**
@@ -96,11 +97,11 @@ public class TextLayoutTools {
 				else if (e instanceof FormattedTextSymbol) {
 					FormattedTextSymbol fts = (FormattedTextSymbol) e;
 					Symbol symbol = fts.getSymbol();
-					if (symbol.getShape() != null) {
+					if (symbol instanceof PathSymbol) {
 						as.addAttribute(TextAttribute.FOREGROUND,
 							toAwtColor(fts.getStyle().getColor()), pos, pos + 1);
 						as.addAttribute(TextAttribute.CHAR_REPLACEMENT,
-							new SymbolGraphicAttribute(symbol, fts.getScaling()), pos, pos + 1);
+							new PathSymbolGraphicAttribute((PathSymbol) symbol, fts.getScaling()), pos, pos + 1);
 						count += 2;
 					}
 				}

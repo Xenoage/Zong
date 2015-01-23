@@ -94,13 +94,8 @@ public class GwtCanvas
 			//draw elements
 			for (FormattedTextElement e : p.getElements()) {
 				if (e instanceof FormattedTextString) {
-					//TODO - formatting
+					//TODO formatting
 					FormattedTextString t = (FormattedTextString) e;
-					/* TODO Paint paint = new Paint(AndroidColorUtils.black);
-					paint.setTypeface(Typeface.SERIF);
-					paint.setTextSize(Units.pxToMm(t.getStyle().getFont().getSize(), 1));
-					paint.setAntiAlias(true);
-					canvas.drawText(t.getText(), offsetX, offsetY, paint); */
 					context.fillText(t.getText(), offsetX, offsetY);
 				}
 				else {

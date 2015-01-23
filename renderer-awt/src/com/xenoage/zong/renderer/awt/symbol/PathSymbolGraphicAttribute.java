@@ -9,32 +9,28 @@ import java.awt.geom.Rectangle2D;
 
 import com.xenoage.utils.math.Units;
 import com.xenoage.utils.math.geom.Rectangle2f;
-import com.xenoage.zong.symbols.Symbol;
+import com.xenoage.zong.renderer.awt.path.AwtPath;
+import com.xenoage.zong.symbols.PathSymbol;
 
 /**
- * This class can draw {@link Symbol}s, which provide a {@link Shape},
- * in a {@link TextLayout}.
+ * This class can draw {@link PathSymbol}s in a {@link TextLayout}.
  * 
  * @author Andreas Wenger
  */
-public final class SymbolGraphicAttribute
+public final class PathSymbolGraphicAttribute
 	extends GraphicAttribute {
 
-	private final Symbol symbol;
+	private final PathSymbol symbol;
 	private final float scaling;
 
 
 	/**
-	 * Creates a new {@link SymbolGraphicAttribute} from the given symbol
+	 * Creates a new {@link PathSymbolGraphicAttribute} from the given symbol
 	 * using the given scaling.
 	 * @throws IllegalArgumentException if the symbol does not provide a {@link Shape}
 	 */
-	public SymbolGraphicAttribute(Symbol symbol, float scaling) {
+	public PathSymbolGraphicAttribute(PathSymbol symbol, float scaling) {
 		super(GraphicAttribute.ROMAN_BASELINE);
-		if (symbol.getShape() == null)
-			throw new IllegalArgumentException("Symbol does not provide a shape");
-		if (symbol.getShape() instanceof Shape == false)
-			throw new IllegalArgumentException("Symbol does not provide an AWT Shape");
 		this.symbol = symbol;
 		this.scaling = scaling * Units.mmToPx_1_1;
 	}
@@ -66,7 +62,7 @@ public final class SymbolGraphicAttribute
 		g.translate(x, y);
 		g.scale(scaling, scaling);
 		g.translate(-1 * symbol.getLeftBorder(), symbol.baselineOffset);
-		g.fill((Shape) symbol.getShape());
+		g.fill(AwtPath.createShape(symbol.getPath()));
 		g.setTransform(oldTransform);
 	}
 
@@ -78,7 +74,7 @@ public final class SymbolGraphicAttribute
 
 	@Override public Shape getOutline(AffineTransform tx) {
 		Shape s = AffineTransform.getScaleInstance(scaling, scaling).createTransformedShape(
-			(Shape) symbol.getShape());
+			AwtPath.createShape(symbol.getPath()));
 		return tx == null ? s : tx.createTransformedShape(s);
 	}
 

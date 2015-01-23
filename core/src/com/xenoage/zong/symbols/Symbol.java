@@ -69,13 +69,4 @@ public abstract class Symbol {
 	 */
 	public abstract SymbolType getType();
 
-	/**
-	 * Gets the shape of this symbol, or null if not available
-	 * (e.g. when the symbol is more complex than just a shape).
-	 * The type of the shape is dependent on the graphics library.
-	 */
-	@MaybeNull public Object getShape() {
-		return null;
-	}
-
 }

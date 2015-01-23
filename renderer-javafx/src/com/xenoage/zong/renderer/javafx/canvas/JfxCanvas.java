@@ -1,21 +1,31 @@
 package com.xenoage.zong.renderer.javafx.canvas;
 
 import static com.xenoage.utils.jse.javafx.color.JfxColorUtils.toJavaFXColor;
+import static com.xenoage.utils.jse.javafx.font.JfxFontUtils.toJavaFXFont;
 import static com.xenoage.utils.kernel.Range.range;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.text.Font;
 
 import com.xenoage.utils.color.Color;
+import com.xenoage.utils.font.TextMetrics;
+import com.xenoage.utils.math.Units;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Rectangle2f;
 import com.xenoage.utils.math.geom.Size2f;
+import com.xenoage.zong.core.text.Alignment;
 import com.xenoage.zong.core.text.FormattedText;
+import com.xenoage.zong.core.text.FormattedTextElement;
+import com.xenoage.zong.core.text.FormattedTextParagraph;
+import com.xenoage.zong.core.text.FormattedTextString;
+import com.xenoage.zong.core.text.FormattedTextSymbol;
 import com.xenoage.zong.io.selection.text.TextSelection;
 import com.xenoage.zong.renderer.canvas.Canvas;
 import com.xenoage.zong.renderer.canvas.CanvasDecoration;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
 import com.xenoage.zong.renderer.canvas.CanvasIntegrity;
 import com.xenoage.zong.renderer.javafx.path.JfxPath;
+import com.xenoage.zong.renderer.symbol.SymbolsRenderer;
 import com.xenoage.zong.symbols.path.Path;
 
 /**
@@ -57,18 +67,54 @@ public class JfxCanvas
 
 	@Override public void drawText(FormattedText text, TextSelection selection, Point2f position,
 		boolean yIsBaseline, float frameWidth) {
-		
-		if (decoration == CanvasDecoration.Interactive) {
-			//interactive mode: show text selection
-		}/* GOON
+		context.save();
+		context.translate(position.x, position.y);
 
-		FontRenderContext frc = g2d.getFontRenderContext();
-		TextLayouts textLayouts = TextLayoutTools.create(text, frameWidth, yIsBaseline, frc);
+		//print the text frame paragraph for paragraph
+		float offsetX = 0;
+		float offsetY = 0;
 
-		AffineTransform oldTransform = g2d.getTransform();
-		g2d.translate(position.x, position.y);
-		textLayouts.draw(g2d);
-		g2d.setTransform(oldTransform); */
+		for (FormattedTextParagraph p : text.getParagraphs()) {
+			TextMetrics pMetrics = p.getMetrics();
+			if (!yIsBaseline)
+				offsetY += pMetrics.getAscent();
+
+			//adjustment
+			if (p.getAlignment() == Alignment.Center)
+				offsetX = (frameWidth - pMetrics.getWidth()) / 2;
+			else if (p.getAlignment() == Alignment.Right)
+				offsetX = frameWidth - pMetrics.getWidth();
+			else
+				offsetX = 0;
+
+			//draw elements
+			for (FormattedTextElement e : p.getElements()) {
+				if (e instanceof FormattedTextString) {
+					//TODO formatting
+					FormattedTextString t = (FormattedTextString) e;
+					context.setFill(toJavaFXColor(t.getStyle().getColor()));
+					Font font = toJavaFXFont(t.getStyle().getFont());
+					context.setFont(font);
+					context.save();
+					context.scale(Units.pxToMm_1_1, Units.pxToMm_1_1);
+					context.fillText(t.getText(), offsetX / Units.pxToMm_1_1, offsetY / Units.pxToMm_1_1);
+					context.restore();
+				}
+				else {
+					//symbol
+					FormattedTextSymbol fts = (FormattedTextSymbol) e;
+					float scaling = fts.getScaling();
+					SymbolsRenderer.draw(fts.getSymbol(), this, Color.black, new Point2f(
+						offsetX + fts.getOffsetX(), offsetY + fts.getSymbol().baselineOffset * scaling),
+						new Point2f(scaling, scaling));
+				}
+				offsetX += e.getMetrics().getWidth();
+			}
+
+			offsetY += (pMetrics.getDescent() + pMetrics.getLeading());
+		}
+
+		context.restore();
 	}
 
 	@Override public void drawLine(Point2f p1, Point2f p2, Color color, float lineWidth) {
