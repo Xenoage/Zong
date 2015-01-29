@@ -1,5 +1,7 @@
 package com.xenoage.zong.musiclayout.notations.chord;
 
+import com.xenoage.utils.annotations.Const;
+
 import lombok.AllArgsConstructor;
 
 /**
@@ -8,11 +10,11 @@ import lombok.AllArgsConstructor;
  *
  * @author Andreas Wenger
  */
-@AllArgsConstructor
-public class NoteDisplacement {
+@Const @AllArgsConstructor
+public final class NoteDisplacement {
 
-	public int lp;
-	public float offsetIs;
-	public NoteSuspension suspension;
+	public final int lp;
+	public final float offsetIs;
+	public final NoteSuspension suspension;
 
 }

@@ -42,7 +42,6 @@ import com.xenoage.zong.core.position.MPElement;
 import com.xenoage.zong.core.text.FormattedText;
 import com.xenoage.zong.core.text.FormattedTextStyle;
 import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
-import com.xenoage.zong.musiclayout.layouter.notation.AccidentalsAlignmentStrategy;
 import com.xenoage.zong.musiclayout.layouter.notation.ArticulationsAlignmentStrategy;
 import com.xenoage.zong.musiclayout.layouter.notation.StemAlignmentStrategy;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
@@ -51,7 +50,7 @@ import com.xenoage.zong.musiclayout.notations.Notation;
 import com.xenoage.zong.musiclayout.notations.RestNotation;
 import com.xenoage.zong.musiclayout.notations.TimeNotation;
 import com.xenoage.zong.musiclayout.notations.TraditionalKeyNotation;
-import com.xenoage.zong.musiclayout.notations.chord.AccidentalsAlignment;
+import com.xenoage.zong.musiclayout.notations.chord.AccidentalsDisplacement;
 import com.xenoage.zong.musiclayout.notations.chord.ArticulationsAlignment;
 import com.xenoage.zong.musiclayout.notations.chord.ChordDisplacement;
 import com.xenoage.zong.musiclayout.notations.chord.StemAlignment;
@@ -74,7 +73,7 @@ public final class Notator {
 
 	//used strategies
 	private final ChordDisplacementPolicy notesAlignmentStrategy;
-	private final AccidentalsAlignmentStrategy accidentalsAlignmentStrategy;
+	private final AccidentalsDisplacementPolicy accidentalsAlignmentStrategy;
 	private final StemAlignmentStrategy stemAlignmentStrategy;
 	private final ArticulationsAlignmentStrategy articulationsAlignmentStrategy;
 	
@@ -85,7 +84,7 @@ public final class Notator {
 	 * Creates a new instance of a {@link Notator}.
 	 */
 	public Notator(ChordDisplacementPolicy notesAlignmentStrategy,
-		AccidentalsAlignmentStrategy accidentalsAlignmentStrategy,
+		AccidentalsDisplacementPolicy accidentalsAlignmentStrategy,
 		StemAlignmentStrategy stemAlignmentStrategy,
 		ArticulationsAlignmentStrategy articulationsAlignmentStrategy) {
 		this.notesAlignmentStrategy = notesAlignmentStrategy;
@@ -225,9 +224,9 @@ public final class Notator {
 		ChordDisplacement chordDisplacement = notesAlignmentStrategy.computeChordDisplacement(chord,
 			stemDirection, chordWidths, mc);
 		//accidentals alignment
-		AccidentalsAlignment accidentalsAlignment = accidentalsAlignmentStrategy
+		AccidentalsDisplacement accidentalsAlignment = accidentalsAlignmentStrategy
 			.computeAccidentalsAlignment(chord, chordDisplacement, chordWidths, mc);
-		float accidentalsWidth = accidentalsAlignment.getWidth();
+		float accidentalsWidth = accidentalsAlignment.widthIs;
 
 		float leftSuspendedWidth = (chordDisplacement.leftSuspended ? chordDisplacement.noteheadWidthIs : 0);
 		//symbol's width: width of the noteheads and dots

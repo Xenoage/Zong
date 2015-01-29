@@ -6,7 +6,7 @@ import lombok.Getter;
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.StemDirection;
-import com.xenoage.zong.musiclayout.notations.chord.AccidentalsAlignment;
+import com.xenoage.zong.musiclayout.notations.chord.AccidentalsDisplacement;
 import com.xenoage.zong.musiclayout.notations.chord.ArticulationsAlignment;
 import com.xenoage.zong.musiclayout.notations.chord.ChordDisplacement;
 import com.xenoage.zong.musiclayout.notations.chord.StemAlignment;
@@ -27,7 +27,7 @@ public class ChordNotation
 	@NonNull public ChordDisplacement notesAlignment;
 	@NonNull public StemDirection stemDirection;
 	@NonNull public StemAlignment stemAlignment;
-	@NonNull public AccidentalsAlignment accidentalsAlignment;
+	@NonNull public AccidentalsDisplacement accidentalsAlignment;
 	@NonNull public ArticulationsAlignment articulationsAlignment;
 
 }

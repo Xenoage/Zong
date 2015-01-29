@@ -2,6 +2,7 @@ package com.xenoage.zong.musiclayout.notations.chord;
 
 import lombok.AllArgsConstructor;
 
+import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.music.chord.Accidental;
 
 /**
@@ -10,11 +11,11 @@ import com.xenoage.zong.core.music.chord.Accidental;
  *
  * @author Andreas Wenger
  */
-@AllArgsConstructor
-public class AccidentalDisplacement {
+@Const @AllArgsConstructor
+public final class AccidentalDisplacement {
 
-	public int lp;
-	public float offsetIs;
-	public Accidental type;
+	public final int lp;
+	public final float offsetIs;
+	public final Accidental type;
 
 }

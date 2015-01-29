@@ -22,7 +22,6 @@ import com.xenoage.zong.musiclayout.layouter.columnspacing.ColumnSpacingStrategy
 import com.xenoage.zong.musiclayout.layouter.columnspacing.LeadingSpacingStrategy;
 import com.xenoage.zong.musiclayout.layouter.columnspacing.MeasureElementsSpacingsStrategy;
 import com.xenoage.zong.musiclayout.layouter.columnspacing.SeparateVoiceSpacingStrategy;
-import com.xenoage.zong.musiclayout.layouter.notation.AccidentalsAlignmentStrategy;
 import com.xenoage.zong.musiclayout.layouter.notation.ArticulationsAlignmentStrategy;
 import com.xenoage.zong.musiclayout.layouter.notation.StemAlignmentStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.SlurStampingStrategy;
@@ -34,6 +33,7 @@ import com.xenoage.zong.musiclayout.layouter.scoreframelayout.StaffStampingsStra
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.TupletStampingStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.VoltaStampingStrategy;
 import com.xenoage.zong.musiclayout.layouter.voicenotation.VoiceStemDirectionNotationsStrategy;
+import com.xenoage.zong.musiclayout.notator.AccidentalsDisplacementPolicy;
 import com.xenoage.zong.musiclayout.notator.Notator;
 import com.xenoage.zong.musiclayout.notator.ChordDisplacementPolicy;
 import com.xenoage.zong.musiclayout.notator.StemDirectionPolicy;
@@ -132,7 +132,7 @@ public class ScoreLayouter {
 	ScoreLayoutStrategy createStrategyTree() {
 		//notation subtree
 		Notator notationStrategy = new Notator(
-			new ChordDisplacementPolicy(), new AccidentalsAlignmentStrategy(),
+			new ChordDisplacementPolicy(), new AccidentalsDisplacementPolicy(),
 			new StemAlignmentStrategy(), new ArticulationsAlignmentStrategy());
 		//measure column subtree
 		ColumnSpacingStrategy columnSpacingStrategy = new ColumnSpacingStrategy(

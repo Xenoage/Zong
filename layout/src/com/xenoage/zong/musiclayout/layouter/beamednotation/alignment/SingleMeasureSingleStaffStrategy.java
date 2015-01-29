@@ -23,7 +23,7 @@ import com.xenoage.zong.musiclayout.layouter.beamednotation.design.TripleBeamDes
 import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
 import com.xenoage.zong.musiclayout.notations.beam.BeamStemAlignments;
-import com.xenoage.zong.musiclayout.notations.chord.AccidentalsAlignment;
+import com.xenoage.zong.musiclayout.notations.chord.AccidentalsDisplacement;
 import com.xenoage.zong.musiclayout.notations.chord.ChordDisplacement;
 import com.xenoage.zong.musiclayout.notations.chord.StemAlignment;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
@@ -65,9 +65,9 @@ public class SingleMeasureSingleStaffStrategy
 			Chord chord = waypoint.getChord();
 			ChordNotation cn = notations.getChord(chord);
 			chordNa[i] = cn.notesAlignment;
-			AccidentalsAlignment aa = cn.accidentalsAlignment;
+			AccidentalsDisplacement aa = cn.accidentalsAlignment;
 			stemX[i] = columnSpacing.getOffset(chord, staffIndex, voiceIndex) +
-				(aa != null ? aa.width : 0) + chordNa[i].stemOffsetIs;
+				(aa != null ? aa.widthIs : 0) + chordNa[i].stemOffsetIs;
 			i++;
 		}
 		StemDirection dir = notations.getChord(firstChord).stemDirection;

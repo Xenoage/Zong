@@ -12,7 +12,7 @@ import com.xenoage.zong.core.music.util.DurationInfo;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.ChordStampings;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
 import com.xenoage.zong.musiclayout.notations.chord.AccidentalDisplacement;
-import com.xenoage.zong.musiclayout.notations.chord.AccidentalsAlignment;
+import com.xenoage.zong.musiclayout.notations.chord.AccidentalsDisplacement;
 import com.xenoage.zong.musiclayout.notations.chord.ArticulationAlignment;
 import com.xenoage.zong.musiclayout.notations.chord.ArticulationsAlignment;
 import com.xenoage.zong.musiclayout.notations.chord.ChordDisplacement;
@@ -90,7 +90,7 @@ public class ChordStamper {
 		}
 
 		//accidentals
-		AccidentalsAlignment caa = chordNotation.getAccidentalsAlignment();
+		AccidentalsDisplacement caa = chordNotation.getAccidentalsAlignment();
 		AccidentalStamping[] accidentals = new AccidentalStamping[0];
 		if (caa != null) {
 			accidentals = new AccidentalStamping[caa.accidentals.length];

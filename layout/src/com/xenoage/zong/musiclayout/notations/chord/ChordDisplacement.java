@@ -1,5 +1,7 @@
 package com.xenoage.zong.musiclayout.notations.chord;
 
+import com.xenoage.utils.annotations.Const;
+
 import lombok.AllArgsConstructor;
 
 /**
@@ -14,24 +16,24 @@ import lombok.AllArgsConstructor;
  *
  * @author Andreas Wenger
  */
-@AllArgsConstructor
+@Const @AllArgsConstructor
 public final class ChordDisplacement {
 
 	/** The width of the chord notes and dots. */
-	public float widthIs;
+	public final float widthIs;
 	/** The width of a notehead in the chord. */
-	public float noteheadWidthIs;
+	public final float noteheadWidthIs;
 	/** The displacement of the notes.
 	 * The notes are sorted upwards, that means, the lowest note has index 0. */
-	public NoteDisplacement[] notes;
+	public final NoteDisplacement[] notes;
 	/** The offsets of the first and second column of dots (if any). */
-	public float[] dotsOffsetsIs;
+	public final float[] dotsOffsetsIs;
 	/** The line positions of the dots, or an empty array, if the chord has no dots. */
-	public int[] dotsLp;
+	public final int[] dotsLp;
 	/** The horizontal offset of the stem. */
-	public float stemOffsetIs;
+	public final float stemOffsetIs;
 	/** True, if there are left-suspended notes, otherwise false. */
-	public boolean leftSuspended;
+	public final boolean leftSuspended;
 	
 	
 	/**
