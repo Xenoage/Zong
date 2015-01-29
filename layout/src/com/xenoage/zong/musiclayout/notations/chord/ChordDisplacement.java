@@ -1,12 +1,9 @@
 package com.xenoage.zong.musiclayout.notations.chord;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-
-import com.xenoage.utils.annotations.Const;
 
 /**
- * This class represents the alignment of the notes and the dots of a chord.
+ * The displacement of the notes, the stem and the dots of a chord.
  * 
  * The horizontal positions are measured in IS.
  * The position x = 0 is at the left side of the normal, unsuspended
@@ -17,22 +14,23 @@ import com.xenoage.utils.annotations.Const;
  *
  * @author Andreas Wenger
  */
-@Const @AllArgsConstructor @Getter public final class NotesAlignment {
+@AllArgsConstructor
+public final class ChordDisplacement {
 
-	/** The width of the chord notes and dots in IS. */
+	/** The width of the chord notes and dots. */
 	public float widthIs;
-	/** The width of a notehead in the chord in IS. */
+	/** The width of a notehead in the chord. */
 	public float noteheadWidthIs;
-	/** The list of note alignments.
+	/** The displacement of the notes.
 	 * The notes are sorted upwards, that means, the lowest note has index 0. */
-	public NoteAlignment[] noteAlignments;
+	public NoteDisplacement[] notes;
 	/** The offsets of the first and second column of dots (if any). */
 	public float[] dotsOffsetsIs;
 	/** The line positions of the dots, or an empty array, if the chord has no dots. */
 	public int[] dotsLp;
-	/** The horizontal offset of the stem in IS. */
+	/** The horizontal offset of the stem. */
 	public float stemOffsetIs;
-	/** True, if there are no left-suspended notes, otherwise false. */
+	/** True, if there are left-suspended notes, otherwise false. */
 	public boolean leftSuspended;
 	
 	
@@ -40,16 +38,16 @@ import com.xenoage.utils.annotations.Const;
 	 * Gets the number of notes.
 	 */
 	public int getNotesCount() {
-		return noteAlignments.length;
+		return notes.length;
 	}
 
 	/**
-	 * Gets the alignment of the note with the given index.
+	 * Gets the displacement of the note with the given index.
 	 * The notes are sorted upwards, that means, the lowest
 	 * note has index 0.
 	 */
-	public NoteAlignment getNoteAlignment(int index) {
-		return noteAlignments[index];
+	public NoteDisplacement getNote(int index) {
+		return notes[index];
 	}
 
 	/**
@@ -60,17 +58,17 @@ import com.xenoage.utils.annotations.Const;
 	}
 
 	/**
-	 * Gets the alignment of the top note of the chord.
+	 * Gets the displacement of the top note of the chord.
 	 */
-	public NoteAlignment getTopNoteAlignment() {
-		return noteAlignments[noteAlignments.length - 1];
+	public NoteDisplacement getTopNote() {
+		return notes[notes.length - 1];
 	}
 
 	/**
-	 * Gets the alignment of the bottom note of the chord.
+	 * Gets the displacement of the bottom note of the chord.
 	 */
-	public NoteAlignment getBottomNoteAlignment() {
-		return noteAlignments[0];
+	public NoteDisplacement getBottomNote() {
+		return notes[0];
 	}
 
 	/**
@@ -81,13 +79,13 @@ import com.xenoage.utils.annotations.Const;
 	}
 
 	/**
-	 * Gets the line positions of the chord (convenience method).
+	 * Gets the LPs of the chord (convenience method).
 	 */
-	public ChordLinePositions getLinePositions() {
-		int[] ret = new int[noteAlignments.length];
+	public ChordLps getLps() {
+		int[] ret = new int[notes.length];
 		for (int i = 0; i < ret.length; i++)
-			ret[i] = noteAlignments[i].lp;
-		return new ChordLinePositions(ret);
+			ret[i] = notes[i].lp;
+		return new ChordLps(ret);
 	}
 
 }

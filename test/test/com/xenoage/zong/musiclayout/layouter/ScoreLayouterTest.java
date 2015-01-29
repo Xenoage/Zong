@@ -14,10 +14,9 @@ import com.xenoage.zong.io.musicxml.in.MusicXmlScoreFileInput;
 import com.xenoage.zong.io.symbols.SymbolPoolReader;
 import com.xenoage.zong.musiclayout.layouter.notation.AccidentalsAlignmentStrategy;
 import com.xenoage.zong.musiclayout.layouter.notation.ArticulationsAlignmentStrategy;
-import com.xenoage.zong.musiclayout.layouter.notation.NotationStrategy;
-import com.xenoage.zong.musiclayout.layouter.notation.NotesAlignmentStrategy;
 import com.xenoage.zong.musiclayout.layouter.notation.StemAlignmentStrategy;
-import com.xenoage.zong.musiclayout.layouter.notation.StemDirectionStrategy;
+import com.xenoage.zong.musiclayout.notator.Notator;
+import com.xenoage.zong.musiclayout.notator.ChordDisplacementPolicy;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.symbols.SymbolPool;
 
@@ -51,8 +50,8 @@ public class ScoreLayouterTest {
 		}
 	}
 
-	public static NotationStrategy getNotationStrategy() {
-		return new NotationStrategy(new StemDirectionStrategy(), new NotesAlignmentStrategy(),
+	public static Notator getNotationStrategy() {
+		return new Notator(new ChordDisplacementPolicy(),
 			new AccidentalsAlignmentStrategy(), new StemAlignmentStrategy(),
 			new ArticulationsAlignmentStrategy());
 	}

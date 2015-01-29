@@ -4,6 +4,7 @@ import static com.xenoage.utils.math.Delta.DRf;
 import static com.xenoage.zong.core.music.chord.StemDirection.Down;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
 import static com.xenoage.zong.musiclayout.layouter.beamednotation.alignment.SingleMeasureSingleStaffStrategy.isBeamOutsideStaff;
+import static com.xenoage.zong.musiclayout.notations.chord.NoteDisplacementTest.note;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -12,8 +13,8 @@ import org.junit.Test;
 
 import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.musiclayout.layouter.beamednotation.design.SingleBeamDesign;
-import com.xenoage.zong.musiclayout.notations.chord.NoteAlignment;
-import com.xenoage.zong.musiclayout.notations.chord.NotesAlignment;
+import com.xenoage.zong.musiclayout.notations.chord.NoteDisplacement;
+import com.xenoage.zong.musiclayout.notations.chord.ChordDisplacement;
 import com.xenoage.zong.musiclayout.notations.chord.StemAlignment;
 
 /**
@@ -38,7 +39,7 @@ public class SingleMeasureSingleStaffStrategyTest {
 		float[] positionX4 = { 2, 4, 6, 8 };
 		StemDirection dir;
 		StemAlignment[] alignment;
-		NotesAlignment[] cna;
+		ChordDisplacement[] cna;
 		int singlebeam = 1;
 		int doublebeam = 2;
 
@@ -180,16 +181,16 @@ public class SingleMeasureSingleStaffStrategyTest {
 
 	}
 
-	private NotesAlignment[] generateChordNotesAlignment(int[][] notes) {
-		NotesAlignment[] cna = new NotesAlignment[notes.length];
+	private ChordDisplacement[] generateChordNotesAlignment(int[][] notes) {
+		ChordDisplacement[] cna = new ChordDisplacement[notes.length];
 		int i = 0;
 		for (int[] chord : notes) {
-			NoteAlignment na[] = new NoteAlignment[chord.length];
+			NoteDisplacement na[] = new NoteDisplacement[chord.length];
 			int a = 0;
 			for (int note : chord) {
-				na[a++] = new NoteAlignment(note, 1);
+				na[a++] = note(note);
 			}
-			cna[i++] = new NotesAlignment(1, 1, na, new float[] {}, new int[] { 1 }, 0, false);
+			cna[i++] = new ChordDisplacement(1, 1, na, new float[] {}, new int[] { 1 }, 0, false);
 		}
 		return cna;
 	}

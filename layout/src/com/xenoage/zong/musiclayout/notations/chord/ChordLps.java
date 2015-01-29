@@ -11,16 +11,16 @@ import com.xenoage.zong.core.music.chord.Note;
  * 
  * @author Andreas Wenger
  */
-@Const public final class ChordLinePositions {
+@Const public final class ChordLps {
 
 	private final int[] linePositions;
 
 
 	/**
-	 * Creates a new {@link ChordLinePositions} object from the
+	 * Creates a new {@link ChordLps} object from the
 	 * given {@link Chord} and {@link MusicContext}.
 	 */
-	public ChordLinePositions(Chord chord, MusicContext context) {
+	public ChordLps(Chord chord, MusicContext context) {
 		linePositions = new int[chord.getNotes().size()];
 		for (int i = 0; i < chord.getNotes().size(); i++) {
 			linePositions[i] = context.getLp(((Note) chord.getNotes().get(i)).getPitch());
@@ -28,10 +28,10 @@ import com.xenoage.zong.core.music.chord.Note;
 	}
 
 	/**
-	 * Creates a new {@link ChordLinePositions} object from the
+	 * Creates a new {@link ChordLps} object from the
 	 * given line positions.
 	 */
-	public ChordLinePositions(int[] linePositions) {
+	public ChordLps(int[] linePositions) {
 		this.linePositions = linePositions;
 		//check if sorted correctly
 		for (int i = 0; i < linePositions.length - 1; i++) {

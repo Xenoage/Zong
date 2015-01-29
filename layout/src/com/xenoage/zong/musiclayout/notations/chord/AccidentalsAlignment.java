@@ -14,18 +14,20 @@ import com.xenoage.utils.annotations.Const;
  * @author Andreas Wenger
  */
 @Const @Getter public final class AccidentalsAlignment {
+	
+	public static final AccidentalsAlignment empty = new AccidentalsAlignment(new AccidentalDisplacement[0], 0);
 
 	/** The accidentals of this chord. */
-	public final AccidentalAlignment[] accidentals;
+	public final AccidentalDisplacement[] accidentals;
 	/** The width of the accidentals of this chord. This is the distance between the left side of
 	 * the leftmost accidental and the beginning of the notes. */
 	public final float width;
 
 
-	public AccidentalsAlignment(AccidentalAlignment[] accidentals, float width) {
+	public AccidentalsAlignment(AccidentalDisplacement[] accidentals, float width) {
 		//must be sorted upwards
 		for (int i = 0; i < accidentals.length - 1; i++) {
-			if (accidentals[i].linePosition > accidentals[i + 1].linePosition)
+			if (accidentals[i].lp > accidentals[i + 1].lp)
 				throw new IllegalArgumentException("Accidentals must be sorted upwards");
 		}
 		this.accidentals = accidentals;

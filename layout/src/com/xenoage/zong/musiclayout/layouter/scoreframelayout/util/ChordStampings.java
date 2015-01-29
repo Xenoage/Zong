@@ -7,7 +7,6 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 
 import com.xenoage.zong.core.music.chord.Chord;
-import com.xenoage.zong.musiclayout.layouter.cache.util.OpenBeamMiddleStem;
 import com.xenoage.zong.musiclayout.stampings.AccidentalStamping;
 import com.xenoage.zong.musiclayout.stampings.ArticulationStamping;
 import com.xenoage.zong.musiclayout.stampings.FlagsStamping;
@@ -36,10 +35,7 @@ public class ChordStampings {
 	public LegerLineStamping[] legerLines;
 	public ArticulationStamping[] articulations;
 	public FlagsStamping flags;
-
-	//stamped or open stem
 	public StemStamping stem;
-	public OpenBeamMiddleStem openStem;
 
 	
 	public NoteheadStamping getFirstNotehead() {

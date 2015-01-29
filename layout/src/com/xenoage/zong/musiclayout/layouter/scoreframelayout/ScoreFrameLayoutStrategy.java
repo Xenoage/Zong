@@ -7,6 +7,7 @@ import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.core.music.format.SP.sp;
 import static com.xenoage.zong.core.position.MP.atBeat;
 import static com.xenoage.zong.core.text.FormattedText.fText;
+import static com.xenoage.zong.musiclayout.stamper.BeamStamper.beamStamper;
 import static com.xenoage.zong.musiclayout.stamper.ChordStamper.chordStamper;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.xenoage.utils.collections.CollectionUtils;
 import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.utils.kernel.Tuple3;
 import com.xenoage.utils.math.VSide;
@@ -116,7 +118,6 @@ public class ScoreFrameLayoutStrategy
 	//used strategies
 	private final StaffStampingsStrategy staffStampingsStrategy;
 	private final MusicElementStampingStrategy musicElementStampingStrategy;
-	private final BeamStampingStrategy beamStampingStrategy;
 	private final SlurStampingStrategy curvedLineStampingStrategy;
 	private final LyricStampingStrategy lyricStampingStrategy;
 	private final VoltaStampingStrategy voltaStampingStrategy;
@@ -126,13 +127,12 @@ public class ScoreFrameLayoutStrategy
 
 	public ScoreFrameLayoutStrategy(StaffStampingsStrategy staffStampingsStrategy,
 		MusicElementStampingStrategy voiceElementStampingStrategy,
-		BeamStampingStrategy beamStampingStrategy, SlurStampingStrategy curvedLineStampingStrategy,
+		SlurStampingStrategy curvedLineStampingStrategy,
 		LyricStampingStrategy lyricStampingStrategy, VoltaStampingStrategy voltaStampingStrategy,
 		DirectionStampingStrategy directionStampingStrategy,
 		TupletStampingStrategy tupletStampingStrategy) {
 		this.staffStampingsStrategy = staffStampingsStrategy;
 		this.musicElementStampingStrategy = voiceElementStampingStrategy;
-		this.beamStampingStrategy = beamStampingStrategy;
 		this.curvedLineStampingStrategy = curvedLineStampingStrategy;
 		this.lyricStampingStrategy = lyricStampingStrategy;
 		this.voltaStampingStrategy = voltaStampingStrategy;
@@ -501,7 +501,7 @@ public class ScoreFrameLayoutStrategy
 		chordSt.addAllTo(ret);
 
 		//beam  
-		if (chordSt.stem != null || chordSt.openStem != null) {
+		if (chordSt.stem != null) {
 			//if the chord belongs to a beam, add the stem to
 			//the corresponding list of beamed stems, so that the
 			//beam can be created later. the middle stems were not stamped
@@ -509,13 +509,8 @@ public class ScoreFrameLayoutStrategy
 			Beam beam = chordElement.getBeam();
 			if (beam != null) {
 				BeamedStemStampings bss = openBeamsCache.get(beam);
-				WaypointPosition pos = beam.getWaypointPosition(chordElement);
-				if (pos == WaypointPosition.Start)
-					bss.setFirstStem(chordSt.stem);
-				else if (pos == WaypointPosition.Stop)
-					bss.setLastStem(chordSt.stem);
-				else
-					bss.addMiddleStem(chordSt.openStem);
+				int chordIndex = beam.getWaypointIndex(chordElement);
+				bss.stems[chordIndex] = chordSt.stem;
 				openBeamsCache.set(beam, bss);
 			}
 		}
@@ -628,7 +623,7 @@ public class ScoreFrameLayoutStrategy
 	private List<Stamping> createBeams(OpenBeamsCache openBeamsCache) {
 		ArrayList<Stamping> ret = alist(openBeamsCache.size());
 		for (BeamedStemStampings beam : openBeamsCache) {
-			ret.addAll(beamStampingStrategy.createBeamStampings(beam));
+			CollectionUtils.addAll(ret, beamStamper.createBeamStampings(beam));
 		}
 		return ret;
 	}

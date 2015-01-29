@@ -24,7 +24,7 @@ import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
 import com.xenoage.zong.musiclayout.notations.beam.BeamStemAlignments;
 import com.xenoage.zong.musiclayout.notations.chord.AccidentalsAlignment;
-import com.xenoage.zong.musiclayout.notations.chord.NotesAlignment;
+import com.xenoage.zong.musiclayout.notations.chord.ChordDisplacement;
 import com.xenoage.zong.musiclayout.notations.chord.StemAlignment;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 
@@ -52,7 +52,7 @@ public class SingleMeasureSingleStaffStrategy
 		NotationsCache notations) {
 
 		//collect needed information
-		NotesAlignment[] chordNa = new NotesAlignment[beam.getWaypoints().size()];
+		ChordDisplacement[] chordNa = new ChordDisplacement[beam.getWaypoints().size()];
 		float[] stemX = new float[beam.getWaypoints().size()];
 		Chord firstChord = beam.getStart().getChord();
 		MP firstChordMP = getMP(firstChord);
@@ -95,7 +95,7 @@ public class SingleMeasureSingleStaffStrategy
 	 * @param stemDirection    the direction of the stem
 	 * @return  the alignments of all stems of the given chords                        
 	 */
-	public BeamStemAlignments computeStemAlignments(NotesAlignment[] chordNa, float[] stemX,
+	public BeamStemAlignments computeStemAlignments(ChordDisplacement[] chordNa, float[] stemX,
 		int staffLinesCount, int beamLinesCount, StemDirection stemDirection) {
 		//get appropriate beam design
 		BeamDesign beamDesign;
@@ -133,7 +133,7 @@ public class SingleMeasureSingleStaffStrategy
 	 * @param stemDirection  the direction of the stems
 	 * @param staffLinesCount  the number of lines in this staff
 	 */
-	private float computeSlant(BeamDesign beamDesign, NotesAlignment[] chordNotesAlignment,
+	private float computeSlant(BeamDesign beamDesign, ChordDisplacement[] chordNotesAlignment,
 		float[] positionX, StemDirection stemDirection, int staffLinesCount) {
 		//collect relevant note line positions (positions of the outermost notes)
 		int firstRelevantNoteLP;
@@ -142,12 +142,12 @@ public class SingleMeasureSingleStaffStrategy
 		int[] relevantNoteLPs = new int[chordsCount];
 		if (stemDirection == StemDirection.Down) {
 			for (int i = 0; i < chordsCount; i++) {
-				relevantNoteLPs[i] = chordNotesAlignment[i].getLinePositions().getBottom();
+				relevantNoteLPs[i] = chordNotesAlignment[i].getLps().getBottom();
 			}
 		}
 		else if (stemDirection == StemDirection.Up) {
 			for (int i = 0; i < chordsCount; i++) {
-				relevantNoteLPs[i] = chordNotesAlignment[i].getLinePositions().getTop();
+				relevantNoteLPs[i] = chordNotesAlignment[i].getLps().getTop();
 			}
 		}
 		firstRelevantNoteLP = relevantNoteLPs[0];
@@ -295,7 +295,7 @@ public class SingleMeasureSingleStaffStrategy
 	 * @param beamLinesCount   the number of beam lines         
 	 * @param stemDirection    the direction of the stems
 	 */
-	private BeamStemAlignments computeStemLengths(BeamDesign beamDesign, NotesAlignment[] chordNa,
+	private BeamStemAlignments computeStemLengths(BeamDesign beamDesign, ChordDisplacement[] chordNa,
 		float[] stemX, float slantIS, int beamLinesCount, StemDirection stemDirection) {
 
 		int chordsCount = chordNa.length;
@@ -314,8 +314,8 @@ public class SingleMeasureSingleStaffStrategy
 
 			//for each chord: check if stem length is ok
 			for (int i = 0; i < chordsCount; i++) {
-				int highestNote = chordNa[i].getLinePositions().getTop();
-				int lowestNote = chordNa[i].getLinePositions().getBottom();
+				int highestNote = chordNa[i].getLps().getTop();
+				int lowestNote = chordNa[i].getLps().getBottom();
 
 				//compute stem length at current chord
 				endline = beamStartLP + slantIS * 2 * (stemX[i] - stemX[0]) / lengthX;

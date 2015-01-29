@@ -3,25 +3,23 @@ package com.xenoage.zong.musiclayout.stamper;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.core.music.format.SP.sp;
 import static com.xenoage.zong.musiclayout.stamper.LegerLinesStamper.legerLinesStamper;
-import static com.xenoage.zong.musiclayout.stamper.StemStamper.stemStamper;
 
 import com.xenoage.utils.color.Color;
 import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.core.music.util.DurationInfo;
-import com.xenoage.zong.musiclayout.layouter.cache.util.OpenBeamMiddleStem;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.ChordStampings;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
-import com.xenoage.zong.musiclayout.notations.chord.AccidentalAlignment;
+import com.xenoage.zong.musiclayout.notations.chord.AccidentalDisplacement;
 import com.xenoage.zong.musiclayout.notations.chord.AccidentalsAlignment;
 import com.xenoage.zong.musiclayout.notations.chord.ArticulationAlignment;
 import com.xenoage.zong.musiclayout.notations.chord.ArticulationsAlignment;
-import com.xenoage.zong.musiclayout.notations.chord.NoteAlignment;
-import com.xenoage.zong.musiclayout.notations.chord.NotesAlignment;
+import com.xenoage.zong.musiclayout.notations.chord.ChordDisplacement;
+import com.xenoage.zong.musiclayout.notations.chord.NoteDisplacement;
+import com.xenoage.zong.musiclayout.notations.chord.StemAlignment;
 import com.xenoage.zong.musiclayout.settings.ChordWidths;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
-import com.xenoage.zong.musiclayout.stamper.StemStamper.Type;
 import com.xenoage.zong.musiclayout.stampings.AccidentalStamping;
 import com.xenoage.zong.musiclayout.stampings.ArticulationStamping;
 import com.xenoage.zong.musiclayout.stampings.FlagsStamping;
@@ -59,13 +57,7 @@ public class ChordStamper {
 			chordNotation.notesAlignment, staffStamping.is);
 		
 		//stem
-		StemStamping stem = null;
-		OpenBeamMiddleStem openStem = null;
-		StemStamper.Type stemType = stemStamper.getStemType(chordNotation);
-		if (stemType == Type.Stem)
-			stem = stemStamper.stamp(chordNotation, leftNoteXMm, staffStamping);
-		else if (stemType == Type.MiddleBeamStem)
-			openStem = stemStamper.openBeamMiddleStem(chordNotation, leftNoteXMm, staffStamping);
+		StemStamping stem = stampStem(chordNotation, leftNoteXMm, staffStamping);
 		
 		//type of notehead
 		int noteheadType = NoteheadStamping.NOTEHEAD_WHOLE;
@@ -76,13 +68,13 @@ public class ChordStamper {
 			noteheadType = NoteheadStamping.NOTEHEAD_QUARTER;
 
 		//noteheads
-		NotesAlignment nas = chordNotation.notesAlignment;
+		ChordDisplacement nas = chordNotation.notesAlignment;
 		NoteheadStamping[] noteheads = new NoteheadStamping[nas.getNotesCount()];
 		for (int iNote : range(noteheads)) {
-			NoteAlignment na = nas.getNoteAlignment(iNote);
+			NoteDisplacement note = nas.getNote(iNote);
 			Color color = Color.black;
 			NoteheadStamping noteSt = new NoteheadStamping(chord, noteheadType, color, staffStamping, sp(
-				leftNoteXMm + na.offsetIs * staffStamping.is, na.lp), scaling, symbolPool);
+				leftNoteXMm + note.offsetIs * staffStamping.is, note.lp), scaling, symbolPool);
 			noteheads[iNote] = noteSt;
 		}
 
@@ -103,17 +95,17 @@ public class ChordStamper {
 		if (caa != null) {
 			accidentals = new AccidentalStamping[caa.accidentals.length];
 			for (int iAcc : range(accidentals)) {
-				AccidentalAlignment aa = caa.accidentals[iAcc];
-				AccidentalStamping accSt = new AccidentalStamping(chord, aa.type, staffStamping,
+				AccidentalDisplacement acc = caa.accidentals[iAcc];
+				AccidentalStamping accSt = new AccidentalStamping(chord, acc.type, staffStamping,
 					sp(chordXMm +
-							(aa.offset - chordNotation.getWidth().getFrontGap() + 0.5f /* 0.5f: half accidental width - TODO */) *
-							staffStamping.is, aa.linePosition), 1, symbolPool);
+							(acc.offsetIs - chordNotation.width.getFrontGap() + 0.5f /* 0.5f: half accidental width - TODO */) *
+							staffStamping.is, acc.lp), 1, symbolPool);
 				accidentals[iAcc] = accSt;
 			}
 		}
 
 		//dots
-		int[] dotPositions = nas.getDotsLp();
+		int[] dotPositions = nas.dotsLp;
 		int dotsPerNote = nas.getDotsPerNoteCount();
 		ProlongationDotStamping[] dots = new ProlongationDotStamping[dotPositions.length * dotsPerNote];
 		for (int iNote : range(dotPositions)) {
@@ -143,15 +135,22 @@ public class ChordStamper {
 		LegerLineStamping[] legerLines = legerLinesStamper.stamp(chordNotation, chordXMm, staffStamping);
 
 		return new ChordStampings(chord, chordXMm, staffStamping, noteheads,
-			dots, accidentals, legerLines, articulations, flags, stem, openStem);
+			dots, accidentals, legerLines, articulations, flags, stem);
 	}
 	
-	float getLeftNoteXMm(float chordXMm, NotesAlignment notesAlignment, float staffIs) {
+	float getLeftNoteXMm(float chordXMm, ChordDisplacement notesAlignment, float staffIs) {
 		//left-suspended chord? then move chord to the left by the width of a notehead
 		float leftNoteXMm = chordXMm;
 		if (notesAlignment.leftSuspended)
 			leftNoteXMm -= notesAlignment.noteheadWidthIs * staffIs;
 		return leftNoteXMm;
+	}
+	
+	StemStamping stampStem(ChordNotation chordNotation, float leftNoteXMm, StaffStamping staffStamping) {
+		float stemXMm = leftNoteXMm + chordNotation.notesAlignment.stemOffsetIs * staffStamping.is;
+		StemAlignment sa = chordNotation.stemAlignment;
+		return new StemStamping(staffStamping, chordNotation.element, stemXMm,
+			sa.startLp, sa.endLp, chordNotation.stemDirection);
 	}
 
 }

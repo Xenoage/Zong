@@ -11,9 +11,9 @@ import com.xenoage.zong.core.music.key.Key;
 import com.xenoage.zong.core.music.key.TraditionalKey;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
-import com.xenoage.zong.musiclayout.layouter.notation.NotationStrategy;
 import com.xenoage.zong.musiclayout.notations.ClefNotation;
 import com.xenoage.zong.musiclayout.notations.TraditionalKeyNotation;
+import com.xenoage.zong.musiclayout.notator.Notator;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.musiclayout.spacing.horizontal.ElementWidth;
 import com.xenoage.zong.musiclayout.spacing.horizontal.LeadingSpacing;
@@ -34,13 +34,13 @@ public class LeadingSpacingStrategy
 	implements ScoreLayouterStrategy {
 
 	//used strategies
-	private final NotationStrategy notationStrategy;
+	private final Notator notationStrategy;
 
 
 	/**
 	 * Creates a new {@link LeadingSpacingStrategy}.
 	 */
-	public LeadingSpacingStrategy(NotationStrategy notationStrategy) {
+	public LeadingSpacingStrategy(Notator notationStrategy) {
 		this.notationStrategy = notationStrategy;
 	}
 

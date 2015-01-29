@@ -24,11 +24,7 @@ import com.xenoage.zong.musiclayout.layouter.columnspacing.MeasureElementsSpacin
 import com.xenoage.zong.musiclayout.layouter.columnspacing.SeparateVoiceSpacingStrategy;
 import com.xenoage.zong.musiclayout.layouter.notation.AccidentalsAlignmentStrategy;
 import com.xenoage.zong.musiclayout.layouter.notation.ArticulationsAlignmentStrategy;
-import com.xenoage.zong.musiclayout.layouter.notation.NotationStrategy;
-import com.xenoage.zong.musiclayout.layouter.notation.NotesAlignmentStrategy;
 import com.xenoage.zong.musiclayout.layouter.notation.StemAlignmentStrategy;
-import com.xenoage.zong.musiclayout.layouter.notation.StemDirectionStrategy;
-import com.xenoage.zong.musiclayout.layouter.scoreframelayout.BeamStampingStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.SlurStampingStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.DirectionStampingStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.LyricStampingStrategy;
@@ -38,7 +34,11 @@ import com.xenoage.zong.musiclayout.layouter.scoreframelayout.StaffStampingsStra
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.TupletStampingStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.VoltaStampingStrategy;
 import com.xenoage.zong.musiclayout.layouter.voicenotation.VoiceStemDirectionNotationsStrategy;
+import com.xenoage.zong.musiclayout.notator.Notator;
+import com.xenoage.zong.musiclayout.notator.ChordDisplacementPolicy;
+import com.xenoage.zong.musiclayout.notator.StemDirectionPolicy;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
+import com.xenoage.zong.musiclayout.stamper.BeamStamper;
 import com.xenoage.zong.symbols.SymbolPool;
 
 /**
@@ -131,8 +131,8 @@ public class ScoreLayouter {
 	 */
 	ScoreLayoutStrategy createStrategyTree() {
 		//notation subtree
-		NotationStrategy notationStrategy = new NotationStrategy(new StemDirectionStrategy(),
-			new NotesAlignmentStrategy(), new AccidentalsAlignmentStrategy(),
+		Notator notationStrategy = new Notator(
+			new ChordDisplacementPolicy(), new AccidentalsAlignmentStrategy(),
 			new StemAlignmentStrategy(), new ArticulationsAlignmentStrategy());
 		//measure column subtree
 		ColumnSpacingStrategy columnSpacingStrategy = new ColumnSpacingStrategy(
@@ -145,7 +145,7 @@ public class ScoreLayouter {
 			columnSpacingStrategy, new FrameArrangementStrategy(new SystemArrangementStrategy(
 				columnSpacingStrategy)), new BeamedStemAlignmentNotationsStrategy(),
 			new ScoreFrameLayoutStrategy(new StaffStampingsStrategy(),
-				new MusicElementStampingStrategy(), new BeamStampingStrategy(),
+				new MusicElementStampingStrategy(),
 				new SlurStampingStrategy(), new LyricStampingStrategy(), new VoltaStampingStrategy(),
 				new DirectionStampingStrategy(), new TupletStampingStrategy()));
 	}

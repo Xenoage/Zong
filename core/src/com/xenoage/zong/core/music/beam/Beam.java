@@ -96,18 +96,7 @@ public final class Beam
 	 * Gets the position of the given waypoint.
 	 */
 	public WaypointPosition getWaypointPosition(BeamWaypoint wp) {
-		if (wp == waypoints.get(0)) {
-			return WaypointPosition.Start;
-		}
-		else if (wp == waypoints.get(waypoints.size() - 1)) {
-			return WaypointPosition.Stop;
-		}
-		else if (waypoints.contains(wp)) {
-			return WaypointPosition.Continue;
-		}
-		else {
-			throw new IllegalArgumentException("Given BeamWaypoint is not part of this Beam.");
-		}
+		return getWaypointPosition(wp.getChord());
 	}
 
 
@@ -115,20 +104,23 @@ public final class Beam
 	 * Gets the position of the given chord: Start, Stop or Continue.
 	 */
 	public WaypointPosition getWaypointPosition(Chord chord) {
-		if (chord == waypoints.get(0).getChord()) {
+		int index = getWaypointIndex(chord);
+		if (index == 0)
 			return WaypointPosition.Start;
-		}
-		else if (chord == waypoints.get(waypoints.size() - 1).getChord()) {
+		else if (index == waypoints.size() - 1)
 			return WaypointPosition.Stop;
-		}
-		else {
-			for (int i : range(1, waypoints.size() - 2)) {
-				if (chord == waypoints.get(i).getChord()) {
-					return WaypointPosition.Continue;
-				}
-			}
-			throw new IllegalArgumentException("Given chord is not part of this Beam.");
-		}	
+		else
+			return WaypointPosition.Continue;
+	}
+	
+	/**
+	 * Gets the index of the given chord within the beam.
+	 */
+	public int getWaypointIndex(Chord chord) {
+		for (int i : range(waypoints))
+			if (chord == waypoints.get(i).getChord())
+				return i;
+		throw new IllegalArgumentException("Given chord is not part of this beam.");
 	}
 
 

@@ -13,9 +13,11 @@ import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.ChordFactory;
 import com.xenoage.zong.core.music.chord.StemDirection;
-import com.xenoage.zong.musiclayout.notations.chord.ChordLinePositions;
-import com.xenoage.zong.musiclayout.notations.chord.NotesAlignment;
+import com.xenoage.zong.musiclayout.notations.chord.ChordLps;
+import com.xenoage.zong.musiclayout.notations.chord.ChordDisplacement;
 import com.xenoage.zong.musiclayout.notations.chord.StemAlignment;
+import com.xenoage.zong.musiclayout.notator.ChordDisplacementPolicy;
+import com.xenoage.zong.musiclayout.notator.StemDirectionPolicy;
 import com.xenoage.zong.musiclayout.settings.ChordWidths;
 
 /**
@@ -28,8 +30,8 @@ public class StemAlignmentStrategyTest {
 
 	StemAlignmentStrategy strategy = new StemAlignmentStrategy();
 
-	StemDirectionStrategy csdStrategy = new StemDirectionStrategy();
-	NotesAlignmentStrategy cnaStrategy = new NotesAlignmentStrategy();
+	StemDirectionPolicy csdStrategy = new StemDirectionPolicy();
+	ChordDisplacementPolicy cnaStrategy = new ChordDisplacementPolicy();
 
 
 	@Test public void computeStemAlignmentTest() {
@@ -128,14 +130,14 @@ public class StemAlignmentStrategyTest {
 	private void testPitch(Pitch[] pitches, float start, float end) {
 		MusicContext context = MusicContext.simpleInstance;
 		Chord chord;
-		NotesAlignment chordNotesAlignment;
+		ChordDisplacement chordNotesAlignment;
 		StemAlignment chordStemAlignment;
 
 		Fraction fraction = fr(1, 1);
 		chord = ChordFactory.chord(pitches, fraction);
-		ChordLinePositions linepositions = new ChordLinePositions(chord, context);
+		ChordLps linepositions = new ChordLps(chord, context);
 		StemDirection stemDirection = csdStrategy.computeStemDirection(linepositions, 5);
-		chordNotesAlignment = cnaStrategy.computeNotesAlignment(chord, stemDirection,
+		chordNotesAlignment = cnaStrategy.computeChordDisplacement(chord, stemDirection,
 			ChordWidths.defaultValue, context);
 		chordStemAlignment = strategy.computeStemAlignment(null, chordNotesAlignment, stemDirection, 5,
 			1);

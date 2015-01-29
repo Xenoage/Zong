@@ -1,5 +1,7 @@
 package com.xenoage.zong.io.musicxml.in.readers;
 
+import static com.xenoage.zong.core.music.chord.Stem.defaultStem;
+
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
@@ -27,14 +29,14 @@ public class StemReader {
 	
 	/**
 	 * Reads and returns the stem of the given chord.
-	 * If not available, null is returned.
+	 * If not available, {@link Stem#defaultStem} is returned.
 	 * @param context   the global context
 	 * @param chord     the chord, whose notes are already collected
 	 * @param staff     the staff index of the current chord
 	 */
 	public Stem read(Context context, Chord chord, int staff) {
 		if (mxlStem == null)
-			return null;
+			return defaultStem;
 		//direction
 		StemDirection direction = readStemDirection();
 		//length

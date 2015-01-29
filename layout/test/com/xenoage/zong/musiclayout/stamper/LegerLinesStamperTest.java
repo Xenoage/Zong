@@ -2,6 +2,7 @@ package com.xenoage.zong.musiclayout.stamper;
 
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Delta.df;
+import static com.xenoage.zong.musiclayout.notations.chord.NoteDisplacementTest.note;
 import static com.xenoage.zong.musiclayout.notations.chord.NoteSuspension.Left;
 import static com.xenoage.zong.musiclayout.notations.chord.NoteSuspension.None;
 import static com.xenoage.zong.musiclayout.notations.chord.NoteSuspension.Right;
@@ -10,7 +11,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.xenoage.zong.musiclayout.notations.chord.NoteAlignment;
+import com.xenoage.zong.musiclayout.notations.chord.NoteDisplacement;
 import com.xenoage.zong.musiclayout.notations.chord.NoteSuspension;
 
 /**
@@ -22,16 +23,16 @@ public class LegerLinesStamperTest {
 	
 	private LegerLinesStamper stamper = LegerLinesStamper.legerLinesStamper;
 	
-	private NoteAlignment[] noteAlignmentsTopLeftSuspended = {
-		new NoteAlignment(-2, 0),
-		new NoteAlignment(11, -1, NoteSuspension.Left),
-		new NoteAlignment(12, 0),
+	private NoteDisplacement[] noteAlignmentsTopLeftSuspended = {
+		note(-2),
+		note(11, -1, NoteSuspension.Left),
+		note(12),
 	};
 	
-	private NoteAlignment[] noteAlignmentsBottomRightSuspended = {
-		new NoteAlignment(-4, 0),
-		new NoteAlignment(-3, 1, NoteSuspension.Right),
-		new NoteAlignment(10, 0),
+	private NoteDisplacement[] noteAlignmentsBottomRightSuspended = {
+		note(-4),
+		note(-3, 1, NoteSuspension.Right),
+		note(10),
 	};
 	
 	

@@ -58,8 +58,8 @@ public class Chord
 	@NonNull @NonEmpty private List<Note> notes;
 	/** The duration of this chord. For a grace chord, this is 0. */
 	@NonNull private Fraction duration;
-	/** The stem of this chord, or null if a default stem is used. */
-	@MaybeNull private Stem stem = null;
+	/** The stem of this chord. */
+	@NonNull private Stem stem = Stem.defaultStem;
 	/** True, if this chord has cue size, otherwise false. */
 	private boolean cue = false;
 	/** The grace value of this chord, or null if it is a normal chord. */

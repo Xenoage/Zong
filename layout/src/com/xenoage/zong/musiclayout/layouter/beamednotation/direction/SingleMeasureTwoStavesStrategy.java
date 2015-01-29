@@ -15,10 +15,10 @@ import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
-import com.xenoage.zong.musiclayout.layouter.notation.NotationStrategy;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
 import com.xenoage.zong.musiclayout.notations.Notation;
 import com.xenoage.zong.musiclayout.notations.beam.BeamStemDirections;
+import com.xenoage.zong.musiclayout.notator.Notator;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 
 /**
@@ -32,10 +32,10 @@ public class SingleMeasureTwoStavesStrategy
 	implements ScoreLayouterStrategy {
 
 	//used strategies
-	private final NotationStrategy notationStrategy;
+	private final Notator notationStrategy;
 
 
-	public SingleMeasureTwoStavesStrategy(NotationStrategy notationStrategy) {
+	public SingleMeasureTwoStavesStrategy(Notator notationStrategy) {
 		this.notationStrategy = notationStrategy;
 	}
 

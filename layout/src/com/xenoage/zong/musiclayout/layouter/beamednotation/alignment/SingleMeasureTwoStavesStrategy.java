@@ -19,7 +19,7 @@ import com.xenoage.zong.musiclayout.layouter.beamednotation.design.TripleBeamDes
 import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
 import com.xenoage.zong.musiclayout.notations.beam.BeamStemAlignments;
-import com.xenoage.zong.musiclayout.notations.chord.NotesAlignment;
+import com.xenoage.zong.musiclayout.notations.chord.ChordDisplacement;
 import com.xenoage.zong.musiclayout.notations.chord.StemAlignment;
 
 /**
@@ -41,7 +41,7 @@ public class SingleMeasureTwoStavesStrategy
 	 * This strategy computes the lengths of the stems of the beamed chords.
 	 */
 	public void computeNotations(Beam beam, NotationsCache notations) {
-		NotesAlignment[] chordNa = new NotesAlignment[beam.getWaypoints().size()];
+		ChordDisplacement[] chordNa = new ChordDisplacement[beam.getWaypoints().size()];
 		int beamlines = beam.getMaxBeamLinesCount();
 		int i = 0;
 		for (BeamWaypoint waypoint : beam.getWaypoints()) {
@@ -70,9 +70,10 @@ public class SingleMeasureTwoStavesStrategy
 	}
 
 	/**
-	 * Computes the vertical positions of the first and the last stem
-	 * of the given beam. All other stem endpoints are set to null (which
-	 * means unknown).
+	 * Computes the vertical positions of all stems
+	 * of the given beam. The lengths of the middle stems have to be
+	 * recomputed in a later step, since their lengths can not be computed yet.
+	 * 
 	 * @param chordNa             the alignments of all chords of the beam
 	 * @param beamLinesCount      the number of lines of the beam
 	 * @param stemDirection       the direction of the stem
@@ -82,7 +83,7 @@ public class SingleMeasureTwoStavesStrategy
 	 * @param lastStemDirection   the direction of the last chord
 	 * @return  the alignments of all stems of the given chords                        
 	 */
-	public BeamStemAlignments computeStemAlignments(NotesAlignment[] chordNa, int beamLinesCount,
+	public BeamStemAlignments computeStemAlignments(ChordDisplacement[] chordNa, int beamLinesCount,
 		Stem firstStem, Stem lastStem, StemDirection firstStemDirection, StemDirection lastStemDirection) {
 		//get appropriate beam design
 		BeamDesign beamDesign;
@@ -105,34 +106,31 @@ public class SingleMeasureTwoStavesStrategy
 		int chordsCount = chordNa.length;
 		StemAlignment[] stemAlignments = new StemAlignment[chordsCount];
 		for (int i = 0; i < chordsCount; i++) {
-			StemAlignment stemAlignment = null; //unknown
-			if (i == 0 || i == chordsCount - 1) {
-				Stem stem = (i == 0 ? firstStem : lastStem);
-				StemDirection stemDirection = (i == 0 ? firstStemDirection : lastStemDirection);
 
-				//start LP
-				float startLP;
-				if (stemDirection == Up) {
-					startLP = chordNa[i].getLinePositions().getBottom();
-				}
-				else {
-					startLP = chordNa[i].getLinePositions().getTop();
-				}
+			Stem stem = (i == 0 ? firstStem : lastStem);
+			StemDirection stemDirection = (i == 0 ? firstStemDirection : lastStemDirection);
 
-				//end LP
-				float endLP;
-				if (stem.getLength() != null) {
-					//use user-defined length
-					endLP = startLP + stemDirection.getSign() * 2 * stem.getLength();
-				}
-				else {
-					//compute length
-					endLP = startLP + stemDirection.getSign() * 2 * beamDesign.getMinimumStemLength();
-				}
-
-				stemAlignment = new StemAlignment(startLP, endLP);
+			//start LP
+			float startLP;
+			if (stemDirection == Up) {
+				startLP = chordNa[i].getLps().getBottom();
 			}
-			stemAlignments[i] = stemAlignment;
+			else {
+				startLP = chordNa[i].getLps().getTop();
+			}
+
+			//end LP
+			float endLP;
+			if (stem.getLength() != null) {
+				//use user-defined length
+				endLP = startLP + stemDirection.getSign() * 2 * stem.getLength();
+			}
+			else {
+				//compute length
+				endLP = startLP + stemDirection.getSign() * 2 * beamDesign.getMinimumStemLength();
+			}
+
+			stemAlignments[i] = new StemAlignment(startLP, endLP);
 		}
 		BeamStemAlignments beamstemalignments = new BeamStemAlignments(stemAlignments,
 			BeamDesign.BEAMLINE_WIDTH, beamDesign.getDistanceBetweenBeamLines(), beamLinesCount);

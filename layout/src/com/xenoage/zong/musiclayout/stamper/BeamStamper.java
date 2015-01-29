@@ -1,38 +1,33 @@
-package com.xenoage.zong.musiclayout.layouter.scoreframelayout;
+package com.xenoage.zong.musiclayout.stamper;
 
-import static com.xenoage.utils.collections.CList.clist;
+import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.utils.math.MathUtils.interpolateLinear;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.xenoage.utils.collections.CList;
-import com.xenoage.utils.collections.IList;
+import com.xenoage.utils.kernel.Range;
 import com.xenoage.utils.math.Fraction;
-import com.xenoage.utils.math.MathUtils;
-import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.music.beam.Beam.VerticalSpan;
 import com.xenoage.zong.core.music.beam.BeamWaypoint;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.util.DurationInfo;
-import com.xenoage.zong.core.position.MP;
-import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.layouter.cache.util.BeamedStemStampings;
-import com.xenoage.zong.musiclayout.layouter.cache.util.OpenBeamMiddleStem;
 import com.xenoage.zong.musiclayout.stampings.BeamStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
-import com.xenoage.zong.musiclayout.stampings.Stamping;
 import com.xenoage.zong.musiclayout.stampings.StemStamping;
 
 /**
  * This strategy creates the stampings for a beam and
- * its middle stems.
+ * adjust the length of the middle stem stampings.
  * 
  * @author Andreas Wenger
  */
-public class BeamStampingStrategy
-	implements ScoreLayouterStrategy {
+public class BeamStamper {
 
+	public static final BeamStamper beamStamper = new BeamStamper();
+	
 	private static final float hookLength = 1.25f; //Chlapik TODO
 
 
@@ -47,108 +42,105 @@ public class BeamStampingStrategy
 
 
 	/**
-	 * Computes the stampings for the given beam and returns them. 
+	 * Computes the stampings for the given beam and returns them.
+	 * The middle {@link StemStamping}s are modified.
 	 */
-	public IList<Stamping> createBeamStampings(BeamedStemStampings beamedStems) {
-		//everything needed there?
-		if (beamedStems.getLastStem() == null) {
-			throw new RuntimeException("Missing end stem for beam beginning at " +
-				MP.getMP((VoiceElement) beamedStems.getFirstStem().musicElement));
-		}
-		//compute beams
-		Beam beam = beamedStems.getBeam();
-		StaffStamping firstChordStaff = beamedStems.getFirstStem().parentStaff;
-		StaffStamping lastChordStaff = beamedStems.getLastStem().parentStaff;
-		CList<Stamping> ret = clist();
+	public BeamStamping[] createBeamStampings(BeamedStemStampings beamedStems) {
+		beamedStems.checkComplete();
+		Beam beam = beamedStems.beam;
+		StemStamping firstStem = beamedStems.firstStem();
+		StemStamping lastStem = beamedStems.lastStem();
+		StaffStamping leftStaff = firstStem.parentStaff;
+		StaffStamping rightStaff = lastStem.parentStaff;
+		float leftX = firstStem.xMm;
+		float rightX = lastStem.xMm;
 		float lineHeight = BeamStamping.beamHeight;
+		//number of beam levels
+		int levels = getLevels(beam);
+		BeamStamping[] ret = new BeamStamping[levels];
+		
 		//first level (8th line) is always continuous
-		float leftX = beamedStems.getFirstStem().xMm;
-		float rightX = beamedStems.getLastStem().xMm;
-		float leftLP = beamedStems.getFirstStem().endLp +
-			beamedStems.getFirstStem().direction.getSign() * lineHeight / 4; //4: looks ok
-		float rightLP = beamedStems.getLastStem().endLp +
-			beamedStems.getLastStem().direction.getSign() * lineHeight / 4; //4: looks ok
-		BeamStamping beam8th = new BeamStamping(beam, firstChordStaff, lastChordStaff, leftX, rightX,
-			leftLP, rightLP);
-		ret.add(beam8th);
+		float leftLp = firstStem.endLp + firstStem.direction.getSign() * lineHeight / 4; //4: looks ok
+		float rightLp = lastStem.endLp + lastStem.direction.getSign() * lineHeight / 4; //4: looks ok
+		BeamStamping beam8th = new BeamStamping(beam, leftStaff, rightStaff, leftX, rightX,
+			leftLp, rightLp);
+		ret[0] = beam8th;
+		
 		//the next levels can be broken, if there are different rhythms or beam subdivisions
-		int maxLevel = getMaxLevel(beam);
 		List<Waypoint> lastWaypoints = null;
-		for (int iLevel = maxLevel; iLevel >= 1; iLevel--) {
-			float leveledLP = -1 * beamedStems.getFirstStem().direction.getSign() *
-				(BeamStamping.beamHeight + BeamStamping.beamGap) * iLevel * 2; //TODO: find right value (*2 is a hack)
-			float leftLeveledLP = leftLP + leveledLP;
-			float rightLeveledLP = rightLP + leveledLP;
+		for (int i : range(levels - 1)) {
+			int level = levels - i + 1;
+			float leveledLp = -1 * firstStem.direction.getSign() *
+				(BeamStamping.beamHeight + BeamStamping.beamGap) * level * 2; //TODO: find right value (*2 is a hack)
+			float leftLeveledLp = leftLp + leveledLp;
+			float rightLeveledLp = rightLp + leveledLp;
 			//compute the waypoints
-			List<Waypoint> waypoints = computeWaypoints(beam, iLevel, lastWaypoints);
+			List<Waypoint> waypoints = computeWaypoints(beam, level, lastWaypoints);
 			lastWaypoints = waypoints;
 			//create the line stampings
 			float startX = 0;
-			for (int iChord = 0; iChord < waypoints.size(); iChord++) {
+			for (int iChord : Range.range(waypoints)) {
 				Waypoint wp = waypoints.get(iChord);
+				float stemX = beamedStems.stems[iChord].xMm;
 				if (wp == Waypoint.Start) {
 					//begin a new beam line
-					startX = beamedStems.getStemX(iChord);
+					startX = stemX;
 				}
 				else if (wp == Waypoint.Stop || wp == Waypoint.StopHookRight) {
 					//end the beam line and stem it
-					float stopX = beamedStems.getStemX(iChord) +
-						(wp == Waypoint.StopHookRight ? hookLength * firstChordStaff.is : 0);
-					BeamStamping line = new BeamStamping(beam, firstChordStaff, lastChordStaff, startX,
-						stopX,
-						MathUtils.interpolateLinear(leftLeveledLP, rightLeveledLP, leftX, rightX, startX),
-						MathUtils.interpolateLinear(leftLeveledLP, rightLeveledLP, leftX, rightX, stopX));
-					ret.add(line);
+					float stopX = stemX +
+						(wp == Waypoint.StopHookRight ? hookLength * leftStaff.is : 0);
+					BeamStamping line = new BeamStamping(beam, leftStaff, rightStaff, startX, stopX,
+						interpolateLinear(leftLeveledLp, rightLeveledLp, leftX, rightX, startX),
+						interpolateLinear(leftLeveledLp, rightLeveledLp, leftX, rightX, stopX));
+					ret[i+1] = line;
 				}
 				else if (wp == Waypoint.HookLeft || wp == Waypoint.HookRight) {
 					//left hook
-					float length = hookLength * firstChordStaff.is;
-					float x = beamedStems.getStemX(iChord);
-					float x1 = (wp == Waypoint.HookLeft ? x - length : x);
-					float x2 = (wp == Waypoint.HookLeft ? x : x + length);
-					BeamStamping line = new BeamStamping(beam, firstChordStaff, lastChordStaff, x1, x2,
-						MathUtils.interpolateLinear(leftLeveledLP, rightLeveledLP, leftX, rightX, x1),
-						MathUtils.interpolateLinear(leftLeveledLP, rightLeveledLP, leftX, rightX, x2));
-					ret.add(line);
+					float length = hookLength * leftStaff.is;
+					float x1 = (wp == Waypoint.HookLeft ? stemX - length : stemX);
+					float x2 = (wp == Waypoint.HookLeft ? stemX : stemX + length);
+					BeamStamping line = new BeamStamping(beam, leftStaff, rightStaff, x1, x2,
+						interpolateLinear(leftLeveledLp, rightLeveledLp, leftX, rightX, x1),
+						interpolateLinear(leftLeveledLp, rightLeveledLp, leftX, rightX, x2));
+					ret[i+1] = line;
 				}
 			}
 		}
 
-		//middle stems
-		for (OpenBeamMiddleStem openStem : beamedStems.getMiddleStems()) {
-			float stemX = openStem.positionX;
+		//update middle stems
+		for (int i : range(1, beamedStems.stems.length - 2)) {
+			StemStamping openStem = beamedStems.stems[i];
+			float stemX = openStem.xMm;
 			float f = (stemX - leftX) / (rightX - leftX);
-			float endLP = 0;
+			float endLp = 0;
 			if (beam.getVerticalSpan() == VerticalSpan.SingleStaff) {
 				//single staff beam: LPs are easy to compute
-				endLP = leftLP + f * (rightLP - leftLP);
+				endLp = leftLp + f * (rightLp - leftLp);
 			}
 			else if (beam.getVerticalSpan() == VerticalSpan.TwoAdjacentStaves) {
 				//two staff beam: LPs are more complicated to compute. we have first to translate
 				//the beam in absolute frame coordinates, then we have to translate it into the
 				//coordinates of the parent staff of the current stem
-				float leftStemEndMm = beamedStems.getFirstStem().parentStaff.computeYMm(leftLP);
-				float rightStemEndMm = beamedStems.getLastStem().parentStaff.computeYMm(rightLP);
+				float leftStemEndMm = leftStaff.computeYMm(leftLp);
+				float rightStemEndMm = rightStaff.computeYMm(rightLp);
 				float endMm = leftStemEndMm + f * (rightStemEndMm - leftStemEndMm);
-				endLP = openStem.staff.computeYLP(endMm);
+				endLp = openStem.parentStaff.computeYLP(endMm);
 			}
-			float startLP = (endLP > openStem.topNoteLP ? openStem.bottomNoteLP : openStem.topNoteLP);
-			StemStamping stem = new StemStamping(openStem.staff, openStem.chord, stemX, startLP, endLP,
-				openStem.stemDirection);
-			ret.add(stem);
+			openStem.endLp = endLp;
 		}
 
-		return ret.close();
+		return ret;
 	}
 
 	/**
-	 * Gets the highest level of this beam. This is 0 for 8th beams,
-	 * 1 for beams which contain up to 16th notes, 2 for 3th notes and so on.
+	 * Gets the number of levels of this beam. This is 1 for 8th beams,
+	 * 2 for beams which contain up to 16th notes, 3 for 3th notes and so on.
 	 */
-	int getMaxLevel(Beam beam) {
+	int getLevels(Beam beam) {
 		int maxLevel = 0;
 		for (BeamWaypoint bw : beam.getWaypoints()) {
-			int level = DurationInfo.getFlagsCount(bw.getChord().getDuration()) - 1;
+			int level = DurationInfo.getFlagsCount(bw.getChord().getDuration());
 			maxLevel = Math.max(level, maxLevel);
 		}
 		return maxLevel;

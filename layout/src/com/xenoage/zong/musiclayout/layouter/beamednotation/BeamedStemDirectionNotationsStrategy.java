@@ -9,8 +9,8 @@ import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.layouter.beamednotation.direction.SingleMeasureSingleStaffStrategy;
 import com.xenoage.zong.musiclayout.layouter.beamednotation.direction.SingleMeasureTwoStavesStrategy;
 import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
-import com.xenoage.zong.musiclayout.layouter.notation.NotationStrategy;
 import com.xenoage.zong.musiclayout.notations.Notation;
+import com.xenoage.zong.musiclayout.notator.Notator;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 
 /**
@@ -40,7 +40,7 @@ public class BeamedStemDirectionNotationsStrategy
 	/**
 	 * Creates a new {@link BeamedStemDirectionNotationsStrategy}.
 	 */
-	public BeamedStemDirectionNotationsStrategy(NotationStrategy notationStrategy) {
+	public BeamedStemDirectionNotationsStrategy(Notator notationStrategy) {
 		singleMeasureSingleStaffStrategy = new SingleMeasureSingleStaffStrategy(notationStrategy);
 		singleMeasureTwoStavesStrategy = new SingleMeasureTwoStavesStrategy(notationStrategy);
 	}

@@ -9,7 +9,7 @@ import org.junit.Test;
 import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterTest;
 import com.xenoage.zong.musiclayout.notations.beam.BeamStemDirections;
-import com.xenoage.zong.musiclayout.notations.chord.ChordLinePositions;
+import com.xenoage.zong.musiclayout.notations.chord.ChordLps;
 
 /**
  * Test class for the {@link SingleMeasureSingleStaffStrategy}.
@@ -147,10 +147,10 @@ public class SingleMeasureSingleStaffStrategyTest {
 		assertEquals(StemDirection.Up, res.getStemDirections()[0]);
 	}
 
-	private ChordLinePositions[] clps(int[][] linePositions) {
-		ChordLinePositions[] ret = new ChordLinePositions[linePositions.length];
+	private ChordLps[] clps(int[][] linePositions) {
+		ChordLps[] ret = new ChordLps[linePositions.length];
 		for (int i = 0; i < linePositions.length; i++)
-			ret[i] = new ChordLinePositions(linePositions[i]);
+			ret[i] = new ChordLps(linePositions[i]);
 		return ret;
 	}
 

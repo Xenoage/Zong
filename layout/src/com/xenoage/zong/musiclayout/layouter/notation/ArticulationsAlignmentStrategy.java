@@ -10,8 +10,8 @@ import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.notations.chord.ArticulationAlignment;
 import com.xenoage.zong.musiclayout.notations.chord.ArticulationsAlignment;
-import com.xenoage.zong.musiclayout.notations.chord.NoteAlignment;
-import com.xenoage.zong.musiclayout.notations.chord.NotesAlignment;
+import com.xenoage.zong.musiclayout.notations.chord.NoteDisplacement;
+import com.xenoage.zong.musiclayout.notations.chord.ChordDisplacement;
 
 /**
  * This strategy stores the alignment of
@@ -28,13 +28,13 @@ public class ArticulationsAlignmentStrategy
 	 * and returns it. If there are no articulations, null is returned.
 	 */
 	public ArticulationsAlignment computeArticulationsAlignment(Chord chord,
-		StemDirection stemDirection, NotesAlignment notesAlignment, int linesCount) {
+		StemDirection stemDirection, ChordDisplacement notesAlignment, int linesCount) {
 		//depending on the stem direction, place the articulation on the other side.
 		//if there is no stem direction, always place at the top
 		VSide side = (stemDirection == StemDirection.Up ? VSide.Bottom : VSide.Top);
 		//dependent on the side of the articulation, take the top or bottom note
-		NoteAlignment outerNote = (side == VSide.Top ? notesAlignment.getTopNoteAlignment()
-			: notesAlignment.getBottomNoteAlignment());
+		NoteDisplacement outerNote = (side == VSide.Top ? notesAlignment.getTopNote()
+			: notesAlignment.getBottomNote());
 		//compute alignment of articulations
 		return computeArticulationsAlignment(chord.getArticulations(), outerNote, side, linesCount);
 	}
@@ -44,10 +44,10 @@ public class ArticulationsAlignmentStrategy
 	 * at the given side, or null if there are no articulations.
 	 */
 	ArticulationsAlignment computeArticulationsAlignment(List<Articulation> articulations,
-		NoteAlignment outerNote, VSide side, int staffLinesCount) {
+		NoteDisplacement outerNote, VSide side, int staffLinesCount) {
 		//if there are no accidentals, return null
 		if (articulations == null || articulations.size() == 0) {
-			return null;
+			return ArticulationsAlignment.empty;
 		}
 		//special cases (which appear often): if there is only a single articulation
 		//which is either a staccato or tenuto, we can place it between the staff lines
@@ -68,7 +68,7 @@ public class ArticulationsAlignmentStrategy
 	 * the staff lines.
 	 */
 	ArticulationsAlignment computeSimpleArticulation(ArticulationType articulation,
-		NoteAlignment outerNote, VSide side, int staffLinesCount) {
+		NoteDisplacement outerNote, VSide side, int staffLinesCount) {
 		//compute LP of the articulation: if within staff, it must be
 		//between the staff lines (LP 1, 3, 5, ...)
 		float lp = outerNote.lp + 2 * side.getDir();
@@ -90,7 +90,7 @@ public class ArticulationsAlignmentStrategy
 	 * the last one as the outermost one.
 	 */
 	ArticulationsAlignment computeOtherArticulations(List<Articulation> articulations,
-		NoteAlignment outerNote, VSide side, int staffLinesCount) {
+		NoteDisplacement outerNote, VSide side, int staffLinesCount) {
 		//compute LP of the first articulation:
 		//if within staff, it must be moved outside
 		float lp = outerNote.lp + 2 * side.getDir();

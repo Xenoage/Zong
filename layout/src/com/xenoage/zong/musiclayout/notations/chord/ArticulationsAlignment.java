@@ -12,6 +12,9 @@ import com.xenoage.utils.annotations.Const;
  * @author Andreas Wenger
  */
 @Const @AllArgsConstructor @Getter public final class ArticulationsAlignment {
+	
+	public static final ArticulationsAlignment empty = new ArticulationsAlignment(
+		new ArticulationAlignment[0], 0);
 
 	/** The positions of the articulations. */
 	public final ArticulationAlignment[] articulations;

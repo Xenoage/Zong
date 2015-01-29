@@ -7,8 +7,8 @@ import static com.xenoage.zong.core.music.chord.StemDirection.Up;
 import com.xenoage.zong.core.music.chord.Stem;
 import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
-import com.xenoage.zong.musiclayout.notations.chord.NoteAlignment;
-import com.xenoage.zong.musiclayout.notations.chord.NotesAlignment;
+import com.xenoage.zong.musiclayout.notations.chord.NoteDisplacement;
+import com.xenoage.zong.musiclayout.notations.chord.ChordDisplacement;
 import com.xenoage.zong.musiclayout.notations.chord.StemAlignment;
 
 /**
@@ -32,19 +32,19 @@ public class StemAlignmentStrategy
 	 * @param linesCount  the number of lines in this staff
 	 * @param scaling     scaling of the whole chord (e.g. smaller than 1 for a grace chord).
 	 *                    ignored if the stem has a given fixed length
-	 * @return  the vertical position of the stem, or <code>null</code> if the chord has no stem.
+	 * @return  the vertical position of the stem, or {@link StemAlignment#none} if the chord has no stem.
 	 */
-	public StemAlignment computeStemAlignment(Stem stem, NotesAlignment na, StemDirection sd,
+	public StemAlignment computeStemAlignment(Stem stem, ChordDisplacement na, StemDirection sd,
 		int linesCount, float scaling) {
-		NoteAlignment high = na.getNoteAlignment(na.getNotesCount() - 1);
-		NoteAlignment low = na.getNoteAlignment(0);
+		NoteDisplacement high = na.getNote(na.getNotesCount() - 1);
+		NoteDisplacement low = na.getNote(0);
 		float startlineposition = 0;
 		float endlineposition = 0;
 		int middlelineposition = linesCount - 1;
 
 		//use a stem?
 		if (sd == None) {
-			return null;
+			return StemAlignment.none;
 		}
 
 		//compute start position

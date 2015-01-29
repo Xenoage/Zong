@@ -1,15 +1,15 @@
-package com.xenoage.zong.musiclayout.layouter.scoreframelayout;
+package com.xenoage.zong.musiclayout.stamper;
 
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.music.Pitch.pi;
 import static com.xenoage.zong.core.music.beam.Beam.beamFromChords;
-import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.BeamStampingStrategy.Waypoint.HookLeft;
-import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.BeamStampingStrategy.Waypoint.HookRight;
-import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.BeamStampingStrategy.Waypoint.None;
-import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.BeamStampingStrategy.Waypoint.Start;
-import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.BeamStampingStrategy.Waypoint.Stop;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import static com.xenoage.zong.musiclayout.stamper.BeamStamper.Waypoint.HookLeft;
+import static com.xenoage.zong.musiclayout.stamper.BeamStamper.Waypoint.HookRight;
+import static com.xenoage.zong.musiclayout.stamper.BeamStamper.Waypoint.None;
+import static com.xenoage.zong.musiclayout.stamper.BeamStamper.Waypoint.Start;
+import static com.xenoage.zong.musiclayout.stamper.BeamStamper.Waypoint.Stop;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -20,42 +20,37 @@ import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.Note;
-import com.xenoage.zong.musiclayout.layouter.scoreframelayout.BeamStampingStrategy.Waypoint;
+import com.xenoage.zong.musiclayout.stamper.BeamStamper;
+import com.xenoage.zong.musiclayout.stamper.BeamStamper.Waypoint;
 
 /**
- * Test cases for a {@link BeamStampingStrategy}.
+ * Tests for {@link BeamStamper}.
  * 
  * The test examples are from Chlapik, page 45, rule 6.
  * 
  * @author Andreas Wenger
  */
-public class BeamStampingStrategyTest {
+public class BeamStamperTest {
 
-	BeamStampingStrategy s = new BeamStampingStrategy();
+	BeamStamper s = new BeamStamper();
 
 
-	/**
-	 * Tests the getMaxLevel method.
-	 */
-	@Test public void getMaxLevelTest() {
-		assertEquals(1, s.getMaxLevel(exampleRow1Col1()));
-		assertEquals(1, s.getMaxLevel(exampleRow1Col2()));
-		assertEquals(1, s.getMaxLevel(exampleRow1Col3()));
-		assertEquals(1, s.getMaxLevel(exampleRow1Col4()));
-		assertEquals(1, s.getMaxLevel(exampleRow2Col1()));
-		assertEquals(1, s.getMaxLevel(exampleRow2Col2()));
-		assertEquals(2, s.getMaxLevel(exampleRow2Col3()));
-		assertEquals(2, s.getMaxLevel(exampleRow2Col4()));
-		assertEquals(2, s.getMaxLevel(exampleRow2Col5()));
-		assertEquals(2, s.getMaxLevel(exampleRow2Col6()));
-		assertEquals(1, s.getMaxLevel(exampleRow3Col2()));
-		assertEquals(1, s.getMaxLevel(exampleRow3Col4()));
-		assertEquals(2, s.getMaxLevel(exampleRow3Col6()));
+	@Test public void getLevelsTest() {
+		assertEquals(2, s.getLevels(exampleRow1Col1()));
+		assertEquals(2, s.getLevels(exampleRow1Col2()));
+		assertEquals(2, s.getLevels(exampleRow1Col3()));
+		assertEquals(2, s.getLevels(exampleRow1Col4()));
+		assertEquals(2, s.getLevels(exampleRow2Col1()));
+		assertEquals(2, s.getLevels(exampleRow2Col2()));
+		assertEquals(3, s.getLevels(exampleRow2Col3()));
+		assertEquals(3, s.getLevels(exampleRow2Col4()));
+		assertEquals(3, s.getLevels(exampleRow2Col5()));
+		assertEquals(3, s.getLevels(exampleRow2Col6()));
+		assertEquals(2, s.getLevels(exampleRow3Col2()));
+		assertEquals(2, s.getLevels(exampleRow3Col4()));
+		assertEquals(3, s.getLevels(exampleRow3Col6()));
 	}
 
-	/**
-	 * Tests the computeWaypoints method.
-	 */
 	@Test public void computeWaypointsTest() {
 		Beam b;
 

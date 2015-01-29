@@ -8,12 +8,15 @@ import com.xenoage.utils.math.VSide;
  * @author Andreas Wenger
  */
 public enum StemDirection {
+	
 	/** No stem. */
 	None,
 	/** Upward stem. */
 	Up,
 	/** Downward stem. */
-	Down;
+	Down,
+	/** Default direction. */
+	Default;
 
 	/**
 	 * Gets the direction of the stem as its signum:

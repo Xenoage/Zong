@@ -11,11 +11,11 @@ import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
-import com.xenoage.zong.musiclayout.layouter.notation.NotationStrategy;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
 import com.xenoage.zong.musiclayout.notations.Notation;
 import com.xenoage.zong.musiclayout.notations.beam.BeamStemDirections;
-import com.xenoage.zong.musiclayout.notations.chord.ChordLinePositions;
+import com.xenoage.zong.musiclayout.notations.chord.ChordLps;
+import com.xenoage.zong.musiclayout.notator.Notator;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 
 /**
@@ -29,10 +29,10 @@ public class SingleMeasureSingleStaffStrategy
 	implements ScoreLayouterStrategy {
 
 	//used strategies
-	private final NotationStrategy notationStrategy;
+	private final Notator notationStrategy;
 
 
-	public SingleMeasureSingleStaffStrategy(NotationStrategy notationStrategy) {
+	public SingleMeasureSingleStaffStrategy(Notator notationStrategy) {
 		this.notationStrategy = notationStrategy;
 	}
 
@@ -46,14 +46,14 @@ public class SingleMeasureSingleStaffStrategy
 		//pre-requirements: beam spans over only one measure (not tested here),
 		//and line positions and the stem direction of each chord are known (tested here)
 		int chordsCount = beam.getWaypoints().size();
-		ChordLinePositions[] chordsLp = new ChordLinePositions[chordsCount];
+		ChordLps[] chordsLp = new ChordLps[chordsCount];
 		StemDirection[] stemDirections = new StemDirection[chordsCount];
 		int iChord = 0;
 		for (BeamWaypoint waypoint : beam.getWaypoints()) {
 			Chord chord = waypoint.getChord();
 			ChordNotation cn = notations.getChord(chord);
 			if (cn != null && cn.getNotesAlignment() != null)
-				chordsLp[iChord] = cn.getNotesAlignment().getLinePositions();
+				chordsLp[iChord] = cn.getNotesAlignment().getLps();
 			else
 				throw new IllegalStateException("ChordLinePositions unknown for Chord " + iChord);
 			if (cn.getStemDirection() != null)
@@ -90,7 +90,7 @@ public class SingleMeasureSingleStaffStrategy
 	 * @param stemDirections  the precomputed directions of the stems (as if they were single, unbeamed chords)
 	 * @param linesCount      the number of lines in this staff
 	 */
-	BeamStemDirections computeBeamStemDirections(ChordLinePositions[] chordsLp,
+	BeamStemDirections computeBeamStemDirections(ChordLps[] chordsLp,
 		StemDirection[] stemDirections, int linesCount) {
 		int up = 0;
 		int down = 0;
@@ -99,7 +99,7 @@ public class SingleMeasureSingleStaffStrategy
 		int f = 0;
 
 		for (int iChord = 0; iChord < chordsLp.length; iChord++) {
-			ChordLinePositions chordLp = chordsLp[iChord];
+			ChordLps chordLp = chordsLp[iChord];
 			StemDirection direction = stemDirections[iChord];
 			if (direction == StemDirection.Up) {
 				up++;

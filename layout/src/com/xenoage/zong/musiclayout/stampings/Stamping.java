@@ -14,6 +14,8 @@ import com.xenoage.zong.core.music.MusicElement;
  * Stamps were used in the early days of music notation to paint the symbols.
  * This class is called stamping, because it is the result of placing a stamp,
  * that means, in most cases, a given symbol at a given position. 
+ * 
+ * TIDY: make all stampings mutable
  *
  * @author Andreas Wenger
  */

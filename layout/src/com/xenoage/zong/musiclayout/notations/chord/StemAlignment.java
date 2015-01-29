@@ -9,10 +9,12 @@ import lombok.AllArgsConstructor;
  */
 @AllArgsConstructor
 public class StemAlignment {
+	
+	public static final StemAlignment none = new StemAlignment(0, 0);
 
 	/** The line position where the stem stars (note side). */
-	public float startLp;
+	public final float startLp;
 	/** The line position where the stem ends (flag/beam side). */
-	public float endLp;
+	public final float endLp;
 
 }

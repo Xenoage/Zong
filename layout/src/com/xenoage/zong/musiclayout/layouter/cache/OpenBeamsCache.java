@@ -5,6 +5,7 @@ import java.util.Iterator;
 
 import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.musiclayout.layouter.cache.util.BeamedStemStampings;
+import com.xenoage.zong.musiclayout.stampings.StemStamping;
 
 /**
  * Cache for beams which still have to be created.
@@ -32,7 +33,7 @@ public class OpenBeamsCache
 	public BeamedStemStampings get(Beam beam) {
 		BeamedStemStampings ret = openBeams.get(beam);
 		if (ret == null) {
-			ret = new BeamedStemStampings(beam);
+			ret = new BeamedStemStampings(beam, new StemStamping[beam.getWaypoints().size()]);
 			openBeams.put(beam, ret);
 		}
 		return ret;

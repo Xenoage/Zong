@@ -4,6 +4,7 @@ import lombok.Data;
 
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.annotations.NonNull;
 
 
 /**
@@ -12,9 +13,11 @@ import com.xenoage.utils.annotations.MaybeNull;
  * @author Andreas Wenger
  */
 @Const @Data public final class Stem {
+	
+	public static final Stem defaultStem = new Stem(StemDirection.Default, null);
 
 	/** The direction of the stem, or null for default. */
-	@MaybeNull private final StemDirection direction;
+	@NonNull private final StemDirection direction;
 
 	/** The length of the stem, measured from the outermost chord not at the stem side
 	 * to the end of the stem, in interline spaces, or null for default. */

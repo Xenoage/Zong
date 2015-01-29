@@ -3,7 +3,7 @@ package com.xenoage.zong.musiclayout.layouter.voicenotation;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterContext;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
-import com.xenoage.zong.musiclayout.layouter.notation.NotationStrategy;
+import com.xenoage.zong.musiclayout.notator.Notator;
 
 /**
  * This strategy computes the directions of the stems
@@ -22,13 +22,13 @@ public class VoiceStemDirectionNotationsStrategy
 	implements ScoreLayouterStrategy {
 
 	//used strategies
-	@SuppressWarnings("unused") private final NotationStrategy notationStrategy;
+	@SuppressWarnings("unused") private final Notator notationStrategy;
 
 
 	/**
 	 * Creates a new {@link VoiceStemDirectionNotationsStrategy}.
 	 */
-	public VoiceStemDirectionNotationsStrategy(NotationStrategy notationStrategy) {
+	public VoiceStemDirectionNotationsStrategy(Notator notationStrategy) {
 		this.notationStrategy = notationStrategy;
 	}
 

@@ -32,10 +32,10 @@ import com.xenoage.zong.musiclayout.layouter.beamednotation.BeamedStemDirectionN
 import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
 import com.xenoage.zong.musiclayout.layouter.columnspacing.ColumnSpacingStrategy;
 import com.xenoage.zong.musiclayout.layouter.horizontalsystemfilling.HorizontalSystemFillingStrategy;
-import com.xenoage.zong.musiclayout.layouter.notation.NotationStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.ScoreFrameLayoutStrategy;
 import com.xenoage.zong.musiclayout.layouter.verticalframefilling.VerticalFrameFillingStrategy;
 import com.xenoage.zong.musiclayout.layouter.voicenotation.VoiceStemDirectionNotationsStrategy;
+import com.xenoage.zong.musiclayout.notator.Notator;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 
 /**
@@ -48,7 +48,7 @@ public class ScoreLayoutStrategy
 	implements ScoreLayouterStrategy {
 
 	//used strategies
-	private final NotationStrategy notationStrategy;
+	private final Notator notationStrategy;
 	private final BeamedStemDirectionNotationsStrategy beamedStemDirectionNotationsStrategy;
 	private final VoiceStemDirectionNotationsStrategy voiceStemDirectionNotationsStrategy;
 	private final ColumnSpacingStrategy measureColumnSpacingStrategy;
@@ -60,7 +60,7 @@ public class ScoreLayoutStrategy
 	/**
 	 * Creates a new {@link ScoreLayoutStrategy}.
 	 */
-	public ScoreLayoutStrategy(NotationStrategy notationStrategy,
+	public ScoreLayoutStrategy(Notator notationStrategy,
 		BeamedStemDirectionNotationsStrategy beamedStemDirectionNotationsStrategy,
 		VoiceStemDirectionNotationsStrategy voiceStemDirectionNotationsStrategy,
 		ColumnSpacingStrategy measureColumnSpacingStrategy,

@@ -1,6 +1,5 @@
 package com.xenoage.zong.musiclayout.stampings;
 
-import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.StemDirection;
 
@@ -14,21 +13,21 @@ import com.xenoage.zong.core.music.chord.StemDirection;
  *
  * @author Andreas Wenger
  */
-@Const public final class StemStamping
+public class StemStamping
 	extends Stamping {
 
 	/** The horizontal position in mm. */
-	public final float xMm;
+	public float xMm;
 
 	/** The start line position of the stem. */
-	public final float noteheadLp;
+	public float noteheadLp;
 
 	/** The end line position of the stem.
 	 * Also non-integer values are allowed here. */
-	public final float endLp;
+	public float endLp;
 
 	/** Stem direction: If up, the notes are at the bottom, and vice versa. */
-	public final StemDirection direction;
+	public StemDirection direction;
 
 
 	public StemStamping(StaffStamping parentStaff, Chord chord, float xMm, float noteheadLp,
