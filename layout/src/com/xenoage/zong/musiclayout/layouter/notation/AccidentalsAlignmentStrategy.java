@@ -1,6 +1,7 @@
 package com.xenoage.zong.musiclayout.layouter.notation;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static com.xenoage.zong.musiclayout.notations.chord.NoteSuspension.Right;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.notations.chord.AccidentalAlignment;
 import com.xenoage.zong.musiclayout.notations.chord.AccidentalsAlignment;
 import com.xenoage.zong.musiclayout.notations.chord.NoteAlignment;
+import com.xenoage.zong.musiclayout.notations.chord.NoteSuspension;
 import com.xenoage.zong.musiclayout.notations.chord.NotesAlignment;
 import com.xenoage.zong.musiclayout.settings.ChordWidths;
 
@@ -72,7 +74,7 @@ public class AccidentalsAlignmentStrategy
 		for (int i = 0; i < pitches.size(); i++) {
 			Accidental at = mc.getAccidental(pitches.get(i));
 			if (at != null) {
-				AccidentalAlignment[] a = { new AccidentalAlignment(alignments[i].getLinePosition(), 0, at) };
+				AccidentalAlignment[] a = { new AccidentalAlignment(alignments[i].lp, 0, at) };
 				float width = chordWidths.get(at) + chordWidths.accToNoteGap;
 				return new AccidentalsAlignment(a, width);
 			}
@@ -95,15 +97,15 @@ public class AccidentalsAlignmentStrategy
 		Accidental atTop = context.getAccidental(pitches.get(topNoteIndex));
 		Accidental atBottom = context.getAccidental(pitches.get(bottomNoteIndex));
 		//interval of at least a seventh?
-		int distance = alignments[topNoteIndex].getLinePosition() -
-			alignments[bottomNoteIndex].getLinePosition();
+		int distance = alignments[topNoteIndex].lp -
+			alignments[bottomNoteIndex].lp;
 		AccidentalAlignment[] a;
 		float width;
 		if (distance >= 6) {
 			//placed on the same horizontal position
 			a = new AccidentalAlignment[] {
-				new AccidentalAlignment(alignments[bottomNoteIndex].getLinePosition(), 0, atBottom),
-				new AccidentalAlignment(alignments[topNoteIndex].getLinePosition(), 0, atTop) };
+				new AccidentalAlignment(alignments[bottomNoteIndex].lp, 0, atBottom),
+				new AccidentalAlignment(alignments[topNoteIndex].lp, 0, atTop) };
 			width = chordWidths.getMaxWidth(atBottom, atTop) + chordWidths.accToNoteGap;
 		}
 		else {
@@ -114,22 +116,23 @@ public class AccidentalsAlignmentStrategy
 			//on the right side of the stem, and the top accidental note
 			//is not, then the bottom accidental
 			//is nearer to the note (see Ross, p. 132)
-			if (alignments[bottomNoteIndex].getOffset() > alignments[topNoteIndex].getOffset()) {
+			if (alignments[bottomNoteIndex].suspension == Right &&
+				alignments[topNoteIndex].suspension != Right) {
 				bottomFirst = false;
 			}
 			if (bottomFirst) {
 				//begin with bottom note
 				a = new AccidentalAlignment[] {
-					new AccidentalAlignment(alignments[bottomNoteIndex].getLinePosition(), 0, atBottom),
-					new AccidentalAlignment(alignments[topNoteIndex].getLinePosition(),
+					new AccidentalAlignment(alignments[bottomNoteIndex].lp, 0, atBottom),
+					new AccidentalAlignment(alignments[topNoteIndex].lp,
 						chordWidths.get(atBottom) + chordWidths.accToAccGap, atTop) };
 			}
 			else {
 				//begin with top note
 				a = new AccidentalAlignment[] {
-					new AccidentalAlignment(alignments[bottomNoteIndex].getLinePosition(),
+					new AccidentalAlignment(alignments[bottomNoteIndex].lp,
 						chordWidths.get(atTop) + chordWidths.accToAccGap, atBottom),
-					new AccidentalAlignment(alignments[topNoteIndex].getLinePosition(), 0f, atTop) };
+					new AccidentalAlignment(alignments[topNoteIndex].lp, 0f, atTop) };
 			}
 			//compute width
 			width = chordWidths.get(atBottom) + chordWidths.accToAccGap + chordWidths.get(atTop) +
@@ -156,34 +159,34 @@ public class AccidentalsAlignmentStrategy
 		Accidental atMiddle = context.getAccidental(pitches.get(middleNoteIndex));
 		Accidental atBottom = context.getAccidental(pitches.get(bottomNoteIndex));
 		//interval of at least a seventh?
-		int distance = alignments[topNoteIndex].getLinePosition() -
-			alignments[bottomNoteIndex].getLinePosition();
+		int distance = alignments[topNoteIndex].lp -
+			alignments[bottomNoteIndex].lp;
 		AccidentalAlignment[] a = new AccidentalAlignment[3];
 		float width;
 		if (distance >= 6) {
 			//interval of at least a seventh. can be rule 1, 3 or 4
-			if (alignments[topNoteIndex].getOffset() > 0f) {
+			if (alignments[topNoteIndex].suspension == Right) {
 				//top note is suspended on the right side of the stem.
 				//this is rule 4. (same code as rule 1)
-				a[1] = new AccidentalAlignment(alignments[middleNoteIndex].getLinePosition(), 0f, atMiddle);
+				a[1] = new AccidentalAlignment(alignments[middleNoteIndex].lp, 0f, atMiddle);
 				float middleWidth = chordWidths.get(atMiddle);
-				a[0] = new AccidentalAlignment(alignments[bottomNoteIndex].getLinePosition(), middleWidth +
+				a[0] = new AccidentalAlignment(alignments[bottomNoteIndex].lp, middleWidth +
 					chordWidths.accToAccGap, atBottom);
-				a[2] = new AccidentalAlignment(alignments[topNoteIndex].getLinePosition(), middleWidth +
+				a[2] = new AccidentalAlignment(alignments[topNoteIndex].lp, middleWidth +
 					chordWidths.accToAccGap, atTop);
 				width = middleWidth + chordWidths.accToAccGap + chordWidths.getMaxWidth(atBottom, atTop) +
 					chordWidths.accToNoteGap;
 			}
-			else if (alignments[middleNoteIndex].getOffset() > 0f) {
+			else if (alignments[middleNoteIndex].suspension == Right) {
 				//middle note is suspended on the right side of the stem.
 				//(bottom note is never suspended on the right) (TODO: really?)
 				//this is rule 3.
-				a[0] = new AccidentalAlignment(alignments[bottomNoteIndex].getLinePosition(), 0f, atBottom);
+				a[0] = new AccidentalAlignment(alignments[bottomNoteIndex].lp, 0f, atBottom);
 				float bottomWidth = chordWidths.get(atBottom);
-				a[2] = new AccidentalAlignment(alignments[topNoteIndex].getLinePosition(), bottomWidth +
+				a[2] = new AccidentalAlignment(alignments[topNoteIndex].lp, bottomWidth +
 					chordWidths.accToAccGap, atTop);
 				float topWidth = chordWidths.get(atTop);
-				a[1] = new AccidentalAlignment(alignments[middleNoteIndex].getLinePosition(), bottomWidth +
+				a[1] = new AccidentalAlignment(alignments[middleNoteIndex].lp, bottomWidth +
 					chordWidths.accToAccGap + topWidth + chordWidths.accToAccGap, atMiddle);
 				width = bottomWidth + chordWidths.accToAccGap + topWidth + chordWidths.accToAccGap +
 					chordWidths.get(atMiddle) + chordWidths.accToNoteGap;
@@ -191,11 +194,11 @@ public class AccidentalsAlignmentStrategy
 			else {
 				//there are no accidental notes suspended on the right side of the stem.
 				//this is rule 1.
-				a[1] = new AccidentalAlignment(alignments[middleNoteIndex].getLinePosition(), 0f, atMiddle);
+				a[1] = new AccidentalAlignment(alignments[middleNoteIndex].lp, 0f, atMiddle);
 				float middleWidth = chordWidths.get(atMiddle);
-				a[0] = new AccidentalAlignment(alignments[bottomNoteIndex].getLinePosition(), middleWidth +
+				a[0] = new AccidentalAlignment(alignments[bottomNoteIndex].lp, middleWidth +
 					chordWidths.accToAccGap, atBottom);
-				a[2] = new AccidentalAlignment(alignments[topNoteIndex].getLinePosition(), middleWidth +
+				a[2] = new AccidentalAlignment(alignments[topNoteIndex].lp, middleWidth +
 					chordWidths.accToAccGap, atTop);
 				width = middleWidth + chordWidths.accToAccGap + chordWidths.getMaxWidth(atBottom, atTop) +
 					chordWidths.accToNoteGap;
@@ -203,30 +206,30 @@ public class AccidentalsAlignmentStrategy
 		}
 		else {
 			//interval of less than a seventh. can be rule 2, 5 or 6
-			if (alignments[topNoteIndex].getOffset() > 0f) {
+			if (alignments[topNoteIndex].suspension == Right) {
 				//top note is suspended on the right side of the stem.
 				//this is rule 5. (same code as rule 2)
-				a[1] = new AccidentalAlignment(alignments[middleNoteIndex].getLinePosition(), 0f, atMiddle);
+				a[1] = new AccidentalAlignment(alignments[middleNoteIndex].lp, 0f, atMiddle);
 				float middleWidth = chordWidths.get(atMiddle);
-				a[0] = new AccidentalAlignment(alignments[bottomNoteIndex].getLinePosition(), middleWidth +
+				a[0] = new AccidentalAlignment(alignments[bottomNoteIndex].lp, middleWidth +
 					chordWidths.accToAccGap, atBottom);
 				float bottomWidth = chordWidths.get(atBottom);
-				a[2] = new AccidentalAlignment(alignments[topNoteIndex].getLinePosition(), middleWidth +
+				a[2] = new AccidentalAlignment(alignments[topNoteIndex].lp, middleWidth +
 					chordWidths.accToAccGap + bottomWidth + chordWidths.accToAccGap, atTop);
 				float topWidth = chordWidths.get(atTop);
 				width = middleWidth + chordWidths.accToAccGap + bottomWidth + chordWidths.accToAccGap +
 					topWidth + chordWidths.accToNoteGap;
 			}
-			else if (alignments[middleNoteIndex].getOffset() > 0f) {
+			else if (alignments[middleNoteIndex].suspension == Right) {
 				//middle note is suspended on the right side of the stem.
 				//(bottom note is never suspended on the right)
 				//this is rule 6. (same code as rule 3)
-				a[0] = new AccidentalAlignment(alignments[bottomNoteIndex].getLinePosition(), 0f, atBottom);
+				a[0] = new AccidentalAlignment(alignments[bottomNoteIndex].lp, 0f, atBottom);
 				float bottomWidth = chordWidths.get(atBottom);
-				a[2] = new AccidentalAlignment(alignments[topNoteIndex].getLinePosition(), bottomWidth +
+				a[2] = new AccidentalAlignment(alignments[topNoteIndex].lp, bottomWidth +
 					chordWidths.accToAccGap, atTop);
 				float topWidth = chordWidths.get(atTop);
-				a[1] = new AccidentalAlignment(alignments[middleNoteIndex].getLinePosition(), bottomWidth +
+				a[1] = new AccidentalAlignment(alignments[middleNoteIndex].lp, bottomWidth +
 					chordWidths.accToAccGap + topWidth + chordWidths.accToAccGap, atMiddle);
 				width = bottomWidth + chordWidths.accToAccGap + topWidth + chordWidths.accToAccGap +
 					chordWidths.get(atMiddle) + chordWidths.accToNoteGap;
@@ -234,12 +237,12 @@ public class AccidentalsAlignmentStrategy
 			else {
 				//there are no accidental notes suspended on the right side of the stem.
 				//this is rule 2.
-				a[1] = new AccidentalAlignment(alignments[middleNoteIndex].getLinePosition(), 0f, atMiddle);
+				a[1] = new AccidentalAlignment(alignments[middleNoteIndex].lp, 0f, atMiddle);
 				float middleWidth = chordWidths.get(atMiddle);
-				a[0] = new AccidentalAlignment(alignments[bottomNoteIndex].getLinePosition(), middleWidth +
+				a[0] = new AccidentalAlignment(alignments[bottomNoteIndex].lp, middleWidth +
 					chordWidths.accToAccGap, atBottom);
 				float bottomWidth = chordWidths.get(atBottom);
-				a[2] = new AccidentalAlignment(alignments[topNoteIndex].getLinePosition(), middleWidth +
+				a[2] = new AccidentalAlignment(alignments[topNoteIndex].lp, middleWidth +
 					chordWidths.accToAccGap + bottomWidth + chordWidths.accToAccGap, atTop);
 				float topWidth = chordWidths.get(atTop);
 				width = middleWidth + chordWidths.accToAccGap + bottomWidth + chordWidths.accToAccGap +
@@ -261,7 +264,7 @@ public class AccidentalsAlignmentStrategy
 		for (int i = 0; i < pitches.size(); i++) {
 			Accidental at = mc.getAccidental(pitches.get(i));
 			if (at != null) {
-				al.add(new AccidentalAlignment(alignments[i].getLinePosition(), 0, at));
+				al.add(new AccidentalAlignment(alignments[i].lp, 0, at));
 				width = Math.max(width, chordWidths.get(at) + chordWidths.accToNoteGap);
 			}
 		}

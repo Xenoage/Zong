@@ -39,7 +39,7 @@ public class SlurStampingStrategy
 		if (chord.getStemDirection().equalsSide(slurSide)) {
 			StemAlignment sa = chord.getStemAlignment();
 			if (sa != null)
-				distance += Math.abs(sa.getEndLinePosition() - sa.getStartLinePosition()) / 2; //LP to IS
+				distance += Math.abs(sa.endLp - sa.startLp) / 2; //LP to IS
 		}
 		return distance;
 	}

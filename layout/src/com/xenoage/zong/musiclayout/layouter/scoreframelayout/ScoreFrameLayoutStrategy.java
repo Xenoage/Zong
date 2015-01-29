@@ -7,6 +7,7 @@ import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.core.music.format.SP.sp;
 import static com.xenoage.zong.core.position.MP.atBeat;
 import static com.xenoage.zong.core.text.FormattedText.fText;
+import static com.xenoage.zong.musiclayout.stamper.ChordStamper.chordStamper;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -495,7 +496,7 @@ public class ScoreFrameLayoutStrategy
 		Chord chordElement = chord.getElement();
 
 		//noteheads, leger lines, dots, accidentals, stem, flags, articulations
-		ChordStampings chordSt = musicElementStampingStrategy.createChordStampings(chord, positionX,
+		ChordStampings chordSt = chordStamper.create(chord, positionX,
 			staff, symbolPool, layoutSettings);
 		chordSt.addAllTo(ret);
 
@@ -524,7 +525,7 @@ public class ScoreFrameLayoutStrategy
 			SlurWaypoint wp = slur.getWaypoint(chordElement);
 			WaypointPosition pos = slur.getWaypointPosition(chordElement);
 			int noteIndex = notNull(wp.getNoteIndex(), 0); //TODO: choose top/bottom
-			NoteheadStamping notehead = chordSt.noteheads.get(noteIndex);
+			NoteheadStamping notehead = chordSt.noteheads[noteIndex];
 			//define the placement: above or below (TODO: better strategy)
 			VSide side = VSide.Top;
 			if (pos == WaypointPosition.Start) {
@@ -577,7 +578,7 @@ public class ScoreFrameLayoutStrategy
 						{
 							//remember it
 							openLyricsCache.setUnderscore((Lyric) lastLyric.musicElement, lastLyric,
-								chordSt.noteheads.getFirst()/* TODO*/, staffIndex);
+								chordSt.noteheads[0]/* TODO*/, staffIndex);
 						}
 					}
 					else {
@@ -585,7 +586,7 @@ public class ScoreFrameLayoutStrategy
 
 						//create text stamping
 						StaffTextStamping sts = lyricStampingStrategy.createSyllableStamping(lyric,
-							defaultLyricStyle, staff, chordSt.noteheads.getFirst()/* TODO*/.position.xMm,
+							defaultLyricStyle, staff, chordSt.noteheads[0]/* TODO*/.position.xMm,
 							baseLine);
 						ret.add(sts);
 

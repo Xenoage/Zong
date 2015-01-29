@@ -26,7 +26,7 @@ public final class StaffStamping
 	public final float length;
 	/** The number of lines in this staff. */
 	public final int linesCount;
-	/** The interline space, i.e. the space between two staff lines in mm */
+	/** The interline space, i.e. the space between two staff lines, in mm */
 	public final float is;
 
 	/** Musical position marks, to convert layout coordinates to musical positions */

@@ -10,8 +10,12 @@ import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 /**
  * Middle stems of a still open beam.
  * 
+ * TODO: get rid of this class. we should be able to correct
+ * the stem lengths of middle chords in beams later.
+ * 
  * @author Andreas Wenger
  */
+@Deprecated
 @Const @AllArgsConstructor public class OpenBeamMiddleStem {
 
 	public final StaffStamping staff;

@@ -139,8 +139,8 @@ public class StemAlignmentStrategyTest {
 			ChordWidths.defaultValue, context);
 		chordStemAlignment = strategy.computeStemAlignment(null, chordNotesAlignment, stemDirection, 5,
 			1);
-		assertEquals(start, chordStemAlignment.getStartLinePosition(), Delta.DELTA_FLOAT);
-		assertEquals(end, chordStemAlignment.getEndLinePosition(), Delta.DELTA_FLOAT);
+		assertEquals(start, chordStemAlignment.startLp, Delta.DELTA_FLOAT);
+		assertEquals(end, chordStemAlignment.endLp, Delta.DELTA_FLOAT);
 	}
 
 }

@@ -40,7 +40,7 @@ public class SingleMeasureTwoStavesStrategy
 	/**
 	 * This strategy computes the lengths of the stems of the beamed chords.
 	 */
-	public NotationsCache computeNotations(Beam beam, NotationsCache notations) {
+	public void computeNotations(Beam beam, NotationsCache notations) {
 		NotesAlignment[] chordNa = new NotesAlignment[beam.getWaypoints().size()];
 		int beamlines = beam.getMaxBeamLinesCount();
 		int i = 0;
@@ -61,15 +61,12 @@ public class SingleMeasureTwoStavesStrategy
 			firstStemDirection, lastStemDirection);
 
 		//compute new notations
-		NotationsCache ret = new NotationsCache();
 		It<BeamWaypoint> waypoints = it(beam.getWaypoints());
 		for (BeamWaypoint waypoint : waypoints) {
 			Chord chord = waypoint.getChord();
-			ChordNotation oldCN = notations.getChord(chord);
-			ret.add(oldCN.withStemAlignment(bsa.stemAlignments[waypoints.getIndex()]));
+			ChordNotation cn = notations.getChord(chord);
+			cn.stemAlignment = bsa.stemAlignments[waypoints.getIndex()];
 		}
-
-		return ret;
 	}
 
 	/**

@@ -136,6 +136,18 @@ public final class ScoreFrameLayout {
 		}
 		return null;
 	}
+	
+	/**
+	 * Returns the first {@link Stamping} of the given type which
+	 * belongs to the given {@link MusicElement}, or null if there is none.
+	 */
+	public Stamping getStampingFor(MusicElement element, StampingType stampingType) {
+		for (Stamping s : otherStampings) {
+			if (s.musicElement == element && s.getType() == stampingType)
+				return s;
+		}
+		return null;
+	}
 
 	/**
 	 * Computes and returns the appropriate musical position

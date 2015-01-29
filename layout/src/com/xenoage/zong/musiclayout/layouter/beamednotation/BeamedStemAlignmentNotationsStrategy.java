@@ -30,20 +30,20 @@ public class BeamedStemAlignmentNotationsStrategy
 	 * This strategy computes the lengths of the stems of beamed notes.
 	 * It only works for chords, in which all the stems point in the same
 	 * direction! (like computed by {@link BeamedStemDirectionNotationsStrategy}).
-	 * The updated chord notations are returned.
+	 * The NotationsCache is updated.
 	 */
-	public NotationsCache computeNotations(Score score, Beam beam,
+	public void computeNotations(Score score, Beam beam,
 		List<ColumnSpacing> columnSpacings, NotationsCache notations) {
 
 		//choose appropriate strategy
 		if (beam.getHorizontalSpan() == HorizontalSpan.SingleMeasure) {
 			if (beam.getVerticalSpan() == VerticalSpan.SingleStaff) {
 				MP firstMP = MP.getMP(beam.getStart().getChord());
-				return singleMeasureSingleStaffStrategy.computeNotations(score, beam,
+				singleMeasureSingleStaffStrategy.computeNotations(score, beam,
 					columnSpacings.get(firstMP.measure), notations);
 			}
 			else if (beam.getVerticalSpan() == VerticalSpan.TwoAdjacentStaves) {
-				return singleMeasureTwoStavesStrategy.computeNotations(beam, notations);
+				singleMeasureTwoStavesStrategy.computeNotations(beam, notations);
 			}
 			else {
 				throw new IllegalStateException("No strategy for more than two or non-adjacent staves");
@@ -51,7 +51,6 @@ public class BeamedStemAlignmentNotationsStrategy
 		}
 		else {
 			//Multi-measure beams are not supported yet - TODO
-			return notations;
 		}
 	}
 

@@ -19,10 +19,12 @@ import com.xenoage.zong.symbols.common.CommonSymbol;
 @Const public final class NoteheadStamping
 	extends StaffSymbolStamping {
 
+	//TIDY: use enum
 	public static final int NOTEHEAD_WHOLE = 0;
 	public static final int NOTEHEAD_HALF = 1;
 	public static final int NOTEHEAD_QUARTER = 2;
 
+	//TIDY: use enum
 	public static final int SIDE_LEFT = 0;
 	public static final int SIDE_CENTER = 1;
 	public static final int SIDE_RIGHT = 2;

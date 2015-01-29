@@ -63,11 +63,11 @@ public final class NotesAlignmentStrategy
 		int[] dots = (dotsCount > 0 ? computeDots(lp) : new int[0]);
 
 		//are there left-suspended notes?
-		float leftSuspendedWidth = 0;
+		boolean leftSuspended = false;
 		for (NoteAlignment note : notes) {
-			if (note.getSuspension() == NoteSuspension.Left) {
+			if (note.suspension == NoteSuspension.Left) {
 				//yes, there is at least one left-suspended note
-				leftSuspendedWidth = noteheadWidth;
+				leftSuspended = true;
 				break;
 			}
 		}
@@ -78,7 +78,7 @@ public final class NotesAlignmentStrategy
 		else
 			totalWidth = notesWidth;
 
-		return new NotesAlignment(totalWidth, notes, dotsOffsets, dots, stemOffset, leftSuspendedWidth);
+		return new NotesAlignment(totalWidth, noteheadWidth, notes, dotsOffsets, dots, stemOffset, leftSuspended);
 	}
 
 	/**

@@ -7,25 +7,33 @@ import com.xenoage.utils.annotations.Const;
 
 /**
  * This class represents the alignment of the notes and the dots of a chord.
+ * 
+ * The horizontal positions are measured in IS.
+ * The position x = 0 is at the left side of the normal, unsuspended
+ * chord notes. Thus, for example, the stem offset is 0 if the stem is on the
+ * left side, or it is the notehead width if it is on the right side.
+ * 
+ * The vertical positions are measured in LPs.
  *
  * @author Andreas Wenger
  */
 @Const @AllArgsConstructor @Getter public final class NotesAlignment {
 
-	/** The width of the chord notes and dots in spaces. */
-	public final float width;
+	/** The width of the chord notes and dots in IS. */
+	public float widthIs;
+	/** The width of a notehead in the chord in IS. */
+	public float noteheadWidthIs;
 	/** The list of note alignments.
 	 * The notes are sorted upwards, that means, the lowest note has index 0. */
-	public final NoteAlignment[] noteAlignments;
+	public NoteAlignment[] noteAlignments;
 	/** The offsets of the first and second column of dots (if any). */
-	public final float[] dotsOffsets;
+	public float[] dotsOffsetsIs;
 	/** The line positions of the dots, or an empty array, if the chord has no dots. */
-	public final int[] dotLPs;
-	/** The horizontal offset of the stem in spaces. */
-	public final float stemOffset;
-	/** The width of the left suspended notes in IS.
-	 * If there are no left-suspended notes, this will be 0. */
-	public final float leftSuspendedWidth;
+	public int[] dotsLp;
+	/** The horizontal offset of the stem in IS. */
+	public float stemOffsetIs;
+	/** True, if there are no left-suspended notes, otherwise false. */
+	public boolean leftSuspended;
 	
 	
 	/**
@@ -48,7 +56,7 @@ import com.xenoage.utils.annotations.Const;
 	 * Gets the number of dots per note.
 	 */
 	public int getDotsPerNoteCount() {
-		return dotsOffsets.length;
+		return dotsOffsetsIs.length;
 	}
 
 	/**
@@ -68,8 +76,8 @@ import com.xenoage.utils.annotations.Const;
 	/**
 	 * Gets the offset of the dots with the given index (0 or 1).
 	 */
-	public float getDotsOffset(int dot) {
-		return dotsOffsets[dot];
+	public float getDotsOffsetIs(int dot) {
+		return dotsOffsetsIs[dot];
 	}
 
 	/**
@@ -78,7 +86,7 @@ import com.xenoage.utils.annotations.Const;
 	public ChordLinePositions getLinePositions() {
 		int[] ret = new int[noteAlignments.length];
 		for (int i = 0; i < ret.length; i++)
-			ret[i] = noteAlignments[i].linePosition;
+			ret[i] = noteAlignments[i].lp;
 		return new ChordLinePositions(ret);
 	}
 

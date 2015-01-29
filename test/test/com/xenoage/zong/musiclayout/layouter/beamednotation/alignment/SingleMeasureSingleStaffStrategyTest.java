@@ -53,25 +53,25 @@ public class SingleMeasureSingleStaffStrategyTest {
 		alignment = strategy.computeStemAlignments(cna, positionX, linesCount, singlebeam, dir)
 			.getStemAlignments();
 
-		assertEquals(-0.5, alignment[0].getEndLinePosition(), DRf);
-		assertEquals(0, alignment[1].getEndLinePosition(), DRf);
+		assertEquals(-0.5, alignment[0].endLp, DRf);
+		assertEquals(0, alignment[1].endLp, DRf);
 
 		dir = Up;
 		int[][] notes2 = { { -1, 1 }, { -1, 1 } };
 		cna = generateChordNotesAlignment(notes2);
 		alignment = strategy.computeStemAlignments(cna, positionX, linesCount, singlebeam, dir)
 			.getStemAlignments();
-		assertEquals(8, alignment[0].getEndLinePosition(), DRf);
-		assertEquals(8, alignment[1].getEndLinePosition(), DRf);
+		assertEquals(8, alignment[0].endLp, DRf);
+		assertEquals(8, alignment[1].endLp, DRf);
 
 		dir = Down;
 		int[][] notes3 = { { 6 }, { 2 }, { 3 }, { 4 }, { 5 }, { 7 } };
 		cna = generateChordNotesAlignment(notes3);
 		alignment = strategy.computeStemAlignments(cna, positionX6, linesCount, singlebeam, dir)
 			.getStemAlignments();
-		assertEquals(1F, alignment[5].getEndLinePosition() - alignment[0].getEndLinePosition(), DRf);
-		assertEquals(-4.5, alignment[0].getEndLinePosition(), DRf);
-		assertEquals(-3.5, alignment[5].getEndLinePosition(), DRf);
+		assertEquals(1F, alignment[5].endLp - alignment[0].endLp, DRf);
+		assertEquals(-4.5, alignment[0].endLp, DRf);
+		assertEquals(-3.5, alignment[5].endLp, DRf);
 
 		//Attention! In this example, Ted Ross breaks his own rules!
 		dir = Down;
@@ -79,40 +79,40 @@ public class SingleMeasureSingleStaffStrategyTest {
 		cna = generateChordNotesAlignment(notes4);
 		alignment = strategy.computeStemAlignments(cna, positionX4, linesCount, singlebeam, dir)
 			.getStemAlignments();
-		assertEquals(-1.0, alignment[0].getEndLinePosition(), DRf);
-		assertEquals(-2.0, alignment[3].getEndLinePosition(), DRf);
+		assertEquals(-1.0, alignment[0].endLp, DRf);
+		assertEquals(-2.0, alignment[3].endLp, DRf);
 
 		dir = Up;
 		int[][] notes5 = { { 1 }, { -1 } };
 		cna = generateChordNotesAlignment(notes5);
 		alignment = strategy.computeStemAlignments(cna, positionX, linesCount, singlebeam, dir)
 			.getStemAlignments();
-		assertEquals(7, alignment[0].getEndLinePosition(), DRf);
-		assertEquals(6, alignment[1].getEndLinePosition(), DRf);
+		assertEquals(7, alignment[0].endLp, DRf);
+		assertEquals(6, alignment[1].endLp, DRf);
 
 		dir = Up;
 		int[][] notes6 = { { 0 }, { -1 }, { 2 }, { 5 } };
 		cna = generateChordNotesAlignment(notes6);
 		alignment = strategy.computeStemAlignments(cna, positionX4, linesCount, singlebeam, dir)
 			.getStemAlignments();
-		assertEquals(8.5, alignment[0].getEndLinePosition(), DRf);
-		assertEquals(11, alignment[3].getEndLinePosition(), DRf);
+		assertEquals(8.5, alignment[0].endLp, DRf);
+		assertEquals(11, alignment[3].endLp, DRf);
 
 		dir = Down;
 		int[][] notes7 = { { 11 }, { 15 } };
 		cna = generateChordNotesAlignment(notes7);
 		alignment = strategy.computeStemAlignments(cna, positionX, linesCount, singlebeam, dir)
 			.getStemAlignments();
-		assertEquals(3, alignment[0].getEndLinePosition(), DRf);
-		assertEquals(4, alignment[1].getEndLinePosition(), DRf);
+		assertEquals(3, alignment[0].endLp, DRf);
+		assertEquals(4, alignment[1].endLp, DRf);
 
 		dir = Down;
 		int[][] notes8 = { { 11 }, { 12 } };
 		cna = generateChordNotesAlignment(notes8);
 		alignment = strategy.computeStemAlignments(cna, positionX, linesCount, singlebeam, dir)
 			.getStemAlignments();
-		assertEquals(3.5, alignment[0].getEndLinePosition(), DRf);
-		assertEquals(4, alignment[1].getEndLinePosition(), DRf);
+		assertEquals(3.5, alignment[0].endLp, DRf);
+		assertEquals(4, alignment[1].endLp, DRf);
 
 		//closer Spacing
 		positionX[1] = 4;
@@ -121,8 +121,8 @@ public class SingleMeasureSingleStaffStrategyTest {
 		cna = generateChordNotesAlignment(notes9);
 		alignment = strategy.computeStemAlignments(cna, positionX, linesCount, singlebeam, dir)
 			.getStemAlignments();
-		assertEquals(0, alignment[0].getEndLinePosition(), DRf);
-		assertEquals(-1, alignment[1].getEndLinePosition(), DRf);
+		assertEquals(0, alignment[0].endLp, DRf);
+		assertEquals(-1, alignment[1].endLp, DRf);
 
 		//normal Spacing again
 		positionX[1] = 8;
@@ -131,52 +131,52 @@ public class SingleMeasureSingleStaffStrategyTest {
 		cna = generateChordNotesAlignment(notes10);
 		alignment = strategy.computeStemAlignments(cna, positionX, linesCount, singlebeam, dir)
 			.getStemAlignments();
-		assertEquals(3, alignment[0].getEndLinePosition(), DRf);
-		assertEquals(4, alignment[1].getEndLinePosition(), DRf);
+		assertEquals(3, alignment[0].endLp, DRf);
+		assertEquals(4, alignment[1].endLp, DRf);
 
 		dir = Down;
 		int[][] notes11 = { { 5 }, { 6 }, { 9 }, { 8 }, { 7 }, { 8 } };
 		cna = generateChordNotesAlignment(notes11);
 		alignment = strategy.computeStemAlignments(cna, positionX6, linesCount, singlebeam, dir)
 			.getStemAlignments();
-		assertEquals(-1, alignment[0].getEndLinePosition(), DRf);
-		assertEquals(1, alignment[5].getEndLinePosition(), DRf);
+		assertEquals(-1, alignment[0].endLp, DRf);
+		assertEquals(1, alignment[5].endLp, DRf);
 
 		dir = Up;
 		cna = generateChordNotesAlignment(notes11);
 		alignment = strategy.computeStemAlignments(cna, positionX6, linesCount, singlebeam, dir)
 			.getStemAlignments();
-		assertEquals(0, alignment[5].getEndLinePosition() - alignment[0].getEndLinePosition(), DRf);
+		assertEquals(0, alignment[5].endLp - alignment[0].endLp, DRf);
 
 		dir = Up;
 		int[][] notes12 = { { -2 }, { -5 }, { -2 }, { -5 } };
 		cna = generateChordNotesAlignment(notes12);
 		alignment = strategy.computeStemAlignments(cna, positionX4, linesCount, singlebeam, dir)
 			.getStemAlignments();
-		assertEquals(4, alignment[0].getEndLinePosition(), DRf);
-		assertEquals(4, alignment[3].getEndLinePosition(), DRf);
+		assertEquals(4, alignment[0].endLp, DRf);
+		assertEquals(4, alignment[3].endLp, DRf);
 
 		dir = Up;
 		cna = generateChordNotesAlignment(notes12);
 		alignment = strategy.computeStemAlignments(cna, positionX4, linesCount, doublebeam, dir)
 			.getStemAlignments();
-		assertEquals(4.5, alignment[0].getEndLinePosition(), DRf);
-		assertEquals(4.5, alignment[3].getEndLinePosition(), DRf);
+		assertEquals(4.5, alignment[0].endLp, DRf);
+		assertEquals(4.5, alignment[3].endLp, DRf);
 
 		dir = Down;
 		int[][] notes13 = { { 13 }, { 11 }, { 12 }, { 11 } };
 		cna = generateChordNotesAlignment(notes13);
 		alignment = strategy.computeStemAlignments(cna, positionX4, linesCount, singlebeam, dir)
 			.getStemAlignments();
-		assertEquals(4, alignment[0].getEndLinePosition(), DRf);
-		assertEquals(4, alignment[3].getEndLinePosition(), DRf);
+		assertEquals(4, alignment[0].endLp, DRf);
+		assertEquals(4, alignment[3].endLp, DRf);
 
 		dir = Down;
 		cna = generateChordNotesAlignment(notes13);
 		alignment = strategy.computeStemAlignments(cna, positionX4, linesCount, doublebeam, dir)
 			.getStemAlignments();
-		assertEquals(4, alignment[0].getEndLinePosition(), DRf);
-		assertEquals(4, alignment[3].getEndLinePosition(), DRf);
+		assertEquals(4, alignment[0].endLp, DRf);
+		assertEquals(4, alignment[3].endLp, DRf);
 
 	}
 
@@ -189,7 +189,7 @@ public class SingleMeasureSingleStaffStrategyTest {
 			for (int note : chord) {
 				na[a++] = new NoteAlignment(note, 1);
 			}
-			cna[i++] = new NotesAlignment(1, na, new float[] {}, new int[] { 1 }, 0, 0);
+			cna[i++] = new NotesAlignment(1, 1, na, new float[] {}, new int[] { 1 }, 0, false);
 		}
 		return cna;
 	}

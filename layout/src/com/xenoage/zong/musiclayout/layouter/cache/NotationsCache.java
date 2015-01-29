@@ -49,7 +49,7 @@ public final class NotationsCache {
 	 * staves (like time signatures), use {@link #add(Notation, int)} instead.
 	 */
 	public void add(Notation notation) {
-		cache.put(notation.getMusicElement(), notation);
+		cache.put(notation.getElement(), notation);
 	}
 
 	/**
@@ -57,13 +57,14 @@ public final class NotationsCache {
 	 * If already there, it is replaced.
 	 */
 	public void add(Notation notation, int staff) {
-		cache.put(new StaffElement(notation.getMusicElement(), staff), notation);
+		cache.put(new StaffElement(notation.getElement(), staff), notation);
 	}
 
 	/**
 	 * Adds the elements of the given {@link StaffNotationCache}.
 	 * If elements are already there, they are replaced.
 	 */
+	@Deprecated
 	public void merge(NotationsCache cache) {
 		this.cache.putAll(cache.cache);
 	}

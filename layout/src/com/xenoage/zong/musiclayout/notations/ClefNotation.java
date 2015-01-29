@@ -1,6 +1,7 @@
 package com.xenoage.zong.musiclayout.notations;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.music.clef.Clef;
@@ -16,7 +17,7 @@ import com.xenoage.zong.musiclayout.spacing.horizontal.ElementWidth;
 	implements Notation {
 
 	/** The clef. */
-	public final Clef element;
+	@Getter public final Clef element;
 	/** The width of the notation. */
 	public final ElementWidth width;
 	/** The line position of the clef. */
@@ -27,10 +28,6 @@ import com.xenoage.zong.musiclayout.spacing.horizontal.ElementWidth;
 
 	@Override public ElementWidth getWidth() {
 		return width;
-	}
-
-	@Override public Clef getMusicElement() {
-		return element;
 	}
 
 }

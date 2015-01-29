@@ -71,7 +71,7 @@ public class ArticulationsAlignmentStrategy
 		NoteAlignment outerNote, VSide side, int staffLinesCount) {
 		//compute LP of the articulation: if within staff, it must be
 		//between the staff lines (LP 1, 3, 5, ...)
-		float lp = outerNote.getLinePosition() + 2 * side.getDir();
+		float lp = outerNote.lp + 2 * side.getDir();
 		if (lp >= 0 && lp <= (staffLinesCount - 1) * 2 && //within staff
 			lp % 2 == 0) //on staff line
 		{
@@ -80,7 +80,7 @@ public class ArticulationsAlignmentStrategy
 		//compute ArticulationsAlignment
 		float height = 1; //1 IS
 		return new ArticulationsAlignment(new ArticulationAlignment[] { new ArticulationAlignment(lp,
-			outerNote.getOffset(), articulation) }, height);
+			outerNote.offsetIs, articulation) }, height);
 	}
 
 	/**
@@ -93,7 +93,7 @@ public class ArticulationsAlignmentStrategy
 		NoteAlignment outerNote, VSide side, int staffLinesCount) {
 		//compute LP of the first articulation:
 		//if within staff, it must be moved outside
-		float lp = outerNote.getLinePosition() + 2 * side.getDir();
+		float lp = outerNote.lp + 2 * side.getDir();
 		if (lp >= 0 && lp <= (staffLinesCount - 1) * 2) //within staff
 		{
 			lp = (side == VSide.Top ? (staffLinesCount - 1) * 2 + 1 : -1);
@@ -101,11 +101,11 @@ public class ArticulationsAlignmentStrategy
 		//collect ArticulationAlignments
 		ArticulationAlignment[] aa = new ArticulationAlignment[articulations.size()];
 		for (int i = 0; i < articulations.size(); i++) {
-			aa[i] = new ArticulationAlignment(lp + 2 * i * side.getDir(), outerNote.getOffset(),
+			aa[i] = new ArticulationAlignment(lp + 2 * i * side.getDir(), outerNote.offsetIs,
 				articulations.get(i).getType());
 		}
 		//total height: 1 IS for each articulation
-		float totalHeightIS = Math.abs(lp - outerNote.getLinePosition()) / 2;
+		float totalHeightIS = Math.abs(lp - outerNote.lp) / 2;
 		//create ArticulationsAlignment
 		return new ArticulationsAlignment(aa, totalHeightIS);
 	}

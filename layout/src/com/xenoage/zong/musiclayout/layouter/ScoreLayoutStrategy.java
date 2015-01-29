@@ -103,8 +103,7 @@ public class ScoreLayoutStrategy
 		//frame filling (vertical)
 		frameArrangements = fillFramesVertically(frameArrangements, lc);
 		//compute beams
-		notations.merge(computeBeamStemAlignments(frameArrangements, optimalMeasureColumnSpacings,
-			notations, lc));
+		computeBeamStemAlignments(frameArrangements, optimalMeasureColumnSpacings, notations, lc);
 		//create score layout from the collected information
 		List<ScoreFrameLayout> scoreFrameLayouts = createScoreFrameLayouts(frameArrangements,
 			notations, lc);
@@ -280,10 +279,9 @@ public class ScoreLayoutStrategy
 	/**
 	 * Computes beamed notations with correct stem alignments.
 	 */
-	NotationsCache computeBeamStemAlignments(List<FrameArrangement> frameArrangements,
+	void computeBeamStemAlignments(List<FrameArrangement> frameArrangements,
 		List<ColumnSpacing> optimalMeasureColumnSpacings, NotationsCache notations,
 		ScoreLayouterContext lc) {
-		NotationsCache ret = new NotationsCache();
 		//collect actual measure column spacings from all frames
 		//(now also including leading spacings and possibly stretched measures)
 		Score score = lc.getScore();
@@ -309,15 +307,14 @@ public class ScoreLayoutStrategy
 							//compute each beam only one time (when the end waypoint is found)
 							Beam beam = chord.getBeam();
 							if (beam != null && beam.getStop().getChord() == chord) {
-								ret.merge(beamedStemAlignmentNotationsStrategy.computeNotations(lc.getScore(),
-									beam, columnSpacings, notations));
+								beamedStemAlignmentNotationsStrategy.computeNotations(lc.getScore(),
+									beam, columnSpacings, notations);
 							}
 						}
 					}
 				}
 			}
 		}
-		return ret;
 	}
 
 	/**

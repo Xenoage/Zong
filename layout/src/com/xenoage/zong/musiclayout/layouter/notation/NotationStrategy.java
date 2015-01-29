@@ -235,9 +235,9 @@ public final class NotationStrategy
 			.computeAccidentalsAlignment(chord, notesAlignment, chordWidths, mc);
 		float accidentalsWidth = (accidentalsAlignment != null ? accidentalsAlignment.getWidth() : 0);
 
-		float leftSuspendedWidth = notesAlignment.getLeftSuspendedWidth();
+		float leftSuspendedWidth = (notesAlignment.leftSuspended ? notesAlignment.noteheadWidthIs : 0);
 		//symbol's width: width of the noteheads and dots
-		float symbolWidth = notesAlignment.getWidth() - leftSuspendedWidth;
+		float symbolWidth = notesAlignment.widthIs - leftSuspendedWidth;
 		float frontGap = accidentalsWidth + leftSuspendedWidth;
 
 		//rear gap: empty duration-dependent space behind the chord

@@ -46,9 +46,9 @@ public class SingleMeasureSingleStaffStrategy
 	 * This strategy computes the lengths of the stems of beamed notes.
 	 * It only works for chords, in which all the stems point in the same
 	 * direction (like computed by {@link BeamedStemDirectionNotationsStrategy}).
-	 * The updated chord notations are returned.
+	 * The NotationsCache is updated.
 	 */
-	public NotationsCache computeNotations(Score score, Beam beam, ColumnSpacing columnSpacing,
+	public void computeNotations(Score score, Beam beam, ColumnSpacing columnSpacing,
 		NotationsCache notations) {
 
 		//collect needed information
@@ -67,7 +67,7 @@ public class SingleMeasureSingleStaffStrategy
 			chordNa[i] = cn.notesAlignment;
 			AccidentalsAlignment aa = cn.accidentalsAlignment;
 			stemX[i] = columnSpacing.getOffset(chord, staffIndex, voiceIndex) +
-				(aa != null ? aa.width : 0) + chordNa[i].stemOffset;
+				(aa != null ? aa.width : 0) + chordNa[i].stemOffsetIs;
 			i++;
 		}
 		StemDirection dir = notations.getChord(firstChord).stemDirection;
@@ -77,15 +77,12 @@ public class SingleMeasureSingleStaffStrategy
 			dir);
 
 		//compute new notations
-		NotationsCache ret = new NotationsCache();
 		It<BeamWaypoint> waypoints = it(beam.getWaypoints());
 		for (BeamWaypoint waypoint : waypoints) {
 			Chord chord = waypoint.getChord();
-			ChordNotation oldCN = notations.getChord(chord);
-			ret.add(oldCN.withStemAlignment(bsa.stemAlignments[waypoints.getIndex()]));
+			ChordNotation cn = notations.getChord(chord);
+			cn.stemAlignment = bsa.stemAlignments[waypoints.getIndex()];
 		}
-
-		return ret;
 	}
 
 	/**

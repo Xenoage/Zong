@@ -21,7 +21,7 @@ import com.xenoage.zong.musiclayout.spacing.horizontal.ElementWidth;
  */
 public interface Notation {
 
-	public MusicElement getMusicElement();
+	public MusicElement getElement();
 
 	public ElementWidth getWidth();
 

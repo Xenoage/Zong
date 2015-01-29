@@ -72,18 +72,18 @@ public class DirectionStampingStrategy
 	 */
 	public StaffTextStamping createDynamics(Dynamics dynamics, MP mp, Chord chord,
 		ChordStampings chordStampings, SymbolPool symbolPool) {
-		StaffStamping staff = chordStampings.staffStamping;
+		StaffStamping staff = chordStampings.staff;
 
 		//positioning
 		//below (default): 3 IS below the base line, or 2 IS below the lowest note
 		//above: 2 IS above the top line, or 1 IS above the highest note
 		float defaultLPBelow = -3f * 2;
 		float defaultLPAbove = (staff.linesCount - 1) * 2 + 2 * 2;
-		if (chordStampings.noteheads.size() > 0) {
+		if (chordStampings.noteheads.length > 0) {
 			defaultLPBelow = Math.min(defaultLPBelow,
-				chordStampings.noteheads.getFirst().position.lp - 2 * 2);
+				chordStampings.getFirstNotehead().position.lp - 2 * 2);
 			defaultLPAbove = Math.max(defaultLPAbove,
-				chordStampings.noteheads.getLast().position.lp + 1 * 2);
+				chordStampings.getLastNotehead().position.lp + 1 * 2);
 		}
 		SP sp = computePosition(dynamics, mp, staff, defaultLPBelow, defaultLPAbove, defaultLPBelow);
 

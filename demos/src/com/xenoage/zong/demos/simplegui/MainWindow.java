@@ -2,7 +2,6 @@ package com.xenoage.zong.demos.simplegui;
 
 import java.awt.image.BufferedImage;
 
-
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
@@ -12,13 +11,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.BorderPane;
 
-
 import org.controlsfx.dialog.Dialog;
 import org.controlsfx.dialog.Dialogs;
 
-
 import com.xenoage.zong.layout.Layout;
-import com.xenoage.zong.renderer.awt.AwtLayoutRenderer;import com.xenoage.zong.renderer.javafx.JfxLayoutRenderer;
+import com.xenoage.zong.renderer.awt.AwtLayoutRenderer;
+import com.xenoage.zong.renderer.javafx.JfxLayoutRenderer;
 
 
 /**

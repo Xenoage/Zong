@@ -37,14 +37,14 @@ public class TupletStampingStrategy
 	 */
 	public TupletStamping createTupletStamping(Tuplet tuplet, OpenTupletsCache cache,
 		SymbolPool symbolPool) {
-		StaffStamping ss = cache.getChord(tuplet.getChords().get(0), tuplet).staffStamping;
+		StaffStamping ss = cache.getChord(tuplet.getChords().get(0), tuplet).staff;
 
 		//horizontal position of the bracket
 		float xDistance = ss.is / 4;
-		float x1Mm = cache.getChord(tuplet.getFirstChord(), tuplet).positionX - xDistance;
+		float x1Mm = cache.getChord(tuplet.getFirstChord(), tuplet).xMm - xDistance;
 		ChordStampings cs2 = cache.getChord(tuplet.getLastChord(), tuplet);
 		float cs2Width = ss.is * 1.2f; //TODO: notehead width!
-		float x2Mm = cs2.positionX + cs2Width + xDistance;
+		float x2Mm = cs2.xMm + cs2Width + xDistance;
 
 		//vertical position of the bracket (above or below) depends on the directions
 		//of the majority of the stems
@@ -95,11 +95,11 @@ public class TupletStampingStrategy
 		else {
 			if (placement == 1) //distance to top notehead
 			{
-				return cs.noteheads.getLast().position.lp + placement * distanceLp;
+				return cs.getLastNotehead().position.lp + placement * distanceLp;
 			}
 			else //distance to bottom notehead
 			{
-				return cs.noteheads.getFirst().position.lp + placement * distanceLp;
+				return cs.getFirstNotehead().position.lp + placement * distanceLp;
 			}
 		}
 	}

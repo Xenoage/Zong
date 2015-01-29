@@ -49,33 +49,33 @@ public class StemAlignmentStrategy
 
 		//compute start position
 		if (sd == Down) {
-			startlineposition = high.getLinePosition();
+			startlineposition = high.lp;
 		}
 		else if (sd == Up) {
-			startlineposition = low.getLinePosition();
+			startlineposition = low.lp;
 		}
 
 		//compute end position
 		if (stem != null && stem.getLength() != null) {
 			//used fixed length
 			if (sd == Down) {
-				endlineposition = low.getLinePosition() - 2 * stem.getLength();
+				endlineposition = low.lp - 2 * stem.getLength();
 			}
 			else if (sd == Up) {
-				endlineposition = high.getLinePosition() + 2 * stem.getLength();
+				endlineposition = high.lp + 2 * stem.getLength();
 			}
 		}
 		else {
 			//compute length
 			if (sd == Down) {
-				endlineposition = low.getLinePosition() - 7 * scaling; //TODO: put 7 into LayoutSettings
+				endlineposition = low.lp - 7 * scaling; //TODO: put 7 into LayoutSettings
 				if (endlineposition > middlelineposition) {
 					endlineposition = middlelineposition;
 				}
 			}
 			else if (sd == Up) {
-				startlineposition = low.getLinePosition();
-				endlineposition = high.getLinePosition() + 7 * scaling;
+				startlineposition = low.lp;
+				endlineposition = high.lp + 7 * scaling;
 				if (endlineposition < middlelineposition) {
 					endlineposition = middlelineposition;
 				}

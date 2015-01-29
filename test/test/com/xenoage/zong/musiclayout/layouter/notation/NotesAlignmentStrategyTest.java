@@ -43,12 +43,12 @@ public class NotesAlignmentStrategyTest {
 	@Test public void testSingleNoteC5() {
 		Chord chord = ChordFactory.chord(pi(0, 0, 5), fr(1, 4));
 		NotesAlignment cna = strategy.computeNotesAlignment(chord, StemDirection.Down, cw, context);
-		assertEquals(0, cna.getStemOffset(), Df);
-		assertEquals(n, cna.getWidth(), Df);
+		assertEquals(0, cna.stemOffsetIs, Df);
+		assertEquals(n, cna.widthIs, Df);
 		NoteAlignment na = cna.getNoteAlignment(0);
-		assertEquals(5, na.getLinePosition());
-		assertEquals(0, na.getOffset(), Df);
-		assertEquals(NoteSuspension.None, na.getSuspension());
+		assertEquals(5, na.lp);
+		assertEquals(0, na.offsetIs, Df);
+		assertEquals(NoteSuspension.None, na.suspension);
 	}
 
 	/**
@@ -57,12 +57,12 @@ public class NotesAlignmentStrategyTest {
 	@Test public void testSingleNoteF4() {
 		Chord chord = ChordFactory.chord(pi(3, 0, 4), fr(1, 2));
 		NotesAlignment cna = strategy.computeNotesAlignment(chord, StemDirection.Up, cw, context);
-		assertEquals(n, cna.getStemOffset(), Df);
-		assertEquals(n, cna.getWidth(), Df);
+		assertEquals(n, cna.stemOffsetIs, Df);
+		assertEquals(n, cna.widthIs, Df);
 		NoteAlignment na = cna.getNoteAlignment(0);
-		assertEquals(1, na.getLinePosition());
-		assertEquals(0, na.getOffset(), Df);
-		assertEquals(NoteSuspension.None, na.getSuspension());
+		assertEquals(1, na.lp);
+		assertEquals(0, na.offsetIs, Df);
+		assertEquals(NoteSuspension.None, na.suspension);
 	}
 
 	/**
@@ -72,16 +72,16 @@ public class NotesAlignmentStrategyTest {
 		Chord chord = ChordFactory.chord(new Pitch[] { pi(0, 0, 5), pi(1, 0, 5) }, fr(1, 4));
 		NotesAlignment cna = strategy.computeNotesAlignment(chord, StemDirection.Down, cw, context);
 		;
-		assertEquals(n, cna.getStemOffset(), Df);
-		assertEquals(2 * n, cna.getWidth(), Df);
+		assertEquals(n, cna.stemOffsetIs, Df);
+		assertEquals(2 * n, cna.widthIs, Df);
 		NoteAlignment na = cna.getNoteAlignment(0);
-		assertEquals(5, na.getLinePosition());
-		assertEquals(0, na.getOffset(), Df);
-		assertEquals(NoteSuspension.Left, na.getSuspension());
+		assertEquals(5, na.lp);
+		assertEquals(0, na.offsetIs, Df);
+		assertEquals(NoteSuspension.Left, na.suspension);
 		na = cna.getNoteAlignment(1);
-		assertEquals(6, na.getLinePosition());
-		assertEquals(n, na.getOffset(), Df);
-		assertEquals(NoteSuspension.None, na.getSuspension());
+		assertEquals(6, na.lp);
+		assertEquals(n, na.offsetIs, Df);
+		assertEquals(NoteSuspension.None, na.suspension);
 	}
 
 	/**
@@ -92,14 +92,14 @@ public class NotesAlignmentStrategyTest {
 			fr(3, 4));
 		NotesAlignment cna = strategy.computeNotesAlignment(chord, StemDirection.Up, cw, context);
 		;
-		assertEquals(n, cna.getStemOffset(), Df);
-		assertEquals(n + dg, cna.getWidth(), Df);
-		assertEquals(0, cna.getNoteAlignment(0).getOffset(), Df);
-		assertEquals(NoteSuspension.None, cna.getNoteAlignment(0).getSuspension());
-		assertEquals(0, cna.getNoteAlignment(1).getOffset(), Df);
-		assertEquals(NoteSuspension.None, cna.getNoteAlignment(1).getSuspension());
-		assertEquals(0, cna.getNoteAlignment(2).getOffset(), Df);
-		assertEquals(NoteSuspension.None, cna.getNoteAlignment(2).getSuspension());
+		assertEquals(n, cna.stemOffsetIs, Df);
+		assertEquals(n + dg, cna.widthIs, Df);
+		assertEquals(0, cna.getNoteAlignment(0).offsetIs, Df);
+		assertEquals(NoteSuspension.None, cna.getNoteAlignment(0).suspension);
+		assertEquals(0, cna.getNoteAlignment(1).offsetIs, Df);
+		assertEquals(NoteSuspension.None, cna.getNoteAlignment(1).suspension);
+		assertEquals(0, cna.getNoteAlignment(2).offsetIs, Df);
+		assertEquals(NoteSuspension.None, cna.getNoteAlignment(2).suspension);
 	}
 
 	/**
@@ -110,14 +110,14 @@ public class NotesAlignmentStrategyTest {
 			fr(1, 4));
 		NotesAlignment cna = strategy.computeNotesAlignment(chord, StemDirection.Down, cw, context);
 		;
-		assertEquals(n, cna.getStemOffset(), Df);
-		assertEquals(2 * n, cna.getWidth(), Df);
-		assertEquals(n, cna.getNoteAlignment(0).getOffset(), Df);
-		assertEquals(NoteSuspension.None, cna.getNoteAlignment(0).getSuspension());
-		assertEquals(0, cna.getNoteAlignment(1).getOffset(), Df);
-		assertEquals(NoteSuspension.Left, cna.getNoteAlignment(1).getSuspension());
-		assertEquals(n, cna.getNoteAlignment(2).getOffset(), Df);
-		assertEquals(NoteSuspension.None, cna.getNoteAlignment(2).getSuspension());
+		assertEquals(n, cna.stemOffsetIs, Df);
+		assertEquals(2 * n, cna.widthIs, Df);
+		assertEquals(n, cna.getNoteAlignment(0).offsetIs, Df);
+		assertEquals(NoteSuspension.None, cna.getNoteAlignment(0).suspension);
+		assertEquals(0, cna.getNoteAlignment(1).offsetIs, Df);
+		assertEquals(NoteSuspension.Left, cna.getNoteAlignment(1).suspension);
+		assertEquals(n, cna.getNoteAlignment(2).offsetIs, Df);
+		assertEquals(NoteSuspension.None, cna.getNoteAlignment(2).suspension);
 	}
 
 	/**
@@ -129,30 +129,30 @@ public class NotesAlignmentStrategyTest {
 		NotesAlignment cna = strategy.computeNotesAlignment(chord, StemDirection.Down, cw, context);
 		;
 		assertEquals(1, cna.getDotsPerNoteCount());
-		assertEquals(1, cna.getDotLPs().length);
-		assertEquals(5, cna.getDotLPs()[0]);
+		assertEquals(1, cna.getDotsLp().length);
+		assertEquals(5, cna.getDotsLp()[0]);
 		//B4: position 6
 		chord = ChordFactory.chord(pi(6, 0, 4), fr(7, 8));
 		cna = strategy.computeNotesAlignment(chord, StemDirection.Down, cw, context);
 		;
 		assertEquals(2, cna.getDotsPerNoteCount());
-		assertEquals(1, cna.getDotLPs().length);
-		assertEquals(5, cna.getDotLPs()[0]);
+		assertEquals(1, cna.getDotsLp().length);
+		assertEquals(5, cna.getDotsLp()[0]);
 		//F4, F4: position 1
 		chord = ChordFactory.chord(new Pitch[] { pi(3, 0, 4), pi(3, 0, 4) }, fr(7, 16));
 		cna = strategy.computeNotesAlignment(chord, StemDirection.Down, cw, context);
 		assertEquals(2, cna.getDotsPerNoteCount());
-		assertEquals(1, cna.getDotLPs().length);
-		assertEquals(1, cna.getDotLPs()[0]);
+		assertEquals(1, cna.getDotsLp().length);
+		assertEquals(1, cna.getDotsLp()[0]);
 		//F5, A5, B5: positions 7, 9, 11
 		chord = ChordFactory.chord(new Pitch[] { pi(3, 0, 5), pi(5, 0, 5), pi(6, 0, 5) }, fr(3, 2));
 		cna = strategy.computeNotesAlignment(chord, StemDirection.Down, cw, context);
 		;
 		assertEquals(1, cna.getDotsPerNoteCount());
-		assertEquals(3, cna.getDotLPs().length);
-		assertEquals(7, cna.getDotLPs()[0]);
-		assertEquals(9, cna.getDotLPs()[1]);
-		assertEquals(11, cna.getDotLPs()[2]);
+		assertEquals(3, cna.getDotsLp().length);
+		assertEquals(7, cna.getDotsLp()[0]);
+		assertEquals(9, cna.getDotsLp()[1]);
+		assertEquals(11, cna.getDotsLp()[2]);
 	}
 
 	/**
@@ -161,16 +161,16 @@ public class NotesAlignmentStrategyTest {
 	@Test public void testChordC5C5() {
 		Chord chord = ChordFactory.chord(new Pitch[] { pi(0, 0, 5), pi(0, 0, 5) }, fr(1, 4));
 		NotesAlignment cna = strategy.computeNotesAlignment(chord, StemDirection.Down, cw, context);
-		assertEquals(n, cna.getStemOffset(), Df);
-		assertEquals(2 * n, cna.getWidth(), Df);
+		assertEquals(n, cna.stemOffsetIs, Df);
+		assertEquals(2 * n, cna.widthIs, Df);
 		NoteAlignment na = cna.getNoteAlignment(0);
-		assertEquals(5, na.getLinePosition());
-		assertEquals(0, na.getOffset(), Df);
-		assertEquals(NoteSuspension.Left, na.getSuspension());
+		assertEquals(5, na.lp);
+		assertEquals(0, na.offsetIs, Df);
+		assertEquals(NoteSuspension.Left, na.suspension);
 		na = cna.getNoteAlignment(1);
-		assertEquals(5, na.getLinePosition());
-		assertEquals(n, na.getOffset(), Df);
-		assertEquals(NoteSuspension.None, na.getSuspension());
+		assertEquals(5, na.lp);
+		assertEquals(n, na.offsetIs, Df);
+		assertEquals(NoteSuspension.None, na.suspension);
 	}
 
 }
