@@ -23,9 +23,9 @@ import com.xenoage.zong.musiclayout.layouter.beamednotation.design.TripleBeamDes
 import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
 import com.xenoage.zong.musiclayout.notations.beam.BeamStemAlignments;
-import com.xenoage.zong.musiclayout.notations.chord.AccidentalsDisplacement;
-import com.xenoage.zong.musiclayout.notations.chord.ChordDisplacement;
-import com.xenoage.zong.musiclayout.notations.chord.StemAlignment;
+import com.xenoage.zong.musiclayout.notations.chord.AccidentalsNotation;
+import com.xenoage.zong.musiclayout.notations.chord.NotesNotation;
+import com.xenoage.zong.musiclayout.notations.chord.StemNotation;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 
 /**
@@ -52,7 +52,7 @@ public class SingleMeasureSingleStaffStrategy
 		NotationsCache notations) {
 
 		//collect needed information
-		ChordDisplacement[] chordNa = new ChordDisplacement[beam.getWaypoints().size()];
+		NotesNotation[] chordNa = new NotesNotation[beam.getWaypoints().size()];
 		float[] stemX = new float[beam.getWaypoints().size()];
 		Chord firstChord = beam.getStart().getChord();
 		MP firstChordMP = getMP(firstChord);
@@ -64,8 +64,8 @@ public class SingleMeasureSingleStaffStrategy
 		for (BeamWaypoint waypoint : beam.getWaypoints()) {
 			Chord chord = waypoint.getChord();
 			ChordNotation cn = notations.getChord(chord);
-			chordNa[i] = cn.notesAlignment;
-			AccidentalsDisplacement aa = cn.accidentalsAlignment;
+			chordNa[i] = cn.notes;
+			AccidentalsNotation aa = cn.accidentals;
 			stemX[i] = columnSpacing.getOffset(chord, staffIndex, voiceIndex) +
 				(aa != null ? aa.widthIs : 0) + chordNa[i].stemOffsetIs;
 			i++;
@@ -81,7 +81,7 @@ public class SingleMeasureSingleStaffStrategy
 		for (BeamWaypoint waypoint : waypoints) {
 			Chord chord = waypoint.getChord();
 			ChordNotation cn = notations.getChord(chord);
-			cn.stemAlignment = bsa.stemAlignments[waypoints.getIndex()];
+			cn.stem = bsa.stemAlignments[waypoints.getIndex()];
 		}
 	}
 
@@ -95,7 +95,7 @@ public class SingleMeasureSingleStaffStrategy
 	 * @param stemDirection    the direction of the stem
 	 * @return  the alignments of all stems of the given chords                        
 	 */
-	public BeamStemAlignments computeStemAlignments(ChordDisplacement[] chordNa, float[] stemX,
+	public BeamStemAlignments computeStemAlignments(NotesNotation[] chordNa, float[] stemX,
 		int staffLinesCount, int beamLinesCount, StemDirection stemDirection) {
 		//get appropriate beam design
 		BeamDesign beamDesign;
@@ -133,7 +133,7 @@ public class SingleMeasureSingleStaffStrategy
 	 * @param stemDirection  the direction of the stems
 	 * @param staffLinesCount  the number of lines in this staff
 	 */
-	private float computeSlant(BeamDesign beamDesign, ChordDisplacement[] chordNotesAlignment,
+	private float computeSlant(BeamDesign beamDesign, NotesNotation[] chordNotesAlignment,
 		float[] positionX, StemDirection stemDirection, int staffLinesCount) {
 		//collect relevant note line positions (positions of the outermost notes)
 		int firstRelevantNoteLP;
@@ -295,11 +295,11 @@ public class SingleMeasureSingleStaffStrategy
 	 * @param beamLinesCount   the number of beam lines         
 	 * @param stemDirection    the direction of the stems
 	 */
-	private BeamStemAlignments computeStemLengths(BeamDesign beamDesign, ChordDisplacement[] chordNa,
+	private BeamStemAlignments computeStemLengths(BeamDesign beamDesign, NotesNotation[] chordNa,
 		float[] stemX, float slantIS, int beamLinesCount, StemDirection stemDirection) {
 
 		int chordsCount = chordNa.length;
-		StemAlignment[] stemAlignments = new StemAlignment[chordsCount];
+		StemNotation[] stemAlignments = new StemNotation[chordsCount];
 		float beamStartLPCorrection = stemDirection.getSign() * 0.5f;
 
 		boolean correctStemLength = false;
@@ -337,7 +337,7 @@ public class SingleMeasureSingleStaffStrategy
 					break;
 				}
 
-				stemAlignments[i] = new StemAlignment(startline, endline);
+				stemAlignments[i] = new StemNotation(startline, endline);
 				correctStemLength = true;
 			}
 

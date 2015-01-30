@@ -3,19 +3,19 @@ package com.xenoage.zong.musiclayout.notations.chord;
 import lombok.AllArgsConstructor;
 
 import com.xenoage.utils.annotations.Const;
-
+import com.xenoage.zong.core.music.annotation.ArticulationType;
 
 /**
- * The vertical position, horizontal offset and suspension of a single
- * note within a chord.
+ * The vertical position and horizontal offset of a single
+ * element within a chord.
  *
  * @author Andreas Wenger
  */
 @Const @AllArgsConstructor
-public class NoteDisplacement {
+public class ArticulationDisplacement {
 
 	public final int yLp;
 	public final float xIs;
-	public final NoteSuspension suspension;
+	public final ArticulationType articulation;
 
 }

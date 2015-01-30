@@ -1,8 +1,11 @@
-package com.xenoage.zong.musiclayout.layouter.notation;
+package com.xenoage.zong.musiclayout.notator;
 
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.music.Pitch.pi;
-import static org.junit.Assert.*;
+import static com.xenoage.zong.musiclayout.notator.NotesNotator.notesNotator;
+import static com.xenoage.zong.musiclayout.notator.StemDirectionNotator.stemDirectionNotator;
+import static com.xenoage.zong.musiclayout.notator.StemNotator.stemNotator;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
@@ -12,26 +15,21 @@ import com.xenoage.zong.core.music.MusicContext;
 import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.ChordFactory;
+import com.xenoage.zong.core.music.chord.Stem;
 import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.musiclayout.notations.chord.ChordLps;
-import com.xenoage.zong.musiclayout.notations.chord.ChordDisplacement;
-import com.xenoage.zong.musiclayout.notations.chord.StemAlignment;
-import com.xenoage.zong.musiclayout.notator.ChordDisplacementPolicy;
-import com.xenoage.zong.musiclayout.notator.StemDirectionPolicy;
+import com.xenoage.zong.musiclayout.notations.chord.NotesNotation;
+import com.xenoage.zong.musiclayout.notations.chord.StemNotation;
 import com.xenoage.zong.musiclayout.settings.ChordWidths;
 
 /**
- * Tests for {@link StemAlignmentStrategy}.
+ * Tests for {@link StemNotator}.
  * 
- * @author Uli Teschemacher
  * @author Andreas Wenger
  */
-public class StemAlignmentStrategyTest {
+public class StemNotatorTest {
 
-	StemAlignmentStrategy strategy = new StemAlignmentStrategy();
-
-	StemDirectionPolicy csdStrategy = new StemDirectionPolicy();
-	ChordDisplacementPolicy cnaStrategy = new ChordDisplacementPolicy();
+	StemNotator testee = stemNotator;
 
 
 	@Test public void computeStemAlignmentTest() {
@@ -117,7 +115,7 @@ public class StemAlignmentStrategyTest {
 		pitches = new Pitch[2];
 		pitches[0] = pi('C', 0, 3);
 		pitches[1] = pi('F', 0, 4);
-		;
+		
 		testPitch(pitches, -9, 8);
 	}
 
@@ -130,16 +128,16 @@ public class StemAlignmentStrategyTest {
 	private void testPitch(Pitch[] pitches, float start, float end) {
 		MusicContext context = MusicContext.simpleInstance;
 		Chord chord;
-		ChordDisplacement chordNotesAlignment;
-		StemAlignment chordStemAlignment;
+		NotesNotation chordNotesAlignment;
+		StemNotation chordStemAlignment;
 
 		Fraction fraction = fr(1, 1);
 		chord = ChordFactory.chord(pitches, fraction);
 		ChordLps linepositions = new ChordLps(chord, context);
-		StemDirection stemDirection = csdStrategy.computeStemDirection(linepositions, 5);
-		chordNotesAlignment = cnaStrategy.computeChordDisplacement(chord, stemDirection,
+		StemDirection stemDirection = stemDirectionNotator.compute(linepositions, 5);
+		chordNotesAlignment = notesNotator.compute(chord, stemDirection,
 			ChordWidths.defaultValue, context);
-		chordStemAlignment = strategy.computeStemAlignment(null, chordNotesAlignment, stemDirection, 5,
+		chordStemAlignment = testee.compute(Stem.defaultStem, chordNotesAlignment, stemDirection, 5,
 			1);
 		assertEquals(start, chordStemAlignment.startLp, Delta.DELTA_FLOAT);
 		assertEquals(end, chordStemAlignment.endLp, Delta.DELTA_FLOAT);

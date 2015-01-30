@@ -14,9 +14,9 @@ import com.xenoage.zong.musiclayout.notations.chord.ChordLps;
  * 
  * @author Andreas Wenger
  */
-public final class StemDirectionPolicy {
+public final class StemDirectionNotator {
 	
-	public static StemDirectionPolicy stemDirectionPolicy = new StemDirectionPolicy();
+	public static StemDirectionNotator stemDirectionNotator = new StemDirectionNotator();
 
 	
 	public StemDirection computeStemDirection(Chord chord, MusicContext context) {
@@ -32,11 +32,11 @@ public final class StemDirectionPolicy {
 		//compute default stem
 		ChordLps chordLp = new ChordLps(chord, context);
 		int linesCount = context.getLinesCount();
-		return computeStemDirection(chordLp, linesCount);
+		return compute(chordLp, linesCount);
 	}
 
 	
-	public StemDirection computeStemDirection(ChordLps chordLps, int staffLinesCount) {
+	public StemDirection compute(ChordLps chordLps, int staffLinesCount) {
 		//compute distance to middle line of staff
 		int distanceLowest = Math.abs(getDistanceToMidline(chordLps.getBottom(), staffLinesCount));
 		int distanceHighest = Math.abs(getDistanceToMidline(chordLps.getTop(), staffLinesCount));

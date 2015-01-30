@@ -14,9 +14,8 @@ import com.xenoage.zong.musiclayout.continued.ContinuedSlur;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.layouter.cache.util.SlurCache;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
-import com.xenoage.zong.musiclayout.notations.chord.StemAlignment;
-import com.xenoage.zong.musiclayout.stampings.SlurStamping;
 import com.xenoage.zong.musiclayout.stampings.NoteheadStamping;
+import com.xenoage.zong.musiclayout.stampings.SlurStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 
 /**
@@ -33,14 +32,9 @@ public class SlurStampingStrategy
 	 */
 	public float computeAdditionalDistance(ChordNotation chord, VSide slurSide) {
 		float distance = 0;
-		if (chord.getArticulationsAlignment() != null) {
-			distance += chord.getArticulationsAlignment().getTotalHeightIS();
-		}
-		if (chord.getStemDirection().equalsSide(slurSide)) {
-			StemAlignment sa = chord.getStemAlignment();
-			if (sa != null)
-				distance += Math.abs(sa.endLp - sa.startLp) / 2; //LP to IS
-		}
+		distance += chord.articulations.heightIs;
+		if (chord.getStemDirection().equalsSide(slurSide))
+			distance += Math.abs(chord.stem.endLp - chord.stem.startLp) / 2; //LP to IS
 		return distance;
 	}
 

@@ -17,7 +17,7 @@ import lombok.AllArgsConstructor;
  * @author Andreas Wenger
  */
 @Const @AllArgsConstructor
-public final class ChordDisplacement {
+public final class NotesNotation {
 
 	/** The width of the chord notes and dots. */
 	public final float widthIs;
@@ -86,7 +86,7 @@ public final class ChordDisplacement {
 	public ChordLps getLps() {
 		int[] ret = new int[notes.length];
 		for (int i = 0; i < ret.length; i++)
-			ret[i] = notes[i].lp;
+			ret[i] = notes[i].yLp;
 		return new ChordLps(ret);
 	}
 

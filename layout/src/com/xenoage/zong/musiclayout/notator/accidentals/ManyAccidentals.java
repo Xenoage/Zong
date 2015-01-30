@@ -1,6 +1,6 @@
 package com.xenoage.zong.musiclayout.notator.accidentals;
 
-import com.xenoage.zong.musiclayout.notations.chord.AccidentalsDisplacement;
+import com.xenoage.zong.musiclayout.notations.chord.AccidentalsNotation;
 
 /**
  * Displacement for a chord with any number of accidentals.
@@ -16,7 +16,7 @@ public class ManyAccidentals
 	public static final ManyAccidentals manyAccidentals = new ManyAccidentals();
 	
 	
-	@Override AccidentalsDisplacement compute(Params p) {
+	@Override AccidentalsNotation compute(Params p) {
 		float width = p.chordWidths.getMaxWidth(p.accs) + p.chordWidths.accToNoteGap;
 		float[] xs = new float[p.accs.length]; //auto-init with 0f
 		return create(p, width, xs);

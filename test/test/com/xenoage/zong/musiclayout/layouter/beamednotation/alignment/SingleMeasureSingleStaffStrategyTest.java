@@ -14,8 +14,8 @@ import org.junit.Test;
 import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.musiclayout.layouter.beamednotation.design.SingleBeamDesign;
 import com.xenoage.zong.musiclayout.notations.chord.NoteDisplacement;
-import com.xenoage.zong.musiclayout.notations.chord.ChordDisplacement;
-import com.xenoage.zong.musiclayout.notations.chord.StemAlignment;
+import com.xenoage.zong.musiclayout.notations.chord.NotesNotation;
+import com.xenoage.zong.musiclayout.notations.chord.StemNotation;
 
 /**
  * Tests for {@link SingleMeasureSingleStaffStrategy}.
@@ -38,8 +38,8 @@ public class SingleMeasureSingleStaffStrategyTest {
 		float[] positionX6 = { 2, 3, 4, 5, 6, 8 };
 		float[] positionX4 = { 2, 4, 6, 8 };
 		StemDirection dir;
-		StemAlignment[] alignment;
-		ChordDisplacement[] cna;
+		StemNotation[] alignment;
+		NotesNotation[] cna;
 		int singlebeam = 1;
 		int doublebeam = 2;
 
@@ -181,8 +181,8 @@ public class SingleMeasureSingleStaffStrategyTest {
 
 	}
 
-	private ChordDisplacement[] generateChordNotesAlignment(int[][] notes) {
-		ChordDisplacement[] cna = new ChordDisplacement[notes.length];
+	private NotesNotation[] generateChordNotesAlignment(int[][] notes) {
+		NotesNotation[] cna = new NotesNotation[notes.length];
 		int i = 0;
 		for (int[] chord : notes) {
 			NoteDisplacement na[] = new NoteDisplacement[chord.length];
@@ -190,7 +190,7 @@ public class SingleMeasureSingleStaffStrategyTest {
 			for (int note : chord) {
 				na[a++] = note(note);
 			}
-			cna[i++] = new ChordDisplacement(1, 1, na, new float[] {}, new int[] { 1 }, 0, false);
+			cna[i++] = new NotesNotation(1, 1, na, new float[] {}, new int[] { 1 }, 0, false);
 		}
 		return cna;
 	}

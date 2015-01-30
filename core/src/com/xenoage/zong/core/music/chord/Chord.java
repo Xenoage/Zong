@@ -200,8 +200,6 @@ public class Chord
 	 * Gets the articulations on this chord, in ascending distance to the chord.
 	 */
 	public List<Articulation> getArticulations() { //TIDY: this method should not be needed
-		if (annotations == null)
-			return null;
 		ArrayList<Articulation> ret = alist();
 		for (Annotation a : annotations) {
 			if (a instanceof Articulation)

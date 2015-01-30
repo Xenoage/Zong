@@ -2,15 +2,18 @@ package com.xenoage.zong.musiclayout.notations.chord;
 
 import lombok.AllArgsConstructor;
 
+import com.xenoage.utils.annotations.Const;
+
+
 /**
  * Vertical position of a chord stem.
  * 
  * @author Andreas Wenger
  */
-@AllArgsConstructor
-public class StemAlignment {
+@Const @AllArgsConstructor
+public class StemNotation {
 	
-	public static final StemAlignment none = new StemAlignment(0, 0);
+	public static final StemNotation none = new StemNotation(0, 0);
 
 	/** The line position where the stem stars (note side). */
 	public final float startLp;

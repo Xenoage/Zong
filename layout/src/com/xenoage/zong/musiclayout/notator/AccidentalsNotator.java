@@ -11,14 +11,14 @@ import com.xenoage.zong.core.music.MusicContext;
 import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.music.chord.Accidental;
 import com.xenoage.zong.core.music.chord.Chord;
-import com.xenoage.zong.musiclayout.notations.chord.AccidentalsDisplacement;
-import com.xenoage.zong.musiclayout.notations.chord.ChordDisplacement;
+import com.xenoage.zong.musiclayout.notations.chord.AccidentalsNotation;
+import com.xenoage.zong.musiclayout.notations.chord.NotesNotation;
 import com.xenoage.zong.musiclayout.notations.chord.NoteDisplacement;
 import com.xenoage.zong.musiclayout.notator.accidentals.Strategy;
 import com.xenoage.zong.musiclayout.settings.ChordWidths;
 
 /**
- * Computes the displacements of the accidentals of a given chord.
+ * Computes the notations of the accidentals of a given chord.
  * 
  * Some rules are adepted from
  * "Ross: The Art of Music Engraving", page 130 ff, and
@@ -26,29 +26,29 @@ import com.xenoage.zong.musiclayout.settings.ChordWidths;
  * 
  * @author Andreas Wenger
  */
-public class AccidentalsDisplacementPolicy {
+public class AccidentalsNotator {
 	
-	public static final AccidentalsDisplacementPolicy accidentalsDisplacementPolicy =
-		new AccidentalsDisplacementPolicy();
+	public static final AccidentalsNotator accidentalsNotator =
+		new AccidentalsNotator();
 	
 	
 	/**
-	 * Computes the alignment of the accidentals of the given chord.
-	 * If there are no accidentals, {@link AccidentalsDisplacement#empty} is returned.
+	 * Computes the notations of the accidentals of the given chord.
+	 * If there are no accidentals, {@link AccidentalsNotation#empty} is returned.
 	 */
-	public AccidentalsDisplacement computeAccidentalsAlignment(Chord chord,
-		ChordDisplacement notesAlignment, ChordWidths chordWidths, MusicContext mc) {
-		return computeAccidentalsAlignment(chord.getPitches(), notesAlignment.notes,
+	public AccidentalsNotation compute(Chord chord,
+		NotesNotation notesAlignment, ChordWidths chordWidths, MusicContext mc) {
+		return compute(chord.getPitches(), notesAlignment.notes,
 			chordWidths, mc);
 	}
 
-	AccidentalsDisplacement computeAccidentalsAlignment(List<Pitch> pitches, NoteDisplacement[] notes,
+	AccidentalsNotation compute(List<Pitch> pitches, NoteDisplacement[] notes,
 		ChordWidths chordWidths, MusicContext mc) {
 		//count number of needed accidentals
 		int accCount = countAccidentals(pitches, mc);
 		//there are different alignment algorithms for each number
 		if (accCount == 0)
-			return AccidentalsDisplacement.empty;
+			return AccidentalsNotation.empty;
 		else
 			return getStrategy(accCount).computeAccidentalsDisplacement(
 				pitches, notes, accCount, chordWidths, mc);

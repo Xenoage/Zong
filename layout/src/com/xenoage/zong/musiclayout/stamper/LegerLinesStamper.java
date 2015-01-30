@@ -8,7 +8,7 @@ import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
 import com.xenoage.zong.musiclayout.notations.chord.NoteDisplacement;
 import com.xenoage.zong.musiclayout.notations.chord.NoteSuspension;
-import com.xenoage.zong.musiclayout.notations.chord.ChordDisplacement;
+import com.xenoage.zong.musiclayout.notations.chord.NotesNotation;
 import com.xenoage.zong.musiclayout.stampings.LegerLineStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 
@@ -26,16 +26,16 @@ public class LegerLinesStamper {
 	
 	public LegerLineStamping[] stamp(ChordNotation chordNotation, float chordXMm, StaffStamping staffStamping) {
 		Chord chord = chordNotation.getElement();
-		ChordDisplacement cna = chordNotation.getNotesAlignment();
-		int bottomCount = getBottomCount(cna.getBottomNote().lp);
-		int topCount = getTopCount(cna.getTopNote().lp, staffStamping.linesCount);
+		NotesNotation notes = chordNotation.notes;
+		int bottomCount = getBottomCount(notes.getBottomNote().yLp);
+		int topCount = getTopCount(notes.getTopNote().yLp, staffStamping.linesCount);
 		if (bottomCount > 0 || topCount > 0) {
 			//horizontal position and width (may differ above and below staff, dependent on suspended notes)
-			NoteSuspension bottomSuspension = getBottomSuspension(cna.notes);
-			float xTopMm = getXMm(chordXMm, cna.noteheadWidthIs, bottomSuspension, staffStamping.is);
+			NoteSuspension bottomSuspension = getBottomSuspension(notes.notes);
+			float xTopMm = getXMm(chordXMm, notes.noteheadWidthIs, bottomSuspension, staffStamping.is);
 			float widthBottomIs = getWidthIs(bottomSuspension != None);
-			NoteSuspension topSuspension = getTopSuspension(cna.notes, staffStamping.linesCount);
-			float xBottomMm = getXMm(chordXMm, cna.noteheadWidthIs, topSuspension, staffStamping.is);
+			NoteSuspension topSuspension = getTopSuspension(notes.notes, staffStamping.linesCount);
+			float xBottomMm = getXMm(chordXMm, notes.noteheadWidthIs, topSuspension, staffStamping.is);
 			float widthTopIs = getWidthIs(bottomSuspension != None);
 			//vertical positions
 			int[] bottomLps = getBottomLps(bottomCount);
@@ -66,7 +66,7 @@ public class LegerLinesStamper {
 	NoteSuspension getBottomSuspension(NoteDisplacement[] notes) {
 		//find a suspended note which needs a leger line on the bottom side
 		for (NoteDisplacement note : notes)
-			if (note.suspension != None && note.lp <= -2)
+			if (note.suspension != None && note.yLp <= -2)
 				return note.suspension;
 		return None;
 	}
@@ -74,7 +74,7 @@ public class LegerLinesStamper {
 	NoteSuspension getTopSuspension(NoteDisplacement[] notes, int staffLinesCount) {
 		//find a suspended note which needs a leger line on the top side
 		for (NoteDisplacement note : notes)
-			if (note.suspension != None && note.lp >= staffLinesCount * 2)
+			if (note.suspension != None && note.yLp >= staffLinesCount * 2)
 				return note.suspension;
 		return None;
 	}

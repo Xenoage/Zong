@@ -6,10 +6,10 @@ import lombok.Getter;
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.StemDirection;
-import com.xenoage.zong.musiclayout.notations.chord.AccidentalsDisplacement;
-import com.xenoage.zong.musiclayout.notations.chord.ArticulationsAlignment;
-import com.xenoage.zong.musiclayout.notations.chord.ChordDisplacement;
-import com.xenoage.zong.musiclayout.notations.chord.StemAlignment;
+import com.xenoage.zong.musiclayout.notations.chord.AccidentalsNotation;
+import com.xenoage.zong.musiclayout.notations.chord.ArticulationsNotation;
+import com.xenoage.zong.musiclayout.notations.chord.NotesNotation;
+import com.xenoage.zong.musiclayout.notations.chord.StemNotation;
 import com.xenoage.zong.musiclayout.spacing.horizontal.ElementWidth;
 
 /**
@@ -24,10 +24,10 @@ public class ChordNotation
 
 	@NonNull public Chord element;
 	@NonNull public ElementWidth width;
-	@NonNull public ChordDisplacement notesAlignment;
+	@NonNull public NotesNotation notes;
 	@NonNull public StemDirection stemDirection;
-	@NonNull public StemAlignment stemAlignment;
-	@NonNull public AccidentalsDisplacement accidentalsAlignment;
-	@NonNull public ArticulationsAlignment articulationsAlignment;
+	@NonNull public StemNotation stem;
+	@NonNull public AccidentalsNotation accidentals;
+	@NonNull public ArticulationsNotation articulations;
 
 }

@@ -7,9 +7,9 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import com.xenoage.zong.core.music.chord.StemDirection;
-import com.xenoage.zong.musiclayout.layouter.ScoreLayouterTest;
 import com.xenoage.zong.musiclayout.notations.beam.BeamStemDirections;
 import com.xenoage.zong.musiclayout.notations.chord.ChordLps;
+import com.xenoage.zong.musiclayout.notator.Notator;
 
 /**
  * Test class for the {@link SingleMeasureSingleStaffStrategy}.
@@ -20,7 +20,7 @@ import com.xenoage.zong.musiclayout.notations.chord.ChordLps;
 public class SingleMeasureSingleStaffStrategyTest {
 
 	SingleMeasureSingleStaffStrategy strategy = new SingleMeasureSingleStaffStrategy(
-		ScoreLayouterTest.getNotationStrategy());
+		new Notator());
 	
 
 	@Test public void computeBeamStemDirectionsTest() {

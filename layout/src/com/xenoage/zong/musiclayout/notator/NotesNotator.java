@@ -11,23 +11,23 @@ import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.MusicContext;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.StemDirection;
-import com.xenoage.zong.musiclayout.notations.chord.ChordDisplacement;
 import com.xenoage.zong.musiclayout.notations.chord.ChordLps;
 import com.xenoage.zong.musiclayout.notations.chord.NoteDisplacement;
 import com.xenoage.zong.musiclayout.notations.chord.NoteSuspension;
+import com.xenoage.zong.musiclayout.notations.chord.NotesNotation;
 import com.xenoage.zong.musiclayout.settings.ChordWidths;
 
 /**
- * Computes the displacements of the notes and the dots of a given chord.
+ * Computes the notation of the notes and the dots of a given chord.
  * 
  * The rules are adapted from "Chlapik: Die Praxis des Notengraphikers", page 40.
  * The dot placing rules are based on Sibelius 1.4.
  * 
  * @author Andreas Wenger
  */
-public class ChordDisplacementPolicy {
+public class NotesNotator {
 	
-	public static final ChordDisplacementPolicy chordDisplacementPolicy = new ChordDisplacementPolicy();
+	public static final NotesNotator notesNotator = new NotesNotator();
 	
 	private final int[] emptyIntArray = {};
 	private final float[] emptyFloatArray = {};
@@ -52,7 +52,7 @@ public class ChordDisplacementPolicy {
 	 * Computes the displacement of the notes of the given chord, which has a stem into
 	 * the given direction, using the given musical context.
 	 */
-	public ChordDisplacement computeChordDisplacement(Chord chord, StemDirection stemDirection,
+	public NotesNotation compute(Chord chord, StemDirection stemDirection,
 		ChordWidths chordWidths, MusicContext musicContext) {
 		
 		ChordLps lp = new ChordLps(chord, musicContext);
@@ -61,7 +61,7 @@ public class ChordDisplacementPolicy {
 		float noteheadWidth = chordWidths.get(chord.getDisplayedDuration());
 		float stemOffset = computeStemOffset(chordClass, noteheadWidth);
 		float notesWidth = computeNotesWidth(chordClass, noteheadWidth);
-		NoteDisplacement[] notes = computeNoteDisplacements(lp, stemDirection, stemOffset);
+		NoteDisplacement[] notes = computeNotes(lp, stemDirection, stemOffset);
 		int dotsCount = computeDotsCount(chord.getDuration());
 		float[] dotsOffsets = computeDotsOffsets(notesWidth, dotsCount, chordWidths);
 		int[] dotsLp = (dotsCount > 0 ? computeDotsLp(lp) : emptyIntArray);
@@ -73,7 +73,7 @@ public class ChordDisplacementPolicy {
 		else
 			totalWidth = notesWidth;
 
-		return new ChordDisplacement(totalWidth, noteheadWidth, notes, dotsOffsets,
+		return new NotesNotation(totalWidth, noteheadWidth, notes, dotsOffsets,
 			dotsLp, stemOffset, leftSuspended);
 	}
 
@@ -99,7 +99,7 @@ public class ChordDisplacementPolicy {
 			return 2 * noteheadWidth;
 	}
 
-	private NoteDisplacement[] computeNoteDisplacements(ChordLps lps, StemDirection sd, float stemOffset) {
+	private NoteDisplacement[] computeNotes(ChordLps lps, StemDirection sd, float stemOffset) {
 		NoteDisplacement[] notes = new NoteDisplacement[lps.getNotesCount()];
 
 		//if stem direction is down or none, begin with the highest note,

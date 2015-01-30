@@ -8,7 +8,11 @@ import static com.xenoage.zong.core.music.Pitch.pi;
 import static com.xenoage.zong.core.music.util.Interval.Before;
 import static com.xenoage.zong.core.music.util.Interval.BeforeOrAt;
 import static com.xenoage.zong.core.text.FormattedTextUtils.styleText;
-import static com.xenoage.zong.musiclayout.notator.StemDirectionPolicy.stemDirectionPolicy;
+import static com.xenoage.zong.musiclayout.notator.AccidentalsNotator.accidentalsNotator;
+import static com.xenoage.zong.musiclayout.notator.ArticulationsNotator.articulationsNotator;
+import static com.xenoage.zong.musiclayout.notator.NotesNotator.notesNotator;
+import static com.xenoage.zong.musiclayout.notator.StemNotator.stemNotator;
+import static com.xenoage.zong.musiclayout.notator.StemDirectionNotator.stemDirectionNotator;
 
 import com.xenoage.utils.font.FontInfo;
 import com.xenoage.utils.font.TextMeasurer;
@@ -42,18 +46,16 @@ import com.xenoage.zong.core.position.MPElement;
 import com.xenoage.zong.core.text.FormattedText;
 import com.xenoage.zong.core.text.FormattedTextStyle;
 import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
-import com.xenoage.zong.musiclayout.layouter.notation.ArticulationsAlignmentStrategy;
-import com.xenoage.zong.musiclayout.layouter.notation.StemAlignmentStrategy;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
 import com.xenoage.zong.musiclayout.notations.ClefNotation;
 import com.xenoage.zong.musiclayout.notations.Notation;
 import com.xenoage.zong.musiclayout.notations.RestNotation;
 import com.xenoage.zong.musiclayout.notations.TimeNotation;
 import com.xenoage.zong.musiclayout.notations.TraditionalKeyNotation;
-import com.xenoage.zong.musiclayout.notations.chord.AccidentalsDisplacement;
-import com.xenoage.zong.musiclayout.notations.chord.ArticulationsAlignment;
-import com.xenoage.zong.musiclayout.notations.chord.ChordDisplacement;
-import com.xenoage.zong.musiclayout.notations.chord.StemAlignment;
+import com.xenoage.zong.musiclayout.notations.chord.AccidentalsNotation;
+import com.xenoage.zong.musiclayout.notations.chord.ArticulationsNotation;
+import com.xenoage.zong.musiclayout.notations.chord.NotesNotation;
+import com.xenoage.zong.musiclayout.notations.chord.StemNotation;
 import com.xenoage.zong.musiclayout.settings.ChordSpacings;
 import com.xenoage.zong.musiclayout.settings.ChordWidths;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
@@ -61,7 +63,7 @@ import com.xenoage.zong.musiclayout.spacing.horizontal.ElementWidth;
 import com.xenoage.zong.symbols.SymbolPool;
 
 /**
- * Creates information about the layout of {@link MusicElement}s,
+ * Creates layout information about the layout of {@link MusicElement}s,
  * so called {@link Notation}s.
  * 
  * For example, the detailled positioning for musical elements like chords,
@@ -70,27 +72,10 @@ import com.xenoage.zong.symbols.SymbolPool;
  * @author Andreas Wenger
  */
 public final class Notator {
-
-	//used strategies
-	private final ChordDisplacementPolicy notesAlignmentStrategy;
-	private final AccidentalsDisplacementPolicy accidentalsAlignmentStrategy;
-	private final StemAlignmentStrategy stemAlignmentStrategy;
-	private final ArticulationsAlignmentStrategy articulationsAlignmentStrategy;
 	
 	private TextMeasurer textMeasurer;
 
-
-	/**
-	 * Creates a new instance of a {@link Notator}.
-	 */
-	public Notator(ChordDisplacementPolicy notesAlignmentStrategy,
-		AccidentalsDisplacementPolicy accidentalsAlignmentStrategy,
-		StemAlignmentStrategy stemAlignmentStrategy,
-		ArticulationsAlignmentStrategy articulationsAlignmentStrategy) {
-		this.notesAlignmentStrategy = notesAlignmentStrategy;
-		this.accidentalsAlignmentStrategy = accidentalsAlignmentStrategy;
-		this.stemAlignmentStrategy = stemAlignmentStrategy;
-		this.articulationsAlignmentStrategy = articulationsAlignmentStrategy;
+	public Notator() {
 		this.textMeasurer = checkNotNull(platformUtils().getTextMeasurer());
 	}
 
@@ -218,14 +203,14 @@ public final class Notator {
 
 		//compute stem direction
 		if (stemDirection == StemDirection.Default)
-			stemDirection = stemDirectionPolicy.computeStemDirection(chord, mc);
+			stemDirection = stemDirectionNotator.computeStemDirection(chord, mc);
 
 		//chord displacement
-		ChordDisplacement chordDisplacement = notesAlignmentStrategy.computeChordDisplacement(chord,
-			stemDirection, chordWidths, mc);
+		NotesNotation chordDisplacement = notesNotator.compute(
+			chord, stemDirection, chordWidths, mc);
 		//accidentals alignment
-		AccidentalsDisplacement accidentalsAlignment = accidentalsAlignmentStrategy
-			.computeAccidentalsAlignment(chord, chordDisplacement, chordWidths, mc);
+		AccidentalsNotation accidentalsAlignment = accidentalsNotator.compute(
+			chord, chordDisplacement, chordWidths, mc);
 		float accidentalsWidth = accidentalsAlignment.widthIs;
 
 		float leftSuspendedWidth = (chordDisplacement.leftSuspended ? chordDisplacement.noteheadWidthIs : 0);
@@ -261,12 +246,13 @@ public final class Notator {
 		}
 
 		//compute length of the stem (if any)
-		StemAlignment stemAlignment = stemAlignmentStrategy.computeStemAlignment(chord.getStem(),
-			chordDisplacement, stemDirection, mc.getLinesCount(), grace ? layoutSettings.scalingGrace : 1);
+		StemNotation stemAlignment = stemNotator.compute(
+			chord.getStem(), chordDisplacement, stemDirection, mc.getLinesCount(),
+			grace ? layoutSettings.scalingGrace : 1);
 
 		//compute articulations
-		ArticulationsAlignment articulationsAlignment = articulationsAlignmentStrategy
-			.computeArticulationsAlignment(chord, stemDirection, chordDisplacement, mc.getLinesCount());
+		ArticulationsNotation articulationsAlignment = articulationsNotator.compute(
+			chord, stemDirection, chordDisplacement, mc.getLinesCount());
 
 		return new ChordNotation(chord, new ElementWidth(frontGap, symbolWidth, rearGap, lyricWidth),
 			chordDisplacement, stemDirection, stemAlignment, accidentalsAlignment, articulationsAlignment);

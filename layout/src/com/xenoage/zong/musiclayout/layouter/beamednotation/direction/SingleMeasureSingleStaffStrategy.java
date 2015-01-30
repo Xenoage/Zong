@@ -46,14 +46,14 @@ public class SingleMeasureSingleStaffStrategy
 		//pre-requirements: beam spans over only one measure (not tested here),
 		//and line positions and the stem direction of each chord are known (tested here)
 		int chordsCount = beam.getWaypoints().size();
-		ChordLps[] chordsLp = new ChordLps[chordsCount];
+		ChordLps[] chordsLps = new ChordLps[chordsCount];
 		StemDirection[] stemDirections = new StemDirection[chordsCount];
 		int iChord = 0;
 		for (BeamWaypoint waypoint : beam.getWaypoints()) {
 			Chord chord = waypoint.getChord();
 			ChordNotation cn = notations.getChord(chord);
-			if (cn != null && cn.getNotesAlignment() != null)
-				chordsLp[iChord] = cn.getNotesAlignment().getLps();
+			if (cn != null)
+				chordsLps[iChord] = cn.notes.getLps();
 			else
 				throw new IllegalStateException("ChordLinePositions unknown for Chord " + iChord);
 			if (cn.getStemDirection() != null)
@@ -64,7 +64,7 @@ public class SingleMeasureSingleStaffStrategy
 		}
 
 		//do the work
-		BeamStemDirections bsd = computeBeamStemDirections(chordsLp, stemDirections, linesCount);
+		BeamStemDirections bsd = computeBeamStemDirections(chordsLps, stemDirections, linesCount);
 
 		//return the results as a new NotationsCache
 		NotationsCache ret = new NotationsCache();

@@ -10,10 +10,11 @@ import com.xenoage.utils.annotations.Const;
  * @author Andreas Wenger
  */
 @Const @AllArgsConstructor
-public final class AccidentalsDisplacement {
+public final class AccidentalsNotation {
 	
-	public static final AccidentalsDisplacement empty = new AccidentalsDisplacement(new AccidentalDisplacement[0], 0);
+	public static final AccidentalsNotation empty = new AccidentalsNotation(new AccidentalDisplacement[0], 0);
 
+	
 	/** The accidentals of this chord.
 	 *  The accidentals are sorted upwards, that means, the lowest accidental has index 0. */
 	public final AccidentalDisplacement[] accidentals;

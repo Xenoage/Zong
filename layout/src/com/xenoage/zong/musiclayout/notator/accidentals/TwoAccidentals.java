@@ -3,7 +3,7 @@ package com.xenoage.zong.musiclayout.notator.accidentals;
 import static com.xenoage.zong.musiclayout.notations.chord.NoteSuspension.Right;
 
 import com.xenoage.zong.core.music.chord.Accidental;
-import com.xenoage.zong.musiclayout.notations.chord.AccidentalsDisplacement;
+import com.xenoage.zong.musiclayout.notations.chord.AccidentalsNotation;
 import com.xenoage.zong.musiclayout.notations.chord.NoteDisplacement;
 
 /**
@@ -17,7 +17,7 @@ public class TwoAccidentals
 	public static final TwoAccidentals twoAccidentals = new TwoAccidentals();
 	
 	
-	@Override AccidentalsDisplacement compute(Params p) {
+	@Override AccidentalsNotation compute(Params p) {
 		float width, xTop, xBottom;
 		NoteDisplacement bottomNote = p.accsNote[0];
 		NoteDisplacement topNote = p.accsNote[1];
@@ -25,7 +25,7 @@ public class TwoAccidentals
 		Accidental topAcc = p.accs[1];
 		float accToAccGap = p.chordWidths.accToAccGap;
 		//interval of at least a seventh?
-		if (topNote.lp - bottomNote.lp >= 6) {
+		if (topNote.yLp - bottomNote.yLp >= 6) {
 			//placed on the same horizontal position x = 0
 			xTop = xBottom = 0;
 			width = p.chordWidths.getMaxWidth(p.accs) + p.chordWidths.accToNoteGap;

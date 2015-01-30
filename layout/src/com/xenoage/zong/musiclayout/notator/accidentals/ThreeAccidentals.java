@@ -3,7 +3,7 @@ package com.xenoage.zong.musiclayout.notator.accidentals;
 import static com.xenoage.zong.musiclayout.notations.chord.NoteSuspension.Right;
 
 import com.xenoage.zong.core.music.chord.Accidental;
-import com.xenoage.zong.musiclayout.notations.chord.AccidentalsDisplacement;
+import com.xenoage.zong.musiclayout.notations.chord.AccidentalsNotation;
 import com.xenoage.zong.musiclayout.notations.chord.NoteDisplacement;
 
 /**
@@ -19,7 +19,7 @@ public class ThreeAccidentals
 	public static final ThreeAccidentals threeAccidentals = new ThreeAccidentals();
 	
 	
-	@Override AccidentalsDisplacement compute(Params p) {
+	@Override AccidentalsNotation compute(Params p) {
 		float width, xBottom, xMiddle, xTop;
 		NoteDisplacement bottomNote = p.accsNote[0];
 		NoteDisplacement middleNote = p.accsNote[1];
@@ -33,7 +33,7 @@ public class ThreeAccidentals
 		float accToAccGap = p.chordWidths.accToAccGap;
 		float accToNoteGap = p.chordWidths.accToNoteGap;
 		//interval of at least a seventh?
-		if (topNote.lp - bottomNote.lp >= 6) {
+		if (topNote.yLp - bottomNote.yLp >= 6) {
 			//interval of at least a seventh. can be rule 1, 3 or 4
 			if (topNote.suspension == Right) {
 				//top note is suspended on the right side of the stem.
