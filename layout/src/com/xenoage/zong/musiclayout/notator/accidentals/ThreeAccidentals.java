@@ -1,13 +1,10 @@
 package com.xenoage.zong.musiclayout.notator.accidentals;
 
-import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.musiclayout.notations.chord.NoteSuspension.Right;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import com.xenoage.zong.core.music.chord.Accidental;
-import com.xenoage.zong.musiclayout.notations.chord.AccidentalDisplacement;
 import com.xenoage.zong.musiclayout.notations.chord.AccidentalsDisplacement;
+import com.xenoage.zong.musiclayout.notations.chord.NoteDisplacement;
 
 /**
  * Displacement for a chord with 3 accidentals.
@@ -16,107 +13,81 @@ import com.xenoage.zong.musiclayout.notations.chord.AccidentalsDisplacement;
  * 
  * @author Andreas Wenger
  */
-@RequiredArgsConstructor
 public class ThreeAccidentals
 	extends Strategy {
 	
-	@Getter private final int accsCount = 3;
+	public static final ThreeAccidentals threeAccidentals = new ThreeAccidentals();
 	
 	
-	@Override AccidentalsDisplacement compute() {
+	@Override AccidentalsDisplacement compute(Params p) {
 		float width, xBottom, xMiddle, xTop;
+		NoteDisplacement bottomNote = p.accsNote[0];
+		NoteDisplacement middleNote = p.accsNote[1];
+		NoteDisplacement topNote = p.accsNote[2];
+		Accidental bottomAcc = p.accs[0];
+		Accidental middleAcc = p.accs[1];
+		Accidental topAcc = p.accs[2];
+		float bottomWidth = p.chordWidths.get(bottomAcc);
+		float middleWidth = p.chordWidths.get(middleAcc);
+		float topWidth = p.chordWidths.get(topAcc);
+		float accToAccGap = p.chordWidths.accToAccGap;
+		float accToNoteGap = p.chordWidths.accToNoteGap;
 		//interval of at least a seventh?
-		if (accsNote[2].lp - accsNote[0].lp >= 6) {
+		if (topNote.lp - bottomNote.lp >= 6) {
 			//interval of at least a seventh. can be rule 1, 3 or 4
-			if (accsNote[2].suspension == Right) {
+			if (topNote.suspension == Right) {
 				//top note is suspended on the right side of the stem.
 				//this is rule 4. (same code as rule 1)
-				float middleWidth = chordWidths.get(accs[1]);
-				xBottom = xTop = middleWidth + chordWidths.accToAccGap;
+				xBottom = xTop = middleWidth + accToAccGap;
 				xMiddle = 0;
-				width = middleWidth + chordWidths.accToAccGap + chordWidths.getMaxWidth(accs[0], accs[2]) +
-					chordWidths.accToNoteGap;
+				width = xBottom + p.chordWidths.getMaxWidth(bottomAcc, topAcc) + accToNoteGap;
 			}
-			else if (accsNote[1].suspension == Right) {
+			else if (middleNote.suspension == Right) {
 				//middle note is suspended on the right side of the stem.
 				//(bottom note is never suspended on the right)
 				//this is rule 3.
-				accs[0] = new AccidentalDisplacement(notes[bottomNoteIndex].lp, 0f, atBottom);
-				float bottomWidth = chordWidths.get(atBottom);
-				accs[2] = new AccidentalDisplacement(notes[topNoteIndex].lp, bottomWidth +
-					chordWidths.accToAccGap, atTop);
-				float topWidth = chordWidths.get(atTop);
-				accs[1] = new AccidentalDisplacement(notes[middleNoteIndex].lp, bottomWidth +
-					chordWidths.accToAccGap + topWidth + chordWidths.accToAccGap, atMiddle);
-				width = bottomWidth + chordWidths.accToAccGap + topWidth + chordWidths.accToAccGap +
-					chordWidths.get(atMiddle) + chordWidths.accToNoteGap;
+				xBottom = 0;
+				xMiddle = bottomWidth + accToAccGap + topWidth + accToAccGap;
+				xTop = bottomWidth + accToAccGap;
+				width = xMiddle + middleWidth + accToNoteGap;
 			}
 			else {
 				//there are no accidental notes suspended on the right side of the stem.
 				//this is rule 1.
-				accs[1] = new AccidentalDisplacement(notes[middleNoteIndex].lp, 0f, atMiddle);
-				float middleWidth = chordWidths.get(atMiddle);
-				accs[0] = new AccidentalDisplacement(notes[bottomNoteIndex].lp, middleWidth +
-					chordWidths.accToAccGap, atBottom);
-				accs[2] = new AccidentalDisplacement(notes[topNoteIndex].lp, middleWidth +
-					chordWidths.accToAccGap, atTop);
-				width = middleWidth + chordWidths.accToAccGap + chordWidths.getMaxWidth(atBottom, atTop) +
-					chordWidths.accToNoteGap;
+				xBottom = xTop = middleWidth + accToAccGap;
+				xMiddle = 0f;
+				width = xBottom + p.chordWidths.getMaxWidth(bottomAcc, topAcc) + accToNoteGap;
 			}
 		}
 		else {
 			//interval of less than a seventh. can be rule 2, 5 or 6
-			if (notes[topNoteIndex].suspension == Right) {
+			if (topNote.suspension == Right) {
 				//top note is suspended on the right side of the stem.
 				//this is rule 5. (same code as rule 2)
-				accs[1] = new AccidentalDisplacement(notes[middleNoteIndex].lp, 0f, atMiddle);
-				float middleWidth = chordWidths.get(atMiddle);
-				accs[0] = new AccidentalDisplacement(notes[bottomNoteIndex].lp, middleWidth +
-					chordWidths.accToAccGap, atBottom);
-				float bottomWidth = chordWidths.get(atBottom);
-				accs[2] = new AccidentalDisplacement(notes[topNoteIndex].lp, middleWidth +
-					chordWidths.accToAccGap + bottomWidth + chordWidths.accToAccGap, atTop);
-				float topWidth = chordWidths.get(atTop);
-				width = middleWidth + chordWidths.accToAccGap + bottomWidth + chordWidths.accToAccGap +
-					topWidth + chordWidths.accToNoteGap;
+				xBottom = middleWidth + accToAccGap;
+				xMiddle = 0f;
+				xTop = xBottom + bottomWidth + accToAccGap;
+				width = xTop + topWidth + accToNoteGap;
 			}
-			else if (notes[middleNoteIndex].suspension == Right) {
+			else if (middleNote.suspension == Right) {
 				//middle note is suspended on the right side of the stem.
 				//(bottom note is never suspended on the right)
 				//this is rule 6. (same code as rule 3)
-				accs[0] = new AccidentalDisplacement(notes[bottomNoteIndex].lp, 0f, atBottom);
-				float bottomWidth = chordWidths.get(atBottom);
-				accs[2] = new AccidentalDisplacement(notes[topNoteIndex].lp, bottomWidth +
-					chordWidths.accToAccGap, atTop);
-				float topWidth = chordWidths.get(atTop);
-				accs[1] = new AccidentalDisplacement(notes[middleNoteIndex].lp, bottomWidth +
-					chordWidths.accToAccGap + topWidth + chordWidths.accToAccGap, atMiddle);
-				width = bottomWidth + chordWidths.accToAccGap + topWidth + chordWidths.accToAccGap +
-					chordWidths.get(atMiddle) + chordWidths.accToNoteGap;
+				xBottom = 0f;
+				xMiddle = bottomWidth + accToAccGap + topWidth + accToAccGap;
+				xTop = bottomWidth + accToAccGap;
+				width = xMiddle + middleWidth + accToNoteGap;
 			}
 			else {
 				//there are no accidental notes suspended on the right side of the stem.
 				//this is rule 2.
-				accs[1] = new AccidentalDisplacement(notes[middleNoteIndex].lp, 0f, atMiddle);
-				float middleWidth = chordWidths.get(atMiddle);
-				accs[0] = new AccidentalDisplacement(notes[bottomNoteIndex].lp, middleWidth +
-					chordWidths.accToAccGap, atBottom);
-				float bottomWidth = chordWidths.get(atBottom);
-				accs[2] = new AccidentalDisplacement(notes[topNoteIndex].lp, middleWidth +
-					chordWidths.accToAccGap + bottomWidth + chordWidths.accToAccGap, atTop);
-				float topWidth = chordWidths.get(atTop);
-				width = middleWidth + chordWidths.accToAccGap + bottomWidth + chordWidths.accToAccGap +
-					topWidth + chordWidths.accToNoteGap;
+				xBottom = middleWidth + accToAccGap;
+				xMiddle = 0f;
+				xTop = middleWidth + accToAccGap + bottomWidth + accToAccGap;
+				width = xTop + topWidth + accToNoteGap;
 			}
 		}
-		return new AccidentalsDisplacement(accs, width);
-	}
-	
-	int getAccNoteIndex(int startIndex) {
-		for (int i : range(startIndex, pitches.size() - 1))
-			if (mc.getAccidental(pitches.get(i)) != null)
-				return i;
-		throw new IllegalStateException();
+		return create(p, width, xBottom, xMiddle, xTop);
 	}
 
 }

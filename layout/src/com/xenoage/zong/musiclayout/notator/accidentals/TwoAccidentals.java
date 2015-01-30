@@ -1,30 +1,34 @@
 package com.xenoage.zong.musiclayout.notator.accidentals;
 
 import static com.xenoage.zong.musiclayout.notations.chord.NoteSuspension.Right;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
+import com.xenoage.zong.core.music.chord.Accidental;
 import com.xenoage.zong.musiclayout.notations.chord.AccidentalsDisplacement;
+import com.xenoage.zong.musiclayout.notations.chord.NoteDisplacement;
 
 /**
  * Displacement for a chord with 2 accidentals.
  * 
  * @author Andreas Wenger
  */
-@RequiredArgsConstructor
 public class TwoAccidentals
 	extends Strategy {
 	
-	@Getter private final int accsCount = 2;
+	public static final TwoAccidentals twoAccidentals = new TwoAccidentals();
 	
 	
-	@Override AccidentalsDisplacement compute() {
+	@Override AccidentalsDisplacement compute(Params p) {
 		float width, xTop, xBottom;
+		NoteDisplacement bottomNote = p.accsNote[0];
+		NoteDisplacement topNote = p.accsNote[1];
+		Accidental bottomAcc = p.accs[0];
+		Accidental topAcc = p.accs[1];
+		float accToAccGap = p.chordWidths.accToAccGap;
 		//interval of at least a seventh?
-		if (accsNote[1].lp - accsNote[0].lp >= 6) {
+		if (topNote.lp - bottomNote.lp >= 6) {
 			//placed on the same horizontal position x = 0
 			xTop = xBottom = 0;
-			width = chordWidths.getMaxWidth(accs) + chordWidths.accToNoteGap;
+			width = p.chordWidths.getMaxWidth(p.accs) + p.chordWidths.accToNoteGap;
 		}
 		else {
 			//placed on different horizontal positions
@@ -33,24 +37,25 @@ public class TwoAccidentals
 			//when the bottom note with an accidental is suspended
 			//on the right side of the stem, and the top note with an accidental
 			//is not, then the bottom accidental is nearer to the note (see Ross, p. 132)
-			if (accsNote[0].suspension == Right && accsNote[1].suspension != Right)
+			if (bottomNote.suspension == Right && topNote.suspension != Right)
 				bottomFirst = false;
 			//horizontal position
+			float bottomWidth = p.chordWidths.get(bottomAcc);
+			float topWidth = p.chordWidths.get(topAcc);
 			if (bottomFirst) {
 				//bottom accidental is leftmost
 				xBottom = 0;
-				xTop = chordWidths.get(accs[1]);
+				xTop = bottomWidth + accToAccGap;
 			}
 			else {
 				//top accidental is leftmost
-				xBottom = chordWidths.get(accs[0]);
+				xBottom = topWidth + accToAccGap;
 				xTop = 0;
 			}
 			//width
-			width = chordWidths.get(accs[0]) + chordWidths.accToAccGap + chordWidths.get(accs[1]) +
-				chordWidths.accToNoteGap;
+			width = bottomWidth + accToAccGap + topWidth + p.chordWidths.accToNoteGap;
 		}
-		return create(width, xBottom, xTop);
+		return create(p, width, xBottom, xTop);
 	}
 
 }

@@ -1,8 +1,5 @@
 package com.xenoage.zong.musiclayout.notator.accidentals;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
 import com.xenoage.zong.musiclayout.notations.chord.AccidentalsDisplacement;
 
 /**
@@ -10,17 +7,16 @@ import com.xenoage.zong.musiclayout.notations.chord.AccidentalsDisplacement;
  * 
  * @author Andreas Wenger
  */
-@RequiredArgsConstructor
 public class OneAccidental
 	extends Strategy {
 	
-	@Getter private final int accsCount = 1;
+	public static final OneAccidental oneAccidental = new OneAccidental();
 	
 	
-	@Override AccidentalsDisplacement compute() {
+	@Override AccidentalsDisplacement compute(Params p) {
 		float x = 0;
-		float width = chordWidths.get(accs[0]) + chordWidths.accToNoteGap;
-		return create(width, x);
+		float width = p.chordWidths.get(p.accs[0]) + p.chordWidths.accToNoteGap;
+		return create(p, width, x);
 	}
 
 }

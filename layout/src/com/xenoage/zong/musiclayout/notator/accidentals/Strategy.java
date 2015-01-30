@@ -14,61 +14,54 @@ import com.xenoage.zong.musiclayout.settings.ChordWidths;
 
 /**
  * Strategy for displacing accidentals.
- * Not thread-safe.
+ * Thread-safe.
  * 
  * @author Andreas Wenger
  */
 public abstract class Strategy {
 	
-	List<Pitch> pitches;
-	NoteDisplacement[] notes;
-	ChordWidths chordWidths;
-	MusicContext mc;
-	
-	//all accidentals, ascending LP
-	Accidental[] accs;
-	//all notes with accidentals, ascending LP
-	NoteDisplacement[] accsNote;
-	
+	class Params {
+		//all accidentals, ascending LP
+		Accidental[] accs;
+		//all notes with accidentals, ascending LP
+		NoteDisplacement[] accsNote;
+		//widths of musical symbols
+		ChordWidths chordWidths;
+	}
 	
 	
 	public AccidentalsDisplacement computeAccidentalsDisplacement(List<Pitch> pitches,
-		NoteDisplacement[] notes, ChordWidths chordWidths, MusicContext mc) {
-		this.pitches = pitches;
-		this.notes = notes;
-		this.chordWidths = chordWidths;
-		this.mc = mc;
-		computeAccsAndAccsNote();
-		return compute();
-	}
-	
-	abstract int getAccsCount();
-	
-	abstract AccidentalsDisplacement compute();
-	
-	private void computeAccsAndAccsNote() {
-		accs = new Accidental[getAccsCount()];
-		accsNote = new NoteDisplacement[accs.length];
+		NoteDisplacement[] notes, int accsCount, ChordWidths chordWidths, MusicContext mc) {
+		//find notes with accidentals
+		Params params = new Params();
+		params.accs = new Accidental[accsCount];
+		params.accsNote = new NoteDisplacement[params.accs.length];
 		int lastIndex = -1;
-		for (int i : range(accs)) {
-			int index = getAccNoteIndex(lastIndex + 1);
-			accs[i] = mc.getAccidental(pitches.get(index));
-			accsNote[i] = notes[i];
+		for (int i : range(params.accs)) {
+			int index = getAccNoteIndex(pitches, lastIndex + 1, mc);
+			params.accs[i] = mc.getAccidental(pitches.get(index));
+			params.accsNote[i] = notes[index];
 			lastIndex = index;
 		}
+		params.chordWidths = chordWidths;
+		//compute displacement
+		return compute(params);
 	}
 	
-	private int getAccNoteIndex(int startIndex) {
+	abstract AccidentalsDisplacement compute(Params params);
+	
+	//GOON: not public
+	public static int getAccNoteIndex(List<Pitch> pitches, int startIndex, MusicContext mc) {
 		for (int i : range(startIndex, pitches.size() - 1))
 			if (mc.getAccidental(pitches.get(i)) != null)
 				return i;
 		throw new IllegalStateException();
 	}
 	
-	AccidentalsDisplacement create(float widthIs, float... xIs) {
+	static AccidentalsDisplacement create(Params params, float widthIs, float... xIs) {
 		AccidentalDisplacement[] a = new AccidentalDisplacement[xIs.length];
 		for (int i : range(a))
-			a[i] = new AccidentalDisplacement(accsNote[i].lp, xIs[i], accs[i]);
+			a[i] = new AccidentalDisplacement(params.accsNote[i].lp, xIs[i], params.accs[i]);
 		return new AccidentalsDisplacement(a, widthIs);
 	}
 
