@@ -28,7 +28,6 @@ import com.xenoage.zong.musiclayout.SystemArrangement;
 import com.xenoage.zong.musiclayout.continued.ContinuedElement;
 import com.xenoage.zong.musiclayout.layouter.arrangement.FrameArrangementStrategy;
 import com.xenoage.zong.musiclayout.layouter.beamednotation.BeamedStemAlignmentNotationsStrategy;
-import com.xenoage.zong.musiclayout.layouter.beamednotation.BeamedStemDirectionNotationsStrategy;
 import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
 import com.xenoage.zong.musiclayout.layouter.columnspacing.ColumnSpacingStrategy;
 import com.xenoage.zong.musiclayout.layouter.horizontalsystemfilling.HorizontalSystemFillingStrategy;
@@ -36,6 +35,7 @@ import com.xenoage.zong.musiclayout.layouter.scoreframelayout.ScoreFrameLayoutSt
 import com.xenoage.zong.musiclayout.layouter.verticalframefilling.VerticalFrameFillingStrategy;
 import com.xenoage.zong.musiclayout.layouter.voicenotation.VoiceStemDirectionNotationsStrategy;
 import com.xenoage.zong.musiclayout.notator.Notator;
+import com.xenoage.zong.musiclayout.notator.beam.BeamedStemDirector;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 
 /**
@@ -49,7 +49,7 @@ public class ScoreLayoutStrategy
 
 	//used strategies
 	private final Notator notationStrategy;
-	private final BeamedStemDirectionNotationsStrategy beamedStemDirectionNotationsStrategy;
+	private final BeamedStemDirector beamedStemDirectionNotationsStrategy;
 	private final VoiceStemDirectionNotationsStrategy voiceStemDirectionNotationsStrategy;
 	private final ColumnSpacingStrategy measureColumnSpacingStrategy;
 	private final FrameArrangementStrategy frameArrangementStrategy;
@@ -61,7 +61,7 @@ public class ScoreLayoutStrategy
 	 * Creates a new {@link ScoreLayoutStrategy}.
 	 */
 	public ScoreLayoutStrategy(Notator notationStrategy,
-		BeamedStemDirectionNotationsStrategy beamedStemDirectionNotationsStrategy,
+		BeamedStemDirector beamedStemDirectionNotationsStrategy,
 		VoiceStemDirectionNotationsStrategy voiceStemDirectionNotationsStrategy,
 		ColumnSpacingStrategy measureColumnSpacingStrategy,
 		FrameArrangementStrategy frameArrangementStrategy,

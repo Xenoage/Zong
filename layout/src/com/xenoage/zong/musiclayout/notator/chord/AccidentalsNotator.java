@@ -1,9 +1,9 @@
-package com.xenoage.zong.musiclayout.notator;
+package com.xenoage.zong.musiclayout.notator.chord;
 
-import static com.xenoage.zong.musiclayout.notator.accidentals.ManyAccidentals.manyAccidentals;
-import static com.xenoage.zong.musiclayout.notator.accidentals.OneAccidental.oneAccidental;
-import static com.xenoage.zong.musiclayout.notator.accidentals.ThreeAccidentals.threeAccidentals;
-import static com.xenoage.zong.musiclayout.notator.accidentals.TwoAccidentals.twoAccidentals;
+import static com.xenoage.zong.musiclayout.notator.chord.accidentals.ManyAccidentals.manyAccidentals;
+import static com.xenoage.zong.musiclayout.notator.chord.accidentals.OneAccidental.oneAccidental;
+import static com.xenoage.zong.musiclayout.notator.chord.accidentals.ThreeAccidentals.threeAccidentals;
+import static com.xenoage.zong.musiclayout.notator.chord.accidentals.TwoAccidentals.twoAccidentals;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.musiclayout.notations.chord.AccidentalsNotation;
 import com.xenoage.zong.musiclayout.notations.chord.NotesNotation;
 import com.xenoage.zong.musiclayout.notations.chord.NoteDisplacement;
-import com.xenoage.zong.musiclayout.notator.accidentals.Strategy;
+import com.xenoage.zong.musiclayout.notator.chord.accidentals.Strategy;
 import com.xenoage.zong.musiclayout.settings.ChordWidths;
 
 /**

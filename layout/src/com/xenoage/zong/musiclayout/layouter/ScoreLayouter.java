@@ -14,7 +14,6 @@ import com.xenoage.zong.musiclayout.ScoreLayout;
 import com.xenoage.zong.musiclayout.layouter.arrangement.FrameArrangementStrategy;
 import com.xenoage.zong.musiclayout.layouter.arrangement.SystemArrangementStrategy;
 import com.xenoage.zong.musiclayout.layouter.beamednotation.BeamedStemAlignmentNotationsStrategy;
-import com.xenoage.zong.musiclayout.layouter.beamednotation.BeamedStemDirectionNotationsStrategy;
 import com.xenoage.zong.musiclayout.layouter.columnspacing.BarlinesBeatOffsetsStrategy;
 import com.xenoage.zong.musiclayout.layouter.columnspacing.BeatOffsetBasedVoiceSpacingStrategy;
 import com.xenoage.zong.musiclayout.layouter.columnspacing.BeatOffsetsStrategy;
@@ -31,12 +30,13 @@ import com.xenoage.zong.musiclayout.layouter.scoreframelayout.StaffStampingsStra
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.TupletStampingStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.VoltaStampingStrategy;
 import com.xenoage.zong.musiclayout.layouter.voicenotation.VoiceStemDirectionNotationsStrategy;
-import com.xenoage.zong.musiclayout.notator.ArticulationsNotator;
-import com.xenoage.zong.musiclayout.notator.AccidentalsNotator;
 import com.xenoage.zong.musiclayout.notator.Notator;
-import com.xenoage.zong.musiclayout.notator.NotesNotator;
-import com.xenoage.zong.musiclayout.notator.StemNotator;
-import com.xenoage.zong.musiclayout.notator.StemDirectionNotator;
+import com.xenoage.zong.musiclayout.notator.beam.BeamedStemDirector;
+import com.xenoage.zong.musiclayout.notator.chord.AccidentalsNotator;
+import com.xenoage.zong.musiclayout.notator.chord.ArticulationsNotator;
+import com.xenoage.zong.musiclayout.notator.chord.NotesNotator;
+import com.xenoage.zong.musiclayout.notator.chord.StemDirector;
+import com.xenoage.zong.musiclayout.notator.chord.StemNotator;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.musiclayout.stamper.BeamStamper;
 import com.xenoage.zong.symbols.SymbolPool;
@@ -138,7 +138,7 @@ public class ScoreLayouter {
 			new BeatOffsetsStrategy(), new BarlinesBeatOffsetsStrategy(),
 			new BeatOffsetBasedVoiceSpacingStrategy(), new LeadingSpacingStrategy(notationStrategy));
 		//complete tree
-		return new ScoreLayoutStrategy(notationStrategy, new BeamedStemDirectionNotationsStrategy(
+		return new ScoreLayoutStrategy(notationStrategy, new BeamedStemDirector(
 			notationStrategy), new VoiceStemDirectionNotationsStrategy(notationStrategy),
 			columnSpacingStrategy, new FrameArrangementStrategy(new SystemArrangementStrategy(
 				columnSpacingStrategy)), new BeamedStemAlignmentNotationsStrategy(),

@@ -10,16 +10,17 @@ import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.musiclayout.notations.beam.BeamStemDirections;
 import com.xenoage.zong.musiclayout.notations.chord.ChordLps;
 import com.xenoage.zong.musiclayout.notator.Notator;
+import com.xenoage.zong.musiclayout.notator.beam.direction.OneMeasureOneStaff;
 
 /**
- * Test class for the {@link SingleMeasureSingleStaffStrategy}.
+ * Test class for the {@link OneMeasureOneStaff}.
  * 
  * @author Uli Teschemacher
  * @author Andreas Wenger
  */
 public class SingleMeasureSingleStaffStrategyTest {
 
-	SingleMeasureSingleStaffStrategy strategy = new SingleMeasureSingleStaffStrategy(
+	OneMeasureOneStaff strategy = new OneMeasureOneStaff(
 		new Notator());
 	
 
@@ -36,7 +37,7 @@ public class SingleMeasureSingleStaffStrategyTest {
 		dir = computeSingleNoteChordsDirections(lineposition);
 
 		res = strategy.computeBeamStemDirections(clps(lineposition), dir, linescount);
-		assertEquals(StemDirection.Up, res.getStemDirections()[0]);
+		assertEquals(StemDirection.Up, res.stemDirections[0]);
 
 		lineposition[0][0] = 5;
 		lineposition[1][0] = 3;
@@ -45,7 +46,7 @@ public class SingleMeasureSingleStaffStrategyTest {
 		dir = computeSingleNoteChordsDirections(lineposition);
 
 		res = strategy.computeBeamStemDirections(clps(lineposition), dir, linescount);
-		assertEquals(StemDirection.Up, res.getStemDirections()[0]);
+		assertEquals(StemDirection.Up, res.stemDirections[0]);
 
 		lineposition[0][0] = 5;
 		lineposition[1][0] = 3;
@@ -54,7 +55,7 @@ public class SingleMeasureSingleStaffStrategyTest {
 		dir = computeSingleNoteChordsDirections(lineposition);
 
 		res = strategy.computeBeamStemDirections(clps(lineposition), dir, linescount);
-		assertEquals(StemDirection.Up, res.getStemDirections()[0]);
+		assertEquals(StemDirection.Up, res.stemDirections[0]);
 
 		lineposition = new int[6][1];
 
@@ -67,7 +68,7 @@ public class SingleMeasureSingleStaffStrategyTest {
 		dir = computeSingleNoteChordsDirections(lineposition);
 
 		res = strategy.computeBeamStemDirections(clps(lineposition), dir, linescount);
-		assertEquals(StemDirection.Up, res.getStemDirections()[0]);
+		assertEquals(StemDirection.Up, res.stemDirections[0]);
 
 		lineposition[0][0] = 2;
 		lineposition[1][0] = 3;
@@ -78,7 +79,7 @@ public class SingleMeasureSingleStaffStrategyTest {
 		dir = computeSingleNoteChordsDirections(lineposition);
 
 		res = strategy.computeBeamStemDirections(clps(lineposition), dir, linescount);
-		assertEquals(StemDirection.Down, res.getStemDirections()[0]);
+		assertEquals(StemDirection.Down, res.stemDirections[0]);
 
 		lineposition[0][0] = 2;
 		lineposition[1][0] = 3;
@@ -89,7 +90,7 @@ public class SingleMeasureSingleStaffStrategyTest {
 		dir = computeSingleNoteChordsDirections(lineposition);
 
 		res = strategy.computeBeamStemDirections(clps(lineposition), dir, linescount);
-		assertEquals(StemDirection.Down, res.getStemDirections()[0]);
+		assertEquals(StemDirection.Down, res.stemDirections[0]);
 
 		lineposition[0][0] = 14;
 		lineposition[1][0] = 9;
@@ -100,7 +101,7 @@ public class SingleMeasureSingleStaffStrategyTest {
 		dir = computeSingleNoteChordsDirections(lineposition);
 
 		res = strategy.computeBeamStemDirections(clps(lineposition), dir, linescount);
-		assertEquals(StemDirection.Down, res.getStemDirections()[0]);
+		assertEquals(StemDirection.Down, res.stemDirections[0]);
 
 		lineposition[0][0] = 0;
 		lineposition[1][0] = -1;
@@ -111,7 +112,7 @@ public class SingleMeasureSingleStaffStrategyTest {
 		dir = computeSingleNoteChordsDirections(lineposition);
 
 		res = strategy.computeBeamStemDirections(clps(lineposition), dir, linescount);
-		assertEquals(StemDirection.Up, res.getStemDirections()[0]);
+		assertEquals(StemDirection.Up, res.stemDirections[0]);
 
 		lineposition[0][0] = -2;
 		lineposition[1][0] = 4;
@@ -122,7 +123,7 @@ public class SingleMeasureSingleStaffStrategyTest {
 		dir = computeSingleNoteChordsDirections(lineposition);
 
 		res = strategy.computeBeamStemDirections(clps(lineposition), dir, linescount);
-		assertEquals(StemDirection.Down, res.getStemDirections()[0]);
+		assertEquals(StemDirection.Down, res.stemDirections[0]);
 
 		lineposition[0][0] = -3;
 		lineposition[1][0] = 4;
@@ -133,7 +134,7 @@ public class SingleMeasureSingleStaffStrategyTest {
 		dir = computeSingleNoteChordsDirections(lineposition);
 
 		res = strategy.computeBeamStemDirections(clps(lineposition), dir, linescount);
-		assertEquals(StemDirection.Down, res.getStemDirections()[0]);
+		assertEquals(StemDirection.Down, res.stemDirections[0]);
 
 		lineposition[0][0] = 0;
 		lineposition[1][0] = 3;
@@ -144,7 +145,7 @@ public class SingleMeasureSingleStaffStrategyTest {
 		dir = computeSingleNoteChordsDirections(lineposition);
 
 		res = strategy.computeBeamStemDirections(clps(lineposition), dir, linescount);
-		assertEquals(StemDirection.Up, res.getStemDirections()[0]);
+		assertEquals(StemDirection.Up, res.stemDirections[0]);
 	}
 
 	private ChordLps[] clps(int[][] linePositions) {

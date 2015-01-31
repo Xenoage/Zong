@@ -13,7 +13,6 @@ import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.layouter.beamednotation.BeamedStemAlignmentNotationsStrategy;
-import com.xenoage.zong.musiclayout.layouter.beamednotation.BeamedStemDirectionNotationsStrategy;
 import com.xenoage.zong.musiclayout.layouter.beamednotation.design.BeamDesign;
 import com.xenoage.zong.musiclayout.layouter.beamednotation.design.ChordBeamSpacing;
 import com.xenoage.zong.musiclayout.layouter.beamednotation.design.DoubleBeamDesign;
@@ -26,6 +25,7 @@ import com.xenoage.zong.musiclayout.notations.beam.BeamStemAlignments;
 import com.xenoage.zong.musiclayout.notations.chord.AccidentalsNotation;
 import com.xenoage.zong.musiclayout.notations.chord.NotesNotation;
 import com.xenoage.zong.musiclayout.notations.chord.StemNotation;
+import com.xenoage.zong.musiclayout.notator.beam.BeamedStemDirector;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 
 /**
@@ -45,7 +45,7 @@ public class SingleMeasureSingleStaffStrategy
 	/**
 	 * This strategy computes the lengths of the stems of beamed notes.
 	 * It only works for chords, in which all the stems point in the same
-	 * direction (like computed by {@link BeamedStemDirectionNotationsStrategy}).
+	 * direction (like computed by {@link BeamedStemDirector}).
 	 * The NotationsCache is updated.
 	 */
 	public void computeNotations(Score score, Beam beam, ColumnSpacing columnSpacing,

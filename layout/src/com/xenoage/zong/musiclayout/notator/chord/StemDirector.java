@@ -1,4 +1,4 @@
-package com.xenoage.zong.musiclayout.notator;
+package com.xenoage.zong.musiclayout.notator.chord;
 
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Fraction._1;
@@ -10,13 +10,13 @@ import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.musiclayout.notations.chord.ChordLps;
 
 /**
- * Rules for the stem direction of single chords.
+ * Computes the {@link StemDirection} of single chords.
  * 
  * @author Andreas Wenger
  */
-public final class StemDirectionNotator {
+public final class StemDirector {
 	
-	public static StemDirectionNotator stemDirectionNotator = new StemDirectionNotator();
+	public static StemDirector stemDirector = new StemDirector();
 
 	
 	public StemDirection computeStemDirection(Chord chord, MusicContext context) {

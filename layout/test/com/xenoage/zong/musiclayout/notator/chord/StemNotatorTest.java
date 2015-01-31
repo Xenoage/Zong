@@ -1,10 +1,10 @@
-package com.xenoage.zong.musiclayout.notator;
+package com.xenoage.zong.musiclayout.notator.chord;
 
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.music.Pitch.pi;
-import static com.xenoage.zong.musiclayout.notator.NotesNotator.notesNotator;
-import static com.xenoage.zong.musiclayout.notator.StemDirectionNotator.stemDirectionNotator;
-import static com.xenoage.zong.musiclayout.notator.StemNotator.stemNotator;
+import static com.xenoage.zong.musiclayout.notator.chord.NotesNotator.notesNotator;
+import static com.xenoage.zong.musiclayout.notator.chord.StemDirector.stemDirector;
+import static com.xenoage.zong.musiclayout.notator.chord.StemNotator.stemNotator;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
@@ -20,6 +20,7 @@ import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.musiclayout.notations.chord.ChordLps;
 import com.xenoage.zong.musiclayout.notations.chord.NotesNotation;
 import com.xenoage.zong.musiclayout.notations.chord.StemNotation;
+import com.xenoage.zong.musiclayout.notator.chord.StemNotator;
 import com.xenoage.zong.musiclayout.settings.ChordWidths;
 
 /**
@@ -134,7 +135,7 @@ public class StemNotatorTest {
 		Fraction fraction = fr(1, 1);
 		chord = ChordFactory.chord(pitches, fraction);
 		ChordLps linepositions = new ChordLps(chord, context);
-		StemDirection stemDirection = stemDirectionNotator.compute(linepositions, 5);
+		StemDirection stemDirection = stemDirector.compute(linepositions, 5);
 		chordNotesAlignment = notesNotator.compute(chord, stemDirection,
 			ChordWidths.defaultValue, context);
 		chordStemAlignment = testee.compute(Stem.defaultStem, chordNotesAlignment, stemDirection, 5,

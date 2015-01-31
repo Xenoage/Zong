@@ -1,4 +1,4 @@
-package com.xenoage.zong.musiclayout.notator.accidentals;
+package com.xenoage.zong.musiclayout.notator.chord.accidentals;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.zong.core.music.Pitch.pi;
@@ -9,6 +9,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.xenoage.zong.core.music.Pitch;
+import com.xenoage.zong.musiclayout.notator.chord.accidentals.Strategy;
 
 
 /**

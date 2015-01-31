@@ -1,17 +1,18 @@
-package com.xenoage.zong.musiclayout.notator;
+package com.xenoage.zong.musiclayout.notator.chord;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.math.Delta.df;
 import static com.xenoage.zong.core.music.Pitch.pi;
 import static com.xenoage.zong.musiclayout.notations.chord.NoteDisplacementTest.note;
-import static com.xenoage.zong.musiclayout.notator.AccidentalsNotator.accidentalsNotator;
+import static com.xenoage.zong.musiclayout.notator.chord.AccidentalsNotator.accidentalsNotator;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
 import com.xenoage.zong.musiclayout.notations.chord.AccidentalsNotation;
 import com.xenoage.zong.musiclayout.notations.chord.NoteDisplacement;
-import com.xenoage.zong.musiclayout.notator.accidentals.TestData;
+import com.xenoage.zong.musiclayout.notator.chord.AccidentalsNotator;
+import com.xenoage.zong.musiclayout.notator.chord.accidentals.TestData;
 
 /**
  * Tests for {@link AccidentalsNotator}.

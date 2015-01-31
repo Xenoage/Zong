@@ -12,11 +12,11 @@ import com.xenoage.zong.io.musiclayout.LayoutSettingsReader;
 import com.xenoage.zong.io.musicxml.in.MusicXMLScoreFileInputTest;
 import com.xenoage.zong.io.musicxml.in.MusicXmlScoreFileInput;
 import com.xenoage.zong.io.symbols.SymbolPoolReader;
-import com.xenoage.zong.musiclayout.notator.ArticulationsNotator;
-import com.xenoage.zong.musiclayout.notator.AccidentalsNotator;
 import com.xenoage.zong.musiclayout.notator.Notator;
-import com.xenoage.zong.musiclayout.notator.NotesNotator;
-import com.xenoage.zong.musiclayout.notator.StemNotator;
+import com.xenoage.zong.musiclayout.notator.chord.AccidentalsNotator;
+import com.xenoage.zong.musiclayout.notator.chord.ArticulationsNotator;
+import com.xenoage.zong.musiclayout.notator.chord.NotesNotator;
+import com.xenoage.zong.musiclayout.notator.chord.StemNotator;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.symbols.SymbolPool;
 

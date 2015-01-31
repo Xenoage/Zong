@@ -8,11 +8,11 @@ import static com.xenoage.zong.core.music.Pitch.pi;
 import static com.xenoage.zong.core.music.util.Interval.Before;
 import static com.xenoage.zong.core.music.util.Interval.BeforeOrAt;
 import static com.xenoage.zong.core.text.FormattedTextUtils.styleText;
-import static com.xenoage.zong.musiclayout.notator.AccidentalsNotator.accidentalsNotator;
-import static com.xenoage.zong.musiclayout.notator.ArticulationsNotator.articulationsNotator;
-import static com.xenoage.zong.musiclayout.notator.NotesNotator.notesNotator;
-import static com.xenoage.zong.musiclayout.notator.StemNotator.stemNotator;
-import static com.xenoage.zong.musiclayout.notator.StemDirectionNotator.stemDirectionNotator;
+import static com.xenoage.zong.musiclayout.notator.chord.AccidentalsNotator.accidentalsNotator;
+import static com.xenoage.zong.musiclayout.notator.chord.ArticulationsNotator.articulationsNotator;
+import static com.xenoage.zong.musiclayout.notator.chord.NotesNotator.notesNotator;
+import static com.xenoage.zong.musiclayout.notator.chord.StemDirector.stemDirector;
+import static com.xenoage.zong.musiclayout.notator.chord.StemNotator.stemNotator;
 
 import com.xenoage.utils.font.FontInfo;
 import com.xenoage.utils.font.TextMeasurer;
@@ -203,7 +203,7 @@ public final class Notator {
 
 		//compute stem direction
 		if (stemDirection == StemDirection.Default)
-			stemDirection = stemDirectionNotator.computeStemDirection(chord, mc);
+			stemDirection = stemDirector.computeStemDirection(chord, mc);
 
 		//chord displacement
 		NotesNotation chordDisplacement = notesNotator.compute(

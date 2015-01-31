@@ -14,7 +14,8 @@ import com.xenoage.zong.musiclayout.spacing.horizontal.ElementWidth;
  *
  * @author Andreas Wenger
  */
-@Const @AllArgsConstructor public final class TraditionalKeyNotation
+@Const @AllArgsConstructor
+public final class TraditionalKeyNotation
 	implements Notation {
 
 	@Getter public final TraditionalKey element;

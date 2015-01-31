@@ -1,4 +1,4 @@
-package com.xenoage.zong.musiclayout.notator;
+package com.xenoage.zong.musiclayout.notator.chord;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.rangeReverse;

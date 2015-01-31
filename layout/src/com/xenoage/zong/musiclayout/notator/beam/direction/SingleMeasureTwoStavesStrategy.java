@@ -1,4 +1,4 @@
-package com.xenoage.zong.musiclayout.layouter.beamednotation.direction;
+package com.xenoage.zong.musiclayout.notator.beam.direction;
 
 import static com.xenoage.utils.iterators.It.it;
 import static com.xenoage.zong.core.music.chord.StemDirection.Down;
@@ -52,15 +52,15 @@ public class SingleMeasureTwoStavesStrategy
 		//return the results as a new NotationsCache
 		NotationsCache ret = new NotationsCache();
 		Iterator<BeamWaypoint> beamWaypoints = it(beam.getWaypoints());
-		for (int i = 0; i < bsd.getStemDirections().length; i++) {
+		for (int i = 0; i < bsd.stemDirections.length; i++) {
 			Chord chord = beamWaypoints.next().getChord();
 			ChordNotation oldChordNotation = notations.getChord(chord);
 			StemDirection oldStemDir = oldChordNotation.getStemDirection();
 			//if stem direction was changed, recompute the notation.
 			//the stem lengths are not fitted to the beam already, so this is
 			//has to be done later within another strategy
-			if (bsd.getStemDirections()[i] != oldStemDir) {
-				ret.add(notationStrategy.computeChord(chord, bsd.getStemDirections()[i], score,
+			if (bsd.stemDirections[i] != oldStemDir) {
+				ret.add(notationStrategy.computeChord(chord, bsd.stemDirections[i], score,
 					layoutSettings));
 			}
 		}

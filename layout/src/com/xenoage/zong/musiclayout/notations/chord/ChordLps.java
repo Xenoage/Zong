@@ -1,9 +1,10 @@
 package com.xenoage.zong.musiclayout.notations.chord;
 
+import static com.xenoage.utils.kernel.Range.range;
+
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.music.MusicContext;
 import com.xenoage.zong.core.music.chord.Chord;
-import com.xenoage.zong.core.music.chord.Note;
 
 /**
  * This class stores the line positions of the notes of a chord.
@@ -11,9 +12,10 @@ import com.xenoage.zong.core.music.chord.Note;
  * 
  * @author Andreas Wenger
  */
-@Const public final class ChordLps {
+@Const
+public final class ChordLps {
 
-	private final int[] linePositions;
+	private final int[] lps;
 
 
 	/**
@@ -21,21 +23,20 @@ import com.xenoage.zong.core.music.chord.Note;
 	 * given {@link Chord} and {@link MusicContext}.
 	 */
 	public ChordLps(Chord chord, MusicContext context) {
-		linePositions = new int[chord.getNotes().size()];
-		for (int i = 0; i < chord.getNotes().size(); i++) {
-			linePositions[i] = context.getLp(((Note) chord.getNotes().get(i)).getPitch());
-		}
+		lps = new int[chord.getNotes().size()];
+		for (int i : range(lps))
+			lps[i] = context.getLp(chord.getNotes().get(i).getPitch());
 	}
 
 	/**
 	 * Creates a new {@link ChordLps} object from the
 	 * given line positions.
 	 */
-	public ChordLps(int[] linePositions) {
-		this.linePositions = linePositions;
+	public ChordLps(int[] lps) {
+		this.lps = lps;
 		//check if sorted correctly
-		for (int i = 0; i < linePositions.length - 1; i++) {
-			if (this.linePositions[i] > this.linePositions[i + 1])
+		for (int i = 0; i < lps.length - 1; i++) {
+			if (this.lps[i] > this.lps[i + 1])
 				throw new IllegalArgumentException("Line positions must be sorted from bottom to top.");
 		}
 	}
@@ -44,28 +45,28 @@ import com.xenoage.zong.core.music.chord.Note;
 	 * Gets the number of notes in this chord.
 	 */
 	public int getNotesCount() {
-		return linePositions.length;
+		return lps.length;
 	}
 
 	/**
 	 * Returns the line position with the given index.
 	 */
 	public int get(int noteIndex) {
-		return linePositions[noteIndex];
+		return lps[noteIndex];
 	}
 
 	/**
 	 * Returns the line position of the bottommost note.
 	 */
 	public int getBottom() {
-		return linePositions[0];
+		return lps[0];
 	}
 
 	/**
 	 * Returns the line position of the topmost note.
 	 */
 	public int getTop() {
-		return linePositions[linePositions.length - 1];
+		return lps[lps.length - 1];
 	}
 
 }

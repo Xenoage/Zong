@@ -1,4 +1,4 @@
-package com.xenoage.zong.musiclayout.notator.accidentals;
+package com.xenoage.zong.musiclayout.notator.chord.accidentals;
 
 import static com.xenoage.zong.core.music.Pitch.pi;
 

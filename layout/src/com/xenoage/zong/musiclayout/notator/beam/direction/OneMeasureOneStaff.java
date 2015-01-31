@@ -1,4 +1,4 @@
-package com.xenoage.zong.musiclayout.layouter.beamednotation.direction;
+package com.xenoage.zong.musiclayout.notator.beam.direction;
 
 import static com.xenoage.utils.iterators.It.it;
 
@@ -19,30 +19,14 @@ import com.xenoage.zong.musiclayout.notator.Notator;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 
 /**
- * This strategy recomputes the {@link Notation}s of the chords
- * of the given {@link Beam}, which spans over a single staff
- * and measure, but only, if necessary.
+ * {@link Strategy} for a {@link Beam}, which spans over a single staff and measure.
  * 
  * @author Andreas Wenger
  */
-public class SingleMeasureSingleStaffStrategy
-	implements ScoreLayouterStrategy {
+public class OneMeasureOneStaff
+	extends Strategy {
 
-	//used strategies
-	private final Notator notationStrategy;
-
-
-	public SingleMeasureSingleStaffStrategy(Notator notationStrategy) {
-		this.notationStrategy = notationStrategy;
-	}
-
-	/**
-	 * Returns better {@link Notation}s of the chords connected by the given beam within
-	 * the given staff and measure, using the given notations and number of lines in this measure.
-	 * Only changed notations are returned.
-	 */
-	public NotationsCache computeNotations(Beam beam, NotationsCache notations, int linesCount,
-		Score score, LayoutSettings layoutSettings) {
+	@Override public StemDirection[] compute(Beam beam, ChordNotation[] chordsNot, int linesCount) {
 		//pre-requirements: beam spans over only one measure (not tested here),
 		//and line positions and the stem direction of each chord are known (tested here)
 		int chordsCount = beam.getWaypoints().size();
@@ -51,7 +35,7 @@ public class SingleMeasureSingleStaffStrategy
 		int iChord = 0;
 		for (BeamWaypoint waypoint : beam.getWaypoints()) {
 			Chord chord = waypoint.getChord();
-			ChordNotation cn = notations.getChord(chord);
+			ChordNotation cn = chordsNot[iChord];
 			if (cn != null)
 				chordsLps[iChord] = cn.notes.getLps();
 			else
@@ -64,38 +48,14 @@ public class SingleMeasureSingleStaffStrategy
 		}
 
 		//do the work
-		BeamStemDirections bsd = computeBeamStemDirections(chordsLps, stemDirections, linesCount);
-
-		//return the results as a new NotationsCache
-		NotationsCache ret = new NotationsCache();
-		Iterator<BeamWaypoint> beamWaypoints = it(beam.getWaypoints());
-		for (int i = 0; i < bsd.getStemDirections().length; i++) {
-			Chord chord = beamWaypoints.next().getChord();
-			ChordNotation oldChordNotation = notations.getChord(chord);
-			StemDirection oldStemDir = oldChordNotation.getStemDirection();
-			//if stem direction was changed, recompute the notation.
-			//the stem lengths are not fitted to the beam already, so this is
-			//has to be done later within another strategy
-			if (bsd.getStemDirections()[i] != oldStemDir) {
-				ret.add(notationStrategy.computeChord(chord, bsd.getStemDirections()[i], score,
-					layoutSettings));
-			}
-		}
-		return ret;
+		return compute(chordsLps, stemDirections, linesCount);
 	}
 
-	/**
-	 * Computes the directions of the stems of beamed chords within a single measure.
-	 * @param chordsLp        the line positions of every chord
-	 * @param stemDirections  the precomputed directions of the stems (as if they were single, unbeamed chords)
-	 * @param linesCount      the number of lines in this staff
-	 */
-	BeamStemDirections computeBeamStemDirections(ChordLps[] chordsLp,
-		StemDirection[] stemDirections, int linesCount) {
+	StemDirection[] compute(ChordLps[] chordsLp, StemDirection[] stemDirections, int staffLinesCount) {
 		int up = 0;
 		int down = 0;
 		int furthest = 0;
-		int middlelinepos = linesCount - 1;
+		int middlelinepos = staffLinesCount - 1;
 		int f = 0;
 
 		for (int iChord = 0; iChord < chordsLp.length; iChord++) {
@@ -140,7 +100,7 @@ public class SingleMeasureSingleStaffStrategy
 			}
 		}
 
-		return new BeamStemDirections(dir);
+		return dir;
 	}
 
 }

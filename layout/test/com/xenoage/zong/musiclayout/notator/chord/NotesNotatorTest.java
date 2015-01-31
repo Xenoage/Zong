@@ -1,10 +1,10 @@
-package com.xenoage.zong.musiclayout.notator;
+package com.xenoage.zong.musiclayout.notator.chord;
 
 import static com.xenoage.utils.math.Delta.Df;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.music.Pitch.pi;
 import static com.xenoage.zong.core.music.chord.ChordFactory.chord;
-import static com.xenoage.zong.musiclayout.notator.NotesNotator.notesNotator;
+import static com.xenoage.zong.musiclayout.notator.chord.NotesNotator.notesNotator;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
@@ -16,6 +16,7 @@ import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.musiclayout.notations.chord.NotesNotation;
 import com.xenoage.zong.musiclayout.notations.chord.NoteDisplacement;
 import com.xenoage.zong.musiclayout.notations.chord.NoteSuspension;
+import com.xenoage.zong.musiclayout.notator.chord.NotesNotator;
 import com.xenoage.zong.musiclayout.settings.ChordWidths;
 
 /**
