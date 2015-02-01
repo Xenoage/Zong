@@ -138,8 +138,7 @@ public class ScoreLayouter {
 			new BeatOffsetsStrategy(), new BarlinesBeatOffsetsStrategy(),
 			new BeatOffsetBasedVoiceSpacingStrategy(), new LeadingSpacingStrategy(notationStrategy));
 		//complete tree
-		return new ScoreLayoutStrategy(notationStrategy, new BeamedStemDirector(
-			notationStrategy), new VoiceStemDirectionNotationsStrategy(notationStrategy),
+		return new ScoreLayoutStrategy(notationStrategy, new VoiceStemDirectionNotationsStrategy(notationStrategy),
 			columnSpacingStrategy, new FrameArrangementStrategy(new SystemArrangementStrategy(
 				columnSpacingStrategy)), new BeamedStemAlignmentNotationsStrategy(),
 			new ScoreFrameLayoutStrategy(new StaffStampingsStrategy(),

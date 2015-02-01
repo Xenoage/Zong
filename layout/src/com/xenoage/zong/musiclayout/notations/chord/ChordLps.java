@@ -1,6 +1,7 @@
 package com.xenoage.zong.musiclayout.notations.chord;
 
 import static com.xenoage.utils.kernel.Range.range;
+import static java.lang.Math.max;
 
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.music.MusicContext;

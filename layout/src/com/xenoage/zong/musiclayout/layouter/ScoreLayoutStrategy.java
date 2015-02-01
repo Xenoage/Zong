@@ -29,6 +29,7 @@ import com.xenoage.zong.musiclayout.continued.ContinuedElement;
 import com.xenoage.zong.musiclayout.layouter.arrangement.FrameArrangementStrategy;
 import com.xenoage.zong.musiclayout.layouter.beamednotation.BeamedStemAlignmentNotationsStrategy;
 import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
+import com.xenoage.zong.musiclayout.layouter.cache.StemDirectionsCache;
 import com.xenoage.zong.musiclayout.layouter.columnspacing.ColumnSpacingStrategy;
 import com.xenoage.zong.musiclayout.layouter.horizontalsystemfilling.HorizontalSystemFillingStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.ScoreFrameLayoutStrategy;
@@ -49,7 +50,6 @@ public class ScoreLayoutStrategy
 
 	//used strategies
 	private final Notator notationStrategy;
-	private final BeamedStemDirector beamedStemDirectionNotationsStrategy;
 	private final VoiceStemDirectionNotationsStrategy voiceStemDirectionNotationsStrategy;
 	private final ColumnSpacingStrategy measureColumnSpacingStrategy;
 	private final FrameArrangementStrategy frameArrangementStrategy;
@@ -61,14 +61,12 @@ public class ScoreLayoutStrategy
 	 * Creates a new {@link ScoreLayoutStrategy}.
 	 */
 	public ScoreLayoutStrategy(Notator notationStrategy,
-		BeamedStemDirector beamedStemDirectionNotationsStrategy,
 		VoiceStemDirectionNotationsStrategy voiceStemDirectionNotationsStrategy,
 		ColumnSpacingStrategy measureColumnSpacingStrategy,
 		FrameArrangementStrategy frameArrangementStrategy,
 		BeamedStemAlignmentNotationsStrategy beamedStemAlignmentNotationsStrategy,
 		ScoreFrameLayoutStrategy scoreFrameLayoutStrategy) {
 		this.notationStrategy = notationStrategy;
-		this.beamedStemDirectionNotationsStrategy = beamedStemDirectionNotationsStrategy;
 		this.voiceStemDirectionNotationsStrategy = voiceStemDirectionNotationsStrategy;
 		this.measureColumnSpacingStrategy = measureColumnSpacingStrategy;
 		this.frameArrangementStrategy = frameArrangementStrategy;
@@ -82,11 +80,14 @@ public class ScoreLayoutStrategy
 	 */
 	public ScoreLayout computeScoreLayout(ScoreLayouterContext lc) {
 		Score score = lc.getScore();
+		
+		//compute stem directions
+		StemDirectionsCache cache;
+		//GOON - use StemNotator for single chords and BeamStemNotator for beamed chords
+		
 		//notations of elements
 		NotationsCache notations = notationStrategy.computeNotations(lc.getScore(), lc.getSymbolPool(),
 			lc.getLayoutSettings());
-		//update beamed notations with correct stem directions
-		notations.merge(computeBeamStemDirections(notations, lc));
 		//TODO: stem directions dependent on their voice
 		for (int iStaff : range(0, score.getStavesCount() - 1)) {
 			notations.merge(voiceStemDirectionNotationsStrategy.computeNotations(iStaff, notations, lc));
@@ -109,35 +110,6 @@ public class ScoreLayoutStrategy
 			notations, lc);
 		//create score layout
 		return new ScoreLayout(lc.getScore(), scoreFrameLayouts, lc.getSymbolPool(), lc.getLayoutSettings());
-	}
-
-	/**
-	 * Computes beamed notations with correct stem directions.
-	 */
-	NotationsCache computeBeamStemDirections(NotationsCache notations, ScoreLayouterContext lc) {
-		NotationsCache ret = new NotationsCache();
-		//go again through all elements, finding beams, and recompute stem direction
-		Score score = lc.getScore();
-		for (int iMeasure : range(0, score.getMeasuresCount() - 1)) {
-			Column measureColumn = score.getColumn(iMeasure);
-			for (int iStaff : range(measureColumn)) {
-				Measure measure = measureColumn.get(iStaff);
-				for (Voice voice : measure.getVoices()) {
-					for (MusicElement element : voice.getElements()) {
-						if (element instanceof Chord) {
-							Chord chord = (Chord) element;
-							//compute each beam only one time (when the end waypoint is found)
-							Beam beam = chord.getBeam();
-							if (beam != null && beam.getStop().getChord() == chord) {
-								ret.merge(beamedStemDirectionNotationsStrategy.computeNotations(beam, notations,
-									lc.getScore(), lc.getLayoutSettings()));
-							}
-						}
-					}
-				}
-			}
-		}
-		return ret;
 	}
 
 	/**

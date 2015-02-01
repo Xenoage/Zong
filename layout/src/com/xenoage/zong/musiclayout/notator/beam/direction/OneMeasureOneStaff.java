@@ -1,22 +1,19 @@
 package com.xenoage.zong.musiclayout.notator.beam.direction;
 
-import static com.xenoage.utils.iterators.It.it;
-
-import java.util.Iterator;
+import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.zong.core.music.chord.StemDirection.Down;
+import static com.xenoage.zong.core.music.chord.StemDirection.Up;
+import static com.xenoage.zong.core.music.util.Interval.Before;
+import static com.xenoage.zong.core.music.util.Interval.BeforeOrAt;
+import static com.xenoage.zong.musiclayout.notator.chord.StemDirector.stemDirector;
 
 import com.xenoage.zong.core.Score;
+import com.xenoage.zong.core.music.MusicContext;
 import com.xenoage.zong.core.music.beam.Beam;
-import com.xenoage.zong.core.music.beam.BeamWaypoint;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.StemDirection;
-import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
-import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
-import com.xenoage.zong.musiclayout.notations.ChordNotation;
-import com.xenoage.zong.musiclayout.notations.Notation;
-import com.xenoage.zong.musiclayout.notations.beam.BeamStemDirections;
+import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.musiclayout.notations.chord.ChordLps;
-import com.xenoage.zong.musiclayout.notator.Notator;
-import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 
 /**
  * {@link Strategy} for a {@link Beam}, which spans over a single staff and measure.
@@ -25,82 +22,68 @@ import com.xenoage.zong.musiclayout.settings.LayoutSettings;
  */
 public class OneMeasureOneStaff
 	extends Strategy {
+	
+	public static OneMeasureOneStaff oneMeasureOneStaff = new OneMeasureOneStaff();
+	
 
-	@Override public StemDirection[] compute(Beam beam, ChordNotation[] chordsNot, int linesCount) {
-		//pre-requirements: beam spans over only one measure (not tested here),
-		//and line positions and the stem direction of each chord are known (tested here)
-		int chordsCount = beam.getWaypoints().size();
-		ChordLps[] chordsLps = new ChordLps[chordsCount];
-		StemDirection[] stemDirections = new StemDirection[chordsCount];
-		int iChord = 0;
-		for (BeamWaypoint waypoint : beam.getWaypoints()) {
-			Chord chord = waypoint.getChord();
-			ChordNotation cn = chordsNot[iChord];
-			if (cn != null)
-				chordsLps[iChord] = cn.notes.getLps();
-			else
-				throw new IllegalStateException("ChordLinePositions unknown for Chord " + iChord);
-			if (cn.getStemDirection() != null)
-				stemDirections[iChord] = cn.getStemDirection();
-			else
-				throw new IllegalStateException("Stem.Direction unknown for Chord " + iChord);
-			iChord++;
+	@Override public StemDirection[] compute(Beam beam, Score score) {
+		int staffLinesCount = getStaffLinesCount(beam.getChord(0), score);
+		ChordLps[] chordsLps = new ChordLps[beam.size()]; 
+		for (int iChord : range(chordsLps)) {
+			Chord chord = beam.getChord(iChord);
+			MP mp = MP.getMP(chord);
+			MusicContext mc = score.getMusicContext(mp, BeforeOrAt, Before);
+			chordsLps[iChord] = new ChordLps(chord, mc);
 		}
-
-		//do the work
-		return compute(chordsLps, stemDirections, linesCount);
+		return compute(chordsLps, staffLinesCount);
 	}
-
-	StemDirection[] compute(ChordLps[] chordsLp, StemDirection[] stemDirections, int staffLinesCount) {
-		int up = 0;
-		int down = 0;
-		int furthest = 0;
-		int middlelinepos = staffLinesCount - 1;
-		int f = 0;
-
-		for (int iChord = 0; iChord < chordsLp.length; iChord++) {
-			ChordLps chordLp = chordsLp[iChord];
-			StemDirection direction = stemDirections[iChord];
-			if (direction == StemDirection.Up) {
-				up++;
-				if (Math.abs(middlelinepos - chordLp.getTop()) > Math.abs(middlelinepos -
-					chordsLp[furthest].get(chordsLp[furthest].getNotesCount() - 1))) {
-					furthest = f;
-				}
-			}
-			else if (direction == StemDirection.Down) {
-				down++;
-				if (Math.abs(middlelinepos - chordLp.getBottom()) > Math.abs(middlelinepos -
-					chordsLp[furthest].get(chordsLp[furthest].getNotesCount() - 1))) {
-					furthest = f;
-				}
-			}
-			f++;
-		}
-
-		StemDirection[] dir = new StemDirection[chordsLp.length];
-		if (up == down) {
-			if (stemDirections[furthest] == StemDirection.Up) {
-				up++;
+		
+	StemDirection[] compute(ChordLps[] chordsLps, int staffLinesCount) {
+		int staffMiddleLp = staffLinesCount - 1;
+		int upCount = 0;
+		int downCount = 0;
+		int furthestDistance = 0; 
+		StemDirection furthestDistanceDir = Up;
+		//compute preferred stem directions and remember the stem direction of
+		//the chord with the note furthest away from the middle staff line
+		for (ChordLps chordLps : chordsLps) {
+			StemDirection preferredDir = stemDirector.compute(chordLps, staffLinesCount);
+			int distance;
+			if (preferredDir == Up) {
+				upCount++;
+				distance = staffMiddleLp - chordLps.getTop();
 			}
 			else {
-				down++;
+				downCount++;
+				distance = chordLps.getBottom() - staffMiddleLp;
 			}
-		}
-		if (up > down) {
-			//All stems up
-			for (int i = 0; i < dir.length; i++) {
-				dir[i] = StemDirection.Up;
-			}
-		}
-		else {
-			//All stems down
-			for (int i = 0; i < dir.length; i++) {
-				dir[i] = StemDirection.Down;
+			
+			if (distance > furthestDistance) {
+				furthestDistance = distance;
+				furthestDistanceDir = preferredDir;
 			}
 		}
 
-		return dir;
+		//the mostly used stem direction wins.
+		//if both directions are equally distributed, the stem direction of
+		//the chord with the note furthest away from the staff middle line wins
+		StemDirection finalStemDir;
+		if (upCount != downCount)
+			finalStemDir = (upCount > downCount ? Up : Down);
+		else
+			finalStemDir = furthestDistanceDir;
+		
+		//use same direction for all stems
+		StemDirection[] dirs = new StemDirection[chordsLps.length];
+		for (int i : range(dirs))
+			dirs[i] = finalStemDir;
+
+		return dirs;
+	}
+	
+	private int getStaffLinesCount(Chord chord, Score score) {
+		MP mp = MP.getMP(chord);
+		return score.getStaff(mp).getLinesCount();
 	}
 
 }

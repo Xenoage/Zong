@@ -19,7 +19,7 @@ public final class StemDirector {
 	public static StemDirector stemDirector = new StemDirector();
 
 	
-	public StemDirection computeStemDirection(Chord chord, MusicContext context) {
+	public StemDirection compute(Chord chord, MusicContext context) {
 		//stem specified in chord?
 		Stem stem = chord.getStem();
 		if (stem.getDirection() != StemDirection.Default)

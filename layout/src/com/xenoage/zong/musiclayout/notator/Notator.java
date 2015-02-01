@@ -195,6 +195,7 @@ public final class Notator {
 	 */
 	private ChordNotation computeChord(Chord chord, MusicContext mc, float interlineSpace,
 		FontInfo lyricsFont, StemDirection stemDirection, LayoutSettings layoutSettings) {
+		
 		//grace or normal chord?
 		boolean grace = chord.isGrace();
 		ChordWidths chordWidths = (grace ? layoutSettings.graceChordWidths : layoutSettings.chordWidths);

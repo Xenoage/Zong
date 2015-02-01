@@ -80,6 +80,11 @@ public final class Beam
 	private Beam(List<BeamWaypoint> waypoints) {
 		this.waypoints = waypoints;
 	}
+	
+	
+	public int size() {
+		return waypoints.size();
+	}
 
 
 	public BeamWaypoint getStart() {
