@@ -11,8 +11,8 @@ import static com.xenoage.zong.core.text.FormattedTextUtils.styleText;
 import static com.xenoage.zong.musiclayout.notator.chord.AccidentalsNotator.accidentalsNotator;
 import static com.xenoage.zong.musiclayout.notator.chord.ArticulationsNotator.articulationsNotator;
 import static com.xenoage.zong.musiclayout.notator.chord.NotesNotator.notesNotator;
-import static com.xenoage.zong.musiclayout.notator.chord.StemDirector.stemDirector;
 import static com.xenoage.zong.musiclayout.notator.chord.StemNotator.stemNotator;
+import static com.xenoage.zong.musiclayout.notator.chord.stem.single.SingleStemDirector.singleStemDirector;
 
 import com.xenoage.utils.font.FontInfo;
 import com.xenoage.utils.font.TextMeasurer;
@@ -204,7 +204,7 @@ public final class Notator {
 
 		//compute stem direction
 		if (stemDirection == StemDirection.Default)
-			stemDirection = stemDirector.computeStemDirection(chord, mc);
+			stemDirection = singleStemDirector.computeStemDirection(chord, mc);
 
 		//chord displacement
 		NotesNotation chordDisplacement = notesNotator.compute(

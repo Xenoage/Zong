@@ -1,4 +1,4 @@
-package com.xenoage.zong.musiclayout.notator.chord;
+package com.xenoage.zong.musiclayout.notator.chord.stem.single;
 
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Fraction._1;
@@ -14,9 +14,9 @@ import com.xenoage.zong.musiclayout.notations.chord.ChordLps;
  * 
  * @author Andreas Wenger
  */
-public final class StemDirector {
+public final class SingleStemDirector {
 	
-	public static StemDirector stemDirector = new StemDirector();
+	public static SingleStemDirector singleStemDirector = new SingleStemDirector();
 
 	
 	public StemDirection compute(Chord chord, MusicContext context) {

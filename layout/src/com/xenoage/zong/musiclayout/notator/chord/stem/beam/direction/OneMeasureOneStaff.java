@@ -1,11 +1,11 @@
-package com.xenoage.zong.musiclayout.notator.beam.direction;
+package com.xenoage.zong.musiclayout.notator.chord.stem.beam.direction;
 
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.core.music.chord.StemDirection.Down;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
 import static com.xenoage.zong.core.music.util.Interval.Before;
 import static com.xenoage.zong.core.music.util.Interval.BeforeOrAt;
-import static com.xenoage.zong.musiclayout.notator.chord.StemDirector.stemDirector;
+import static com.xenoage.zong.musiclayout.notator.chord.stem.single.SingleStemDirector.singleStemDirector;
 
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.MusicContext;
@@ -47,7 +47,7 @@ public class OneMeasureOneStaff
 		//compute preferred stem directions and remember the stem direction of
 		//the chord with the note furthest away from the middle staff line
 		for (ChordLps chordLps : chordsLps) {
-			StemDirection preferredDir = stemDirector.compute(chordLps, staffLinesCount);
+			StemDirection preferredDir = singleStemDirector.compute(chordLps, staffLinesCount);
 			int distance;
 			if (preferredDir == Up) {
 				upCount++;

@@ -25,7 +25,7 @@ import com.xenoage.zong.musiclayout.notations.beam.BeamStemAlignments;
 import com.xenoage.zong.musiclayout.notations.chord.AccidentalsNotation;
 import com.xenoage.zong.musiclayout.notations.chord.NotesNotation;
 import com.xenoage.zong.musiclayout.notations.chord.StemNotation;
-import com.xenoage.zong.musiclayout.notator.beam.BeamedStemDirector;
+import com.xenoage.zong.musiclayout.notator.chord.stem.beam.BeamedStemDirector;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 
 /**

@@ -36,7 +36,7 @@ import com.xenoage.zong.musiclayout.layouter.scoreframelayout.ScoreFrameLayoutSt
 import com.xenoage.zong.musiclayout.layouter.verticalframefilling.VerticalFrameFillingStrategy;
 import com.xenoage.zong.musiclayout.layouter.voicenotation.VoiceStemDirectionNotationsStrategy;
 import com.xenoage.zong.musiclayout.notator.Notator;
-import com.xenoage.zong.musiclayout.notator.beam.BeamedStemDirector;
+import com.xenoage.zong.musiclayout.notator.chord.stem.beam.BeamedStemDirector;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 
 /**

@@ -1,9 +1,8 @@
 package com.xenoage.zong.musiclayout.notations;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.musiclayout.notations.chord.AccidentalsNotation;
@@ -18,16 +17,16 @@ import com.xenoage.zong.musiclayout.spacing.horizontal.ElementWidth;
  *
  * @author Andreas Wenger
  */
-@AllArgsConstructor @Getter
+@RequiredArgsConstructor
 public class ChordNotation
 	implements Notation {
 
-	@NonNull public Chord element;
-	@NonNull public ElementWidth width;
-	@NonNull public NotesNotation notes;
-	@NonNull public StemDirection stemDirection;
-	@NonNull public StemNotation stem;
-	@NonNull public AccidentalsNotation accidentals;
-	@NonNull public ArticulationsNotation articulations;
+	@Getter public final Chord element;
+	@Getter public ElementWidth width;
+	public NotesNotation notes;
+	public StemDirection stemDirection;
+	public StemNotation stem;
+	public AccidentalsNotation accidentals;
+	public ArticulationsNotation articulations;
 
 }

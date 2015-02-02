@@ -31,12 +31,12 @@ import com.xenoage.zong.musiclayout.layouter.scoreframelayout.TupletStampingStra
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.VoltaStampingStrategy;
 import com.xenoage.zong.musiclayout.layouter.voicenotation.VoiceStemDirectionNotationsStrategy;
 import com.xenoage.zong.musiclayout.notator.Notator;
-import com.xenoage.zong.musiclayout.notator.beam.BeamedStemDirector;
 import com.xenoage.zong.musiclayout.notator.chord.AccidentalsNotator;
 import com.xenoage.zong.musiclayout.notator.chord.ArticulationsNotator;
 import com.xenoage.zong.musiclayout.notator.chord.NotesNotator;
-import com.xenoage.zong.musiclayout.notator.chord.StemDirector;
 import com.xenoage.zong.musiclayout.notator.chord.StemNotator;
+import com.xenoage.zong.musiclayout.notator.chord.stem.beam.BeamedStemDirector;
+import com.xenoage.zong.musiclayout.notator.chord.stem.single.SingleStemDirector;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.musiclayout.stamper.BeamStamper;
 import com.xenoage.zong.symbols.SymbolPool;

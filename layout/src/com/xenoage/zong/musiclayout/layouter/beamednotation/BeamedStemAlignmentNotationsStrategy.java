@@ -11,7 +11,7 @@ import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.layouter.beamednotation.alignment.SingleMeasureSingleStaffStrategy;
 import com.xenoage.zong.musiclayout.layouter.beamednotation.alignment.SingleMeasureTwoStavesStrategy;
 import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
-import com.xenoage.zong.musiclayout.notator.beam.BeamedStemDirector;
+import com.xenoage.zong.musiclayout.notator.chord.stem.beam.BeamedStemDirector;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 
 /**

@@ -1,23 +1,22 @@
-package com.xenoage.zong.musiclayout.notator.chord;
+package com.xenoage.zong.musiclayout.notator.chord.stem.single;
 
 import static com.xenoage.zong.core.music.chord.StemDirection.Down;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
-import static com.xenoage.zong.musiclayout.notator.chord.StemDirector.stemDirector;
+import static com.xenoage.zong.musiclayout.notator.chord.stem.single.SingleStemDirector.singleStemDirector;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
 import com.xenoage.zong.musiclayout.notations.chord.ChordLps;
-import com.xenoage.zong.musiclayout.notator.chord.StemDirector;
 
 /**
- * Tests for {@link StemDirector}.
+ * Tests for {@link SingleStemDirector}.
  * 
  * @author Andreas Wenger
  */
-public class StemDirectorTest {
+public class SingleStemDirectorTest {
 
-	StemDirector testee = stemDirector;
+	SingleStemDirector testee = singleStemDirector;
 
 
 	@Test public void computeStemDirectionTest() {

@@ -91,11 +91,14 @@ public final class NotationsCache {
 	}
 
 	/**
-	 * Gets the {@link ChordNotation}, that belongs to the given {@link Chord},
-	 * or null if unknown.
+	 * Gets the {@link ChordNotation}, that belongs to the given {@link Chord}.
+	 * If the notation does not exist yet, it is created.
 	 */
 	public ChordNotation getChord(Chord chord) {
-		return (ChordNotation) get(chord);
+		ChordNotation ret = (ChordNotation) get(chord);
+		if (ret == null)
+			add(ret = new ChordNotation(chord));
+		return ret;
 	}
 
 	public int size() {

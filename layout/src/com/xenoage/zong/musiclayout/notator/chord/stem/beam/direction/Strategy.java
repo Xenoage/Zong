@@ -1,4 +1,4 @@
-package com.xenoage.zong.musiclayout.notator.beam.direction;
+package com.xenoage.zong.musiclayout.notator.chord.stem.beam.direction;
 
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.beam.Beam;

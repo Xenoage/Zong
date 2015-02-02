@@ -3,8 +3,8 @@ package com.xenoage.zong.musiclayout.notator.chord;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.music.Pitch.pi;
 import static com.xenoage.zong.musiclayout.notator.chord.NotesNotator.notesNotator;
-import static com.xenoage.zong.musiclayout.notator.chord.StemDirector.stemDirector;
 import static com.xenoage.zong.musiclayout.notator.chord.StemNotator.stemNotator;
+import static com.xenoage.zong.musiclayout.notator.chord.stem.single.SingleStemDirector.singleStemDirector;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
@@ -135,7 +135,7 @@ public class StemNotatorTest {
 		Fraction fraction = fr(1, 1);
 		chord = ChordFactory.chord(pitches, fraction);
 		ChordLps linepositions = new ChordLps(chord, context);
-		StemDirection stemDirection = stemDirector.compute(linepositions, 5);
+		StemDirection stemDirection = singleStemDirector.compute(linepositions, 5);
 		chordNotesAlignment = notesNotator.compute(chord, stemDirection,
 			ChordWidths.defaultValue, context);
 		chordStemAlignment = testee.compute(Stem.defaultStem, chordNotesAlignment, stemDirection, 5,
