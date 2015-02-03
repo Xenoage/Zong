@@ -1,5 +1,7 @@
 package com.xenoage.zong.core.music.direction;
 
+import com.xenoage.zong.core.music.MusicElementType;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -25,4 +27,8 @@ public final class Pedal
 	/** The start or stop marking type. */
 	private final Type type;
 
+	@Override public MusicElementType getMusicElementType() {
+		return MusicElementType.Pedal;
+	}
+	
 }

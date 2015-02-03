@@ -2,10 +2,12 @@ package com.xenoage.zong.core.format;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.header.ColumnHeader;
 import com.xenoage.zong.core.music.ColumnElement;
+import com.xenoage.zong.core.music.MusicElementType;
 import com.xenoage.zong.core.music.layout.PageBreak;
 import com.xenoage.zong.core.music.layout.SystemBreak;
 
@@ -32,5 +34,8 @@ public final class Break
 		return "Break (" + pageBreak + ", " + systemBreak + ")";
 	}
 
+	@Override public MusicElementType getMusicElementType() {
+		return MusicElementType.Break;
+	}
 
 }

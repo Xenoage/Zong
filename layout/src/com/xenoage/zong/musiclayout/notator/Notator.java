@@ -3,7 +3,6 @@ package com.xenoage.zong.musiclayout.notator;
 import static com.xenoage.utils.CheckUtils.checkNotNull;
 import static com.xenoage.utils.PlatformUtils.platformUtils;
 import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.zong.core.music.Pitch.pi;
 import static com.xenoage.zong.core.music.util.Interval.Before;
 import static com.xenoage.zong.core.music.util.Interval.BeforeOrAt;
@@ -18,22 +17,17 @@ import java.util.Map;
 
 import com.xenoage.utils.font.FontInfo;
 import com.xenoage.utils.font.TextMeasurer;
-import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.Score;
-import com.xenoage.zong.core.format.Break;
 import com.xenoage.zong.core.music.ColumnElement;
-import com.xenoage.zong.core.music.InstrumentChange;
 import com.xenoage.zong.core.music.Measure;
 import com.xenoage.zong.core.music.MeasureElement;
 import com.xenoage.zong.core.music.MusicContext;
 import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.VoiceElement;
-import com.xenoage.zong.core.music.barline.Barline;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.core.music.clef.Clef;
-import com.xenoage.zong.core.music.direction.Direction;
 import com.xenoage.zong.core.music.key.TraditionalKey;
 import com.xenoage.zong.core.music.lyric.Lyric;
 import com.xenoage.zong.core.music.lyric.SyllableType;
@@ -42,7 +36,6 @@ import com.xenoage.zong.core.music.time.Time;
 import com.xenoage.zong.core.music.util.BeatE;
 import com.xenoage.zong.core.music.util.Column;
 import com.xenoage.zong.core.music.util.Interval;
-import com.xenoage.zong.core.music.volta.Volta;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.position.MPElement;
 import com.xenoage.zong.core.text.FormattedText;
@@ -111,8 +104,7 @@ public final class Notator {
 			for (ColumnElement element : score.getHeader().getColumnHeader(iMeasure).getColumnElements()) {
 				for (int iStaff : range(measureColumn)) {
 					Notation notation = compute(element, iStaff);
-					if (notation != null)
-						cache.add(notation, iStaff);
+					cache.add(notation, iStaff);
 				}
 			}
 
@@ -121,18 +113,14 @@ public final class Notator {
 				//measure elements
 				for (BeatE<MeasureElement> element : measure.getMeasureElements()) {
 					Notation notation = compute(element.element, iStaff);
-					if (notation != null)
-						cache.add(notation);
+					cache.add(notation);
 				}
 				for (int iVoice : range(measure.getVoices())) {
 					Voice voice = measure.getVoice(iVoice);
 					//voice elements
-					Fraction beat = _0;
 					for (VoiceElement element : voice.getElements()) {
 						Notation notation = compute(element, iStaff);
-						if (notation != null)
-							cache.add(notation);
-						beat = beat.add(element.getDuration());
+						cache.add(notation);
 					}
 				}
 			}
@@ -150,42 +138,27 @@ public final class Notator {
 
 		//not nice, but we want to leave the logic within this class.
 		//multiple dispatch would be needed.
-		Notation notation;
-		if (element instanceof Chord)
-			notation = computeChord((Chord) element, ((Chord) element).getStem().getDirection());
-		else if (element instanceof Clef)
-			notation = computeClef((Clef) element);
-		else if (element instanceof Time)
-			notation = computeTime((Time) element);
-		else if (element instanceof Rest)
-			notation = computeRest((Rest) element);
-		else if (element instanceof TraditionalKey)
-			notation = computeTraditionalKey((TraditionalKey) element,
-				score.getClef(MP.getMP(element).withStaff(staff), Interval.Before));
-		else if (element instanceof Direction) {
-			//directions need no notations at the moment
-			notation = null;
+		Notation notation = null;
+		switch (element.getMusicElementType()) {
+			case Chord:
+				notation = computeChord((Chord) element, ((Chord) element).getStem().getDirection());
+				break;
+			case Clef:
+				notation = computeClef((Clef) element);
+				break;
+			case Time:
+				notation = computeTime((Time) element);
+				break;
+			case Rest:
+				notation = computeRest((Rest) element);
+				break;
+			case TraditionalKey:
+				notation = computeTraditionalKey((TraditionalKey) element,
+					score.getClef(MP.getMP(element).withStaff(staff), Interval.Before));
+				break;
+			default:
+				//other elements need no notations at the moment
 		}
-		else if (element instanceof InstrumentChange) {
-			//ignore instrument change
-			notation = null;
-		}
-		else if (element instanceof Barline) {
-			//ignore barline
-			notation = null;
-		}
-		else if (element instanceof Break) {
-			//ignore break
-			notation = null;
-		}
-		else if (element instanceof Volta) {
-			//ignore volta
-			notation = null;
-		}
-		else {
-			notation = computeUnsupported(element);
-		}
-
 		return notation;
 	}
 
@@ -337,13 +310,6 @@ public final class Notator {
 		}
 		return new TraditionalKeyNotation(key, new ElementWidth(0, width, 1),
 			contextClef.getType().getLp(pi(0, 0, 4)), contextClef.getType().getKeySignatureLowestLp(fifth));
-	}
-
-	/**
-	* Computes the layout of an unknown {@link MusicElement}.
-	*/
-	private Notation computeUnsupported(MusicElement element) {
-		throw new IllegalArgumentException("Unsupported MusicElement of type " + element.getClass());
 	}
 
 }

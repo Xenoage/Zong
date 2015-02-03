@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import com.xenoage.zong.core.header.ColumnHeader;
+import com.xenoage.zong.core.music.MusicElementType;
 
 
 /**
@@ -18,4 +19,8 @@ public final class Coda
 	extends Direction
 	implements NavigationMarker {
 
+	@Override public MusicElementType getMusicElementType() {
+		return MusicElementType.Coda;
+	}
+	
 }

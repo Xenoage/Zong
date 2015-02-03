@@ -34,12 +34,10 @@ public final class StemDirector {
 		Beam beam = chord.getBeam();
 		Score score = chord.getScore();
 		if (beam != null) {
-			//compute beamed chords together, i.e. only for the first chord in the beam
-			if (beam.getChord(0) == chord) {
-				StemDirection[] beamedStems = beamedStemDirector.compute(beam, score);
-				for (int iChord : range(beam.size()))
-					ret.put(beam.getChord(iChord), beamedStems[iChord]);
-			}
+			//compute stem directions for all chords of the beam
+			StemDirection[] beamedStems = beamedStemDirector.compute(beam, score);
+			for (int iChord : range(beam.size()))
+				ret.put(beam.getChord(iChord), beamedStems[iChord]);
 		}
 		else {
 			//compute stem direction for single chord

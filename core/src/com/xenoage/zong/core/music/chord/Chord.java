@@ -20,6 +20,7 @@ import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.annotations.Optimized;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.Score;
+import com.xenoage.zong.core.music.MusicElementType;
 import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.VoiceElement;
@@ -215,6 +216,10 @@ public class Chord
 	 */
 	public Score getScore() {
 		return (parent != null ? parent.getScore() : null);
+	}
+	
+	@Override public MusicElementType getMusicElementType() {
+		return MusicElementType.Chord;
 	}
 
 }

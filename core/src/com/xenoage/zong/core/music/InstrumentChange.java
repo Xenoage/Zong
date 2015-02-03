@@ -23,4 +23,8 @@ import com.xenoage.zong.core.instrument.Instrument;
 	/** Back reference: The parent measure, or null if not part of a measure. */
 	@Getter @Setter private Measure parent;
 
+	@Override public MusicElementType getMusicElementType() {
+		return MusicElementType.InstrumentChange;
+	}
+	
 }

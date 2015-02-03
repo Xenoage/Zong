@@ -12,6 +12,7 @@ import lombok.Getter;
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.MusicElement;
+import com.xenoage.zong.core.music.MusicElementType;
 import com.xenoage.zong.core.music.WaypointPosition;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.util.DurationInfo;
@@ -267,5 +268,7 @@ public final class Beam
 		this.lowerStaffIndex = maxStaffIndex;
 	}
 
-
+	@Override public MusicElementType getMusicElementType() {
+		return MusicElementType.Beam;
+	}
 }

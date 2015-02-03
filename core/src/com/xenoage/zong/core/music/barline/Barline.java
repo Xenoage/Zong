@@ -8,6 +8,7 @@ import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.zong.core.header.ColumnHeader;
 import com.xenoage.zong.core.music.ColumnElement;
 import com.xenoage.zong.core.music.Measure;
+import com.xenoage.zong.core.music.MusicElementType;
 
 /**
  * Class for a barline.
@@ -86,6 +87,10 @@ public final class Barline
 
 	@Override public String toString() {
 		return "Barline [style=" + style + ", repeat=" + repeat + ", repeatTimes=" + repeatTimes + "]";
+	}
+	
+	@Override public MusicElementType getMusicElementType() {
+		return MusicElementType.Barline;
 	}
 
 }

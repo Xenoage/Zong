@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.zong.core.music.MusicElementType;
 import com.xenoage.zong.core.music.TextElement;
 import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.core.text.Text;
@@ -40,7 +41,6 @@ public class Lyric
 		this.verse = verse;
 	}
 
-
 	/**
 	 * Creates a new extend lyric.
 	 */
@@ -48,18 +48,18 @@ public class Lyric
 		return new Lyric(null, SyllableType.Extend, verse);
 	}
 
-
 	@Override public void setText(Text text) {
 		if (syllableType != SyllableType.Extend)
 			checkArgsNotNull(text);
 		this.text = text;
 	}
 
-	
-
 	@Override public String toString() {
 		return "Lyric (\"" + text + "\")";
 	}
 
-
+	@Override public MusicElementType getMusicElementType() {
+		return MusicElementType.Lyric;
+	}
+	
 }

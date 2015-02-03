@@ -7,6 +7,7 @@ import lombok.ToString;
 import com.xenoage.utils.kernel.Range;
 import com.xenoage.zong.core.header.ColumnHeader;
 import com.xenoage.zong.core.music.ColumnElement;
+import com.xenoage.zong.core.music.MusicElementType;
 
 /**
  * Class for a volta (also informally called "Haus" in German).
@@ -75,4 +76,8 @@ public final class Volta
 		return caption;
 	}
 
+	@Override public MusicElementType getMusicElementType() {
+		return MusicElementType.Volta;
+	}
+	
 }

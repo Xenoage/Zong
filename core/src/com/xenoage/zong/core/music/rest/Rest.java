@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.math.Fraction;
+import com.xenoage.zong.core.music.MusicElementType;
 import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.VoiceElement;
 
@@ -34,9 +35,11 @@ public final class Rest
 		this.duration = duration;
 	}
 
-
 	@Override public String toString() {
 		return "rest(dur:" + duration + ")";
 	}
 
+	@Override public MusicElementType getMusicElementType() {
+		return MusicElementType.Rest;
+	}
 }
