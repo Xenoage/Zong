@@ -12,7 +12,9 @@ import static com.xenoage.zong.musiclayout.notator.chord.AccidentalsNotator.acci
 import static com.xenoage.zong.musiclayout.notator.chord.ArticulationsNotator.articulationsNotator;
 import static com.xenoage.zong.musiclayout.notator.chord.NotesNotator.notesNotator;
 import static com.xenoage.zong.musiclayout.notator.chord.StemNotator.stemNotator;
-import static com.xenoage.zong.musiclayout.notator.chord.stem.single.SingleStemDirector.singleStemDirector;
+import static com.xenoage.zong.musiclayout.notator.chord.stem.StemDirector.stemDirector;
+
+import java.util.Map;
 
 import com.xenoage.utils.font.FontInfo;
 import com.xenoage.utils.font.TextMeasurer;
@@ -73,28 +75,44 @@ import com.xenoage.zong.symbols.SymbolPool;
  */
 public final class Notator {
 	
+	private Score score;
+	private SymbolPool symbolPool;
+	private LayoutSettings layoutSettings;
 	private TextMeasurer textMeasurer;
+	
+	private NotationsCache cache;
+	
 
-	public Notator() {
-		this.textMeasurer = checkNotNull(platformUtils().getTextMeasurer());
+	/**
+	 * Creates a new {@link Notator} for the given score and settings.
+	 */
+	public static Notator notator(Score score, SymbolPool symbolPool, LayoutSettings layoutSettings) {
+		Notator notator = new Notator();
+		notator.score = score;
+		notator.symbolPool = symbolPool;
+		notator.layoutSettings = layoutSettings;
+		notator.textMeasurer = checkNotNull(platformUtils().getTextMeasurer());
+		notator.cache = new NotationsCache();
+		return notator;
+	}
+	
+	private Notator() {
 	}
 
 	/**
-	 * Computes the {@link Notation}s of all {@link MusicElement}s
-	 * in the given {@link Score}, using the given {@link SymbolPool}.
+	 * Computes the {@link Notation}s of all elements.
 	 */
-	public NotationsCache computeNotations(Score score, SymbolPool symbolPool,
-		LayoutSettings layoutSettings) {
-		NotationsCache ret = new NotationsCache();
+	public NotationsCache computeAll() {
+		cache = new NotationsCache();
 		for (int iMeasure : range(0, score.getMeasuresCount() - 1)) {
 			Column measureColumn = score.getColumn(iMeasure);
 
 			//column elements (for each staff)
 			for (ColumnElement element : score.getHeader().getColumnHeader(iMeasure).getColumnElements()) {
 				for (int iStaff : range(measureColumn)) {
-					Notation notation = computeNotation(element, iStaff, score, symbolPool, layoutSettings);
+					Notation notation = compute(element, iStaff);
 					if (notation != null)
-						ret.add(notation, iStaff);
+						cache.add(notation, iStaff);
 				}
 			}
 
@@ -102,33 +120,30 @@ public final class Notator {
 				Measure measure = measureColumn.get(iStaff);
 				//measure elements
 				for (BeatE<MeasureElement> element : measure.getMeasureElements()) {
-					Notation notation = computeNotation(element.element, iStaff, score, symbolPool,
-						layoutSettings);
+					Notation notation = compute(element.element, iStaff);
 					if (notation != null)
-						ret.add(notation);
+						cache.add(notation);
 				}
 				for (int iVoice : range(measure.getVoices())) {
 					Voice voice = measure.getVoice(iVoice);
 					//voice elements
 					Fraction beat = _0;
 					for (VoiceElement element : voice.getElements()) {
-						Notation notation = computeNotation(element, iStaff, score, symbolPool, layoutSettings);
+						Notation notation = compute(element, iStaff);
 						if (notation != null)
-							ret.add(notation);
+							cache.add(notation);
 						beat = beat.add(element.getDuration());
 					}
 				}
 			}
 		}
-		return ret;
+		return cache;
 	}
 
 	/**
-	 * Computes the {@link Notation} of the given {@link MusicElement} at the
-	 * given staff in the given {@link Score}, using the given {@link SymbolPool}.
+	 * Computes the {@link Notation} of the given element in the given staff.
 	 */
-	private Notation computeNotation(MPElement element, int staff, Score score,
-		SymbolPool symbolPool, LayoutSettings layoutSettings) {
+	private Notation compute(MPElement element, int staff) {
 		//note: we can not read the MP of the element from the score in all cases,
 		//since column elements have no single MP, but are used over the whole column.
 		//so we provide the staff as a parameter
@@ -137,17 +152,16 @@ public final class Notator {
 		//multiple dispatch would be needed.
 		Notation notation;
 		if (element instanceof Chord)
-			notation = computeChord((Chord) element, ((Chord) element).getStem().getDirection(), score, layoutSettings);
+			notation = computeChord((Chord) element, ((Chord) element).getStem().getDirection());
 		else if (element instanceof Clef)
-			notation = computeClef((Clef) element, layoutSettings);
+			notation = computeClef((Clef) element);
 		else if (element instanceof Time)
-			notation = computeTime((Time) element, symbolPool);
+			notation = computeTime((Time) element);
 		else if (element instanceof Rest)
-			notation = computeRest((Rest) element, layoutSettings);
+			notation = computeRest((Rest) element);
 		else if (element instanceof TraditionalKey)
 			notation = computeTraditionalKey((TraditionalKey) element,
-				score.getClef(MP.getMP(element).withStaff(staff), Interval.Before),
-				layoutSettings);
+				score.getClef(MP.getMP(element).withStaff(staff), Interval.Before));
 		else if (element instanceof Direction) {
 			//directions need no notations at the moment
 			notation = null;
@@ -176,25 +190,23 @@ public final class Notator {
 	}
 
 	/**
-	 * Computes the {@link Notation} of the given {@link Chord} at the
-	 * given {@link IMP} ,
-	 * using the given {@link StemDirection} in the given {@link Score}.
+	 * Computes the {@link ChordNotation} of the given {@link Chord},
+	 * using the given {@link StemDirection}.
 	 */
-	public ChordNotation computeChord(Chord chord, StemDirection stemDirection,
-		Score score, LayoutSettings layoutSettings) {
+	public ChordNotation computeChord(Chord chord, StemDirection stemDirection) {
 		//get the music context and the parent voice
 		MP mp = MP.getMP(chord);
 		MusicContext mc = score.getMusicContext(mp, BeforeOrAt, Before);
 		//compute the notation
 		return computeChord(chord, mc, score.getInterlineSpace(mp), score.getFormat().getLyricFont(),
-			stemDirection, layoutSettings);
+			stemDirection);
 	}
 
 	/**
 	 * Computes the layout of a {@link Chord}.
 	 */
 	private ChordNotation computeChord(Chord chord, MusicContext mc, float interlineSpace,
-		FontInfo lyricsFont, StemDirection stemDirection, LayoutSettings layoutSettings) {
+		FontInfo lyricsFont, StemDirection stemDirection) {
 		
 		//grace or normal chord?
 		boolean grace = chord.isGrace();
@@ -203,8 +215,18 @@ public final class Notator {
 			: layoutSettings.spacings.normalChordSpacings);
 
 		//compute stem direction
-		if (stemDirection == StemDirection.Default)
-			stemDirection = singleStemDirector.computeStemDirection(chord, mc);
+		if (stemDirection == StemDirection.Default) {
+			//if stem direction was not computed yet, compute it now
+			stemDirection = cache.getChord(chord).stemDirection;
+			if (stemDirection == StemDirection.Default) {
+				Map<Chord, StemDirection> computedStems = stemDirector.compute(chord);
+				stemDirection = computedStems.get(chord);
+				//also remember the other computed stems
+				for (Chord computedChord : computedStems.keySet()) {
+					cache.getChord(computedChord).stemDirection = computedStems.get(computedChord);
+				}
+			}
+		}
 
 		//chord displacement
 		NotesNotation chordDisplacement = notesNotator.compute(
@@ -263,7 +285,8 @@ public final class Notator {
 	* Computes the layout of a {@link Clef}, which is not in a leading spacing.
 	* These clefs are usually drawn smaller.
 	*/
-	private ClefNotation computeClef(Clef clef, LayoutSettings ls) {
+	private ClefNotation computeClef(Clef clef) {
+		LayoutSettings ls = layoutSettings;
 		return new ClefNotation(clef, new ElementWidth(0, ls.spacings.widthClef * ls.scalingClefInner,
 			0), clef.getType().getLp(), ls.scalingClefInner);
 	}
@@ -271,7 +294,7 @@ public final class Notator {
 	/**
 	* Computes the layout of a {@link Time}.
 	*/
-	private TimeNotation computeTime(Time time, SymbolPool symbolPool) {
+	private TimeNotation computeTime(Time time) {
 		//front and rear gap: 1 space
 		float gap = 1f;
 		//gap between digits: 0.1 space
@@ -295,7 +318,7 @@ public final class Notator {
 	/**
 	* Computes the layout of a {@link Rest}.
 	*/
-	private RestNotation computeRest(Rest rest, LayoutSettings layoutSettings) {
+	private RestNotation computeRest(Rest rest) {
 		float width = layoutSettings.spacings.normalChordSpacings.getWidth(rest.getDuration());
 		return new RestNotation(rest, new ElementWidth(width));
 	}
@@ -303,8 +326,7 @@ public final class Notator {
 	/**
 	* Computes the layout of a {@link TraditionalKey}.
 	*/
-	public TraditionalKeyNotation computeTraditionalKey(TraditionalKey key, Clef contextClef,
-		LayoutSettings layoutSettings) {
+	public TraditionalKeyNotation computeTraditionalKey(TraditionalKey key, Clef contextClef) {
 		float width = 0;
 		int fifth = key.getFifths();
 		if (fifth > 0) {

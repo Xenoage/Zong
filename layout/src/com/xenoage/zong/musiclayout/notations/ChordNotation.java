@@ -1,5 +1,6 @@
 package com.xenoage.zong.musiclayout.notations;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -17,6 +18,7 @@ import com.xenoage.zong.musiclayout.spacing.horizontal.ElementWidth;
  *
  * @author Andreas Wenger
  */
+@AllArgsConstructor
 @RequiredArgsConstructor
 public class ChordNotation
 	implements Notation {
@@ -24,7 +26,7 @@ public class ChordNotation
 	@Getter public final Chord element;
 	@Getter public ElementWidth width;
 	public NotesNotation notes;
-	public StemDirection stemDirection;
+	public StemDirection stemDirection = StemDirection.Default;
 	public StemNotation stem;
 	public AccidentalsNotation accidentals;
 	public ArticulationsNotation articulations;

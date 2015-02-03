@@ -19,6 +19,7 @@ import com.xenoage.utils.annotations.NonEmpty;
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.annotations.Optimized;
 import com.xenoage.utils.math.Fraction;
+import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.VoiceElement;
@@ -206,6 +207,14 @@ public class Chord
 				ret.add((Articulation) a);
 		}
 		return ret;
+	}
+	
+	/**
+	 * Convenience method. Gets the parent score of this chord,
+	 * or null, if this chord is not part of a score.
+	 */
+	public Score getScore() {
+		return (parent != null ? parent.getScore() : null);
 	}
 
 }

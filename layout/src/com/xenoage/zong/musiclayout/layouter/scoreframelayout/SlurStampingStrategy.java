@@ -33,7 +33,7 @@ public class SlurStampingStrategy
 	public float computeAdditionalDistance(ChordNotation chord, VSide slurSide) {
 		float distance = 0;
 		distance += chord.articulations.heightIs;
-		if (chord.getStemDirection().equalsSide(slurSide))
+		if (chord.stemDirection.equalsSide(slurSide))
 			distance += Math.abs(chord.stem.endLp - chord.stem.startLp) / 2; //LP to IS
 		return distance;
 	}

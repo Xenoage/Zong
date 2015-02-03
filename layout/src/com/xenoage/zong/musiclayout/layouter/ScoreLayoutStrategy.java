@@ -86,8 +86,7 @@ public class ScoreLayoutStrategy
 		//GOON - use StemNotator for single chords and BeamStemNotator for beamed chords
 		
 		//notations of elements
-		NotationsCache notations = notationStrategy.computeNotations(lc.getScore(), lc.getSymbolPool(),
-			lc.getLayoutSettings());
+		NotationsCache notations = notationStrategy.computeAll();
 		//TODO: stem directions dependent on their voice
 		for (int iStaff : range(0, score.getStavesCount() - 1)) {
 			notations.merge(voiceStemDirectionNotationsStrategy.computeNotations(iStaff, notations, lc));

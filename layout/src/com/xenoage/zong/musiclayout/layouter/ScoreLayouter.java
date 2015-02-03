@@ -3,6 +3,7 @@ package com.xenoage.zong.musiclayout.layouter;
 import static com.xenoage.utils.lang.VocByString.voc;
 import static com.xenoage.utils.log.Log.log;
 import static com.xenoage.utils.log.Report.warning;
+import static com.xenoage.zong.musiclayout.notator.Notator.notator;
 
 import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.collections.IList;
@@ -58,6 +59,8 @@ public class ScoreLayouter {
 
 	//the score layout created by this layouter
 	private ScoreLayout layout = null;
+	
+	private Notator notator;
 
 
 	/**
@@ -94,11 +97,13 @@ public class ScoreLayouter {
 		boolean isCompleteLayout, Size2f areaSize) {
 		this.context = new ScoreLayouterContext(score, symbolPool, layoutSettings,
 			isCompleteLayout, CList.<ScoreLayoutArea>ilist(), new ScoreLayoutArea(areaSize));
+		this.notator = notator(score, symbolPool, layoutSettings);
 		this.strategy = createStrategyTree();
 	}
 
 	public ScoreLayouter(ScoreLayouterContext context) {
 		this.context = context;
+		this.notator = notator(context.getScore(), context.getSymbolPool(), context.getLayoutSettings());
 		this.strategy = createStrategyTree();
 	}
 
@@ -130,15 +135,13 @@ public class ScoreLayouter {
 	 * See "doc/Layoutengine.odg"
 	 */
 	ScoreLayoutStrategy createStrategyTree() {
-		//notation subtree
-		Notator notationStrategy = new Notator();
 		//measure column subtree
 		ColumnSpacingStrategy columnSpacingStrategy = new ColumnSpacingStrategy(
 			new SeparateVoiceSpacingStrategy(), new MeasureElementsSpacingsStrategy(),
 			new BeatOffsetsStrategy(), new BarlinesBeatOffsetsStrategy(),
-			new BeatOffsetBasedVoiceSpacingStrategy(), new LeadingSpacingStrategy(notationStrategy));
+			new BeatOffsetBasedVoiceSpacingStrategy(), new LeadingSpacingStrategy(notator));
 		//complete tree
-		return new ScoreLayoutStrategy(notationStrategy, new VoiceStemDirectionNotationsStrategy(notationStrategy),
+		return new ScoreLayoutStrategy(notator, new VoiceStemDirectionNotationsStrategy(notator),
 			columnSpacingStrategy, new FrameArrangementStrategy(new SystemArrangementStrategy(
 				columnSpacingStrategy)), new BeamedStemAlignmentNotationsStrategy(),
 			new ScoreFrameLayoutStrategy(new StaffStampingsStrategy(),
