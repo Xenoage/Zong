@@ -1,6 +1,7 @@
 package com.xenoage.zong.musiclayout.layouter.columnspacing;
 
 import static com.xenoage.utils.collections.CList.clist;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.collections.SortedList.sortedListNoDuplicates;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Fraction._0;
@@ -45,7 +46,7 @@ public class BeatOffsetsStrategy
 	 * (or that needs accidentals) dictate the spacing.
 	 * See "Ross: The Art of Music Engraving", page 79.
 	 */
-	public IList<BeatOffset> computeBeatOffsets(VoiceSpacingsByStaff voiceSpacings,
+	public BeatOffset[] computeBeatOffsets(VoiceSpacingsByStaff voiceSpacings,
 		Fraction measureBeats, LayoutSettings layoutSettings) {
 		//iterate over the staves to find beat offsets for each staff
 		CList<VoiceSpacing> vss = clist();
@@ -62,7 +63,7 @@ public class BeatOffsetsStrategy
 		return computeBeatOffsetsFromVoiceSpacings(vss.close(), measureBeats, layoutSettings);
 	}
 
-	IList<BeatOffset> computeBeatOffsetsFromVoiceSpacings(IList<VoiceSpacing> voiceSpacings,
+	BeatOffset[] computeBeatOffsetsFromVoiceSpacings(IList<VoiceSpacing> voiceSpacings,
 		Fraction measureBeats, LayoutSettings layoutSettings) {
 
 		//the list of all used beats of the measure
@@ -72,7 +73,7 @@ public class BeatOffsetsStrategy
 		beats.add(measureBeats); //add final beat in terms of time signature (only correct for non-upbeat measures)
 
 		//the resulting offsets for each used beat
-		CList<BeatOffset> ret = clist();
+		List<BeatOffset> ret = alist();
 
 		//compute the offset of beat 0
 		float offsetMm = getOffsetBeat0InMm(voiceSpacings);
@@ -128,7 +129,9 @@ public class BeatOffsetsStrategy
 
 		}
 
-		return ret.close();
+		BeatOffset[] retArray = new BeatOffset[ret.size()];
+		ret.toArray(retArray);
+		return retArray;
 	}
 
 	/**
@@ -162,7 +165,7 @@ public class BeatOffsetsStrategy
 	Fraction computeLastBeat(List<VoiceSpacing> voiceSpacings) {
 		Fraction ret = _0;
 		for (VoiceSpacing voiceSpacing : voiceSpacings) {
-			Fraction beat = voiceSpacing.getLast().beat;
+			Fraction beat = voiceSpacing.spacingElements[voiceSpacing.spacingElements.length - 1].beat;
 			if (beat.compareTo(ret) > 0)
 				ret = beat;
 		}

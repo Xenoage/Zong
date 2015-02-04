@@ -20,10 +20,5 @@ public final class VoiceSpacing {
 	public final float interlineSpace;
 	/** The {@link SpacingElement}s of this voice. */
 	public final SpacingElement[] spacingElements;
-
-	
-	public SpacingElement getLast() {
-		return spacingElements[spacingElements.length - 1];
-	}
 	
 }

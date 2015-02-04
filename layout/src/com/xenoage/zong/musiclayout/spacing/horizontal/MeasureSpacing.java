@@ -19,6 +19,9 @@ import com.xenoage.zong.core.position.MP;
  * @author Andreas Wenger
  */
 @Const @Getter public final class MeasureSpacing {
+	
+	/** An empty array of {@link MeasureSpacing}s. */
+	public static final MeasureSpacing[] empty = new MeasureSpacing[0];
 
 	/** The musical position of the measure. */
 	@NonNull private final MP mp;

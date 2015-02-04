@@ -1,6 +1,7 @@
 package com.xenoage.zong.musiclayout.layouter.columnspacing;
 
 import static com.xenoage.utils.collections.CList.clist;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Tuple2.t;
 
 import java.util.List;
@@ -35,11 +36,11 @@ public class BarlinesBeatOffsetsStrategy {
 	 * Computes and returns updated {@link BeatOffset}s. The first component are
 	 * the note offsets, the second one the barline offsets.
 	 */
-	public Tuple2<IList<BeatOffset>, IList<BeatOffset>> computeBeatOffsets(
-		List<BeatOffset> baseOffsets, ColumnHeader columnHeader, float interlineSpace) {
+	public Tuple2<BeatOffset[], BeatOffset[]> computeBeatOffsets(
+		BeatOffset[] baseOffsets, ColumnHeader columnHeader, float interlineSpace) {
 
-		CList<BeatOffset> retNotes = clist(baseOffsets);
-		CList<BeatOffset> retBarlines = clist();
+		List<BeatOffset> retNotes = alist(baseOffsets);
+		List<BeatOffset> retBarlines = alist();
 		//start barline
 		retBarlines.add(new BeatOffset(Fraction._0, 0));
 		Barline startBarline = columnHeader.getStartBarline();
@@ -103,8 +104,9 @@ public class BarlinesBeatOffsetsStrategy {
 		else {
 			retBarlines.add(lastOffset);
 		}
+		
 		//return result
-		return t(retNotes.close(), retBarlines.close());
+		return t(retNotes.toArray(BeatOffset.empty), retBarlines.toArray(BeatOffset.empty));
 	}
 
 }

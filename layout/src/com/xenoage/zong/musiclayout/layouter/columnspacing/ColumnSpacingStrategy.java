@@ -120,14 +120,14 @@ public class ColumnSpacingStrategy
 		//compute the beat offsets of this measure column
 		VoiceSpacingsByStaff optimalVoiceSpacings = new VoiceSpacingsByStaff(
 			optimalVoiceSpacingsByStaff);
-		IList<BeatOffset> beatOffsets = beatOffsetsStrategy.computeBeatOffsets(optimalVoiceSpacings,
+		BeatOffset[] beatOffsets = beatOffsetsStrategy.computeBeatOffsets(optimalVoiceSpacings,
 			measureBeats, lc.getLayoutSettings());
 
 		//recompute beat offsets with respect to barlines
-		Tuple2<IList<BeatOffset>, IList<BeatOffset>> offsets = barlinesBeatOffsetsStrategy
+		Tuple2<BeatOffset[], BeatOffset[]> offsets = barlinesBeatOffsetsStrategy
 			.computeBeatOffsets(beatOffsets, columnHeader, lc.getMaxInterlineSpace());
 		beatOffsets = offsets.get1();
-		IList<BeatOffset> barlineOffsets = offsets.get2();
+		BeatOffset[] barlineOffsets = offsets.get2();
 
 		//compute the spacings for the whole column, so that equal beats are aligned
 		ArrayList<MeasureElementsSpacings> alignedMeasureElementsSpacingsByStaff = alist();
@@ -157,7 +157,7 @@ public class ColumnSpacingStrategy
 
 		//compute spacings for each staff
 		NotationsCache leadingNotations = (createLeading ? new NotationsCache() : null);
-		CList<MeasureSpacing> measureSpacings = clist();
+		MeasureSpacing[] measureSpacings = new MeasureSpacing[column.size()];
 		context.saveMp();
 		for (int iStaff : range(column)) {
 			//create leading spacing, if needed
@@ -170,11 +170,10 @@ public class ColumnSpacingStrategy
 				leadingNotations.merge(ls.get2());
 			}
 			//create measure spacing
-			measureSpacings.add(new MeasureSpacing(atMeasure(iStaff, measureIndex), alignedVoiceSpacings
-				.get(iStaff), alignedMeasureElementsSpacingsByStaff.get(iStaff), leadingSpacing));
+			measureSpacings[iStaff] = new MeasureSpacing(atMeasure(iStaff, measureIndex), alignedVoiceSpacings
+				.get(iStaff), alignedMeasureElementsSpacingsByStaff.get(iStaff), leadingSpacing);
 		}
 		context.restoreMp();
-		measureSpacings.close();
 
 		return t3(
 			new ColumnSpacing(lc.getScore(), measureSpacings, beatOffsets, barlineOffsets),

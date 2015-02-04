@@ -27,11 +27,11 @@ public class BeatOffsetBasedVoiceSpacingStrategy
 	 * single voice, based on the given beat offsets, that
 	 * are used for the result, and the given precomputed voice spacing.
 	 */
-	public VoiceSpacing computeVoiceSpacing(VoiceSpacing voiceSpacing, List<BeatOffset> beatOffsets) {
+	public VoiceSpacing computeVoiceSpacing(VoiceSpacing voiceSpacing, BeatOffset[] beatOffsets) {
 		
 		SpacingElement[] oldSpacingElements = voiceSpacing.spacingElements;
 		SpacingElement[] spacingElements = oldSpacingElements.clone();
-		if (spacingElements.length == 0 || beatOffsets.size() == 0)
+		if (spacingElements.length == 0 || beatOffsets.length == 0)
 			return voiceSpacing;
 		//find the given beats, that are also used here
 		List<BeatOffset> sharedBeats = computeSharedBeats(spacingElements, beatOffsets);
@@ -100,13 +100,13 @@ public class BeatOffsetBasedVoiceSpacingStrategy
 	 * If there are no beats used by both lists, an empty
 	 * list is returned.
 	 */
-	public List<BeatOffset> computeSharedBeats(SpacingElement[] spacingElements, List<BeatOffset> beatOffsets) {
-		ArrayList<BeatOffset> ret = alist(beatOffsets.size());
+	public List<BeatOffset> computeSharedBeats(SpacingElement[] spacingElements, BeatOffset[] beatOffsets) {
+		ArrayList<BeatOffset> ret = alist(beatOffsets.length);
 		int i1 = 0, i2 = 0;
 		Fraction lastAddedBeat = fr(-1);
-		while (i1 < spacingElements.length && i2 < beatOffsets.size()) {
+		while (i1 < spacingElements.length && i2 < beatOffsets.length) {
 			Fraction beat1 = spacingElements[i1].beat;
-			BeatOffset beatOffset2 = beatOffsets.get(i2);
+			BeatOffset beatOffset2 = beatOffsets[i2];
 			Fraction beat2 = beatOffset2.getBeat();
 			if (beat1.equals(beat2)) {
 				if (beat2.equals(lastAddedBeat)) {

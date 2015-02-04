@@ -1,12 +1,10 @@
 package com.xenoage.zong.musiclayout.layouter.horizontalsystemfilling;
 
 import static com.xenoage.utils.collections.CList.clist;
-import static com.xenoage.utils.iterators.ReverseIterator.reverseIt;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.kernel.Range.rangeReverse;
 
 import com.xenoage.utils.collections.CList;
-import com.xenoage.utils.kernel.Range;
 import com.xenoage.zong.musiclayout.BeatOffset;
 import com.xenoage.zong.musiclayout.SystemArrangement;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
@@ -55,19 +53,19 @@ public class StretchHorizontalSystemFillingStrategy
 		CList<ColumnSpacing> newMCSpacings = clist(systemArrangement.getColumnSpacings().size());
 		for (ColumnSpacing column : systemArrangement.getColumnSpacings()) {
 			//beat offsets
-			CList<BeatOffset> newBeatOffsets = clist(column.getBeatOffsets().size());
+			CList<BeatOffset> newBeatOffsets = clist(column.getBeatOffsets().length);
 			for (BeatOffset oldBeatOffset : column.getBeatOffsets()) {
 				//stretch the offset
 				newBeatOffsets.add(oldBeatOffset.withOffsetMm(oldBeatOffset.getOffsetMm() * stretch));
 			}
-			CList<BeatOffset> newBarlineOffsets = clist(column.getBarlineOffsets().size());
+			CList<BeatOffset> newBarlineOffsets = clist(column.getBarlineOffsets().length);
 			for (BeatOffset oldBarlineOffset : column.getBarlineOffsets()) {
 				//stretch the offset
 				newBarlineOffsets.add(oldBarlineOffset.withOffsetMm(oldBarlineOffset.getOffsetMm() *
 					stretch));
 			}
 			//measures
-			CList<MeasureSpacing> newMeasureSpacings = clist(column.getMeasureSpacings().size());
+			CList<MeasureSpacing> newMeasureSpacings = clist(column.getMeasureSpacings().length);
 			for (MeasureSpacing oldMS : column.getMeasureSpacings()) {
 				//measure elements
 				SpacingElement[] me = oldMS.getMeasureElementsSpacings().elements;
@@ -107,8 +105,8 @@ public class StretchHorizontalSystemFillingStrategy
 					oldMS.getLeadingSpacing()));
 			}
 
-			newMCSpacings.add(new ColumnSpacing(column.getScore(), newMeasureSpacings.close(),
-				newBeatOffsets.close(), newBarlineOffsets.close()));
+			newMCSpacings.add(new ColumnSpacing(column.getScore(), newMeasureSpacings.toArray(MeasureSpacing.empty),
+				newBeatOffsets.toArray(BeatOffset.empty), newBarlineOffsets.toArray(BeatOffset.empty)));
 
 		}
 
