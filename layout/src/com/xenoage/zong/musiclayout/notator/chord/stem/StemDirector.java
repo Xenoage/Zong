@@ -46,6 +46,8 @@ public final class StemDirector {
 				score.getMusicContext(mp, BeforeOrAt, Before));
 			ret.put(chord, stem);
 		}
+		//TODO: add another strategy for measures with two voices. we had one already,
+		//but it was bad and outdated, so we removed it.
 		return ret;
 	}
 

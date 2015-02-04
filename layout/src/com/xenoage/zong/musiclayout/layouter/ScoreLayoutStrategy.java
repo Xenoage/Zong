@@ -31,13 +31,10 @@ import com.xenoage.zong.musiclayout.continued.ContinuedElement;
 import com.xenoage.zong.musiclayout.layouter.arrangement.FrameArrangementStrategy;
 import com.xenoage.zong.musiclayout.layouter.beamednotation.BeamedStemAlignmentNotationsStrategy;
 import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
-import com.xenoage.zong.musiclayout.layouter.cache.StemDirectionsCache;
 import com.xenoage.zong.musiclayout.layouter.columnspacing.ColumnSpacingStrategy;
 import com.xenoage.zong.musiclayout.layouter.horizontalsystemfilling.HorizontalSystemFillingStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.ScoreFrameLayoutStrategy;
 import com.xenoage.zong.musiclayout.layouter.verticalframefilling.VerticalFrameFillingStrategy;
-import com.xenoage.zong.musiclayout.layouter.voicenotation.VoiceStemDirectionNotationsStrategy;
-import com.xenoage.zong.musiclayout.notator.Notator;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 
 /**
@@ -50,7 +47,6 @@ public class ScoreLayoutStrategy
 	implements ScoreLayouterStrategy {
 
 	//used strategies
-	private final VoiceStemDirectionNotationsStrategy voiceStemDirectionNotationsStrategy;
 	private final ColumnSpacingStrategy measureColumnSpacingStrategy;
 	private final FrameArrangementStrategy frameArrangementStrategy;
 	private final BeamedStemAlignmentNotationsStrategy beamedStemAlignmentNotationsStrategy;
@@ -61,12 +57,10 @@ public class ScoreLayoutStrategy
 	 * Creates a new {@link ScoreLayoutStrategy}.
 	 */
 	public ScoreLayoutStrategy(
-		VoiceStemDirectionNotationsStrategy voiceStemDirectionNotationsStrategy,
 		ColumnSpacingStrategy measureColumnSpacingStrategy,
 		FrameArrangementStrategy frameArrangementStrategy,
 		BeamedStemAlignmentNotationsStrategy beamedStemAlignmentNotationsStrategy,
 		ScoreFrameLayoutStrategy scoreFrameLayoutStrategy) {
-		this.voiceStemDirectionNotationsStrategy = voiceStemDirectionNotationsStrategy;
 		this.measureColumnSpacingStrategy = measureColumnSpacingStrategy;
 		this.frameArrangementStrategy = frameArrangementStrategy;
 		this.beamedStemAlignmentNotationsStrategy = beamedStemAlignmentNotationsStrategy;
@@ -80,10 +74,6 @@ public class ScoreLayoutStrategy
 	public ScoreLayout computeScoreLayout(ScoreLayouterContext lc) {
 		Score score = lc.getScore();
 		
-		//compute stem directions
-		StemDirectionsCache cache;
-		//GOON - use StemNotator for single chords and BeamStemNotator for beamed chords
-		
 		//notations of elements
 		Context context = new Context();
 		context.score = lc.getScore();
@@ -92,12 +82,9 @@ public class ScoreLayoutStrategy
 		notator.computeAll(context);
 		NotationsCache notations = context.notationsCache;
 		
-		//TODO: stem directions dependent on their voice
-		for (int iStaff : range(0, score.getStavesCount() - 1)) {
-			notations.merge(voiceStemDirectionNotationsStrategy.computeNotations(iStaff, notations, lc));
-		}
 		//optimal measure spacings
 		List<ColumnSpacing> optimalMeasureColumnSpacings = computeColumnSpacings(notations, lc);
+		
 		//break into systems and frames
 		Tuple2<ArrayList<FrameArrangement>, NotationsCache> t = computeFrameArrangements(
 			optimalMeasureColumnSpacings, notations, lc);

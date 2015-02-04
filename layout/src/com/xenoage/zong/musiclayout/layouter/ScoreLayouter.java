@@ -30,8 +30,8 @@ import com.xenoage.zong.musiclayout.layouter.scoreframelayout.SlurStampingStrate
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.StaffStampingsStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.TupletStampingStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.VoltaStampingStrategy;
-import com.xenoage.zong.musiclayout.layouter.voicenotation.VoiceStemDirectionNotationsStrategy;
 import com.xenoage.zong.musiclayout.notator.Notator;
+import com.xenoage.zong.musiclayout.notator.chord.stem.voice.VoiceStemDirector;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.symbols.SymbolPool;
 
@@ -130,7 +130,7 @@ public class ScoreLayouter {
 			new BeatOffsetsStrategy(), new BarlinesBeatOffsetsStrategy(),
 			new BeatOffsetBasedVoiceSpacingStrategy(), new LeadingSpacingStrategy());
 		//complete tree
-		return new ScoreLayoutStrategy(new VoiceStemDirectionNotationsStrategy(),
+		return new ScoreLayoutStrategy(new VoiceStemDirector(),
 			columnSpacingStrategy, new FrameArrangementStrategy(new SystemArrangementStrategy(
 				columnSpacingStrategy)), new BeamedStemAlignmentNotationsStrategy(),
 			new ScoreFrameLayoutStrategy(new StaffStampingsStrategy(),
