@@ -2,6 +2,7 @@ package com.xenoage.zong.musiclayout.layouter.horizontalsystemfilling;
 
 import static com.xenoage.utils.collections.CList.clist;
 import static com.xenoage.utils.iterators.ReverseIterator.reverseIt;
+import static com.xenoage.utils.kernel.Range.range;
 
 import com.xenoage.utils.collections.CList;
 import com.xenoage.zong.musiclayout.BeatOffset;
@@ -67,13 +68,13 @@ public class StretchHorizontalSystemFillingStrategy
 			CList<MeasureSpacing> newMeasureSpacings = clist(column.getMeasureSpacings().size());
 			for (MeasureSpacing oldMS : column.getMeasureSpacings()) {
 				//measure elements
-				CList<SpacingElement> newMESElements = clist(oldMS.getMeasureElementsSpacings()
-					.getElements().size());
-				for (SpacingElement oldMES : oldMS.getMeasureElementsSpacings().getElements()) {
+				SpacingElement[] me = oldMS.getMeasureElementsSpacings().elements;
+				SpacingElement[] newMESElements = new SpacingElement[me.length];
+				for (int i : range(me)) {
 					//stretch the offset
-					newMESElements.add(oldMES.withOffset(oldMES.offset * stretch));
+					newMESElements[i] = me[i].withOffset(me[i].offset * stretch);
 				}
-				MeasureElementsSpacings newMES = new MeasureElementsSpacings(newMESElements.close());
+				MeasureElementsSpacings newMES = new MeasureElementsSpacings(newMESElements);
 				//voices
 				CList<VoiceSpacing> newVSs = clist(oldMS.getVoiceSpacings().size());
 				for (VoiceSpacing oldVS : oldMS.getVoiceSpacings()) {

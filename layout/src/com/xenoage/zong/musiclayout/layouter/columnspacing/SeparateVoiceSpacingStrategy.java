@@ -103,7 +103,7 @@ public class SeparateVoiceSpacingStrategy
 				//element + the space of following grace elements, when possible
 				//(but use at least minimal distance)
 				symbolOffset = Math.min(lastFrontGapOffset - layoutSettings.spacings.widthDistanceMin,
-					lastFullSymbolOffset - elementWidth.getRearGap()) - elementWidth.getSymbolWidth();
+					lastFullSymbolOffset - elementWidth.rearGap) - elementWidth.symbolWidth;
 				lastFullSymbolOffset = symbolOffset;
 				//update beat cursor
 				curBeat = curBeat.sub(element.getDuration());
@@ -111,11 +111,11 @@ public class SeparateVoiceSpacingStrategy
 			else {
 				//grace element
 				//share this rear gap and the front gap of the following element, when possible
-				symbolOffset = Math.min(lastFrontGapOffset, lastSymbolOffset - elementWidth.getRearGap()) -
-					elementWidth.getSymbolWidth();
+				symbolOffset = Math.min(lastFrontGapOffset, lastSymbolOffset - elementWidth.rearGap) -
+					elementWidth.symbolWidth;
 			}
 			acc.addFirst(new SpacingElement(element, curBeat, symbolOffset, grace));
-			lastFrontGapOffset = symbolOffset - elementWidth.getFrontGap();
+			lastFrontGapOffset = symbolOffset - elementWidth.frontGap;
 			lastSymbolOffset = symbolOffset;
 		}
 

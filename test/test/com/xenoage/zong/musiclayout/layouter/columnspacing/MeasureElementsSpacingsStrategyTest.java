@@ -7,7 +7,6 @@ import static com.xenoage.zong.core.music.util.BeatE.beatE;
 import static org.junit.Assert.assertEquals;
 
 import java.util.HashMap;
-import java.util.List;
 
 import org.junit.Test;
 
@@ -74,10 +73,10 @@ public class MeasureElementsSpacingsStrategyTest {
 		Tuple2<MeasureElementsSpacings, IList<VoiceSpacing>> res = new MeasureElementsSpacingsStrategy()
 			.compute(innerClefs, new BeatEList<Key>(), null, false, vs, 0, sne(ve, innerClef), ls);
 		//clef must be at offset 15 - padding - clefwidth/2
-		List<SpacingElement> mes = res.get1().getElements();
-		assertEquals(1, mes.size());
-		assertEquals(fr(6), mes.get(0).beat);
-		assertEquals(15 - paddingWidth - clefWidth / 2, mes.get(0).offset, Delta.DELTA_FLOAT);
+		SpacingElement[] mes = res.get1().elements;
+		assertEquals(1, mes.length);
+		assertEquals(fr(6), mes[0].beat);
+		assertEquals(15 - paddingWidth - clefWidth / 2, mes[0].offset, Delta.DELTA_FLOAT);
 		//voice spacings must be unchanged
 		assertEquals(vs, res.get2());
 	}
@@ -119,10 +118,10 @@ public class MeasureElementsSpacingsStrategyTest {
 		assertEquals(ilist(se(ve[2], fr(1), 5), se(ve[3], fr(13, 2), 18)), res.get2().get(1)
 			.getSpacingElements());
 		//clef must be at offset 13 - padding - clefwidth/2
-		List<SpacingElement> mes = res.get1().getElements();
-		assertEquals(1, mes.size());
-		assertEquals(fr(4), mes.get(0).beat);
-		assertEquals(13 - paddingWidth - clefWidth / 2, mes.get(0).offset, Delta.DELTA_FLOAT);
+		SpacingElement[] mes = res.get1().elements;
+		assertEquals(1, mes.length);
+		assertEquals(fr(4), mes[0].beat);
+		assertEquals(13 - paddingWidth - clefWidth / 2, mes[0].offset, Delta.DELTA_FLOAT);
 	}
 
 	private Rest[] ve() {

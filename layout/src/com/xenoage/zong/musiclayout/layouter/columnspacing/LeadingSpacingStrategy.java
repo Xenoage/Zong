@@ -50,7 +50,7 @@ public class LeadingSpacingStrategy
 			useKey = true;
 		}
 
-		CList<SpacingElement> elements = clist();
+		SpacingElement[] elements = new SpacingElement[useKey ? 2 : 1];
 		NotationsCache notations = new NotationsCache();
 
 		Clef clef = new Clef(musicContext.getClef().getType()); //it is not the same element instance, but has the same meaning
@@ -58,7 +58,7 @@ public class LeadingSpacingStrategy
 			context.settings.spacings.widthClef, 0), musicContext.getClef().getType().getLp(), 1);
 		notations.add(clefNotation);
 		xOffset += context.settings.spacings.widthClef / 2;
-		elements.add(new SpacingElement(clef, fr(0), xOffset));
+		elements[0] = new SpacingElement(clef, fr(0), xOffset);
 		xOffset += context.settings.spacings.widthClef / 2;
 
 		if (useKey) {
@@ -67,12 +67,12 @@ public class LeadingSpacingStrategy
 			TraditionalKey tradKey = new TraditionalKey(tkey.getFifths(), tkey.getMode()); //it is not the same element instance, but has the same meaning
 			TraditionalKeyNotation keyNotation = traditionalKeyNotator.notate(tradKey, context);
 			notations.add(keyNotation, context.mp.staff);
-			elements.add(new SpacingElement(tradKey, fr(0), xOffset));
+			elements[1] = new SpacingElement(tradKey, fr(0), xOffset);
 			xOffset += keyNotation.getWidth().getWidth();
 		}
 
 		return new Tuple2<LeadingSpacing, NotationsCache>(
-			new LeadingSpacing(elements.close(), xOffset), notations);
+			new LeadingSpacing(elements, xOffset), notations);
 	}
 
 }

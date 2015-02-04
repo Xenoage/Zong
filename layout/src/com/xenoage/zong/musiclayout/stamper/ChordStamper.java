@@ -98,7 +98,7 @@ public class ChordStamper {
 				AccidentalDisplacement acc = accs.accidentals[iAcc];
 				AccidentalStamping accSt = new AccidentalStamping(chord, acc.accidental, staffStamping,
 					sp(chordXMm +
-							(acc.xIs - chordNotation.width.getFrontGap() + 0.5f /* 0.5f: half accidental width - TODO */) *
+							(acc.xIs - chordNotation.width.frontGap + 0.5f /* 0.5f: half accidental width - TODO */) *
 							staffStamping.is, acc.yLp), 1, symbolPool);
 				accsSt[iAcc] = accSt;
 			}

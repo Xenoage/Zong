@@ -116,7 +116,7 @@ import com.xenoage.zong.musiclayout.spacing.horizontal.SpacingElement;
 			MeasureSpacing measureSpacing = measureSpacings.get(i);
 			LeadingSpacing leadingSpacing = measureSpacing.getLeadingSpacing();
 			if (leadingSpacing != null) {
-				float width = leadingSpacing.getWidth() * score.getInterlineSpace(MP.atStaff(i));
+				float width = leadingSpacing.width * score.getInterlineSpace(MP.atStaff(i));
 				if (width > ret)
 					ret = width;
 			}

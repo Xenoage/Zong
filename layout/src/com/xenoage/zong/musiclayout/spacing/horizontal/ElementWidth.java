@@ -1,6 +1,6 @@
 package com.xenoage.zong.musiclayout.spacing.horizontal;
 
-import lombok.Getter;
+import lombok.AllArgsConstructor;
 
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.music.MusicElement;
@@ -14,7 +14,7 @@ import com.xenoage.zong.core.music.MusicElement;
  * The front gap is the gap for example needed for
  * accidentals and left-suspended notes.
  * 
- * The symbol's width is the width of the symbol
+ * The symbol's width is the total width of the symbol(s)
  * of the element. If it is for example a
  * chord with right-suspended notes, the width
  * is about two times the width of a single notehead.
@@ -38,27 +38,17 @@ import com.xenoage.zong.core.music.MusicElement;
  *
  * @author Andreas Wenger
  */
-@Const @Getter public final class ElementWidth {
+@Const @AllArgsConstructor
+public final class ElementWidth {
 
 	/** The front gap in IS, or 0 if there is none. */
-	private final float frontGap;
+	public final float frontGap;
 	/** The width of the symbol in IS. */
-	private final float symbolWidth;
+	public final float symbolWidth;
 	/** The rear gap in IS, or 0 if there is none. */
-	private final float rearGap;
+	public final float rearGap;
 	/** The width of the lyric in IS, or 0 if there is none. */
-	private final float lyricWidth;
-
-
-	/**
-	 * Creates a new {@link ElementWidth}.
-	 */
-	public ElementWidth(float frontGap, float symbolWidth, float rearGap, float lyricWidth) {
-		this.frontGap = frontGap;
-		this.symbolWidth = symbolWidth;
-		this.rearGap = rearGap;
-		this.lyricWidth = lyricWidth;
-	}
+	public final float lyricWidth;
 
 	/**
 	 * Creates a new {@link ElementWidth}, which only has a

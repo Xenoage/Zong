@@ -1,6 +1,7 @@
 package com.xenoage.zong.musiclayout.layouter.columnspacing;
 
 import static com.xenoage.utils.collections.CList.clist;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.iterators.It.it;
 import static com.xenoage.utils.kernel.Tuple2.t;
 import static com.xenoage.utils.math.Fraction._0;
@@ -92,7 +93,7 @@ public class MeasureElementsSpacingsStrategy
 		}
 
 		IList<VoiceSpacing> updatedVS = originalVoiceSpacings;
-		CList<SpacingElement> measureElementsSpacings = clist();
+		List<SpacingElement> measureElementsSpacings = alist();
 		float startOffset = layoutSettings.offsetMeasureStart;
 
 		//key and time
@@ -115,7 +116,7 @@ public class MeasureElementsSpacingsStrategy
 			if (time != null) {
 				ElementWidth timeWidth = notations.get(time, staff).getWidth();
 				measureElementsSpacings.add(new SpacingElement(time, _0, currentOffset +
-					timeWidth.getSymbolWidth() / 2));
+					timeWidth.symbolWidth / 2));
 				currentOffset += timeWidth.getUsedWidth();
 			}
 
@@ -196,7 +197,9 @@ public class MeasureElementsSpacingsStrategy
 	
 			}
 		}
-		return t(new MeasureElementsSpacings(measureElementsSpacings.close()), updatedVS);
+		SpacingElement[] mes = new SpacingElement[measureElementsSpacings.size()];
+		measureElementsSpacings.toArray(mes);
+		return t(new MeasureElementsSpacings(mes), updatedVS);
 	}
 
 	/**
@@ -260,7 +263,7 @@ public class MeasureElementsSpacingsStrategy
 	private float getLeftX(SpacingElement se, NotationsCache notations) {
 		//element and notation may be null, e.g. for last SE in measure
 		Notation notation = notations.get(se.element);
-		return se.offset - (notation != null ? notation.getWidth().getFrontGap() : 0);
+		return se.offset - (notation != null ? notation.getWidth().frontGap : 0);
 	}
 
 	/**
@@ -270,7 +273,7 @@ public class MeasureElementsSpacingsStrategy
 	private float getRightX(SpacingElement se, NotationsCache notations) {
 		//element and notation may be null, e.g. for last SE in measure
 		Notation notation = notations.get(se.element);
-		return se.offset + (notation != null ? notation.getWidth().getSymbolWidth() : 0);
+		return se.offset + (notation != null ? notation.getWidth().symbolWidth : 0);
 	}
 
 	/**

@@ -1,12 +1,8 @@
 package com.xenoage.zong.musiclayout.spacing.horizontal;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 import com.xenoage.utils.annotations.Const;
-import com.xenoage.utils.annotations.MaybeEmpty;
-import com.xenoage.utils.collections.CList;
-import com.xenoage.utils.collections.IList;
 import com.xenoage.zong.core.music.ColumnElement;
 import com.xenoage.zong.core.music.MeasureElement;
 
@@ -17,11 +13,11 @@ import com.xenoage.zong.core.music.MeasureElement;
  * 
  * @author Andreas Wenger
  */
-@Const @Getter @AllArgsConstructor public class MeasureElementsSpacings {
+@Const @AllArgsConstructor
+public final class MeasureElementsSpacings {
+	
+	public static final MeasureElementsSpacings empty = new MeasureElementsSpacings(new SpacingElement[0]);
 
-	@MaybeEmpty private final IList<SpacingElement> elements;
-
-	public static final MeasureElementsSpacings empty = new MeasureElementsSpacings(
-		CList.<SpacingElement>ilist());
+	public final SpacingElement[] elements;
 
 }

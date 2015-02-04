@@ -302,7 +302,7 @@ public class ScoreFrameLayoutStrategy
 					//add leading spacing elements, if available
 					LeadingSpacing leadingSpacing = measureStaffSpacing.getLeadingSpacing();
 					if (leadingSpacing != null) {
-						for (SpacingElement spacingElement : leadingSpacing.getSpacingElements()) {
+						for (SpacingElement spacingElement : leadingSpacing.spacingElements) {
 							MusicElement element = spacingElement.element;
 							if (element != null) {
 								float x = xOffset + spacingElement.offset * interlineSpace;
@@ -356,7 +356,7 @@ public class ScoreFrameLayoutStrategy
 					float voicesOffset = xOffset + measureColumnSpacing.getLeadingWidth();
 
 					//add measure elements within this measure
-					for (SpacingElement spacingElement : measureStaffSpacing.getMeasureElementsSpacings().getElements()) {
+					for (SpacingElement spacingElement : measureStaffSpacing.getMeasureElementsSpacings().elements) {
 						MusicElement element = spacingElement.element;
 						if (element != null) {
 							Notation notation = notations.get(element, iStaff);
