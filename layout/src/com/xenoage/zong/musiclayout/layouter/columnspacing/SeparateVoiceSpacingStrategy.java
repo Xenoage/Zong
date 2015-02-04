@@ -4,6 +4,7 @@ import static com.xenoage.utils.collections.CList.clist;
 import static com.xenoage.utils.collections.CList.ilist;
 import static com.xenoage.utils.collections.CollectionUtils.llist;
 import static com.xenoage.utils.iterators.ReverseIterator.reverseIt;
+import static com.xenoage.utils.kernel.Range.range;
 
 import java.util.LinkedList;
 
@@ -57,9 +58,9 @@ public class SeparateVoiceSpacingStrategy
 
 		//special case: no elements in the measure.
 		if (voice.getElements().size() == 0) {
-			return new VoiceSpacing(voice, interlineSpace, ilist(
+			return new VoiceSpacing(voice, interlineSpace, new SpacingElement[]{
 				new SpacingElement(null, Fraction._0, 0), new SpacingElement(null, measureBeats,
-					layoutSettings.spacings.widthMeasureEmpty)));
+					layoutSettings.spacings.widthMeasureEmpty)});
 		}
 
 		//we compute the spacings in reverse order. this is easier, since grace chords
@@ -121,10 +122,9 @@ public class SeparateVoiceSpacingStrategy
 
 		//shift spacings to the right
 		float shift = (-lastFrontGapOffset) + layoutSettings.offsetMeasureStart;
-		CList<SpacingElement> ret = clist(acc.size());
-		for (SpacingElement se : acc)
-			ret.add(se.withOffset(se.offset + shift));
-		ret.close();
+		SpacingElement[] ret = new SpacingElement[acc.size()];
+		for (int i : range(acc))
+			ret[i] = acc.get(i).withOffset(acc.get(i).offsetIs + shift);
 
 		return new VoiceSpacing(voice, interlineSpace, ret);
 	}

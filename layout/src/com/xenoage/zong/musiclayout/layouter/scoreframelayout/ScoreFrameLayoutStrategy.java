@@ -305,7 +305,7 @@ public class ScoreFrameLayoutStrategy
 						for (SpacingElement spacingElement : leadingSpacing.spacingElements) {
 							MusicElement element = spacingElement.element;
 							if (element != null) {
-								float x = xOffset + spacingElement.offset * interlineSpace;
+								float x = xOffset + spacingElement.offsetIs * interlineSpace;
 								Notation notation = notations.get(element, iStaff);
 								if (notation == null)
 									throw new RuntimeException("No notation for element " + element + " at " +
@@ -360,7 +360,7 @@ public class ScoreFrameLayoutStrategy
 						MusicElement element = spacingElement.element;
 						if (element != null) {
 							Notation notation = notations.get(element, iStaff);
-							float x = voicesOffset + spacingElement.offset * interlineSpace;
+							float x = voicesOffset + spacingElement.offsetIs * interlineSpace;
 							if (element instanceof MeasureElement || element instanceof ColumnElement) {
 								//clef, key, time, ...
 								otherStampsPool.add(createMeasureElementStamping(notation, x, staff,
@@ -374,7 +374,7 @@ public class ScoreFrameLayoutStrategy
 
 					//add voice elements within this measure
 					for (VoiceSpacing voiceSpacing : measureStaffSpacing.getVoiceSpacings()) {
-						List<SpacingElement> voice = voiceSpacing.getSpacingElements();
+						SpacingElement[] voice = voiceSpacing.spacingElements;
 
 						//TODO
 						//don't stamp leading rests in voice 2 - TODO: config?
@@ -385,7 +385,7 @@ public class ScoreFrameLayoutStrategy
 							MusicElement element = spacingElement.element;
 							if (element != null /* TODO && (stampRests || !(element instanceof Rest)) */) {
 								Notation notation = notations.get(element, iStaff);
-								float x = voicesOffset + spacingElement.offset * interlineSpace;
+								float x = voicesOffset + spacingElement.offsetIs * interlineSpace;
 								if (element instanceof Chord) {
 									//chord
 									otherStampsPool.addAll(createChordStampings((ChordNotation) notation, x, staff,

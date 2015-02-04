@@ -3,6 +3,7 @@ package com.xenoage.zong.musiclayout.layouter.columnspacing;
 import static com.xenoage.utils.collections.CList.clist;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.iterators.It.it;
+import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.kernel.Tuple2.t;
 import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.zong.core.position.MP.atMeasure;
@@ -210,7 +211,7 @@ public class MeasureElementsSpacingsStrategy
 		SpacingElement ret = null;
 		float retLeftX = Float.MAX_VALUE;
 		for (VoiceSpacing vs : vss) {
-			for (SpacingElement se : vs.getSpacingElements()) {
+			for (SpacingElement se : vs.spacingElements) {
 				float leftX = getLeftX(se, notations);
 				if (leftX < retLeftX) {
 					retLeftX = leftX;
@@ -232,7 +233,7 @@ public class MeasureElementsSpacingsStrategy
 		float retLeftX = Float.MIN_VALUE;
 		float retRightX = Float.MAX_VALUE;
 		for (VoiceSpacing vs : vss) {
-			for (SpacingElement se : vs.getSpacingElements()) {
+			for (SpacingElement se : vs.spacingElements) {
 				int compare = se.beat.compareTo(beat);
 				if (compare < 0) {
 					float leftX = getLeftX(se, notations);
@@ -263,7 +264,7 @@ public class MeasureElementsSpacingsStrategy
 	private float getLeftX(SpacingElement se, NotationsCache notations) {
 		//element and notation may be null, e.g. for last SE in measure
 		Notation notation = notations.get(se.element);
-		return se.offset - (notation != null ? notation.getWidth().frontGap : 0);
+		return se.offsetIs - (notation != null ? notation.getWidth().frontGap : 0);
 	}
 
 	/**
@@ -273,7 +274,7 @@ public class MeasureElementsSpacingsStrategy
 	private float getRightX(SpacingElement se, NotationsCache notations) {
 		//element and notation may be null, e.g. for last SE in measure
 		Notation notation = notations.get(se.element);
-		return se.offset + (notation != null ? notation.getWidth().symbolWidth : 0);
+		return se.offsetIs + (notation != null ? notation.getWidth().symbolWidth : 0);
 	}
 
 	/**
@@ -282,12 +283,12 @@ public class MeasureElementsSpacingsStrategy
 	public IList<VoiceSpacing> shift(List<VoiceSpacing> vss, float offset) {
 		CList<VoiceSpacing> movedVS = clist();
 		for (VoiceSpacing vs : vss) {
-			CList<SpacingElement> movedSE = clist();
-			for (SpacingElement se : vs.getSpacingElements()) {
-				float newOffset = se.offset + offset;
-				movedSE.add(se.withOffset(newOffset));
+			SpacingElement[] movedSE = new SpacingElement[vs.spacingElements.length];
+			for (int i : range(vs.spacingElements)) {
+				float newOffset = vs.spacingElements[i].offsetIs + offset;
+				movedSE[i] = vs.spacingElements[i].withOffset(newOffset);
 			}
-			movedVS.add(new VoiceSpacing(vs.getVoice(), vs.getInterlineSpace(), movedSE.close()));
+			movedVS.add(new VoiceSpacing(vs.voice, vs.interlineSpace, movedSE));
 		}
 		return movedVS.close();
 	}
@@ -299,12 +300,13 @@ public class MeasureElementsSpacingsStrategy
 	public IList<VoiceSpacing> shiftAfterBeat(List<VoiceSpacing> vss, float offset, Fraction beat) {
 		CList<VoiceSpacing> movedVS = clist();
 		for (VoiceSpacing vs : vss) {
-			CList<SpacingElement> movedSE = clist();
-			for (SpacingElement se : vs.getSpacingElements()) {
-				float newOffset = se.offset + (se.beat.compareTo(beat) >= 0 ? offset : 0);
-				movedSE.add(se.withOffset(newOffset));
+			SpacingElement[] movedSE = new SpacingElement[vs.spacingElements.length];
+			for (int i : range(vs.spacingElements)) {
+				float newOffset = vs.spacingElements[i].offsetIs +
+					(vs.spacingElements[i].beat.compareTo(beat) >= 0 ? offset : 0);
+				movedSE[i] = vs.spacingElements[i].withOffset(newOffset);
 			}
-			movedVS.add(new VoiceSpacing(vs.getVoice(), vs.getInterlineSpace(), movedSE.close()));
+			movedVS.add(new VoiceSpacing(vs.voice, vs.interlineSpace, movedSE));
 		}
 		return movedVS.close();
 	}

@@ -1,7 +1,6 @@
 package com.xenoage.zong.musiclayout.spacing.horizontal;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.annotations.MaybeNull;
@@ -17,7 +16,8 @@ import com.xenoage.zong.core.music.MusicElement;
  *
  * @author Andreas Wenger
  */
-@Const @Data @AllArgsConstructor public final class SpacingElement {
+@Const @AllArgsConstructor
+public final class SpacingElement {
 
 	/** The corresponding music element, e.g. a chord. May be null, e.g. when this
 	 * element denotes the end point of the measure. */
@@ -25,7 +25,7 @@ import com.xenoage.zong.core.music.MusicElement;
 	/** The beat where this music element can be found in the measure */
 	@NonNull public final Fraction beat;
 	/** The horizontal offset of the element in interline spaces */
-	public final float offset;
+	public final float offsetIs;
 	/** True, if this is a grace element (0 duration) */
 	public final boolean grace;
 

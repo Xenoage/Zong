@@ -61,9 +61,9 @@ public class StretchHorizontalSystemFillingStrategyTest {
 			Delta.DELTA_FLOAT);
 		//element spacings
 		VoiceSpacing newVoice = newCol.getMeasureSpacings().get(0).getVoiceSpacings().get(0);
-		assertEquals(offsetBeat1 * stretch, newVoice.getSpacingElements().get(0).offset,
+		assertEquals(offsetBeat1 * stretch, newVoice.spacingElements[0].offsetIs,
 			Delta.DELTA_FLOAT);
-		assertEquals(offsetBeat2 * stretch, newVoice.getSpacingElements().get(1).offset,
+		assertEquals(offsetBeat2 * stretch, newVoice.spacingElements[1].offsetIs,
 			Delta.DELTA_FLOAT);
 
 	}
@@ -97,13 +97,13 @@ public class StretchHorizontalSystemFillingStrategyTest {
 			Delta.DELTA_FLOAT);
 		//element spacings
 		VoiceSpacing newVoice = newCol.getMeasureSpacings().get(0).getVoiceSpacings().get(0);
-		assertEquals(offsetChord1 * stretch, newVoice.getSpacingElements().get(0).offset,
+		assertEquals(offsetChord1 * stretch, newVoice.spacingElements[0].offsetIs,
 			Delta.DELTA_FLOAT);
 		assertEquals(offsetChord2 * stretch - 2 * graceDistance,
-			newVoice.getSpacingElements().get(1).offset, Delta.DELTA_FLOAT);
+			newVoice.spacingElements[1].offsetIs, Delta.DELTA_FLOAT);
 		assertEquals(offsetChord2 * stretch - 1 * graceDistance,
-			newVoice.getSpacingElements().get(2).offset, Delta.DELTA_FLOAT);
-		assertEquals(offsetChord2 * stretch, newVoice.getSpacingElements().get(3).offset,
+			newVoice.spacingElements[2].offsetIs, Delta.DELTA_FLOAT);
+		assertEquals(offsetChord2 * stretch, newVoice.spacingElements[3].offsetIs,
 			Delta.DELTA_FLOAT);
 	}
 
@@ -121,10 +121,10 @@ public class StretchHorizontalSystemFillingStrategyTest {
 			pi(1, 0, 4), fr(2, 4))));
 		IList<BeatOffset> beatOffsets = ilist(new BeatOffset(fr(1, 4), offsetBeat0), new BeatOffset(
 			fr(3, 4), offsetBeat1), new BeatOffset(fr(5, 4), offsetBeat2));
-		IList<VoiceSpacing> voiceSpacings = ilist(new VoiceSpacing(voice, 1, ilist(new SpacingElement(
-			voice.getElement(0), beatOffsets.get(0).getBeat(), beatOffsets.get(0).getOffsetMm()),
+		IList<VoiceSpacing> voiceSpacings = ilist(new VoiceSpacing(voice, 1, new SpacingElement[]{
+			new SpacingElement(voice.getElement(0), beatOffsets.get(0).getBeat(), beatOffsets.get(0).getOffsetMm()),
 			new SpacingElement(voice.getElement(1), beatOffsets.get(1).getBeat(), beatOffsets.get(1)
-				.getOffsetMm()))));
+				.getOffsetMm())}));
 		MeasureSpacing measureSpacing = new MeasureSpacing(atMeasure(0, 0), voiceSpacings,
 			MeasureElementsSpacings.empty, LeadingSpacingMock.createGClefSpacing(leadingWidth));
 		IList<MeasureSpacing> measureSpacings = ilist(measureSpacing);
@@ -145,13 +145,13 @@ public class StretchHorizontalSystemFillingStrategyTest {
 			1, 0, 4)), graceChord(pi(2, 0, 4)), chord(pi(3, 0, 4), fr(2, 4))));
 		IList<BeatOffset> beatOffsets = ilist(new BeatOffset(fr(0, 4), offsetChord1), new BeatOffset(
 			fr(2, 4), offsetChord2), new BeatOffset(fr(4, 4), offsetMeasureEnd));
-		IList<VoiceSpacing> voiceSpacings = ilist(new VoiceSpacing(voice, 1, ilist(new SpacingElement(
+		IList<VoiceSpacing> voiceSpacings = ilist(new VoiceSpacing(voice, 1, new SpacingElement[]{new SpacingElement(
 			voice.getElement(0), beatOffsets.get(0).getBeat(), beatOffsets.get(0).getOffsetMm()),
 			new SpacingElement(voice.getElement(1), beatOffsets.get(1).getBeat(), beatOffsets.get(1)
 				.getOffsetMm() - 2 * graceDistance, true), new SpacingElement(voice.getElement(2),
 				beatOffsets.get(1).getBeat(), beatOffsets.get(1).getOffsetMm() - 1 * graceDistance, true),
 			new SpacingElement(voice.getElement(3), beatOffsets.get(1).getBeat(), beatOffsets.get(1)
-				.getOffsetMm()))));
+				.getOffsetMm())}));
 		MeasureSpacing measureSpacing = new MeasureSpacing(atMeasure(0, 0), voiceSpacings,
 			MeasureElementsSpacings.empty, null);
 		ColumnSpacing mcs = new ColumnSpacing(new Score(), ilist(measureSpacing), beatOffsets, ilist(

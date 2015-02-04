@@ -67,21 +67,21 @@ public class SeparateVoiceSpacingStrategyTest {
 		VoiceSpacing vs = new SeparateVoiceSpacingStrategy().computeVoiceSpacing(voice, 200f,
 			notations, fr(4, 4), layoutSettings);
 		//check spacing
-		List<SpacingElement> ses = vs.getSpacingElements();
+		SpacingElement[] ses = vs.spacingElements;
 		float s = layoutSettings.offsetMeasureStart;
 		float d = layoutSettings.spacings.widthDistanceMin;
-		assertEquals(5, ses.size());
-		assertEquals(s + 2, ses.get(0).offset, DELTA_FLOAT);
-		assertEquals(s + 8, ses.get(1).offset, DELTA_FLOAT);
-		assertEquals(s + 12 + d, ses.get(2).offset, DELTA_FLOAT);
-		assertEquals(s + 19 + 2 * d, ses.get(3).offset, DELTA_FLOAT);
-		assertEquals(s + 24 + 2 * d, ses.get(4).offset, DELTA_FLOAT);
+		assertEquals(5, ses.length);
+		assertEquals(s + 2, ses[0].offsetIs, DELTA_FLOAT);
+		assertEquals(s + 8, ses[1].offsetIs, DELTA_FLOAT);
+		assertEquals(s + 12 + d, ses[2].offsetIs, DELTA_FLOAT);
+		assertEquals(s + 19 + 2 * d, ses[3].offsetIs, DELTA_FLOAT);
+		assertEquals(s + 24 + 2 * d, ses[4].offsetIs, DELTA_FLOAT);
 		//check beats
-		assertEquals(fr(0, 8), ses.get(0).beat);
-		assertEquals(fr(2, 8), ses.get(1).beat);
-		assertEquals(fr(3, 8), ses.get(2).beat);
-		assertEquals(fr(4, 8), ses.get(3).beat);
-		assertEquals(fr(8, 8), ses.get(4).beat);
+		assertEquals(fr(0, 8), ses[0].beat);
+		assertEquals(fr(2, 8), ses[1].beat);
+		assertEquals(fr(3, 8), ses[2].beat);
+		assertEquals(fr(4, 8), ses[3].beat);
+		assertEquals(fr(8, 8), ses[4].beat);
 	}
 
 	/**
@@ -105,20 +105,20 @@ public class SeparateVoiceSpacingStrategyTest {
 		VoiceSpacing vs = new SeparateVoiceSpacingStrategy().computeVoiceSpacing(voice, 300f,
 			notations, fr(4, 4), layoutSettings);
 		//check spacing
-		List<SpacingElement> ses = vs.getSpacingElements();
+		SpacingElement[] ses = vs.spacingElements;
 		float s = layoutSettings.offsetMeasureStart;
-		assertEquals(5, ses.size());
-		assertEquals(s + 2, ses.get(0).offset, DELTA_FLOAT);
-		assertEquals(s + 9, ses.get(1).offset, DELTA_FLOAT);
-		assertEquals(s + 12, ses.get(2).offset, DELTA_FLOAT);
-		assertEquals(s + 17, ses.get(3).offset, DELTA_FLOAT);
-		assertEquals(s + 22, ses.get(4).offset, DELTA_FLOAT);
+		assertEquals(5, ses.length);
+		assertEquals(s + 2, ses[0].offsetIs, DELTA_FLOAT);
+		assertEquals(s + 9, ses[1].offsetIs, DELTA_FLOAT);
+		assertEquals(s + 12, ses[2].offsetIs, DELTA_FLOAT);
+		assertEquals(s + 17, ses[3].offsetIs, DELTA_FLOAT);
+		assertEquals(s + 22, ses[4].offsetIs, DELTA_FLOAT);
 		//check beats
-		assertEquals(fr(0, 8), ses.get(0).beat);
-		assertEquals(fr(2, 8), ses.get(1).beat);
-		assertEquals(fr(2, 8), ses.get(2).beat);
-		assertEquals(fr(2, 8), ses.get(3).beat);
-		assertEquals(fr(6, 8), ses.get(4).beat);
+		assertEquals(fr(0, 8), ses[0].beat);
+		assertEquals(fr(2, 8), ses[1].beat);
+		assertEquals(fr(2, 8), ses[2].beat);
+		assertEquals(fr(2, 8), ses[3].beat);
+		assertEquals(fr(6, 8), ses[4].beat);
 	}
 
 	/**
@@ -142,21 +142,21 @@ public class SeparateVoiceSpacingStrategyTest {
 		VoiceSpacing vs = new SeparateVoiceSpacingStrategy().computeVoiceSpacing(voice, 400f,
 			notations, fr(4, 4), layoutSettings);
 		//check spacing
-		List<SpacingElement> ses = vs.getSpacingElements();
+		SpacingElement[] ses = vs.spacingElements;
 		float s = layoutSettings.offsetMeasureStart;
 		float d = layoutSettings.spacings.widthDistanceMin;
-		assertEquals(5, ses.size());
-		assertEquals(s + 2, ses.get(0).offset, DELTA_FLOAT);
-		assertEquals(s + 5 + d, ses.get(1).offset, DELTA_FLOAT);
-		assertEquals(s + 8 + d, ses.get(2).offset, DELTA_FLOAT);
-		assertEquals(s + 13 + d, ses.get(3).offset, DELTA_FLOAT);
-		assertEquals(s + 18 + d, ses.get(4).offset, DELTA_FLOAT);
+		assertEquals(5, ses.length);
+		assertEquals(s + 2, ses[0].offsetIs, DELTA_FLOAT);
+		assertEquals(s + 5 + d, ses[1].offsetIs, DELTA_FLOAT);
+		assertEquals(s + 8 + d, ses[2].offsetIs, DELTA_FLOAT);
+		assertEquals(s + 13 + d, ses[3].offsetIs, DELTA_FLOAT);
+		assertEquals(s + 18 + d, ses[4].offsetIs, DELTA_FLOAT);
 		//check beats
-		assertEquals(fr(0, 8), ses.get(0).beat);
-		assertEquals(fr(2, 8), ses.get(1).beat);
-		assertEquals(fr(2, 8), ses.get(2).beat);
-		assertEquals(fr(2, 8), ses.get(3).beat);
-		assertEquals(fr(6, 8), ses.get(4).beat);
+		assertEquals(fr(0, 8), ses[0].beat);
+		assertEquals(fr(2, 8), ses[1].beat);
+		assertEquals(fr(2, 8), ses[2].beat);
+		assertEquals(fr(2, 8), ses[3].beat);
+		assertEquals(fr(6, 8), ses[4].beat);
 	}
 
 	/**
@@ -180,21 +180,21 @@ public class SeparateVoiceSpacingStrategyTest {
 		VoiceSpacing vs = new SeparateVoiceSpacingStrategy().computeVoiceSpacing(voice, 400f,
 			notations, fr(4, 4), layoutSettings);
 		//check spacing
-		List<SpacingElement> ses = vs.getSpacingElements();
+		SpacingElement[] ses = vs.spacingElements;
 		float s = layoutSettings.offsetMeasureStart;
 		float d = layoutSettings.spacings.widthDistanceMin;
-		assertEquals(5, ses.size());
-		assertEquals(s + 2, ses.get(0).offset, DELTA_FLOAT);
-		assertEquals(s + 5 + d, ses.get(1).offset, DELTA_FLOAT);
-		assertEquals(s + 8 + d, ses.get(2).offset, DELTA_FLOAT);
-		assertEquals(s + 13 + d, ses.get(3).offset, DELTA_FLOAT);
-		assertEquals(s + 18 + d, ses.get(4).offset, DELTA_FLOAT);
+		assertEquals(5, ses.length);
+		assertEquals(s + 2, ses[0].offsetIs, DELTA_FLOAT);
+		assertEquals(s + 5 + d, ses[1].offsetIs, DELTA_FLOAT);
+		assertEquals(s + 8 + d, ses[2].offsetIs, DELTA_FLOAT);
+		assertEquals(s + 13 + d, ses[3].offsetIs, DELTA_FLOAT);
+		assertEquals(s + 18 + d, ses[4].offsetIs, DELTA_FLOAT);
 		//check beats
-		assertEquals(fr(0, 8), ses.get(0).beat);
-		assertEquals(fr(2, 8), ses.get(1).beat);
-		assertEquals(fr(2, 8), ses.get(2).beat);
-		assertEquals(fr(2, 8), ses.get(3).beat);
-		assertEquals(fr(6, 8), ses.get(4).beat);
+		assertEquals(fr(0, 8), ses[0].beat);
+		assertEquals(fr(2, 8), ses[1].beat);
+		assertEquals(fr(2, 8), ses[2].beat);
+		assertEquals(fr(2, 8), ses[3].beat);
+		assertEquals(fr(6, 8), ses[4].beat);
 	}
 
 }

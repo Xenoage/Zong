@@ -1,13 +1,11 @@
 package com.xenoage.zong.musiclayout.layouter.columnspacing;
 
-import static com.xenoage.utils.collections.CList.clist;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.math.Fraction.fr;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.musiclayout.BeatOffset;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
@@ -31,9 +29,9 @@ public class BeatOffsetBasedVoiceSpacingStrategy
 	 */
 	public VoiceSpacing computeVoiceSpacing(VoiceSpacing voiceSpacing, List<BeatOffset> beatOffsets) {
 		
-		List<SpacingElement> oldSpacingElements = voiceSpacing.getSpacingElements();
-		CList<SpacingElement> spacingElements = clist(oldSpacingElements);
-		if (spacingElements.size() == 0 || beatOffsets.size() == 0)
+		SpacingElement[] oldSpacingElements = voiceSpacing.spacingElements;
+		SpacingElement[] spacingElements = oldSpacingElements.clone();
+		if (spacingElements.length == 0 || beatOffsets.size() == 0)
 			return voiceSpacing;
 		//find the given beats, that are also used here
 		List<BeatOffset> sharedBeats = computeSharedBeats(spacingElements, beatOffsets);
@@ -42,11 +40,11 @@ public class BeatOffsetBasedVoiceSpacingStrategy
 		float lastEndElementPosition = 0;
 		int firstElement = 0;
 		int lastElement = -1;
-		float interlineSpace = voiceSpacing.getInterlineSpace();
+		float interlineSpace = voiceSpacing.interlineSpace;
 		for (int iGivenBeat = 0; iGivenBeat < sharedBeats.size(); iGivenBeat++) {
 			//for each given beat: find elements before or at that beat
-			for (int iElement = lastElement + 1; iElement < spacingElements.size(); iElement++) {
-				if (spacingElements.get(iElement).beat.compareTo(sharedBeats.get(iGivenBeat).getBeat()) > 0)
+			for (int iElement = lastElement + 1; iElement < spacingElements.length; iElement++) {
+				if (spacingElements[iElement].beat.compareTo(sharedBeats.get(iGivenBeat).getBeat()) > 0)
 					break;
 				lastElement++;
 			}
@@ -57,17 +55,17 @@ public class BeatOffsetBasedVoiceSpacingStrategy
 			//last shared beat up to the current shared beat.
 			float currentGivenBeatPosition = sharedBeats.get(iGivenBeat).getOffsetMm() / interlineSpace; //we calculate in interline spaces here
 			float givenBeatsDistance = currentGivenBeatPosition - lastGivenBeatPosition;
-			float currentEndElementPosition = spacingElements.get(lastElement).offset;
+			float currentEndElementPosition = spacingElements[lastElement].offsetIs;
 			float elementsDistance = currentEndElementPosition - lastEndElementPosition;
 			//interpolate the offsets of the current voice spacing
 			//between the last shared beat and the current shared beat.
 			//do this in reverse order, because the position of grace notes is dependent
 			//on the position of the (following) main note
 			for (int iElement = lastElement; iElement >= firstElement; iElement--) {
-				SpacingElement e = spacingElements.get(iElement);
+				SpacingElement e = spacingElements[iElement];
 				if (!e.grace) {
 					//normal element: interpolate position
-					float currentElementOffset = e.offset - lastEndElementPosition;
+					float currentElementOffset = e.offsetIs - lastEndElementPosition;
 					float newElementOffset;
 					if (elementsDistance != 0) {
 						newElementOffset = currentElementOffset / elementsDistance * givenBeatsDistance; //scale offset according to the given beats distance
@@ -75,26 +73,24 @@ public class BeatOffsetBasedVoiceSpacingStrategy
 					else {
 						newElementOffset = currentGivenBeatPosition;
 					}
-					spacingElements.set(iElement, e.withOffset(newElementOffset + lastGivenBeatPosition));
+					spacingElements[iElement] = e.withOffset(newElementOffset + lastGivenBeatPosition);
 				}
 				else {
 					//grace element: same distance to the main note as before
-					float distanceBefore = oldSpacingElements.get(iElement + 1).offset -
-						oldSpacingElements.get(iElement).offset;
-					spacingElements.set(iElement,
-						e.withOffset(spacingElements.get(iElement + 1).offset - distanceBefore));
+					float distanceBefore = oldSpacingElements[iElement + 1].offsetIs -
+						oldSpacingElements[iElement].offsetIs;
+					spacingElements[iElement] = e.withOffset(spacingElements[iElement + 1].offsetIs - distanceBefore);
 				}
 			}
 			//next range up to next shared beat
 			firstElement = lastElement + 1;
-			if (firstElement >= spacingElements.size())
+			if (firstElement >= spacingElements.length)
 				break;
 			lastGivenBeatPosition = currentGivenBeatPosition;
 			lastEndElementPosition = currentEndElementPosition;
 		}
-		spacingElements.close();
 		
-		return new VoiceSpacing(voiceSpacing.getVoice(), voiceSpacing.getInterlineSpace(),
+		return new VoiceSpacing(voiceSpacing.voice, voiceSpacing.interlineSpace,
 			spacingElements);
 	}
 
@@ -104,13 +100,12 @@ public class BeatOffsetBasedVoiceSpacingStrategy
 	 * If there are no beats used by both lists, an empty
 	 * list is returned.
 	 */
-	public List<BeatOffset> computeSharedBeats(List<SpacingElement> spacingElements,
-		List<BeatOffset> beatOffsets) {
+	public List<BeatOffset> computeSharedBeats(SpacingElement[] spacingElements, List<BeatOffset> beatOffsets) {
 		ArrayList<BeatOffset> ret = alist(beatOffsets.size());
 		int i1 = 0, i2 = 0;
 		Fraction lastAddedBeat = fr(-1);
-		while (i1 < spacingElements.size() && i2 < beatOffsets.size()) {
-			Fraction beat1 = spacingElements.get(i1).beat;
+		while (i1 < spacingElements.length && i2 < beatOffsets.size()) {
+			Fraction beat1 = spacingElements[i1].beat;
 			BeatOffset beatOffset2 = beatOffsets.get(i2);
 			Fraction beat2 = beatOffset2.getBeat();
 			if (beat1.equals(beat2)) {

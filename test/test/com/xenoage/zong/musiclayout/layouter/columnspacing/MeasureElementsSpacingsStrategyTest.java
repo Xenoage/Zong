@@ -65,8 +65,8 @@ public class MeasureElementsSpacingsStrategyTest {
 	@Test public void testEnoughExistingSpace() {
 		Rest[] ve = ve();
 		IList<VoiceSpacing> vs = ilist(
-			new VoiceSpacing(null, 1, ilist(se(ve[0], fr(1, 2), 4), se(ve[1], fr(6), 15))),
-			new VoiceSpacing(null, 1, ilist(se(ve[2], fr(1), 5), se(ve[3], fr(17, 2), 20))));
+			new VoiceSpacing(null, 1, new SpacingElement[]{se(ve[0], fr(1, 2), 4), se(ve[1], fr(6), 15)}),
+			new VoiceSpacing(null, 1, new SpacingElement[]{se(ve[2], fr(1), 5), se(ve[3], fr(17, 2), 20)}));
 		Clef innerClef = new Clef(ClefType.clefTreble);
 		BeatEList<Clef> innerClefs = new BeatEList<Clef>();
 		innerClefs.add(beatE(innerClef, fr(6)));
@@ -76,7 +76,7 @@ public class MeasureElementsSpacingsStrategyTest {
 		SpacingElement[] mes = res.get1().elements;
 		assertEquals(1, mes.length);
 		assertEquals(fr(6), mes[0].beat);
-		assertEquals(15 - paddingWidth - clefWidth / 2, mes[0].offset, Delta.DELTA_FLOAT);
+		assertEquals(15 - paddingWidth - clefWidth / 2, mes[0].offsetIs, Delta.DELTA_FLOAT);
 		//voice spacings must be unchanged
 		assertEquals(vs, res.get2());
 	}
@@ -104,8 +104,8 @@ public class MeasureElementsSpacingsStrategyTest {
 	@Test public void testNeedAdditionalSpace() {
 		Rest[] ve = ve();
 		IList<VoiceSpacing> vs = ilist(
-			new VoiceSpacing(null, 1, ilist(se(ve[0], fr(1, 2), 4), se(ve[1], fr(4), 11))),
-			new VoiceSpacing(null, 1, ilist(se(ve[2], fr(1), 5), se(ve[3], fr(13, 2), 16))));
+			new VoiceSpacing(null, 1, new SpacingElement[]{se(ve[0], fr(1, 2), 4), se(ve[1], fr(4), 11)}),
+			new VoiceSpacing(null, 1, new SpacingElement[]{se(ve[2], fr(1), 5), se(ve[3], fr(13, 2), 16)}));
 		Clef innerClef = new Clef(ClefType.clefTreble);
 		BeatEList<Clef> innerClefs = new BeatEList<Clef>();
 		innerClefs.add(beatE(innerClef, fr(4)));
@@ -114,14 +114,14 @@ public class MeasureElementsSpacingsStrategyTest {
 		//voice spacings
 		assertEquals(2, res.get2().size());
 		assertEquals(ilist(se(ve[0], fr(1, 2), 4), se(ve[1], fr(4), 13)), res.get2().get(0)
-			.getSpacingElements());
+			.spacingElements);
 		assertEquals(ilist(se(ve[2], fr(1), 5), se(ve[3], fr(13, 2), 18)), res.get2().get(1)
-			.getSpacingElements());
+			.spacingElements);
 		//clef must be at offset 13 - padding - clefwidth/2
 		SpacingElement[] mes = res.get1().elements;
 		assertEquals(1, mes.length);
 		assertEquals(fr(4), mes[0].beat);
-		assertEquals(13 - paddingWidth - clefWidth / 2, mes[0].offset, Delta.DELTA_FLOAT);
+		assertEquals(13 - paddingWidth - clefWidth / 2, mes[0].offsetIs, Delta.DELTA_FLOAT);
 	}
 
 	private Rest[] ve() {

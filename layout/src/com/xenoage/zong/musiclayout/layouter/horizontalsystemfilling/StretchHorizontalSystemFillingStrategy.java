@@ -3,8 +3,10 @@ package com.xenoage.zong.musiclayout.layouter.horizontalsystemfilling;
 import static com.xenoage.utils.collections.CList.clist;
 import static com.xenoage.utils.iterators.ReverseIterator.reverseIt;
 import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.utils.kernel.Range.rangeReverse;
 
 import com.xenoage.utils.collections.CList;
+import com.xenoage.utils.kernel.Range;
 import com.xenoage.zong.musiclayout.BeatOffset;
 import com.xenoage.zong.musiclayout.SystemArrangement;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
@@ -72,7 +74,7 @@ public class StretchHorizontalSystemFillingStrategy
 				SpacingElement[] newMESElements = new SpacingElement[me.length];
 				for (int i : range(me)) {
 					//stretch the offset
-					newMESElements[i] = me[i].withOffset(me[i].offset * stretch);
+					newMESElements[i] = me[i].withOffset(me[i].offsetIs * stretch);
 				}
 				MeasureElementsSpacings newMES = new MeasureElementsSpacings(newMESElements);
 				//voices
@@ -82,23 +84,24 @@ public class StretchHorizontalSystemFillingStrategy
 					//traverse in reverse order, so we can align grace elements correctly
 					//grace elements are not stretched, but the distance to their following full element
 					//stays the same
-					CList<SpacingElement> newSEs = clist();
+					SpacingElement[] newSEs = new SpacingElement[oldVS.spacingElements.length];
 					float lastOldOffset = Float.NaN;
 					float lastNewOffset = Float.NaN;
-					for (SpacingElement oldSE : reverseIt(oldVS.getSpacingElements())) {
+					for (int i : rangeReverse(oldVS.spacingElements)) {
+						SpacingElement oldSE = oldVS.spacingElements[i];
 						if (oldSE.grace && !Float.isNaN(lastOldOffset)) {
 							//grace element: keep distance to following element
-							float oldDistance = lastOldOffset - oldSE.offset;
+							float oldDistance = lastOldOffset - oldSE.offsetIs;
 							lastNewOffset = lastNewOffset - oldDistance;
 						}
 						else {
 							//normal element: stretch the offset
-							lastNewOffset = oldSE.offset * stretch;
+							lastNewOffset = oldSE.offsetIs * stretch;
 						}
-						lastOldOffset = oldSE.offset;
-						newSEs.add(0, oldSE.withOffset(lastNewOffset));
+						lastOldOffset = oldSE.offsetIs;
+						newSEs[oldVS.spacingElements.length - i - 1] = oldSE.withOffset(lastNewOffset);
 					}
-					newVSs.add(new VoiceSpacing(oldVS.getVoice(), oldVS.getInterlineSpace(), newSEs.close()));
+					newVSs.add(new VoiceSpacing(oldVS.voice, oldVS.interlineSpace, newSEs));
 				}
 				newMeasureSpacings.add(new MeasureSpacing(oldMS.getMp(), newVSs.close(), newMES,
 					oldMS.getLeadingSpacing()));

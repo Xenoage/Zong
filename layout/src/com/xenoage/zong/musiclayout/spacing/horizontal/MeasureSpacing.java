@@ -42,8 +42,8 @@ import com.xenoage.zong.core.position.MP;
 		//compute the list of all used beats
 		SortedList<Fraction> usedBeats = new SortedList<Fraction>(false);
 		for (VoiceSpacing vs : voiceSpacings) {
-			for (SpacingElement se : vs.getSpacingElements()) {
-				usedBeats.add(se.getBeat());
+			for (SpacingElement se : vs.spacingElements) {
+				usedBeats.add(se.beat);
 			}
 		}
 		this.usedBeats = ilist(usedBeats.getLinkedList());

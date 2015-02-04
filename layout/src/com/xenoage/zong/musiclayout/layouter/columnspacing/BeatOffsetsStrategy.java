@@ -83,12 +83,12 @@ public class BeatOffsetsStrategy
 		//Otherwise we must find the dominant parts within the voices
 		if (voiceSpacings.size() == 1) {
 			//only one voice
-			float interlineSpace = voiceSpacings.get(0).getInterlineSpace();
-			for (SpacingElement se : voiceSpacings.get(0).getSpacingElements()) {
+			float interlineSpace = voiceSpacings.get(0).interlineSpace;
+			for (SpacingElement se : voiceSpacings.get(0).spacingElements) {
 				//if last beat offset has same beat, overwrite it
 				if (ret.get(ret.size() - 1).getBeat().equals(se.beat))
 					ret.remove(ret.size() - 1);
-				ret.add(new BeatOffset(se.beat, se.offset * interlineSpace));
+				ret.add(new BeatOffset(se.beat, se.offsetIs * interlineSpace));
 			}
 		}
 		else {
@@ -106,9 +106,9 @@ public class BeatOffsetsStrategy
 				//find dominating voice and its minimal required distance
 				float minimalDistance = 0;
 				for (VoiceSpacing voiceSpacing : voiceSpacings) {
-					float interlineSpace = voiceSpacing.getInterlineSpace();
+					float interlineSpace = voiceSpacing.interlineSpace;
 					float voiceMinimalDistance = computeMinimalDistance(lastBeat, beat,
-						beat.equals(measureBeats), voiceSpacing.getVoice(), voiceSpacing.getSpacingElements(),
+						beat.equals(measureBeats), voiceSpacing.voice, voiceSpacing.spacingElements,
 						ret, interlineSpace);
 					minimalDistance = Math.max(minimalDistance, voiceMinimalDistance);
 
@@ -141,7 +141,7 @@ public class BeatOffsetsStrategy
 		Fraction beat;
 		for (VoiceSpacing voiceSpacing : voiceSpacings) {
 			beat = Fraction._0;
-			for (SpacingElement spacingElement : voiceSpacing.getSpacingElements()) {
+			for (SpacingElement spacingElement : voiceSpacing.spacingElements) {
 				MusicElement element = spacingElement.element;
 				if (element != null && element instanceof VoiceElement) {
 					//add beat
@@ -162,7 +162,7 @@ public class BeatOffsetsStrategy
 	Fraction computeLastBeat(List<VoiceSpacing> voiceSpacings) {
 		Fraction ret = _0;
 		for (VoiceSpacing voiceSpacing : voiceSpacings) {
-			Fraction beat = voiceSpacing.getSpacingElements().getLast().beat;
+			Fraction beat = voiceSpacing.getLast().beat;
 			if (beat.compareTo(ret) > 0)
 				ret = beat;
 		}
@@ -225,7 +225,7 @@ public class BeatOffsetsStrategy
 	 * place the elements up to the given ending beat.
 	 */
 	float computeMinimalDistance(Fraction startBeat, Fraction endBeat, boolean endBeatIsMeasureEnd,
-		Voice voice, List<SpacingElement> spacings, List<BeatOffset> alreadyComputedBeatOffsets,
+		Voice voice, SpacingElement[] spacings, List<BeatOffset> alreadyComputedBeatOffsets,
 		float interlineSpace) {
 		//end beat used? (measure end beat is always used)
 		if (endBeatIsMeasureEnd || voice.isBeatUsed(endBeat)) {
@@ -249,7 +249,7 @@ public class BeatOffsetsStrategy
 				float lastUsedBeatVoiceSpacingOffset = 0;
 				for (SpacingElement spacing : spacings) {
 					if (spacing.beat.equals(lastUsedBeat)) {
-						lastUsedBeatVoiceSpacingOffset = spacing.offset * interlineSpace;
+						lastUsedBeatVoiceSpacingOffset = spacing.offsetIs * interlineSpace;
 						break;
 					}
 				}
@@ -287,8 +287,8 @@ public class BeatOffsetsStrategy
 	private float getOffsetBeat0InMm(List<VoiceSpacing> voiceSpacings) {
 		float maxOffset = 0;
 		for (VoiceSpacing voiceSpacing : voiceSpacings) {
-			List<SpacingElement> elements = voiceSpacing.getSpacingElements();
-			float offset = getLastOffset(elements, _0) * voiceSpacing.getInterlineSpace();
+			SpacingElement[] elements = voiceSpacing.spacingElements;
+			float offset = getLastOffset(elements, _0) * voiceSpacing.interlineSpace;
 			if (offset > maxOffset)
 				maxOffset = offset;
 		}
@@ -300,15 +300,15 @@ public class BeatOffsetsStrategy
 	 * occurrence of the given beat in interline spaces.
 	 * If the beat is not found, 0 is returned.
 	 */
-	private float getLastOffset(List<SpacingElement> spacings, Fraction beat) {
-		for (int i = 0; i < spacings.size(); i++) {
+	private float getLastOffset(SpacingElement[] spacings, Fraction beat) {
+		for (int i : range(spacings)) {
 			//find first occurrence of the beat
-			if (spacings.get(i).beat.equals(beat)) {
+			if (spacings[i].beat.equals(beat)) {
 				//find last occurrence of the beat
-				while (i + 1 < spacings.size() && spacings.get(i + 1).beat.equals(beat)) {
+				while (i + 1 < spacings.length && spacings[i + 1].beat.equals(beat)) {
 					i++;
 				}
-				return spacings.get(i).offset;
+				return spacings[i].offsetIs;
 			}
 		}
 		return 0;

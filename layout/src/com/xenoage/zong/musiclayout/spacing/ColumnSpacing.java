@@ -96,9 +96,9 @@ import com.xenoage.zong.musiclayout.spacing.horizontal.SpacingElement;
 	 */
 	public float getOffset(MusicElement element, int staffIndex, int voiceIndex) {
 		MeasureSpacing measure = measureSpacings.get(staffIndex);
-		for (SpacingElement se : measure.getVoiceSpacings().get(voiceIndex).getSpacingElements()) {
-			if (se.getElement() == element) {
-				return se.getOffset();
+		for (SpacingElement se : measure.getVoiceSpacings().get(voiceIndex).spacingElements) {
+			if (se.element == element) {
+				return se.offsetIs;
 			}
 		}
 		return 0;
