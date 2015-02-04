@@ -4,6 +4,7 @@ import static com.xenoage.utils.collections.CList.clist;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.kernel.Tuple3.t3;
+import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.zong.core.music.util.Interval.At;
 import static com.xenoage.zong.core.position.MP.atBeat;
 import static com.xenoage.zong.core.position.MP.atMeasure;
@@ -23,6 +24,7 @@ import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.util.Column;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.musiclayout.BeatOffset;
+import com.xenoage.zong.musiclayout.Context;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterContext;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
@@ -144,17 +146,26 @@ public class ColumnSpacingStrategy
 					notations, lc.getLayoutSettings()).get1());
 			alignedVoiceSpacings.add(vs.close());
 		}
+		
+		//TODO
+		Context context = new Context();
+		context.notationsCache = notations;
+		context.score = score;
+		context.settings = lc.getLayoutSettings();
+		context.symbols = lc.getSymbolPool();
+		context.mp = atBeat(0, measureIndex, 0, _0);
 
 		//compute spacings for each staff
 		NotationsCache leadingNotations = (createLeading ? new NotationsCache() : null);
 		CList<MeasureSpacing> measureSpacings = clist();
+		context.saveMp();
 		for (int iStaff : range(column)) {
 			//create leading spacing, if needed
 			LeadingSpacing leadingSpacing = null;
 			if (createLeading) {
-				MusicContext mc = score.getMusicContext(atBeat(iStaff, measureIndex, 0, Fraction._0), At, null);
+				context.mp = atBeat(iStaff, measureIndex, 0, Fraction._0);
 				Tuple2<LeadingSpacing, NotationsCache> ls = measureLeadingSpacingStrategy
-					.computeLeadingSpacing(mc, iStaff, lc.getLayoutSettings());
+					.computeLeadingSpacing(context);
 				leadingSpacing = ls.get1();
 				leadingNotations.merge(ls.get2());
 			}
@@ -162,6 +173,7 @@ public class ColumnSpacingStrategy
 			measureSpacings.add(new MeasureSpacing(atMeasure(iStaff, measureIndex), alignedVoiceSpacings
 				.get(iStaff), alignedMeasureElementsSpacingsByStaff.get(iStaff), leadingSpacing));
 		}
+		context.restoreMp();
 		measureSpacings.close();
 
 		return t3(

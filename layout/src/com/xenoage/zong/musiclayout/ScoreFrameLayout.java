@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import com.xenoage.utils.iterators.MultiIt;
+import com.xenoage.utils.iterators.MultiListIt;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Rectangle2f;
 import com.xenoage.zong.core.music.MusicElement;
@@ -70,7 +70,7 @@ public final class ScoreFrameLayout {
 	 */
 	@SuppressWarnings("unchecked")
 	public Iterable<Stamping> getMusicalStampings() {
-		return new MultiIt<Stamping>(staffStampings, otherStampings);
+		return new MultiListIt<Stamping>(staffStampings, otherStampings);
 	}
 
 	/**
@@ -79,7 +79,7 @@ public final class ScoreFrameLayout {
 	 */
 	@SuppressWarnings("unchecked")
 	public Iterable<Stamping> getAllStampings() {
-		return new MultiIt<Stamping>(staffStampings, otherStampings, selectionStampings,
+		return new MultiListIt<Stamping>(staffStampings, otherStampings, selectionStampings,
 			playbackStampings);
 	}
 

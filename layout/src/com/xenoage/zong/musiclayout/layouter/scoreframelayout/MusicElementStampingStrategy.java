@@ -48,8 +48,8 @@ public class MusicElementStampingStrategy
 	 */
 	public KeySignatureStamping createKeyStamping(TraditionalKeyNotation key, float positionX,
 		StaffStamping staff, SymbolPool symbolPool, LayoutSettings layoutSettings) {
-		return new KeySignatureStamping(key.element, key.linePositionC4,
-			key.linePositionMin, positionX, staff, symbolPool, layoutSettings);
+		return new KeySignatureStamping(key.element, key.c4Lp,
+			key.minLp, positionX, staff, symbolPool, layoutSettings);
 	}
 
 	/**

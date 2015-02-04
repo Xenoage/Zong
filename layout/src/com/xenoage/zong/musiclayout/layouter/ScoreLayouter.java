@@ -3,7 +3,6 @@ package com.xenoage.zong.musiclayout.layouter;
 import static com.xenoage.utils.lang.VocByString.voc;
 import static com.xenoage.utils.log.Log.log;
 import static com.xenoage.utils.log.Report.warning;
-import static com.xenoage.zong.musiclayout.notator.Notator.notator;
 
 import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.collections.IList;
@@ -11,6 +10,7 @@ import com.xenoage.utils.lang.Lang;
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.Zong;
 import com.xenoage.zong.core.Score;
+import com.xenoage.zong.musiclayout.Context;
 import com.xenoage.zong.musiclayout.ScoreLayout;
 import com.xenoage.zong.musiclayout.layouter.arrangement.FrameArrangementStrategy;
 import com.xenoage.zong.musiclayout.layouter.arrangement.SystemArrangementStrategy;
@@ -22,24 +22,17 @@ import com.xenoage.zong.musiclayout.layouter.columnspacing.ColumnSpacingStrategy
 import com.xenoage.zong.musiclayout.layouter.columnspacing.LeadingSpacingStrategy;
 import com.xenoage.zong.musiclayout.layouter.columnspacing.MeasureElementsSpacingsStrategy;
 import com.xenoage.zong.musiclayout.layouter.columnspacing.SeparateVoiceSpacingStrategy;
-import com.xenoage.zong.musiclayout.layouter.scoreframelayout.SlurStampingStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.DirectionStampingStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.LyricStampingStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.MusicElementStampingStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.ScoreFrameLayoutStrategy;
+import com.xenoage.zong.musiclayout.layouter.scoreframelayout.SlurStampingStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.StaffStampingsStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.TupletStampingStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.VoltaStampingStrategy;
 import com.xenoage.zong.musiclayout.layouter.voicenotation.VoiceStemDirectionNotationsStrategy;
 import com.xenoage.zong.musiclayout.notator.Notator;
-import com.xenoage.zong.musiclayout.notator.chord.AccidentalsNotator;
-import com.xenoage.zong.musiclayout.notator.chord.ArticulationsNotator;
-import com.xenoage.zong.musiclayout.notator.chord.NotesNotator;
-import com.xenoage.zong.musiclayout.notator.chord.StemNotator;
-import com.xenoage.zong.musiclayout.notator.chord.stem.beam.BeamedStemDirector;
-import com.xenoage.zong.musiclayout.notator.chord.stem.single.SingleStemDirector;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
-import com.xenoage.zong.musiclayout.stamper.BeamStamper;
 import com.xenoage.zong.symbols.SymbolPool;
 
 /**
@@ -59,8 +52,6 @@ public class ScoreLayouter {
 
 	//the score layout created by this layouter
 	private ScoreLayout layout = null;
-	
-	private Notator notator;
 
 
 	/**
@@ -97,13 +88,11 @@ public class ScoreLayouter {
 		boolean isCompleteLayout, Size2f areaSize) {
 		this.context = new ScoreLayouterContext(score, symbolPool, layoutSettings,
 			isCompleteLayout, CList.<ScoreLayoutArea>ilist(), new ScoreLayoutArea(areaSize));
-		this.notator = notator(score, symbolPool, layoutSettings);
 		this.strategy = createStrategyTree();
 	}
 
-	public ScoreLayouter(ScoreLayouterContext context) {
-		this.context = context;
-		this.notator = notator(context.getScore(), context.getSymbolPool(), context.getLayoutSettings());
+	public ScoreLayouter(ScoreLayouterContext c) {
+		this.context = c;
 		this.strategy = createStrategyTree();
 	}
 
@@ -139,9 +128,9 @@ public class ScoreLayouter {
 		ColumnSpacingStrategy columnSpacingStrategy = new ColumnSpacingStrategy(
 			new SeparateVoiceSpacingStrategy(), new MeasureElementsSpacingsStrategy(),
 			new BeatOffsetsStrategy(), new BarlinesBeatOffsetsStrategy(),
-			new BeatOffsetBasedVoiceSpacingStrategy(), new LeadingSpacingStrategy(notator));
+			new BeatOffsetBasedVoiceSpacingStrategy(), new LeadingSpacingStrategy());
 		//complete tree
-		return new ScoreLayoutStrategy(notator, new VoiceStemDirectionNotationsStrategy(notator),
+		return new ScoreLayoutStrategy(new VoiceStemDirectionNotationsStrategy(),
 			columnSpacingStrategy, new FrameArrangementStrategy(new SystemArrangementStrategy(
 				columnSpacingStrategy)), new BeamedStemAlignmentNotationsStrategy(),
 			new ScoreFrameLayoutStrategy(new StaffStampingsStrategy(),

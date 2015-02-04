@@ -5,6 +5,7 @@ import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.iterators.It.it;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.kernel.Tuple2.t;
+import static com.xenoage.zong.musiclayout.notator.Notator.notator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,7 @@ import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.util.Column;
 import com.xenoage.zong.layout.frames.ScoreFrame;
+import com.xenoage.zong.musiclayout.Context;
 import com.xenoage.zong.musiclayout.FrameArrangement;
 import com.xenoage.zong.musiclayout.ScoreFrameLayout;
 import com.xenoage.zong.musiclayout.ScoreLayout;
@@ -36,7 +38,6 @@ import com.xenoage.zong.musiclayout.layouter.scoreframelayout.ScoreFrameLayoutSt
 import com.xenoage.zong.musiclayout.layouter.verticalframefilling.VerticalFrameFillingStrategy;
 import com.xenoage.zong.musiclayout.layouter.voicenotation.VoiceStemDirectionNotationsStrategy;
 import com.xenoage.zong.musiclayout.notator.Notator;
-import com.xenoage.zong.musiclayout.notator.chord.stem.beam.BeamedStemDirector;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 
 /**
@@ -49,7 +50,6 @@ public class ScoreLayoutStrategy
 	implements ScoreLayouterStrategy {
 
 	//used strategies
-	private final Notator notationStrategy;
 	private final VoiceStemDirectionNotationsStrategy voiceStemDirectionNotationsStrategy;
 	private final ColumnSpacingStrategy measureColumnSpacingStrategy;
 	private final FrameArrangementStrategy frameArrangementStrategy;
@@ -60,13 +60,12 @@ public class ScoreLayoutStrategy
 	/**
 	 * Creates a new {@link ScoreLayoutStrategy}.
 	 */
-	public ScoreLayoutStrategy(Notator notationStrategy,
+	public ScoreLayoutStrategy(
 		VoiceStemDirectionNotationsStrategy voiceStemDirectionNotationsStrategy,
 		ColumnSpacingStrategy measureColumnSpacingStrategy,
 		FrameArrangementStrategy frameArrangementStrategy,
 		BeamedStemAlignmentNotationsStrategy beamedStemAlignmentNotationsStrategy,
 		ScoreFrameLayoutStrategy scoreFrameLayoutStrategy) {
-		this.notationStrategy = notationStrategy;
 		this.voiceStemDirectionNotationsStrategy = voiceStemDirectionNotationsStrategy;
 		this.measureColumnSpacingStrategy = measureColumnSpacingStrategy;
 		this.frameArrangementStrategy = frameArrangementStrategy;
@@ -86,7 +85,13 @@ public class ScoreLayoutStrategy
 		//GOON - use StemNotator for single chords and BeamStemNotator for beamed chords
 		
 		//notations of elements
-		NotationsCache notations = notationStrategy.computeAll();
+		Context context = new Context();
+		context.score = lc.getScore();
+		context.settings = lc.getLayoutSettings();
+		context.symbols = lc.getSymbolPool();
+		notator.computeAll(context);
+		NotationsCache notations = context.notationsCache;
+		
 		//TODO: stem directions dependent on their voice
 		for (int iStaff : range(0, score.getStavesCount() - 1)) {
 			notations.merge(voiceStemDirectionNotationsStrategy.computeNotations(iStaff, notations, lc));

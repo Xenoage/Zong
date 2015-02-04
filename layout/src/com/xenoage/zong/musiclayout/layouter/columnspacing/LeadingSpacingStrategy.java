@@ -2,6 +2,8 @@ package com.xenoage.zong.musiclayout.layouter.columnspacing;
 
 import static com.xenoage.utils.collections.CList.clist;
 import static com.xenoage.utils.math.Fraction.fr;
+import static com.xenoage.zong.core.music.util.Interval.At;
+import static com.xenoage.zong.musiclayout.notator.TraditionalKeyNotator.traditionalKeyNotator;
 
 import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.kernel.Tuple2;
@@ -9,12 +11,11 @@ import com.xenoage.zong.core.music.MusicContext;
 import com.xenoage.zong.core.music.clef.Clef;
 import com.xenoage.zong.core.music.key.Key;
 import com.xenoage.zong.core.music.key.TraditionalKey;
+import com.xenoage.zong.musiclayout.Context;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
 import com.xenoage.zong.musiclayout.notations.ClefNotation;
 import com.xenoage.zong.musiclayout.notations.TraditionalKeyNotation;
-import com.xenoage.zong.musiclayout.notator.Notator;
-import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.musiclayout.spacing.horizontal.ElementWidth;
 import com.xenoage.zong.musiclayout.spacing.horizontal.LeadingSpacing;
 import com.xenoage.zong.musiclayout.spacing.horizontal.SpacingElement;
@@ -33,27 +34,17 @@ import com.xenoage.zong.musiclayout.spacing.horizontal.SpacingElement;
 public class LeadingSpacingStrategy
 	implements ScoreLayouterStrategy {
 
-	//used strategies
-	private final Notator notationStrategy;
-
-
-	/**
-	 * Creates a new {@link LeadingSpacingStrategy}.
-	 */
-	public LeadingSpacingStrategy(Notator notationStrategy) {
-		this.notationStrategy = notationStrategy;
-	}
-
+	
 	/**
 	 * Computes and returns the leading spacing for the given context.
 	 * This spacing contains the current clef and key signature.
 	 * The additionally created notations are returned, too.
 	 */
-	public Tuple2<LeadingSpacing, NotationsCache> computeLeadingSpacing(MusicContext musicContext,
-		int iStaff, LayoutSettings layoutSettings) {
-		float xOffset = layoutSettings.offsetMeasureStart;
-
+	public Tuple2<LeadingSpacing, NotationsCache> computeLeadingSpacing(Context context) {
+		float xOffset = context.settings.offsetMeasureStart;
+		
 		boolean useKey = false;
+		MusicContext musicContext = context.getMusicContext(At, null);
 		Key key = musicContext.getKey();
 		if (key instanceof TraditionalKey) {
 			useKey = true;
@@ -64,18 +55,18 @@ public class LeadingSpacingStrategy
 
 		Clef clef = new Clef(musicContext.getClef().getType()); //it is not the same element instance, but has the same meaning
 		ClefNotation clefNotation = new ClefNotation(clef, new ElementWidth(0,
-			layoutSettings.spacings.widthClef, 0), musicContext.getClef().getType().getLp(), 1);
+			context.settings.spacings.widthClef, 0), musicContext.getClef().getType().getLp(), 1);
 		notations.add(clefNotation);
-		xOffset += layoutSettings.spacings.widthClef / 2;
+		xOffset += context.settings.spacings.widthClef / 2;
 		elements.add(new SpacingElement(clef, fr(0), xOffset));
-		xOffset += layoutSettings.spacings.widthClef / 2;
+		xOffset += context.settings.spacings.widthClef / 2;
 
 		if (useKey) {
 			TraditionalKey tkey = (TraditionalKey) key;
-			xOffset += layoutSettings.spacings.widthDistanceMin;
+			xOffset += context.settings.spacings.widthDistanceMin;
 			TraditionalKey tradKey = new TraditionalKey(tkey.getFifths(), tkey.getMode()); //it is not the same element instance, but has the same meaning
-			TraditionalKeyNotation keyNotation = notationStrategy.computeTraditionalKey(tradKey, clef);
-			notations.add(keyNotation, iStaff);
+			TraditionalKeyNotation keyNotation = traditionalKeyNotator.notate(tradKey, context);
+			notations.add(keyNotation, context.mp.staff);
 			elements.add(new SpacingElement(tradKey, fr(0), xOffset));
 			xOffset += keyNotation.getWidth().getWidth();
 		}

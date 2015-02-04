@@ -38,6 +38,8 @@ import com.xenoage.zong.core.music.Voice;
 	public static final Fraction unknownBeat = null;
 	/** Special value for an unknown index. */
 	public static final int unknown = -1;
+	/** Unknown MP. */
+	public static final MP unknownMp = new MP(unknown, unknown, unknown, unknownBeat, unknown);
 	
 
 	/** Musical position with all values set to 0, including beat and element index. */

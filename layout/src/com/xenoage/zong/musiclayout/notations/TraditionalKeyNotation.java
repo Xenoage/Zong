@@ -5,7 +5,6 @@ import lombok.Getter;
 
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.music.key.TraditionalKey;
-import com.xenoage.zong.core.music.time.Time;
 import com.xenoage.zong.musiclayout.spacing.horizontal.ElementWidth;
 
 /**
@@ -20,7 +19,7 @@ public final class TraditionalKeyNotation
 
 	@Getter public final TraditionalKey element;
 	@Getter public final ElementWidth width;
-	public final int linePositionC4;
-	public final int linePositionMin;
+	public final int c4Lp;
+	public final int minLp;
 
 }
