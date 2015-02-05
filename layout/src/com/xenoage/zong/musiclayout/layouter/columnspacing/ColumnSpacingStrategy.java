@@ -6,6 +6,7 @@ import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.zong.core.position.MP.atBeat;
 import static com.xenoage.zong.core.position.MP.atMeasure;
+import static com.xenoage.zong.musiclayout.spacer.measure.MeasureElementsSpacer.measureElementsSpacer;
 import static com.xenoage.zong.musiclayout.spacer.voice.SingleVoiceSpacer.singleVoiceSpacer;
 
 import java.util.ArrayList;
@@ -26,9 +27,10 @@ import com.xenoage.zong.musiclayout.Context;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterContext;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
+import com.xenoage.zong.musiclayout.spacer.measure.MeasureElementsSpacer;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 import com.xenoage.zong.musiclayout.spacing.horizontal.LeadingSpacing;
-import com.xenoage.zong.musiclayout.spacing.horizontal.MeasureElementsSpacings;
+import com.xenoage.zong.musiclayout.spacing.horizontal.MeasureElementsSpacing;
 import com.xenoage.zong.musiclayout.spacing.horizontal.MeasureSpacing;
 import com.xenoage.zong.musiclayout.spacing.horizontal.VoiceSpacing;
 
@@ -43,7 +45,6 @@ public class ColumnSpacingStrategy
 	implements ScoreLayouterStrategy {
 
 	//used strategies
-	private final MeasureElementsSpacingsStrategy measureElementsSpacingsStrategy;
 	private final BeatOffsetsStrategy beatOffsetsStrategy;
 	private final BarlinesBeatOffsetsStrategy barlinesBeatOffsetsStrategy;
 	private final BeatOffsetBasedVoiceSpacingStrategy beatBasedVoiceSpacingStrategy;
@@ -54,12 +55,10 @@ public class ColumnSpacingStrategy
 	 * Creates a new {@link ColumnSpacingStrategy}.
 	 */
 	public ColumnSpacingStrategy(
-		MeasureElementsSpacingsStrategy measureElementsSpacingsStrategy,
 		BeatOffsetsStrategy beatOffsetsStrategy,
 		BarlinesBeatOffsetsStrategy barlinesBeatOffsetsStrategy,
 		BeatOffsetBasedVoiceSpacingStrategy beatBasedVoiceSpacingStrategy,
 		LeadingSpacingStrategy measureLeadingSpacingStrategy) {
-		this.measureElementsSpacingsStrategy = measureElementsSpacingsStrategy;
 		this.beatOffsetsStrategy = beatOffsetsStrategy;
 		this.barlinesBeatOffsetsStrategy = barlinesBeatOffsetsStrategy;
 		this.beatBasedVoiceSpacingStrategy = beatBasedVoiceSpacingStrategy;
@@ -87,6 +86,13 @@ public class ColumnSpacingStrategy
 
 		//beats within this measure column
 		Fraction measureBeats = score.getMeasureBeats(measureIndex);
+		
+		//TODO
+		Context context = new Context();
+		context.score = score;
+		context.notationsCache = notations;
+		context.symbols = lc.getSymbolPool();
+		context.settings = lc.getLayoutSettings();
 
 		//compute the optimal spacings for each voice separately
 		List<List<VoiceSpacing>> voiceSpacingsByStaff = alist();
@@ -94,27 +100,19 @@ public class ColumnSpacingStrategy
 			List<VoiceSpacing> vss = alist();
 			Measure measure = column.get(iStaff);
 			for (Voice voice : measure.getVoices()) {
-				
-				//TODO
-				Context context = new Context();
-				context.score = score;
 				context.mp = MP.atVoice(iStaff, measureIndex, measure.getVoices().indexOf(voice));
-				context.notationsCache = notations;
-				context.symbols = lc.getSymbolPool();
-				context.settings = lc.getLayoutSettings();
-				
-				VoiceSpacing vs = singleVoiceSpacer.compute(context, measureBeats);
+				VoiceSpacing vs = singleVoiceSpacer.compute(context);
 				vss.add(vs);
 			}
 			voiceSpacingsByStaff.add(vss);
 		}
 
 		//compute the measure elements (like inner clefs) and accordingly updated voice spacings
-		ArrayList<MeasureElementsSpacings> optimalMeasureElementsSpacingsByStaff = alist();
+		ArrayList<MeasureElementsSpacing> optimalMeasureElementsSpacingsByStaff = alist();
 		for (int iStaff : range(column)) {
-			MeasureElementsSpacings measureSpacing = measureElementsSpacingsStrategy
-				.computeMeasureElementsSpacings(score, iStaff, measureIndex, createLeading,
-					voiceSpacingsByStaff.get(iStaff), notations, lc.getLayoutSettings());
+			context.mp = MP.atMeasure(iStaff, measureIndex);
+			MeasureElementsSpacing measureSpacing = measureElementsSpacer.compute(
+				context, createLeading, voiceSpacingsByStaff.get(iStaff));
 			optimalMeasureElementsSpacingsByStaff.add(measureSpacing);
 		}
 
@@ -130,7 +128,7 @@ public class ColumnSpacingStrategy
 		BeatOffset[] barlineOffsets = offsets.get2();
 
 		//compute the spacings for the whole column, so that equal beats are aligned
-		ArrayList<MeasureElementsSpacings> alignedMeasureElementsSpacingsByStaff = alist();
+		ArrayList<MeasureElementsSpacing> alignedMeasureElementsSpacingsByStaff = alist();
 		for (int iStaff : range(column)) {
 			Measure measure = column.get(iStaff);
 			//voice spacings
@@ -139,20 +137,11 @@ public class ColumnSpacingStrategy
 					voiceSpacings.get(iStaff, iVoice), beatOffsets);
 			}
 			//measure elements, based on the aligned voice spacings
-			alignedMeasureElementsSpacingsByStaff.add(measureElementsSpacingsStrategy
-				.computeMeasureElementsSpacings(lc.getScore(), iStaff, measureIndex, createLeading,
-					voiceSpacings.getStaff(iStaff),
-					notations, lc.getLayoutSettings()));
+			context.mp = atMeasure(iStaff, measureIndex);
+			alignedMeasureElementsSpacingsByStaff.add(measureElementsSpacer.compute(
+				context, createLeading, voiceSpacings.getStaff(iStaff)));
 		}
 		
-		//TODO
-		Context context = new Context();
-		context.notationsCache = notations;
-		context.score = score;
-		context.settings = lc.getLayoutSettings();
-		context.symbols = lc.getSymbolPool();
-		context.mp = atBeat(0, measureIndex, 0, _0);
-
 		//compute spacings for each staff
 		NotationsCache leadingNotations = (createLeading ? new NotationsCache() : null);
 		MeasureSpacing[] measureSpacings = new MeasureSpacing[column.size()];

@@ -11,7 +11,7 @@ import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.musiclayout.BeatOffset;
 import com.xenoage.zong.musiclayout.spacing.horizontal.LeadingSpacing;
 import com.xenoage.zong.musiclayout.spacing.horizontal.MeasureSpacing;
-import com.xenoage.zong.musiclayout.spacing.horizontal.SpacingElement;
+import com.xenoage.zong.musiclayout.spacing.horizontal.ElementSpacing;
 
 /**
  * The horizontal spacing for one measure column.
@@ -94,7 +94,7 @@ import com.xenoage.zong.musiclayout.spacing.horizontal.SpacingElement;
 	 */
 	public float getOffset(MusicElement element, int staffIndex, int voiceIndex) {
 		MeasureSpacing measure = measureSpacings[staffIndex];
-		for (SpacingElement se : measure.getVoiceSpacings().get(voiceIndex).spacingElements) {
+		for (ElementSpacing se : measure.getVoiceSpacings().get(voiceIndex).spacingElements) {
 			if (se.element == element) {
 				return se.offsetIs;
 			}

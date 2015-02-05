@@ -1,14 +1,11 @@
 package com.xenoage.zong.musiclayout.spacer.voice;
 
-import static com.xenoage.utils.annotations.Optimized.Reason.Performance;
 import static com.xenoage.utils.collections.CList.ilist;
 import static com.xenoage.utils.collections.CollectionUtils.llist;
 import static com.xenoage.utils.iterators.ReverseIterator.reverseIt;
 
 import java.util.LinkedList;
 
-import com.xenoage.utils.annotations.Optimized;
-import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.VoiceElement;
@@ -17,7 +14,7 @@ import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
 import com.xenoage.zong.musiclayout.notations.Notation;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.musiclayout.spacing.horizontal.ElementWidth;
-import com.xenoage.zong.musiclayout.spacing.horizontal.SpacingElement;
+import com.xenoage.zong.musiclayout.spacing.horizontal.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.horizontal.VoiceSpacing;
 
 /**
@@ -35,22 +32,23 @@ public class SingleVoiceSpacer {
 	public static final SingleVoiceSpacer singleVoiceSpacer = new SingleVoiceSpacer();
 	
 
-	public VoiceSpacing compute(Context context, @Optimized(Performance) Fraction measureBeats) {
+	public VoiceSpacing compute(Context context) {
 		//measureBeats could be computed, but this is expensive and the caller can
 		//reuse the value for the whole measure column
 		Voice voice = context.score.getVoice(context.mp);
 		float is = context.score.getInterlineSpace(context.mp);
+		Fraction measureBeats = context.score.getMeasureBeats(context.mp.measure);
 		return compute(voice, is, measureBeats, context.notationsCache, context.settings);
 	}
 
 	VoiceSpacing compute(Voice voice, float interlineSpace, Fraction measureBeats, 
 		NotationsCache notations, LayoutSettings layoutSettings) {
-		LinkedList<SpacingElement> ret = llist();
+		LinkedList<ElementSpacing> ret = llist();
 
 		//special case: no elements in the measure.
 		if (voice.getElements().size() == 0) {
 			return new VoiceSpacing(voice, interlineSpace, ilist(
-				new SpacingElement(null, Fraction._0, 0), new SpacingElement(null, measureBeats,
+				new ElementSpacing(null, Fraction._0, 0), new ElementSpacing(null, measureBeats,
 					layoutSettings.spacings.widthMeasureEmpty)));
 		}
 
@@ -74,7 +72,7 @@ public class SingleVoiceSpacer {
 
 		//at last beat
 		Fraction curBeat = voice.getFilledBeats();
-		ret.addFirst(new SpacingElement(null, curBeat, lastFrontGapOffset));
+		ret.addFirst(new ElementSpacing(null, curBeat, lastFrontGapOffset));
 
 		//iterate through the elements in reverse order
 		for (VoiceElement element : reverseIt(voice.getElements())) {
@@ -106,14 +104,14 @@ public class SingleVoiceSpacer {
 				symbolOffset = Math.min(lastFrontGapOffset, lastSymbolOffset - elementWidth.rearGap) -
 					elementWidth.symbolWidth;
 			}
-			ret.addFirst(new SpacingElement(element, curBeat, grace, symbolOffset));
+			ret.addFirst(new ElementSpacing(element, curBeat, grace, symbolOffset));
 			lastFrontGapOffset = symbolOffset - elementWidth.frontGap;
 			lastSymbolOffset = symbolOffset;
 		}
 
 		//shift spacings to the right
 		float shift = (-lastFrontGapOffset) + layoutSettings.offsetMeasureStart;
-		for (SpacingElement e : ret)
+		for (ElementSpacing e : ret)
 			e.offsetIs += shift;
 
 		return new VoiceSpacing(voice, interlineSpace, ilist(ret));

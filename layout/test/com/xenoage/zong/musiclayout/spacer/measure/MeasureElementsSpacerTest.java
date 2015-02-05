@@ -1,10 +1,11 @@
-package com.xenoage.zong.musiclayout.layouter.columnspacing;
+package com.xenoage.zong.musiclayout.spacer.measure;
 
 import static com.xenoage.utils.collections.CList.ilist;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.collections.CollectionUtils.map;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.music.util.BeatE.beatE;
+import static com.xenoage.zong.musiclayout.spacer.measure.MeasureElementsSpacer.measureElementsSpacer;
 import static org.junit.Assert.assertEquals;
 
 import java.util.HashMap;
@@ -12,8 +13,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.xenoage.utils.collections.IList;
-import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.utils.math.Delta;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.VoiceElement;
@@ -29,21 +28,23 @@ import com.xenoage.zong.musiclayout.settings.ChordSpacings;
 import com.xenoage.zong.musiclayout.settings.ChordWidths;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.musiclayout.settings.Spacings;
+import com.xenoage.zong.musiclayout.spacing.horizontal.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.horizontal.ElementWidth;
-import com.xenoage.zong.musiclayout.spacing.horizontal.MeasureElementsSpacings;
-import com.xenoage.zong.musiclayout.spacing.horizontal.SpacingElement;
+import com.xenoage.zong.musiclayout.spacing.horizontal.MeasureElementsSpacing;
 import com.xenoage.zong.musiclayout.spacing.horizontal.VoiceSpacing;
 
 /**
- * Tests for the {@link MeasureElementsSpacingsStrategy}.
+ * Tests for the {@link MeasureElementsSpacer}.
  * 
  * In these tests, we assume a width for the padding of
  * 1 IS and for the clef of 6 IS.
  * 
  * @author Andreas Wenger
  */
-public class MeasureElementsSpacingsStrategyTest {
+public class MeasureElementsSpacerTest {
 
+	private MeasureElementsSpacer testee = measureElementsSpacer;
+	
 	private float paddingWidth = 1;
 	private float clefWidth = 6;
 	private LayoutSettings ls = ls();
@@ -53,7 +54,7 @@ public class MeasureElementsSpacingsStrategyTest {
 	 * If there is enough space left for the measure elements,
 	 * the voice spacings do not have to be changed.
 	 * To understand the following sketch, have a look at the comments
-	 * in {@link MeasureElementsSpacingsStrategy}.
+	 * in {@link MeasureElementsSpacer}.
 	 * <pre>
 	 * enough space: 
 	 * beat:     0   2   4   6   8
@@ -72,10 +73,10 @@ public class MeasureElementsSpacingsStrategyTest {
 		Clef innerClef = new Clef(ClefType.clefTreble);
 		BeatEList<Clef> innerClefs = new BeatEList<Clef>();
 		innerClefs.add(beatE(innerClef, fr(6)));
-		MeasureElementsSpacings res = new MeasureElementsSpacingsStrategy()
-			.compute(innerClefs, new BeatEList<Key>(), null, false, vs, 0, sne(ve, innerClef), ls);
+		MeasureElementsSpacing res = testee.compute(
+			innerClefs, new BeatEList<Key>(), null, false, vs, 0, sne(ve, innerClef), ls);
 		//clef must be at offset 15 - padding - clefwidth/2
-		SpacingElement[] mes = res.elements;
+		ElementSpacing[] mes = res.elements.toArray(new ElementSpacing[0]);
 		assertEquals(1, mes.length);
 		assertEquals(fr(6), mes[0].beat);
 		assertEquals(15 - paddingWidth - clefWidth / 2, mes[0].offsetIs, Delta.DELTA_FLOAT);
@@ -87,7 +88,7 @@ public class MeasureElementsSpacingsStrategyTest {
 	 * If there is not enough space left for the measure elements,
 	 * the voice spacings have to be moved to create enough space.
 	 * To understand the following sketch, have a look at the comments
-	 * in {@link MeasureElementsSpacingsStrategy}.
+	 * in {@link MeasureElementsSpacer}.
 	 * <pre>
 	 * enough space: 
 	 * beat:     0   2   4   6   8
@@ -111,8 +112,8 @@ public class MeasureElementsSpacingsStrategyTest {
 		Clef innerClef = new Clef(ClefType.clefTreble);
 		BeatEList<Clef> innerClefs = new BeatEList<Clef>();
 		innerClefs.add(beatE(innerClef, fr(4)));
-		MeasureElementsSpacings mes = new MeasureElementsSpacingsStrategy()
-			.compute(innerClefs, new BeatEList<Key>(), null, false, vs, 0, sne(ve, innerClef), ls);
+		MeasureElementsSpacing mes = testee.compute(
+			innerClefs, new BeatEList<Key>(), null, false, vs, 0, sne(ve, innerClef), ls);
 		//voice spacings
 		assertEquals(2, vs.size());
 		assertEquals(ilist(se(ve[0], fr(1, 2), 4), se(ve[1], fr(4), 13)), vs.get(0)
@@ -120,7 +121,7 @@ public class MeasureElementsSpacingsStrategyTest {
 		assertEquals(ilist(se(ve[2], fr(1), 5), se(ve[3], fr(13, 2), 18)), vs.get(1)
 			.spacingElements);
 		//clef must be at offset 13 - padding - clefwidth/2
-		SpacingElement[] se = mes.elements;
+		ElementSpacing[] se = mes.elements.toArray(new ElementSpacing[0]);
 		assertEquals(1, se.length);
 		assertEquals(fr(4), se[0].beat);
 		assertEquals(13 - paddingWidth - clefWidth / 2, se[0].offsetIs, Delta.DELTA_FLOAT);
@@ -130,8 +131,8 @@ public class MeasureElementsSpacingsStrategyTest {
 		return new Rest[] { new Rest(fr(1)), new Rest(fr(1)), new Rest(fr(1)), new Rest(fr(1)) };
 	}
 
-	private SpacingElement se(VoiceElement ve, Fraction beat, float offset) {
-		return new SpacingElement(ve, beat, offset);
+	private ElementSpacing se(VoiceElement ve, Fraction beat, float offset) {
+		return new ElementSpacing(ve, beat, offset);
 	}
 
 	private NotationsCache sne(Rest[] rests, Clef clef) {

@@ -19,7 +19,7 @@ import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.musiclayout.BeatOffset;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
-import com.xenoage.zong.musiclayout.spacing.horizontal.SpacingElement;
+import com.xenoage.zong.musiclayout.spacing.horizontal.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.horizontal.VoiceSpacing;
 
 /**
@@ -85,7 +85,7 @@ public class BeatOffsetsStrategy
 		if (voiceSpacings.size() == 1) {
 			//only one voice
 			float interlineSpace = voiceSpacings.get(0).interlineSpace;
-			for (SpacingElement se : voiceSpacings.get(0).spacingElements) {
+			for (ElementSpacing se : voiceSpacings.get(0).spacingElements) {
 				//if last beat offset has same beat, overwrite it
 				if (ret.get(ret.size() - 1).getBeat().equals(se.beat))
 					ret.remove(ret.size() - 1);
@@ -144,7 +144,7 @@ public class BeatOffsetsStrategy
 		Fraction beat;
 		for (VoiceSpacing voiceSpacing : voiceSpacings) {
 			beat = Fraction._0;
-			for (SpacingElement spacingElement : voiceSpacing.spacingElements) {
+			for (ElementSpacing spacingElement : voiceSpacing.spacingElements) {
 				MusicElement element = spacingElement.element;
 				if (element != null && element instanceof VoiceElement) {
 					//add beat
@@ -228,7 +228,7 @@ public class BeatOffsetsStrategy
 	 * place the elements up to the given ending beat.
 	 */
 	float computeMinimalDistance(Fraction startBeat, Fraction endBeat, boolean endBeatIsMeasureEnd,
-		Voice voice, List<SpacingElement> spacings, List<BeatOffset> alreadyComputedBeatOffsets,
+		Voice voice, List<ElementSpacing> spacings, List<BeatOffset> alreadyComputedBeatOffsets,
 		float interlineSpace) {
 		//end beat used? (measure end beat is always used)
 		if (endBeatIsMeasureEnd || voice.isBeatUsed(endBeat)) {
@@ -250,7 +250,7 @@ public class BeatOffsetsStrategy
 				Fraction lastUsedBeat = voice.getLastUsedBeat(startBeat);
 				//get offset of the last used beat in the voice spacing
 				float lastUsedBeatVoiceSpacingOffset = 0;
-				for (SpacingElement spacing : spacings) {
+				for (ElementSpacing spacing : spacings) {
 					if (spacing.beat.equals(lastUsedBeat)) {
 						lastUsedBeatVoiceSpacingOffset = spacing.offsetIs * interlineSpace;
 						break;
@@ -302,7 +302,7 @@ public class BeatOffsetsStrategy
 	 * occurrence of the given beat in interline spaces.
 	 * If the beat is not found, 0 is returned.
 	 */
-	private float getLastOffset(List<SpacingElement> spacings, Fraction beat) {
+	private float getLastOffset(List<ElementSpacing> spacings, Fraction beat) {
 		for (int i : range(spacings)) {
 			//find first occurrence of the beat
 			if (spacings.get(i).beat.equals(beat)) {

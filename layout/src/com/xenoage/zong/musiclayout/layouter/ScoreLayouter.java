@@ -20,7 +20,6 @@ import com.xenoage.zong.musiclayout.layouter.columnspacing.BeatOffsetBasedVoiceS
 import com.xenoage.zong.musiclayout.layouter.columnspacing.BeatOffsetsStrategy;
 import com.xenoage.zong.musiclayout.layouter.columnspacing.ColumnSpacingStrategy;
 import com.xenoage.zong.musiclayout.layouter.columnspacing.LeadingSpacingStrategy;
-import com.xenoage.zong.musiclayout.layouter.columnspacing.MeasureElementsSpacingsStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.DirectionStampingStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.LyricStampingStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.MusicElementStampingStrategy;
@@ -31,6 +30,7 @@ import com.xenoage.zong.musiclayout.layouter.scoreframelayout.TupletStampingStra
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.VoltaStampingStrategy;
 import com.xenoage.zong.musiclayout.notator.Notator;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
+import com.xenoage.zong.musiclayout.spacer.measure.MeasureElementsSpacer;
 import com.xenoage.zong.musiclayout.spacer.voice.SingleVoiceSpacer;
 import com.xenoage.zong.symbols.SymbolPool;
 
@@ -125,7 +125,6 @@ public class ScoreLayouter {
 	ScoreLayoutStrategy createStrategyTree() {
 		//measure column subtree
 		ColumnSpacingStrategy columnSpacingStrategy = new ColumnSpacingStrategy(
-			new MeasureElementsSpacingsStrategy(),
 			new BeatOffsetsStrategy(), new BarlinesBeatOffsetsStrategy(),
 			new BeatOffsetBasedVoiceSpacingStrategy(), new LeadingSpacingStrategy());
 		//complete tree

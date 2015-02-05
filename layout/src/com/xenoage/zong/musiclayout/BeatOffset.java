@@ -4,7 +4,7 @@ import lombok.Data;
 
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.math.Fraction;
-import com.xenoage.zong.musiclayout.spacing.horizontal.SpacingElement;
+import com.xenoage.zong.musiclayout.spacing.horizontal.ElementSpacing;
 
 /**
  * Offset of a beat in mm.
@@ -31,7 +31,7 @@ import com.xenoage.zong.musiclayout.spacing.horizontal.SpacingElement;
 
 
 	/**
-	 * Returns a copy of this {@link SpacingElement}, but using the
+	 * Returns a copy of this {@link ElementSpacing}, but using the
 	 * given the offset in mm.
 	 */
 	public BeatOffset withOffsetMm(float offsetMm) {

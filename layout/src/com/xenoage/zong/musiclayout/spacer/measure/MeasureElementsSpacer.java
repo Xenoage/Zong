@@ -1,21 +1,14 @@
-package com.xenoage.zong.musiclayout.layouter.columnspacing;
+package com.xenoage.zong.musiclayout.spacer.measure;
 
-import static com.xenoage.utils.collections.CList.clist;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.utils.iterators.It.it;
-import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.utils.kernel.Tuple2.t;
 import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.zong.core.position.MP.atMeasure;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.xenoage.utils.annotations.MaybeEmpty;
 import com.xenoage.utils.annotations.MaybeNull;
-import com.xenoage.utils.collections.CList;
-import com.xenoage.utils.collections.IList;
-import com.xenoage.utils.iterators.It;
-import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.header.ColumnHeader;
@@ -28,27 +21,27 @@ import com.xenoage.zong.core.music.key.TraditionalKey;
 import com.xenoage.zong.core.music.time.Time;
 import com.xenoage.zong.core.music.util.BeatE;
 import com.xenoage.zong.core.music.util.BeatEList;
-import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
+import com.xenoage.zong.musiclayout.Context;
 import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
 import com.xenoage.zong.musiclayout.notations.Notation;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
+import com.xenoage.zong.musiclayout.spacing.horizontal.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.horizontal.ElementWidth;
 import com.xenoage.zong.musiclayout.spacing.horizontal.LeadingSpacing;
-import com.xenoage.zong.musiclayout.spacing.horizontal.MeasureElementsSpacings;
-import com.xenoage.zong.musiclayout.spacing.horizontal.SpacingElement;
+import com.xenoage.zong.musiclayout.spacing.horizontal.MeasureElementsSpacing;
 import com.xenoage.zong.musiclayout.spacing.horizontal.VoiceSpacing;
 
 /**
- * This strategy creates {@link SpacingElement}s for the
+ * Computes the {@link MeasureElementsSpacing}s for the
  * {@link MeasureElement}s and {@link ColumnElement}s in
  * a {@link Measure}, like key signatures or clefs.
  * 
- * Currently clefs, key signatures at beat 0 over the
+ * Currently, clefs, key signatures at beat 0 over the
  * whole column and time signatures over the whole column are supported.
  * 
  * Because these elements need space, the {@link VoiceSpacing}s
- * of the voices of this measure must be given. Modified versions
- * that leave enough space for the measure elements are returned.
+ * of the voices of this measure must be given. These are modified
+ * to leave enough space for the measure elements.
  * 
  * The strategy can either create spacings for the elements at
  * beat 0 or ignore them, if there is already a {@link LeadingSpacing}
@@ -56,44 +49,44 @@ import com.xenoage.zong.musiclayout.spacing.horizontal.VoiceSpacing;
  * 
  * @author Andreas Wenger
  */
-@SuppressWarnings("unused")
-public class MeasureElementsSpacingsStrategy
-	implements ScoreLayouterStrategy {
+public class MeasureElementsSpacer {
+	
+	public static final MeasureElementsSpacer measureElementsSpacer = new MeasureElementsSpacer();
+	
 
 	/**
 	 * Creates and returns spacings for the measure elements of the given measure.
 	 * The given precomputed voice spacings (without respect to measure elements) are
-	 * updated, so that they leave enough space for the measure elements, and are returned.
+	 * updated, so that they leave enough space for the measure elements.
 	 * @param leadingSpacing  true, if a leading spacing is used for this measure. In this case,
 	 *                        clefs at beat 0 are ignored (since they are already shown in the
 	 *                        leading spacing)
 	 * @param originalVoiceSpacings  the spacings of the voices without regard to measure elements
 	 * @param notations       the precomputed notations for this staff
-	 */ //TIDY: also get rid of MeasureElementsSpacings
-	public MeasureElementsSpacings computeMeasureElementsSpacings(
-		Score score, int iStaff, int iMeasure, boolean leadingSpacing,
-		List<VoiceSpacing> voiceSpacings, NotationsCache notations,
-		LayoutSettings layoutSettings) {
+	 */
+	public MeasureElementsSpacing compute(
+		Context context, boolean leadingSpacing, List<VoiceSpacing> voiceSpacings) {
 		
-		Measure measure = score.getMeasure(atMeasure(iStaff, iMeasure));
-		ColumnHeader columnHeader = score.getHeader().getColumnHeader(iMeasure);
+		Measure measure = context.score.getMeasure(context.mp);
+		ColumnHeader columnHeader = context.score.getHeader().getColumnHeader(context.mp.measure);
 		return compute(measure.getClefs(), columnHeader.getKeys(), columnHeader.getTime(), leadingSpacing,
-			voiceSpacings, iStaff, notations, layoutSettings);
+			voiceSpacings, context.mp.staff, context.notationsCache, context.settings);
 	}
 
-	MeasureElementsSpacings compute(BeatEList<Clef> clefs,
+	MeasureElementsSpacing compute(BeatEList<Clef> clefs,
 		@MaybeEmpty BeatEList<Key> keys, @MaybeNull Time time, boolean leadingSpacing,
 		List<VoiceSpacing> voiceSpacings, int staff, NotationsCache notations,
 		LayoutSettings layoutSettings) {
+		
 		Key key0 = null;
 		if (keys.size() > 0 && keys.getFirst().beat.equals(_0))
 			key0 = keys.getFirst().element;
 		if (key0 == null && time == null && (clefs == null || clefs.size() == 0)) {
 			//nothing to do
-			return MeasureElementsSpacings.empty;
+			return MeasureElementsSpacing.empty;
 		}
 
-		List<SpacingElement> measureElementsSpacings = alist();
+		ArrayList<ElementSpacing> ret = alist();
 		float startOffset = layoutSettings.offsetMeasureStart;
 
 		//key and time
@@ -107,7 +100,7 @@ public class MeasureElementsSpacingsStrategy
 			//***
 			if (isKey) {
 				ElementWidth keyWidth = notations.get(key0, staff).getWidth();
-				measureElementsSpacings.add(new SpacingElement(key0, _0, startOffset));
+				ret.add(new ElementSpacing(key0, _0, startOffset));
 				currentOffset += keyWidth.getUsedWidth();
 			}
 
@@ -115,13 +108,13 @@ public class MeasureElementsSpacingsStrategy
 			//****
 			if (time != null) {
 				ElementWidth timeWidth = notations.get(time, staff).getWidth();
-				measureElementsSpacings.add(new SpacingElement(time, _0, currentOffset +
+				ret.add(new ElementSpacing(time, _0, currentOffset +
 					timeWidth.symbolWidth / 2));
 				currentOffset += timeWidth.getUsedWidth();
 			}
 
 			//move voice elements, if not enough space before first voice element
-			SpacingElement leftSE = getFirstSpacingElement(voiceSpacings, notations);
+			ElementSpacing leftSE = getFirstElementSpacing(voiceSpacings, notations);
 			if (leftSE != null) {
 				float leftSEx = getLeftX(leftSE, notations);
 				float ES = leftSEx; //existing space
@@ -172,8 +165,8 @@ public class MeasureElementsSpacingsStrategy
 					continue;
 	
 				//find VE1 and VE2 for the current element
-				SpacingElement[] ses = getNearestSpacingElements(MEb, voiceSpacings, notations);
-				SpacingElement VE1 = ses[0], VE2 = ses[1];
+				ElementSpacing[] ses = getNearestSpacingElements(MEb, voiceSpacings, notations);
+				ElementSpacing VE1 = ses[0], VE2 = ses[1];
 	
 				//if VE1 is unknown, use startOffset. if VE2 is unknown, ignore this element
 				float VE1x = (VE1 != null ? getRightX(VE1, notations) : startOffset);
@@ -193,24 +186,24 @@ public class MeasureElementsSpacingsStrategy
 	
 				//add measure element
 				float MEx = VE2x - layoutSettings.spacings.widthDistanceMin - MEwidth / 2;
-				measureElementsSpacings.add(new SpacingElement(ME.element, ME.beat, MEx));
+				ret.add(new ElementSpacing(ME.element, ME.beat, MEx));
 	
 			}
 		}
-		SpacingElement[] mes = new SpacingElement[measureElementsSpacings.size()];
-		measureElementsSpacings.toArray(mes);
-		return new MeasureElementsSpacings(mes);
+
+		ret.trimToSize();
+		return new MeasureElementsSpacing(ret);
 	}
 
 	/**
-	 * Gets the leftmost {@link SpacingElement} in the given list of VoiceSpacings,
+	 * Gets the leftmost {@link ElementSpacing} in the given list of {@link VoiceSpacing}s,
 	 * or null there is none.
 	 */
-	private SpacingElement getFirstSpacingElement(List<VoiceSpacing> vss, NotationsCache notations) {
-		SpacingElement ret = null;
+	private ElementSpacing getFirstElementSpacing(List<VoiceSpacing> vss, NotationsCache notations) {
+		ElementSpacing ret = null;
 		float retLeftX = Float.MAX_VALUE;
 		for (VoiceSpacing vs : vss) {
-			for (SpacingElement se : vs.spacingElements) {
+			for (ElementSpacing se : vs.spacingElements) {
 				float leftX = getLeftX(se, notations);
 				if (leftX < retLeftX) {
 					retLeftX = leftX;
@@ -223,16 +216,16 @@ public class MeasureElementsSpacingsStrategy
 	}
 
 	/**
-	 * Gets the nearest two {@link SpacingElement}s at the
+	 * Gets the nearest two {@link ElementSpacing}s at the
 	 * given beat (left [0] and right [1]).
 	 */
-	private SpacingElement[] getNearestSpacingElements(Fraction beat, List<VoiceSpacing> vss,
+	private ElementSpacing[] getNearestSpacingElements(Fraction beat, List<VoiceSpacing> vss,
 		NotationsCache notations) {
-		SpacingElement[] ret = { null, null };
+		ElementSpacing[] ret = { null, null };
 		float retLeftX = Float.MIN_VALUE;
 		float retRightX = Float.MAX_VALUE;
 		for (VoiceSpacing vs : vss) {
-			for (SpacingElement se : vs.spacingElements) {
+			for (ElementSpacing se : vs.spacingElements) {
 				int compare = se.beat.compareTo(beat);
 				if (compare < 0) {
 					float leftX = getLeftX(se, notations);
@@ -257,41 +250,41 @@ public class MeasureElementsSpacingsStrategy
 	}
 
 	/**
-	 * Gets the leftmost position of the given {@link SpacingElement} in the given staff.
+	 * Gets the leftmost position of the given {@link ElementSpacing} in the given staff.
 	 * This is its offset minus the front gap of its {@link Notation}.
 	 */
-	private float getLeftX(SpacingElement se, NotationsCache notations) {
+	private float getLeftX(ElementSpacing se, NotationsCache notations) {
 		//element and notation may be null, e.g. for last SE in measure
 		Notation notation = notations.get(se.element);
 		return se.offsetIs - (notation != null ? notation.getWidth().frontGap : 0);
 	}
 
 	/**
-	 * Gets the rightmost position of the given {@link SpacingElement} in the given staff.
+	 * Gets the rightmost position of the given {@link ElementSpacing} in the given staff.
 	 * This is its offset plus the width of its {@link Notation} (bot not plus its rear gap!).
 	 */
-	private float getRightX(SpacingElement se, NotationsCache notations) {
+	private float getRightX(ElementSpacing se, NotationsCache notations) {
 		//element and notation may be null, e.g. for last SE in measure
 		Notation notation = notations.get(se.element);
 		return se.offsetIs + (notation != null ? notation.getWidth().symbolWidth : 0);
 	}
 
 	/**
-	 * Moves all given {@link SpacingElement}s by the given offset.
+	 * Moves all given {@link ElementSpacing}s by the given offset.
 	 */
 	public void shift(List<VoiceSpacing> vss, float offsetIs) {
 		for (VoiceSpacing vs : vss)
-			for (SpacingElement se : vs.spacingElements)
+			for (ElementSpacing se : vs.spacingElements)
 				se.offsetIs += offsetIs;
 	}
 
 	/**
-	 * Moves all given {@link SpacingElement}s by the given offset, if they are at
+	 * Moves all given {@link ElementSpacing}s by the given offset, if they are at
 	 * or behind the given beat.
 	 */
 	public void shiftAfterBeat(List<VoiceSpacing> vss, float offsetIs, Fraction beat) {
 		for (VoiceSpacing vs : vss)
-			for (SpacingElement se : vs.spacingElements)
+			for (ElementSpacing se : vs.spacingElements)
 				if (se.beat.compareTo(beat) >= 0)
 					se.offsetIs += offsetIs;
 	}

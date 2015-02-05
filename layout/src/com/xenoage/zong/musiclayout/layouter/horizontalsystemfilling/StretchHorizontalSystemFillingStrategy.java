@@ -11,9 +11,9 @@ import com.xenoage.utils.collections.CList;
 import com.xenoage.zong.musiclayout.BeatOffset;
 import com.xenoage.zong.musiclayout.SystemArrangement;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
-import com.xenoage.zong.musiclayout.spacing.horizontal.MeasureElementsSpacings;
+import com.xenoage.zong.musiclayout.spacing.horizontal.MeasureElementsSpacing;
 import com.xenoage.zong.musiclayout.spacing.horizontal.MeasureSpacing;
-import com.xenoage.zong.musiclayout.spacing.horizontal.SpacingElement;
+import com.xenoage.zong.musiclayout.spacing.horizontal.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.horizontal.VoiceSpacing;
 
 /**
@@ -71,13 +71,13 @@ public class StretchHorizontalSystemFillingStrategy
 			CList<MeasureSpacing> newMeasureSpacings = clist(column.getMeasureSpacings().length);
 			for (MeasureSpacing oldMS : column.getMeasureSpacings()) {
 				//measure elements
-				SpacingElement[] me = oldMS.getMeasureElementsSpacings().elements;
-				SpacingElement[] newMESElements = new SpacingElement[me.length];
+				List<ElementSpacing> me = oldMS.getMeasureElementsSpacings().elements;
+				List<ElementSpacing> newMESElements = alist(me.size());
 				for (int i : range(me)) {
 					//stretch the offset
-					newMESElements[i] = me[i].withOffset(me[i].offsetIs * stretch);
+					newMESElements.add(me.get(i).withOffset(me.get(i).offsetIs * stretch));
 				}
-				MeasureElementsSpacings newMES = new MeasureElementsSpacings(newMESElements);
+				MeasureElementsSpacing newMES = new MeasureElementsSpacing(newMESElements);
 				//voices
 				CList<VoiceSpacing> newVSs = clist(oldMS.getVoiceSpacings().size());
 				for (VoiceSpacing oldVS : oldMS.getVoiceSpacings()) {
@@ -85,11 +85,11 @@ public class StretchHorizontalSystemFillingStrategy
 					//traverse in reverse order, so we can align grace elements correctly
 					//grace elements are not stretched, but the distance to their following full element
 					//stays the same
-					List<SpacingElement> newSEs = alist(oldVS.spacingElements.size());
+					List<ElementSpacing> newSEs = alist(oldVS.spacingElements.size());
 					float lastOldOffset = Float.NaN;
 					float lastNewOffset = Float.NaN;
 					for (int i : rangeReverse(oldVS.spacingElements)) {
-						SpacingElement oldSE = oldVS.spacingElements.get(i);
+						ElementSpacing oldSE = oldVS.spacingElements.get(i);
 						if (oldSE.grace && !Float.isNaN(lastOldOffset)) {
 							//grace element: keep distance to following element
 							float oldDistance = lastOldOffset - oldSE.offsetIs;

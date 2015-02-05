@@ -1,6 +1,9 @@
 package com.xenoage.zong.musiclayout.spacing.horizontal;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.NonNull;
@@ -8,15 +11,15 @@ import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.MusicElement;
 
 /**
- * A spacing element stores the beat and the position (offset)
+ * An element spacing stores the beat and the position (offset)
  * of a given {@link MusicElement} in a layout.
  * 
  * All units are measured in interline spaces.
  *
  * @author Andreas Wenger
  */
-@AllArgsConstructor
-public class SpacingElement {
+@Data @AllArgsConstructor 
+public class ElementSpacing {
 
 	/** The corresponding music element, e.g. a chord. May be null, e.g. when this
 	 * element denotes the end point of the measure. */
@@ -29,14 +32,14 @@ public class SpacingElement {
 	public float offsetIs;
 	
 
-	public SpacingElement(MusicElement element, Fraction beat, float offset) {
+	public ElementSpacing(MusicElement element, Fraction beat, float offset) {
 		this(element, beat, false, offset);
 	}
 
 
-	@Deprecated
-	public SpacingElement withOffset(float offset) {
-		return new SpacingElement(element, beat, grace, offset);
+	@Deprecated //this class is mutable
+	public ElementSpacing withOffset(float offset) {
+		return new ElementSpacing(element, beat, grace, offset);
 	}
 
 }

@@ -18,7 +18,7 @@ import com.xenoage.zong.musiclayout.notations.ClefNotation;
 import com.xenoage.zong.musiclayout.notations.TraditionalKeyNotation;
 import com.xenoage.zong.musiclayout.spacing.horizontal.ElementWidth;
 import com.xenoage.zong.musiclayout.spacing.horizontal.LeadingSpacing;
-import com.xenoage.zong.musiclayout.spacing.horizontal.SpacingElement;
+import com.xenoage.zong.musiclayout.spacing.horizontal.ElementSpacing;
 
 /**
  * Strategy to compute the {@link LeadingSpacing} for
@@ -50,7 +50,7 @@ public class LeadingSpacingStrategy
 			useKey = true;
 		}
 
-		CList<SpacingElement> elements = clist(useKey ? 2 : 1);
+		CList<ElementSpacing> elements = clist(useKey ? 2 : 1);
 		NotationsCache notations = new NotationsCache();
 
 		Clef clef = new Clef(musicContext.getClef().getType()); //it is not the same element instance, but has the same meaning
@@ -58,7 +58,7 @@ public class LeadingSpacingStrategy
 			context.settings.spacings.widthClef, 0), musicContext.getClef().getType().getLp(), 1);
 		notations.add(clefNotation);
 		xOffset += context.settings.spacings.widthClef / 2;
-		elements.add(new SpacingElement(clef, fr(0), xOffset));
+		elements.add(new ElementSpacing(clef, fr(0), xOffset));
 		xOffset += context.settings.spacings.widthClef / 2;
 
 		if (useKey) {
@@ -67,7 +67,7 @@ public class LeadingSpacingStrategy
 			TraditionalKey tradKey = new TraditionalKey(tkey.getFifths(), tkey.getMode()); //it is not the same element instance, but has the same meaning
 			TraditionalKeyNotation keyNotation = traditionalKeyNotator.notate(tradKey, context);
 			notations.add(keyNotation, context.mp.staff);
-			elements.add(new SpacingElement(tradKey, fr(0), xOffset));
+			elements.add(new ElementSpacing(tradKey, fr(0), xOffset));
 			xOffset += keyNotation.getWidth().getWidth();
 		}
 

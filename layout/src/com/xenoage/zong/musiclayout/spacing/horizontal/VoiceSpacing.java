@@ -19,11 +19,11 @@ public final class VoiceSpacing {
 	public final Voice voice;
 	/** The interline space in mm of this voice. */
 	public final float interlineSpace;
-	/** The {@link SpacingElement}s of this voice. */
-	public List<SpacingElement> spacingElements;
+	/** The {@link ElementSpacing}s of this voice. */
+	public List<ElementSpacing> spacingElements;
 	
 	
-	public SpacingElement getLast() {
+	public ElementSpacing getLast() {
 		return spacingElements.get(spacingElements.size() - 1);
 	}
 	

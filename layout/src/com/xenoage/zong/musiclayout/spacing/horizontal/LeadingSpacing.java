@@ -17,7 +17,7 @@ import com.xenoage.utils.collections.IList;
 public final class LeadingSpacing {
 
 	/** The spacing elements of this measure leading. */
-	public final IList<SpacingElement> spacingElements;
+	public final IList<ElementSpacing> spacingElements;
 	/** The width of this leading spacing in interline spaces. */
 	public final float width;
 

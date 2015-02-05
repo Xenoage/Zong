@@ -89,7 +89,7 @@ import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 import com.xenoage.zong.musiclayout.spacing.horizontal.LeadingSpacing;
 import com.xenoage.zong.musiclayout.spacing.horizontal.MeasureSpacing;
-import com.xenoage.zong.musiclayout.spacing.horizontal.SpacingElement;
+import com.xenoage.zong.musiclayout.spacing.horizontal.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.horizontal.VoiceSpacing;
 import com.xenoage.zong.musiclayout.stampings.BarlineStamping;
 import com.xenoage.zong.musiclayout.stampings.BracketStamping;
@@ -301,7 +301,7 @@ public class ScoreFrameLayoutStrategy
 					//add leading spacing elements, if available
 					LeadingSpacing leadingSpacing = measureStaffSpacing.getLeadingSpacing();
 					if (leadingSpacing != null) {
-						for (SpacingElement spacingElement : leadingSpacing.spacingElements) {
+						for (ElementSpacing spacingElement : leadingSpacing.spacingElements) {
 							MusicElement element = spacingElement.element;
 							if (element != null) {
 								float x = xOffset + spacingElement.offsetIs * interlineSpace;
@@ -355,7 +355,7 @@ public class ScoreFrameLayoutStrategy
 					float voicesOffset = xOffset + measureColumnSpacing.getLeadingWidth();
 
 					//add measure elements within this measure
-					for (SpacingElement spacingElement : measureStaffSpacing.getMeasureElementsSpacings().elements) {
+					for (ElementSpacing spacingElement : measureStaffSpacing.getMeasureElementsSpacings().elements) {
 						MusicElement element = spacingElement.element;
 						if (element != null) {
 							Notation notation = notations.get(element, iStaff);
@@ -373,14 +373,14 @@ public class ScoreFrameLayoutStrategy
 
 					//add voice elements within this measure
 					for (VoiceSpacing voiceSpacing : measureStaffSpacing.getVoiceSpacings()) {
-						List<SpacingElement> voice = voiceSpacing.spacingElements;
+						List<ElementSpacing> voice = voiceSpacing.spacingElements;
 
 						//TODO
 						//don't stamp leading rests in voice 2 - TODO: config?
 						//boolean stampRests = (iVoice == 0);
 
 						//create the voice elements
-						for (SpacingElement spacingElement : voice) {
+						for (ElementSpacing spacingElement : voice) {
 							MusicElement element = spacingElement.element;
 							if (element != null /* TODO && (stampRests || !(element instanceof Rest)) */) {
 								Notation notation = notations.get(element, iStaff);

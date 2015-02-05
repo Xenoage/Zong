@@ -9,7 +9,7 @@ import java.util.List;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.musiclayout.BeatOffset;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
-import com.xenoage.zong.musiclayout.spacing.horizontal.SpacingElement;
+import com.xenoage.zong.musiclayout.spacing.horizontal.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.horizontal.VoiceSpacing;
 
 /**
@@ -27,7 +27,7 @@ public class BeatOffsetBasedVoiceSpacingStrategy
 	 */
 	public void computeVoiceSpacing(VoiceSpacing voiceSpacing, BeatOffset[] beatOffsets) {
 		
-		List<SpacingElement> spacingElements = voiceSpacing.spacingElements;
+		List<ElementSpacing> spacingElements = voiceSpacing.spacingElements;
 		if (spacingElements.size() == 0 || beatOffsets.length == 0)
 			return;
 		
@@ -60,7 +60,7 @@ public class BeatOffsetBasedVoiceSpacingStrategy
 			//do this in reverse order, because the position of grace notes is dependent
 			//on the position of the (following) main note
 			for (int iElement = lastElement; iElement >= firstElement; iElement--) {
-				SpacingElement e = spacingElements.get(iElement);
+				ElementSpacing e = spacingElements.get(iElement);
 				if (!e.grace) {
 					//normal element: interpolate position
 					float currentElementOffset = e.offsetIs - lastEndElementPosition;
@@ -90,10 +90,10 @@ public class BeatOffsetBasedVoiceSpacingStrategy
 	}
 
 	/**
-	 * Finds and returns the shared beats of the given {@link SpacingElement}s and {@link BeatOffset}s.
+	 * Finds and returns the shared beats of the given {@link ElementSpacing}s and {@link BeatOffset}s.
 	 * If there are no beats used by both lists, an empty list is returned.
 	 */
-	public List<BeatOffset> computeSharedBeats(List<SpacingElement> spacingElements, BeatOffset[] beatOffsets) {
+	public List<BeatOffset> computeSharedBeats(List<ElementSpacing> spacingElements, BeatOffset[] beatOffsets) {
 		ArrayList<BeatOffset> ret = alist(Math.min(spacingElements.size(), beatOffsets.length));
 		int i1 = 0, i2 = 0;
 		Fraction lastAddedBeat = fr(-1);

@@ -32,7 +32,7 @@ import com.xenoage.zong.core.position.MP;
 	/** The spacings of the voices */
 	@NonEmpty private List<VoiceSpacing> voiceSpacings;
 	/** The spacings of the measure elements, like inner clefs */
-	@NonNull private final MeasureElementsSpacings measureElementsSpacings;
+	@NonNull private final MeasureElementsSpacing measureElementsSpacings;
 	/** The leading spacing, which may contain elements like initial clefs or key signatures */
 	@MaybeNull private final LeadingSpacing leadingSpacing;
 	/** A sorted list of all used beats in this measure */
@@ -40,7 +40,7 @@ import com.xenoage.zong.core.position.MP;
 
 
 	public MeasureSpacing(MP mp, List<VoiceSpacing> voiceSpacings,
-		MeasureElementsSpacings measureElementSpacings, LeadingSpacing leadingSpacing) {
+		MeasureElementsSpacing measureElementSpacings, LeadingSpacing leadingSpacing) {
 		this.mp = mp;
 		this.voiceSpacings = voiceSpacings;
 		this.measureElementsSpacings = measureElementSpacings;
@@ -49,7 +49,7 @@ import com.xenoage.zong.core.position.MP;
 		//compute the list of all used beats
 		SortedList<Fraction> usedBeats = new SortedList<Fraction>(false);
 		for (VoiceSpacing vs : voiceSpacings) {
-			for (SpacingElement se : vs.spacingElements) {
+			for (ElementSpacing se : vs.spacingElements) {
 				usedBeats.add(se.beat);
 			}
 		}

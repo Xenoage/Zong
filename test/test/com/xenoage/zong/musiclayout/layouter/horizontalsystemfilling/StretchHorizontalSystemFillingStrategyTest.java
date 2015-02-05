@@ -22,9 +22,9 @@ import com.xenoage.zong.musiclayout.BeatOffset;
 import com.xenoage.zong.musiclayout.SystemArrangement;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 import com.xenoage.zong.musiclayout.spacing.horizontal.LeadingSpacingMock;
-import com.xenoage.zong.musiclayout.spacing.horizontal.MeasureElementsSpacings;
+import com.xenoage.zong.musiclayout.spacing.horizontal.MeasureElementsSpacing;
 import com.xenoage.zong.musiclayout.spacing.horizontal.MeasureSpacing;
-import com.xenoage.zong.musiclayout.spacing.horizontal.SpacingElement;
+import com.xenoage.zong.musiclayout.spacing.horizontal.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.horizontal.VoiceSpacing;
 
 /**
@@ -124,11 +124,11 @@ public class StretchHorizontalSystemFillingStrategyTest {
 		BeatOffset[] beatOffsets = { new BeatOffset(fr(1, 4), offsetBeat0), new BeatOffset(
 			fr(3, 4), offsetBeat1), new BeatOffset(fr(5, 4), offsetBeat2) };
 		List<VoiceSpacing> voiceSpacings = alist(new VoiceSpacing(voice, 1, alist(
-			new SpacingElement(voice.getElement(0), beatOffsets[0].getBeat(), beatOffsets[0].getOffsetMm()),
-			new SpacingElement(voice.getElement(1), beatOffsets[1].getBeat(), beatOffsets[1]
+			new ElementSpacing(voice.getElement(0), beatOffsets[0].getBeat(), beatOffsets[0].getOffsetMm()),
+			new ElementSpacing(voice.getElement(1), beatOffsets[1].getBeat(), beatOffsets[1]
 				.getOffsetMm()))));
 		MeasureSpacing measureSpacing = new MeasureSpacing(atMeasure(0, 0), voiceSpacings,
-			MeasureElementsSpacings.empty, LeadingSpacingMock.createGClefSpacing(leadingWidth));
+			MeasureElementsSpacing.empty, LeadingSpacingMock.createGClefSpacing(leadingWidth));
 		MeasureSpacing[] measureSpacings = { measureSpacing };
 		ColumnSpacing mcs = new ColumnSpacing(new Score(), measureSpacings, beatOffsets,
 			new BeatOffset[] { new BeatOffset(fr(0, 4), 0), new BeatOffset(fr(6, 4), offsetBeat2) });
@@ -147,15 +147,15 @@ public class StretchHorizontalSystemFillingStrategyTest {
 			1, 0, 4)), graceChord(pi(2, 0, 4)), chord(pi(3, 0, 4), fr(2, 4))));
 		BeatOffset[] beatOffsets = { new BeatOffset(fr(0, 4), offsetChord1), new BeatOffset(
 			fr(2, 4), offsetChord2), new BeatOffset(fr(4, 4), offsetMeasureEnd) };
-		List<VoiceSpacing> voiceSpacings = alist(new VoiceSpacing(voice, 1, alist(new SpacingElement(
+		List<VoiceSpacing> voiceSpacings = alist(new VoiceSpacing(voice, 1, alist(new ElementSpacing(
 			voice.getElement(0), beatOffsets[0].getBeat(), beatOffsets[0].getOffsetMm()),
-			new SpacingElement(voice.getElement(1), beatOffsets[1].getBeat(), true, beatOffsets[1]
-				.getOffsetMm() - 2 * graceDistance), new SpacingElement(voice.getElement(2),
+			new ElementSpacing(voice.getElement(1), beatOffsets[1].getBeat(), true, beatOffsets[1]
+				.getOffsetMm() - 2 * graceDistance), new ElementSpacing(voice.getElement(2),
 				beatOffsets[1].getBeat(), true, beatOffsets[1].getOffsetMm() - 1 * graceDistance),
-			new SpacingElement(voice.getElement(3), beatOffsets[1].getBeat(), beatOffsets[1]
+			new ElementSpacing(voice.getElement(3), beatOffsets[1].getBeat(), beatOffsets[1]
 				.getOffsetMm()))));
 		MeasureSpacing measureSpacing = new MeasureSpacing(atMeasure(0, 0), voiceSpacings,
-			MeasureElementsSpacings.empty, null);
+			MeasureElementsSpacing.empty, null);
 		ColumnSpacing mcs = new ColumnSpacing(new Score(), new MeasureSpacing[] { measureSpacing },
 			beatOffsets, new BeatOffset[] { new BeatOffset(fr(0, 4), 0), new BeatOffset(fr(4, 4), offsetMeasureEnd) });
 		SystemArrangement system = new SystemArrangement(10, 10, ilist(mcs), 0, 0, offsetMeasureEnd,
