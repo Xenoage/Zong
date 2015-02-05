@@ -20,7 +20,7 @@ public final class VoiceSpacing {
 	/** The interline space in mm of this voice. */
 	public final float interlineSpace;
 	/** The {@link ElementSpacing}s of this voice. */
-	public List<ElementSpacing> spacingElements;
+	public final List<ElementSpacing> spacingElements;
 	
 	
 	public ElementSpacing getLast() {

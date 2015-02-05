@@ -19,7 +19,7 @@ import com.xenoage.zong.musiclayout.spacing.horizontal.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.horizontal.VoiceSpacing;
 
 /**
- * Computes the {@link BeatOffset}s for the given {@link VoiceSpacing}s
+ * Computes the common {@link BeatOffset}s for the given {@link VoiceSpacing}s
  * within one measure column.
  * 
  * Note, that the offsets of the precomputed voice spacings

@@ -27,9 +27,9 @@ public final class BeatOffset {
 	public static final BeatOffset[] empty = new BeatOffset[0]; 
 
 	/** The beat. */
-	private final Fraction beat;
+	public final Fraction beat;
 	/** The offset in mm. */
-	private final float offsetMm;
+	public final float offsetMm;
 
 
 	/**

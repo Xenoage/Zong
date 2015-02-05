@@ -1,6 +1,8 @@
-package com.xenoage.zong.musiclayout.layouter.columnspacing;
+package com.xenoage.zong.musiclayout.spacer.voice;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.utils.kernel.Range.rangeReverse;
 import static com.xenoage.utils.math.Fraction.fr;
 
 import java.util.ArrayList;
@@ -8,40 +10,42 @@ import java.util.List;
 
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.musiclayout.BeatOffset;
-import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.spacing.horizontal.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.horizontal.VoiceSpacing;
 
 /**
- * Strategy to compute the horizontal spacing for a
- * single voice, based on optimal {@link VoiceSpacing}s
- * and the {@link BeatOffset}s of this measure column.
+ * Computes the {@link VoiceSpacing}s for all voices in a measure column,
+ * based on the individual optimal {@link VoiceSpacing}s and the
+ * common {@link BeatOffset}s of this measure column.
  * 
  * @author Andreas Wenger
  */
-public class BeatOffsetBasedVoiceSpacingStrategy
-	implements ScoreLayouterStrategy {
+public class AlignedVoicesSpacer {
+	
+	public static final AlignedVoicesSpacer alignedVoicesSpacer = new AlignedVoicesSpacer();
 
+	
 	/**
 	 * Modifies the given {@link VoiceSpacing}, based on the given beat offsets.
 	 */
-	public void computeVoiceSpacing(VoiceSpacing voiceSpacing, BeatOffset[] beatOffsets) {
+	public void compute(VoiceSpacing voiceSpacing, List<BeatOffset> beatOffsets) {
 		
 		List<ElementSpacing> spacingElements = voiceSpacing.spacingElements;
-		if (spacingElements.size() == 0 || beatOffsets.length == 0)
+		if (spacingElements.size() == 0 || beatOffsets.size() == 0)
 			return;
 		
 		//find the given beats, that are also used here
 		List<BeatOffset> sharedBeats = computeSharedBeats(spacingElements, beatOffsets);
+		
 		//interpolate positions between the shared beats
 		float lastGivenBeatPosition = 0;
 		float lastEndElementPosition = 0;
 		int firstElement = 0;
 		int lastElement = -1;
 		float interlineSpace = voiceSpacing.interlineSpace;
-		for (int iGivenBeat = 0; iGivenBeat < sharedBeats.size(); iGivenBeat++) {
+		for (int iGivenBeat : range(sharedBeats)) {
 			//for each given beat: find elements before or at that beat
-			for (int iElement = lastElement + 1; iElement < spacingElements.size(); iElement++) {
+			for (int iElement : range(lastElement + 1, spacingElements.size() - 1)) {
 				if (spacingElements.get(iElement).beat.compareTo(sharedBeats.get(iGivenBeat).getBeat()) > 0)
 					break;
 				lastElement++;
@@ -59,7 +63,8 @@ public class BeatOffsetBasedVoiceSpacingStrategy
 			//between the last shared beat and the current shared beat.
 			//do this in reverse order, because the position of grace notes is dependent
 			//on the position of the (following) main note
-			for (int iElement = lastElement; iElement >= firstElement; iElement--) {
+			float lastOriginalOffsetIs = 0;
+			for (int iElement : rangeReverse(lastElement, firstElement)) {
 				ElementSpacing e = spacingElements.get(iElement);
 				if (!e.grace) {
 					//normal element: interpolate position
@@ -71,13 +76,14 @@ public class BeatOffsetBasedVoiceSpacingStrategy
 					else {
 						newElementOffset = currentGivenBeatPosition;
 					}
+					lastOriginalOffsetIs = e.offsetIs;
 					e.offsetIs = newElementOffset + lastGivenBeatPosition;
 				}
 				else {
 					//grace element: same distance to the main note as before
-					float distanceBefore = spacingElements.get(iElement + 1).offsetIs -
-						spacingElements.get(iElement).offsetIs;
-					spacingElements.get(iElement).offsetIs = spacingElements.get(iElement + 1).offsetIs - distanceBefore;
+					float distanceBefore = lastOriginalOffsetIs - e.offsetIs;
+					lastOriginalOffsetIs = e.offsetIs;
+					e.offsetIs = spacingElements.get(iElement + 1).offsetIs - distanceBefore;
 				}
 			}
 			//next range up to next shared beat
@@ -90,34 +96,33 @@ public class BeatOffsetBasedVoiceSpacingStrategy
 	}
 
 	/**
-	 * Finds and returns the shared beats of the given {@link ElementSpacing}s and {@link BeatOffset}s.
+	 * Returns the shared beats of the given {@link ElementSpacing}s and {@link BeatOffset}s.
 	 * If there are no beats used by both lists, an empty list is returned.
 	 */
-	public List<BeatOffset> computeSharedBeats(List<ElementSpacing> spacingElements, BeatOffset[] beatOffsets) {
-		ArrayList<BeatOffset> ret = alist(Math.min(spacingElements.size(), beatOffsets.length));
-		int i1 = 0, i2 = 0;
+	public List<BeatOffset> computeSharedBeats(List<ElementSpacing> spacingElements, List<BeatOffset> beatOffsets) {
+		ArrayList<BeatOffset> ret = alist(Math.min(spacingElements.size(), beatOffsets.size()));
+		int iElement = 0, iBeat = 0;
 		Fraction lastAddedBeat = fr(-1);
-		while (i1 < spacingElements.size() && i2 < beatOffsets.length) {
-			Fraction beat1 = spacingElements.get(i1).beat;
-			BeatOffset beatOffset2 = beatOffsets[i2];
-			Fraction beat2 = beatOffset2.getBeat();
-			if (beat1.equals(beat2)) {
-				if (beat2.equals(lastAddedBeat)) {
+		while (iElement < spacingElements.size() && iBeat < beatOffsets.size()) {
+			Fraction elementBeat = spacingElements.get(iElement).beat;
+			BeatOffset beatOffset = beatOffsets.get(iBeat);
+			if (elementBeat.equals(beatOffset.beat)) {
+				if (beatOffset.beat.equals(lastAddedBeat)) {
 					//when this beat was already added, replace it. the
 					//rightmost offset is the offset we need.
-					ret.set(ret.size() - 1, beatOffset2);
+					ret.set(ret.size() - 1, beatOffset);
 				}
 				else {
-					ret.add(beatOffset2);
+					ret.add(beatOffset);
 				}
-				lastAddedBeat = beat2;
-				i1++;
+				lastAddedBeat = beatOffset.beat;
+				iElement++;
 			}
-			else if (beat1.compareTo(beat2) > 0) {
-				i2++;
+			else if (elementBeat.compareTo(beatOffset.beat) > 0) {
+				iBeat++;
 			}
 			else {
-				i1++;
+				iElement++;
 			}
 		}
 		return ret;
