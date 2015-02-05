@@ -1,19 +1,18 @@
-package com.xenoage.zong.musiclayout.layouter.columnspacing;
+package com.xenoage.zong.musiclayout.spacer.voice;
 
-import static com.xenoage.utils.collections.CList.clist;
+import static com.xenoage.utils.annotations.Optimized.Reason.Performance;
 import static com.xenoage.utils.collections.CList.ilist;
 import static com.xenoage.utils.collections.CollectionUtils.llist;
 import static com.xenoage.utils.iterators.ReverseIterator.reverseIt;
-import static com.xenoage.utils.kernel.Range.range;
 
 import java.util.LinkedList;
 
+import com.xenoage.utils.annotations.Optimized;
 import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.VoiceElement;
-import com.xenoage.zong.musiclayout.BeatOffset;
-import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
+import com.xenoage.zong.musiclayout.Context;
 import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
 import com.xenoage.zong.musiclayout.notations.Notation;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
@@ -22,45 +21,37 @@ import com.xenoage.zong.musiclayout.spacing.horizontal.SpacingElement;
 import com.xenoage.zong.musiclayout.spacing.horizontal.VoiceSpacing;
 
 /**
- * Strategy to compute the horizontal spacing for a
- * single voice regardless of the spacing of other
- * voices or staves. Lyrics are ignored
- * (use the {@link LyricsVoiceSpacingStrategy} later).
+ * Computes the {@link VoiceSpacing} for a single {@link Voice} regardless of the spacing of other
+ * voices or staves. Lyrics are ignored.
  * 
- * This is needed for precomputations needed for the final
- * spacing, which can be done when the {@link BeatOffset}s
- * are known by using the {@link BeatOffsetBasedVoiceSpacingStrategy}.
- * 
- * Since this strategy only handles {@link VoiceElement}s, the barlines
+ * Since this class only handles {@link VoiceElement}s, the barlines
  * at the beginning and the end of the measure, implicit initial clefs,
  * time signatures and so on are ignored.
  * 
  * @author Andreas Wenger
  */
-public class SeparateVoiceSpacingStrategy
-	implements ScoreLayouterStrategy {
+public class SingleVoiceSpacer {
+	
+	public static final SingleVoiceSpacer singleVoiceSpacer = new SingleVoiceSpacer();
+	
 
-	/**
-	 * Computes the {@link VoiceSpacing} for the given voice,
-	 * which is computed separately, regardless of the spacing of other
-	 * voices or staves. If a parent measure is given, its clefs and
-	 * key signatures are considered for the computation, too.
-	 * @param voice           the voice to compute
-	 * @param interlineSpace  interline space of the voice
-	 * @param notations       the already computed notations (all elements within the
-	 *                        given voice must be included)
-	 * @param measureBeats    the time signature of this voice
-	 * @param layoutSettings  general layout preferences
-	 */
-	public VoiceSpacing computeVoiceSpacing(Voice voice, float interlineSpace,
-		NotationsCache notations, Fraction measureBeats, LayoutSettings layoutSettings) {
-		LinkedList<SpacingElement> acc = llist();
+	public VoiceSpacing compute(Context context, @Optimized(Performance) Fraction measureBeats) {
+		//measureBeats could be computed, but this is expensive and the caller can
+		//reuse the value for the whole measure column
+		Voice voice = context.score.getVoice(context.mp);
+		float is = context.score.getInterlineSpace(context.mp);
+		return compute(voice, is, measureBeats, context.notationsCache, context.settings);
+	}
+
+	VoiceSpacing compute(Voice voice, float interlineSpace, Fraction measureBeats, 
+		NotationsCache notations, LayoutSettings layoutSettings) {
+		LinkedList<SpacingElement> ret = llist();
 
 		//special case: no elements in the measure.
 		if (voice.getElements().size() == 0) {
-			return new VoiceSpacing(voice, interlineSpace, new SpacingElement[]{
+			return new VoiceSpacing(voice, interlineSpace, ilist(
 				new SpacingElement(null, Fraction._0, 0), new SpacingElement(null, measureBeats,
-					layoutSettings.spacings.widthMeasureEmpty)});
+					layoutSettings.spacings.widthMeasureEmpty)));
 		}
 
 		//we compute the spacings in reverse order. this is easier, since grace chords
@@ -83,7 +74,7 @@ public class SeparateVoiceSpacingStrategy
 
 		//at last beat
 		Fraction curBeat = voice.getFilledBeats();
-		acc.addFirst(new SpacingElement(null, curBeat, lastFrontGapOffset));
+		ret.addFirst(new SpacingElement(null, curBeat, lastFrontGapOffset));
 
 		//iterate through the elements in reverse order
 		for (VoiceElement element : reverseIt(voice.getElements())) {
@@ -115,18 +106,17 @@ public class SeparateVoiceSpacingStrategy
 				symbolOffset = Math.min(lastFrontGapOffset, lastSymbolOffset - elementWidth.rearGap) -
 					elementWidth.symbolWidth;
 			}
-			acc.addFirst(new SpacingElement(element, curBeat, symbolOffset, grace));
+			ret.addFirst(new SpacingElement(element, curBeat, grace, symbolOffset));
 			lastFrontGapOffset = symbolOffset - elementWidth.frontGap;
 			lastSymbolOffset = symbolOffset;
 		}
 
 		//shift spacings to the right
 		float shift = (-lastFrontGapOffset) + layoutSettings.offsetMeasureStart;
-		SpacingElement[] ret = new SpacingElement[acc.size()];
-		for (int i : range(acc))
-			ret[i] = acc.get(i).withOffset(acc.get(i).offsetIs + shift);
+		for (SpacingElement e : ret)
+			e.offsetIs += shift;
 
-		return new VoiceSpacing(voice, interlineSpace, ret);
+		return new VoiceSpacing(voice, interlineSpace, ilist(ret));
 	}
 
 }

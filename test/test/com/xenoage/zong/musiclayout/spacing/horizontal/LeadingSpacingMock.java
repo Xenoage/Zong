@@ -1,5 +1,6 @@
 package com.xenoage.zong.musiclayout.spacing.horizontal;
 
+import static com.xenoage.utils.collections.CList.ilist;
 import static com.xenoage.utils.math.Fraction.fr;
 
 import com.xenoage.zong.core.format.ScoreFormat;
@@ -24,7 +25,7 @@ public class LeadingSpacingMock {
 		float widthIS = widthMm / ScoreFormat.defaultInterlineSpace;
 		ClefNotation notation = new ClefNotation(new Clef(ClefType.clefTreble), new ElementWidth(widthIS), 0, 1);
 		SpacingElement spacing = new SpacingElement(notation.element, fr(0), 0);
-		return new LeadingSpacing(new SpacingElement[]{spacing}, widthIS);
+		return new LeadingSpacing(ilist(spacing), widthIS);
 	}
 
 }

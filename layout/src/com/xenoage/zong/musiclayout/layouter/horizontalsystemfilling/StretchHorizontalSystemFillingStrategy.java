@@ -1,8 +1,11 @@
 package com.xenoage.zong.musiclayout.layouter.horizontalsystemfilling;
 
 import static com.xenoage.utils.collections.CList.clist;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.kernel.Range.rangeReverse;
+
+import java.util.List;
 
 import com.xenoage.utils.collections.CList;
 import com.xenoage.zong.musiclayout.BeatOffset;
@@ -82,11 +85,11 @@ public class StretchHorizontalSystemFillingStrategy
 					//traverse in reverse order, so we can align grace elements correctly
 					//grace elements are not stretched, but the distance to their following full element
 					//stays the same
-					SpacingElement[] newSEs = new SpacingElement[oldVS.spacingElements.length];
+					List<SpacingElement> newSEs = alist(oldVS.spacingElements.size());
 					float lastOldOffset = Float.NaN;
 					float lastNewOffset = Float.NaN;
 					for (int i : rangeReverse(oldVS.spacingElements)) {
-						SpacingElement oldSE = oldVS.spacingElements[i];
+						SpacingElement oldSE = oldVS.spacingElements.get(i);
 						if (oldSE.grace && !Float.isNaN(lastOldOffset)) {
 							//grace element: keep distance to following element
 							float oldDistance = lastOldOffset - oldSE.offsetIs;
@@ -97,7 +100,7 @@ public class StretchHorizontalSystemFillingStrategy
 							lastNewOffset = oldSE.offsetIs * stretch;
 						}
 						lastOldOffset = oldSE.offsetIs;
-						newSEs[oldVS.spacingElements.length - i - 1] = oldSE.withOffset(lastNewOffset);
+						newSEs.add(0, oldSE.withOffset(lastNewOffset));
 					}
 					newVSs.add(new VoiceSpacing(oldVS.voice, oldVS.interlineSpace, newSEs));
 				}

@@ -23,16 +23,14 @@ public class BeatOffsetBasedVoiceSpacingStrategy
 	implements ScoreLayouterStrategy {
 
 	/**
-	 * Computes and returns the horizontal spacing for a
-	 * single voice, based on the given beat offsets, that
-	 * are used for the result, and the given precomputed voice spacing.
+	 * Modifies the given {@link VoiceSpacing}, based on the given beat offsets.
 	 */
-	public VoiceSpacing computeVoiceSpacing(VoiceSpacing voiceSpacing, BeatOffset[] beatOffsets) {
+	public void computeVoiceSpacing(VoiceSpacing voiceSpacing, BeatOffset[] beatOffsets) {
 		
-		SpacingElement[] oldSpacingElements = voiceSpacing.spacingElements;
-		SpacingElement[] spacingElements = oldSpacingElements.clone();
-		if (spacingElements.length == 0 || beatOffsets.length == 0)
-			return voiceSpacing;
+		List<SpacingElement> spacingElements = voiceSpacing.spacingElements;
+		if (spacingElements.size() == 0 || beatOffsets.length == 0)
+			return;
+		
 		//find the given beats, that are also used here
 		List<BeatOffset> sharedBeats = computeSharedBeats(spacingElements, beatOffsets);
 		//interpolate positions between the shared beats
@@ -43,8 +41,8 @@ public class BeatOffsetBasedVoiceSpacingStrategy
 		float interlineSpace = voiceSpacing.interlineSpace;
 		for (int iGivenBeat = 0; iGivenBeat < sharedBeats.size(); iGivenBeat++) {
 			//for each given beat: find elements before or at that beat
-			for (int iElement = lastElement + 1; iElement < spacingElements.length; iElement++) {
-				if (spacingElements[iElement].beat.compareTo(sharedBeats.get(iGivenBeat).getBeat()) > 0)
+			for (int iElement = lastElement + 1; iElement < spacingElements.size(); iElement++) {
+				if (spacingElements.get(iElement).beat.compareTo(sharedBeats.get(iGivenBeat).getBeat()) > 0)
 					break;
 				lastElement++;
 			}
@@ -55,14 +53,14 @@ public class BeatOffsetBasedVoiceSpacingStrategy
 			//last shared beat up to the current shared beat.
 			float currentGivenBeatPosition = sharedBeats.get(iGivenBeat).getOffsetMm() / interlineSpace; //we calculate in interline spaces here
 			float givenBeatsDistance = currentGivenBeatPosition - lastGivenBeatPosition;
-			float currentEndElementPosition = spacingElements[lastElement].offsetIs;
+			float currentEndElementPosition = spacingElements.get(lastElement).offsetIs;
 			float elementsDistance = currentEndElementPosition - lastEndElementPosition;
 			//interpolate the offsets of the current voice spacing
 			//between the last shared beat and the current shared beat.
 			//do this in reverse order, because the position of grace notes is dependent
 			//on the position of the (following) main note
 			for (int iElement = lastElement; iElement >= firstElement; iElement--) {
-				SpacingElement e = spacingElements[iElement];
+				SpacingElement e = spacingElements.get(iElement);
 				if (!e.grace) {
 					//normal element: interpolate position
 					float currentElementOffset = e.offsetIs - lastEndElementPosition;
@@ -73,39 +71,34 @@ public class BeatOffsetBasedVoiceSpacingStrategy
 					else {
 						newElementOffset = currentGivenBeatPosition;
 					}
-					spacingElements[iElement] = e.withOffset(newElementOffset + lastGivenBeatPosition);
+					e.offsetIs = newElementOffset + lastGivenBeatPosition;
 				}
 				else {
 					//grace element: same distance to the main note as before
-					float distanceBefore = oldSpacingElements[iElement + 1].offsetIs -
-						oldSpacingElements[iElement].offsetIs;
-					spacingElements[iElement] = e.withOffset(spacingElements[iElement + 1].offsetIs - distanceBefore);
+					float distanceBefore = spacingElements.get(iElement + 1).offsetIs -
+						spacingElements.get(iElement).offsetIs;
+					spacingElements.get(iElement).offsetIs = spacingElements.get(iElement + 1).offsetIs - distanceBefore;
 				}
 			}
 			//next range up to next shared beat
 			firstElement = lastElement + 1;
-			if (firstElement >= spacingElements.length)
+			if (firstElement >= spacingElements.size())
 				break;
 			lastGivenBeatPosition = currentGivenBeatPosition;
 			lastEndElementPosition = currentEndElementPosition;
 		}
-		
-		return new VoiceSpacing(voiceSpacing.voice, voiceSpacing.interlineSpace,
-			spacingElements);
 	}
 
 	/**
-	 * Finds and returns the shared beats of the given
-	 * {@link SpacingElement}s and {@link BeatOffset}s.
-	 * If there are no beats used by both lists, an empty
-	 * list is returned.
+	 * Finds and returns the shared beats of the given {@link SpacingElement}s and {@link BeatOffset}s.
+	 * If there are no beats used by both lists, an empty list is returned.
 	 */
-	public List<BeatOffset> computeSharedBeats(SpacingElement[] spacingElements, BeatOffset[] beatOffsets) {
-		ArrayList<BeatOffset> ret = alist(beatOffsets.length);
+	public List<BeatOffset> computeSharedBeats(List<SpacingElement> spacingElements, BeatOffset[] beatOffsets) {
+		ArrayList<BeatOffset> ret = alist(Math.min(spacingElements.size(), beatOffsets.length));
 		int i1 = 0, i2 = 0;
 		Fraction lastAddedBeat = fr(-1);
-		while (i1 < spacingElements.length && i2 < beatOffsets.length) {
-			Fraction beat1 = spacingElements[i1].beat;
+		while (i1 < spacingElements.size() && i2 < beatOffsets.length) {
+			Fraction beat1 = spacingElements.get(i1).beat;
 			BeatOffset beatOffset2 = beatOffsets[i2];
 			Fraction beat2 = beatOffset2.getBeat();
 			if (beat1.equals(beat2)) {

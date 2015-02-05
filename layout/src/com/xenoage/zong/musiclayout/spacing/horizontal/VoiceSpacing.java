@@ -1,8 +1,9 @@
 package com.xenoage.zong.musiclayout.spacing.horizontal;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 
-import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.music.Voice;
 
 /**
@@ -11,7 +12,7 @@ import com.xenoage.zong.core.music.Voice;
  *
  * @author Andreas Wenger
  */
-@Const @AllArgsConstructor
+@AllArgsConstructor
 public final class VoiceSpacing {
 
 	/** The {@link Voice} this spacing belongs to. */
@@ -19,6 +20,11 @@ public final class VoiceSpacing {
 	/** The interline space in mm of this voice. */
 	public final float interlineSpace;
 	/** The {@link SpacingElement}s of this voice. */
-	public final SpacingElement[] spacingElements;
+	public List<SpacingElement> spacingElements;
+	
+	
+	public SpacingElement getLast() {
+		return spacingElements.get(spacingElements.size() - 1);
+	}
 	
 }

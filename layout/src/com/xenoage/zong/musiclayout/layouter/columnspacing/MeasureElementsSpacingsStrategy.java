@@ -69,31 +69,30 @@ public class MeasureElementsSpacingsStrategy
 	 *                        leading spacing)
 	 * @param originalVoiceSpacings  the spacings of the voices without regard to measure elements
 	 * @param notations       the precomputed notations for this staff
-	 */
-	public Tuple2<MeasureElementsSpacings, IList<VoiceSpacing>> computeMeasureElementsSpacings(
+	 */ //TIDY: also get rid of MeasureElementsSpacings
+	public MeasureElementsSpacings computeMeasureElementsSpacings(
 		Score score, int iStaff, int iMeasure, boolean leadingSpacing,
-		IList<VoiceSpacing> originalVoiceSpacings, NotationsCache notations,
+		List<VoiceSpacing> voiceSpacings, NotationsCache notations,
 		LayoutSettings layoutSettings) {
 		
 		Measure measure = score.getMeasure(atMeasure(iStaff, iMeasure));
 		ColumnHeader columnHeader = score.getHeader().getColumnHeader(iMeasure);
 		return compute(measure.getClefs(), columnHeader.getKeys(), columnHeader.getTime(), leadingSpacing,
-			originalVoiceSpacings, iStaff, notations, layoutSettings);
+			voiceSpacings, iStaff, notations, layoutSettings);
 	}
 
-	Tuple2<MeasureElementsSpacings, IList<VoiceSpacing>> compute(BeatEList<Clef> clefs,
+	MeasureElementsSpacings compute(BeatEList<Clef> clefs,
 		@MaybeEmpty BeatEList<Key> keys, @MaybeNull Time time, boolean leadingSpacing,
-		IList<VoiceSpacing> originalVoiceSpacings, int staff, NotationsCache notations,
+		List<VoiceSpacing> voiceSpacings, int staff, NotationsCache notations,
 		LayoutSettings layoutSettings) {
 		Key key0 = null;
 		if (keys.size() > 0 && keys.getFirst().beat.equals(_0))
 			key0 = keys.getFirst().element;
 		if (key0 == null && time == null && (clefs == null || clefs.size() == 0)) {
 			//nothing to do
-			return t(MeasureElementsSpacings.empty, originalVoiceSpacings);
+			return MeasureElementsSpacings.empty;
 		}
 
-		IList<VoiceSpacing> updatedVS = originalVoiceSpacings;
 		List<SpacingElement> measureElementsSpacings = alist();
 		float startOffset = layoutSettings.offsetMeasureStart;
 
@@ -122,13 +121,13 @@ public class MeasureElementsSpacingsStrategy
 			}
 
 			//move voice elements, if not enough space before first voice element
-			SpacingElement leftSE = getFirstSpacingElement(updatedVS, notations);
+			SpacingElement leftSE = getFirstSpacingElement(voiceSpacings, notations);
 			if (leftSE != null) {
 				float leftSEx = getLeftX(leftSE, notations);
 				float ES = leftSEx; //existing space
 				float AS = currentOffset - ES; //additional needed space
 				if (AS > 0) {
-					updatedVS = shift(updatedVS, AS);
+					shift(voiceSpacings, AS);
 					startOffset += AS;
 				}
 			}
@@ -173,7 +172,7 @@ public class MeasureElementsSpacingsStrategy
 					continue;
 	
 				//find VE1 and VE2 for the current element
-				SpacingElement[] ses = getNearestSpacingElements(MEb, updatedVS, notations);
+				SpacingElement[] ses = getNearestSpacingElements(MEb, voiceSpacings, notations);
 				SpacingElement VE1 = ses[0], VE2 = ses[1];
 	
 				//if VE1 is unknown, use startOffset. if VE2 is unknown, ignore this element
@@ -189,7 +188,7 @@ public class MeasureElementsSpacingsStrategy
 					float AS = MEwidth - ES;
 					//move all elements at or after ME.beat
 					VE2x += AS;
-					updatedVS = shiftAfterBeat(updatedVS, AS, MEb);
+					shiftAfterBeat(voiceSpacings, AS, MEb);
 				}
 	
 				//add measure element
@@ -200,7 +199,7 @@ public class MeasureElementsSpacingsStrategy
 		}
 		SpacingElement[] mes = new SpacingElement[measureElementsSpacings.size()];
 		measureElementsSpacings.toArray(mes);
-		return t(new MeasureElementsSpacings(mes), updatedVS);
+		return new MeasureElementsSpacings(mes);
 	}
 
 	/**
@@ -280,35 +279,21 @@ public class MeasureElementsSpacingsStrategy
 	/**
 	 * Moves all given {@link SpacingElement}s by the given offset.
 	 */
-	public IList<VoiceSpacing> shift(List<VoiceSpacing> vss, float offset) {
-		CList<VoiceSpacing> movedVS = clist();
-		for (VoiceSpacing vs : vss) {
-			SpacingElement[] movedSE = new SpacingElement[vs.spacingElements.length];
-			for (int i : range(vs.spacingElements)) {
-				float newOffset = vs.spacingElements[i].offsetIs + offset;
-				movedSE[i] = vs.spacingElements[i].withOffset(newOffset);
-			}
-			movedVS.add(new VoiceSpacing(vs.voice, vs.interlineSpace, movedSE));
-		}
-		return movedVS.close();
+	public void shift(List<VoiceSpacing> vss, float offsetIs) {
+		for (VoiceSpacing vs : vss)
+			for (SpacingElement se : vs.spacingElements)
+				se.offsetIs += offsetIs;
 	}
 
 	/**
 	 * Moves all given {@link SpacingElement}s by the given offset, if they are at
 	 * or behind the given beat.
 	 */
-	public IList<VoiceSpacing> shiftAfterBeat(List<VoiceSpacing> vss, float offset, Fraction beat) {
-		CList<VoiceSpacing> movedVS = clist();
-		for (VoiceSpacing vs : vss) {
-			SpacingElement[] movedSE = new SpacingElement[vs.spacingElements.length];
-			for (int i : range(vs.spacingElements)) {
-				float newOffset = vs.spacingElements[i].offsetIs +
-					(vs.spacingElements[i].beat.compareTo(beat) >= 0 ? offset : 0);
-				movedSE[i] = vs.spacingElements[i].withOffset(newOffset);
-			}
-			movedVS.add(new VoiceSpacing(vs.voice, vs.interlineSpace, movedSE));
-		}
-		return movedVS.close();
+	public void shiftAfterBeat(List<VoiceSpacing> vss, float offsetIs, Fraction beat) {
+		for (VoiceSpacing vs : vss)
+			for (SpacingElement se : vs.spacingElements)
+				if (se.beat.compareTo(beat) >= 0)
+					se.offsetIs += offsetIs;
 	}
 
 }

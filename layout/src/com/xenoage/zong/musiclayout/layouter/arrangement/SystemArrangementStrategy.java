@@ -132,10 +132,10 @@ public class SystemArrangementStrategy
 																							//measure column with leading spacing is really used
 			if (systemMCSs.size() == 0) {
 				//first measure within this system: add leading elements (clef, time sig.)
-				Tuple3<ColumnSpacing, VoiceSpacingsByStaff, NotationsCache> mcsData = measureColumnSpacingStrategy
+				Tuple2<ColumnSpacing, NotationsCache> mcsData = measureColumnSpacingStrategy
 					.computeColumnSpacing(currentMeasure, true /* leading! */, notations, lc);
 				currentMCS = mcsData.get1();
-				leadingNotations = mcsData.get3();
+				leadingNotations = mcsData.get2();
 			}
 			else {
 				//otherwise: use the optimal spacing

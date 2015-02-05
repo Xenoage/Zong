@@ -9,6 +9,8 @@ import static com.xenoage.zong.core.music.chord.ChordFactory.graceChord;
 import static com.xenoage.zong.core.position.MP.atMeasure;
 import static org.junit.Assert.assertEquals;
 
+import java.util.List;
+
 import org.junit.Test;
 
 import com.xenoage.utils.collections.IList;
@@ -61,9 +63,9 @@ public class StretchHorizontalSystemFillingStrategyTest {
 			Delta.DELTA_FLOAT);
 		//element spacings
 		VoiceSpacing newVoice = newCol.getMeasureSpacings()[0].getVoiceSpacings().get(0);
-		assertEquals(offsetBeat1 * stretch, newVoice.spacingElements[0].offsetIs,
+		assertEquals(offsetBeat1 * stretch, newVoice.spacingElements.get(0).offsetIs,
 			Delta.DELTA_FLOAT);
-		assertEquals(offsetBeat2 * stretch, newVoice.spacingElements[1].offsetIs,
+		assertEquals(offsetBeat2 * stretch, newVoice.spacingElements.get(1).offsetIs,
 			Delta.DELTA_FLOAT);
 
 	}
@@ -97,13 +99,13 @@ public class StretchHorizontalSystemFillingStrategyTest {
 			Delta.DELTA_FLOAT);
 		//element spacings
 		VoiceSpacing newVoice = newCol.getMeasureSpacings()[0].getVoiceSpacings().get(0);
-		assertEquals(offsetChord1 * stretch, newVoice.spacingElements[0].offsetIs,
+		assertEquals(offsetChord1 * stretch, newVoice.spacingElements.get(0).offsetIs,
 			Delta.DELTA_FLOAT);
 		assertEquals(offsetChord2 * stretch - 2 * graceDistance,
-			newVoice.spacingElements[1].offsetIs, Delta.DELTA_FLOAT);
+			newVoice.spacingElements.get(1).offsetIs, Delta.DELTA_FLOAT);
 		assertEquals(offsetChord2 * stretch - 1 * graceDistance,
-			newVoice.spacingElements[2].offsetIs, Delta.DELTA_FLOAT);
-		assertEquals(offsetChord2 * stretch, newVoice.spacingElements[3].offsetIs,
+			newVoice.spacingElements.get(2).offsetIs, Delta.DELTA_FLOAT);
+		assertEquals(offsetChord2 * stretch, newVoice.spacingElements.get(3).offsetIs,
 			Delta.DELTA_FLOAT);
 	}
 
@@ -121,10 +123,10 @@ public class StretchHorizontalSystemFillingStrategyTest {
 			pi(1, 0, 4), fr(2, 4))));
 		BeatOffset[] beatOffsets = { new BeatOffset(fr(1, 4), offsetBeat0), new BeatOffset(
 			fr(3, 4), offsetBeat1), new BeatOffset(fr(5, 4), offsetBeat2) };
-		IList<VoiceSpacing> voiceSpacings = ilist(new VoiceSpacing(voice, 1, new SpacingElement[]{
+		List<VoiceSpacing> voiceSpacings = alist(new VoiceSpacing(voice, 1, alist(
 			new SpacingElement(voice.getElement(0), beatOffsets[0].getBeat(), beatOffsets[0].getOffsetMm()),
 			new SpacingElement(voice.getElement(1), beatOffsets[1].getBeat(), beatOffsets[1]
-				.getOffsetMm())}));
+				.getOffsetMm()))));
 		MeasureSpacing measureSpacing = new MeasureSpacing(atMeasure(0, 0), voiceSpacings,
 			MeasureElementsSpacings.empty, LeadingSpacingMock.createGClefSpacing(leadingWidth));
 		MeasureSpacing[] measureSpacings = { measureSpacing };
@@ -145,13 +147,13 @@ public class StretchHorizontalSystemFillingStrategyTest {
 			1, 0, 4)), graceChord(pi(2, 0, 4)), chord(pi(3, 0, 4), fr(2, 4))));
 		BeatOffset[] beatOffsets = { new BeatOffset(fr(0, 4), offsetChord1), new BeatOffset(
 			fr(2, 4), offsetChord2), new BeatOffset(fr(4, 4), offsetMeasureEnd) };
-		IList<VoiceSpacing> voiceSpacings = ilist(new VoiceSpacing(voice, 1, new SpacingElement[]{new SpacingElement(
+		List<VoiceSpacing> voiceSpacings = alist(new VoiceSpacing(voice, 1, alist(new SpacingElement(
 			voice.getElement(0), beatOffsets[0].getBeat(), beatOffsets[0].getOffsetMm()),
-			new SpacingElement(voice.getElement(1), beatOffsets[1].getBeat(), beatOffsets[1]
-				.getOffsetMm() - 2 * graceDistance, true), new SpacingElement(voice.getElement(2),
-				beatOffsets[1].getBeat(), beatOffsets[1].getOffsetMm() - 1 * graceDistance, true),
+			new SpacingElement(voice.getElement(1), beatOffsets[1].getBeat(), true, beatOffsets[1]
+				.getOffsetMm() - 2 * graceDistance), new SpacingElement(voice.getElement(2),
+				beatOffsets[1].getBeat(), true, beatOffsets[1].getOffsetMm() - 1 * graceDistance),
 			new SpacingElement(voice.getElement(3), beatOffsets[1].getBeat(), beatOffsets[1]
-				.getOffsetMm())}));
+				.getOffsetMm()))));
 		MeasureSpacing measureSpacing = new MeasureSpacing(atMeasure(0, 0), voiceSpacings,
 			MeasureElementsSpacings.empty, null);
 		ColumnSpacing mcs = new ColumnSpacing(new Score(), new MeasureSpacing[] { measureSpacing },

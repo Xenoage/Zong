@@ -373,7 +373,7 @@ public class ScoreFrameLayoutStrategy
 
 					//add voice elements within this measure
 					for (VoiceSpacing voiceSpacing : measureStaffSpacing.getVoiceSpacings()) {
-						SpacingElement[] voice = voiceSpacing.spacingElements;
+						List<SpacingElement> voice = voiceSpacing.spacingElements;
 
 						//TODO
 						//don't stamp leading rests in voice 2 - TODO: config?

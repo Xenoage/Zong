@@ -1,6 +1,9 @@
 package com.xenoage.zong.musiclayout.spacing.horizontal;
 
 import static com.xenoage.utils.collections.CList.ilist;
+
+import java.util.List;
+
 import lombok.Getter;
 
 import com.xenoage.utils.annotations.Const;
@@ -18,6 +21,7 @@ import com.xenoage.zong.core.position.MP;
  * 
  * @author Andreas Wenger
  */
+//TIDY: not Const
 @Const @Getter public final class MeasureSpacing {
 	
 	/** An empty array of {@link MeasureSpacing}s. */
@@ -26,7 +30,7 @@ import com.xenoage.zong.core.position.MP;
 	/** The musical position of the measure. */
 	@NonNull private final MP mp;
 	/** The spacings of the voices */
-	@NonEmpty private final IList<VoiceSpacing> voiceSpacings;
+	@NonEmpty private List<VoiceSpacing> voiceSpacings;
 	/** The spacings of the measure elements, like inner clefs */
 	@NonNull private final MeasureElementsSpacings measureElementsSpacings;
 	/** The leading spacing, which may contain elements like initial clefs or key signatures */
@@ -35,7 +39,7 @@ import com.xenoage.zong.core.position.MP;
 	@MaybeEmpty private final IList<Fraction> usedBeats;
 
 
-	public MeasureSpacing(MP mp, IList<VoiceSpacing> voiceSpacings,
+	public MeasureSpacing(MP mp, List<VoiceSpacing> voiceSpacings,
 		MeasureElementsSpacings measureElementSpacings, LeadingSpacing leadingSpacing) {
 		this.mp = mp;
 		this.voiceSpacings = voiceSpacings;

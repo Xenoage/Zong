@@ -1,12 +1,12 @@
-package com.xenoage.zong.musiclayout.layouter.columnspacing;
+package com.xenoage.zong.musiclayout.spacer.voice;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.math.Delta.DELTA_FLOAT;
 import static com.xenoage.utils.math.Fraction.fr;
+import static com.xenoage.zong.musiclayout.spacer.voice.SingleVoiceSpacer.singleVoiceSpacer;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -26,11 +26,13 @@ import com.xenoage.zong.musiclayout.spacing.horizontal.SpacingElement;
 import com.xenoage.zong.musiclayout.spacing.horizontal.VoiceSpacing;
 
 /**
- * Tests for {@link SeparateVoiceSpacingStrategy}.
+ * Tests for {@link SingleVoiceSpacer}.
  * 
  * @author Andreas Wenger
  */
-public class SeparateVoiceSpacingStrategyTest {
+public class SingleVoiceSpacerTest {
+	
+	private SingleVoiceSpacer testee = singleVoiceSpacer;
 
 	private Rest r1, r2, r3, r4;
 	private Chord g1, g2;
@@ -55,7 +57,7 @@ public class SeparateVoiceSpacingStrategyTest {
 	 * Combined:        --r1--~~r2_~-r3_~~---r4---
 	 * </pre> (~: area used by two elements, _: minimal distance between elements)
 	 */
-	@Test public void computeVoiceSpacingTestSimple() {
+	@Test public void testSimple() {
 		//create voice and notations
 		Voice voice = new Voice(alist((VoiceElement) r1, r2, r3, r4));
 		NotationsCache notations = new NotationsCache();
@@ -64,10 +66,9 @@ public class SeparateVoiceSpacingStrategyTest {
 		notations.add(new RestNotation(r3, new ElementWidth(2, 2, 3)));
 		notations.add(new RestNotation(r4, new ElementWidth(5, 2, 3)));
 		//compute spacing
-		VoiceSpacing vs = new SeparateVoiceSpacingStrategy().computeVoiceSpacing(voice, 200f,
-			notations, fr(4, 4), layoutSettings);
+		VoiceSpacing vs = testee.compute(voice, 200f, fr(4, 4), notations, layoutSettings);
 		//check spacing
-		SpacingElement[] ses = vs.spacingElements;
+		SpacingElement[] ses = vs.spacingElements.toArray(new SpacingElement[0]);
 		float s = layoutSettings.offsetMeasureStart;
 		float d = layoutSettings.spacings.widthDistanceMin;
 		assertEquals(5, ses.length);
@@ -93,7 +94,7 @@ public class SeparateVoiceSpacingStrategyTest {
 	 * Combined:        --r1----~g1~g2~~~r4---
 	 * </pre> (~: area used by two elements)
 	 */
-	@Test public void computeVoiceSpacingTestGrace1() {
+	@Test public void testGrace1() {
 		//create voice and notations
 		Voice voice = new Voice(alist((VoiceElement) r1, g1, g2, r4));
 		NotationsCache notations = new NotationsCache();
@@ -102,10 +103,9 @@ public class SeparateVoiceSpacingStrategyTest {
 		notations.add(new ChordNotation(g2, new ElementWidth(1, 2, 1), null, null, null, null, null));
 		notations.add(new RestNotation(r4, new ElementWidth(3, 2, 3)));
 		//compute spacing
-		VoiceSpacing vs = new SeparateVoiceSpacingStrategy().computeVoiceSpacing(voice, 300f,
-			notations, fr(4, 4), layoutSettings);
+		VoiceSpacing vs = testee.compute(voice, 300f, fr(4, 4), notations, layoutSettings);
 		//check spacing
-		SpacingElement[] ses = vs.spacingElements;
+		SpacingElement[] ses = vs.spacingElements.toArray(new SpacingElement[0]);;
 		float s = layoutSettings.offsetMeasureStart;
 		assertEquals(5, ses.length);
 		assertEquals(s + 2, ses[0].offsetIs, DELTA_FLOAT);
@@ -130,7 +130,7 @@ public class SeparateVoiceSpacingStrategyTest {
 	 * Combined:        --r1_~g1~g2~~~r4---
 	 * </pre> (~: area used by two elements, _: minimal distance between elements)
 	 */
-	@Test public void computeVoiceSpacingTestGrace2() {
+	@Test public void testGrace2() {
 		//create voice and notations
 		Voice voice = new Voice(alist((VoiceElement) r1, g1, g2, r4));
 		NotationsCache notations = new NotationsCache();
@@ -139,10 +139,9 @@ public class SeparateVoiceSpacingStrategyTest {
 		notations.add(new ChordNotation(g2, new ElementWidth(1, 2, 1), null, null, null, null, null));
 		notations.add(new RestNotation(r4, new ElementWidth(3, 2, 3)));
 		//compute spacing
-		VoiceSpacing vs = new SeparateVoiceSpacingStrategy().computeVoiceSpacing(voice, 400f,
-			notations, fr(4, 4), layoutSettings);
+		VoiceSpacing vs = testee.compute(voice, 400f, fr(4, 4), notations, layoutSettings);
 		//check spacing
-		SpacingElement[] ses = vs.spacingElements;
+		SpacingElement[] ses = vs.spacingElements.toArray(new SpacingElement[0]);;
 		float s = layoutSettings.offsetMeasureStart;
 		float d = layoutSettings.spacings.widthDistanceMin;
 		assertEquals(5, ses.length);
@@ -168,7 +167,7 @@ public class SeparateVoiceSpacingStrategyTest {
 	 * Combined:        --r1_~g1~g2~~~r4---
 	 * </pre> (~: area used by two elements, _: minimal distance between elements)
 	 */
-	@Test public void computeVoiceSpacingTestGrace3() {
+	@Test public void testGrace3() {
 		//create voice and notations
 		Voice voice = new Voice(alist((VoiceElement) r1, g1, g2, r4));
 		NotationsCache notations = new NotationsCache();
@@ -177,10 +176,9 @@ public class SeparateVoiceSpacingStrategyTest {
 		notations.add(new ChordNotation(g2, new ElementWidth(1, 2, 1), null, null, null, null, null));
 		notations.add(new RestNotation(r4, new ElementWidth(3, 2, 3)));
 		//compute spacing
-		VoiceSpacing vs = new SeparateVoiceSpacingStrategy().computeVoiceSpacing(voice, 400f,
-			notations, fr(4, 4), layoutSettings);
+		VoiceSpacing vs = testee.compute(voice, 400f, fr(4, 4), notations, layoutSettings);
 		//check spacing
-		SpacingElement[] ses = vs.spacingElements;
+		SpacingElement[] ses = vs.spacingElements.toArray(new SpacingElement[0]);;
 		float s = layoutSettings.offsetMeasureStart;
 		float d = layoutSettings.spacings.widthDistanceMin;
 		assertEquals(5, ses.length);

@@ -165,9 +165,9 @@ public class BeatOffsetsStrategy
 	Fraction computeLastBeat(List<VoiceSpacing> voiceSpacings) {
 		Fraction ret = _0;
 		for (VoiceSpacing voiceSpacing : voiceSpacings) {
-			Fraction beat = voiceSpacing.spacingElements[voiceSpacing.spacingElements.length - 1].beat;
-			if (beat.compareTo(ret) > 0)
-				ret = beat;
+			Fraction lastBeat = voiceSpacing.getLast().beat;
+			if (lastBeat.compareTo(ret) > 0)
+				ret = lastBeat;
 		}
 		return ret;
 	}
@@ -228,7 +228,7 @@ public class BeatOffsetsStrategy
 	 * place the elements up to the given ending beat.
 	 */
 	float computeMinimalDistance(Fraction startBeat, Fraction endBeat, boolean endBeatIsMeasureEnd,
-		Voice voice, SpacingElement[] spacings, List<BeatOffset> alreadyComputedBeatOffsets,
+		Voice voice, List<SpacingElement> spacings, List<BeatOffset> alreadyComputedBeatOffsets,
 		float interlineSpace) {
 		//end beat used? (measure end beat is always used)
 		if (endBeatIsMeasureEnd || voice.isBeatUsed(endBeat)) {
@@ -290,8 +290,7 @@ public class BeatOffsetsStrategy
 	private float getOffsetBeat0InMm(List<VoiceSpacing> voiceSpacings) {
 		float maxOffset = 0;
 		for (VoiceSpacing voiceSpacing : voiceSpacings) {
-			SpacingElement[] elements = voiceSpacing.spacingElements;
-			float offset = getLastOffset(elements, _0) * voiceSpacing.interlineSpace;
+			float offset = getLastOffset(voiceSpacing.spacingElements, _0) * voiceSpacing.interlineSpace;
 			if (offset > maxOffset)
 				maxOffset = offset;
 		}
@@ -303,15 +302,15 @@ public class BeatOffsetsStrategy
 	 * occurrence of the given beat in interline spaces.
 	 * If the beat is not found, 0 is returned.
 	 */
-	private float getLastOffset(SpacingElement[] spacings, Fraction beat) {
+	private float getLastOffset(List<SpacingElement> spacings, Fraction beat) {
 		for (int i : range(spacings)) {
 			//find first occurrence of the beat
-			if (spacings[i].beat.equals(beat)) {
+			if (spacings.get(i).beat.equals(beat)) {
 				//find last occurrence of the beat
-				while (i + 1 < spacings.length && spacings[i + 1].beat.equals(beat)) {
+				while (i + 1 < spacings.size() && spacings.get(i + 1).beat.equals(beat)) {
 					i++;
 				}
-				return spacings[i].offsetIs;
+				return spacings.get(i).offsetIs;
 			}
 		}
 		return 0;
