@@ -23,8 +23,8 @@ import com.xenoage.zong.musiclayout.SystemArrangement;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterContext;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
-import com.xenoage.zong.musiclayout.layouter.columnspacing.ColumnSpacingStrategy;
 import com.xenoage.zong.musiclayout.layouter.columnspacing.VoiceSpacingsByStaff;
+import com.xenoage.zong.musiclayout.spacer.ColumnSpacer;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 
 /**
@@ -43,13 +43,13 @@ public class SystemArrangementStrategy
 	implements ScoreLayouterStrategy {
 
 	//used strategies
-	private final ColumnSpacingStrategy measureColumnSpacingStrategy;
+	private final ColumnSpacer measureColumnSpacingStrategy;
 
 
 	/**
 	 * Creates a new {@link SystemArrangementStrategy}.
 	 */
-	public SystemArrangementStrategy(ColumnSpacingStrategy measureColumnSpacingStrategy) {
+	public SystemArrangementStrategy(ColumnSpacer measureColumnSpacingStrategy) {
 		this.measureColumnSpacingStrategy = measureColumnSpacingStrategy;
 	}
 

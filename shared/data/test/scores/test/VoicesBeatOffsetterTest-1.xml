@@ -5,7 +5,7 @@
 <score-partwise version="1.1">
 	<part-list>
 		<score-part id="P1">
-		<part-name>Xenoage Score Test Data</part-name>
+		<part-name>Zong! Test Data</part-name>
 	</score-part>
 	</part-list>
 	<part id="P1">
@@ -65,9 +65,9 @@
 					<alter>1</alter>
 					<octave>4</octave>
 				</pitch>
-				<duration>1</duration>
+				<duration>2</duration>
 				<voice>2</voice>
-				<type>eighth</type>
+				<type>quarter</type>
 				<staff>1</staff>
 			</note>
 			<note>
@@ -75,9 +75,10 @@
 					<step>G</step>
 					<octave>4</octave>
 				</pitch>
-				<duration>4</duration>
+				<duration>3</duration>
 				<voice>2</voice>
-				<type>half</type>
+				<type>quarter</type>
+				<dot />
 				<staff>1</staff>
 			</note>
 			<note>
@@ -96,7 +97,7 @@
 			<note>
 				<pitch>
 					<step>D</step>
-					<octave>5</octave>
+					<octave>3</octave>
 				</pitch>
 				<duration>2</duration>
 				<voice>3</voice>
@@ -106,7 +107,7 @@
 			<note>
 				<pitch>
 					<step>E</step>
-					<octave>5</octave>
+					<octave>3</octave>
 				</pitch>
 				<duration>2</duration>
 				<voice>3</voice>
@@ -117,7 +118,7 @@
 				<pitch>
 					<step>F</step>
 					<alter>1</alter>
-					<octave>5</octave>
+					<octave>3</octave>
 				</pitch>
 				<duration>2</duration>
 				<voice>3</voice>
@@ -131,27 +132,28 @@
 				<pitch>
 					<step>F</step>
 					<alter>1</alter>
-					<octave>4</octave>
+					<octave>2</octave>
 				</pitch>
-				<duration>1</duration>
+				<duration>2</duration>
 				<voice>4</voice>
-				<type>eighth</type>
+				<type>quarter</type>
 				<staff>2</staff>
 			</note>
 			<note>
 				<pitch>
 					<step>G</step>
-					<octave>4</octave>
+					<octave>2</octave>
 				</pitch>
-				<duration>4</duration>
+				<duration>3</duration>
 				<voice>4</voice>
-				<type>half</type>
+				<type>quarter</type>
+				<dot ></dot>
 				<staff>2</staff>
 			</note>
 			<note>
 				<pitch>
 					<step>A</step>
-					<octave>4</octave>
+					<octave>2</octave>
 				</pitch>
 				<duration>1</duration>
 				<voice>4</voice>

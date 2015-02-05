@@ -1,8 +1,10 @@
 package com.xenoage.zong.musiclayout.layouter.columnspacing;
 
+import static com.xenoage.utils.collections.CollectionUtils.alist;
+
+import java.util.ArrayList;
 import java.util.List;
 
-import com.xenoage.utils.collections.IList;
 import com.xenoage.zong.musiclayout.spacing.horizontal.VoiceSpacing;
 
 /**
@@ -18,6 +20,13 @@ public class VoiceSpacingsByStaff {
 
 	public VoiceSpacingsByStaff(List<List<VoiceSpacing>> staves) {
 		this.staves = staves;
+	}
+	
+	public List<VoiceSpacing> getAll() {
+		ArrayList<VoiceSpacing> ret = alist();
+		for (List<VoiceSpacing> staff : staves)
+			ret.addAll(staff);
+		return ret;
 	}
 	
 	public List<VoiceSpacing> getStaff(int staff) {

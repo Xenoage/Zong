@@ -15,10 +15,7 @@ import com.xenoage.zong.musiclayout.ScoreLayout;
 import com.xenoage.zong.musiclayout.layouter.arrangement.FrameArrangementStrategy;
 import com.xenoage.zong.musiclayout.layouter.arrangement.SystemArrangementStrategy;
 import com.xenoage.zong.musiclayout.layouter.beamednotation.BeamedStemAlignmentNotationsStrategy;
-import com.xenoage.zong.musiclayout.layouter.columnspacing.BarlinesBeatOffsetsStrategy;
 import com.xenoage.zong.musiclayout.layouter.columnspacing.BeatOffsetBasedVoiceSpacingStrategy;
-import com.xenoage.zong.musiclayout.layouter.columnspacing.BeatOffsetsStrategy;
-import com.xenoage.zong.musiclayout.layouter.columnspacing.ColumnSpacingStrategy;
 import com.xenoage.zong.musiclayout.layouter.columnspacing.LeadingSpacingStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.DirectionStampingStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.LyricStampingStrategy;
@@ -30,6 +27,9 @@ import com.xenoage.zong.musiclayout.layouter.scoreframelayout.TupletStampingStra
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.VoltaStampingStrategy;
 import com.xenoage.zong.musiclayout.notator.Notator;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
+import com.xenoage.zong.musiclayout.spacer.ColumnSpacer;
+import com.xenoage.zong.musiclayout.spacer.beat.BarlinesBeatOffsetter;
+import com.xenoage.zong.musiclayout.spacer.beat.VoicesBeatOffsetter;
 import com.xenoage.zong.musiclayout.spacer.measure.MeasureElementsSpacer;
 import com.xenoage.zong.musiclayout.spacer.voice.SingleVoiceSpacer;
 import com.xenoage.zong.symbols.SymbolPool;
@@ -124,8 +124,8 @@ public class ScoreLayouter {
 	 */
 	ScoreLayoutStrategy createStrategyTree() {
 		//measure column subtree
-		ColumnSpacingStrategy columnSpacingStrategy = new ColumnSpacingStrategy(
-			new BeatOffsetsStrategy(), new BarlinesBeatOffsetsStrategy(),
+		ColumnSpacer columnSpacingStrategy = new ColumnSpacer(
+			new VoicesBeatOffsetter(), new BarlinesBeatOffsetter(),
 			new BeatOffsetBasedVoiceSpacingStrategy(), new LeadingSpacingStrategy());
 		//complete tree
 		return new ScoreLayoutStrategy(

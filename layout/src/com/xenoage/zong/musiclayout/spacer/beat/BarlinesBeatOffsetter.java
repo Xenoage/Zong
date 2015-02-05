@@ -1,14 +1,12 @@
-package com.xenoage.zong.musiclayout.layouter.columnspacing;
+package com.xenoage.zong.musiclayout.spacer.beat;
 
-import static com.xenoage.utils.collections.CList.clist;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.utils.kernel.Tuple2.t;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import com.xenoage.utils.collections.CList;
-import com.xenoage.utils.collections.IList;
-import com.xenoage.utils.kernel.Tuple2;
+import lombok.AllArgsConstructor;
+
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.header.ColumnHeader;
 import com.xenoage.zong.core.music.barline.Barline;
@@ -17,42 +15,46 @@ import com.xenoage.zong.core.music.util.BeatE;
 import com.xenoage.zong.musiclayout.BeatOffset;
 
 /**
- * This strategy creates {@link BeatOffset}s for the barlines
- * and the notes of the given measure column, based on the
- * given {@link BeatOffset}s (that were created without
- * respect to barlines).
+ * Computes {@link BeatOffset}s for the barlines and the notes of the given measure column,
+ * based on the given {@link BeatOffset}s (that were created without respect to barlines).
  * 
  * @author Andreas Wenger
  */
-public class BarlinesBeatOffsetsStrategy {
+public class BarlinesBeatOffsetter {
+	
+	public static final BarlinesBeatOffsetter barlinesBeatOffsetter = new BarlinesBeatOffsetter();
 
-	//additional 1 IS when using a repeat sign
-	public static final float REPEAT_SPACE = 1;
-	//2 IS after a mid-measure barline
-	public static final float MID_BARLINE_SPACE = 2;
+	//additional 1 IS when using a repeat sign - TIDY: move into layout settings
+	static final float repeatSpace = 1;
+	//2 IS after a mid-measure barline - TIDY: move into layout settings
+	static final float midBarlineSpace = 2;
+	
+	
+	@AllArgsConstructor
+	public class Result {
+		public List<BeatOffset> voiceElementOffsets;
+		public List<BeatOffset> barlineOffsets;
+	}
 
 
-	/**
-	 * Computes and returns updated {@link BeatOffset}s. The first component are
-	 * the note offsets, the second one the barline offsets.
-	 */
-	public Tuple2<BeatOffset[], BeatOffset[]> computeBeatOffsets(
-		BeatOffset[] baseOffsets, ColumnHeader columnHeader, float interlineSpace) {
+	public Result compute(List<BeatOffset> baseOffsets, ColumnHeader columnHeader, float maxInterlineSpace) {
 
-		List<BeatOffset> retNotes = alist(baseOffsets);
-		List<BeatOffset> retBarlines = alist();
+		ArrayList<BeatOffset> retNotes = alist(baseOffsets);
+		ArrayList<BeatOffset> retBarlines = alist();
+		
 		//start barline
 		retBarlines.add(new BeatOffset(Fraction._0, 0));
 		Barline startBarline = columnHeader.getStartBarline();
 		if (startBarline != null && startBarline.getRepeat() == BarlineRepeat.Forward) {
 			//forward repeat: move all beats REPEAT_SPACE IS backward
-			float move = REPEAT_SPACE * interlineSpace;
+			float move = repeatSpace * maxInterlineSpace;
 			for (int i = 0; i < retNotes.size(); i++) {
 				BeatOffset oldOffset = retNotes.get(i);
 				retNotes.set(i, new BeatOffset(oldOffset.getBeat(), oldOffset.getOffsetMm() + move));
 			}
 		}
-		//mid-measure barlines: add MID_BARLINE_SPACE IS for each
+		
+		//mid-measure barlines
 		for (BeatE<Barline> midBarline : columnHeader.getMiddleBarlines()) {
 			//get beat of barline, find it in the note offsets and move the following ones
 			Fraction beat = midBarline.beat;
@@ -63,7 +65,7 @@ public class BarlinesBeatOffsetsStrategy {
 					BarlineRepeat repeat = midBarline.element.getRepeat();
 					if (repeat == BarlineRepeat.Backward) {
 						//backward repeat: additional space before barline
-						move += REPEAT_SPACE * interlineSpace;
+						move += repeatSpace * maxInterlineSpace;
 						BeatOffset oldOffset = retNotes.get(i);
 						retBarlines.add(new BeatOffset(oldOffset.getBeat(), oldOffset.getOffsetMm() + move));
 					}
@@ -71,19 +73,19 @@ public class BarlinesBeatOffsetsStrategy {
 						//forward repeat: additional space after barline
 						BeatOffset oldOffset = retNotes.get(i);
 						retBarlines.add(new BeatOffset(oldOffset.getBeat(), oldOffset.getOffsetMm() + move));
-						move += REPEAT_SPACE * interlineSpace;
+						move += repeatSpace * maxInterlineSpace;
 					}
 					else if (repeat == BarlineRepeat.Both) {
 						//forward and backward repeat: additional space before and after barline
-						move += REPEAT_SPACE * interlineSpace;
+						move += repeatSpace * maxInterlineSpace;
 						BeatOffset oldOffset = retNotes.get(i);
 						retBarlines.add(new BeatOffset(oldOffset.getBeat(), oldOffset.getOffsetMm() + move));
-						move += REPEAT_SPACE * interlineSpace;
+						move += repeatSpace * maxInterlineSpace;
 					}
 					else {
 						retBarlines.add(retNotes.get(i));
 					}
-					move += MID_BARLINE_SPACE * interlineSpace;
+					move += midBarlineSpace * maxInterlineSpace;
 					break;
 				}
 			}
@@ -93,12 +95,13 @@ public class BarlinesBeatOffsetsStrategy {
 				retNotes.set(i, new BeatOffset(oldOffset.getBeat(), oldOffset.getOffsetMm() + move));
 			}
 		}
+		
 		//end barline
 		BeatOffset lastOffset = retNotes.get(retNotes.size() - 1);
 		Barline endBarline = columnHeader.getEndBarline();
 		if (endBarline != null && endBarline.getRepeat() == BarlineRepeat.Backward) {
 			//backward repeat: additional space before end barline
-			float move = REPEAT_SPACE * interlineSpace;
+			float move = repeatSpace * maxInterlineSpace;
 			retBarlines.add(new BeatOffset(lastOffset.getBeat(), lastOffset.getOffsetMm() + move));
 		}
 		else {
@@ -106,7 +109,8 @@ public class BarlinesBeatOffsetsStrategy {
 		}
 		
 		//return result
-		return t(retNotes.toArray(BeatOffset.empty), retBarlines.toArray(BeatOffset.empty));
+		retBarlines.trimToSize();
+		return new Result(retNotes, retBarlines);
 	}
 
 }

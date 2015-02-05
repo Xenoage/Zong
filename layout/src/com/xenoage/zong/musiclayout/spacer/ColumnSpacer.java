@@ -1,4 +1,4 @@
-package com.xenoage.zong.musiclayout.layouter.columnspacing;
+package com.xenoage.zong.musiclayout.spacer;
 
 import static com.xenoage.utils.collections.CList.clist;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
@@ -6,6 +6,7 @@ import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.zong.core.position.MP.atBeat;
 import static com.xenoage.zong.core.position.MP.atMeasure;
+import static com.xenoage.zong.musiclayout.spacer.beat.BarlinesBeatOffsetter.barlinesBeatOffsetter;
 import static com.xenoage.zong.musiclayout.spacer.measure.MeasureElementsSpacer.measureElementsSpacer;
 import static com.xenoage.zong.musiclayout.spacer.voice.SingleVoiceSpacer.singleVoiceSpacer;
 
@@ -27,6 +28,11 @@ import com.xenoage.zong.musiclayout.Context;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterContext;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
+import com.xenoage.zong.musiclayout.layouter.columnspacing.BeatOffsetBasedVoiceSpacingStrategy;
+import com.xenoage.zong.musiclayout.layouter.columnspacing.LeadingSpacingStrategy;
+import com.xenoage.zong.musiclayout.layouter.columnspacing.VoiceSpacingsByStaff;
+import com.xenoage.zong.musiclayout.spacer.beat.BarlinesBeatOffsetter;
+import com.xenoage.zong.musiclayout.spacer.beat.VoicesBeatOffsetter;
 import com.xenoage.zong.musiclayout.spacer.measure.MeasureElementsSpacer;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 import com.xenoage.zong.musiclayout.spacing.horizontal.LeadingSpacing;
@@ -35,28 +41,27 @@ import com.xenoage.zong.musiclayout.spacing.horizontal.MeasureSpacing;
 import com.xenoage.zong.musiclayout.spacing.horizontal.VoiceSpacing;
 
 /**
- * A {@link ColumnSpacingStrategy}
- * computes a single {@link ColumnSpacing} from
- * the given measure column.
+ * A {@link ColumnSpacer} computes a {@link ColumnSpacing} from
+ * a given measure column.
  * 
  * @author Andreas Wenger
  */
-public class ColumnSpacingStrategy
+public class ColumnSpacer
 	implements ScoreLayouterStrategy {
 
 	//used strategies
-	private final BeatOffsetsStrategy beatOffsetsStrategy;
-	private final BarlinesBeatOffsetsStrategy barlinesBeatOffsetsStrategy;
+	private final VoicesBeatOffsetter beatOffsetsStrategy;
+	private final BarlinesBeatOffsetter barlinesBeatOffsetsStrategy;
 	private final BeatOffsetBasedVoiceSpacingStrategy beatBasedVoiceSpacingStrategy;
 	private final LeadingSpacingStrategy measureLeadingSpacingStrategy;
 
 
 	/**
-	 * Creates a new {@link ColumnSpacingStrategy}.
+	 * Creates a new {@link ColumnSpacer}.
 	 */
-	public ColumnSpacingStrategy(
-		BeatOffsetsStrategy beatOffsetsStrategy,
-		BarlinesBeatOffsetsStrategy barlinesBeatOffsetsStrategy,
+	public ColumnSpacer(
+		VoicesBeatOffsetter beatOffsetsStrategy,
+		BarlinesBeatOffsetter barlinesBeatOffsetsStrategy,
 		BeatOffsetBasedVoiceSpacingStrategy beatBasedVoiceSpacingStrategy,
 		LeadingSpacingStrategy measureLeadingSpacingStrategy) {
 		this.beatOffsetsStrategy = beatOffsetsStrategy;
@@ -80,6 +85,7 @@ public class ColumnSpacingStrategy
 	 */
 	public Tuple2<ColumnSpacing, NotationsCache> computeColumnSpacing(
 		int measureIndex, boolean createLeading, NotationsCache notations, ScoreLayouterContext lc) {
+		
 		Score score = lc.getScore();
 		Column column = score.getColumn(measureIndex);
 		ColumnHeader columnHeader = score.getHeader().getColumnHeader(measureIndex);
@@ -118,14 +124,15 @@ public class ColumnSpacingStrategy
 
 		//compute the beat offsets of this measure column
 		VoiceSpacingsByStaff voiceSpacings = new VoiceSpacingsByStaff(voiceSpacingsByStaff);
-		BeatOffset[] beatOffsets = beatOffsetsStrategy.computeBeatOffsets(voiceSpacings,
-			measureBeats, lc.getLayoutSettings());
+		List<BeatOffset> beatOffsets = beatOffsetsStrategy.compute(voiceSpacings.getAll(),
+			measureBeats, context.settings.offsetBeatsMinimal);
+		BeatOffset[] beatOffsetsArray = beatOffsets.toArray(BeatOffset.empty);
 
 		//recompute beat offsets with respect to barlines
-		Tuple2<BeatOffset[], BeatOffset[]> offsets = barlinesBeatOffsetsStrategy
-			.computeBeatOffsets(beatOffsets, columnHeader, lc.getMaxInterlineSpace());
-		beatOffsets = offsets.get1();
-		BeatOffset[] barlineOffsets = offsets.get2();
+		BarlinesBeatOffsetter.Result offsets = barlinesBeatOffsetter.compute(
+			beatOffsets, columnHeader, lc.getMaxInterlineSpace());
+		beatOffsets = offsets.voiceElementOffsets;
+		List<BeatOffset> barlineOffsets = offsets.barlineOffsets;
 
 		//compute the spacings for the whole column, so that equal beats are aligned
 		ArrayList<MeasureElementsSpacing> alignedMeasureElementsSpacingsByStaff = alist();
@@ -134,7 +141,7 @@ public class ColumnSpacingStrategy
 			//voice spacings
 			for (int iVoice : range(measure.getVoices())) {
 				beatBasedVoiceSpacingStrategy.computeVoiceSpacing(
-					voiceSpacings.get(iStaff, iVoice), beatOffsets);
+					voiceSpacings.get(iStaff, iVoice), beatOffsetsArray);
 			}
 			//measure elements, based on the aligned voice spacings
 			context.mp = atMeasure(iStaff, measureIndex);
@@ -162,8 +169,9 @@ public class ColumnSpacingStrategy
 		}
 		context.restoreMp();
 
+		BeatOffset[] barlineOffsetsArray = barlineOffsets.toArray(BeatOffset.empty);
 		return Tuple2.t(
-			new ColumnSpacing(lc.getScore(), measureSpacings, beatOffsets, barlineOffsets), leadingNotations);
+			new ColumnSpacing(lc.getScore(), measureSpacings, beatOffsetsArray, barlineOffsetsArray), leadingNotations);
 	}
 
 }

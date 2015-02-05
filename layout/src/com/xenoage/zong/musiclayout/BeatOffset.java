@@ -19,9 +19,11 @@ import com.xenoage.zong.musiclayout.spacing.horizontal.ElementSpacing;
  *
  * @author Andreas Wenger
  */
-@Const @Data public final class BeatOffset {
+@Const @Data
+public final class BeatOffset {
 	
 	/** An empty array of {@link BeatOffset}s. */
+	@Deprecated
 	public static final BeatOffset[] empty = new BeatOffset[0]; 
 
 	/** The beat. */

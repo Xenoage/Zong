@@ -1,34 +1,30 @@
-package com.xenoage.zong.musiclayout.layouter.columnspacing;
+package com.xenoage.zong.musiclayout.spacer.beat;
 
-import static com.xenoage.utils.collections.CList.clist;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.collections.SortedList.sortedListNoDuplicates;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Fraction._0;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.xenoage.utils.collections.CList;
-import com.xenoage.utils.collections.IList;
 import com.xenoage.utils.collections.SortedList;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.musiclayout.BeatOffset;
-import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
-import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.musiclayout.spacing.horizontal.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.horizontal.VoiceSpacing;
 
 /**
- * This strategy creates {@link BeatOffset}s for the given
- * measure column, based on the precomputed voice spacings.
+ * Computes the {@link BeatOffset}s for the given {@link VoiceSpacing}s
+ * within one measure column.
  * 
  * Note, that the offsets of the precomputed voice spacings
  * must already include necessary space which is needed for
- * additonal elements like inner clefs, since this strategy
+ * additonal elements like inner clefs, since this class
  * does not look at the musical content of the score, but is
  * just using the given spacings.
  * 
@@ -36,9 +32,11 @@ import com.xenoage.zong.musiclayout.spacing.horizontal.VoiceSpacing;
  * 
  * @author Andreas Wenger
  */
-public class BeatOffsetsStrategy
-	implements ScoreLayouterStrategy {
+public class VoicesBeatOffsetter {
+	
+	public static final VoicesBeatOffsetter voicesBeatOffsetter = new VoicesBeatOffsetter();
 
+	
 	/**
 	 * Computes the offsets of all the used beats, including
 	 * at least beat 0 and the beat at the end of the measure.
@@ -46,25 +44,8 @@ public class BeatOffsetsStrategy
 	 * (or that needs accidentals) dictate the spacing.
 	 * See "Ross: The Art of Music Engraving", page 79.
 	 */
-	public BeatOffset[] computeBeatOffsets(VoiceSpacingsByStaff voiceSpacings,
-		Fraction measureBeats, LayoutSettings layoutSettings) {
-		//iterate over the staves to find beat offsets for each staff
-		CList<VoiceSpacing> vss = clist();
-		for (int iStaff : range(voiceSpacings.staves)) {
-			for (int iVoice : range(voiceSpacings.staves.get(iStaff))) {
-				VoiceSpacing vs = voiceSpacings.get(iStaff, iVoice);
-				if (vs == null)
-					throw new IllegalStateException("VoiceSpacing for voice at (staff " + iStaff +
-						", voice " + iVoice + ") is missing!");
-				vss.add(vs);
-			}
-		}
-		//compute voice spacings
-		return computeBeatOffsetsFromVoiceSpacings(vss.close(), measureBeats, layoutSettings);
-	}
-
-	BeatOffset[] computeBeatOffsetsFromVoiceSpacings(IList<VoiceSpacing> voiceSpacings,
-		Fraction measureBeats, LayoutSettings layoutSettings) {
+	public List<BeatOffset> compute(List<VoiceSpacing> voiceSpacings,
+		Fraction measureBeats, float minimalBeatsOffsetIs) {
 
 		//the list of all used beats of the measure
 		//TODO: handle upbeat measures correctly!
@@ -73,7 +54,7 @@ public class BeatOffsetsStrategy
 		beats.add(measureBeats); //add final beat in terms of time signature (only correct for non-upbeat measures)
 
 		//the resulting offsets for each used beat
-		List<BeatOffset> ret = alist();
+		ArrayList<BeatOffset> ret = alist();
 
 		//compute the offset of beat 0
 		float offsetMm = getOffsetBeat0InMm(voiceSpacings);
@@ -115,8 +96,8 @@ public class BeatOffsetsStrategy
 
 					//a minimal distance of 0 is possible, see "BeatOffsetsStrategyTest-3.xml" for an example.
 					//but we do not want to have different beats at the same offset, so add a small distance.
-					if (minimalDistance < layoutSettings.offsetBeatsMinimal * interlineSpace) {
-						minimalDistance = layoutSettings.offsetBeatsMinimal * interlineSpace;
+					if (minimalDistance < minimalBeatsOffsetIs * interlineSpace) {
+						minimalDistance = minimalBeatsOffsetIs * interlineSpace;
 					}
 				}
 
@@ -129,9 +110,8 @@ public class BeatOffsetsStrategy
 
 		}
 
-		BeatOffset[] retArray = new BeatOffset[ret.size()];
-		ret.toArray(retArray);
-		return retArray;
+		ret.trimToSize();
+		return ret;
 	}
 
 	/**

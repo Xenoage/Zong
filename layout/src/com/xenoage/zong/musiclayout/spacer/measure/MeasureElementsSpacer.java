@@ -2,7 +2,6 @@ package com.xenoage.zong.musiclayout.spacer.measure;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.math.Fraction._0;
-import static com.xenoage.zong.core.position.MP.atMeasure;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +9,6 @@ import java.util.List;
 import com.xenoage.utils.annotations.MaybeEmpty;
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.math.Fraction;
-import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.header.ColumnHeader;
 import com.xenoage.zong.core.music.ColumnElement;
 import com.xenoage.zong.core.music.Measure;
