@@ -28,6 +28,7 @@ import com.xenoage.zong.layout.frames.ScoreFrame;
 import com.xenoage.zong.musiclayout.Context;
 import com.xenoage.zong.musiclayout.ScoreFrameLayout;
 import com.xenoage.zong.musiclayout.ScoreLayout;
+import com.xenoage.zong.musiclayout.Target;
 import com.xenoage.zong.musiclayout.continued.ContinuedElement;
 import com.xenoage.zong.musiclayout.layouter.beamednotation.BeamedStemAlignmentNotationsStrategy;
 import com.xenoage.zong.musiclayout.layouter.horizontalsystemfilling.HorizontalSystemFillingStrategy;
@@ -81,13 +82,14 @@ public class ScoreLayoutStrategy
 		List<ColumnSpacing> optimalMeasureColumnSpacings = computeColumnSpacings(notations, lc);
 		
 		//break into systems and frames
-		List<FrameSpacing> frames = computeFrameArrangements(
-			optimalMeasureColumnSpacings, notations, lc, context);
+		Target target = new Target(lc.getAreas(), lc.getAdditionalArea(), lc.isCompleteLayout());
+		List<FrameSpacing> frames = computeFrameArrangements(target, context,
+			optimalMeasureColumnSpacings, notations);
 
 		//system stretching (horizontal)
-		frames = fillSystemsHorizontally(frames, lc);
+		frames = fillSystemsHorizontally(frames, target);
 		//frame filling (vertical)
-		frames = fillFramesVertically(frames, lc);
+		frames = fillFramesVertically(frames, target, context.score);
 		//compute beams
 		computeBeamStemAlignments(frames, optimalMeasureColumnSpacings, notations, lc);
 		//create score layout from the collected information
@@ -120,32 +122,31 @@ public class ScoreLayoutStrategy
 
 	/**
 	 * Breaks the given measure column spacings into systems and frames.
-	 * The list of frame arrangements and the list of created leading notations
-	 * is returned.
+	 * The list of frame arrangements is returned.
 	 */
-	ArrayList<FrameSpacing> computeFrameArrangements(
-		List<ColumnSpacing> measureColumnSpacings, Notations notations, ScoreLayouterContext lc,
-		Context context) {
+	ArrayList<FrameSpacing> computeFrameArrangements(Target target, Context context,
+		List<ColumnSpacing> measureColumnSpacings, Notations notations) {
 		context.saveMp();
 		
 		ArrayList<FrameSpacing> ret = alist();
-		int measuresCount = lc.getScore().getMeasuresCount();
+		int measuresCount = context.score.getMeasuresCount();
 		int iMeasure = 0;
 		int iSystem = 0;
 		int iFrame = 0;
-		boolean additionalFrameIteration = false;
+		boolean additionalFrameIteration;
+		
 		while (true) {
 			additionalFrameIteration = false;
 
 			//find score frame
 			Size2f frameSize;
-			if (iFrame < lc.getAreas().size()) {
+			if (iFrame < target.areas.size()) {
 				//there is another existing score frame
-				frameSize = lc.getArea(iFrame).getSize();
+				frameSize = target.getArea(iFrame).size;
 			}
 			else {
 				//there is no another existing score frame
-				if (false == lc.isCompleteLayout()) {
+				if (false == target.isCompleteLayout) {
 					//we are not interested in the stuff after the last score frame. exit.
 					break;
 				}
@@ -155,7 +156,7 @@ public class ScoreLayoutStrategy
 				}
 				else {
 					//still material to layout and additional frames requested. create one.
-					frameSize = lc.getAdditionalArea().getSize();
+					frameSize = target.additionalArea.size;
 					additionalFrameIteration = true;
 				}
 			}
@@ -200,12 +201,11 @@ public class ScoreLayoutStrategy
 	 * Fills the systems horizontally according to the {@link HorizontalSystemFillingStrategy}
 	 * of the frame.
 	 */
-	List<FrameSpacing> fillSystemsHorizontally(List<FrameSpacing> frameArrangements,
-		ScoreLayouterContext lc) {
+	List<FrameSpacing> fillSystemsHorizontally(List<FrameSpacing> frameArrangements, Target target) {
 		ArrayList<FrameSpacing> ret = alist();
 		for (int iFrame : range(frameArrangements)) {
 			FrameSpacing frameArr = frameArrangements.get(iFrame);
-			HorizontalSystemFillingStrategy hFill = lc.getArea(iFrame).getHFill();
+			HorizontalSystemFillingStrategy hFill = target.getArea(iFrame).hFill;
 			if (hFill != null) {
 				//apply strategy
 				CList<SystemSpacing> systemArrs = clist();
@@ -228,12 +228,10 @@ public class ScoreLayoutStrategy
 	 * Fills the frames vertically according to the {@link VerticalFrameFillingStrategy}
 	 * of the frame.
 	 */
-	List<FrameSpacing> fillFramesVertically(List<FrameSpacing> frameArrs,
-		ScoreLayouterContext lc) {
+	List<FrameSpacing> fillFramesVertically(List<FrameSpacing> frameArrs, Target target, Score score) {
 		ArrayList<FrameSpacing> ret = alist();
-		Score score = lc.getScore();
 		for (int iFrame : range(frameArrs)) {
-			VerticalFrameFillingStrategy vFill = lc.getArea(iFrame).getVFill();
+			VerticalFrameFillingStrategy vFill = target.getArea(iFrame).vFill;
 			if (vFill != null) {
 				ret.add(vFill.computeFrameArrangement(frameArrs.get(iFrame), score));
 			}
