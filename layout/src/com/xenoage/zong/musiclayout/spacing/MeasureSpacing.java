@@ -25,6 +25,8 @@ public final class MeasureSpacing {
 
 	/** The musical position of the measure. */
 	@NonNull private MP mp;
+	/** The interline space in mm of this voice. */
+	private float interlineSpace;
 	/** The spacings of the voices */
 	@NonEmpty private List<VoiceSpacing> voiceSpacings;
 	/** The spacings of the measure elements, like inner clefs */
@@ -35,9 +37,10 @@ public final class MeasureSpacing {
 	@MaybeEmpty private List<Fraction> usedBeats;
 
 
-	public MeasureSpacing(MP mp, List<VoiceSpacing> voiceSpacings,
+	public MeasureSpacing(MP mp, float interlineSpace, List<VoiceSpacing> voiceSpacings,
 		MeasureElementsSpacing measureElementSpacings, LeadingSpacing leadingSpacing) {
 		this.mp = mp;
+		this.interlineSpace = interlineSpace;
 		this.voiceSpacings = voiceSpacings;
 		this.measureElementsSpacings = measureElementSpacings;
 		this.leadingSpacing = leadingSpacing;

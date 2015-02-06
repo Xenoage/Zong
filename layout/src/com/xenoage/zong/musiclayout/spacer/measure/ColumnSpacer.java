@@ -115,12 +115,13 @@ public class ColumnSpacer
 				leadingSpacing = leadingSpacer.compute(context);
 			}
 			//create measure spacing
-			measureSpacings.add(new MeasureSpacing(atMeasure(iStaff, measureIndex), voiceSpacings
-				.getStaff(iStaff), alignedMeasureElementsSpacingsByStaff.get(iStaff), leadingSpacing));
+			float interlineSpace = context.score.getInterlineSpace(iStaff);
+			measureSpacings.add(new MeasureSpacing(atMeasure(iStaff, measureIndex), interlineSpace,
+				voiceSpacings.getStaff(iStaff), alignedMeasureElementsSpacingsByStaff.get(iStaff), leadingSpacing));
 		}
 		
 		context.restoreMp();
-		return new ColumnSpacing(context.score, measureSpacings, beatOffsets, barlineOffsets);
+		return new ColumnSpacing(measureSpacings, beatOffsets, barlineOffsets);
 	}
 
 }

@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import com.xenoage.utils.math.Fraction;
-import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.MusicElement;
 
 /**
@@ -30,9 +29,6 @@ import com.xenoage.zong.core.music.MusicElement;
  */
 @AllArgsConstructor @Getter
 public class ColumnSpacing {
-
-	/** The score this spacing belongs to. */
-	public Score score;
 
 	/** The list of measure spacings.
 	 * Eeach staff of the measure has its own spacing. */
@@ -67,7 +63,7 @@ public class ColumnSpacing {
 			MeasureSpacing measureSpacing = measureSpacings.get(iStaff);
 			LeadingSpacing leadingSpacing = measureSpacing.getLeadingSpacing();
 			if (leadingSpacing != null) {
-				float width = leadingSpacing.width * score.getInterlineSpace(iStaff);
+				float width = leadingSpacing.widthIs * measureSpacing.getInterlineSpace();
 				if (width > ret)
 					ret = width;
 			}

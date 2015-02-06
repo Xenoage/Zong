@@ -1,30 +1,29 @@
-package com.xenoage.zong.musiclayout.layouter.verticalframefilling;
+package com.xenoage.zong.musiclayout.spacer.frame.fill;
 
 import static com.xenoage.utils.collections.CList.ilist;
+import static com.xenoage.utils.math.Delta.df;
+import static com.xenoage.zong.musiclayout.spacer.frame.fill.StretchSystems.stretchSystems;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.xenoage.utils.collections.CList;
-import com.xenoage.utils.math.Delta;
+import com.xenoage.utils.collections.CollectionUtils;
 import com.xenoage.utils.math.geom.Size2f;
-import com.xenoage.zong.musiclayout.spacer.frame.fill.StretchSystems;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 import com.xenoage.zong.musiclayout.spacing.FrameSpacing;
 import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
 
 /**
- * Test cases for a {@link StretchSystems}.
+ * Tests for {@link StretchSystems}.
  * 
  * @author Andreas Wenger
  */
-public class FillPageVerticalFrameFillingStrategyTest {
+public class StretchSystemsTest {
+	
+	private StretchSystems testee = stretchSystems;
 
-	/**
-	 * Check if the systems were positioned correctly in a frame
-	 * with some systems.
-	 */
-	@Test public void computeFrameArrangementTest() {
+	
+	@Test public void computeTest() {
 		//create a simple frame for testing
 		float usableHeight = 400;
 		int stavesCount = 2;
@@ -41,8 +40,7 @@ public class FillPageVerticalFrameFillingStrategyTest {
 			new Size2f(10, usableHeight));
 
 		//apply strategy
-		StretchSystems strategy = StretchSystems.stretchSystems;
-		frame = strategy.computeFrameArrangement(frame, null);
+		testee.compute(frame, null);
 
 		//compare values
 		//remaining space is usable height - offset3 - (height of last system)
@@ -50,11 +48,8 @@ public class FillPageVerticalFrameFillingStrategyTest {
 		//the last two systems are moved down, each remainingSpace/2
 		float additionalSpace = remainingSpace / 2;
 		//compare new offsets
-		assertEquals(offset2 + 1 * additionalSpace, frame.getSystems().get(1).getOffsetY(),
-			Delta.DELTA_FLOAT);
-		assertEquals(offset3 + 2 * additionalSpace, frame.getSystems().get(2).getOffsetY(),
-			Delta.DELTA_FLOAT);
-
+		assertEquals(offset2 + 1 * additionalSpace, frame.getSystems().get(1).offsetYMm, df);
+		assertEquals(offset3 + 2 * additionalSpace, frame.getSystems().get(2).offsetYMm, df);
 	}
 
 	/**
@@ -69,7 +64,7 @@ public class FillPageVerticalFrameFillingStrategyTest {
 		float[] staffDistances = new float[stavesCount - 1];
 		for (int i = 0; i < stavesCount - 1; i++)
 			staffDistances[i] = staffDistance;
-		return new SystemSpacing(-1, -1, CList.<ColumnSpacing>ilist(), 0, 0, 0,
+		return new SystemSpacing(-1, -1, CollectionUtils.<ColumnSpacing>alist(), 0, 0, 0,
 			staffHeights, staffDistances, offsetY);
 	}
 

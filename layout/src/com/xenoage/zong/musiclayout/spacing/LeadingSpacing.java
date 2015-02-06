@@ -21,6 +21,6 @@ public class LeadingSpacing {
 	/** The element spacing of this measure leading. */
 	public List<ElementSpacing> elements;
 	/** The width of this leading spacing in interline spaces. */
-	public float width;
+	public float widthIs;
 
 }
