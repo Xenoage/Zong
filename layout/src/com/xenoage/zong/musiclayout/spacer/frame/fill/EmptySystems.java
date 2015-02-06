@@ -1,11 +1,9 @@
-package com.xenoage.zong.musiclayout.layouter.verticalframefilling;
+package com.xenoage.zong.musiclayout.spacer.frame.fill;
 
-import static com.xenoage.utils.collections.CList.clist;
 import static com.xenoage.utils.collections.CollectionUtils.getLast;
 import static com.xenoage.utils.kernel.Range.range;
 
 import com.xenoage.utils.collections.CList;
-import com.xenoage.utils.collections.CollectionUtils;
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.format.SystemLayout;
@@ -15,32 +13,28 @@ import com.xenoage.zong.musiclayout.spacing.FrameSpacing;
 import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
 
 /**
- * This vertical frame filling strategy
- * adds empty systems to the current frame
- * until the page is filled and returns
- * the result.
+ * Adds empty systems to the current frame
+ * until the page is filled.
+ * 
+ * TODO: test this class. since the staff is empty, the layouter
+ * may have problems with it
  * 
  * @author Andreas Wenger
  */
-public class EmptySystemsVerticalFrameFillingStrategy
-	implements VerticalFrameFillingStrategy {
+public class EmptySystems
+	implements FrameFiller {
 
-	public static final EmptySystemsVerticalFrameFillingStrategy instance =
-		new EmptySystemsVerticalFrameFillingStrategy();
+	public static final EmptySystems emptySystems = new EmptySystems();
 
 
-	/**
-	 * Fill frame with empty systems.
-	 */
-	@Override public FrameSpacing computeFrameArrangement(FrameSpacing frameArr, Score score) {
-		Size2f usableSize = frameArr.getUsableSizeMm();
-		FrameSpacing ret = frameArr;
+	@Override public void compute(FrameSpacing frame, Score score) {
+		Size2f usableSize = frame.usableSizeMm;
 
 		//compute remaining space
 		float remainingSpace = usableSize.height;
 		float offsetY = 0;
-		if (frameArr.getSystems().size() > 0) {
-			SystemSpacing lastSystem = getLast(frameArr.getSystems());
+		if (frame.systems.size() > 0) {
+			SystemSpacing lastSystem = getLast(frame.systems);
 			offsetY = lastSystem.getOffsetYMm() + lastSystem.getHeight();
 			remainingSpace -= offsetY;
 		}
@@ -55,19 +49,10 @@ public class EmptySystemsVerticalFrameFillingStrategy
 
 		//add as many additional empty staves as possible
 		int newSystemsCount = (int) (remainingSpace / newSystemHeight);
-		if (newSystemsCount > 0) {
-			//otherwise add the empty systems
-			CList<SystemSpacing> newSystems = clist();
-			newSystems.addAll(frameArr.getSystems());
-			for (int i = frameArr.getSystems().size() - 1; i < newSystemsCount; i++) {
-				newSystems.add(createEmptySystem(score, usableSize.width - defaultMargin, offsetY +
-					defaultSystemDistance));
-				offsetY += newSystemHeight;
-			}
-			ret = new FrameSpacing(newSystems.close(), frameArr.getUsableSizeMm());
+		for (int i : range(newSystemsCount)) {
+			frame.systems.add(createEmptySystem(score, usableSize.width - defaultMargin,
+				offsetY + (i * newSystemHeight) + defaultSystemDistance));
 		}
-
-		return ret;
 	}
 
 	/**

@@ -17,7 +17,7 @@ import com.xenoage.utils.math.Delta;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.VoiceElement;
-import com.xenoage.zong.musiclayout.spacer.system.fill.Stretch;
+import com.xenoage.zong.musiclayout.spacer.system.fill.StretchMeasures;
 import com.xenoage.zong.musiclayout.spacing.BeatOffset;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
@@ -28,7 +28,7 @@ import com.xenoage.zong.musiclayout.spacing.VoiceSpacing;
 import com.xenoage.zong.musiclayout.spacing.horizontal.LeadingSpacingMock;
 
 /**
- * Test cases for a {@link Stretch}.
+ * Test cases for a {@link StretchMeasures}.
  * 
  * @author Andreas Wenger
  */
@@ -47,7 +47,7 @@ public class StretchHorizontalSystemFillingStrategyTest {
 			offsetBeat3);
 
 		//stretch the system
-		Stretch strategy = Stretch.stretch;
+		StretchMeasures strategy = StretchMeasures.stretchSystem;
 		float newWidth = 20;
 		system = strategy.computeSystemArrangement(system, newWidth);
 
@@ -85,7 +85,7 @@ public class StretchHorizontalSystemFillingStrategyTest {
 			offsetMeasureEnd, graceDistance);
 
 		//stretch the system
-		Stretch strategy = Stretch.stretch;
+		StretchMeasures strategy = StretchMeasures.stretchSystem;
 		float newWidth = 28;
 		system = strategy.computeSystemArrangement(system, newWidth);
 

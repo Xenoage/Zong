@@ -8,12 +8,13 @@ import org.junit.Test;
 import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.math.Delta;
 import com.xenoage.utils.math.geom.Size2f;
+import com.xenoage.zong.musiclayout.spacer.frame.fill.StretchSystems;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 import com.xenoage.zong.musiclayout.spacing.FrameSpacing;
 import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
 
 /**
- * Test cases for a {@link FillPageVerticalFrameFillingStrategy}.
+ * Test cases for a {@link StretchSystems}.
  * 
  * @author Andreas Wenger
  */
@@ -40,7 +41,7 @@ public class FillPageVerticalFrameFillingStrategyTest {
 			new Size2f(10, usableHeight));
 
 		//apply strategy
-		FillPageVerticalFrameFillingStrategy strategy = FillPageVerticalFrameFillingStrategy.instance;
+		StretchSystems strategy = StretchSystems.stretchSystems;
 		frame = strategy.computeFrameArrangement(frame, null);
 
 		//compare values

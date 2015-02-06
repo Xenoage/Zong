@@ -17,10 +17,10 @@ import com.xenoage.zong.musiclayout.spacing.VoiceSpacing;
  * 
  * @author Andreas Wenger
  */
-public class Stretch
+public class StretchMeasures
 	implements SystemFiller {
 
-	public static final Stretch stretch = new Stretch();
+	public static final StretchMeasures stretchMeasures = new StretchMeasures();
 
 
 	@Override public void compute(SystemSpacing system, float usableWidthMm) {

@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.layout.frames.ScoreFrame;
-import com.xenoage.zong.musiclayout.layouter.verticalframefilling.VerticalFrameFillingStrategy;
+import com.xenoage.zong.musiclayout.spacer.frame.fill.FrameFiller;
 import com.xenoage.zong.musiclayout.spacer.system.fill.SystemFiller;
 
 /**
@@ -18,6 +18,6 @@ public class ScoreLayoutArea {
 
 	public final Size2f size;
 	public SystemFiller hFill = ScoreFrame.defaultHFill;
-	public VerticalFrameFillingStrategy vFill = ScoreFrame.defaultVFill;
+	public FrameFiller vFill = ScoreFrame.defaultVFill;
 
 }

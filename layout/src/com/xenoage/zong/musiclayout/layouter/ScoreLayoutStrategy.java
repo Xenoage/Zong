@@ -30,8 +30,10 @@ import com.xenoage.zong.musiclayout.Target;
 import com.xenoage.zong.musiclayout.continued.ContinuedElement;
 import com.xenoage.zong.musiclayout.layouter.beamednotation.BeamedStemAlignmentNotationsStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.ScoreFrameLayoutStrategy;
-import com.xenoage.zong.musiclayout.layouter.verticalframefilling.VerticalFrameFillingStrategy;
 import com.xenoage.zong.musiclayout.notations.Notations;
+import com.xenoage.zong.musiclayout.spacer.frame.fill.EmptySystems;
+import com.xenoage.zong.musiclayout.spacer.frame.fill.FrameFiller;
+import com.xenoage.zong.musiclayout.spacer.frame.fill.StretchSystems;
 import com.xenoage.zong.musiclayout.spacer.system.fill.SystemFiller;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 import com.xenoage.zong.musiclayout.spacing.FrameSpacing;
@@ -86,7 +88,7 @@ public class ScoreLayoutStrategy
 		//system stretching (horizontal)
 		fillSystemsHorizontally(frames, target);
 		//frame filling (vertical)
-		frames = fillFramesVertically(frames, target, context.score);
+		fillFramesVertically(frames, target, context.score);
 		//compute beams
 		computeBeamStemAlignments(frames, optimalMeasureColumnSpacings, notations, lc);
 		//create score layout from the collected information
@@ -198,9 +200,9 @@ public class ScoreLayoutStrategy
 	 * Fills the systems horizontally according to the {@link SystemFiller}
 	 * of the frame.
 	 */
-	void fillSystemsHorizontally(List<FrameSpacing> frameArrangements, Target target) {
-		for (int iFrame : range(frameArrangements)) {
-			FrameSpacing frameArr = frameArrangements.get(iFrame);
+	void fillSystemsHorizontally(List<FrameSpacing> frames, Target target) {
+		for (int iFrame : range(frames)) {
+			FrameSpacing frameArr = frames.get(iFrame);
 			SystemFiller hFill = target.getArea(iFrame).hFill;
 			//apply strategy
 			for (SystemSpacing oldSystemArr : frameArr.getSystems()) {
@@ -212,18 +214,13 @@ public class ScoreLayoutStrategy
 	}
 
 	/**
-	 * Fills the frames vertically according to the {@link VerticalFrameFillingStrategy}
-	 * of the frame.
+	 * Fills the frames vertically according to the {@link FrameFiller} of the frame.
 	 */
-	List<FrameSpacing> fillFramesVertically(List<FrameSpacing> frameArrs, Target target, Score score) {
-		ArrayList<FrameSpacing> ret = alist();
-		for (int iFrame : range(frameArrs)) {
-			VerticalFrameFillingStrategy vFill = target.getArea(iFrame).vFill;
-			if (vFill != null) {
-				ret.add(vFill.computeFrameArrangement(frameArrs.get(iFrame), score));
-			}
+	void fillFramesVertically(List<FrameSpacing> frames, Target target, Score score) {
+		for (int iFrame : range(frames)) {
+			FrameFiller vFill = target.getArea(iFrame).vFill;
+			vFill.compute(frames.get(iFrame), score);
 		}
-		return ret;
 	}
 
 	/**
