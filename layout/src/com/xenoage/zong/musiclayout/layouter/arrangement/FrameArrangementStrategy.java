@@ -2,6 +2,7 @@ package com.xenoage.zong.musiclayout.layouter.arrangement;
 
 import static com.xenoage.utils.collections.CList.clist;
 import static com.xenoage.utils.kernel.Tuple2.t;
+import static com.xenoage.zong.core.position.MP.atMeasure;
 import static com.xenoage.zong.musiclayout.spacer.system.SystemSpacer.systemSpacer;
 
 import java.util.List;
@@ -13,11 +14,11 @@ import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.format.ScoreFormat;
 import com.xenoage.zong.core.format.SystemLayout;
 import com.xenoage.zong.core.header.ScoreHeader;
+import com.xenoage.zong.musiclayout.Context;
 import com.xenoage.zong.musiclayout.FrameArrangement;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterContext;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.notations.Notations;
-import com.xenoage.zong.musiclayout.spacer.system.SystemSpacer;
 import com.xenoage.zong.musiclayout.spacing.measure.ColumnSpacing;
 import com.xenoage.zong.musiclayout.spacing.system.SystemSpacing;
 
@@ -44,7 +45,9 @@ public class FrameArrangementStrategy
 	 */
 	public Tuple2<FrameArrangement, Notations> computeFrameArrangement(int startMeasure,
 		int startSystem, Size2f usableSize, List<ColumnSpacing> columnSpacings,
-		Notations notations, ScoreLayouterContext lc) {
+		Notations notations, ScoreLayouterContext lc, Context context) {
+		context.saveMp();
+		
 		Score score = lc.getScore();
 		ScoreFormat scoreFormat = score.getFormat();
 		ScoreHeader scoreHeader = score.getHeader();
@@ -61,17 +64,14 @@ public class FrameArrangementStrategy
 		Notations retLeadingNotations = new Notations();
 		while (measureIndex < measuresCount) {
 			//try to create system on this frame
-			Tuple2<SystemSpacing, Notations> t = systemSpacer
-				.computeSystemArrangement(measureIndex, usableSize, offsetY, systemIndex, columnSpacings,
-					notations, lc);
-			SystemSpacing system = (t != null ? t.get1() : null);
-			Notations leadingNotations = (t != null ? t.get2() : null);
+			context.mp = atMeasure(measureIndex);
+			SystemSpacing system = systemSpacer.compute(context, usableSize, offsetY, systemIndex,
+				columnSpacings, notations).orNull();
 
 			//was there enough place for this system?
 			if (system != null) {
-				//yes, there is enough place. add system and remember notations
+				//yes, there is enough place. add system
 				systems.add(system);
-				retLeadingNotations.merge(leadingNotations);
 				//update offset and start measure index for next system
 				//add height of this system
 				offsetY += system.getHeight();
@@ -87,6 +87,7 @@ public class FrameArrangementStrategy
 		}
 		systems.close();
 
+		context.restoreMp();
 		return t(new FrameArrangement(systems, usableSize), retLeadingNotations);
 	}
 

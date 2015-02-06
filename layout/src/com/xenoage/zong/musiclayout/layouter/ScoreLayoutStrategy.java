@@ -5,6 +5,8 @@ import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.iterators.It.it;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.kernel.Tuple2.t;
+import static com.xenoage.zong.core.position.MP.atMeasure;
+import static com.xenoage.zong.core.position.MP.mp0;
 import static com.xenoage.zong.musiclayout.notator.Notator.notator;
 import static com.xenoage.zong.musiclayout.spacer.measure.ColumnSpacer.columnSpacer;
 
@@ -81,6 +83,7 @@ public class ScoreLayoutStrategy
 		context.score = lc.getScore();
 		context.settings = lc.getLayoutSettings();
 		context.symbols = lc.getSymbolPool();
+		context.mp = mp0;
 		Notations notations = notator.computeAll(context);
 		
 		//optimal measure spacings
@@ -88,7 +91,7 @@ public class ScoreLayoutStrategy
 		
 		//break into systems and frames
 		Tuple2<ArrayList<FrameArrangement>, Notations> t = computeFrameArrangements(
-			optimalMeasureColumnSpacings, notations, lc);
+			optimalMeasureColumnSpacings, notations, lc, context);
 		List<FrameArrangement> frameArrangements = t.get1();
 		notations.merge(t.get2());
 		//system stretching (horizontal)
@@ -131,7 +134,10 @@ public class ScoreLayoutStrategy
 	 * is returned.
 	 */
 	Tuple2<ArrayList<FrameArrangement>, Notations> computeFrameArrangements(
-		List<ColumnSpacing> measureColumnSpacings, Notations notations, ScoreLayouterContext lc) {
+		List<ColumnSpacing> measureColumnSpacings, Notations notations, ScoreLayouterContext lc,
+		Context context) {
+		context.saveMp();
+		
 		ArrayList<FrameArrangement> ret = alist();
 		Notations retLeadingNotations = new Notations();
 		int measuresCount = lc.getScore().getMeasuresCount();
@@ -168,9 +174,10 @@ public class ScoreLayoutStrategy
 			//some material left to layout?
 			if (iMeasure < measuresCount) {
 				//more measures to layout
+				context.mp = atMeasure(iMeasure);
 				Tuple2<FrameArrangement, Notations> t = frameArrangementStrategy
 					.computeFrameArrangement(iMeasure, iSystem, frameSize, measureColumnSpacings, notations,
-						lc);
+						lc, context);
 				FrameArrangement frameArr = t.get1();
 				Notations leadingNotations = t.get2();
 				if (frameArr.getSystems().size() > 0) {
@@ -199,6 +206,8 @@ public class ScoreLayoutStrategy
 			//next frame
 			iFrame++;
 		}
+		
+		context.restoreMp();
 		return t(ret, retLeadingNotations);
 	}
 
