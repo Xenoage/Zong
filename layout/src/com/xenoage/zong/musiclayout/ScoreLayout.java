@@ -14,7 +14,7 @@ import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.io.selection.ScoreSelection;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
-import com.xenoage.zong.musiclayout.spacing.system.SystemArrangement;
+import com.xenoage.zong.musiclayout.spacing.system.SystemSpacing;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import com.xenoage.zong.musiclayout.stampings.Stamping;
 import com.xenoage.zong.symbols.SymbolPool;
@@ -129,7 +129,7 @@ public class ScoreLayout {
 		FrameArrangement frameArr = frames.get(frame).getFrameArrangement();
 		//go through all systems of this frame
 		for (int iSystem : range(frameArr.systems)) {
-			SystemArrangement system = frameArr.systems.get(iSystem);
+			SystemSpacing system = frameArr.systems.get(iSystem);
 			if (system.startMeasureIndex <= measure && system.endMeasureIndex >= measure)
 				return iSystem;
 		}

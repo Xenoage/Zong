@@ -37,7 +37,7 @@ import com.xenoage.zong.musiclayout.layouter.verticalframefilling.VerticalFrameF
 import com.xenoage.zong.musiclayout.notations.Notations;
 import com.xenoage.zong.musiclayout.spacer.measure.ColumnSpacer;
 import com.xenoage.zong.musiclayout.spacing.measure.ColumnSpacing;
-import com.xenoage.zong.musiclayout.spacing.system.SystemArrangement;
+import com.xenoage.zong.musiclayout.spacing.system.SystemSpacing;
 
 /**
  * This strategy creates a {@link ScoreLayout} from a given
@@ -184,7 +184,7 @@ public class ScoreLayoutStrategy
 					//no space for a measure in this frame. empty frame. but only, if existing frame.
 					//do not create endless list of empty additional frames!
 					if (!additionalFrameIteration) {
-						ret.add(new FrameArrangement(CList.<SystemArrangement>ilist(), frameSize));
+						ret.add(new FrameArrangement(CList.<SystemSpacing>ilist(), frameSize));
 					}
 					else {
 						break;
@@ -193,7 +193,7 @@ public class ScoreLayoutStrategy
 			}
 			else {
 				//no material left. empty frame.
-				ret.add(new FrameArrangement(CList.<SystemArrangement>ilist(), frameSize));
+				ret.add(new FrameArrangement(CList.<SystemSpacing>ilist(), frameSize));
 			}
 
 			//next frame
@@ -214,8 +214,8 @@ public class ScoreLayoutStrategy
 			HorizontalSystemFillingStrategy hFill = lc.getArea(iFrame).getHFill();
 			if (hFill != null) {
 				//apply strategy
-				CList<SystemArrangement> systemArrs = clist();
-				for (SystemArrangement oldSystemArr : frameArr.getSystems()) {
+				CList<SystemSpacing> systemArrs = clist();
+				for (SystemSpacing oldSystemArr : frameArr.getSystems()) {
 					float usableWidth = frameArr.getUsableSize().width - oldSystemArr.getMarginLeft() -
 						oldSystemArr.getMarginRight();
 					systemArrs.add(hFill.computeSystemArrangement(oldSystemArr, usableWidth));
@@ -258,7 +258,7 @@ public class ScoreLayoutStrategy
 		Score score = lc.getScore();
 		ArrayList<ColumnSpacing> columnSpacings = alist();
 		for (FrameArrangement frameArr : frameArrangements) {
-			for (SystemArrangement systemArr : frameArr.getSystems()) {
+			for (SystemSpacing systemArr : frameArr.getSystems()) {
 				columnSpacings.addAll(systemArr.getColumnSpacings());
 			}
 		}

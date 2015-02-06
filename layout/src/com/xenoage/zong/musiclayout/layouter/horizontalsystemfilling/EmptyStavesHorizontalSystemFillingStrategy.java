@@ -1,6 +1,6 @@
 package com.xenoage.zong.musiclayout.layouter.horizontalsystemfilling;
 
-import com.xenoage.zong.musiclayout.spacing.system.SystemArrangement;
+import com.xenoage.zong.musiclayout.spacing.system.SystemSpacing;
 
 /**
  * This horizontal system filling strategy
@@ -19,9 +19,10 @@ public class EmptyStavesHorizontalSystemFillingStrategy
 	/**
 	 * Changes the length of all staves of the given system to their maximum width.
 	 */
-	@Override public SystemArrangement computeSystemArrangement(SystemArrangement systemArrangement,
+	@Override public SystemSpacing computeSystemArrangement(SystemSpacing systemArrangement,
 		float usableWidth) {
-		return systemArrangement.withWidth(usableWidth);
+		systemArrangement.width = usableWidth;
+		return systemArrangement;
 	}
 
 }

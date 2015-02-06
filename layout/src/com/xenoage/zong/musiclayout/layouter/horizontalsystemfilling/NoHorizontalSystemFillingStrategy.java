@@ -1,6 +1,6 @@
 package com.xenoage.zong.musiclayout.layouter.horizontalsystemfilling;
 
-import com.xenoage.zong.musiclayout.spacing.system.SystemArrangement;
+import com.xenoage.zong.musiclayout.spacing.system.SystemSpacing;
 
 /**
  * This horizontal system filling strategy
@@ -20,7 +20,7 @@ public class NoHorizontalSystemFillingStrategy
 	/**
 	 * Nothing is changed. The given system arrangement is returned.
 	 */
-	@Override public SystemArrangement computeSystemArrangement(SystemArrangement systemArrangement,
+	@Override public SystemSpacing computeSystemArrangement(SystemSpacing systemArrangement,
 		float usableWidth) {
 		return systemArrangement;
 	}

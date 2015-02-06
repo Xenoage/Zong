@@ -24,7 +24,7 @@ import com.xenoage.zong.musiclayout.spacing.measure.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.measure.MeasureElementsSpacing;
 import com.xenoage.zong.musiclayout.spacing.measure.MeasureSpacing;
 import com.xenoage.zong.musiclayout.spacing.measure.VoiceSpacing;
-import com.xenoage.zong.musiclayout.spacing.system.SystemArrangement;
+import com.xenoage.zong.musiclayout.spacing.system.SystemSpacing;
 
 /**
  * Test cases for a {@link StretchHorizontalSystemFillingStrategy}.
@@ -42,7 +42,7 @@ public class StretchHorizontalSystemFillingStrategyTest {
 		float offsetBeat1 = 3;
 		float offsetBeat2 = 7;
 		float offsetBeat3 = 12;
-		SystemArrangement system = createSystemWith1Measure(leadingWidth, offsetBeat1, offsetBeat2,
+		SystemSpacing system = createSystemWith1Measure(leadingWidth, offsetBeat1, offsetBeat2,
 			offsetBeat3);
 
 		//stretch the system
@@ -80,7 +80,7 @@ public class StretchHorizontalSystemFillingStrategyTest {
 		float offsetChord2 = 12;
 		float offsetMeasureEnd = 16;
 		float graceDistance = 2;
-		SystemArrangement system = createSystemWith1MeasureGrace(offsetChord1, offsetChord2,
+		SystemSpacing system = createSystemWith1MeasureGrace(offsetChord1, offsetChord2,
 			offsetMeasureEnd, graceDistance);
 
 		//stretch the system
@@ -109,14 +109,14 @@ public class StretchHorizontalSystemFillingStrategyTest {
 	}
 
 	/**
-	 * Creates and returns a simple {@link SystemArrangement} with only one
+	 * Creates and returns a simple {@link SystemSpacing} with only one
 	 * measure with a clef and two notes, using the given parameters.
 	 * @param leadingWidth  width of the leading spacing in mm
 	 * @param offsetBeat0   offset of beat 1/4 in mm
 	 * @param offsetBeat1   offset of beat 3/4 in mm
 	 * @param offsetBeat2   width of the voice spacing in mm
 	 */
-	public static SystemArrangement createSystemWith1Measure(float leadingWidth, float offsetBeat0,
+	public static SystemSpacing createSystemWith1Measure(float leadingWidth, float offsetBeat0,
 		float offsetBeat1, float offsetBeat2) {
 		Voice voice = new Voice(alist((VoiceElement) chord(pi(0, 0, 4), fr(2, 4)), chord(
 			pi(1, 0, 4), fr(2, 4))));
@@ -130,16 +130,16 @@ public class StretchHorizontalSystemFillingStrategyTest {
 		List<MeasureSpacing> measureSpacings = alist(measureSpacing);
 		ColumnSpacing mcs = new ColumnSpacing(new Score(), measureSpacings, beatOffsets,
 			alist(new BeatOffset(fr(0, 4), 0), new BeatOffset(fr(6, 4), offsetBeat2)));
-		SystemArrangement system = new SystemArrangement(10, 10, ilist(mcs), 0, 0, leadingWidth +
+		SystemSpacing system = new SystemSpacing(10, 10, ilist(mcs), 0, 0, leadingWidth +
 			offsetBeat2, new float[]{0f}, new float[0], 0);
 		return system;
 	}
 
 	/**
-	 * Creates and returns a simple {@link SystemArrangement} with only one
+	 * Creates and returns a simple {@link SystemSpacing} with only one
 	 * measure and three notes: two main notes and two grace notes between them.
 	 */
-	public static SystemArrangement createSystemWith1MeasureGrace(float offsetChord1,
+	public static SystemSpacing createSystemWith1MeasureGrace(float offsetChord1,
 		float offsetChord2, float offsetMeasureEnd, float graceDistance) {
 		Voice voice = new Voice(alist((VoiceElement) chord(pi(0, 0, 4), fr(2, 4)), graceChord(pi(
 			1, 0, 4)), graceChord(pi(2, 0, 4)), chord(pi(3, 0, 4), fr(2, 4))));
@@ -156,7 +156,7 @@ public class StretchHorizontalSystemFillingStrategyTest {
 			MeasureElementsSpacing.empty, null);
 		ColumnSpacing mcs = new ColumnSpacing(new Score(), alist(measureSpacing),
 			beatOffsets, alist(new BeatOffset(fr(0, 4), 0), new BeatOffset(fr(4, 4), offsetMeasureEnd)));
-		SystemArrangement system = new SystemArrangement(10, 10, ilist(mcs), 0, 0, offsetMeasureEnd,
+		SystemSpacing system = new SystemSpacing(10, 10, ilist(mcs), 0, 0, offsetMeasureEnd,
 			new float[]{0f}, new float[0], 0);
 		return system;
 	}

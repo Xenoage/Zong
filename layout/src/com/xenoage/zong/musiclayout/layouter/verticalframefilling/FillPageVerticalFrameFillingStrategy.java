@@ -6,7 +6,7 @@ import static com.xenoage.utils.kernel.Range.range;
 import com.xenoage.utils.collections.CList;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.musiclayout.FrameArrangement;
-import com.xenoage.zong.musiclayout.spacing.system.SystemArrangement;
+import com.xenoage.zong.musiclayout.spacing.system.SystemSpacing;
 
 /**
  * This vertical frame filling strategy
@@ -29,17 +29,16 @@ public class FillPageVerticalFrameFillingStrategy
 		//if there is no or only one system, do nothing
 		if (frameArr.getSystems().size() > 1) {
 			//compute remaining space
-			SystemArrangement lastSystem = frameArr.getSystems().getLast();
+			SystemSpacing lastSystem = frameArr.getSystems().getLast();
 			float lastSystemEndY = lastSystem.getOffsetY() + lastSystem.getHeight();
 			float remainingSpace = frameArr.getUsableSize().height - lastSystemEndY;
 			//compute additional space between the systems
 			float additionalSpace = remainingSpace / (frameArr.getSystems().size() - 1);
 			//compute new y-offsets
-			CList<SystemArrangement> systemArrs = clist();
+			CList<SystemSpacing> systemArrs = clist();
 			for (int i : range(frameArr.getSystems())) {
-				SystemArrangement system = frameArr.getSystems().get(i);
-				system = system.withOffsetY(system.getOffsetY() + i * additionalSpace);
-				systemArrs.add(system);
+				SystemSpacing system = frameArr.getSystems().get(i);
+				system.offsetY += i * additionalSpace;
 			}
 			ret = new FrameArrangement(systemArrs.close(), frameArr.getUsableSize());
 		}

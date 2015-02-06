@@ -14,7 +14,7 @@ import com.xenoage.zong.musiclayout.spacing.measure.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.measure.MeasureElementsSpacing;
 import com.xenoage.zong.musiclayout.spacing.measure.MeasureSpacing;
 import com.xenoage.zong.musiclayout.spacing.measure.VoiceSpacing;
-import com.xenoage.zong.musiclayout.spacing.system.SystemArrangement;
+import com.xenoage.zong.musiclayout.spacing.system.SystemSpacing;
 
 /**
  * This horizontal system filling strategy
@@ -35,7 +35,7 @@ public class StretchHorizontalSystemFillingStrategy
 	 * Stretches the measures of the given system, so that
 	 * it uses the whole usable width of the system.
 	 */
-	@Override public SystemArrangement computeSystemArrangement(SystemArrangement systemArrangement,
+	@Override public SystemSpacing computeSystemArrangement(SystemSpacing systemArrangement,
 		float usableWidth) {
 		//compute width of all voice spacings
 		//(leading spacings are not stretched)
@@ -114,7 +114,9 @@ public class StretchHorizontalSystemFillingStrategy
 		}
 
 		//create and return the new system
-		return systemArrangement.withSpacings(newMCSpacings.close(), usableWidth);
+		systemArrangement.columnSpacings = newMCSpacings;
+		systemArrangement.width = usableWidth;
+		return systemArrangement;
 	}
 
 }

@@ -10,7 +10,7 @@ import com.xenoage.zong.core.format.SystemLayout;
 import com.xenoage.zong.core.music.Staff;
 import com.xenoage.zong.musiclayout.FrameArrangement;
 import com.xenoage.zong.musiclayout.spacing.measure.ColumnSpacing;
-import com.xenoage.zong.musiclayout.spacing.system.SystemArrangement;
+import com.xenoage.zong.musiclayout.spacing.system.SystemSpacing;
 
 /**
  * This vertical frame filling strategy
@@ -38,7 +38,7 @@ public class EmptySystemsVerticalFrameFillingStrategy
 		float remainingSpace = usableSize.height;
 		float offsetY = 0;
 		if (frameArr.getSystems().size() > 0) {
-			SystemArrangement lastSystem = frameArr.getSystems().getLast();
+			SystemSpacing lastSystem = frameArr.getSystems().getLast();
 			offsetY = lastSystem.getOffsetY() + lastSystem.getHeight();
 			remainingSpace -= offsetY;
 		}
@@ -48,14 +48,14 @@ public class EmptySystemsVerticalFrameFillingStrategy
 		float defaultSystemDistance = defaultSystemLayout.getDistance();
 		float defaultMargin = defaultSystemLayout.getMarginLeft() +
 			defaultSystemLayout.getMarginRight();
-		SystemArrangement newSystem = createEmptySystem(score, usableSize.width, 0);
+		SystemSpacing newSystem = createEmptySystem(score, usableSize.width, 0);
 		float newSystemHeight = defaultSystemDistance + newSystem.getHeight();
 
 		//add as many additional empty staves as possible
 		int newSystemsCount = (int) (remainingSpace / newSystemHeight);
 		if (newSystemsCount > 0) {
 			//otherwise add the empty systems
-			CList<SystemArrangement> newSystems = clist();
+			CList<SystemSpacing> newSystems = clist();
 			newSystems.addAll(frameArr.getSystems());
 			for (int i = frameArr.getSystems().size() - 1; i < newSystemsCount; i++) {
 				newSystems.add(createEmptySystem(score, usableSize.width - defaultMargin, offsetY +
@@ -72,7 +72,7 @@ public class EmptySystemsVerticalFrameFillingStrategy
 	 * Creates an additional system for the given {@link Score} with
 	 * the given width and y-offset in mm and returns it.
 	 */
-	private SystemArrangement createEmptySystem(Score score, float width, float offsetY) {
+	private SystemSpacing createEmptySystem(Score score, float width, float offsetY) {
 		float[] staffHeights = new float[score.getStavesCount()];
 		float[] staffDistances = new float[score.getStavesCount() - 1];
 		//compute staff heights
@@ -86,7 +86,7 @@ public class EmptySystemsVerticalFrameFillingStrategy
 		}
 		//create and returns system
 		SystemLayout defaultSystemLayout = score.getFormat().getSystemLayout();
-		return new SystemArrangement(-1, -1, CList.<ColumnSpacing> ilist(),
+		return new SystemSpacing(-1, -1, CList.<ColumnSpacing> ilist(),
 			defaultSystemLayout.getMarginLeft(), defaultSystemLayout.getMarginRight(), width,
 			staffHeights, staffDistances, offsetY);
 	}

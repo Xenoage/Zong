@@ -10,7 +10,7 @@ import com.xenoage.utils.math.Delta;
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.musiclayout.FrameArrangement;
 import com.xenoage.zong.musiclayout.spacing.measure.ColumnSpacing;
-import com.xenoage.zong.musiclayout.spacing.system.SystemArrangement;
+import com.xenoage.zong.musiclayout.spacing.system.SystemSpacing;
 
 /**
  * Test cases for a {@link FillPageVerticalFrameFillingStrategy}.
@@ -32,9 +32,9 @@ public class FillPageVerticalFrameFillingStrategyTest {
 		float offset1 = 0;
 		float offset2 = 100;
 		float offset3 = 200;
-		SystemArrangement system1 = createSystem(stavesCount, staffHeight, staffDistance, offset1);
-		SystemArrangement system2 = createSystem(stavesCount, staffHeight, staffDistance, offset2);
-		SystemArrangement system3 = createSystem(stavesCount, staffHeight, staffDistance, offset3);
+		SystemSpacing system1 = createSystem(stavesCount, staffHeight, staffDistance, offset1);
+		SystemSpacing system2 = createSystem(stavesCount, staffHeight, staffDistance, offset2);
+		SystemSpacing system3 = createSystem(stavesCount, staffHeight, staffDistance, offset3);
 
 		FrameArrangement frame = new FrameArrangement(ilist(system1, system2, system3),
 			new Size2f(10, usableHeight));
@@ -57,10 +57,10 @@ public class FillPageVerticalFrameFillingStrategyTest {
 	}
 
 	/**
-	 * Creates and returns a simple {@link SystemArrangement} using the
+	 * Creates and returns a simple {@link SystemSpacing} using the
 	 * given values.
 	 */
-	public static SystemArrangement createSystem(int stavesCount, float staffHeight,
+	public static SystemSpacing createSystem(int stavesCount, float staffHeight,
 		float staffDistance, float offsetY) {
 		float[] staffHeights = new float[stavesCount];
 		for (int i = 0; i < stavesCount; i++)
@@ -68,7 +68,7 @@ public class FillPageVerticalFrameFillingStrategyTest {
 		float[] staffDistances = new float[stavesCount - 1];
 		for (int i = 0; i < stavesCount - 1; i++)
 			staffDistances[i] = staffDistance;
-		return new SystemArrangement(-1, -1, CList.<ColumnSpacing>ilist(), 0, 0, 0,
+		return new SystemSpacing(-1, -1, CList.<ColumnSpacing>ilist(), 0, 0, 0,
 			staffHeights, staffDistances, offsetY);
 	}
 

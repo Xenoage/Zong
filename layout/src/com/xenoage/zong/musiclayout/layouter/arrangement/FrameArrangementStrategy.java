@@ -2,6 +2,7 @@ package com.xenoage.zong.musiclayout.layouter.arrangement;
 
 import static com.xenoage.utils.collections.CList.clist;
 import static com.xenoage.utils.kernel.Tuple2.t;
+import static com.xenoage.zong.musiclayout.spacer.system.SystemSpacer.systemSpacer;
 
 import java.util.List;
 
@@ -16,8 +17,9 @@ import com.xenoage.zong.musiclayout.FrameArrangement;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterContext;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.notations.Notations;
+import com.xenoage.zong.musiclayout.spacer.system.SystemSpacer;
 import com.xenoage.zong.musiclayout.spacing.measure.ColumnSpacing;
-import com.xenoage.zong.musiclayout.spacing.system.SystemArrangement;
+import com.xenoage.zong.musiclayout.spacing.system.SystemSpacing;
 
 /**
  * A {@link FrameArrangementStrategy} arranges a list of
@@ -34,16 +36,6 @@ import com.xenoage.zong.musiclayout.spacing.system.SystemArrangement;
 public class FrameArrangementStrategy
 	implements ScoreLayouterStrategy {
 
-	//used strategies
-	private final SystemArrangementStrategy systemArrangementStrategy;
-
-
-	/**
-	 * Creates a new {@link FrameArrangementStrategy}.
-	 */
-	public FrameArrangementStrategy(SystemArrangementStrategy systemArrangementStrategy) {
-		this.systemArrangementStrategy = systemArrangementStrategy;
-	}
 
 	/**
 	 * Arranges the given measure column spacings beginning at the
@@ -65,14 +57,14 @@ public class FrameArrangementStrategy
 		float offsetY = getTopSystemDistance(systemIndex, scoreFormat, scoreHeader);
 
 		//append systems to the frame
-		CList<SystemArrangement> systems = clist();
+		CList<SystemSpacing> systems = clist();
 		Notations retLeadingNotations = new Notations();
 		while (measureIndex < measuresCount) {
 			//try to create system on this frame
-			Tuple2<SystemArrangement, Notations> t = systemArrangementStrategy
+			Tuple2<SystemSpacing, Notations> t = systemSpacer
 				.computeSystemArrangement(measureIndex, usableSize, offsetY, systemIndex, columnSpacings,
 					notations, lc);
-			SystemArrangement system = (t != null ? t.get1() : null);
+			SystemSpacing system = (t != null ? t.get1() : null);
 			Notations leadingNotations = (t != null ? t.get2() : null);
 
 			//was there enough place for this system?

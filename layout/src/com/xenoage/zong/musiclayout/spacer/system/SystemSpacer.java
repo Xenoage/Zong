@@ -1,4 +1,4 @@
-package com.xenoage.zong.musiclayout.layouter.arrangement;
+package com.xenoage.zong.musiclayout.spacer.system;
 
 import static com.xenoage.utils.collections.CList.clist;
 import static com.xenoage.utils.kernel.Range.range;
@@ -22,15 +22,13 @@ import com.xenoage.zong.core.music.layout.SystemBreak;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.musiclayout.Context;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterContext;
-import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.notations.Notations;
-import com.xenoage.zong.musiclayout.spacer.measure.ColumnSpacer;
 import com.xenoage.zong.musiclayout.spacing.measure.ColumnSpacing;
 import com.xenoage.zong.musiclayout.spacing.measure.LeadingSpacing;
-import com.xenoage.zong.musiclayout.spacing.system.SystemArrangement;
+import com.xenoage.zong.musiclayout.spacing.system.SystemSpacing;
 
 /**
- * Arranges a list of measure columns into a {@link SystemArrangement}.
+ * Arranges a list of measure columns into a {@link SystemSpacing}.
  * 
  * The systems will not be stretched to their full possible width.
  * This can be done in a later layouting step. However, a {@link LeadingSpacing}
@@ -41,19 +39,10 @@ import com.xenoage.zong.musiclayout.spacing.system.SystemArrangement;
  * 
  * @author Andreas Wenger
  */
-public class SystemArrangementStrategy
-	implements ScoreLayouterStrategy {
+public class SystemSpacer {
+	
+	public static final SystemSpacer systemSpacer = new SystemSpacer();
 
-	//used strategies
-	private final ColumnSpacer measureColumnSpacingStrategy;
-
-
-	/**
-	 * Creates a new {@link SystemArrangementStrategy}.
-	 */
-	public SystemArrangementStrategy(ColumnSpacer measureColumnSpacingStrategy) {
-		this.measureColumnSpacingStrategy = measureColumnSpacingStrategy;
-	}
 
 	/**
 	 * Arranges an optimum number of measures in a system, beginning at the given measure,
@@ -70,7 +59,7 @@ public class SystemArrangementStrategy
 	 *                       for the leading spacing are added.
 	 * @param lc             the context of the layouter
 	 */
-	public Tuple2<SystemArrangement, Notations> computeSystemArrangement(int startMeasure,
+	public Tuple2<SystemSpacing, Notations> computeSystemArrangement(int startMeasure,
 		Size2f usableSize, float offsetY, int systemIndex, List<ColumnSpacing> measureColumnSpacings,
 		Notations notations, ScoreLayouterContext lc) {
 
@@ -165,7 +154,7 @@ public class SystemArrangementStrategy
 			return null; //not enough space for the system on this area
 		}
 		else {
-			SystemArrangement ret = new SystemArrangement(startMeasure, startMeasure + systemMCSs.size() -
+			SystemSpacing ret = new SystemSpacing(startMeasure, startMeasure + systemMCSs.size() -
 				1, systemMCSs, systemLeftMargin, systemRightMargin, usedWidth, staffHeights,
 				staffDistances, offsetY);
 			return t(ret, retLeadingNotations);

@@ -90,7 +90,7 @@ import com.xenoage.zong.musiclayout.spacing.measure.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.measure.LeadingSpacing;
 import com.xenoage.zong.musiclayout.spacing.measure.MeasureSpacing;
 import com.xenoage.zong.musiclayout.spacing.measure.VoiceSpacing;
-import com.xenoage.zong.musiclayout.spacing.system.SystemArrangement;
+import com.xenoage.zong.musiclayout.spacing.system.SystemSpacing;
 import com.xenoage.zong.musiclayout.stampings.BarlineStamping;
 import com.xenoage.zong.musiclayout.stampings.BracketStamping;
 import com.xenoage.zong.musiclayout.stampings.FrameTextStamping;
@@ -187,7 +187,7 @@ public class ScoreFrameLayoutStrategy
 
 		//go through the systems
 		for (int iSystem : range(frameArr.getSystems())) {
-			SystemArrangement system = frameArr.getSystems().get(iSystem);
+			SystemSpacing system = frameArr.getSystems().get(iSystem);
 			List<StaffStamping> systemStaves = staffStampings.getAllOfSystem(iSystem);
 
 			//add the part names (first system) or part abbreviations (other systems)
@@ -700,7 +700,7 @@ public class ScoreFrameLayoutStrategy
 	 * All closed voltas are removed from the cache. The unclosed voltas (which have to
 	 * be continued on the next system or frame) remain in the cache (or are added, if they are new).
 	 */
-	private List<VoltaStamping> createVoltas(int systemIndex, SystemArrangement system,
+	private List<VoltaStamping> createVoltas(int systemIndex, SystemSpacing system,
 		ScoreHeader header, StaffStampings staffStampings, List<ContinuedVolta> openVoltasCache,
 		FormattedTextStyle textStyle) {
 		ArrayList<VoltaStamping> ret = alist();
@@ -733,7 +733,7 @@ public class ScoreFrameLayoutStrategy
 	 * All closed wedges are removed from the cache. The unclosed wedges (which have to
 	 * be continued on the next system or frame) remain in the cache (or are added, if they are new).
 	 */
-	private List<WedgeStamping> createWedges(int systemIndex, SystemArrangement system,
+	private List<WedgeStamping> createWedges(int systemIndex, SystemSpacing system,
 		Score score, StaffStampings staffStampings, List<ContinuedWedge> openWedgesCache) {
 		ArrayList<WedgeStamping> ret = alist();
 		//find new wedges beginning in this staff

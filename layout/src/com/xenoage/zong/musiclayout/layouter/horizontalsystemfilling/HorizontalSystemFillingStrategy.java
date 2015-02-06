@@ -1,11 +1,11 @@
 package com.xenoage.zong.musiclayout.layouter.horizontalsystemfilling;
 
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
-import com.xenoage.zong.musiclayout.spacing.system.SystemArrangement;
+import com.xenoage.zong.musiclayout.spacing.system.SystemSpacing;
 
 /**
  * A horizontal system filling strategy
- * creates a new {@link SystemArrangement}
+ * creates a new {@link SystemSpacing}
  * from the given one, applying
  * horizontal distribution changes.
  * 
@@ -18,7 +18,7 @@ import com.xenoage.zong.musiclayout.spacing.system.SystemArrangement;
 public interface HorizontalSystemFillingStrategy
 	extends ScoreLayouterStrategy {
 
-	public SystemArrangement computeSystemArrangement(SystemArrangement systemArrangement,
+	public SystemSpacing computeSystemArrangement(SystemSpacing systemArrangement,
 		float usableWidth);
 
 }

@@ -7,6 +7,7 @@ import static com.xenoage.utils.kernel.Range.range;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.collections.IList;
@@ -19,7 +20,7 @@ import com.xenoage.zong.musiclayout.MeasureMarks;
 import com.xenoage.zong.musiclayout.StaffMarks;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.StaffStampings;
 import com.xenoage.zong.musiclayout.spacing.measure.ColumnSpacing;
-import com.xenoage.zong.musiclayout.spacing.system.SystemArrangement;
+import com.xenoage.zong.musiclayout.spacing.system.SystemSpacing;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 
 /**
@@ -37,7 +38,7 @@ public class StaffStampingsStrategy {
 
 		//go through the systems
 		for (int iSystem : range(systemsCount)) {
-			SystemArrangement system = frameArr.getSystems().get(iSystem);
+			SystemSpacing system = frameArr.getSystems().get(iSystem);
 
 			//create staves of the system
 			StaffStamping[] systemStaves = new StaffStamping[stavesCount];
@@ -52,7 +53,7 @@ public class StaffStampingsStrategy {
 			}
 
 			//create position marks
-			IList<ColumnSpacing> css = system.getColumnSpacings();
+			List<ColumnSpacing> css = system.getColumnSpacings();
 			int measuresCount = system.getColumnSpacings().size();
 			float[] measureMarkersLeft = new float[measuresCount];
 			float[] measureMarkersLeading = new float[measuresCount];

@@ -6,7 +6,7 @@ import lombok.Getter;
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.collections.IList;
 import com.xenoage.utils.math.geom.Size2f;
-import com.xenoage.zong.musiclayout.spacing.system.SystemArrangement;
+import com.xenoage.zong.musiclayout.spacing.system.SystemSpacing;
 
 /**
  * This class contains the arrangement
@@ -17,13 +17,13 @@ import com.xenoage.zong.musiclayout.spacing.system.SystemArrangement;
 @Const @Getter public final class FrameArrangement {
 
 	/** The systems on this frame. */
-	public final IList<SystemArrangement> systems;
+	public final IList<SystemSpacing> systems;
 	/** The size in mm this frame arrangement may use. */
 	public final Size2f usableSize;
 
 
 	//LOMBOK
-	public FrameArrangement(IList<SystemArrangement> systems, Size2f usableSize) {
+	public FrameArrangement(IList<SystemSpacing> systems, Size2f usableSize) {
 		//null values are not allowed
 		if (containsNull(systems) || usableSize == null)
 			throw new IllegalArgumentException("Systems and size may not be null");
