@@ -7,6 +7,7 @@ import com.xenoage.zong.core.music.clef.ClefType;
 import com.xenoage.zong.core.music.key.TraditionalKey;
 import com.xenoage.zong.core.position.MPElement;
 import com.xenoage.zong.musiclayout.Context;
+import com.xenoage.zong.musiclayout.notations.Notations;
 import com.xenoage.zong.musiclayout.notations.TraditionalKeyNotation;
 import com.xenoage.zong.musiclayout.spacing.horizontal.ElementWidth;
 
@@ -21,11 +22,11 @@ public class TraditionalKeyNotator
 	public static final TraditionalKeyNotator traditionalKeyNotator = new TraditionalKeyNotator();
 	
 
-	@Override public TraditionalKeyNotation notate(MPElement element, Context context) {
-		return notate((TraditionalKey) element, context);
+	@Override public TraditionalKeyNotation compute(MPElement element, Context context, Notations notations) {
+		return compute((TraditionalKey) element, context);
 	}
 	
-	public TraditionalKeyNotation notate(TraditionalKey key, Context context) {
+	public TraditionalKeyNotation compute(TraditionalKey key, Context context) {
 		//compute width
 		float width = 0;
 		int fifth = key.getFifths();

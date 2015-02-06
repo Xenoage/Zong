@@ -30,10 +30,10 @@ import com.xenoage.zong.musiclayout.SystemArrangement;
 import com.xenoage.zong.musiclayout.continued.ContinuedElement;
 import com.xenoage.zong.musiclayout.layouter.arrangement.FrameArrangementStrategy;
 import com.xenoage.zong.musiclayout.layouter.beamednotation.BeamedStemAlignmentNotationsStrategy;
-import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
 import com.xenoage.zong.musiclayout.layouter.horizontalsystemfilling.HorizontalSystemFillingStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.ScoreFrameLayoutStrategy;
 import com.xenoage.zong.musiclayout.layouter.verticalframefilling.VerticalFrameFillingStrategy;
+import com.xenoage.zong.musiclayout.notations.Notations;
 import com.xenoage.zong.musiclayout.spacer.ColumnSpacer;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 
@@ -80,13 +80,13 @@ public class ScoreLayoutStrategy
 		context.settings = lc.getLayoutSettings();
 		context.symbols = lc.getSymbolPool();
 		notator.computeAll(context);
-		NotationsCache notations = context.notationsCache;
+		Notations notations = context.notationsCache;
 		
 		//optimal measure spacings
 		List<ColumnSpacing> optimalMeasureColumnSpacings = computeColumnSpacings(notations, lc);
 		
 		//break into systems and frames
-		Tuple2<ArrayList<FrameArrangement>, NotationsCache> t = computeFrameArrangements(
+		Tuple2<ArrayList<FrameArrangement>, Notations> t = computeFrameArrangements(
 			optimalMeasureColumnSpacings, notations, lc);
 		List<FrameArrangement> frameArrangements = t.get1();
 		notations.merge(t.get2());
@@ -107,7 +107,7 @@ public class ScoreLayoutStrategy
 	 * Computes the {@link ColumnSpacing} for each measure
 	 * (without leading spacing).
 	 */
-	List<ColumnSpacing> computeColumnSpacings(NotationsCache notations, ScoreLayouterContext lc) {
+	List<ColumnSpacing> computeColumnSpacings(Notations notations, ScoreLayouterContext lc) {
 		Score score = lc.getScore();
 		ArrayList<ColumnSpacing> ret = alist();
 		for (int iMeasure : range(0, score.getMeasuresCount() - 1)) {
@@ -122,10 +122,10 @@ public class ScoreLayoutStrategy
 	 * The list of frame arrangements and the list of created leading notations
 	 * is returned.
 	 */
-	Tuple2<ArrayList<FrameArrangement>, NotationsCache> computeFrameArrangements(
-		List<ColumnSpacing> measureColumnSpacings, NotationsCache notations, ScoreLayouterContext lc) {
+	Tuple2<ArrayList<FrameArrangement>, Notations> computeFrameArrangements(
+		List<ColumnSpacing> measureColumnSpacings, Notations notations, ScoreLayouterContext lc) {
 		ArrayList<FrameArrangement> ret = alist();
-		NotationsCache retLeadingNotations = new NotationsCache();
+		Notations retLeadingNotations = new Notations();
 		int measuresCount = lc.getScore().getMeasuresCount();
 		int iMeasure = 0;
 		int iSystem = 0;
@@ -160,11 +160,11 @@ public class ScoreLayoutStrategy
 			//some material left to layout?
 			if (iMeasure < measuresCount) {
 				//more measures to layout
-				Tuple2<FrameArrangement, NotationsCache> t = frameArrangementStrategy
+				Tuple2<FrameArrangement, Notations> t = frameArrangementStrategy
 					.computeFrameArrangement(iMeasure, iSystem, frameSize, measureColumnSpacings, notations,
 						lc);
 				FrameArrangement frameArr = t.get1();
-				NotationsCache leadingNotations = t.get2();
+				Notations leadingNotations = t.get2();
 				if (frameArr.getSystems().size() > 0) {
 					//at least one measure in this frame. remember frame arrangement and leading notations
 					ret.add(frameArr);
@@ -243,7 +243,7 @@ public class ScoreLayoutStrategy
 	 * Computes beamed notations with correct stem alignments.
 	 */
 	void computeBeamStemAlignments(List<FrameArrangement> frameArrangements,
-		List<ColumnSpacing> optimalMeasureColumnSpacings, NotationsCache notations,
+		List<ColumnSpacing> optimalMeasureColumnSpacings, Notations notations,
 		ScoreLayouterContext lc) {
 		//collect actual measure column spacings from all frames
 		//(now also including leading spacings and possibly stretched measures)
@@ -284,7 +284,7 @@ public class ScoreLayoutStrategy
 	 * Creates all {@link ScoreFrameLayout}s.
 	 */
 	List<ScoreFrameLayout> createScoreFrameLayouts(List<FrameArrangement> frameArrs,
-		NotationsCache notations, ScoreLayouterContext lc) {
+		Notations notations, ScoreLayouterContext lc) {
 		ArrayList<ScoreFrameLayout> ret = alist();
 		ArrayList<ContinuedElement> continuedElements = alist();
 		It<FrameArrangement> itFrameArrs = it(frameArrs);

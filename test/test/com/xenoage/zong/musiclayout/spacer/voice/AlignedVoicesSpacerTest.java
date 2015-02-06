@@ -2,6 +2,7 @@ package com.xenoage.zong.musiclayout.spacer.voice;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.math.Delta.df;
+import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.music.Voice.voice;
 import static com.xenoage.zong.musiclayout.spacer.voice.AlignedVoicesSpacer.alignedVoicesSpacer;
@@ -12,7 +13,9 @@ import java.util.List;
 import org.junit.Test;
 
 import com.xenoage.utils.math.Fraction;
+import com.xenoage.zong.core.music.rest.Rest;
 import com.xenoage.zong.musiclayout.BeatOffset;
+import com.xenoage.zong.musiclayout.notations.RestNotation;
 import com.xenoage.zong.musiclayout.spacing.horizontal.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.horizontal.VoiceSpacing;
 
@@ -182,8 +185,8 @@ public class AlignedVoicesSpacerTest {
 		//         | ⌎------- 51
 		//         ⌎--------- 50
 		VoiceSpacing voiceSpacing = new VoiceSpacing(voice(), is, alist(new ElementSpacing(null,
-			beat(0), 0f), new ElementSpacing(null, beat(2), 1f), new ElementSpacing(null, beat(8), true, 8f),
-			new ElementSpacing(null, beat(8), true, 9f), new ElementSpacing(null, beat(8), 10f)));
+			beat(0), 0f), new ElementSpacing(null, beat(2), 1f), graceSpacing(beat(8), 8f),
+			graceSpacing(beat(8), 9f), new ElementSpacing(null, beat(8), 10f)));
 		//given beat offsets:
 		//beats:   0.......8
 		//offsets: |       | 
@@ -219,4 +222,7 @@ public class AlignedVoicesSpacerTest {
 		return fr(quarters, 4);
 	}
 
+	private ElementSpacing graceSpacing(Fraction beat, float offsetIs) {
+		return new ElementSpacing(new RestNotation(new Rest(_0), null), beat, offsetIs);
+	}
 }

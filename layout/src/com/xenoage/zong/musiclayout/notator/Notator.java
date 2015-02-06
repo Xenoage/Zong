@@ -21,8 +21,8 @@ import com.xenoage.zong.core.util.ColumnElementIterator;
 import com.xenoage.zong.core.util.MeasureElementIterator;
 import com.xenoage.zong.core.util.VoiceElementIterator;
 import com.xenoage.zong.musiclayout.Context;
-import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
 import com.xenoage.zong.musiclayout.notations.Notation;
+import com.xenoage.zong.musiclayout.notations.Notations;
 
 /**
  * Creates layout information about the layout of {@link MusicElement}s,
@@ -50,13 +50,13 @@ public final class Notator {
 	
 	/**
 	 * Computes the {@link Notation}s of all elements and stores
-	 * the results in the {@link NotationsCache}.
+	 * the results in the {@link Notations}.
 	 */
 	public void computeAll(Context context) {
 		context.saveMp();
 		
 		Score score = context.score;
-		NotationsCache cache = context.notationsCache;
+		Notations notations = new Notations();
 		
 		//iterate over all column elements, measure elements and voice elements
 		ColumnElementIterator itC = new ColumnElementIterator(score);
@@ -64,18 +64,18 @@ public final class Notator {
 			//column elements: one notation for each staff
 			for (int iStaff : range(context.score.getStavesCount())) {
 				context.mp = itC.getMp().withStaff(iStaff);
-				cache.add(compute(e, context), iStaff);
+				notations.add(compute(e, context, notations), iStaff);
 			}
 		}
 		MeasureElementIterator itM = new MeasureElementIterator(score);
 		for (MeasureElement e : itM) {
 			context.mp = itM.getMp();
-			cache.add(compute(e, context));
+			notations.add(compute(e, context, notations));
 		}
 		VoiceElementIterator itV = new VoiceElementIterator(score);
 		for (VoiceElement e : itV) {
 			context.mp = itV.getMp();
-			cache.add(compute(e, context));
+			notations.add(compute(e, context, notations));
 		}
 		
 		context.restoreMp();
@@ -84,11 +84,12 @@ public final class Notator {
 	/**
 	 * Computes the {@link Notation} of the given element.
 	 */
-	private Notation compute(MPElement element, Context context) {
+	private Notation compute(MPElement element, Context context, Notations notations) {
 		ElementNotator notator = notators.get(element.getMusicElementType());
 		if (notator == null) //element needs no notation
 			return null;
-		return notator.notate(element, context);
+		Notation notation = notator.compute(element, context, notations);
+		return notation;
 	}
 
 }

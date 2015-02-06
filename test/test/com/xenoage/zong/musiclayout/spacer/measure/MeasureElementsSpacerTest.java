@@ -3,6 +3,8 @@ package com.xenoage.zong.musiclayout.spacer.measure;
 import static com.xenoage.utils.collections.CList.ilist;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.collections.CollectionUtils.map;
+import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.utils.math.Delta.df;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.music.util.BeatE.beatE;
 import static com.xenoage.zong.musiclayout.spacer.measure.MeasureElementsSpacer.measureElementsSpacer;
@@ -15,14 +17,13 @@ import org.junit.Test;
 
 import com.xenoage.utils.math.Delta;
 import com.xenoage.utils.math.Fraction;
-import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.core.music.clef.Clef;
 import com.xenoage.zong.core.music.clef.ClefType;
 import com.xenoage.zong.core.music.key.Key;
 import com.xenoage.zong.core.music.rest.Rest;
 import com.xenoage.zong.core.music.util.BeatEList;
-import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
 import com.xenoage.zong.musiclayout.notations.ClefNotation;
+import com.xenoage.zong.musiclayout.notations.Notations;
 import com.xenoage.zong.musiclayout.notations.RestNotation;
 import com.xenoage.zong.musiclayout.settings.ChordSpacings;
 import com.xenoage.zong.musiclayout.settings.ChordWidths;
@@ -68,13 +69,13 @@ public class MeasureElementsSpacerTest {
 	@Test public void testEnoughExistingSpace() {
 		Rest[] ve = ve();
 		List<VoiceSpacing> vs = alist(
-			new VoiceSpacing(null, 1, alist(se(ve[0], fr(1, 2), 4), se(ve[1], fr(6), 15))),
-			new VoiceSpacing(null, 1, alist(se(ve[2], fr(1), 5), se(ve[3], fr(17, 2), 20))));
+			new VoiceSpacing(null, 1, alist(spacing(ve[0], fr(1, 2), 4), spacing(ve[1], fr(6), 15))),
+			new VoiceSpacing(null, 1, alist(spacing(ve[2], fr(1), 5), spacing(ve[3], fr(17, 2), 20))));
 		Clef innerClef = new Clef(ClefType.clefTreble);
 		BeatEList<Clef> innerClefs = new BeatEList<Clef>();
 		innerClefs.add(beatE(innerClef, fr(6)));
 		MeasureElementsSpacing res = testee.compute(
-			innerClefs, new BeatEList<Key>(), null, false, vs, 0, sne(ve, innerClef), ls);
+			innerClefs, new BeatEList<Key>(), null, false, vs, 0, notations(ve, innerClef), ls);
 		//clef must be at offset 15 - padding - clefwidth/2
 		ElementSpacing[] mes = res.elements.toArray(new ElementSpacing[0]);
 		assertEquals(1, mes.length);
@@ -107,38 +108,45 @@ public class MeasureElementsSpacerTest {
 	@Test public void testNeedAdditionalSpace() {
 		Rest[] ve = ve();
 		List<VoiceSpacing> vs = alist(
-			new VoiceSpacing(null, 1, alist(se(ve[0], fr(1, 2), 4), se(ve[1], fr(4), 11))),
-			new VoiceSpacing(null, 1, alist(se(ve[2], fr(1), 5), se(ve[3], fr(13, 2), 16))));
+			new VoiceSpacing(null, 1, alist(spacing(ve[0], fr(1, 2), 4), spacing(ve[1], fr(4), 11))),
+			new VoiceSpacing(null, 1, alist(spacing(ve[2], fr(1), 5), spacing(ve[3], fr(13, 2), 16))));
 		Clef innerClef = new Clef(ClefType.clefTreble);
 		BeatEList<Clef> innerClefs = new BeatEList<Clef>();
 		innerClefs.add(beatE(innerClef, fr(4)));
 		MeasureElementsSpacing mes = testee.compute(
-			innerClefs, new BeatEList<Key>(), null, false, vs, 0, sne(ve, innerClef), ls);
+			innerClefs, new BeatEList<Key>(), null, false, vs, 0, notations(ve, innerClef), ls);
 		//voice spacings
 		assertEquals(2, vs.size());
-		assertEquals(ilist(se(ve[0], fr(1, 2), 4), se(ve[1], fr(4), 13)), vs.get(0)
-			.spacingElements);
-		assertEquals(ilist(se(ve[2], fr(1), 5), se(ve[3], fr(13, 2), 18)), vs.get(1)
-			.spacingElements);
+		assertEqualsSpacings(ilist(spacing(ve[0], fr(1, 2), 4), spacing(ve[1], fr(4), 13)),
+			vs.get(0).spacingElements);
+		assertEqualsSpacings(ilist(spacing(ve[2], fr(1), 5), spacing(ve[3], fr(13, 2), 18)),
+			vs.get(1).spacingElements);
 		//clef must be at offset 13 - padding - clefwidth/2
 		ElementSpacing[] se = mes.elements.toArray(new ElementSpacing[0]);
 		assertEquals(1, se.length);
 		assertEquals(fr(4), se[0].beat);
 		assertEquals(13 - paddingWidth - clefWidth / 2, se[0].offsetIs, Delta.DELTA_FLOAT);
 	}
+	
+	private void assertEqualsSpacings(List<ElementSpacing> expected, List<ElementSpacing> actual) {
+		assertEquals(expected.size(), actual.size());
+		for (int i : range(expected)) {
+			assertEquals(expected.get(i).getElement(), expected.get(i).getElement());
+			assertEquals(expected.get(i).beat, expected.get(i).beat);
+			assertEquals(expected.get(i).offsetIs, expected.get(i).offsetIs, df);
+		}
+	}
 
 	private Rest[] ve() {
 		return new Rest[] { new Rest(fr(1)), new Rest(fr(1)), new Rest(fr(1)), new Rest(fr(1)) };
 	}
 
-	private ElementSpacing se(VoiceElement ve, Fraction beat, float offset) {
-		return new ElementSpacing(ve, beat, offset);
+	private ElementSpacing spacing(Rest rest, Fraction beat, float offset) {
+		return new ElementSpacing(new RestNotation(rest, new ElementWidth(0)), beat, offset);
 	}
 
-	private NotationsCache sne(Rest[] rests, Clef clef) {
-		NotationsCache ret = new NotationsCache();
-		for (Rest rest : rests)
-			ret.add(new RestNotation(rest, new ElementWidth(0)));
+	private Notations notations(Rest[] rests, Clef clef) {
+		Notations ret = new Notations();
 		ret.add(new ClefNotation(clef, new ElementWidth(clefWidth), 0, 1));
 		return ret;
 	}

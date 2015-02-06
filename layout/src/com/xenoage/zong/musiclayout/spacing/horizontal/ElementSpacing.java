@@ -2,13 +2,13 @@ package com.xenoage.zong.musiclayout.spacing.horizontal;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.MusicElement;
+import com.xenoage.zong.core.music.VoiceElement;
+import com.xenoage.zong.musiclayout.notations.Notation;
 
 /**
  * An element spacing stores the beat and the position (offset)
@@ -21,25 +21,36 @@ import com.xenoage.zong.core.music.MusicElement;
 @Data @AllArgsConstructor 
 public class ElementSpacing {
 
-	/** The corresponding music element, e.g. a chord. May be null, e.g. when this
+	/** The corresponding element notation, e.g. a chord. May be null, e.g. when this
 	 * element denotes the end point of the measure. */
-	@MaybeNull public final MusicElement element;
+	@MaybeNull public final Notation notation;
 	/** The beat where this music element can be found in the measure */
 	@NonNull public final Fraction beat;
-	/** True, if this is a grace element (0 duration) */
-	public final boolean grace;
 	/** The horizontal offset of the element in interline spaces */
 	public float offsetIs;
 	
-
-	public ElementSpacing(MusicElement element, Fraction beat, float offset) {
-		this(element, beat, false, offset);
+	/**
+	 * Returns the MusicElement, or null, if there is none.
+	 */
+	public MusicElement getElement() {
+		if (notation == null)
+			return null;
+		return notation.getElement();
+	}
+	
+	/**
+	 * Returns true, if this element is a grace chord, otherwise false.
+	 */
+	public boolean isGrace() {
+		MusicElement element = getElement();
+		return (element != null && element instanceof VoiceElement &&
+			((VoiceElement) element).getDuration().isGreater0() == false);
 	}
 
 
 	@Deprecated //this class is mutable
 	public ElementSpacing withOffset(float offset) {
-		return new ElementSpacing(element, beat, grace, offset);
+		return new ElementSpacing(notation, beat, offset);
 	}
 
 }

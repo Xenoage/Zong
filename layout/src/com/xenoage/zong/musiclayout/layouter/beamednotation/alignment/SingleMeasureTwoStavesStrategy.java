@@ -16,8 +16,8 @@ import com.xenoage.zong.musiclayout.layouter.beamednotation.design.DoubleBeamDes
 import com.xenoage.zong.musiclayout.layouter.beamednotation.design.MultipleBeamDesign;
 import com.xenoage.zong.musiclayout.layouter.beamednotation.design.SingleBeamDesign;
 import com.xenoage.zong.musiclayout.layouter.beamednotation.design.TripleBeamDesign;
-import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
+import com.xenoage.zong.musiclayout.notations.Notations;
 import com.xenoage.zong.musiclayout.notations.beam.BeamStemAlignments;
 import com.xenoage.zong.musiclayout.notations.chord.NotesNotation;
 import com.xenoage.zong.musiclayout.notations.chord.StemNotation;
@@ -40,7 +40,7 @@ public class SingleMeasureTwoStavesStrategy
 	/**
 	 * This strategy computes the lengths of the stems of the beamed chords.
 	 */
-	public void computeNotations(Beam beam, NotationsCache notations) {
+	public void computeNotations(Beam beam, Notations notations) {
 		NotesNotation[] chordNa = new NotesNotation[beam.getWaypoints().size()];
 		int beamlines = beam.getMaxBeamLinesCount();
 		int i = 0;

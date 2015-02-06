@@ -125,8 +125,8 @@ public class VoicesBeatOffsetter {
 		for (VoiceSpacing voiceSpacing : voiceSpacings) {
 			beat = Fraction._0;
 			for (ElementSpacing spacingElement : voiceSpacing.spacingElements) {
-				MusicElement element = spacingElement.element;
-				if (element != null && element instanceof VoiceElement) {
+				MusicElement element = spacingElement.getElement();
+				if (element instanceof VoiceElement) {
 					//add beat
 					beats.add(beat);
 					//find the next beat

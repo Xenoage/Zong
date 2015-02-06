@@ -29,6 +29,7 @@ import com.xenoage.zong.core.music.Measure;
 import com.xenoage.zong.core.music.MeasureElement;
 import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.VoiceElement;
+import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.clef.Clef;
 import com.xenoage.zong.core.music.clef.ClefType;
 import com.xenoage.zong.core.music.key.TraditionalKey;
@@ -37,6 +38,7 @@ import com.xenoage.zong.core.music.time.TimeType;
 import com.xenoage.zong.io.musicxml.in.MusicXMLScoreFileInputTest;
 import com.xenoage.zong.io.selection.Cursor;
 import com.xenoage.zong.musiclayout.BeatOffset;
+import com.xenoage.zong.musiclayout.notations.ChordNotation;
 import com.xenoage.zong.musiclayout.spacing.horizontal.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.horizontal.VoiceSpacing;
 
@@ -487,7 +489,7 @@ public class VoicesBeatOffsetterTest {
 					else if (e.getDuration().equals(dur_1_1))
 						width = width_1_1;
 					//create spacing element with offset
-					se.add(new ElementSpacing(e, beat, offset));
+					se.add(new ElementSpacing(new ChordNotation((Chord) e), beat, offset));
 					beat = beat.add(e.getDuration());
 					offset += width;
 				}

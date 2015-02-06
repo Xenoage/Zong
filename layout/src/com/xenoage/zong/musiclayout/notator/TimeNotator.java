@@ -3,6 +3,7 @@ package com.xenoage.zong.musiclayout.notator;
 import com.xenoage.zong.core.music.time.Time;
 import com.xenoage.zong.core.position.MPElement;
 import com.xenoage.zong.musiclayout.Context;
+import com.xenoage.zong.musiclayout.notations.Notations;
 import com.xenoage.zong.musiclayout.notations.TimeNotation;
 import com.xenoage.zong.musiclayout.spacing.horizontal.ElementWidth;
 
@@ -17,11 +18,11 @@ public class TimeNotator
 	public static final TimeNotator timeNotator = new TimeNotator();
 	
 
-	@Override public TimeNotation notate(MPElement element, Context context) {
-		return notate((Time) element, context);
+	@Override public TimeNotation compute(MPElement element, Context context, Notations notations) {
+		return compute((Time) element, context);
 	}
 	
-	public TimeNotation notate(Time time, Context context) {
+	public TimeNotation compute(Time time, Context context) {
 		//front and rear gap: 1 space
 		float gap = 1f;
 		//gap between digits: 0.1 space

@@ -60,8 +60,8 @@ public class StaffStampingsStrategy {
 			float xOffset = 0; //start at the beginning of the staff
 			for (int iMeasure : range(measuresCount)) {
 				float xLeft = xOffset;
-				float xLeading = xLeft + css.get(iMeasure).getLeadingWidth();
-				xOffset += system.getColumnSpacings().get(iMeasure).getWidth();
+				float xLeading = xLeft + css.get(iMeasure).getLeadingWidthMm();
+				xOffset += system.getColumnSpacings().get(iMeasure).getWidthMm();
 				float xRight = xOffset;
 				//mark measure offset
 				measureMarkersLeft[iMeasure] = xLeft;
@@ -80,7 +80,7 @@ public class StaffStampingsStrategy {
 					ColumnSpacing cs = css.get(iMeasure);
 					CList<BeatOffset> measureBeats = clist();
 					lastBeatOffset = null;
-					for (Fraction beat : cs.getMeasureSpacings()[iStaff].getUsedBeats()) {
+					for (Fraction beat : cs.getMeasureSpacings().get(iStaff).getUsedBeats()) {
 						BeatOffset bo = cs.getBeatOffset(beat);
 						if (bo == null)
 							bo = lastBeatOffset; //fallback: reuse last offset (happens currently only for ActorPreludeSample)
@@ -88,12 +88,12 @@ public class StaffStampingsStrategy {
 							throw new IllegalStateException("No offset defined for beat " + beat + " in system " +
 								iSystem + ", staff " + iStaff + ", system measure " + iMeasure +
 								", global measure " + (system.getStartMeasureIndex() + iMeasure));
-						bo = bo.withOffsetMm(xOffset + bo.getOffsetMm() + cs.getLeadingWidth());
+						bo = bo.withOffsetMm(xOffset + bo.getOffsetMm() + cs.getLeadingWidthMm());
 						measureBeats.add(bo);
 						lastBeatOffset = bo;
 					}
 					staffBeats.add(measureBeats.close());
-					xOffset += cs.getWidth();
+					xOffset += cs.getWidthMm();
 				}
 
 				//create StaffMarks for each staff

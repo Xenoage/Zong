@@ -1,24 +1,26 @@
 package com.xenoage.zong.musiclayout.spacing.horizontal;
 
-import lombok.AllArgsConstructor;
+import java.util.List;
 
-import com.xenoage.utils.annotations.Const;
-import com.xenoage.utils.collections.IList;
+import lombok.AllArgsConstructor;
 
 /**
  * The leading spacing of a measure of a single staff.
  * 
  * This spacing contains for example elements
  * like initial clefs and key signatures.
+ * 
+ * TODO: we also need a "TrailingSpacing" for the last measure
+ * in a staff to warn about clef or key signature changes.
  *
  * @author Andreas Wenger
  */
-@Const @AllArgsConstructor
-public final class LeadingSpacing {
+@AllArgsConstructor
+public class LeadingSpacing {
 
-	/** The spacing elements of this measure leading. */
-	public final IList<ElementSpacing> spacingElements;
+	/** The element spacing of this measure leading. */
+	public List<ElementSpacing> elements;
 	/** The width of this leading spacing in interline spaces. */
-	public final float width;
+	public float width;
 
 }

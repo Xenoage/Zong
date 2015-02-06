@@ -1,4 +1,4 @@
-package com.xenoage.zong.musiclayout.layouter.cache;
+package com.xenoage.zong.musiclayout.notations;
 
 import static com.xenoage.utils.collections.CollectionUtils.map;
 
@@ -9,11 +9,9 @@ import lombok.Data;
 import com.xenoage.zong.core.music.ColumnElement;
 import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.core.music.chord.Chord;
-import com.xenoage.zong.musiclayout.notations.ChordNotation;
-import com.xenoage.zong.musiclayout.notations.Notation;
 
 /**
- * Cache for already computed {@link Notation}s.
+ * Collection of already computed {@link Notation}s.
  * 
  * A {@link Notation} is queried by the {@link MusicElement} it belongs
  * to. Also a staff index may be given, because for {@link ColumnElement}s
@@ -26,20 +24,17 @@ import com.xenoage.zong.musiclayout.notations.Notation;
  * 
  * @author Andreas Wenger
  */
-public final class NotationsCache {
+public class Notations {
 
 	@Data private static class StaffElement {
-
 		public final MusicElement element;
 		public final int staff;
 	}
 
+	private HashMap<Object, Notation> notations;
 
-	private HashMap<Object, Notation> cache;
-
-
-	public NotationsCache() {
-		this.cache = map();
+	public Notations() {
+		this.notations = map();
 	}
 
 	/**
@@ -50,7 +45,7 @@ public final class NotationsCache {
 	 */
 	public void add(Notation notation) {
 		if (notation != null)
-			cache.put(notation.getElement(), notation);
+			notations.put(notation.getElement(), notation);
 	}
 
 	/**
@@ -59,16 +54,12 @@ public final class NotationsCache {
 	 */
 	public void add(Notation notation, int staff) {
 		if (notation != null)
-			cache.put(new StaffElement(notation.getElement(), staff), notation);
+			notations.put(new StaffElement(notation.getElement(), staff), notation);
 	}
 
-	/**
-	 * Adds the elements of the given {@link StaffNotationCache}.
-	 * If elements are already there, they are replaced.
-	 */
 	@Deprecated
-	public void merge(NotationsCache cache) {
-		this.cache.putAll(cache.cache);
+	public void merge(Notations cache) {
+		this.notations.putAll(cache.notations);
 	}
 
 	/**
@@ -77,7 +68,7 @@ public final class NotationsCache {
 	 * with a staff before. See {@link #add(Notation, MusicElement)}.
 	 */
 	public Notation get(MusicElement element) {
-		return cache.get(element);
+		return notations.get(element);
 	}
 
 	/**
@@ -86,9 +77,9 @@ public final class NotationsCache {
 	 * If still not found, null is returned.
 	 */
 	public Notation get(MusicElement element, int staff) {
-		Notation ret = cache.get(new StaffElement(element, staff));
+		Notation ret = notations.get(new StaffElement(element, staff));
 		if (ret == null)
-			ret = cache.get(element);
+			ret = notations.get(element);
 		return ret;
 	}
 
@@ -104,11 +95,11 @@ public final class NotationsCache {
 	}
 
 	public int size() {
-		return cache.size();
+		return notations.size();
 	}
 
 	@Override public String toString() {
-		return "[" + getClass().getSimpleName() + " with " + cache.size() + " elements]";
+		return "[" + getClass().getSimpleName() + " with " + notations.size() + " elements]";
 	}
 
 }

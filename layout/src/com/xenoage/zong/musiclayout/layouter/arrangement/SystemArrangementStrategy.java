@@ -22,8 +22,8 @@ import com.xenoage.zong.core.music.layout.SystemBreak;
 import com.xenoage.zong.musiclayout.SystemArrangement;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterContext;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
-import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
 import com.xenoage.zong.musiclayout.layouter.columnspacing.VoiceSpacingsByStaff;
+import com.xenoage.zong.musiclayout.notations.Notations;
 import com.xenoage.zong.musiclayout.spacer.ColumnSpacer;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 
@@ -68,9 +68,9 @@ public class SystemArrangementStrategy
 	 *                       for the leading spacing are added.
 	 * @param lc             the context of the layouter
 	 */
-	public Tuple2<SystemArrangement, NotationsCache> computeSystemArrangement(int startMeasure,
+	public Tuple2<SystemArrangement, Notations> computeSystemArrangement(int startMeasure,
 		Size2f usableSize, float offsetY, int systemIndex, List<ColumnSpacing> measureColumnSpacings,
-		NotationsCache notations, ScoreLayouterContext lc) {
+		Notations notations, ScoreLayouterContext lc) {
 
 		//test if there is enough height for the system
 		Score score = lc.getScore();
@@ -122,17 +122,17 @@ public class SystemArrangementStrategy
 		CList<ColumnSpacing> systemMCSs = clist();
 		float usedWidth = 0;
 		int currentMeasure;
-		NotationsCache retLeadingNotations = new NotationsCache();
+		Notations retLeadingNotations = new Notations();
 		while (startMeasure + systemMCSs.size() < measuresCount) {
 			currentMeasure = startMeasure + systemMCSs.size();
 
 			//decide if to add a leading spacing to the current measure or not
 			ColumnSpacing currentMCS;
-			NotationsCache leadingNotations = null; //add leading notations to given cache only if
+			Notations leadingNotations = null; //add leading notations to given cache only if
 																							//measure column with leading spacing is really used
 			if (systemMCSs.size() == 0) {
 				//first measure within this system: add leading elements (clef, time sig.)
-				Tuple2<ColumnSpacing, NotationsCache> mcsData = measureColumnSpacingStrategy
+				Tuple2<ColumnSpacing, Notations> mcsData = measureColumnSpacingStrategy
 					.computeColumnSpacing(currentMeasure, true /* leading! */, notations, lc);
 				currentMCS = mcsData.get1();
 				leadingNotations = mcsData.get2();
@@ -149,7 +149,7 @@ public class SystemArrangementStrategy
 				break;
 			}
 			else {
-				usedWidth += currentMCS.getWidth();
+				usedWidth += currentMCS.getWidthMm();
 				systemMCSs.add(currentMCS);
 				if (leadingNotations != null)
 					retLeadingNotations.merge(leadingNotations);
@@ -189,7 +189,7 @@ public class SystemArrangementStrategy
 
 		//enough horizontal space?
 		float remainingWidth = usableWidth - usedWidth;
-		if (remainingWidth < measure.getWidth() && !force)
+		if (remainingWidth < measure.getWidthMm() && !force)
 			return false;
 
 		//ok, append the measure

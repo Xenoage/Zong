@@ -16,8 +16,8 @@ import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.core.music.VoiceTest;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.rest.Rest;
-import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
+import com.xenoage.zong.musiclayout.notations.Notations;
 import com.xenoage.zong.musiclayout.notations.RestNotation;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.musiclayout.settings.LayoutSettingsTest;
@@ -60,7 +60,7 @@ public class SingleVoiceSpacerTest {
 	@Test public void testSimple() {
 		//create voice and notations
 		Voice voice = new Voice(alist((VoiceElement) r1, r2, r3, r4));
-		NotationsCache notations = new NotationsCache();
+		Notations notations = new Notations();
 		notations.add(new RestNotation(r1, new ElementWidth(2, 2, 4)));
 		notations.add(new RestNotation(r2, new ElementWidth(2, 2, 2)));
 		notations.add(new RestNotation(r3, new ElementWidth(2, 2, 3)));
@@ -97,7 +97,7 @@ public class SingleVoiceSpacerTest {
 	@Test public void testGrace1() {
 		//create voice and notations
 		Voice voice = new Voice(alist((VoiceElement) r1, g1, g2, r4));
-		NotationsCache notations = new NotationsCache();
+		Notations notations = new Notations();
 		notations.add(new RestNotation(r1, new ElementWidth(2, 2, 13)));
 		notations.add(new ChordNotation(g1, new ElementWidth(1, 2, 1), null, null, null, null, null));
 		notations.add(new ChordNotation(g2, new ElementWidth(1, 2, 1), null, null, null, null, null));
@@ -133,7 +133,7 @@ public class SingleVoiceSpacerTest {
 	@Test public void testGrace2() {
 		//create voice and notations
 		Voice voice = new Voice(alist((VoiceElement) r1, g1, g2, r4));
-		NotationsCache notations = new NotationsCache();
+		Notations notations = new Notations();
 		notations.add(new RestNotation(r1, new ElementWidth(2, 2, 7)));
 		notations.add(new ChordNotation(g1, new ElementWidth(1, 2, 1), null, null, null, null, null));
 		notations.add(new ChordNotation(g2, new ElementWidth(1, 2, 1), null, null, null, null, null));
@@ -170,7 +170,7 @@ public class SingleVoiceSpacerTest {
 	@Test public void testGrace3() {
 		//create voice and notations
 		Voice voice = new Voice(alist((VoiceElement) r1, g1, g2, r4));
-		NotationsCache notations = new NotationsCache();
+		Notations notations = new Notations();
 		notations.add(new RestNotation(r1, new ElementWidth(2, 2, 3)));
 		notations.add(new ChordNotation(g1, new ElementWidth(1, 2, 1), null, null, null, null, null));
 		notations.add(new ChordNotation(g2, new ElementWidth(1, 2, 1), null, null, null, null, null));

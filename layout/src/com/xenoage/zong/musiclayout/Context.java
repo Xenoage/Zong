@@ -6,7 +6,6 @@ import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.MusicContext;
 import com.xenoage.zong.core.music.util.Interval;
 import com.xenoage.zong.core.position.MP;
-import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.symbols.SymbolPool;
 
@@ -23,8 +22,6 @@ public class Context {
 	public SymbolPool symbols;
 	/** Layout settings. */
 	public LayoutSettings settings;
-	/** The cached element notations. */
-	public NotationsCache notationsCache = new NotationsCache();
 	
 	/** The current musical position. Some values may be unknown, dependent
 	 * on the state of the layouter. This value can be saved and popped on

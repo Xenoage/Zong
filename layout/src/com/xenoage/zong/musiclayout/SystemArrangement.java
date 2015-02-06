@@ -105,7 +105,7 @@ import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 		if (Float.isNaN(usedWidth)) {
 			usedWidth = 0;
 			for (ColumnSpacing mcs : columnSpacings) {
-				usedWidth += mcs.getWidth();
+				usedWidth += mcs.getWidthMm();
 			}
 		}
 		return usedWidth;

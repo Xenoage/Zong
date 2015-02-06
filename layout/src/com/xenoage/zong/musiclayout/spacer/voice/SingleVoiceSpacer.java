@@ -10,8 +10,8 @@ import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.musiclayout.Context;
-import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
 import com.xenoage.zong.musiclayout.notations.Notation;
+import com.xenoage.zong.musiclayout.notations.Notations;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.musiclayout.spacing.horizontal.ElementWidth;
 import com.xenoage.zong.musiclayout.spacing.horizontal.ElementSpacing;
@@ -32,17 +32,15 @@ public class SingleVoiceSpacer {
 	public static final SingleVoiceSpacer singleVoiceSpacer = new SingleVoiceSpacer();
 	
 
-	public VoiceSpacing compute(Context context) {
-		//measureBeats could be computed, but this is expensive and the caller can
-		//reuse the value for the whole measure column
+	public VoiceSpacing compute(Context context, Notations notations) {
 		Voice voice = context.score.getVoice(context.mp);
 		float is = context.score.getInterlineSpace(context.mp);
 		Fraction measureBeats = context.score.getMeasureBeats(context.mp.measure);
-		return compute(voice, is, measureBeats, context.notationsCache, context.settings);
+		return compute(voice, is, measureBeats, notations, context.settings);
 	}
 
 	VoiceSpacing compute(Voice voice, float interlineSpace, Fraction measureBeats, 
-		NotationsCache notations, LayoutSettings layoutSettings) {
+		Notations notations, LayoutSettings layoutSettings) {
 		LinkedList<ElementSpacing> ret = llist();
 
 		//special case: no elements in the measure.
@@ -104,7 +102,7 @@ public class SingleVoiceSpacer {
 				symbolOffset = Math.min(lastFrontGapOffset, lastSymbolOffset - elementWidth.rearGap) -
 					elementWidth.symbolWidth;
 			}
-			ret.addFirst(new ElementSpacing(element, curBeat, grace, symbolOffset));
+			ret.addFirst(new ElementSpacing(notation, curBeat, symbolOffset));
 			lastFrontGapOffset = symbolOffset - elementWidth.frontGap;
 			lastSymbolOffset = symbolOffset;
 		}

@@ -16,7 +16,7 @@ import com.xenoage.zong.musiclayout.FrameArrangement;
 import com.xenoage.zong.musiclayout.SystemArrangement;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterContext;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
-import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
+import com.xenoage.zong.musiclayout.notations.Notations;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 
 /**
@@ -50,9 +50,9 @@ public class FrameArrangementStrategy
 	 * given index to a {@link FrameArrangement}. Returns the frame arrangements
 	 * and a list of created notations for the leading notations.
 	 */
-	public Tuple2<FrameArrangement, NotationsCache> computeFrameArrangement(int startMeasure,
+	public Tuple2<FrameArrangement, Notations> computeFrameArrangement(int startMeasure,
 		int startSystem, Size2f usableSize, List<ColumnSpacing> columnSpacings,
-		NotationsCache notations, ScoreLayouterContext lc) {
+		Notations notations, ScoreLayouterContext lc) {
 		Score score = lc.getScore();
 		ScoreFormat scoreFormat = score.getFormat();
 		ScoreHeader scoreHeader = score.getHeader();
@@ -66,14 +66,14 @@ public class FrameArrangementStrategy
 
 		//append systems to the frame
 		CList<SystemArrangement> systems = clist();
-		NotationsCache retLeadingNotations = new NotationsCache();
+		Notations retLeadingNotations = new Notations();
 		while (measureIndex < measuresCount) {
 			//try to create system on this frame
-			Tuple2<SystemArrangement, NotationsCache> t = systemArrangementStrategy
+			Tuple2<SystemArrangement, Notations> t = systemArrangementStrategy
 				.computeSystemArrangement(measureIndex, usableSize, offsetY, systemIndex, columnSpacings,
 					notations, lc);
 			SystemArrangement system = (t != null ? t.get1() : null);
-			NotationsCache leadingNotations = (t != null ? t.get2() : null);
+			Notations leadingNotations = (t != null ? t.get2() : null);
 
 			//was there enough place for this system?
 			if (system != null) {

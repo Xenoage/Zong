@@ -42,8 +42,8 @@ public class StretchHorizontalSystemFillingStrategy
 		float voicesWidth = 0;
 		float leadingsWidth = 0;
 		for (ColumnSpacing mcs : systemArrangement.getColumnSpacings()) {
-			voicesWidth += mcs.getVoicesWidth();
-			leadingsWidth += mcs.getLeadingWidth();
+			voicesWidth += mcs.getVoicesWidthMm();
+			leadingsWidth += mcs.getLeadingWidthMm();
 		}
 
 		//compute the stretching factor for the voice spacings
@@ -56,19 +56,19 @@ public class StretchHorizontalSystemFillingStrategy
 		CList<ColumnSpacing> newMCSpacings = clist(systemArrangement.getColumnSpacings().size());
 		for (ColumnSpacing column : systemArrangement.getColumnSpacings()) {
 			//beat offsets
-			CList<BeatOffset> newBeatOffsets = clist(column.getBeatOffsets().length);
+			CList<BeatOffset> newBeatOffsets = clist(column.beatOffsets.size());
 			for (BeatOffset oldBeatOffset : column.getBeatOffsets()) {
 				//stretch the offset
 				newBeatOffsets.add(oldBeatOffset.withOffsetMm(oldBeatOffset.getOffsetMm() * stretch));
 			}
-			CList<BeatOffset> newBarlineOffsets = clist(column.getBarlineOffsets().length);
+			CList<BeatOffset> newBarlineOffsets = clist(column.barlineOffsets.size());
 			for (BeatOffset oldBarlineOffset : column.getBarlineOffsets()) {
 				//stretch the offset
 				newBarlineOffsets.add(oldBarlineOffset.withOffsetMm(oldBarlineOffset.getOffsetMm() *
 					stretch));
 			}
 			//measures
-			CList<MeasureSpacing> newMeasureSpacings = clist(column.getMeasureSpacings().length);
+			CList<MeasureSpacing> newMeasureSpacings = clist(column.measureSpacings.size());
 			for (MeasureSpacing oldMS : column.getMeasureSpacings()) {
 				//measure elements
 				List<ElementSpacing> me = oldMS.getMeasureElementsSpacings().elements;
@@ -108,8 +108,8 @@ public class StretchHorizontalSystemFillingStrategy
 					oldMS.getLeadingSpacing()));
 			}
 
-			newMCSpacings.add(new ColumnSpacing(column.getScore(), newMeasureSpacings.toArray(MeasureSpacing.empty),
-				newBeatOffsets.toArray(BeatOffset.empty), newBarlineOffsets.toArray(BeatOffset.empty)));
+			newMCSpacings.add(new ColumnSpacing(column.getScore(), newMeasureSpacings,
+				newBeatOffsets, newBarlineOffsets));
 
 		}
 

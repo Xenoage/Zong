@@ -66,7 +66,7 @@ public class AlignedVoicesSpacer {
 			float lastOriginalOffsetIs = 0;
 			for (int iElement : rangeReverse(lastElement, firstElement)) {
 				ElementSpacing e = spacingElements.get(iElement);
-				if (!e.grace) {
+				if (false == e.isGrace()) {
 					//normal element: interpolate position
 					float currentElementOffset = e.offsetIs - lastEndElementPosition;
 					float newElementOffset;

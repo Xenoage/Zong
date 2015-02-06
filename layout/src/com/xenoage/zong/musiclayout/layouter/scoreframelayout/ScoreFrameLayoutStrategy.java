@@ -69,7 +69,6 @@ import com.xenoage.zong.musiclayout.continued.ContinuedVolta;
 import com.xenoage.zong.musiclayout.continued.ContinuedWedge;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterContext;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
-import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenBeamsCache;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenLyricsCache;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenSlursCache;
@@ -82,6 +81,7 @@ import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.StaffStamping
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
 import com.xenoage.zong.musiclayout.notations.ClefNotation;
 import com.xenoage.zong.musiclayout.notations.Notation;
+import com.xenoage.zong.musiclayout.notations.Notations;
 import com.xenoage.zong.musiclayout.notations.RestNotation;
 import com.xenoage.zong.musiclayout.notations.TimeNotation;
 import com.xenoage.zong.musiclayout.notations.TraditionalKeyNotation;
@@ -147,7 +147,7 @@ public class ScoreFrameLayoutStrategy
 	 *                           spanning over more than one frame
 	 */
 	public ScoreFrameLayout computeScoreFrameLayout(FrameArrangement frameArr, int frameIndex,
-		NotationsCache notations, List<ContinuedElement> unclosedElements, ScoreLayouterContext lc) {
+		Notations notations, List<ContinuedElement> unclosedElements, ScoreLayouterContext lc) {
 		Score score = lc.getScore();
 		ScoreHeader header = score.getHeader();
 		int stavesCount = score.getStavesCount();
@@ -250,8 +250,8 @@ public class ScoreFrameLayoutStrategy
 				}
 				//for the first measure in the system: begin after leading spacing
 				if (iMeasure == 0)
-					xLeft += system.getColumnSpacings().get(iMeasure).getLeadingWidth();
-				xOffset += system.getColumnSpacings().get(iMeasure).getWidth();
+					xLeft += system.getColumnSpacings().get(iMeasure).getLeadingWidthMm();
+				xOffset += system.getColumnSpacings().get(iMeasure).getWidthMm();
 				float xRight = xOffset;
 				//regard the groups of the score
 				for (iStaff = 0; iStaff < stavesCount; iStaff++) {
@@ -278,7 +278,7 @@ public class ScoreFrameLayoutStrategy
 					//middle barlines
 					for (BeatE<Barline> middleBarline : columnHeader.getMiddleBarlines()) {
 						otherStampsPool.add(new BarlineStamping(middleBarline.element, groupStaves, xLeft +
-							system.getColumnSpacings().get(iMeasure).getBarlineOffset(middleBarline.beat),
+							system.getColumnSpacings().get(iMeasure).getBarlineOffsetMm(middleBarline.beat),
 							barlineGroupStyle));
 					}
 					//go to next group
@@ -296,12 +296,12 @@ public class ScoreFrameLayoutStrategy
 				for (int iMeasure = 0; iMeasure < system.getColumnSpacings().size(); iMeasure++) {
 					int globalMeasureIndex = system.getStartMeasureIndex() + iMeasure;
 					ColumnSpacing measureColumnSpacing = system.getColumnSpacings().get(iMeasure);
-					MeasureSpacing measureStaffSpacing = measureColumnSpacing.getMeasureSpacings()[iStaff];
+					MeasureSpacing measureStaffSpacing = measureColumnSpacing.getMeasureSpacings().get(iStaff);
 
 					//add leading spacing elements, if available
 					LeadingSpacing leadingSpacing = measureStaffSpacing.getLeadingSpacing();
 					if (leadingSpacing != null) {
-						for (ElementSpacing spacingElement : leadingSpacing.spacingElements) {
+						for (ElementSpacing spacingElement : leadingSpacing.elements) {
 							MusicElement element = spacingElement.element;
 							if (element != null) {
 								float x = xOffset + spacingElement.offsetIs * interlineSpace;
@@ -352,7 +352,7 @@ public class ScoreFrameLayoutStrategy
 					}
 
 					//now begin with the voices
-					float voicesOffset = xOffset + measureColumnSpacing.getLeadingWidth();
+					float voicesOffset = xOffset + measureColumnSpacing.getLeadingWidthMm();
 
 					//add measure elements within this measure
 					for (ElementSpacing spacingElement : measureStaffSpacing.getMeasureElementsSpacings().elements) {
@@ -405,7 +405,7 @@ public class ScoreFrameLayoutStrategy
 
 					}
 
-					xOffset += measureColumnSpacing.getWidth();
+					xOffset += measureColumnSpacing.getWidthMm();
 
 				}
 

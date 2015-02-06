@@ -12,6 +12,7 @@ import static com.xenoage.zong.musiclayout.notator.chord.stem.StemDirector.stemD
 
 import java.util.Map;
 
+import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.font.FontInfo;
 import com.xenoage.utils.font.TextMeasurer;
 import com.xenoage.zong.core.Score;
@@ -25,6 +26,7 @@ import com.xenoage.zong.core.text.FormattedText;
 import com.xenoage.zong.core.text.FormattedTextStyle;
 import com.xenoage.zong.musiclayout.Context;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
+import com.xenoage.zong.musiclayout.notations.Notations;
 import com.xenoage.zong.musiclayout.notations.chord.AccidentalsNotation;
 import com.xenoage.zong.musiclayout.notations.chord.ArticulationsNotation;
 import com.xenoage.zong.musiclayout.notations.chord.NotesNotation;
@@ -44,11 +46,11 @@ public class ChordNotator
 	public static final ChordNotator chordNotator = new ChordNotator();
 	
 	
-	@Override public ChordNotation notate(MPElement element, Context context) {
-		return notate((Chord) element, context);
+	@Override public ChordNotation compute(MPElement element, Context context, Notations notations) {
+		return compute((Chord) element, context, notations);
 	}
 	
-	public ChordNotation notate(Chord chord, Context context) {
+	public ChordNotation compute(Chord chord, Context context, @MaybeNull Notations notations) {
 		Score score = context.score;
 		float interlineSpace = score.getInterlineSpace(context.mp);
 		FontInfo lyricsFont = score.getFormat().getLyricFont();
@@ -64,14 +66,15 @@ public class ChordNotator
 		StemDirection stemDirection = chord.getStem().getDirection();
 		if (stemDirection == StemDirection.Default) {
 			//if stem direction was not computed yet, compute it now
-			stemDirection = context.notationsCache.getChord(chord).stemDirection;
+			if (notations != null)
+				stemDirection = notations.getChord(chord).stemDirection;
 			if (stemDirection == StemDirection.Default) {
 				Map<Chord, StemDirection> computedStems = stemDirector.compute(chord);
 				stemDirection = computedStems.get(chord);
 				//also remember the other computed stems
-				for (Chord computedChord : computedStems.keySet()) {
-					context.notationsCache.getChord(computedChord).stemDirection = computedStems.get(computedChord);
-				}
+				if (notations != null)
+					for (Chord computedChord : computedStems.keySet())
+						notations.getChord(computedChord).stemDirection = computedStems.get(computedChord);
 			}
 		}
 

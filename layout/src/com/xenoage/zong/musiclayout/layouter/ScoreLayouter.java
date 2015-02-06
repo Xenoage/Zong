@@ -15,7 +15,6 @@ import com.xenoage.zong.musiclayout.ScoreLayout;
 import com.xenoage.zong.musiclayout.layouter.arrangement.FrameArrangementStrategy;
 import com.xenoage.zong.musiclayout.layouter.arrangement.SystemArrangementStrategy;
 import com.xenoage.zong.musiclayout.layouter.beamednotation.BeamedStemAlignmentNotationsStrategy;
-import com.xenoage.zong.musiclayout.layouter.columnspacing.LeadingSpacingStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.DirectionStampingStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.LyricStampingStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.MusicElementStampingStrategy;
@@ -29,6 +28,7 @@ import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.musiclayout.spacer.ColumnSpacer;
 import com.xenoage.zong.musiclayout.spacer.beat.BarlinesBeatOffsetter;
 import com.xenoage.zong.musiclayout.spacer.beat.VoicesBeatOffsetter;
+import com.xenoage.zong.musiclayout.spacer.measure.LeadingSpacer;
 import com.xenoage.zong.musiclayout.spacer.measure.MeasureElementsSpacer;
 import com.xenoage.zong.musiclayout.spacer.voice.AlignedVoicesSpacer;
 import com.xenoage.zong.musiclayout.spacer.voice.SingleVoiceSpacer;
@@ -124,9 +124,7 @@ public class ScoreLayouter {
 	 */
 	ScoreLayoutStrategy createStrategyTree() {
 		//measure column subtree
-		ColumnSpacer columnSpacingStrategy = new ColumnSpacer(
-			new VoicesBeatOffsetter(), new BarlinesBeatOffsetter(),
-			new AlignedVoicesSpacer(), new LeadingSpacingStrategy());
+		ColumnSpacer columnSpacingStrategy = new ColumnSpacer();
 		//complete tree
 		return new ScoreLayoutStrategy(
 			columnSpacingStrategy, new FrameArrangementStrategy(new SystemArrangementStrategy(

@@ -19,8 +19,8 @@ import com.xenoage.zong.musiclayout.layouter.beamednotation.design.DoubleBeamDes
 import com.xenoage.zong.musiclayout.layouter.beamednotation.design.MultipleBeamDesign;
 import com.xenoage.zong.musiclayout.layouter.beamednotation.design.SingleBeamDesign;
 import com.xenoage.zong.musiclayout.layouter.beamednotation.design.TripleBeamDesign;
-import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
+import com.xenoage.zong.musiclayout.notations.Notations;
 import com.xenoage.zong.musiclayout.notations.beam.BeamStemAlignments;
 import com.xenoage.zong.musiclayout.notations.chord.AccidentalsNotation;
 import com.xenoage.zong.musiclayout.notations.chord.NotesNotation;
@@ -49,7 +49,7 @@ public class SingleMeasureSingleStaffStrategy
 	 * The NotationsCache is updated.
 	 */
 	public void computeNotations(Score score, Beam beam, ColumnSpacing columnSpacing,
-		NotationsCache notations) {
+		Notations notations) {
 
 		//collect needed information
 		NotesNotation[] chordNa = new NotesNotation[beam.getWaypoints().size()];
@@ -66,7 +66,7 @@ public class SingleMeasureSingleStaffStrategy
 			ChordNotation cn = notations.getChord(chord);
 			chordNa[i] = cn.notes;
 			AccidentalsNotation aa = cn.accidentals;
-			stemX[i] = columnSpacing.getOffset(chord, staffIndex, voiceIndex) +
+			stemX[i] = columnSpacing.getOffsetIs(chord, staffIndex, voiceIndex) +
 				(aa != null ? aa.widthIs : 0) + chordNa[i].stemOffsetIs;
 			i++;
 		}

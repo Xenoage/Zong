@@ -10,7 +10,7 @@ import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.layouter.beamednotation.alignment.SingleMeasureSingleStaffStrategy;
 import com.xenoage.zong.musiclayout.layouter.beamednotation.alignment.SingleMeasureTwoStavesStrategy;
-import com.xenoage.zong.musiclayout.layouter.cache.NotationsCache;
+import com.xenoage.zong.musiclayout.notations.Notations;
 import com.xenoage.zong.musiclayout.notator.chord.stem.beam.BeamedStemDirector;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 
@@ -34,7 +34,7 @@ public class BeamedStemAlignmentNotationsStrategy
 	 * The NotationsCache is updated.
 	 */
 	public void computeNotations(Score score, Beam beam,
-		List<ColumnSpacing> columnSpacings, NotationsCache notations) {
+		List<ColumnSpacing> columnSpacings, Notations notations) {
 
 		//choose appropriate strategy
 		if (beam.getHorizontalSpan() == HorizontalSpan.SingleMeasure) {
