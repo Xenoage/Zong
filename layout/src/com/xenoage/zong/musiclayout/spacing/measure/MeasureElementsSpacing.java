@@ -1,4 +1,4 @@
-package com.xenoage.zong.musiclayout.spacing.horizontal;
+package com.xenoage.zong.musiclayout.spacing.measure;
 
 import java.util.Collections;
 import java.util.List;

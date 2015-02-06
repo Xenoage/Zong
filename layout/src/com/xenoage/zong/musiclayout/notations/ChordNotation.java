@@ -10,7 +10,7 @@ import com.xenoage.zong.musiclayout.notations.chord.AccidentalsNotation;
 import com.xenoage.zong.musiclayout.notations.chord.ArticulationsNotation;
 import com.xenoage.zong.musiclayout.notations.chord.NotesNotation;
 import com.xenoage.zong.musiclayout.notations.chord.StemNotation;
-import com.xenoage.zong.musiclayout.spacing.horizontal.ElementWidth;
+import com.xenoage.zong.musiclayout.spacing.measure.ElementWidth;
 
 /**
  * This class contains layout information about a chord, like its width and the

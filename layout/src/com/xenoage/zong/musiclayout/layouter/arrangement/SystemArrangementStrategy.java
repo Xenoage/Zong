@@ -4,12 +4,12 @@ import static com.xenoage.utils.collections.CList.clist;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.kernel.Tuple2.t;
 import static com.xenoage.zong.core.position.MP.atStaff;
+import static com.xenoage.zong.musiclayout.spacer.measure.ColumnSpacer.columnSpacer;
 
 import java.util.List;
 
 import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.kernel.Tuple2;
-import com.xenoage.utils.kernel.Tuple3;
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.format.Break;
@@ -19,20 +19,22 @@ import com.xenoage.zong.core.format.SystemLayout;
 import com.xenoage.zong.core.header.ScoreHeader;
 import com.xenoage.zong.core.music.Staff;
 import com.xenoage.zong.core.music.layout.SystemBreak;
-import com.xenoage.zong.musiclayout.SystemArrangement;
+import com.xenoage.zong.core.position.MP;
+import com.xenoage.zong.musiclayout.Context;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterContext;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
-import com.xenoage.zong.musiclayout.layouter.columnspacing.VoiceSpacingsByStaff;
 import com.xenoage.zong.musiclayout.notations.Notations;
-import com.xenoage.zong.musiclayout.spacer.ColumnSpacer;
-import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
+import com.xenoage.zong.musiclayout.spacer.measure.ColumnSpacer;
+import com.xenoage.zong.musiclayout.spacing.measure.ColumnSpacing;
+import com.xenoage.zong.musiclayout.spacing.measure.LeadingSpacing;
+import com.xenoage.zong.musiclayout.spacing.system.SystemArrangement;
 
 /**
- * The {@link SystemArrangementStrategy} arranges
- * a list of measure columns into a {@link SystemArrangement}.
+ * Arranges a list of measure columns into a {@link SystemArrangement}.
  * 
  * The systems will not be stretched to their full possible width.
- * This can be done by another strategy.
+ * This can be done in a later layouting step. However, a {@link LeadingSpacing}
+ * is added at the beginning of the system.
  * 
  * This strategy also regards forced and prohibited system breaks
  * and custom system margins (left, right) and staff margins.
@@ -128,14 +130,17 @@ public class SystemArrangementStrategy
 
 			//decide if to add a leading spacing to the current measure or not
 			ColumnSpacing currentMCS;
-			Notations leadingNotations = null; //add leading notations to given cache only if
-																							//measure column with leading spacing is really used
 			if (systemMCSs.size() == 0) {
 				//first measure within this system: add leading elements (clef, time sig.)
-				Tuple2<ColumnSpacing, Notations> mcsData = measureColumnSpacingStrategy
-					.computeColumnSpacing(currentMeasure, true /* leading! */, notations, lc);
-				currentMCS = mcsData.get1();
-				leadingNotations = mcsData.get2();
+				
+				//TODO
+				Context context = new Context();
+				context.score = lc.getScore();
+				context.symbols = lc.getSymbolPool();
+				context.settings = lc.getLayoutSettings();
+				
+				context.mp = MP.atMeasure(currentMeasure);
+				currentMCS = columnSpacer.compute(context, true /* leading! */, notations);
 			}
 			else {
 				//otherwise: use the optimal spacing
@@ -151,8 +156,6 @@ public class SystemArrangementStrategy
 			else {
 				usedWidth += currentMCS.getWidthMm();
 				systemMCSs.add(currentMCS);
-				if (leadingNotations != null)
-					retLeadingNotations.merge(leadingNotations);
 			}
 		}
 		systemMCSs.close();

@@ -49,10 +49,9 @@ public final class Notator {
 	
 	
 	/**
-	 * Computes the {@link Notation}s of all elements and stores
-	 * the results in the {@link Notations}.
+	 * Computes the {@link Notation}s of all elements and returns them.
 	 */
-	public void computeAll(Context context) {
+	public Notations computeAll(Context context) {
 		context.saveMp();
 		
 		Score score = context.score;
@@ -79,6 +78,7 @@ public final class Notator {
 		}
 		
 		context.restoreMp();
+		return notations;
 	}
 
 	/**

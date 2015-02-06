@@ -1,11 +1,11 @@
-package com.xenoage.zong.musiclayout;
+package com.xenoage.zong.musiclayout.spacing.system;
 
 import static com.xenoage.utils.collections.ArrayUtils.sum;
 import lombok.Getter;
 
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.collections.IList;
-import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
+import com.xenoage.zong.musiclayout.spacing.measure.ColumnSpacing;
 
 /**
  * A system arrangement is the horizontal and

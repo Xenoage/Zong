@@ -7,6 +7,9 @@ import com.xenoage.zong.core.format.ScoreFormat;
 import com.xenoage.zong.core.music.clef.Clef;
 import com.xenoage.zong.core.music.clef.ClefType;
 import com.xenoage.zong.musiclayout.notations.ClefNotation;
+import com.xenoage.zong.musiclayout.spacing.measure.ElementSpacing;
+import com.xenoage.zong.musiclayout.spacing.measure.ElementWidth;
+import com.xenoage.zong.musiclayout.spacing.measure.LeadingSpacing;
 
 /**
  * Mock class that can be used when a

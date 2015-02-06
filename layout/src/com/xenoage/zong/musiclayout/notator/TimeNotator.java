@@ -5,7 +5,7 @@ import com.xenoage.zong.core.position.MPElement;
 import com.xenoage.zong.musiclayout.Context;
 import com.xenoage.zong.musiclayout.notations.Notations;
 import com.xenoage.zong.musiclayout.notations.TimeNotation;
-import com.xenoage.zong.musiclayout.spacing.horizontal.ElementWidth;
+import com.xenoage.zong.musiclayout.spacing.measure.ElementWidth;
 
 /**
  * Computes a {@link TimeNotation} from a {@link Time}.

@@ -13,11 +13,11 @@ import com.xenoage.zong.core.format.ScoreFormat;
 import com.xenoage.zong.core.format.SystemLayout;
 import com.xenoage.zong.core.header.ScoreHeader;
 import com.xenoage.zong.musiclayout.FrameArrangement;
-import com.xenoage.zong.musiclayout.SystemArrangement;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterContext;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.notations.Notations;
-import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
+import com.xenoage.zong.musiclayout.spacing.measure.ColumnSpacing;
+import com.xenoage.zong.musiclayout.spacing.system.SystemArrangement;
 
 /**
  * A {@link FrameArrangementStrategy} arranges a list of

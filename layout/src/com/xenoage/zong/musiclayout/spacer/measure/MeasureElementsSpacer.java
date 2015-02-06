@@ -23,10 +23,10 @@ import com.xenoage.zong.musiclayout.Context;
 import com.xenoage.zong.musiclayout.notations.Notation;
 import com.xenoage.zong.musiclayout.notations.Notations;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
-import com.xenoage.zong.musiclayout.spacing.horizontal.ElementSpacing;
-import com.xenoage.zong.musiclayout.spacing.horizontal.LeadingSpacing;
-import com.xenoage.zong.musiclayout.spacing.horizontal.MeasureElementsSpacing;
-import com.xenoage.zong.musiclayout.spacing.horizontal.VoiceSpacing;
+import com.xenoage.zong.musiclayout.spacing.measure.ElementSpacing;
+import com.xenoage.zong.musiclayout.spacing.measure.LeadingSpacing;
+import com.xenoage.zong.musiclayout.spacing.measure.MeasureElementsSpacing;
+import com.xenoage.zong.musiclayout.spacing.measure.VoiceSpacing;
 
 /**
  * Computes the {@link MeasureElementsSpacing}s for the

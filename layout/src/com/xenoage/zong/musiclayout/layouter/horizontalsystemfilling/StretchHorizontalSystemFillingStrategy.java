@@ -9,12 +9,12 @@ import java.util.List;
 
 import com.xenoage.utils.collections.CList;
 import com.xenoage.zong.musiclayout.BeatOffset;
-import com.xenoage.zong.musiclayout.SystemArrangement;
-import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
-import com.xenoage.zong.musiclayout.spacing.horizontal.MeasureElementsSpacing;
-import com.xenoage.zong.musiclayout.spacing.horizontal.MeasureSpacing;
-import com.xenoage.zong.musiclayout.spacing.horizontal.ElementSpacing;
-import com.xenoage.zong.musiclayout.spacing.horizontal.VoiceSpacing;
+import com.xenoage.zong.musiclayout.spacing.measure.ColumnSpacing;
+import com.xenoage.zong.musiclayout.spacing.measure.ElementSpacing;
+import com.xenoage.zong.musiclayout.spacing.measure.MeasureElementsSpacing;
+import com.xenoage.zong.musiclayout.spacing.measure.MeasureSpacing;
+import com.xenoage.zong.musiclayout.spacing.measure.VoiceSpacing;
+import com.xenoage.zong.musiclayout.spacing.system.SystemArrangement;
 
 /**
  * This horizontal system filling strategy
@@ -90,7 +90,7 @@ public class StretchHorizontalSystemFillingStrategy
 					float lastNewOffset = Float.NaN;
 					for (int i : rangeReverse(oldVS.spacingElements)) {
 						ElementSpacing oldSE = oldVS.spacingElements.get(i);
-						if (oldSE.grace && !Float.isNaN(lastOldOffset)) {
+						if (oldSE.isGrace() && !Float.isNaN(lastOldOffset)) {
 							//grace element: keep distance to following element
 							float oldDistance = lastOldOffset - oldSE.offsetIs;
 							lastNewOffset = lastNewOffset - oldDistance;

@@ -17,9 +17,9 @@ import com.xenoage.zong.musiclayout.BeatOffset;
 import com.xenoage.zong.musiclayout.FrameArrangement;
 import com.xenoage.zong.musiclayout.MeasureMarks;
 import com.xenoage.zong.musiclayout.StaffMarks;
-import com.xenoage.zong.musiclayout.SystemArrangement;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.StaffStampings;
-import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
+import com.xenoage.zong.musiclayout.spacing.measure.ColumnSpacing;
+import com.xenoage.zong.musiclayout.spacing.system.SystemArrangement;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 
 /**

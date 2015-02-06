@@ -5,7 +5,7 @@ import lombok.Getter;
 
 import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.core.music.time.Time;
-import com.xenoage.zong.musiclayout.spacing.horizontal.ElementWidth;
+import com.xenoage.zong.musiclayout.spacing.measure.ElementWidth;
 
 /**
  * Mock object for a {@link Notation}.

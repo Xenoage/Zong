@@ -5,7 +5,7 @@ import lombok.Getter;
 
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.music.time.Time;
-import com.xenoage.zong.musiclayout.spacing.horizontal.ElementWidth;
+import com.xenoage.zong.musiclayout.spacing.measure.ElementWidth;
 
 /**
  * This class contains layout information

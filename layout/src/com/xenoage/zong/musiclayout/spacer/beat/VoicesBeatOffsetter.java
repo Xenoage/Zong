@@ -15,8 +15,8 @@ import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.musiclayout.BeatOffset;
-import com.xenoage.zong.musiclayout.spacing.horizontal.ElementSpacing;
-import com.xenoage.zong.musiclayout.spacing.horizontal.VoiceSpacing;
+import com.xenoage.zong.musiclayout.spacing.measure.ElementSpacing;
+import com.xenoage.zong.musiclayout.spacing.measure.VoiceSpacing;
 
 /**
  * Computes the common {@link BeatOffset}s for the given {@link VoiceSpacing}s

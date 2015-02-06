@@ -9,8 +9,8 @@ import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.math.Delta;
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.musiclayout.FrameArrangement;
-import com.xenoage.zong.musiclayout.SystemArrangement;
-import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
+import com.xenoage.zong.musiclayout.spacing.measure.ColumnSpacing;
+import com.xenoage.zong.musiclayout.spacing.system.SystemArrangement;
 
 /**
  * Test cases for a {@link FillPageVerticalFrameFillingStrategy}.

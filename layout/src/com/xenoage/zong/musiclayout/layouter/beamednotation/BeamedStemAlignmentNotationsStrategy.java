@@ -12,7 +12,7 @@ import com.xenoage.zong.musiclayout.layouter.beamednotation.alignment.SingleMeas
 import com.xenoage.zong.musiclayout.layouter.beamednotation.alignment.SingleMeasureTwoStavesStrategy;
 import com.xenoage.zong.musiclayout.notations.Notations;
 import com.xenoage.zong.musiclayout.notator.chord.stem.beam.BeamedStemDirector;
-import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
+import com.xenoage.zong.musiclayout.spacing.measure.ColumnSpacing;
 
 /**
  * This strategy computes the alignments of the stems and the widths

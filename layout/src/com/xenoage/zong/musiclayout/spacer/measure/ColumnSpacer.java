@@ -1,4 +1,4 @@
-package com.xenoage.zong.musiclayout.spacer;
+package com.xenoage.zong.musiclayout.spacer.measure;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
@@ -27,11 +27,11 @@ import com.xenoage.zong.musiclayout.layouter.columnspacing.VoiceSpacingsByStaff;
 import com.xenoage.zong.musiclayout.notations.Notation;
 import com.xenoage.zong.musiclayout.notations.Notations;
 import com.xenoage.zong.musiclayout.spacer.beat.BarlinesBeatOffsetter;
-import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
-import com.xenoage.zong.musiclayout.spacing.horizontal.LeadingSpacing;
-import com.xenoage.zong.musiclayout.spacing.horizontal.MeasureElementsSpacing;
-import com.xenoage.zong.musiclayout.spacing.horizontal.MeasureSpacing;
-import com.xenoage.zong.musiclayout.spacing.horizontal.VoiceSpacing;
+import com.xenoage.zong.musiclayout.spacing.measure.ColumnSpacing;
+import com.xenoage.zong.musiclayout.spacing.measure.LeadingSpacing;
+import com.xenoage.zong.musiclayout.spacing.measure.MeasureElementsSpacing;
+import com.xenoage.zong.musiclayout.spacing.measure.MeasureSpacing;
+import com.xenoage.zong.musiclayout.spacing.measure.VoiceSpacing;
 
 /**
  * Computes a {@link ColumnSpacing} from a measure column.

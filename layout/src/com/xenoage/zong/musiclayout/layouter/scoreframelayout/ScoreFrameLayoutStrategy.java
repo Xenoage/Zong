@@ -62,7 +62,6 @@ import com.xenoage.zong.core.text.FormattedTextString;
 import com.xenoage.zong.core.text.FormattedTextStyle;
 import com.xenoage.zong.musiclayout.FrameArrangement;
 import com.xenoage.zong.musiclayout.ScoreFrameLayout;
-import com.xenoage.zong.musiclayout.SystemArrangement;
 import com.xenoage.zong.musiclayout.continued.ContinuedElement;
 import com.xenoage.zong.musiclayout.continued.ContinuedSlur;
 import com.xenoage.zong.musiclayout.continued.ContinuedVolta;
@@ -86,11 +85,12 @@ import com.xenoage.zong.musiclayout.notations.RestNotation;
 import com.xenoage.zong.musiclayout.notations.TimeNotation;
 import com.xenoage.zong.musiclayout.notations.TraditionalKeyNotation;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
-import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
-import com.xenoage.zong.musiclayout.spacing.horizontal.LeadingSpacing;
-import com.xenoage.zong.musiclayout.spacing.horizontal.MeasureSpacing;
-import com.xenoage.zong.musiclayout.spacing.horizontal.ElementSpacing;
-import com.xenoage.zong.musiclayout.spacing.horizontal.VoiceSpacing;
+import com.xenoage.zong.musiclayout.spacing.measure.ColumnSpacing;
+import com.xenoage.zong.musiclayout.spacing.measure.ElementSpacing;
+import com.xenoage.zong.musiclayout.spacing.measure.LeadingSpacing;
+import com.xenoage.zong.musiclayout.spacing.measure.MeasureSpacing;
+import com.xenoage.zong.musiclayout.spacing.measure.VoiceSpacing;
+import com.xenoage.zong.musiclayout.spacing.system.SystemArrangement;
 import com.xenoage.zong.musiclayout.stampings.BarlineStamping;
 import com.xenoage.zong.musiclayout.stampings.BracketStamping;
 import com.xenoage.zong.musiclayout.stampings.FrameTextStamping;
@@ -302,7 +302,7 @@ public class ScoreFrameLayoutStrategy
 					LeadingSpacing leadingSpacing = measureStaffSpacing.getLeadingSpacing();
 					if (leadingSpacing != null) {
 						for (ElementSpacing spacingElement : leadingSpacing.elements) {
-							MusicElement element = spacingElement.element;
+							MusicElement element = spacingElement.getElement();
 							if (element != null) {
 								float x = xOffset + spacingElement.offsetIs * interlineSpace;
 								Notation notation = notations.get(element, iStaff);
@@ -356,7 +356,7 @@ public class ScoreFrameLayoutStrategy
 
 					//add measure elements within this measure
 					for (ElementSpacing spacingElement : measureStaffSpacing.getMeasureElementsSpacings().elements) {
-						MusicElement element = spacingElement.element;
+						MusicElement element = spacingElement.getElement();
 						if (element != null) {
 							Notation notation = notations.get(element, iStaff);
 							float x = voicesOffset + spacingElement.offsetIs * interlineSpace;
@@ -381,7 +381,7 @@ public class ScoreFrameLayoutStrategy
 
 						//create the voice elements
 						for (ElementSpacing spacingElement : voice) {
-							MusicElement element = spacingElement.element;
+							MusicElement element = spacingElement.getElement();
 							if (element != null /* TODO && (stampRests || !(element instanceof Rest)) */) {
 								Notation notation = notations.get(element, iStaff);
 								float x = voicesOffset + spacingElement.offsetIs * interlineSpace;

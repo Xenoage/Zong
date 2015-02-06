@@ -6,6 +6,7 @@ import static com.xenoage.utils.iterators.It.it;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.kernel.Tuple2.t;
 import static com.xenoage.zong.musiclayout.notator.Notator.notator;
+import static com.xenoage.zong.musiclayout.spacer.measure.ColumnSpacer.columnSpacer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,12 +22,12 @@ import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.util.Column;
+import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.layout.frames.ScoreFrame;
 import com.xenoage.zong.musiclayout.Context;
 import com.xenoage.zong.musiclayout.FrameArrangement;
 import com.xenoage.zong.musiclayout.ScoreFrameLayout;
 import com.xenoage.zong.musiclayout.ScoreLayout;
-import com.xenoage.zong.musiclayout.SystemArrangement;
 import com.xenoage.zong.musiclayout.continued.ContinuedElement;
 import com.xenoage.zong.musiclayout.layouter.arrangement.FrameArrangementStrategy;
 import com.xenoage.zong.musiclayout.layouter.beamednotation.BeamedStemAlignmentNotationsStrategy;
@@ -34,8 +35,9 @@ import com.xenoage.zong.musiclayout.layouter.horizontalsystemfilling.HorizontalS
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.ScoreFrameLayoutStrategy;
 import com.xenoage.zong.musiclayout.layouter.verticalframefilling.VerticalFrameFillingStrategy;
 import com.xenoage.zong.musiclayout.notations.Notations;
-import com.xenoage.zong.musiclayout.spacer.ColumnSpacer;
-import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
+import com.xenoage.zong.musiclayout.spacer.measure.ColumnSpacer;
+import com.xenoage.zong.musiclayout.spacing.measure.ColumnSpacing;
+import com.xenoage.zong.musiclayout.spacing.system.SystemArrangement;
 
 /**
  * This strategy creates a {@link ScoreLayout} from a given
@@ -79,8 +81,7 @@ public class ScoreLayoutStrategy
 		context.score = lc.getScore();
 		context.settings = lc.getLayoutSettings();
 		context.symbols = lc.getSymbolPool();
-		notator.computeAll(context);
-		Notations notations = context.notationsCache;
+		Notations notations = notator.computeAll(context);
 		
 		//optimal measure spacings
 		List<ColumnSpacing> optimalMeasureColumnSpacings = computeColumnSpacings(notations, lc);
@@ -111,8 +112,15 @@ public class ScoreLayoutStrategy
 		Score score = lc.getScore();
 		ArrayList<ColumnSpacing> ret = alist();
 		for (int iMeasure : range(0, score.getMeasuresCount() - 1)) {
-			ret.add(measureColumnSpacingStrategy.computeColumnSpacing(iMeasure, false, notations, lc)
-				.get1()); //TODO: also save optimal voice spacings for later reuse
+			
+			//TODO
+			Context context = new Context();
+			context.score = lc.getScore();
+			context.settings = lc.getLayoutSettings();
+			context.symbols = lc.getSymbolPool();
+			
+			context.mp = MP.atMeasure(iMeasure);
+			ret.add(columnSpacer.compute(context, false, notations));
 		}
 		return ret;
 	}

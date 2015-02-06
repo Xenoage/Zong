@@ -6,6 +6,7 @@ import lombok.Getter;
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.collections.IList;
 import com.xenoage.utils.math.geom.Size2f;
+import com.xenoage.zong.musiclayout.spacing.system.SystemArrangement;
 
 /**
  * This class contains the arrangement

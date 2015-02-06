@@ -6,7 +6,7 @@ import static com.xenoage.utils.kernel.Range.range;
 import com.xenoage.utils.collections.CList;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.musiclayout.FrameArrangement;
-import com.xenoage.zong.musiclayout.SystemArrangement;
+import com.xenoage.zong.musiclayout.spacing.system.SystemArrangement;
 
 /**
  * This vertical frame filling strategy

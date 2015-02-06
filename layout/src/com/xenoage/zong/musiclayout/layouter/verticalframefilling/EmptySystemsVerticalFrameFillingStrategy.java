@@ -9,8 +9,8 @@ import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.format.SystemLayout;
 import com.xenoage.zong.core.music.Staff;
 import com.xenoage.zong.musiclayout.FrameArrangement;
-import com.xenoage.zong.musiclayout.SystemArrangement;
-import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
+import com.xenoage.zong.musiclayout.spacing.measure.ColumnSpacing;
+import com.xenoage.zong.musiclayout.spacing.system.SystemArrangement;
 
 /**
  * This vertical frame filling strategy

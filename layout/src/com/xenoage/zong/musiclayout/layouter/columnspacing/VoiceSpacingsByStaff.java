@@ -5,7 +5,7 @@ import static com.xenoage.utils.collections.CollectionUtils.alist;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.xenoage.zong.musiclayout.spacing.horizontal.VoiceSpacing;
+import com.xenoage.zong.musiclayout.spacing.measure.VoiceSpacing;
 
 /**
  * A list of {@link VoiceSpacing}s, which can be accessed by
