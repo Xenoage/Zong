@@ -2,7 +2,7 @@ package com.xenoage.zong.musiclayout.layouter.columnspacing;
 
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.spacer.voice.SingleVoiceSpacer;
-import com.xenoage.zong.musiclayout.spacing.measure.VoiceSpacing;
+import com.xenoage.zong.musiclayout.spacing.VoiceSpacing;
 
 /**
  * This strategy creates a {@link VoiceSpacing} based on a given one,

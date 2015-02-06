@@ -14,7 +14,8 @@ import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.io.selection.ScoreSelection;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
-import com.xenoage.zong.musiclayout.spacing.system.SystemSpacing;
+import com.xenoage.zong.musiclayout.spacing.FrameSpacing;
+import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import com.xenoage.zong.musiclayout.stampings.Stamping;
 import com.xenoage.zong.symbols.SymbolPool;
@@ -112,7 +113,7 @@ public class ScoreLayout {
 	public int getFrameIndexOf(int measure) {
 		//go through all frames
 		for (int iFrame : range(frames)) {
-			FrameArrangement frameArr = frames.get(iFrame).getFrameArrangement();
+			FrameSpacing frameArr = frames.get(iFrame).getFrameArrangement();
 			if (frameArr.getStartMeasureIndex() <= measure && frameArr.getEndMeasureIndex() >= measure)
 				return iFrame;
 		}
@@ -126,7 +127,7 @@ public class ScoreLayout {
 	 * containing the measure with the given global index. If not found, -1 is returned.
 	 */
 	public int getSystemIndexOf(int frame, int measure) {
-		FrameArrangement frameArr = frames.get(frame).getFrameArrangement();
+		FrameSpacing frameArr = frames.get(frame).getFrameArrangement();
 		//go through all systems of this frame
 		for (int iSystem : range(frameArr.systems)) {
 			SystemSpacing system = frameArr.systems.get(iSystem);

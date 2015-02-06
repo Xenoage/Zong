@@ -5,7 +5,7 @@ import lombok.Getter;
 
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.music.rest.Rest;
-import com.xenoage.zong.musiclayout.spacing.measure.ElementWidth;
+import com.xenoage.zong.musiclayout.spacing.ElementWidth;
 
 /**
  * This class contains layout information about a rest.

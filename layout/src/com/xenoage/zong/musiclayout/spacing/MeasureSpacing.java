@@ -1,4 +1,4 @@
-package com.xenoage.zong.musiclayout.spacing.measure;
+package com.xenoage.zong.musiclayout.spacing;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 

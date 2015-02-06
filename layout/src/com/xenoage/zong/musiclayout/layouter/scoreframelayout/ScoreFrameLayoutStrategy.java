@@ -60,7 +60,6 @@ import com.xenoage.zong.core.text.FormattedText;
 import com.xenoage.zong.core.text.FormattedTextElement;
 import com.xenoage.zong.core.text.FormattedTextString;
 import com.xenoage.zong.core.text.FormattedTextStyle;
-import com.xenoage.zong.musiclayout.FrameArrangement;
 import com.xenoage.zong.musiclayout.ScoreFrameLayout;
 import com.xenoage.zong.musiclayout.continued.ContinuedElement;
 import com.xenoage.zong.musiclayout.continued.ContinuedSlur;
@@ -85,12 +84,13 @@ import com.xenoage.zong.musiclayout.notations.RestNotation;
 import com.xenoage.zong.musiclayout.notations.TimeNotation;
 import com.xenoage.zong.musiclayout.notations.TraditionalKeyNotation;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
-import com.xenoage.zong.musiclayout.spacing.measure.ColumnSpacing;
-import com.xenoage.zong.musiclayout.spacing.measure.ElementSpacing;
-import com.xenoage.zong.musiclayout.spacing.measure.LeadingSpacing;
-import com.xenoage.zong.musiclayout.spacing.measure.MeasureSpacing;
-import com.xenoage.zong.musiclayout.spacing.measure.VoiceSpacing;
-import com.xenoage.zong.musiclayout.spacing.system.SystemSpacing;
+import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
+import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
+import com.xenoage.zong.musiclayout.spacing.FrameSpacing;
+import com.xenoage.zong.musiclayout.spacing.LeadingSpacing;
+import com.xenoage.zong.musiclayout.spacing.MeasureSpacing;
+import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
+import com.xenoage.zong.musiclayout.spacing.VoiceSpacing;
 import com.xenoage.zong.musiclayout.stampings.BarlineStamping;
 import com.xenoage.zong.musiclayout.stampings.BracketStamping;
 import com.xenoage.zong.musiclayout.stampings.FrameTextStamping;
@@ -105,7 +105,7 @@ import com.xenoage.zong.symbols.SymbolPool;
 
 /**
  * This strategy creates the {@link ScoreFrameLayout}
- * for a given {@link FrameArrangement}.
+ * for a given {@link FrameSpacing}.
  * 
  * TODO: TIDY or redesign. This is probably the ugliest
  * class in the whole project.
@@ -141,12 +141,12 @@ public class ScoreFrameLayoutStrategy
 	}
 
 	/**
-	 * Creates a {@link ScoreFrameLayout} from the given {@link FrameArrangement}.
+	 * Creates a {@link ScoreFrameLayout} from the given {@link FrameSpacing}.
 	 * 
 	 * @param continuedElements  unclosed elements from the last frame, like slurs
 	 *                           spanning over more than one frame
 	 */
-	public ScoreFrameLayout computeScoreFrameLayout(FrameArrangement frameArr, int frameIndex,
+	public ScoreFrameLayout computeScoreFrameLayout(FrameSpacing frameArr, int frameIndex,
 		Notations notations, List<ContinuedElement> unclosedElements, ScoreLayouterContext lc) {
 		Score score = lc.getScore();
 		ScoreHeader header = score.getHeader();
@@ -213,7 +213,7 @@ public class ScoreFrameLayoutStrategy
 			for (BracketGroup bracketGroup : stavesList.getBracketGroups()) {
 				StavesRange r = bracketGroup.getStaves();
 				otherStampsPool.add(new BracketStamping(systemStaves.get(r.getStart()), systemStaves.get(r
-					.getStop()), system.getMarginLeft() - 1.4f, bracketGroup.getStyle()));
+					.getStop()), system.getMarginLeftMm() - 1.4f, bracketGroup.getStyle()));
 			}
 
 			//add the barlines

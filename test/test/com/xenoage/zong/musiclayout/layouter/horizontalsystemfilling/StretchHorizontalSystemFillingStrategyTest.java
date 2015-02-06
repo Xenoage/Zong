@@ -18,13 +18,13 @@ import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.musiclayout.BeatOffset;
+import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
+import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
+import com.xenoage.zong.musiclayout.spacing.MeasureElementsSpacing;
+import com.xenoage.zong.musiclayout.spacing.MeasureSpacing;
+import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
+import com.xenoage.zong.musiclayout.spacing.VoiceSpacing;
 import com.xenoage.zong.musiclayout.spacing.horizontal.LeadingSpacingMock;
-import com.xenoage.zong.musiclayout.spacing.measure.ColumnSpacing;
-import com.xenoage.zong.musiclayout.spacing.measure.ElementSpacing;
-import com.xenoage.zong.musiclayout.spacing.measure.MeasureElementsSpacing;
-import com.xenoage.zong.musiclayout.spacing.measure.MeasureSpacing;
-import com.xenoage.zong.musiclayout.spacing.measure.VoiceSpacing;
-import com.xenoage.zong.musiclayout.spacing.system.SystemSpacing;
 
 /**
  * Test cases for a {@link StretchHorizontalSystemFillingStrategy}.

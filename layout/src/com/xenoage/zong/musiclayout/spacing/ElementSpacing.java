@@ -1,4 +1,4 @@
-package com.xenoage.zong.musiclayout.spacing.measure;
+package com.xenoage.zong.musiclayout.spacing;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

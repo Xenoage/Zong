@@ -26,7 +26,7 @@ import com.xenoage.zong.musiclayout.notations.chord.AccidentalsNotation;
 import com.xenoage.zong.musiclayout.notations.chord.NotesNotation;
 import com.xenoage.zong.musiclayout.notations.chord.StemNotation;
 import com.xenoage.zong.musiclayout.notator.chord.stem.beam.BeamedStemDirector;
-import com.xenoage.zong.musiclayout.spacing.measure.ColumnSpacing;
+import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 
 /**
  * This class helps the {@link BeamedStemAlignmentNotationsStrategy}

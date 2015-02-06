@@ -10,8 +10,8 @@ import java.util.List;
 
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.musiclayout.BeatOffset;
-import com.xenoage.zong.musiclayout.spacing.measure.ElementSpacing;
-import com.xenoage.zong.musiclayout.spacing.measure.VoiceSpacing;
+import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
+import com.xenoage.zong.musiclayout.spacing.VoiceSpacing;
 
 /**
  * Computes the {@link VoiceSpacing}s for all voices in a measure column,

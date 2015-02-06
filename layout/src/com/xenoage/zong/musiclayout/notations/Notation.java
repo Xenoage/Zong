@@ -1,7 +1,7 @@
 package com.xenoage.zong.musiclayout.notations;
 
 import com.xenoage.zong.core.music.MusicElement;
-import com.xenoage.zong.musiclayout.spacing.measure.ElementWidth;
+import com.xenoage.zong.musiclayout.spacing.ElementWidth;
 
 /**
  * This is the interface for {@link MusicElement} layout

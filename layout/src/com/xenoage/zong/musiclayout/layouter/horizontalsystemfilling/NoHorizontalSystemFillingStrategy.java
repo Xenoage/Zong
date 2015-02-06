@@ -1,6 +1,6 @@
 package com.xenoage.zong.musiclayout.layouter.horizontalsystemfilling;
 
-import com.xenoage.zong.musiclayout.spacing.system.SystemSpacing;
+import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
 
 /**
  * This horizontal system filling strategy

@@ -21,9 +21,9 @@ import com.xenoage.zong.core.music.layout.SystemBreak;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.musiclayout.Context;
 import com.xenoage.zong.musiclayout.notations.Notations;
-import com.xenoage.zong.musiclayout.spacing.measure.ColumnSpacing;
-import com.xenoage.zong.musiclayout.spacing.measure.LeadingSpacing;
-import com.xenoage.zong.musiclayout.spacing.system.SystemSpacing;
+import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
+import com.xenoage.zong.musiclayout.spacing.LeadingSpacing;
+import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
 
 /**
  * Arranges a list of measure columns into a {@link SystemSpacing}.
@@ -48,7 +48,7 @@ public class SystemSpacer {
 	 * @param context        the context of the layouter, with the {@link MP} set to the start measure
 	 * @param usableSizeMm   the usable size within the score frame in mm
 	 * @param offsetYMm      the vertical offset of the system in mm
-	 * @param systemIndex    the global system index (over all pages)
+	 * @param systemIndex    the global system index (over all frames)
 	 * @param measureColumnSpacings  a list of all measure column spacings without leading spacings
 	 * @param notations      the notations of the elements, needed when a column has to be recomputed
 	 *                       because of a leading spacing

@@ -15,6 +15,7 @@ import com.xenoage.utils.math.geom.Rectangle2f;
 import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.musiclayout.continued.ContinuedElement;
+import com.xenoage.zong.musiclayout.spacing.FrameSpacing;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import com.xenoage.zong.musiclayout.stampings.Stamping;
 import com.xenoage.zong.musiclayout.stampings.StampingType;
@@ -34,7 +35,7 @@ import com.xenoage.zong.musiclayout.stampings.TextStamping;
 public final class ScoreFrameLayout {
 
 	/** Information about the systems in this frame. */
-	@Getter private FrameArrangement frameArrangement;
+	@Getter private FrameSpacing frameArrangement;
 
 	/** The list of all staff stampings of this frame. Staff stampings and
 	 * other stampings are divided for performance reasons. */
@@ -54,7 +55,7 @@ public final class ScoreFrameLayout {
 	@Getter @Setter private List<? extends Stamping> playbackStampings = alist();
 
 	
-	public ScoreFrameLayout(FrameArrangement frameArrangement, ArrayList<StaffStamping> staffStampings,
+	public ScoreFrameLayout(FrameSpacing frameArrangement, ArrayList<StaffStamping> staffStampings,
 		ArrayList<Stamping> otherStampings, ArrayList<ContinuedElement> continuedElements)
 	{
 		this.frameArrangement = frameArrangement;

@@ -1,7 +1,7 @@
 package com.xenoage.zong.musiclayout.layouter.verticalframefilling;
 
 import com.xenoage.zong.core.Score;
-import com.xenoage.zong.musiclayout.FrameArrangement;
+import com.xenoage.zong.musiclayout.spacing.FrameSpacing;
 
 /**
  * This vertical frame filling strategy changes nothing.
@@ -15,7 +15,7 @@ public class NoVerticalFrameFillingStrategy
 	public static final NoVerticalFrameFillingStrategy instance = new NoVerticalFrameFillingStrategy();
 
 
-	@Override public FrameArrangement computeFrameArrangement(FrameArrangement frameArr, Score score) {
+	@Override public FrameSpacing computeFrameArrangement(FrameSpacing frameArr, Score score) {
 		return frameArr;
 	}
 

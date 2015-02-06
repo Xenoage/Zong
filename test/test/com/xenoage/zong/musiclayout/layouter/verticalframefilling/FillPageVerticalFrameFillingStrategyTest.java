@@ -8,9 +8,9 @@ import org.junit.Test;
 import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.math.Delta;
 import com.xenoage.utils.math.geom.Size2f;
-import com.xenoage.zong.musiclayout.FrameArrangement;
-import com.xenoage.zong.musiclayout.spacing.measure.ColumnSpacing;
-import com.xenoage.zong.musiclayout.spacing.system.SystemSpacing;
+import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
+import com.xenoage.zong.musiclayout.spacing.FrameSpacing;
+import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
 
 /**
  * Test cases for a {@link FillPageVerticalFrameFillingStrategy}.
@@ -36,7 +36,7 @@ public class FillPageVerticalFrameFillingStrategyTest {
 		SystemSpacing system2 = createSystem(stavesCount, staffHeight, staffDistance, offset2);
 		SystemSpacing system3 = createSystem(stavesCount, staffHeight, staffDistance, offset3);
 
-		FrameArrangement frame = new FrameArrangement(ilist(system1, system2, system3),
+		FrameSpacing frame = new FrameSpacing(ilist(system1, system2, system3),
 			new Size2f(10, usableHeight));
 
 		//apply strategy

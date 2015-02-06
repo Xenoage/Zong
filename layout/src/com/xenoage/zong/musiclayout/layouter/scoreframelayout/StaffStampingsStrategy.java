@@ -15,23 +15,23 @@ import com.xenoage.utils.math.Fraction;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.musiclayout.BeatOffset;
-import com.xenoage.zong.musiclayout.FrameArrangement;
 import com.xenoage.zong.musiclayout.MeasureMarks;
 import com.xenoage.zong.musiclayout.StaffMarks;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.StaffStampings;
-import com.xenoage.zong.musiclayout.spacing.measure.ColumnSpacing;
-import com.xenoage.zong.musiclayout.spacing.system.SystemSpacing;
+import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
+import com.xenoage.zong.musiclayout.spacing.FrameSpacing;
+import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 
 /**
  * This strategy creates the staves of all systems of a
- * given {@link FrameArrangement}.
+ * given {@link FrameSpacing}.
  * 
  * @author Andreas Wenger
  */
 public class StaffStampingsStrategy {
 
-	public StaffStampings createStaffStampings(Score score, FrameArrangement frameArr) {
+	public StaffStampings createStaffStampings(Score score, FrameSpacing frameArr) {
 		int systemsCount = frameArr.getSystems().size();
 		int stavesCount = score.getStavesCount();
 		LinkedList<StaffStamping> allStaves = llist();
@@ -42,11 +42,11 @@ public class StaffStampingsStrategy {
 
 			//create staves of the system
 			StaffStamping[] systemStaves = new StaffStamping[stavesCount];
-			float systemXOffset = system.getMarginLeft();
-			float yOffset = system.getOffsetY();
+			float systemXOffset = system.getMarginLeftMm();
+			float yOffset = system.getOffsetYMm();
 			for (int iStaff = 0; iStaff < stavesCount; iStaff++) {
 				yOffset += system.getStaffDistance(iStaff);
-				StaffStamping staff = new StaffStamping(new Point2f(systemXOffset, yOffset), system.width,
+				StaffStamping staff = new StaffStamping(new Point2f(systemXOffset, yOffset), system.widthMm,
 					5, score.getInterlineSpace(iStaff), null);
 				systemStaves[iStaff] = staff;
 				yOffset += system.getStaffHeight(iStaff);

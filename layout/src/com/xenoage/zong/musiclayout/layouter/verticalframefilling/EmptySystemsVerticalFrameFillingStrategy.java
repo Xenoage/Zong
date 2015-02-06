@@ -1,16 +1,18 @@
 package com.xenoage.zong.musiclayout.layouter.verticalframefilling;
 
 import static com.xenoage.utils.collections.CList.clist;
+import static com.xenoage.utils.collections.CollectionUtils.getLast;
 import static com.xenoage.utils.kernel.Range.range;
 
 import com.xenoage.utils.collections.CList;
+import com.xenoage.utils.collections.CollectionUtils;
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.format.SystemLayout;
 import com.xenoage.zong.core.music.Staff;
-import com.xenoage.zong.musiclayout.FrameArrangement;
-import com.xenoage.zong.musiclayout.spacing.measure.ColumnSpacing;
-import com.xenoage.zong.musiclayout.spacing.system.SystemSpacing;
+import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
+import com.xenoage.zong.musiclayout.spacing.FrameSpacing;
+import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
 
 /**
  * This vertical frame filling strategy
@@ -30,16 +32,16 @@ public class EmptySystemsVerticalFrameFillingStrategy
 	/**
 	 * Fill frame with empty systems.
 	 */
-	@Override public FrameArrangement computeFrameArrangement(FrameArrangement frameArr, Score score) {
-		Size2f usableSize = frameArr.getUsableSize();
-		FrameArrangement ret = frameArr;
+	@Override public FrameSpacing computeFrameArrangement(FrameSpacing frameArr, Score score) {
+		Size2f usableSize = frameArr.getUsableSizeMm();
+		FrameSpacing ret = frameArr;
 
 		//compute remaining space
 		float remainingSpace = usableSize.height;
 		float offsetY = 0;
 		if (frameArr.getSystems().size() > 0) {
-			SystemSpacing lastSystem = frameArr.getSystems().getLast();
-			offsetY = lastSystem.getOffsetY() + lastSystem.getHeight();
+			SystemSpacing lastSystem = getLast(frameArr.getSystems());
+			offsetY = lastSystem.getOffsetYMm() + lastSystem.getHeight();
 			remainingSpace -= offsetY;
 		}
 
@@ -62,7 +64,7 @@ public class EmptySystemsVerticalFrameFillingStrategy
 					defaultSystemDistance));
 				offsetY += newSystemHeight;
 			}
-			ret = new FrameArrangement(newSystems.close(), frameArr.getUsableSize());
+			ret = new FrameSpacing(newSystems.close(), frameArr.getUsableSizeMm());
 		}
 
 		return ret;

@@ -1,4 +1,4 @@
-package com.xenoage.zong.musiclayout.spacing.system;
+package com.xenoage.zong.musiclayout.spacing;
 
 import static com.xenoage.utils.collections.ArrayUtils.sum;
 
@@ -6,8 +6,6 @@ import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import com.xenoage.zong.musiclayout.spacing.measure.ColumnSpacing;
 
 /**
  * The horizontal and vertical spacing of a system.
@@ -30,43 +28,43 @@ public class SystemSpacing {
 	public List<ColumnSpacing> columnSpacings;
 
 	/** The left margin of the system in mm. */
-	public float marginLeft;
+	public float marginLeftMm;
 	/** The right margin of the system in mm. */
-	public float marginRight;
+	public float marginRightMm;
 
 	/** The width of the system (without the horizontal offset).
 	 * It may be longer than the used width, e.g. to create empty staves.
 	 * To get the used width, call {@link #getUsedWidth()}. */
-	public float width;
+	public float widthMm;
 
 	/** The heights of the staves in mm. (#staves-1) items. */
-	public float[] staffHeights;
+	public float[] staffHeightsMm;
 	/** The distances between the staves in mm. (#staves-2) items. */
-	public float[] staffDistances;
+	public float[] staffDistancesMm;
 
 	/** The vertical offset of the system in mm, relative to the top. */
-	public float offsetY;
+	public float offsetYMm;
 
 
 	/**
 	 * Gets the height of the staff with the given index.
 	 */
 	public float getStaffHeight(int index) {
-		return staffHeights[index];
+		return staffHeightsMm[index];
 	}
 
 	/**
 	 * Gets the distance between the previous and the given staff.
 	 */
 	public float getStaffDistance(int index) {
-		return (index > 0 ? staffDistances[index - 1] : 0);
+		return (index > 0 ? staffDistancesMm[index - 1] : 0);
 	}
 
 	/**
 	 * Gets the total height of this system in mm.
 	 */
 	public float getHeight() {
-		return sum(staffHeights) + sum(staffDistances);
+		return sum(staffHeightsMm) + sum(staffDistancesMm);
 	}
 
 	/**

@@ -14,9 +14,9 @@ import com.xenoage.zong.core.music.key.TraditionalKey;
 import com.xenoage.zong.musiclayout.Context;
 import com.xenoage.zong.musiclayout.notations.ClefNotation;
 import com.xenoage.zong.musiclayout.notations.TraditionalKeyNotation;
-import com.xenoage.zong.musiclayout.spacing.measure.ElementSpacing;
-import com.xenoage.zong.musiclayout.spacing.measure.ElementWidth;
-import com.xenoage.zong.musiclayout.spacing.measure.LeadingSpacing;
+import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
+import com.xenoage.zong.musiclayout.spacing.ElementWidth;
+import com.xenoage.zong.musiclayout.spacing.LeadingSpacing;
 
 /**
  * Computes the {@link LeadingSpacing} for a measure.

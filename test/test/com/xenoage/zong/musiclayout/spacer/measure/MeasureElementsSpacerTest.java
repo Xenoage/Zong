@@ -29,10 +29,10 @@ import com.xenoage.zong.musiclayout.settings.ChordSpacings;
 import com.xenoage.zong.musiclayout.settings.ChordWidths;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.musiclayout.settings.Spacings;
-import com.xenoage.zong.musiclayout.spacing.measure.ElementSpacing;
-import com.xenoage.zong.musiclayout.spacing.measure.ElementWidth;
-import com.xenoage.zong.musiclayout.spacing.measure.MeasureElementsSpacing;
-import com.xenoage.zong.musiclayout.spacing.measure.VoiceSpacing;
+import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
+import com.xenoage.zong.musiclayout.spacing.ElementWidth;
+import com.xenoage.zong.musiclayout.spacing.MeasureElementsSpacing;
+import com.xenoage.zong.musiclayout.spacing.VoiceSpacing;
 
 /**
  * Tests for the {@link MeasureElementsSpacer}.

@@ -5,7 +5,7 @@ import com.xenoage.zong.core.position.MPElement;
 import com.xenoage.zong.musiclayout.Context;
 import com.xenoage.zong.musiclayout.notations.Notations;
 import com.xenoage.zong.musiclayout.notations.RestNotation;
-import com.xenoage.zong.musiclayout.spacing.measure.ElementWidth;
+import com.xenoage.zong.musiclayout.spacing.ElementWidth;
 
 /**
  * Computes a {@link RestNotation} from a {@link Rest}.

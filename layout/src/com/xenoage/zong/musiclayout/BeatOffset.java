@@ -4,7 +4,7 @@ import lombok.Data;
 
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.math.Fraction;
-import com.xenoage.zong.musiclayout.spacing.measure.ElementSpacing;
+import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
 
 /**
  * Offset of a beat in mm.

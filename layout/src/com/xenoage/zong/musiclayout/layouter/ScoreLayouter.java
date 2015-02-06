@@ -10,9 +10,7 @@ import com.xenoage.utils.lang.Lang;
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.Zong;
 import com.xenoage.zong.core.Score;
-import com.xenoage.zong.musiclayout.Context;
 import com.xenoage.zong.musiclayout.ScoreLayout;
-import com.xenoage.zong.musiclayout.layouter.arrangement.FrameArrangementStrategy;
 import com.xenoage.zong.musiclayout.layouter.beamednotation.BeamedStemAlignmentNotationsStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.DirectionStampingStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.LyricStampingStrategy;
@@ -22,16 +20,7 @@ import com.xenoage.zong.musiclayout.layouter.scoreframelayout.SlurStampingStrate
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.StaffStampingsStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.TupletStampingStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.VoltaStampingStrategy;
-import com.xenoage.zong.musiclayout.notator.Notator;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
-import com.xenoage.zong.musiclayout.spacer.beat.BarlinesBeatOffsetter;
-import com.xenoage.zong.musiclayout.spacer.beat.VoicesBeatOffsetter;
-import com.xenoage.zong.musiclayout.spacer.measure.ColumnSpacer;
-import com.xenoage.zong.musiclayout.spacer.measure.LeadingSpacer;
-import com.xenoage.zong.musiclayout.spacer.measure.MeasureElementsSpacer;
-import com.xenoage.zong.musiclayout.spacer.system.SystemSpacer;
-import com.xenoage.zong.musiclayout.spacer.voice.AlignedVoicesSpacer;
-import com.xenoage.zong.musiclayout.spacer.voice.SingleVoiceSpacer;
 import com.xenoage.zong.symbols.SymbolPool;
 
 /**
@@ -123,11 +112,9 @@ public class ScoreLayouter {
 	 * See "doc/Layoutengine.odg"
 	 */
 	ScoreLayoutStrategy createStrategyTree() {
-		//measure column subtree
-		ColumnSpacer columnSpacingStrategy = new ColumnSpacer();
 		//complete tree
 		return new ScoreLayoutStrategy(
-			columnSpacingStrategy, new FrameArrangementStrategy(), new BeamedStemAlignmentNotationsStrategy(),
+			new BeamedStemAlignmentNotationsStrategy(),
 			new ScoreFrameLayoutStrategy(new StaffStampingsStrategy(),
 				new MusicElementStampingStrategy(),
 				new SlurStampingStrategy(), new LyricStampingStrategy(), new VoltaStampingStrategy(),

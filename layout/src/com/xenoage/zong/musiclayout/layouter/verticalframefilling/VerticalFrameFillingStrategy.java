@@ -1,11 +1,11 @@
 package com.xenoage.zong.musiclayout.layouter.verticalframefilling;
 
 import com.xenoage.zong.core.Score;
-import com.xenoage.zong.musiclayout.FrameArrangement;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
+import com.xenoage.zong.musiclayout.spacing.FrameSpacing;
 
 /**
- * A vertical frame filling strategy creates a new {@link FrameArrangement}
+ * A vertical frame filling strategy creates a new {@link FrameSpacing}
  * from the given one so that the vertical distribution of its systems changes.
  * 
  * For example, an implementation could increase the distance of the systems
@@ -16,6 +16,6 @@ import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 public interface VerticalFrameFillingStrategy
 	extends ScoreLayouterStrategy {
 
-	public FrameArrangement computeFrameArrangement(FrameArrangement frameArr, Score score);
+	public FrameSpacing computeFrameArrangement(FrameSpacing frameArr, Score score);
 
 }

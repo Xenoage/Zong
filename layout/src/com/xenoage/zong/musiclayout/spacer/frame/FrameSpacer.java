@@ -1,54 +1,56 @@
-package com.xenoage.zong.musiclayout.layouter.arrangement;
+package com.xenoage.zong.musiclayout.spacer.frame;
 
-import static com.xenoage.utils.collections.CList.clist;
-import static com.xenoage.utils.kernel.Tuple2.t;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.zong.core.position.MP.atMeasure;
 import static com.xenoage.zong.musiclayout.spacer.system.SystemSpacer.systemSpacer;
 
 import java.util.List;
 
-import com.xenoage.utils.collections.CList;
-import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.format.ScoreFormat;
 import com.xenoage.zong.core.format.SystemLayout;
 import com.xenoage.zong.core.header.ScoreHeader;
+import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.musiclayout.Context;
-import com.xenoage.zong.musiclayout.FrameArrangement;
-import com.xenoage.zong.musiclayout.layouter.ScoreLayouterContext;
-import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.notations.Notations;
-import com.xenoage.zong.musiclayout.spacing.measure.ColumnSpacing;
-import com.xenoage.zong.musiclayout.spacing.system.SystemSpacing;
+import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
+import com.xenoage.zong.musiclayout.spacing.FrameSpacing;
+import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
 
 /**
- * A {@link FrameArrangementStrategy} arranges a list of
- * measure columns on a frame by filling it with systems.
+ * Arranges a list of measure columns on a frame by filling it with systems.
  * 
- * The systems are not stretched or moved
- * horizontally or vertically. This can be
- * done by other strategies.
+ * The systems are not stretched or moved horizontally or vertically.
+ * This can be done by a later layouting step.
  * 
  * This strategy also regards custom system distances.
  * 
  * @author Andreas Wenger
  */
-public class FrameArrangementStrategy
-	implements ScoreLayouterStrategy {
+public class FrameSpacer {
+	
+	public static final FrameSpacer frameSpacer = new FrameSpacer();
 
 
 	/**
-	 * Arranges the given measure column spacings beginning at the
-	 * given index to a {@link FrameArrangement}. Returns the frame arrangements
-	 * and a list of created notations for the leading notations.
+	 * Arranges an optimum number of systems in a frame, beginning at the given measure,
+	 * if possible.
+	 * @param context        the context of the layouter, with the {@link MP} set to the start measure
+	 * @param startSystem    the index of the system where to start
+	 * @param usableSizeMm   the usable size within the score frame in mm
+	 * @param systemIndex    the global system index (over all frames)
+	 * @param measureColumnSpacings  a list of all measure column spacings without leading spacings
+	 * @param notations      the notations of the elements, needed when a column has to be recomputed
+	 *                       because of a leading spacing
 	 */
-	public Tuple2<FrameArrangement, Notations> computeFrameArrangement(int startMeasure,
-		int startSystem, Size2f usableSize, List<ColumnSpacing> columnSpacings,
-		Notations notations, ScoreLayouterContext lc, Context context) {
-		context.saveMp();
+	public FrameSpacing compute(Context context, int startSystem,
+		Size2f usableSizeMm, List<ColumnSpacing> columnSpacings, Notations notations) {
 		
-		Score score = lc.getScore();
+		context.saveMp();
+		int startMeasure = context.mp.measure;
+		
+		Score score = context.score;
 		ScoreFormat scoreFormat = score.getFormat();
 		ScoreHeader scoreHeader = score.getHeader();
 
@@ -60,12 +62,11 @@ public class FrameArrangementStrategy
 		float offsetY = getTopSystemDistance(systemIndex, scoreFormat, scoreHeader);
 
 		//append systems to the frame
-		CList<SystemSpacing> systems = clist();
-		Notations retLeadingNotations = new Notations();
+		List<SystemSpacing> systems = alist();
 		while (measureIndex < measuresCount) {
 			//try to create system on this frame
 			context.mp = atMeasure(measureIndex);
-			SystemSpacing system = systemSpacer.compute(context, usableSize, offsetY, systemIndex,
+			SystemSpacing system = systemSpacer.compute(context, usableSizeMm, offsetY, systemIndex,
 				columnSpacings, notations).orNull();
 
 			//was there enough place for this system?
@@ -85,10 +86,9 @@ public class FrameArrangementStrategy
 				break;
 			}
 		}
-		systems.close();
 
 		context.restoreMp();
-		return t(new FrameArrangement(systems, usableSize), retLeadingNotations);
+		return new FrameSpacing(systems, usableSizeMm);
 	}
 
 	/**
