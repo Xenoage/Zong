@@ -6,10 +6,10 @@ import lombok.EqualsAndHashCode;
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.zong.musiclayout.ScoreFrameLayout;
-import com.xenoage.zong.musiclayout.layouter.horizontalsystemfilling.HorizontalSystemFillingStrategy;
-import com.xenoage.zong.musiclayout.layouter.horizontalsystemfilling.StretchHorizontalSystemFillingStrategy;
 import com.xenoage.zong.musiclayout.layouter.verticalframefilling.NoVerticalFrameFillingStrategy;
 import com.xenoage.zong.musiclayout.layouter.verticalframefilling.VerticalFrameFillingStrategy;
+import com.xenoage.zong.musiclayout.spacer.system.fill.SystemFiller;
+import com.xenoage.zong.musiclayout.spacer.system.fill.Stretch;
 
 /**
  * A {@link ScoreFrame} is a frame that contains a musical score.
@@ -26,13 +26,13 @@ import com.xenoage.zong.musiclayout.layouter.verticalframefilling.VerticalFrameF
 	/** The chain of frames for the score, or null when the frame is unused. */
 	@MaybeNull private ScoreFrameChain scoreFrameChain = null;
 	/** The horizontal system filling strategy for this score frame. */
-	private HorizontalSystemFillingStrategy hFill = defaultHFill;
+	private SystemFiller hFill = defaultHFill;
 	/** The vertical frame filling strategy for this score frame. */
 	private VerticalFrameFillingStrategy vFill = defaultVFill;
 
 	//default values
-	public static final HorizontalSystemFillingStrategy defaultHFill =
-		StretchHorizontalSystemFillingStrategy.instance;
+	public static final SystemFiller defaultHFill =
+		Stretch.stretch;
 	public static final VerticalFrameFillingStrategy defaultVFill =
 		NoVerticalFrameFillingStrategy.instance;
 

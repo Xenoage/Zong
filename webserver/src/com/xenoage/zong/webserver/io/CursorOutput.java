@@ -24,9 +24,9 @@ import com.xenoage.zong.layout.Layout;
 import com.xenoage.zong.layout.Page;
 import com.xenoage.zong.layout.frames.Frame;
 import com.xenoage.zong.layout.frames.ScoreFrame;
-import com.xenoage.zong.musiclayout.BeatOffset;
 import com.xenoage.zong.musiclayout.MeasureMarks;
 import com.xenoage.zong.musiclayout.ScoreFrameLayout;
+import com.xenoage.zong.musiclayout.spacing.BeatOffset;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 
 /**

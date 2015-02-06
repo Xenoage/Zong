@@ -10,7 +10,6 @@ import lombok.Getter;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.MusicElement;
-import com.xenoage.zong.musiclayout.BeatOffset;
 
 /**
  * The horizontal spacing for one measure column.

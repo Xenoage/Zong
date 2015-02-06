@@ -1,6 +1,5 @@
 package com.xenoage.zong.musiclayout.layouter;
 
-import static com.xenoage.utils.collections.CList.clist;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.iterators.It.it;
 import static com.xenoage.utils.kernel.Range.range;
@@ -13,7 +12,6 @@ import static com.xenoage.zong.musiclayout.spacer.measure.ColumnSpacer.columnSpa
 import java.util.ArrayList;
 import java.util.List;
 
-import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.iterators.It;
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.core.Score;
@@ -31,10 +29,10 @@ import com.xenoage.zong.musiclayout.ScoreLayout;
 import com.xenoage.zong.musiclayout.Target;
 import com.xenoage.zong.musiclayout.continued.ContinuedElement;
 import com.xenoage.zong.musiclayout.layouter.beamednotation.BeamedStemAlignmentNotationsStrategy;
-import com.xenoage.zong.musiclayout.layouter.horizontalsystemfilling.HorizontalSystemFillingStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.ScoreFrameLayoutStrategy;
 import com.xenoage.zong.musiclayout.layouter.verticalframefilling.VerticalFrameFillingStrategy;
 import com.xenoage.zong.musiclayout.notations.Notations;
+import com.xenoage.zong.musiclayout.spacer.system.fill.SystemFiller;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 import com.xenoage.zong.musiclayout.spacing.FrameSpacing;
 import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
@@ -68,7 +66,6 @@ public class ScoreLayoutStrategy
 	 * within the given chain of score frames.
 	 */
 	public ScoreLayout computeScoreLayout(ScoreLayouterContext lc) {
-		Score score = lc.getScore();
 		
 		//notations of elements
 		Context context = new Context();
@@ -87,7 +84,7 @@ public class ScoreLayoutStrategy
 			optimalMeasureColumnSpacings, notations);
 
 		//system stretching (horizontal)
-		frames = fillSystemsHorizontally(frames, target);
+		fillSystemsHorizontally(frames, target);
 		//frame filling (vertical)
 		frames = fillFramesVertically(frames, target, context.score);
 		//compute beams
@@ -198,30 +195,20 @@ public class ScoreLayoutStrategy
 	}
 
 	/**
-	 * Fills the systems horizontally according to the {@link HorizontalSystemFillingStrategy}
+	 * Fills the systems horizontally according to the {@link SystemFiller}
 	 * of the frame.
 	 */
-	List<FrameSpacing> fillSystemsHorizontally(List<FrameSpacing> frameArrangements, Target target) {
-		ArrayList<FrameSpacing> ret = alist();
+	void fillSystemsHorizontally(List<FrameSpacing> frameArrangements, Target target) {
 		for (int iFrame : range(frameArrangements)) {
 			FrameSpacing frameArr = frameArrangements.get(iFrame);
-			HorizontalSystemFillingStrategy hFill = target.getArea(iFrame).hFill;
-			if (hFill != null) {
-				//apply strategy
-				CList<SystemSpacing> systemArrs = clist();
-				for (SystemSpacing oldSystemArr : frameArr.getSystems()) {
-					float usableWidth = frameArr.getUsableSizeMm().width - oldSystemArr.getMarginLeftMm() -
-						oldSystemArr.getMarginRightMm();
-					systemArrs.add(hFill.computeSystemArrangement(oldSystemArr, usableWidth));
-				}
-				ret.add(new FrameSpacing(systemArrs.close(), frameArr.getUsableSizeMm()));
-			}
-			else {
-				//unmodified frame
-				ret.add(frameArr);
+			SystemFiller hFill = target.getArea(iFrame).hFill;
+			//apply strategy
+			for (SystemSpacing oldSystemArr : frameArr.getSystems()) {
+				float usableWidth = frameArr.getUsableSizeMm().width - oldSystemArr.getMarginLeftMm() -
+					oldSystemArr.getMarginRightMm();
+				hFill.compute(oldSystemArr, usableWidth);
 			}
 		}
-		return ret;
 	}
 
 	/**

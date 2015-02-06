@@ -6,6 +6,7 @@ import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.collections.IList;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.utils.math.MathUtils;
+import com.xenoage.zong.musiclayout.spacing.BeatOffset;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 
 /**

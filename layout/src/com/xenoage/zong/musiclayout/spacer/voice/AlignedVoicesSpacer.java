@@ -1,6 +1,7 @@
 package com.xenoage.zong.musiclayout.spacer.voice;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static com.xenoage.utils.collections.CollectionUtils.getLast;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.kernel.Range.rangeReverse;
 import static com.xenoage.utils.math.Fraction.fr;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.xenoage.utils.math.Fraction;
-import com.xenoage.zong.musiclayout.BeatOffset;
+import com.xenoage.zong.musiclayout.spacing.BeatOffset;
 import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.VoiceSpacing;
 
@@ -63,7 +64,7 @@ public class AlignedVoicesSpacer {
 			//between the last shared beat and the current shared beat.
 			//do this in reverse order, because the position of grace notes is dependent
 			//on the position of the (following) main note
-			float lastOriginalOffsetIs = 0;
+			float lastOriginalOffsetIs = getLast(beatOffsets).offsetMm / interlineSpace;
 			for (int iElement : rangeReverse(lastElement, firstElement)) {
 				ElementSpacing e = spacingElements.get(iElement);
 				if (false == e.isGrace()) {

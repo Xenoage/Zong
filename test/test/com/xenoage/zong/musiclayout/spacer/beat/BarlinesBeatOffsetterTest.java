@@ -17,7 +17,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.xenoage.zong.core.header.ColumnHeader;
-import com.xenoage.zong.musiclayout.BeatOffset;
+import com.xenoage.zong.musiclayout.spacing.BeatOffset;
 
 /**
  * Tests for {@link BarlinesBeatOffsetter}.

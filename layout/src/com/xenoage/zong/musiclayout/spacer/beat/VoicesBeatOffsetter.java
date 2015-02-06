@@ -14,7 +14,7 @@ import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.VoiceElement;
-import com.xenoage.zong.musiclayout.BeatOffset;
+import com.xenoage.zong.musiclayout.spacing.BeatOffset;
 import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.VoiceSpacing;
 

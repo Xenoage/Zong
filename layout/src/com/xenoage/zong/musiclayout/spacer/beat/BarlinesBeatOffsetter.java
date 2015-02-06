@@ -12,7 +12,7 @@ import com.xenoage.zong.core.header.ColumnHeader;
 import com.xenoage.zong.core.music.barline.Barline;
 import com.xenoage.zong.core.music.barline.BarlineRepeat;
 import com.xenoage.zong.core.music.util.BeatE;
-import com.xenoage.zong.musiclayout.BeatOffset;
+import com.xenoage.zong.musiclayout.spacing.BeatOffset;
 
 /**
  * Computes {@link BeatOffset}s for the barlines and the notes of the given measure column,

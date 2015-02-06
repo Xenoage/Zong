@@ -12,6 +12,7 @@ import org.junit.Test;
 import com.xenoage.utils.math.Delta;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.position.MP;
+import com.xenoage.zong.musiclayout.spacing.BeatOffset;
 
 /**
  * Test cases for a {@link StaffMarks} class.
