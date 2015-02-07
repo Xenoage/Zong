@@ -7,8 +7,8 @@ import static com.xenoage.zong.core.text.FormattedTextUtils.styleText;
 import static com.xenoage.zong.musiclayout.notator.chord.AccidentalsNotator.accidentalsNotator;
 import static com.xenoage.zong.musiclayout.notator.chord.ArticulationsNotator.articulationsNotator;
 import static com.xenoage.zong.musiclayout.notator.chord.NotesNotator.notesNotator;
-import static com.xenoage.zong.musiclayout.notator.chord.StemNotator.stemNotator;
 import static com.xenoage.zong.musiclayout.notator.chord.stem.StemDirector.stemDirector;
+import static com.xenoage.zong.musiclayout.notator.chord.stem.StemNotator.stemNotator;
 
 import java.util.Map;
 

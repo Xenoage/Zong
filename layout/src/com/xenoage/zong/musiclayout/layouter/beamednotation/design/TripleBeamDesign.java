@@ -1,6 +1,6 @@
 package com.xenoage.zong.musiclayout.layouter.beamednotation.design;
 
-import static com.xenoage.zong.musiclayout.layouter.beamednotation.alignment.SingleMeasureSingleStaffStrategy.isBeamOutsideStaff;
+import static com.xenoage.zong.musiclayout.notator.chord.stem.beam.notation.OneMeasureOneStaff.isBeamOutsideStaff;
 
 import com.xenoage.zong.core.music.chord.StemDirection;
 

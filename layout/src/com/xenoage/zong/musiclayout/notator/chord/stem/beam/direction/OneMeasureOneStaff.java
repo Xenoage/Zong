@@ -21,7 +21,7 @@ import com.xenoage.zong.musiclayout.notations.chord.ChordLps;
  * @author Andreas Wenger
  */
 public class OneMeasureOneStaff
-	extends Strategy {
+	implements Strategy {
 	
 	public static OneMeasureOneStaff oneMeasureOneStaff = new OneMeasureOneStaff();
 	

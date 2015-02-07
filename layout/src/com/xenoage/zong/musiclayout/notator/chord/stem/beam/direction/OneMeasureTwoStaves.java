@@ -16,7 +16,7 @@ import com.xenoage.zong.core.position.MP;
  * @author Andreas Wenger
  */
 public class OneMeasureTwoStaves
-	extends Strategy {
+	implements Strategy {
 
 
 	@Override public StemDirection[] compute(Beam beam, Score score) {

@@ -3,8 +3,8 @@ package com.xenoage.zong.musiclayout.layouter.beamednotation.alignment;
 import static com.xenoage.utils.math.Delta.DRf;
 import static com.xenoage.zong.core.music.chord.StemDirection.Down;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
-import static com.xenoage.zong.musiclayout.layouter.beamednotation.alignment.SingleMeasureSingleStaffStrategy.isBeamOutsideStaff;
 import static com.xenoage.zong.musiclayout.notations.chord.NoteDisplacementTest.note;
+import static com.xenoage.zong.musiclayout.notator.chord.stem.beam.notation.OneMeasureOneStaff.isBeamOutsideStaff;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -16,16 +16,17 @@ import com.xenoage.zong.musiclayout.layouter.beamednotation.design.SingleBeamDes
 import com.xenoage.zong.musiclayout.notations.chord.NoteDisplacement;
 import com.xenoage.zong.musiclayout.notations.chord.NotesNotation;
 import com.xenoage.zong.musiclayout.notations.chord.StemNotation;
+import com.xenoage.zong.musiclayout.notator.chord.stem.beam.notation.OneMeasureOneStaff;
 
 /**
- * Tests for {@link SingleMeasureSingleStaffStrategy}.
+ * Tests for {@link OneMeasureOneStaff}.
  * 
  * @author Uli Teschemacher
  * @author Andreas Wenger
  */
 public class SingleMeasureSingleStaffStrategyTest {
 
-	SingleMeasureSingleStaffStrategy strategy = new SingleMeasureSingleStaffStrategy();
+	OneMeasureOneStaff strategy = new OneMeasureOneStaff();
 
 
 	/**

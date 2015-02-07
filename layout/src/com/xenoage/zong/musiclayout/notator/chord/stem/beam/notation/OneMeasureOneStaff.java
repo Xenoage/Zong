@@ -1,18 +1,17 @@
-package com.xenoage.zong.musiclayout.layouter.beamednotation.alignment;
+package com.xenoage.zong.musiclayout.notator.chord.stem.beam.notation;
 
 import static com.xenoage.utils.iterators.It.it;
 import static com.xenoage.zong.core.position.MP.getMP;
 
+import java.util.List;
+
 import com.xenoage.utils.iterators.It;
 import com.xenoage.utils.math.MathUtils;
-import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.music.beam.BeamWaypoint;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.core.position.MP;
-import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
-import com.xenoage.zong.musiclayout.layouter.beamednotation.BeamedStemAlignmentNotationsStrategy;
 import com.xenoage.zong.musiclayout.layouter.beamednotation.design.BeamDesign;
 import com.xenoage.zong.musiclayout.layouter.beamednotation.design.ChordBeamSpacing;
 import com.xenoage.zong.musiclayout.layouter.beamednotation.design.DoubleBeamDesign;
@@ -20,7 +19,6 @@ import com.xenoage.zong.musiclayout.layouter.beamednotation.design.MultipleBeamD
 import com.xenoage.zong.musiclayout.layouter.beamednotation.design.SingleBeamDesign;
 import com.xenoage.zong.musiclayout.layouter.beamednotation.design.TripleBeamDesign;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
-import com.xenoage.zong.musiclayout.notations.Notations;
 import com.xenoage.zong.musiclayout.notations.beam.BeamStemAlignments;
 import com.xenoage.zong.musiclayout.notations.chord.AccidentalsNotation;
 import com.xenoage.zong.musiclayout.notations.chord.NotesNotation;
@@ -29,27 +27,19 @@ import com.xenoage.zong.musiclayout.notator.chord.stem.beam.BeamedStemDirector;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 
 /**
- * This class helps the {@link BeamedStemAlignmentNotationsStrategy}
- * to compute beams that are all in the same measure and staff.
+ * {@link Strategy} for a {@link Beam}, which spans over a single staff and measure.
  * 
- * @author Uli Teschemacher
  * @author Andreas Wenger
+ * @author Uli Teschemacher
  */
-public class SingleMeasureSingleStaffStrategy
-	implements ScoreLayouterStrategy {
+public class OneMeasureOneStaff
+	implements Strategy {
 
 	private static final float closeSpacing = 5;
 	private static final float wideSpacing = 8;
 
 
-	/**
-	 * This strategy computes the lengths of the stems of beamed notes.
-	 * It only works for chords, in which all the stems point in the same
-	 * direction (like computed by {@link BeamedStemDirector}).
-	 * The NotationsCache is updated.
-	 */
-	public void computeNotations(Score score, Beam beam, ColumnSpacing columnSpacing,
-		Notations notations) {
+	@Override public void compute(Beam beam, List<ColumnSpacing> columnSpacings) {
 
 		//collect needed information
 		NotesNotation[] chordNa = new NotesNotation[beam.getWaypoints().size()];

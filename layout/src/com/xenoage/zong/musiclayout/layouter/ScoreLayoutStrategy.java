@@ -13,24 +13,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.xenoage.utils.iterators.It;
+import com.xenoage.utils.kernel.Range;
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.Measure;
 import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.core.music.Voice;
+import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.util.Column;
 import com.xenoage.zong.core.position.MP;
+import com.xenoage.zong.core.util.VoiceElementIterator;
 import com.xenoage.zong.layout.frames.ScoreFrame;
 import com.xenoage.zong.musiclayout.Context;
 import com.xenoage.zong.musiclayout.ScoreFrameLayout;
 import com.xenoage.zong.musiclayout.ScoreLayout;
 import com.xenoage.zong.musiclayout.Target;
 import com.xenoage.zong.musiclayout.continued.ContinuedElement;
-import com.xenoage.zong.musiclayout.layouter.beamednotation.BeamedStemAlignmentNotationsStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.ScoreFrameLayoutStrategy;
 import com.xenoage.zong.musiclayout.notations.Notations;
+import com.xenoage.zong.musiclayout.notator.chord.stem.beam.BeamedStemNotator;
 import com.xenoage.zong.musiclayout.spacer.frame.fill.EmptySystems;
 import com.xenoage.zong.musiclayout.spacer.frame.fill.FrameFiller;
 import com.xenoage.zong.musiclayout.spacer.frame.fill.StretchSystems;
@@ -49,7 +52,7 @@ public class ScoreLayoutStrategy
 	implements ScoreLayouterStrategy {
 
 	//used strategies
-	private final BeamedStemAlignmentNotationsStrategy beamedStemAlignmentNotationsStrategy;
+	private final BeamedStemNotator beamedStemAlignmentNotationsStrategy;
 	private final ScoreFrameLayoutStrategy scoreFrameLayoutStrategy;
 
 
@@ -57,7 +60,7 @@ public class ScoreLayoutStrategy
 	 * Creates a new {@link ScoreLayoutStrategy}.
 	 */
 	public ScoreLayoutStrategy(
-		BeamedStemAlignmentNotationsStrategy beamedStemAlignmentNotationsStrategy,
+		BeamedStemNotator beamedStemAlignmentNotationsStrategy,
 		ScoreFrameLayoutStrategy scoreFrameLayoutStrategy) {
 		this.beamedStemAlignmentNotationsStrategy = beamedStemAlignmentNotationsStrategy;
 		this.scoreFrameLayoutStrategy = scoreFrameLayoutStrategy;
@@ -225,40 +228,38 @@ public class ScoreLayoutStrategy
 
 	/**
 	 * Computes beamed notations with correct stem alignments.
+	 * TIDY: optimalMeasureColumnSpacings are already modified, so optimalMeasureColumnSpacings
+	 * as parameter is enough, frameArrangements are not needed
 	 */
 	void computeBeamStemAlignments(List<FrameSpacing> frameArrangements,
-		List<ColumnSpacing> optimalMeasureColumnSpacings, Notations notations,
-		ScoreLayouterContext lc) {
+		List<ColumnSpacing> optimalMeasureColumnSpacings, Context context) {
+		
 		//collect actual measure column spacings from all frames
 		//(now also including leading spacings and possibly stretched measures)
-		Score score = lc.getScore();
-		ArrayList<ColumnSpacing> columnSpacings = alist();
+		int measuresCount = context.score.getMeasuresCount();
+		ArrayList<ColumnSpacing> columnSpacings = alist(measuresCount);
 		for (FrameSpacing frameArr : frameArrangements) {
 			for (SystemSpacing systemArr : frameArr.getSystems()) {
 				columnSpacings.addAll(systemArr.getColumnSpacings());
 			}
 		}
+		
 		//if not all measures were arranged (because of missing space), add their
 		//optimal spacings to the list
-		for (int iMeasure = columnSpacings.size(); iMeasure < score.getMeasuresCount(); iMeasure++) {
+		for (int iMeasure : range(columnSpacings.size(), measuresCount - 1)) {
 			columnSpacings.add(optimalMeasureColumnSpacings.get(iMeasure));
 		}
+		
 		//go again through all elements, finding beams, and recompute stem alignment
-		for (int iMeasure : range(0, score.getMeasuresCount() - 1)) {
-			Column measureColumn = score.getColumn(iMeasure);
-			for (Measure measure : measureColumn) {
-				for (Voice voice : measure.getVoices()) {
-					for (MusicElement element : voice.getElements()) {
-						if (element instanceof Chord) {
-							Chord chord = (Chord) element;
-							//compute each beam only one time (when the end waypoint is found)
-							Beam beam = chord.getBeam();
-							if (beam != null && beam.getStop().getChord() == chord) {
-								beamedStemAlignmentNotationsStrategy.computeNotations(lc.getScore(),
-									beam, columnSpacings, notations);
-							}
-						}
-					}
+		VoiceElementIterator voiceElementsIt = new VoiceElementIterator(context.score);
+		for (VoiceElement e : voiceElementsIt) {
+			if (e instanceof Chord) {
+				Chord chord = (Chord) e;
+				//compute each beam only one time (when the end waypoint is found)
+				Beam beam = chord.getBeam();
+				if (beam != null && beam.getStop().getChord() == chord) {
+					beamedStemAlignmentNotationsStrategy.computeNotations(lc.getScore(),
+						beam, columnSpacings, notations);
 				}
 			}
 		}

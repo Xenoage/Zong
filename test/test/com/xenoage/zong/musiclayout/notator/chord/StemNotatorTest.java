@@ -3,7 +3,7 @@ package com.xenoage.zong.musiclayout.notator.chord;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.music.Pitch.pi;
 import static com.xenoage.zong.musiclayout.notator.chord.NotesNotator.notesNotator;
-import static com.xenoage.zong.musiclayout.notator.chord.StemNotator.stemNotator;
+import static com.xenoage.zong.musiclayout.notator.chord.stem.StemNotator.stemNotator;
 import static com.xenoage.zong.musiclayout.notator.chord.stem.single.SingleStemDirector.singleStemDirector;
 import static org.junit.Assert.assertEquals;
 
@@ -20,7 +20,7 @@ import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.musiclayout.notations.chord.ChordLps;
 import com.xenoage.zong.musiclayout.notations.chord.NotesNotation;
 import com.xenoage.zong.musiclayout.notations.chord.StemNotation;
-import com.xenoage.zong.musiclayout.notator.chord.StemNotator;
+import com.xenoage.zong.musiclayout.notator.chord.stem.StemNotator;
 import com.xenoage.zong.musiclayout.settings.ChordWidths;
 
 /**

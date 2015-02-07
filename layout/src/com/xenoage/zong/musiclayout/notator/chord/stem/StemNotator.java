@@ -1,4 +1,4 @@
-package com.xenoage.zong.musiclayout.notator.chord;
+package com.xenoage.zong.musiclayout.notator.chord.stem;
 
 import static com.xenoage.zong.core.music.chord.StemDirection.Down;
 import static com.xenoage.zong.core.music.chord.StemDirection.None;

@@ -1,4 +1,4 @@
-package com.xenoage.zong.musiclayout.layouter.beamednotation.alignment;
+package com.xenoage.zong.musiclayout.notator.chord.stem.beam.notation;
 
 import static com.xenoage.utils.iterators.It.it;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
@@ -10,7 +10,6 @@ import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.Stem;
 import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
-import com.xenoage.zong.musiclayout.layouter.beamednotation.BeamedStemAlignmentNotationsStrategy;
 import com.xenoage.zong.musiclayout.layouter.beamednotation.design.BeamDesign;
 import com.xenoage.zong.musiclayout.layouter.beamednotation.design.DoubleBeamDesign;
 import com.xenoage.zong.musiclayout.layouter.beamednotation.design.MultipleBeamDesign;
@@ -21,9 +20,10 @@ import com.xenoage.zong.musiclayout.notations.Notations;
 import com.xenoage.zong.musiclayout.notations.beam.BeamStemAlignments;
 import com.xenoage.zong.musiclayout.notations.chord.NotesNotation;
 import com.xenoage.zong.musiclayout.notations.chord.StemNotation;
+import com.xenoage.zong.musiclayout.notator.chord.stem.beam.BeamedStemNotator;
 
 /**
- * This class helps the {@link BeamedStemAlignmentNotationsStrategy}
+ * This class helps the {@link BeamedStemNotator}
  * to compute beams that are all in the same measure, but in
  * two adjacent staves.
  * 

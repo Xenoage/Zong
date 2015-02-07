@@ -11,7 +11,6 @@ import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.Zong;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.musiclayout.ScoreLayout;
-import com.xenoage.zong.musiclayout.layouter.beamednotation.BeamedStemAlignmentNotationsStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.DirectionStampingStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.LyricStampingStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.MusicElementStampingStrategy;
@@ -20,6 +19,7 @@ import com.xenoage.zong.musiclayout.layouter.scoreframelayout.SlurStampingStrate
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.StaffStampingsStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.TupletStampingStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.VoltaStampingStrategy;
+import com.xenoage.zong.musiclayout.notator.chord.stem.beam.BeamedStemNotator;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.symbols.SymbolPool;
 
@@ -114,7 +114,7 @@ public class ScoreLayouter {
 	ScoreLayoutStrategy createStrategyTree() {
 		//complete tree
 		return new ScoreLayoutStrategy(
-			new BeamedStemAlignmentNotationsStrategy(),
+			new BeamedStemNotator(),
 			new ScoreFrameLayoutStrategy(new StaffStampingsStrategy(),
 				new MusicElementStampingStrategy(),
 				new SlurStampingStrategy(), new LyricStampingStrategy(), new VoltaStampingStrategy(),
