@@ -10,17 +10,17 @@ import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.Stem;
 import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
-import com.xenoage.zong.musiclayout.layouter.beamednotation.design.BeamDesign;
-import com.xenoage.zong.musiclayout.layouter.beamednotation.design.DoubleBeamDesign;
-import com.xenoage.zong.musiclayout.layouter.beamednotation.design.MultipleBeamDesign;
-import com.xenoage.zong.musiclayout.layouter.beamednotation.design.SingleBeamDesign;
-import com.xenoage.zong.musiclayout.layouter.beamednotation.design.TripleBeamDesign;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
 import com.xenoage.zong.musiclayout.notations.Notations;
 import com.xenoage.zong.musiclayout.notations.beam.BeamStemAlignments;
 import com.xenoage.zong.musiclayout.notations.chord.NotesNotation;
 import com.xenoage.zong.musiclayout.notations.chord.StemNotation;
 import com.xenoage.zong.musiclayout.notator.chord.stem.beam.BeamedStemNotator;
+import com.xenoage.zong.musiclayout.notator.chord.stem.beam.notation.lines.BeamLines;
+import com.xenoage.zong.musiclayout.notator.chord.stem.beam.notation.lines.TwoLines;
+import com.xenoage.zong.musiclayout.notator.chord.stem.beam.notation.lines.MultipleLines;
+import com.xenoage.zong.musiclayout.notator.chord.stem.beam.notation.lines.OneLine;
+import com.xenoage.zong.musiclayout.notator.chord.stem.beam.notation.lines.ThreeLines;
 
 /**
  * This class helps the {@link BeamedStemNotator}
@@ -86,20 +86,20 @@ public class SingleMeasureTwoStavesStrategy
 	public BeamStemAlignments computeStemAlignments(NotesNotation[] chordNa, int beamLinesCount,
 		Stem firstStem, Stem lastStem, StemDirection firstStemDirection, StemDirection lastStemDirection) {
 		//get appropriate beam design
-		BeamDesign beamDesign;
+		BeamLines beamDesign;
 		switch (beamLinesCount) {
 		//TIDY: we need only a small subset of the BeamDesign class. extract it?
 			case 1:
-				beamDesign = new SingleBeamDesign(firstStemDirection, 0);
+				beamDesign = new OneLine(firstStemDirection, 0);
 				break;
 			case 2:
-				beamDesign = new DoubleBeamDesign(firstStemDirection, 0);
+				beamDesign = new TwoLines(firstStemDirection, 0);
 				break;
 			case 3:
-				beamDesign = new TripleBeamDesign(firstStemDirection, 0);
+				beamDesign = new ThreeLines(firstStemDirection, 0);
 				break;
 			default:
-				beamDesign = new MultipleBeamDesign(firstStemDirection, 0, beamLinesCount);
+				beamDesign = new MultipleLines(firstStemDirection, 0, beamLinesCount);
 		}
 
 		//compute stem alignments
@@ -127,13 +127,13 @@ public class SingleMeasureTwoStavesStrategy
 			}
 			else {
 				//compute length
-				endLP = startLP + stemDirection.getSign() * 2 * beamDesign.getMinimumStemLength();
+				endLP = startLP + stemDirection.getSign() * 2 * beamDesign.getMinimumStemLengthIs();
 			}
 
 			stemAlignments[i] = new StemNotation(startLP, endLP);
 		}
 		BeamStemAlignments beamstemalignments = new BeamStemAlignments(stemAlignments,
-			BeamDesign.BEAMLINE_WIDTH, beamDesign.getDistanceBetweenBeamLines(), beamLinesCount);
+			BeamLines.beamLineWidth, beamDesign.getDistanceBetweenBeamLinesIs(), beamLinesCount);
 
 		return beamstemalignments;
 	}

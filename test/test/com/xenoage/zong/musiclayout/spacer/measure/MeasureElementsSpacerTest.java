@@ -118,9 +118,9 @@ public class MeasureElementsSpacerTest {
 		//voice spacings
 		assertEquals(2, vs.size());
 		assertEqualsSpacings(ilist(spacing(ve[0], fr(1, 2), 4), spacing(ve[1], fr(4), 13)),
-			vs.get(0).spacingElements);
+			vs.get(0).elements);
 		assertEqualsSpacings(ilist(spacing(ve[2], fr(1), 5), spacing(ve[3], fr(13, 2), 18)),
-			vs.get(1).spacingElements);
+			vs.get(1).elements);
 		//clef must be at offset 13 - padding - clefwidth/2
 		ElementSpacing[] se = mes.elements.toArray(new ElementSpacing[0]);
 		assertEquals(1, se.length);

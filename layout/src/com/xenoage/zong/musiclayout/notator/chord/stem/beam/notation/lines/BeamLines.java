@@ -1,41 +1,40 @@
-package com.xenoage.zong.musiclayout.layouter.beamednotation.design;
+package com.xenoage.zong.musiclayout.notator.chord.stem.beam.notation.lines;
+
+import lombok.AllArgsConstructor;
 
 import com.xenoage.zong.core.music.chord.StemDirection;
 
 /**
- * Base class for beam designs. This includes for example
- * the minimum stem length, slants or spacings that make
+ * Base class for computing the layout of a beam,
+ * dependent on the number of beam lines.
+ * 
+ * This includes the minimum stem length, slants or spacings that make
  * the beam look beautiful.
  * 
  * For each number of beam lines there are different rules,
  * so there is an abstract base class (this one) with different
  * implementations.
  * 
+ * TODO: lots of equal or similar code in the subclasses. merge when possible.
+ * 
  * @author Uli Teschemacher
  * @author Andreas Wenger
  */
-public abstract class BeamDesign {
+@AllArgsConstructor
+public abstract class BeamLines {
 
-	public static final float BEAMLINE_WIDTH = 0.5f;
+	public static final float beamLineWidth = 0.5f;
 
-	protected StemDirection stemDirection;
-	protected int staffLinesCount;
+	StemDirection stemDirection;
+	int staffLinesCount;
 
-
-	/**
-	 * Creates a new {@link BeamDesign}.
-	 * @param stemDirection    the direction of the stems
-	 * @param staffLinesCount  the number of lines in the staff
-	 */
-	public BeamDesign(StemDirection stemDirection, int staffLinesCount) {
-		this.stemDirection = stemDirection;
-		this.staffLinesCount = staffLinesCount;
-	}
 
 	/**
-	 * Gets the minimum length of a stem in IS.
+	 * Gets the minimum length of a stem in IS,
+	 * from the outermost note at the stem side up to
+	 * the end of the stem.
 	 */
-	public float getMinimumStemLength() {
+	public float getMinimumStemLengthIs() {
 		return 3;
 	}
 
@@ -44,7 +43,7 @@ public abstract class BeamDesign {
 	 * are sorted descending. The slant is defined as the directed vertical distance of
 	 * the first stem endpoint and the last stem endpoint in IS.
 	 */
-	public float getSlantDescendingMiddleNotes() {
+	public float getSlantDescendingMiddleNotesIs() {
 		return -0.5f; //TODO: was -1f before, but I'm not sure if Uli already meant it as IS instead of LP
 	}
 
@@ -53,16 +52,16 @@ public abstract class BeamDesign {
 	 * are sorted ascending. The slant is defined as the directed vertical distance of
 	 * the first stem endpoint and the last stem endpoint in IS.
 	 */
-	public float getSlantAscendingMiddleNotes() {
+	public float getSlantAscendingMiddleNotesIs() {
 		return 0.5f; //TODO: was 1f before, but I'm not sure if Uli already meant it as IS instead of LP
 	}
 
 	/**
 	 * This method calculates whether the current position of the beam is correct or not.
-	 * @param startLP          the LP of the stem endpoint at the beginning of the beam
-	 * @param slantIS          the vertical distance of the beam endpoints in IS
+	 * @param startLp  the LP of the stem endpoint at the beginning of the beam
+	 * @param slantIs  the vertical distance of the beam endpoints in IS
 	 */
-	public boolean isGoodStemPosition(float startLP, float slantIS) {
+	public boolean isGoodStemPosition(float startLp, float slantIs) {
 		return true;
 	}
 
@@ -70,7 +69,7 @@ public abstract class BeamDesign {
 	 * Returns the distance between two beamlines in IS.
 	 * Normaly this is 0.25 but it can be up to 0.5 IS.
 	 */
-	public float getDistanceBetweenBeamLines() {
+	public float getDistanceBetweenBeamLinesIs() {
 		return 0.25f;
 	}
 
@@ -78,10 +77,10 @@ public abstract class BeamDesign {
 	 * Returns the (unsigned) slant if there is only few space between the notes.
 	 * The slant is defined as the directed vertical distance of
 	 * the first stem endpoint and the last stem endpoint in IS.
-	 * @param startNoteLP    the LP of the first relevant note
-	 * @param endNoteLP      the LP of the last relevant note
+	 * @param startNoteLp  the LP of the first relevant note
+	 * @param endNoteLp    the LP of the last relevant note
 	 */
-	public float getCloseSpacing(int startNoteLP, int endNoteLP) {
+	public float getCloseSpacingSlantIs(int startNoteLp, int endNoteLp) {
 		return 0.5f;
 	}
 
@@ -89,10 +88,10 @@ public abstract class BeamDesign {
 	 * Returns the (unsigned) slant if there is plentiful space between the first and the last note.
 	 * The slant is defined as the directed vertical distance of
 	 * the first stem endpoint and the last stem endpoint in IS.
-	 * @param startNoteLP    the LP of the first relevant note
-	 * @param endNoteLP      the LP of the last relevant note
+	 * @param startNoteLp  the LP of the first relevant note
+	 * @param endNoteLp    the LP of the last relevant note
 	 */
-	public float getWideSpacing(int startNoteLP, int endNoteLP) {
+	public float getWideSpacingSlantIs(int startNoteLp, int endNoteLp) {
 		return 2f;
 	}
 
@@ -100,10 +99,10 @@ public abstract class BeamDesign {
 	 * Returns the (unsigned) slant for normal spacing conditions.
 	 * The slant is defined as the directed vertical distance of
 	 * the first stem endpoint and the last stem endpoint in IS.
-	 * @param startNoteLP    the LP of the first relevant note
-	 * @param endNoteLP      the LP of the last relevant note
+	 * @param startNoteLP  the LP of the first relevant note
+	 * @param endNoteLP    the LP of the last relevant note
 	 */
-	public float getNormalSpacing(int startNoteLP, int endNoteLP) {
+	public float getNormalSpacingSlantIs(int startNoteLP, int endNoteLP) {
 		return 1f;
 	}
 

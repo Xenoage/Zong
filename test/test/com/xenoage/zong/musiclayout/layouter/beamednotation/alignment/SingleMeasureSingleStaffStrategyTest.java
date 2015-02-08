@@ -12,11 +12,11 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import com.xenoage.zong.core.music.chord.StemDirection;
-import com.xenoage.zong.musiclayout.layouter.beamednotation.design.SingleBeamDesign;
 import com.xenoage.zong.musiclayout.notations.chord.NoteDisplacement;
 import com.xenoage.zong.musiclayout.notations.chord.NotesNotation;
 import com.xenoage.zong.musiclayout.notations.chord.StemNotation;
 import com.xenoage.zong.musiclayout.notator.chord.stem.beam.notation.OneMeasureOneStaff;
+import com.xenoage.zong.musiclayout.notator.chord.stem.beam.notation.lines.OneLine;
 
 /**
  * Tests for {@link OneMeasureOneStaff}.
@@ -31,7 +31,7 @@ public class SingleMeasureSingleStaffStrategyTest {
 
 	/**
 	 * Attention! This test will only work correct if the values of Ted Ross
-	 * are selected in the {@link SingleBeamDesign}.
+	 * are selected in the {@link OneLine}.
 	 */
 	@Test public void computeStemAlignments1StaffTest() {
 		int linesCount = 5;

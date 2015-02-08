@@ -48,7 +48,7 @@ public final class MeasureSpacing {
 		//compute the list of all used beats
 		SortedList<Fraction> usedBeats = new SortedList<Fraction>(false);
 		for (VoiceSpacing vs : voiceSpacings) {
-			for (ElementSpacing se : vs.spacingElements) {
+			for (ElementSpacing se : vs.elements) {
 				usedBeats.add(se.beat);
 			}
 		}

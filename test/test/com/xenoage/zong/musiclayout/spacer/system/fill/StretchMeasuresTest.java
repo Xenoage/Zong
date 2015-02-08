@@ -60,8 +60,8 @@ public class StretchMeasuresTest {
 		assertEquals(offsetBeat2 * stretch, newCol.getBeatOffsets().get(1).getOffsetMm(), df);
 		//element spacings
 		VoiceSpacing newVoice = newCol.getMeasureSpacings().get(0).getVoiceSpacings().get(0);
-		assertEquals(offsetBeat1 * stretch, newVoice.spacingElements.get(0).offsetIs, df);
-		assertEquals(offsetBeat2 * stretch, newVoice.spacingElements.get(1).offsetIs, df);
+		assertEquals(offsetBeat1 * stretch, newVoice.elements.get(0).offsetIs, df);
+		assertEquals(offsetBeat2 * stretch, newVoice.elements.get(1).offsetIs, df);
 	}
 
 	/**
@@ -92,13 +92,13 @@ public class StretchMeasuresTest {
 			df);
 		//element spacings
 		VoiceSpacing newVoice = newCol.getMeasureSpacings().get(0).getVoiceSpacings().get(0);
-		assertEquals(offsetChord1 * stretch, newVoice.spacingElements.get(0).offsetIs,
+		assertEquals(offsetChord1 * stretch, newVoice.elements.get(0).offsetIs,
 			df);
 		assertEquals(offsetChord2 * stretch - 2 * graceDistance,
-			newVoice.spacingElements.get(1).offsetIs, df);
+			newVoice.elements.get(1).offsetIs, df);
 		assertEquals(offsetChord2 * stretch - 1 * graceDistance,
-			newVoice.spacingElements.get(2).offsetIs, df);
-		assertEquals(offsetChord2 * stretch, newVoice.spacingElements.get(3).offsetIs,
+			newVoice.elements.get(2).offsetIs, df);
+		assertEquals(offsetChord2 * stretch, newVoice.elements.get(3).offsetIs,
 			df);
 	}
 

@@ -1,6 +1,7 @@
 package com.xenoage.zong.musiclayout.notator.chord.stem.beam.notation;
 
 import static com.xenoage.utils.iterators.It.it;
+import static com.xenoage.zong.core.music.chord.StemDirection.Up;
 import static com.xenoage.zong.core.position.MP.getMP;
 
 import java.util.List;
@@ -12,19 +13,19 @@ import com.xenoage.zong.core.music.beam.BeamWaypoint;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.core.position.MP;
-import com.xenoage.zong.musiclayout.layouter.beamednotation.design.BeamDesign;
 import com.xenoage.zong.musiclayout.layouter.beamednotation.design.ChordBeamSpacing;
-import com.xenoage.zong.musiclayout.layouter.beamednotation.design.DoubleBeamDesign;
-import com.xenoage.zong.musiclayout.layouter.beamednotation.design.MultipleBeamDesign;
-import com.xenoage.zong.musiclayout.layouter.beamednotation.design.SingleBeamDesign;
-import com.xenoage.zong.musiclayout.layouter.beamednotation.design.TripleBeamDesign;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
 import com.xenoage.zong.musiclayout.notations.beam.BeamStemAlignments;
 import com.xenoage.zong.musiclayout.notations.chord.AccidentalsNotation;
 import com.xenoage.zong.musiclayout.notations.chord.NotesNotation;
 import com.xenoage.zong.musiclayout.notations.chord.StemNotation;
-import com.xenoage.zong.musiclayout.notator.chord.stem.beam.BeamedStemDirector;
+import com.xenoage.zong.musiclayout.notator.chord.stem.beam.notation.lines.BeamLines;
+import com.xenoage.zong.musiclayout.notator.chord.stem.beam.notation.lines.MultipleLines;
+import com.xenoage.zong.musiclayout.notator.chord.stem.beam.notation.lines.OneLine;
+import com.xenoage.zong.musiclayout.notator.chord.stem.beam.notation.lines.ThreeLines;
+import com.xenoage.zong.musiclayout.notator.chord.stem.beam.notation.lines.TwoLines;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
+import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
 
 /**
  * {@link Strategy} for a {@link Beam}, which spans over a single staff and measure.
@@ -42,36 +43,38 @@ public class OneMeasureOneStaff
 	@Override public void compute(Beam beam, List<ColumnSpacing> columnSpacings) {
 
 		//collect needed information
+		ColumnSpacing column = columnSpacings.get(getMP(beam.getChord(0)).measure);
 		NotesNotation[] chordNa = new NotesNotation[beam.getWaypoints().size()];
 		float[] stemX = new float[beam.getWaypoints().size()];
 		Chord firstChord = beam.getStart().getChord();
 		MP firstChordMP = getMP(firstChord);
-		int staffLinesCount = score.getStaff(firstChordMP).getLinesCount();
+		int staffLinesCount = firstChord.getScore().getStaff(firstChordMP).getLinesCount();
 		int beamLinesCount = beam.getMaxBeamLinesCount();
 		int staffIndex = beam.getUpperStaffIndex();
 		int voiceIndex = firstChordMP.voice;
 		int i = 0;
+		StemDirection dir = Up;
 		for (BeamWaypoint waypoint : beam.getWaypoints()) {
 			Chord chord = waypoint.getChord();
-			ChordNotation cn = notations.getChord(chord);
+			ElementSpacing cs = column.getElement(chord);
+			ChordNotation cn = (ChordNotation) cs.notation;
+			if (i == 0)
+				dir = cn.stemDirection;
 			chordNa[i] = cn.notes;
 			AccidentalsNotation aa = cn.accidentals;
-			stemX[i] = columnSpacing.getOffsetIs(chord, staffIndex, voiceIndex) +
-				(aa != null ? aa.widthIs : 0) + chordNa[i].stemOffsetIs;
+			stemX[i] = cs.offsetIs + aa.widthIs + chordNa[i].stemOffsetIs;
 			i++;
 		}
-		StemDirection dir = notations.getChord(firstChord).stemDirection;
 
 		//compute the stem alignments
-		BeamStemAlignments bsa = computeStemAlignments(chordNa, stemX, staffLinesCount, beamLinesCount,
-			dir);
+		BeamStemAlignments bsa = computeStemAlignments(chordNa, stemX, staffLinesCount, beamLinesCount, dir);
 
-		//compute new notations
+		//save stems in notations
 		It<BeamWaypoint> waypoints = it(beam.getWaypoints());
 		for (BeamWaypoint waypoint : waypoints) {
 			Chord chord = waypoint.getChord();
-			ChordNotation cn = notations.getChord(chord);
-			cn.stem = bsa.stemAlignments[waypoints.getIndex()];
+			ChordNotation notation = column.getNotation(chord);
+			notation.stem = bsa.stemAlignments[waypoints.getIndex()];
 		}
 	}
 
@@ -87,27 +90,28 @@ public class OneMeasureOneStaff
 	 */
 	public BeamStemAlignments computeStemAlignments(NotesNotation[] chordNa, float[] stemX,
 		int staffLinesCount, int beamLinesCount, StemDirection stemDirection) {
+		
 		//get appropriate beam design
-		BeamDesign beamDesign;
+		BeamLines beamDesign;
 		switch (beamLinesCount) {
 			case 1:
-				beamDesign = new SingleBeamDesign(stemDirection, staffLinesCount);
+				beamDesign = new OneLine(stemDirection, staffLinesCount);
 				break;
 			case 2:
-				beamDesign = new DoubleBeamDesign(stemDirection, staffLinesCount);
+				beamDesign = new TwoLines(stemDirection, staffLinesCount);
 				break;
 			case 3:
-				beamDesign = new TripleBeamDesign(stemDirection, staffLinesCount);
+				beamDesign = new ThreeLines(stemDirection, staffLinesCount);
 				break;
 			default:
-				beamDesign = new MultipleBeamDesign(stemDirection, staffLinesCount, beamLinesCount);
+				beamDesign = new MultipleLines(stemDirection, staffLinesCount, beamLinesCount);
 		}
 
 		//compute beautiful slant
-		float slantIS = computeSlant(beamDesign, chordNa, stemX, stemDirection, staffLinesCount);
+		float slantIs = computeSlant(beamDesign, chordNa, stemX, stemDirection, staffLinesCount);
 
 		//compute stem alignments
-		BeamStemAlignments beamstemalignments = computeStemLengths(beamDesign, chordNa, stemX, slantIS,
+		BeamStemAlignments beamstemalignments = computeStemLengths(beamDesign, chordNa, stemX, slantIs,
 			beamLinesCount, stemDirection);
 
 		return beamstemalignments;
@@ -123,7 +127,7 @@ public class OneMeasureOneStaff
 	 * @param stemDirection  the direction of the stems
 	 * @param staffLinesCount  the number of lines in this staff
 	 */
-	private float computeSlant(BeamDesign beamDesign, NotesNotation[] chordNotesAlignment,
+	private float computeSlant(BeamLines beamDesign, NotesNotation[] chordNotesAlignment,
 		float[] positionX, StemDirection stemDirection, int staffLinesCount) {
 		//collect relevant note line positions (positions of the outermost notes)
 		int firstRelevantNoteLP;
@@ -188,7 +192,7 @@ public class OneMeasureOneStaff
 				}
 			}
 			if (ascend) {
-				return beamDesign.getSlantAscendingMiddleNotes();
+				return beamDesign.getSlantAscendingMiddleNotesIs();
 			}
 			boolean descend = true;
 			for (int i = 1; i < chordsCount - 1; i++) {
@@ -198,7 +202,7 @@ public class OneMeasureOneStaff
 				}
 			}
 			if (descend) {
-				return beamDesign.getSlantDescendingMiddleNotes();
+				return beamDesign.getSlantDescendingMiddleNotesIs();
 			}
 		}
 
@@ -216,7 +220,7 @@ public class OneMeasureOneStaff
 	 * @param lengthX          the horizontal distance between the first and the last note in IS
 	 * @param staffLinesCount  the number of lines in this staff
 	 */
-	private float computeNormalBeamSlant(BeamDesign beamDesign, int firstNoteLP, int lastNoteLP,
+	private float computeNormalBeamSlant(BeamLines beamDesign, int firstNoteLP, int lastNoteLP,
 		float lengthX, int staffLinesCount) {
 		ChordBeamSpacing spacing = ChordBeamSpacing.Normal;
 		if (lengthX > wideSpacing) {
@@ -238,7 +242,7 @@ public class OneMeasureOneStaff
 	 * @param spacing          the horizontal spacing of the beam chords
 	 * @param staffLinesCount  the number of lines in this staff
 	 */
-	private float computeSlant(BeamDesign beamDesign, int firstNoteLP, int lastNoteLP,
+	private float computeSlant(BeamLines beamDesign, int firstNoteLP, int lastNoteLP,
 		ChordBeamSpacing spacing, int staffLinesCount) {
 		int verticalDistanceLP = lastNoteLP - firstNoteLP;
 		float slantIS = 0;
@@ -260,14 +264,14 @@ public class OneMeasureOneStaff
 		}
 
 		if (usesimpleslant || spacing == ChordBeamSpacing.Close) {
-			slantIS = beamDesign.getCloseSpacing(firstNoteLP, lastNoteLP) / 2;
+			slantIS = beamDesign.getCloseSpacingSlantIs(firstNoteLP, lastNoteLP) / 2;
 		}
 		else {
 			if (spacing == ChordBeamSpacing.Wide) {
-				slantIS = beamDesign.getWideSpacing(firstNoteLP, lastNoteLP) / 2;
+				slantIS = beamDesign.getWideSpacingSlantIs(firstNoteLP, lastNoteLP) / 2;
 			}
 			else {
-				slantIS = beamDesign.getNormalSpacing(firstNoteLP, lastNoteLP) / 2;
+				slantIS = beamDesign.getNormalSpacingSlantIs(firstNoteLP, lastNoteLP) / 2;
 			}
 		}
 		if (verticalDistanceLP < 0) {
@@ -285,7 +289,7 @@ public class OneMeasureOneStaff
 	 * @param beamLinesCount   the number of beam lines         
 	 * @param stemDirection    the direction of the stems
 	 */
-	private BeamStemAlignments computeStemLengths(BeamDesign beamDesign, NotesNotation[] chordNa,
+	private BeamStemAlignments computeStemLengths(BeamLines beamDesign, NotesNotation[] chordNa,
 		float[] stemX, float slantIS, int beamLinesCount, StemDirection stemDirection) {
 
 		int chordsCount = chordNa.length;
@@ -322,7 +326,7 @@ public class OneMeasureOneStaff
 				}
 
 				//stem length ok?
-				if (currentStemLength < beamDesign.getMinimumStemLength()) {
+				if (currentStemLength < beamDesign.getMinimumStemLengthIs()) {
 					correctStemLength = false;
 					break;
 				}
@@ -344,7 +348,7 @@ public class OneMeasureOneStaff
 		}
 
 		BeamStemAlignments beamStemAlignments = new BeamStemAlignments(stemAlignments,
-			BeamDesign.BEAMLINE_WIDTH, beamDesign.getDistanceBetweenBeamLines(), beamLinesCount);
+			BeamLines.beamLineWidth, beamDesign.getDistanceBetweenBeamLinesIs(), beamLinesCount);
 		return beamStemAlignments;
 	}
 

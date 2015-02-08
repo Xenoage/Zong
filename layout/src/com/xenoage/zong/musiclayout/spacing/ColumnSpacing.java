@@ -1,6 +1,7 @@
 package com.xenoage.zong.musiclayout.spacing;
 
 import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.zong.core.position.MP.getMP;
 
 import java.util.List;
 
@@ -9,6 +10,10 @@ import lombok.Getter;
 
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.MusicElement;
+import com.xenoage.zong.core.music.VoiceElement;
+import com.xenoage.zong.core.music.chord.Chord;
+import com.xenoage.zong.core.position.MP;
+import com.xenoage.zong.musiclayout.notations.ChordNotation;
 
 /**
  * The horizontal spacing for one measure column.
@@ -92,10 +97,11 @@ public class ColumnSpacing {
 	/**
 	 * Returns the offset of the given {@link MusicElement} in IS, or
 	 * 0 if not found. The index of the staff and voice must also be given.
+	 * @deprecated use {@link #getChord(Chord)}
 	 */
 	public float getOffsetIs(MusicElement element, int staffIndex, int voiceIndex) {
 		MeasureSpacing measure = measureSpacings.get(staffIndex);
-		for (ElementSpacing se : measure.getVoiceSpacings().get(voiceIndex).spacingElements) {
+		for (ElementSpacing se : measure.getVoiceSpacings().get(voiceIndex).elements) {
 			if (se.getElement() == element) {
 				return se.offsetIs;
 			}
@@ -112,6 +118,31 @@ public class ColumnSpacing {
 				return bo.getOffsetMm();
 		}
 		return 0;
+	}
+	
+	/**
+	 * Gets the VoiceSpacing at the given staff and voice.
+	 */
+	public VoiceSpacing getVoice(int staff, int voice) {
+		return measureSpacings.get(staff).getVoiceSpacings().get(voice);
+	}
+	
+	/**
+	 * Convenience method to get the {@link ElementSpacing} of the given
+	 * {@link VoiceElement} in this column.
+	 */
+	public ElementSpacing getElement(VoiceElement element) {
+		MP mp = getMP(element);
+		VoiceSpacing voice = getVoice(mp.staff, mp.voice);
+		return voice.getElement(element);
+	}
+	
+	/**
+	 * Convenience method to get the {@link ChordNotation} of the given
+	 * {@link Chord} in this column.
+	 */
+	public ChordNotation getNotation(Chord chord) {
+		return (ChordNotation) getElement(chord).notation;
 	}
 
 }

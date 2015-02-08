@@ -67,13 +67,13 @@ public class StretchMeasures
 					//grace elements are not stretched, but the distance to their following full element
 					//stays the same
 					float lastElementOriginalOffsetIs = getLast(column.beatOffsets).offsetMm / voice.interlineSpace;
-					for (int i : rangeReverse(voice.spacingElements)) {
-						ElementSpacing element = voice.spacingElements.get(i);
+					for (int i : rangeReverse(voice.elements)) {
+						ElementSpacing element = voice.elements.get(i);
 						if (element.isGrace()) {
 							//grace element: keep distance to following element
 							float oldDistance = lastElementOriginalOffsetIs - element.offsetIs;
 							lastElementOriginalOffsetIs = element.offsetIs;
-							element.offsetIs = voice.spacingElements.get(i + 1).offsetIs - oldDistance;
+							element.offsetIs = voice.elements.get(i + 1).offsetIs - oldDistance;
 						}
 						else {
 							//normal element: stretch the offset

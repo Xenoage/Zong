@@ -31,7 +31,7 @@ public class AlignedVoicesSpacer {
 	 */
 	public void compute(VoiceSpacing voiceSpacing, List<BeatOffset> beatOffsets) {
 		
-		List<ElementSpacing> spacingElements = voiceSpacing.spacingElements;
+		List<ElementSpacing> spacingElements = voiceSpacing.elements;
 		if (spacingElements.size() == 0 || beatOffsets.size() == 0)
 			return;
 		

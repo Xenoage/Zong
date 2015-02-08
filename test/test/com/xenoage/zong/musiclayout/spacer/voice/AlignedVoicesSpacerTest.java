@@ -95,7 +95,7 @@ public class AlignedVoicesSpacerTest {
 		//           | ⌎-----  (8 - 0) / (2 - 0) * (2 - 0) + 0 =  8 } (shared beats 0 and 4)
 		//           ⌎-------  (8 - 0) / (2 - 0) * (1 - 0) + 0 =  4 } (shared beats 0 and 4)
 		testee.compute(voiceSpacing, beatOffsets);
-		List<ElementSpacing> finalSpacing = voiceSpacing.spacingElements;
+		List<ElementSpacing> finalSpacing = voiceSpacing.elements;
 		assertEquals(4, finalSpacing.size());
 		assertEquals(beat(2), finalSpacing.get(0).beat);
 		assertEquals(4f / is, finalSpacing.get(0).offsetIs, df);
@@ -130,7 +130,7 @@ public class AlignedVoicesSpacerTest {
 		//         | ⌎- 2
 		//         ⌎--- 0
 		testee.compute(voiceSpacing, beatOffsets);
-		List<ElementSpacing> finalSpacing = voiceSpacing.spacingElements;
+		List<ElementSpacing> finalSpacing = voiceSpacing.elements;
 		assertEquals(2, finalSpacing.size());
 		assertEquals(beat(0), finalSpacing.get(0).beat);
 		assertEquals(0f / is, finalSpacing.get(0).offsetIs, df);
@@ -161,7 +161,7 @@ public class AlignedVoicesSpacerTest {
 		//         | ⌎- 6
 		//         ⌎--- 2
 		testee.compute(voiceSpacing, beatOffsets);
-		List<ElementSpacing> finalSpacing = voiceSpacing.spacingElements;
+		List<ElementSpacing> finalSpacing = voiceSpacing.elements;
 		assertEquals(2, finalSpacing.size());
 		assertEquals(beat(0), finalSpacing.get(0).beat);
 		assertEquals(2f / is, finalSpacing.get(0).offsetIs, df);
@@ -204,7 +204,7 @@ public class AlignedVoicesSpacerTest {
 		//         | ⌎------- (30 - 10) / (60 - 50) * (51 - 50) + 10 = 12 } (shared beats 0 and 8)
 		//         ⌎--------- (30 - 10) / (60 - 50) * (50 - 50) + 10 = 10 } (shared beats 0 and 8)
 		testee.compute(voiceSpacing, beatOffsets);
-		List<ElementSpacing> finalSpacing = voiceSpacing.spacingElements;
+		List<ElementSpacing> finalSpacing = voiceSpacing.elements;
 		assertEquals(5, finalSpacing.size());
 		assertEquals(beat(0), finalSpacing.get(0).beat);
 		assertEquals(10f / is, finalSpacing.get(0).offsetIs, df);

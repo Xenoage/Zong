@@ -66,7 +66,7 @@ public class VoicesBeatOffsetter {
 		if (voiceSpacings.size() == 1) {
 			//only one voice
 			float interlineSpace = voiceSpacings.get(0).interlineSpace;
-			for (ElementSpacing se : voiceSpacings.get(0).spacingElements) {
+			for (ElementSpacing se : voiceSpacings.get(0).elements) {
 				//if last beat offset has same beat, overwrite it
 				if (ret.get(ret.size() - 1).getBeat().equals(se.beat))
 					ret.remove(ret.size() - 1);
@@ -90,7 +90,7 @@ public class VoicesBeatOffsetter {
 				for (VoiceSpacing voiceSpacing : voiceSpacings) {
 					float interlineSpace = voiceSpacing.interlineSpace;
 					float voiceMinimalDistance = computeMinimalDistance(lastBeat, beat,
-						beat.equals(measureBeats), voiceSpacing.voice, voiceSpacing.spacingElements,
+						beat.equals(measureBeats), voiceSpacing.voice, voiceSpacing.elements,
 						ret, interlineSpace);
 					minimalDistance = Math.max(minimalDistance, voiceMinimalDistance);
 
@@ -124,7 +124,7 @@ public class VoicesBeatOffsetter {
 		Fraction beat;
 		for (VoiceSpacing voiceSpacing : voiceSpacings) {
 			beat = Fraction._0;
-			for (ElementSpacing spacingElement : voiceSpacing.spacingElements) {
+			for (ElementSpacing spacingElement : voiceSpacing.elements) {
 				MusicElement element = spacingElement.getElement();
 				if (element instanceof VoiceElement) {
 					//add beat
@@ -270,7 +270,7 @@ public class VoicesBeatOffsetter {
 	private float getOffsetBeat0InMm(List<VoiceSpacing> voiceSpacings) {
 		float maxOffset = 0;
 		for (VoiceSpacing voiceSpacing : voiceSpacings) {
-			float offset = getLastOffset(voiceSpacing.spacingElements, _0) * voiceSpacing.interlineSpace;
+			float offset = getLastOffset(voiceSpacing.elements, _0) * voiceSpacing.interlineSpace;
 			if (offset > maxOffset)
 				maxOffset = offset;
 		}

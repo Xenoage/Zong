@@ -68,7 +68,7 @@ public class SingleVoiceSpacerTest {
 		//compute spacing
 		VoiceSpacing vs = testee.compute(voice, 200f, fr(4, 4), notations, layoutSettings);
 		//check spacing
-		ElementSpacing[] ses = vs.spacingElements.toArray(new ElementSpacing[0]);
+		ElementSpacing[] ses = vs.elements.toArray(new ElementSpacing[0]);
 		float s = layoutSettings.offsetMeasureStart;
 		float d = layoutSettings.spacings.widthDistanceMin;
 		assertEquals(5, ses.length);
@@ -105,7 +105,7 @@ public class SingleVoiceSpacerTest {
 		//compute spacing
 		VoiceSpacing vs = testee.compute(voice, 300f, fr(4, 4), notations, layoutSettings);
 		//check spacing
-		ElementSpacing[] ses = vs.spacingElements.toArray(new ElementSpacing[0]);;
+		ElementSpacing[] ses = vs.elements.toArray(new ElementSpacing[0]);;
 		float s = layoutSettings.offsetMeasureStart;
 		assertEquals(5, ses.length);
 		assertEquals(s + 2, ses[0].offsetIs, DELTA_FLOAT);
@@ -141,7 +141,7 @@ public class SingleVoiceSpacerTest {
 		//compute spacing
 		VoiceSpacing vs = testee.compute(voice, 400f, fr(4, 4), notations, layoutSettings);
 		//check spacing
-		ElementSpacing[] ses = vs.spacingElements.toArray(new ElementSpacing[0]);;
+		ElementSpacing[] ses = vs.elements.toArray(new ElementSpacing[0]);;
 		float s = layoutSettings.offsetMeasureStart;
 		float d = layoutSettings.spacings.widthDistanceMin;
 		assertEquals(5, ses.length);
@@ -178,7 +178,7 @@ public class SingleVoiceSpacerTest {
 		//compute spacing
 		VoiceSpacing vs = testee.compute(voice, 400f, fr(4, 4), notations, layoutSettings);
 		//check spacing
-		ElementSpacing[] ses = vs.spacingElements.toArray(new ElementSpacing[0]);;
+		ElementSpacing[] ses = vs.elements.toArray(new ElementSpacing[0]);;
 		float s = layoutSettings.offsetMeasureStart;
 		float d = layoutSettings.spacings.widthDistanceMin;
 		assertEquals(5, ses.length);

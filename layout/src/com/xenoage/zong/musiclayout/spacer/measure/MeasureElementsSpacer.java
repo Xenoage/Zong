@@ -190,7 +190,7 @@ public class MeasureElementsSpacer {
 		ElementSpacing ret = null;
 		float retLeftX = Float.MAX_VALUE;
 		for (VoiceSpacing vs : vss) {
-			for (ElementSpacing se : vs.spacingElements) {
+			for (ElementSpacing se : vs.elements) {
 				float leftX = getLeftX(se);
 				if (leftX < retLeftX) {
 					retLeftX = leftX;
@@ -211,7 +211,7 @@ public class MeasureElementsSpacer {
 		float retLeftX = Float.MIN_VALUE;
 		float retRightX = Float.MAX_VALUE;
 		for (VoiceSpacing vs : vss) {
-			for (ElementSpacing se : vs.spacingElements) {
+			for (ElementSpacing se : vs.elements) {
 				int compare = se.beat.compareTo(beat);
 				if (compare < 0) {
 					float leftX = getLeftX(se);
@@ -260,7 +260,7 @@ public class MeasureElementsSpacer {
 	 */
 	public void shift(List<VoiceSpacing> vss, float offsetIs) {
 		for (VoiceSpacing vs : vss)
-			for (ElementSpacing se : vs.spacingElements)
+			for (ElementSpacing se : vs.elements)
 				se.offsetIs += offsetIs;
 	}
 
@@ -270,7 +270,7 @@ public class MeasureElementsSpacer {
 	 */
 	public void shiftAfterBeat(List<VoiceSpacing> vss, float offsetIs, Fraction beat) {
 		for (VoiceSpacing vs : vss)
-			for (ElementSpacing se : vs.spacingElements)
+			for (ElementSpacing se : vs.elements)
 				if (se.beat.compareTo(beat) >= 0)
 					se.offsetIs += offsetIs;
 	}
