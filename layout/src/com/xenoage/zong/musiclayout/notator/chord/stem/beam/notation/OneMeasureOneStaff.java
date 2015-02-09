@@ -35,6 +35,8 @@ import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
  */
 public class OneMeasureOneStaff
 	implements Strategy {
+	
+	public static final OneMeasureOneStaff oneMeasureOneStaff = new OneMeasureOneStaff();
 
 	private static final float closeSpacing = 5;
 	private static final float wideSpacing = 8;
@@ -50,8 +52,6 @@ public class OneMeasureOneStaff
 		MP firstChordMP = getMP(firstChord);
 		int staffLinesCount = firstChord.getScore().getStaff(firstChordMP).getLinesCount();
 		int beamLinesCount = beam.getMaxBeamLinesCount();
-		int staffIndex = beam.getUpperStaffIndex();
-		int voiceIndex = firstChordMP.voice;
 		int i = 0;
 		StemDirection dir = Up;
 		for (BeamWaypoint waypoint : beam.getWaypoints()) {
