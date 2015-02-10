@@ -71,7 +71,7 @@ public class ScoreLayoutStrategy
 		Notations notations = notator.computeAll(context);
 		
 		//optimal measure spacings
-		List<ColumnSpacing> columnSpacings = computeColumnSpacings(notations, lc);
+		List<ColumnSpacing> columnSpacings = computeColumnSpacings(notations, context);
 
 		//break into systems and frames
 		Target target = new Target(lc.getAreas(), lc.getAdditionalArea(), lc.isCompleteLayout());
@@ -91,24 +91,16 @@ public class ScoreLayoutStrategy
 			notations, lc);
 		
 		//create score layout
-		return new ScoreLayout(lc.getScore(), scoreFrameLayouts, lc.getSymbolPool(), lc.getLayoutSettings());
+		return new ScoreLayout(context.score, scoreFrameLayouts, context.symbols, context.settings);
 	}
 
 	/**
 	 * Computes the {@link ColumnSpacing} for each measure
 	 * (without leading spacing).
 	 */
-	List<ColumnSpacing> computeColumnSpacings(Notations notations, ScoreLayouterContext lc) {
-		Score score = lc.getScore();
+	List<ColumnSpacing> computeColumnSpacings(Notations notations, Context context) {
 		ArrayList<ColumnSpacing> ret = alist();
-		for (int iMeasure : range(0, score.getMeasuresCount() - 1)) {
-			
-			//TODO
-			Context context = new Context();
-			context.score = lc.getScore();
-			context.settings = lc.getLayoutSettings();
-			context.symbols = lc.getSymbolPool();
-			
+		for (int iMeasure : range(0, context.score.getMeasuresCount() - 1)) {
 			context.mp = MP.atMeasure(iMeasure);
 			ret.add(columnSpacer.compute(context, false, notations));
 		}
