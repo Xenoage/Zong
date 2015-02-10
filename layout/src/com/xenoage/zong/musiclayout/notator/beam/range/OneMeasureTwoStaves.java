@@ -24,6 +24,7 @@ import com.xenoage.zong.musiclayout.notator.beam.lines.OneLine;
 import com.xenoage.zong.musiclayout.notator.beam.lines.ThreeLines;
 import com.xenoage.zong.musiclayout.notator.beam.lines.TwoLines;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
+import com.xenoage.zong.musiclayout.spacing.ScoreSpacing;
 
 /**
  * {@link Strategy} for a {@link Beam}, which spans over two adjacent staves
@@ -45,8 +46,8 @@ public class OneMeasureTwoStaves
 	public static final OneMeasureTwoStaves oneMeasureTwoStaves = new OneMeasureTwoStaves();
 	
 
-	@Override public void compute(Beam beam, List<ColumnSpacing> columnSpacings) {
-		ColumnSpacing column = columnSpacings.get(getMP(beam.getChord(0)).measure);
+	@Override public void compute(Beam beam, ScoreSpacing scoreSpacing) {
+		ColumnSpacing column = scoreSpacing.columns.get(getMP(beam.getChord(0)).measure);
 		int beamLinesCount = beam.getMaxBeamLinesCount();
 		
 		//collect chord notations

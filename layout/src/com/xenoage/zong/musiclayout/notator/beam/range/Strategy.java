@@ -1,10 +1,8 @@
 package com.xenoage.zong.musiclayout.notator.beam.range;
 
-import java.util.List;
-
 import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.musiclayout.notations.chord.StemNotation;
-import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
+import com.xenoage.zong.musiclayout.spacing.ScoreSpacing;
 
 /**
  * Strategy for computing the {@link StemNotation}s of beamed stems.
@@ -14,6 +12,6 @@ import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
  */
 public interface Strategy {
 
-	public void compute(Beam beam, List<ColumnSpacing> columnSpacings);
+	public void compute(Beam beam, ScoreSpacing scoreSpacing);
 
 }

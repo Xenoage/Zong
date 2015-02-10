@@ -3,23 +3,19 @@ package com.xenoage.zong.musiclayout.layouter;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.iterators.It.it;
 import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.zong.core.position.MP.atMeasure;
 import static com.xenoage.zong.core.position.MP.mp0;
 import static com.xenoage.zong.musiclayout.notator.Notator.notator;
 import static com.xenoage.zong.musiclayout.notator.beam.BeamNotator.beamNotator;
-import static com.xenoage.zong.musiclayout.spacer.frame.FrameSpacer.frameSpacer;
-import static com.xenoage.zong.musiclayout.spacer.measure.ColumnSpacer.columnSpacer;
+import static com.xenoage.zong.musiclayout.spacer.ScoreSpacer.scoreSpacer;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.xenoage.utils.iterators.It;
-import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.music.chord.Chord;
-import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.util.VoiceElementIterator;
 import com.xenoage.zong.layout.frames.ScoreFrame;
 import com.xenoage.zong.musiclayout.Context;
@@ -31,8 +27,8 @@ import com.xenoage.zong.musiclayout.layouter.scoreframelayout.ScoreFrameLayoutSt
 import com.xenoage.zong.musiclayout.notations.Notations;
 import com.xenoage.zong.musiclayout.spacer.frame.fill.FrameFiller;
 import com.xenoage.zong.musiclayout.spacer.system.fill.SystemFiller;
-import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 import com.xenoage.zong.musiclayout.spacing.FrameSpacing;
+import com.xenoage.zong.musiclayout.spacing.ScoreSpacing;
 import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
 
 /**
@@ -70,118 +66,24 @@ public class ScoreLayoutStrategy
 		context.mp = mp0;
 		Notations notations = notator.computeAll(context);
 		
-		//optimal measure spacings
-		List<ColumnSpacing> columnSpacings = computeColumnSpacings(notations, context);
-
-		//break into systems and frames
-		Target target = new Target(lc.getAreas(), lc.getAdditionalArea(), lc.isCompleteLayout());
-		List<FrameSpacing> frames = computeFrameArrangements(target, context,
-			columnSpacings, notations);
+		//compute optimal measure spacings and break into systems and frames
+		Target target = new Target(lc.getAreas(), lc.getAdditionalArea(), lc.isCompleteLayout());  //TODO: target should be a param
+		ScoreSpacing scoreSpacing = scoreSpacer.compute(context, target, notations);
 		
 		//system stretching (horizontal)
-		fillSystemsHorizontally(frames, target);
+		fillSystemsHorizontally(scoreSpacing.frames, target);
 		//frame filling (vertical)
-		fillFramesVertically(frames, target, context.score);
+		fillFramesVertically(scoreSpacing.frames, target, context.score);
 		
 		//compute beams
-		computeBeamNotations(columnSpacings, context);
+		computeBeamNotations(scoreSpacing);
 		
 		//create score layout from the collected information
-		List<ScoreFrameLayout> scoreFrameLayouts = createScoreFrameLayouts(frames,
+		List<ScoreFrameLayout> scoreFrameLayouts = createScoreFrameLayouts(scoreSpacing.frames,
 			notations, lc);
 		
 		//create score layout
 		return new ScoreLayout(context.score, scoreFrameLayouts, context.symbols, context.settings);
-	}
-
-	/**
-	 * Computes the {@link ColumnSpacing} for each measure
-	 * (without leading spacing).
-	 */
-	List<ColumnSpacing> computeColumnSpacings(Notations notations, Context context) {
-		ArrayList<ColumnSpacing> ret = alist();
-		for (int iMeasure : range(0, context.score.getMeasuresCount() - 1)) {
-			context.mp = MP.atMeasure(iMeasure);
-			ret.add(columnSpacer.compute(context, false, notations));
-		}
-		return ret;
-	}
-
-	/**
-	 * Breaks the given measure column spacings into systems and frames.
-	 * The list of frame arrangements is returned.
-	 */
-	ArrayList<FrameSpacing> computeFrameArrangements(Target target, Context context,
-		List<ColumnSpacing> measureColumnSpacings, Notations notations) {
-		context.saveMp();
-		
-		ArrayList<FrameSpacing> ret = alist();
-		int measuresCount = context.score.getMeasuresCount();
-		int iMeasure = 0;
-		int iSystem = 0;
-		int iFrame = 0;
-		boolean additionalFrameIteration;
-		
-		while (true) {
-			additionalFrameIteration = false;
-
-			//find score frame
-			Size2f frameSize;
-			if (iFrame < target.areas.size()) {
-				//there is another existing score frame
-				frameSize = target.getArea(iFrame).size;
-			}
-			else {
-				//there is no another existing score frame
-				if (false == target.isCompleteLayout) {
-					//we are not interested in the stuff after the last score frame. exit.
-					break;
-				}
-				else if (iMeasure >= measuresCount) {
-					//all measures layouted. exit.
-					break;
-				}
-				else {
-					//still material to layout and additional frames requested. create one.
-					frameSize = target.additionalArea.size;
-					additionalFrameIteration = true;
-				}
-			}
-
-			//some material left to layout?
-			if (iMeasure < measuresCount) {
-				//more measures to layout
-				context.mp = atMeasure(iMeasure);
-				FrameSpacing frame = frameSpacer.compute(context, iSystem, frameSize,
-					measureColumnSpacings, notations);
-				if (frame.getSystems().size() > 0) {
-					//at least one measure in this frame. remember frame
-					ret.add(frame);
-					iMeasure = frame.getEndMeasureIndex() + 1;
-					iSystem += frame.getSystems().size();
-				}
-				else {
-					//no space for a measure in this frame. empty frame. but only, if frame exists.
-					//do not create endless list of empty additional frames
-					if (!additionalFrameIteration) {
-						ret.add(FrameSpacing.empty(frameSize));
-					}
-					else {
-						break;
-					}
-				}
-			}
-			else {
-				//no material left. empty frame.
-				ret.add(FrameSpacing.empty(frameSize));
-			}
-
-			//next frame
-			iFrame++;
-		}
-		
-		context.restoreMp();
-		return ret;
 	}
 
 	/**
@@ -214,16 +116,16 @@ public class ScoreLayoutStrategy
 	/**
 	 * Computes beamed notations with correct stem alignments.
 	 */
-	void computeBeamNotations(List<ColumnSpacing> columnSpacings, Context context) {
+	void computeBeamNotations(ScoreSpacing scoreSpacing) {
 		//go through all elements, finding beams, and recompute stem alignment
-		VoiceElementIterator voiceElementsIt = new VoiceElementIterator(context.score);
+		VoiceElementIterator voiceElementsIt = new VoiceElementIterator(scoreSpacing.score);
 		for (VoiceElement e : voiceElementsIt) {
 			if (e instanceof Chord) {
 				Chord chord = (Chord) e;
 				//compute each beam only one time (when the end waypoint is found)
 				Beam beam = chord.getBeam();
 				if (beam != null && beam.getStop().getChord() == chord) {
-					beamNotator.compute(beam, columnSpacings);
+					beamNotator.compute(beam, scoreSpacing);
 				}
 			}
 		}

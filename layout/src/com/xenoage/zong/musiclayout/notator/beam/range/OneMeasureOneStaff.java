@@ -28,6 +28,7 @@ import com.xenoage.zong.musiclayout.notator.beam.lines.ThreeLines;
 import com.xenoage.zong.musiclayout.notator.beam.lines.TwoLines;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
+import com.xenoage.zong.musiclayout.spacing.ScoreSpacing;
 
 /**
  * {@link Strategy} for a {@link Beam}, which spans over a single staff and measure.
@@ -46,10 +47,10 @@ public class OneMeasureOneStaff
 	private static final float wideSpacing = 8;
 
 
-	@Override public void compute(Beam beam, List<ColumnSpacing> columnSpacings) {
+	@Override public void compute(Beam beam, ScoreSpacing scoreSpacing) {
 
 		//collect needed information
-		ColumnSpacing column = columnSpacings.get(getMP(beam.getChord(0)).measure);
+		ColumnSpacing column = scoreSpacing.columns.get(getMP(beam.getChord(0)).measure);
 		List<ChordNotation> chords = alist(beam.size());
 		float[] stemX = new float[beam.getWaypoints().size()];
 		Chord firstChord = beam.getStart().getChord();
