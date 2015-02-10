@@ -25,7 +25,7 @@ public class TwoAccidentals
 		Accidental topAcc = p.accs[1];
 		float accToAccGap = p.chordWidths.accToAccGap;
 		//interval of at least a seventh?
-		if (topNote.yLp - bottomNote.yLp >= 6) {
+		if (topNote.lp - bottomNote.lp >= 6) {
 			//placed on the same horizontal position x = 0
 			xTop = xBottom = 0;
 			width = p.chordWidths.getMaxWidth(p.accs) + p.chordWidths.accToNoteGap;

@@ -33,7 +33,7 @@ public class ThreeAccidentals
 		float accToAccGap = p.chordWidths.accToAccGap;
 		float accToNoteGap = p.chordWidths.accToNoteGap;
 		//interval of at least a seventh?
-		if (topNote.yLp - bottomNote.yLp >= 6) {
+		if (topNote.lp - bottomNote.lp >= 6) {
 			//interval of at least a seventh. can be rule 1, 3 or 4
 			if (topNote.suspension == Right) {
 				//top note is suspended on the right side of the stem.

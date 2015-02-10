@@ -1,8 +1,7 @@
-package com.xenoage.zong.musiclayout.notator.chord.stem.beam.notation.lines;
+package com.xenoage.zong.musiclayout.notator.beam.lines;
 
 import static com.xenoage.utils.math.MathUtils.mod;
 import static com.xenoage.zong.core.music.chord.StemDirection.Down;
-import static com.xenoage.zong.musiclayout.notator.chord.stem.beam.notation.OneMeasureOneStaff.isBeamOutsideStaff;
 
 import com.xenoage.zong.core.music.chord.StemDirection;
 
@@ -32,7 +31,7 @@ public class OneLine
 			//TODO: some of the following 4 are possibly not really always 4 but
 			//dependent on the staffLinesCount.
 			int linepositionstart = mod((int) (startLp * 2), 4);
-			int linepositionend = mod((int) (startLp + slantIs * 2) * 2, 4);
+			int linepositionend = mod((int) ((startLp + slantIs * 2) * 2), 4);
 			if (stemDirection == Down) {
 				if (startLp <= 4 && startLp + slantIs * 2 <= 4) {
 					//downstems must only straddle the line or sit on it (at the beginning)

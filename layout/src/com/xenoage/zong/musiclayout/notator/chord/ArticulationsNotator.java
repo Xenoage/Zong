@@ -67,7 +67,7 @@ public class ArticulationsNotator {
 		NoteDisplacement outerNote, VSide side, int staffLinesCount) {
 		//compute LP of the articulation: if within staff, it must be
 		//between the staff lines (LP 1, 3, 5, ...)
-		int lp = outerNote.yLp + 2 * side.getDir();
+		int lp = outerNote.lp + 2 * side.getDir();
 		if (lp >= 0 && lp <= (staffLinesCount - 1) * 2 && //within staff
 			lp % 2 == 0) { //on staff line
 			lp += side.getDir(); //move one LP further
@@ -88,7 +88,7 @@ public class ArticulationsNotator {
 		NoteDisplacement outerNote, VSide side, int staffLinesCount) {
 		//compute LP of the first articulation:
 		//if within staff, it must be moved outside
-		int lp = outerNote.yLp + 2 * side.getDir();
+		int lp = outerNote.lp + 2 * side.getDir();
 		if (lp >= 0 && lp <= (staffLinesCount - 1) * 2) //within staff
 			lp = (side == VSide.Top ? (staffLinesCount - 1) * 2 + 1 : -1);
 		//collect displacements
@@ -98,7 +98,7 @@ public class ArticulationsNotator {
 				articulations.get(i).getType());
 		}
 		//total height: 1 IS for each articulation
-		float heightIS = Math.abs(lp - outerNote.yLp) / 2;
+		float heightIS = Math.abs(lp - outerNote.lp) / 2;
 		//create ArticulationsAlignment
 		return new ArticulationsNotation(arts, heightIS);
 	}

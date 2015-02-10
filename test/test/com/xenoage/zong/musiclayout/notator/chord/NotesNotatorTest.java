@@ -42,7 +42,7 @@ public class NotesNotatorTest {
 		assertEquals(0, notes.stemOffsetIs, Df);
 		assertEquals(n, notes.widthIs, Df);
 		NoteDisplacement note = notes.getNote(0);
-		assertEquals(5, note.yLp);
+		assertEquals(5, note.lp);
 		assertEquals(0, note.xIs, Df);
 		assertEquals(NoteSuspension.None, note.suspension);
 	}
@@ -56,7 +56,7 @@ public class NotesNotatorTest {
 		assertEquals(n, notes.stemOffsetIs, Df);
 		assertEquals(n, notes.widthIs, Df);
 		NoteDisplacement note = notes.getNote(0);
-		assertEquals(1, note.yLp);
+		assertEquals(1, note.lp);
 		assertEquals(0, note.xIs, Df);
 		assertEquals(NoteSuspension.None, note.suspension);
 	}
@@ -71,11 +71,11 @@ public class NotesNotatorTest {
 		assertEquals(n, notes.stemOffsetIs, Df);
 		assertEquals(2 * n, notes.widthIs, Df);
 		NoteDisplacement note = notes.getNote(0);
-		assertEquals(5, note.yLp);
+		assertEquals(5, note.lp);
 		assertEquals(0, note.xIs, Df);
 		assertEquals(NoteSuspension.Left, note.suspension);
 		note = notes.getNote(1);
-		assertEquals(6, note.yLp);
+		assertEquals(6, note.lp);
 		assertEquals(n, note.xIs, Df);
 		assertEquals(NoteSuspension.None, note.suspension);
 	}
@@ -157,11 +157,11 @@ public class NotesNotatorTest {
 		assertEquals(n, notes.stemOffsetIs, Df);
 		assertEquals(2 * n, notes.widthIs, Df);
 		NoteDisplacement note = notes.getNote(0);
-		assertEquals(5, note.yLp);
+		assertEquals(5, note.lp);
 		assertEquals(0, note.xIs, Df);
 		assertEquals(NoteSuspension.Left, note.suspension);
 		note = notes.getNote(1);
-		assertEquals(5, note.yLp);
+		assertEquals(5, note.lp);
 		assertEquals(n, note.xIs, Df);
 		assertEquals(NoteSuspension.None, note.suspension);
 	}

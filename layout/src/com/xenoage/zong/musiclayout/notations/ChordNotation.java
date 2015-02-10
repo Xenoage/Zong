@@ -19,16 +19,26 @@ import com.xenoage.zong.musiclayout.spacing.ElementWidth;
  * @author Andreas Wenger
  */
 @AllArgsConstructor
-@RequiredArgsConstructor
 public class ChordNotation
 	implements Notation {
 
-	@Getter public final Chord element;
+	@Getter public Chord element;
 	@Getter public ElementWidth width;
 	public NotesNotation notes;
 	public StemDirection stemDirection = StemDirection.Default;
 	public StemNotation stem;
 	public AccidentalsNotation accidentals;
 	public ArticulationsNotation articulations;
+	public BeamNotation beam;
+	
+	public ChordNotation(Chord element) {
+		this.element = element;
+	}
+	
+	public ChordNotation(Chord element, ElementWidth width) {
+		this.element = element;
+		this.width = width;
+	}
 
+	
 }

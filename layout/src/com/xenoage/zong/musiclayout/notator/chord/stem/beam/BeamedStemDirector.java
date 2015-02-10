@@ -2,13 +2,13 @@ package com.xenoage.zong.musiclayout.notator.chord.stem.beam;
 
 import static com.xenoage.zong.core.music.beam.Beam.HorizontalSpan.SingleMeasure;
 import static com.xenoage.zong.core.music.beam.Beam.VerticalSpan.SingleStaff;
-import static com.xenoage.zong.musiclayout.notator.chord.stem.beam.direction.OneMeasureOneStaff.oneMeasureOneStaff;
+import static com.xenoage.zong.musiclayout.notator.chord.stem.beam.range.OneMeasureOneStaff.oneMeasureOneStaff;
 
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.music.beam.Beam.VerticalSpan;
 import com.xenoage.zong.core.music.chord.StemDirection;
-import com.xenoage.zong.musiclayout.notator.chord.stem.beam.direction.Strategy;
+import com.xenoage.zong.musiclayout.notator.chord.stem.beam.range.Strategy;
 
 /**
  * Computes the {@link StemDirection} of beamed chords.

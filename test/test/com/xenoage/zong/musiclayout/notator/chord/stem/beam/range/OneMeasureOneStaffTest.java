@@ -1,13 +1,13 @@
-package com.xenoage.zong.musiclayout.notator.chord.stem.beam.direction;
+package com.xenoage.zong.musiclayout.notator.chord.stem.beam.range;
 
-import static com.xenoage.zong.musiclayout.notator.chord.stem.beam.direction.OneMeasureOneStaff.oneMeasureOneStaff;
+import static com.xenoage.zong.musiclayout.notator.chord.stem.beam.range.OneMeasureOneStaff.oneMeasureOneStaff;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
 import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.musiclayout.notations.chord.ChordLps;
-import com.xenoage.zong.musiclayout.notator.chord.stem.beam.direction.OneMeasureOneStaff;
+import com.xenoage.zong.musiclayout.notator.chord.stem.beam.range.OneMeasureOneStaff;
 
 /**
  * Tests for {@link OneMeasureOneStaff}.

@@ -74,7 +74,7 @@ public class ChordStamper {
 			NoteDisplacement note = nas.getNote(iNote);
 			Color color = Color.black;
 			NoteheadStamping noteSt = new NoteheadStamping(chord, noteheadType, color, staffStamping, sp(
-				leftNoteXMm + note.xIs * staffStamping.is, note.yLp), scaling, symbolPool);
+				leftNoteXMm + note.xIs * staffStamping.is, note.lp), scaling, symbolPool);
 			noteheads[iNote] = noteSt;
 		}
 

@@ -86,7 +86,7 @@ public final class NotesNotation {
 	public ChordLps getLps() {
 		int[] ret = new int[notes.length];
 		for (int i = 0; i < ret.length; i++)
-			ret[i] = notes[i].yLp;
+			ret[i] = notes[i].lp;
 		return new ChordLps(ret);
 	}
 

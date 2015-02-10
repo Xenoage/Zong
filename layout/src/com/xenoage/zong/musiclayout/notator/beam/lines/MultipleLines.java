@@ -1,4 +1,4 @@
-package com.xenoage.zong.musiclayout.notator.chord.stem.beam.notation.lines;
+package com.xenoage.zong.musiclayout.notator.beam.lines;
 
 import com.xenoage.zong.core.music.chord.StemDirection;
 

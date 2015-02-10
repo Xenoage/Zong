@@ -1,7 +1,6 @@
-package com.xenoage.zong.musiclayout.notator.chord.stem.beam.notation.lines;
+package com.xenoage.zong.musiclayout.notator.beam.lines;
 
 import static com.xenoage.utils.math.MathUtils.mod;
-import static com.xenoage.zong.musiclayout.notator.chord.stem.beam.notation.OneMeasureOneStaff.isBeamOutsideStaff;
 
 import com.xenoage.zong.core.music.chord.StemDirection;
 

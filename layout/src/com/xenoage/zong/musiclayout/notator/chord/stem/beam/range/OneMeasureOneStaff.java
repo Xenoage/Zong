@@ -1,4 +1,4 @@
-package com.xenoage.zong.musiclayout.notator.chord.stem.beam.direction;
+package com.xenoage.zong.musiclayout.notator.chord.stem.beam.range;
 
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.core.music.chord.StemDirection.Down;

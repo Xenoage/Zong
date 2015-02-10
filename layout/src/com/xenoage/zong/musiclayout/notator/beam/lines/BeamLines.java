@@ -1,5 +1,7 @@
-package com.xenoage.zong.musiclayout.notator.chord.stem.beam.notation.lines;
+package com.xenoage.zong.musiclayout.notator.beam.lines;
 
+import static com.xenoage.zong.core.music.chord.StemDirection.Down;
+import static com.xenoage.zong.core.music.chord.StemDirection.Up;
 import lombok.AllArgsConstructor;
 
 import com.xenoage.zong.core.music.chord.StemDirection;
@@ -23,7 +25,7 @@ import com.xenoage.zong.core.music.chord.StemDirection;
 @AllArgsConstructor
 public abstract class BeamLines {
 
-	public static final float beamLineWidth = 0.5f;
+	public static final float beamLineHeightIs = 0.5f;
 
 	StemDirection stemDirection;
 	int staffLinesCount;
@@ -106,4 +108,40 @@ public abstract class BeamLines {
 		return 1f;
 	}
 
+	/**
+	 * Returns true, when the lines of the given beam are completely outside the staff
+	 * (not even touching a staff line).
+	 * @param stemDirection      the direction of the stems
+	 * @param firstStemEndLp     the LP of the endpoint of the first stem
+	 * @param lastStemEndLp      the LP of the endpoint of the last stem  
+	 * @param staffLinesCount    the number of staff lines 
+	 * @param totalBeamHeightIs  the total height of the beam lines (including gaps) in IS
+	 */
+	static boolean isBeamOutsideStaff(StemDirection stemDirection, float firstStemEndLp,
+		float lastStemEndLp, int staffLinesCount, float totalBeamHeightIs) {
+		float maxStaffLp = (staffLinesCount - 1) * 2;
+		if (stemDirection == Up) {
+			//beam lines above the staff?
+			if (firstStemEndLp > maxStaffLp + totalBeamHeightIs * 2 &&
+				lastStemEndLp > maxStaffLp + totalBeamHeightIs * 2) {
+				return true;
+			}
+			//beam lines below the staff?
+			if (firstStemEndLp < 0 && lastStemEndLp < 0) {
+				return true;
+			}
+		}
+		else if (stemDirection == Down) {
+			//beam lines above the staff?
+			if (firstStemEndLp > maxStaffLp && lastStemEndLp > maxStaffLp) {
+				return true;
+			}
+			//beam lines below the staff?
+			if (firstStemEndLp < -1 * totalBeamHeightIs * 2 &&
+				lastStemEndLp < -1 * totalBeamHeightIs * 2) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

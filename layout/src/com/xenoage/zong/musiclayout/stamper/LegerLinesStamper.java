@@ -27,8 +27,8 @@ public class LegerLinesStamper {
 	public LegerLineStamping[] stamp(ChordNotation chordNotation, float chordXMm, StaffStamping staffStamping) {
 		Chord chord = chordNotation.getElement();
 		NotesNotation notes = chordNotation.notes;
-		int bottomCount = getBottomCount(notes.getBottomNote().yLp);
-		int topCount = getTopCount(notes.getTopNote().yLp, staffStamping.linesCount);
+		int bottomCount = getBottomCount(notes.getBottomNote().lp);
+		int topCount = getTopCount(notes.getTopNote().lp, staffStamping.linesCount);
 		if (bottomCount > 0 || topCount > 0) {
 			//horizontal position and width (may differ above and below staff, dependent on suspended notes)
 			NoteSuspension bottomSuspension = getBottomSuspension(notes.notes);
@@ -66,7 +66,7 @@ public class LegerLinesStamper {
 	NoteSuspension getBottomSuspension(NoteDisplacement[] notes) {
 		//find a suspended note which needs a leger line on the bottom side
 		for (NoteDisplacement note : notes)
-			if (note.suspension != None && note.yLp <= -2)
+			if (note.suspension != None && note.lp <= -2)
 				return note.suspension;
 		return None;
 	}
@@ -74,7 +74,7 @@ public class LegerLinesStamper {
 	NoteSuspension getTopSuspension(NoteDisplacement[] notes, int staffLinesCount) {
 		//find a suspended note which needs a leger line on the top side
 		for (NoteDisplacement note : notes)
-			if (note.suspension != None && note.yLp >= staffLinesCount * 2)
+			if (note.suspension != None && note.lp >= staffLinesCount * 2)
 				return note.suspension;
 		return None;
 	}

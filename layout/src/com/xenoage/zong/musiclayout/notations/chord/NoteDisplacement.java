@@ -14,7 +14,7 @@ import com.xenoage.utils.annotations.Const;
 @Const @AllArgsConstructor
 public class NoteDisplacement {
 
-	public final int yLp;
+	public final int lp;
 	public final float xIs;
 	public final NoteSuspension suspension;
 

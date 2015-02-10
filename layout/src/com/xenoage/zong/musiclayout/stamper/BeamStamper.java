@@ -70,6 +70,7 @@ public class BeamStamper {
 		List<Waypoint> lastWaypoints = null;
 		for (int i : range(levels - 1)) {
 			int level = levels - i + 1;
+			//TODO: use BeamNotation here!!!
 			float leveledLp = -1 * firstStem.direction.getSign() *
 				(BeamStamping.beamHeight + BeamStamping.beamGap) * level * 2; //TODO: find right value (*2 is a hack)
 			float leftLeveledLp = leftLp + leveledLp;

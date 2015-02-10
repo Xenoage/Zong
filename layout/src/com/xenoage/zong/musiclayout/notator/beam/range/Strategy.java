@@ -1,4 +1,4 @@
-package com.xenoage.zong.musiclayout.notator.chord.stem.beam.notation;
+package com.xenoage.zong.musiclayout.notator.beam.range;
 
 import java.util.List;
 

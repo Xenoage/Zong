@@ -47,28 +47,28 @@ public class StemNotator {
 
 		//compute start position
 		if (stemDir == Down)
-			startLp = topNote.yLp;
+			startLp = topNote.lp;
 		else if (stemDir == Up)
-			startLp = bottomNote.yLp;
+			startLp = bottomNote.lp;
 
 		//compute end position
 		if (stem.getLength() != null) {
 			//used fixed length
 			if (stemDir == Down)
-				endLp = bottomNote.yLp - 2 * stem.getLength();
+				endLp = bottomNote.lp - 2 * stem.getLength();
 			else if (stemDir == Up)
-				endLp = topNote.yLp + 2 * stem.getLength();
+				endLp = topNote.lp + 2 * stem.getLength();
 		}
 		else {
 			//compute length
 			if (stemDir == Down) {
-				endLp = bottomNote.yLp - 7 * scaling; //TODO: put 7 into LayoutSettings
+				endLp = bottomNote.lp - 7 * scaling; //TODO: put 7 into LayoutSettings
 				if (endLp > staffMiddleLp)
 					endLp = staffMiddleLp;
 			}
 			else if (stemDir == Up) {
-				startLp = bottomNote.yLp;
-				endLp = topNote.yLp + 7 * scaling;
+				startLp = bottomNote.lp;
+				endLp = topNote.lp + 7 * scaling;
 				if (endLp < staffMiddleLp)
 					endLp = staffMiddleLp;
 			}

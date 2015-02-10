@@ -99,8 +99,8 @@ public class SingleVoiceSpacerTest {
 		Voice voice = new Voice(alist((VoiceElement) r1, g1, g2, r4));
 		Notations notations = new Notations();
 		notations.add(new RestNotation(r1, new ElementWidth(2, 2, 13)));
-		notations.add(new ChordNotation(g1, new ElementWidth(1, 2, 1), null, null, null, null, null));
-		notations.add(new ChordNotation(g2, new ElementWidth(1, 2, 1), null, null, null, null, null));
+		notations.add(new ChordNotation(g1, new ElementWidth(1, 2, 1)));
+		notations.add(new ChordNotation(g2, new ElementWidth(1, 2, 1)));
 		notations.add(new RestNotation(r4, new ElementWidth(3, 2, 3)));
 		//compute spacing
 		VoiceSpacing vs = testee.compute(voice, 300f, fr(4, 4), notations, layoutSettings);
@@ -135,8 +135,8 @@ public class SingleVoiceSpacerTest {
 		Voice voice = new Voice(alist((VoiceElement) r1, g1, g2, r4));
 		Notations notations = new Notations();
 		notations.add(new RestNotation(r1, new ElementWidth(2, 2, 7)));
-		notations.add(new ChordNotation(g1, new ElementWidth(1, 2, 1), null, null, null, null, null));
-		notations.add(new ChordNotation(g2, new ElementWidth(1, 2, 1), null, null, null, null, null));
+		notations.add(new ChordNotation(g1, new ElementWidth(1, 2, 1)));
+		notations.add(new ChordNotation(g2, new ElementWidth(1, 2, 1)));
 		notations.add(new RestNotation(r4, new ElementWidth(3, 2, 3)));
 		//compute spacing
 		VoiceSpacing vs = testee.compute(voice, 400f, fr(4, 4), notations, layoutSettings);
@@ -172,8 +172,8 @@ public class SingleVoiceSpacerTest {
 		Voice voice = new Voice(alist((VoiceElement) r1, g1, g2, r4));
 		Notations notations = new Notations();
 		notations.add(new RestNotation(r1, new ElementWidth(2, 2, 3)));
-		notations.add(new ChordNotation(g1, new ElementWidth(1, 2, 1), null, null, null, null, null));
-		notations.add(new ChordNotation(g2, new ElementWidth(1, 2, 1), null, null, null, null, null));
+		notations.add(new ChordNotation(g1, new ElementWidth(1, 2, 1)));
+		notations.add(new ChordNotation(g2, new ElementWidth(1, 2, 1)));
 		notations.add(new RestNotation(r4, new ElementWidth(3, 2, 3)));
 		//compute spacing
 		VoiceSpacing vs = testee.compute(voice, 400f, fr(4, 4), notations, layoutSettings);

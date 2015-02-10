@@ -64,7 +64,7 @@ public abstract class Strategy {
 	static AccidentalsNotation create(Params params, float widthIs, float... xIs) {
 		AccidentalDisplacement[] a = new AccidentalDisplacement[xIs.length];
 		for (int i : range(a))
-			a[i] = new AccidentalDisplacement(params.accsNote[i].yLp, xIs[i], params.accs[i]);
+			a[i] = new AccidentalDisplacement(params.accsNote[i].lp, xIs[i], params.accs[i]);
 		return new AccidentalsNotation(a, widthIs);
 	}
 
