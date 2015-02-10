@@ -20,7 +20,7 @@ import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
  */
 public class BeamNotator {
 	
-	public static final BeamNotator beamedStemNotator = new BeamNotator();
+	public static final BeamNotator beamNotator = new BeamNotator();
 
 
 	public void compute(Beam beam, List<ColumnSpacing> columnSpacings) {

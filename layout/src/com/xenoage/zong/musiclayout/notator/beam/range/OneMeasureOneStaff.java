@@ -32,6 +32,8 @@ import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
 /**
  * {@link Strategy} for a {@link Beam}, which spans over a single staff and measure.
  * 
+ * TIDY
+ * 
  * @author Uli Teschemacher
  * @author Andreas Wenger
  */

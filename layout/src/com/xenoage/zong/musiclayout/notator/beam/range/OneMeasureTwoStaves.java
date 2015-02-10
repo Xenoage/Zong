@@ -35,6 +35,8 @@ import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
  * computed later, meanwhile they have wrong values. - TODO: change this! the staff
  * distances should be known already!
  * 
+ * TIDY
+ * 
  * @author Andreas Wenger
  */
 public class OneMeasureTwoStaves
