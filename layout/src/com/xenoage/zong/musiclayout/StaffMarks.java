@@ -9,6 +9,8 @@ import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.collections.IList;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.position.MP;
+import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
+import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 
 /**
@@ -25,6 +27,8 @@ import com.xenoage.zong.musiclayout.stampings.StaffStamping;
  * The voice of the positions is not relevant.
  * 
  * There is no validation of the given data, so be careful what you do.
+ * 
+ * @deprecated merge with or into {@link SystemSpacing} (maybe create StaffSpacing class)
  * 
  * @author Andreas Wenger
  */

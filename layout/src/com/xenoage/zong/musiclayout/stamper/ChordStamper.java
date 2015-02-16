@@ -38,7 +38,6 @@ import com.xenoage.zong.symbols.SymbolPool;
  * 
  * @author Andreas Wenger
  */
-@SuppressWarnings("Tests needed")
 public class ChordStamper {
 	
 	public static final ChordStamper chordStamper = new ChordStamper();

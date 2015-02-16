@@ -19,7 +19,6 @@ import com.xenoage.zong.musiclayout.layouter.scoreframelayout.SlurStampingStrate
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.StaffStampingsStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.TupletStampingStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.VoltaStampingStrategy;
-import com.xenoage.zong.musiclayout.notator.beam.BeamNotator;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.symbols.SymbolPool;
 

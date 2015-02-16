@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import com.xenoage.zong.core.music.MusicElement;
-import com.xenoage.zong.core.music.time.Time;
 import com.xenoage.zong.musiclayout.spacing.ElementWidth;
 
 /**

@@ -7,6 +7,7 @@ import com.xenoage.utils.collections.IList;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.utils.math.MathUtils;
 import com.xenoage.zong.musiclayout.spacing.BeatOffset;
+import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 
 /**
@@ -23,6 +24,8 @@ import com.xenoage.zong.musiclayout.stampings.StaffStamping;
  * The voice of the positions are not relevant.
  * 
  * There is no validation of the given data, so be careful what you do.
+ * 
+ * @deprecated merge with {@link ColumnSpacing}
  * 
  * @author Andreas Wenger
  */
@@ -68,6 +71,9 @@ import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 	 * the right mark is selected (like it is usual e.g. in text
 	 * processing applications). If it is behind all known marks,
 	 * the last known beat is returned.
+	 * 
+	 * TODO: divide between left or right at the center between two marks.
+	 * this is the real way text processing apps handle it
 	 */
 	public Fraction getBeatAt(float xMm) {
 		//find beat and return it
