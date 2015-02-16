@@ -81,7 +81,7 @@ public class StaffStampingsStrategy {
 					ColumnSpacing cs = css.get(iMeasure);
 					CList<BeatOffset> measureBeats = clist();
 					lastBeatOffset = null;
-					for (Fraction beat : cs.getMeasureSpacings().get(iStaff).getUsedBeats()) {
+					for (Fraction beat : cs.measures.get(iStaff).getUsedBeats()) {
 						BeatOffset bo = cs.getBeatOffset(beat);
 						if (bo == null)
 							bo = lastBeatOffset; //fallback: reuse last offset (happens currently only for ActorPreludeSample)

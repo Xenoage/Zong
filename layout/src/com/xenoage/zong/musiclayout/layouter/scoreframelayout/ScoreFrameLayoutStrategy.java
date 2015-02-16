@@ -296,7 +296,7 @@ public class ScoreFrameLayoutStrategy
 				for (int iMeasure = 0; iMeasure < system.getColumnSpacings().size(); iMeasure++) {
 					int globalMeasureIndex = system.getStartMeasureIndex() + iMeasure;
 					ColumnSpacing measureColumnSpacing = system.getColumnSpacings().get(iMeasure);
-					MeasureSpacing measureStaffSpacing = measureColumnSpacing.getMeasureSpacings().get(iStaff);
+					MeasureSpacing measureStaffSpacing = measureColumnSpacing.getMeasures().get(iStaff);
 
 					//add leading spacing elements, if available
 					LeadingSpacing leadingSpacing = measureStaffSpacing.getLeadingSpacing();

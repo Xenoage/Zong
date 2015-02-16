@@ -59,7 +59,7 @@ public class StretchMeasuresTest {
 		assertEquals(offsetBeat1 * stretch, newCol.getBeatOffsets().get(0).getOffsetMm(), df);
 		assertEquals(offsetBeat2 * stretch, newCol.getBeatOffsets().get(1).getOffsetMm(), df);
 		//element spacings
-		VoiceSpacing newVoice = newCol.getMeasureSpacings().get(0).getVoiceSpacings().get(0);
+		VoiceSpacing newVoice = newCol.measures.get(0).getVoiceSpacings().get(0);
 		assertEquals(offsetBeat1 * stretch, newVoice.elements.get(0).offsetIs, df);
 		assertEquals(offsetBeat2 * stretch, newVoice.elements.get(1).offsetIs, df);
 	}
@@ -91,7 +91,7 @@ public class StretchMeasuresTest {
 		assertEquals(offsetChord2 * stretch, newCol.getBeatOffsets().get(1).getOffsetMm(),
 			df);
 		//element spacings
-		VoiceSpacing newVoice = newCol.getMeasureSpacings().get(0).getVoiceSpacings().get(0);
+		VoiceSpacing newVoice = newCol.measures.get(0).getVoiceSpacings().get(0);
 		assertEquals(offsetChord1 * stretch, newVoice.elements.get(0).offsetIs,
 			df);
 		assertEquals(offsetChord2 * stretch - 2 * graceDistance,
@@ -124,7 +124,7 @@ public class StretchMeasuresTest {
 		MeasureSpacing measureSpacing = new MeasureSpacing(atMeasure(0, 0), is, voiceSpacings,
 			MeasureElementsSpacing.empty, LeadingSpacingMock.createGClefSpacing(leadingWidth));
 		List<MeasureSpacing> measureSpacings = alist(measureSpacing);
-		ColumnSpacing mcs = new ColumnSpacing(measureSpacings, beatOffsets,
+		ColumnSpacing mcs = new ColumnSpacing(-1, measureSpacings, beatOffsets,
 			alist(new BeatOffset(fr(0, 4), 0), new BeatOffset(fr(6, 4), offsetBeat2)));
 		SystemSpacing system = new SystemSpacing(10, 10, ilist(mcs), 0, 0, leadingWidth +
 			offsetBeat2, new float[]{0f}, new float[0], 0);
@@ -156,7 +156,7 @@ public class StretchMeasuresTest {
 				beatOffsets.get(1).getOffsetMm()))));
 		MeasureSpacing measureSpacing = new MeasureSpacing(atMeasure(0, 0), is, voiceSpacings,
 			MeasureElementsSpacing.empty, null);
-		ColumnSpacing mcs = new ColumnSpacing(alist(measureSpacing),
+		ColumnSpacing mcs = new ColumnSpacing(-1, alist(measureSpacing),
 			beatOffsets, alist(new BeatOffset(fr(0, 4), 0), new BeatOffset(fr(4, 4), offsetMeasureEnd)));
 		SystemSpacing system = new SystemSpacing(10, 10, ilist(mcs), 0, 0, offsetMeasureEnd,
 			new float[]{0f}, new float[0], 0);

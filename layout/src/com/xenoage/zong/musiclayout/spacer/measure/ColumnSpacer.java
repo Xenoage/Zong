@@ -121,7 +121,7 @@ public class ColumnSpacer
 		}
 		
 		context.restoreMp();
-		return new ColumnSpacing(measureSpacings, beatOffsets, barlineOffsets);
+		return new ColumnSpacing(measureIndex, measureSpacings, beatOffsets, barlineOffsets);
 	}
 
 }

@@ -55,7 +55,7 @@ public class StretchMeasures
 			}
 			
 			//measures
-			for (MeasureSpacing measure : column.measureSpacings) {
+			for (MeasureSpacing measure : column.measures) {
 				//measure elements
 				for (ElementSpacing element : measure.getMeasureElementsSpacings().elements) {
 					//stretch the offset

@@ -5,7 +5,6 @@ import static com.xenoage.zong.core.position.MP.getMP;
 
 import java.util.List;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import com.xenoage.utils.math.Fraction;
@@ -35,13 +34,13 @@ import com.xenoage.zong.musiclayout.notations.ChordNotation;
 @Getter
 public class ColumnSpacing {
 
+	/** The global measure index. */
+	public int measureIndex;
 	/** The list of measure spacings.
 	 * Eeach staff of the measure has its own spacing. */
-	public List<MeasureSpacing> measureSpacings;
-
+	public List<MeasureSpacing> measures;
 	/** The offsets of the relevant beats (notes and rests) of this measure in mm. */
 	public List<BeatOffset> beatOffsets;
-	
 	/** The barline offsets of this measure in mm.
 	 * At least the position of the start barline and the end barline
 	 * is available, and mid-measure barlines may also be included. */
@@ -51,9 +50,10 @@ public class ColumnSpacing {
 	public SystemSpacing parentSystem = null;
 
 	
-	public ColumnSpacing(List<MeasureSpacing> measureSpacings, List<BeatOffset> beatOffsets,
-		List<BeatOffset> barlineOffsets) {
-		this.measureSpacings = measureSpacings;
+	public ColumnSpacing(int measureIndex, List<MeasureSpacing> measureSpacings,
+		List<BeatOffset> beatOffsets, List<BeatOffset> barlineOffsets) {
+		this.measureIndex = measureIndex;
+		this.measures = measureSpacings;
 		this.beatOffsets = beatOffsets;
 		this.barlineOffsets = barlineOffsets;
 	}
@@ -74,8 +74,8 @@ public class ColumnSpacing {
 		float ret = 1; //TODO
 		//find the maximum width of the leading spacings
 		//of each staff
-		for (int iStaff : range(measureSpacings)) {
-			MeasureSpacing measureSpacing = measureSpacings.get(iStaff);
+		for (int iStaff : range(measures)) {
+			MeasureSpacing measureSpacing = measures.get(iStaff);
 			LeadingSpacing leadingSpacing = measureSpacing.getLeadingSpacing();
 			if (leadingSpacing != null) {
 				float width = leadingSpacing.widthIs * measureSpacing.getInterlineSpace();
@@ -110,7 +110,7 @@ public class ColumnSpacing {
 	 * @deprecated use {@link #getChord(Chord)}
 	 */
 	public float getOffsetIs(MusicElement element, int staffIndex, int voiceIndex) {
-		MeasureSpacing measure = measureSpacings.get(staffIndex);
+		MeasureSpacing measure = measures.get(staffIndex);
 		for (ElementSpacing se : measure.getVoiceSpacings().get(voiceIndex).elements) {
 			if (se.getElement() == element) {
 				return se.offsetIs;
@@ -134,7 +134,7 @@ public class ColumnSpacing {
 	 * Gets the VoiceSpacing at the given staff and voice.
 	 */
 	public VoiceSpacing getVoice(int staff, int voice) {
-		return measureSpacings.get(staff).getVoiceSpacings().get(voice);
+		return measures.get(staff).getVoiceSpacings().get(voice);
 	}
 	
 	/**
