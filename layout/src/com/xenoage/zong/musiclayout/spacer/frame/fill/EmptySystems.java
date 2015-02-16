@@ -3,7 +3,7 @@ package com.xenoage.zong.musiclayout.spacer.frame.fill;
 import static com.xenoage.utils.collections.CollectionUtils.getLast;
 import static com.xenoage.utils.kernel.Range.range;
 
-import com.xenoage.utils.collections.CList;
+import com.xenoage.utils.collections.CollectionUtils;
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.format.SystemLayout;
@@ -73,7 +73,7 @@ public class EmptySystems
 		}
 		//create and returns system
 		SystemLayout defaultSystemLayout = score.getFormat().getSystemLayout();
-		return new SystemSpacing(-1, -1, CList.<ColumnSpacing> ilist(),
+		return new SystemSpacing(CollectionUtils.<ColumnSpacing> alist(),
 			defaultSystemLayout.getMarginLeft(), defaultSystemLayout.getMarginRight(), width,
 			staffHeights, staffDistances, offsetY);
 	}

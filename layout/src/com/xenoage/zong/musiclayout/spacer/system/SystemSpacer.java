@@ -140,8 +140,8 @@ public class SystemSpacer {
 			return absent(); //not enough space for the system on this area
 		}
 		else {
-			SystemSpacing ret = new SystemSpacing(startMeasure, startMeasure + system.size() -
-				1, system, systemLeftMarginMm, systemRightMarginMm, usedWidthMm, staffHeightsMm,
+			SystemSpacing ret = new SystemSpacing(
+				system, systemLeftMarginMm, systemRightMarginMm, usedWidthMm, staffHeightsMm,
 				staffDistancesMm, offsetYMm);
 			return of(ret);
 		}

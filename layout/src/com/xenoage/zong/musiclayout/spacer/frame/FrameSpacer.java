@@ -80,7 +80,7 @@ public class FrameSpacer {
 				offsetY += getSystemDistance(systemIndex + 1, scoreFormat, scoreHeader);
 				//increase indexes
 				systemIndex++;
-				measureIndex = system.endMeasureIndex + 1;
+				measureIndex = system.getEndMeasureIndex() + 1;
 			}
 			else {
 				break;

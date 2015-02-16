@@ -64,7 +64,7 @@ public class StretchSystemsTest {
 		float[] staffDistances = new float[stavesCount - 1];
 		for (int i = 0; i < stavesCount - 1; i++)
 			staffDistances[i] = staffDistance;
-		return new SystemSpacing(-1, -1, CollectionUtils.<ColumnSpacing>alist(), 0, 0, 0,
+		return new SystemSpacing(CollectionUtils.<ColumnSpacing>alist(), 0, 0, 0,
 			staffHeights, staffDistances, offsetY);
 	}
 

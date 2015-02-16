@@ -55,7 +55,7 @@ public class FrameSpacing {
 		if (systems.size() == 0)
 			return -1;
 		else
-			return getFirst(systems).startMeasureIndex;
+			return getFirst(systems).getStartMeasureIndex();
 	}
 
 	/**
@@ -65,12 +65,12 @@ public class FrameSpacing {
 		if (systems.size() == 0)
 			return -1;
 		else
-			return getLast(systems).endMeasureIndex;
+			return getLast(systems).getEndMeasureIndex();
 	}
 	
 	public ColumnSpacing getColumn(int scoreMeasure) {
 		for (SystemSpacing system : systems) {
-			if (scoreMeasure <= system.endMeasureIndex)
+			if (scoreMeasure <= system.getEndMeasureIndex())
 				return system.getColumn(scoreMeasure);
 		}
 		throw new IllegalMPException(atMeasure(scoreMeasure));

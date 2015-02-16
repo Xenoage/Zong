@@ -1,6 +1,8 @@
 package com.xenoage.zong.musiclayout.spacing;
 
 import static com.xenoage.utils.collections.ArrayUtils.sum;
+import static com.xenoage.utils.collections.CollectionUtils.getFirst;
+import static com.xenoage.utils.collections.CollectionUtils.getLast;
 
 import java.util.List;
 
@@ -17,11 +19,6 @@ import lombok.Getter;
  */
 @Getter
 public class SystemSpacing {
-
-	/** The index of the first measure of the system. */
-	public int startMeasureIndex;
-	/** The index of the last measure of the system. */
-	public int endMeasureIndex;
 
 	/** The list of the spacings of the measure columns in this system. */
 	public List<ColumnSpacing> columnSpacings;
@@ -48,11 +45,8 @@ public class SystemSpacing {
 	public FrameSpacing parentFrame = null;
 	
 
-	public SystemSpacing(int startMeasureIndex, int endMeasureIndex,
-		List<ColumnSpacing> columnSpacings, float marginLeftMm, float marginRightMm, float widthMm,
-		float[] staffHeightsMm, float[] staffDistancesMm, float offsetYMm) {
-		this.startMeasureIndex = startMeasureIndex;
-		this.endMeasureIndex = endMeasureIndex;
+	public SystemSpacing(List<ColumnSpacing> columnSpacings, float marginLeftMm, float marginRightMm,
+		float widthMm, float[] staffHeightsMm, float[] staffDistancesMm, float offsetYMm) {
 		this.columnSpacings = columnSpacings;
 		this.marginLeftMm = marginLeftMm;
 		this.marginRightMm = marginRightMm;
@@ -96,8 +90,16 @@ public class SystemSpacing {
 		return usedWidth;
 	}
 	
+	public int getStartMeasureIndex() {
+		return getFirst(columnSpacings).measureIndex;
+	}
+	
+	public int getEndMeasureIndex() {
+		return getLast(columnSpacings).measureIndex;
+	}
+	
 	public ColumnSpacing getColumn(int scoreMeasure) {
-		return columnSpacings.get(scoreMeasure - startMeasureIndex);
+		return columnSpacings.get(scoreMeasure - getStartMeasureIndex());
 	}
 	
 	public int getSystemIndexInFrame() {
