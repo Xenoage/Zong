@@ -13,9 +13,13 @@ import com.xenoage.utils.annotations.NonEmpty;
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.collections.SortedList;
 import com.xenoage.utils.math.Fraction;
+import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.position.MP;
+import com.xenoage.zong.layout.frames.ScoreFrame;
 
 /**
+ * The spacing information of the musical layout in a {@link ScoreFrame}.
+ * 
  * This class contains the spacing of a measure of a single staff.
  * 
  * @author Andreas Wenger

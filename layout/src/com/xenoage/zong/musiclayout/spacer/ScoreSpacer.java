@@ -33,7 +33,8 @@ public class ScoreSpacer {
 		List<ColumnSpacing> columns = computeColumnSpacings(notations, context);
 		//break them into systems and frames
 		List<FrameSpacing> frames = computeFrameSpacings(columns, target, context, notations);
-		return new ScoreSpacing(context.score, columns, frames);
+		ScoreSpacing scoreSpacing = new ScoreSpacing(context.score, frames);
+		return scoreSpacing;
 	}
 	
 	/**

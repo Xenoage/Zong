@@ -50,7 +50,7 @@ public class OneMeasureOneStaff
 	@Override public void compute(Beam beam, ScoreSpacing scoreSpacing) {
 
 		//collect needed information
-		ColumnSpacing column = scoreSpacing.columns.get(getMP(beam.getChord(0)).measure);
+		ColumnSpacing column = scoreSpacing.getColumn(getMP(beam.getChord(0)).measure);
 		List<ChordNotation> chords = alist(beam.size());
 		float[] stemX = new float[beam.getWaypoints().size()];
 		Chord firstChord = beam.getStart().getChord();

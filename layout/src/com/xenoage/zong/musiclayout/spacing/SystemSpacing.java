@@ -4,7 +4,6 @@ import static com.xenoage.utils.collections.ArrayUtils.sum;
 
 import java.util.List;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
@@ -16,7 +15,7 @@ import lombok.Getter;
  *
  * @author Andreas Wenger
  */
-@AllArgsConstructor @Getter
+@Getter
 public class SystemSpacing {
 
 	/** The index of the first measure of the system. */
@@ -45,7 +44,27 @@ public class SystemSpacing {
 	/** The vertical offset of the system in mm, relative to the top. */
 	public float offsetYMm;
 
+	/** Backward reference to the frame. */
+	public FrameSpacing parentFrame = null;
+	
 
+	public SystemSpacing(int startMeasureIndex, int endMeasureIndex,
+		List<ColumnSpacing> columnSpacings, float marginLeftMm, float marginRightMm, float widthMm,
+		float[] staffHeightsMm, float[] staffDistancesMm, float offsetYMm) {
+		this.startMeasureIndex = startMeasureIndex;
+		this.endMeasureIndex = endMeasureIndex;
+		this.columnSpacings = columnSpacings;
+		this.marginLeftMm = marginLeftMm;
+		this.marginRightMm = marginRightMm;
+		this.widthMm = widthMm;
+		this.staffHeightsMm = staffHeightsMm;
+		this.staffDistancesMm = staffDistancesMm;
+		this.offsetYMm = offsetYMm;
+		//set backward references
+		for (ColumnSpacing column : columnSpacings)
+			column.parentSystem = this;
+	}
+	
 	/**
 	 * Gets the height of the staff with the given index.
 	 */
@@ -75,6 +94,14 @@ public class SystemSpacing {
 		for (ColumnSpacing mcs : columnSpacings)
 			usedWidth += mcs.getWidthMm();
 		return usedWidth;
+	}
+	
+	public ColumnSpacing getColumn(int scoreMeasure) {
+		return columnSpacings.get(scoreMeasure - startMeasureIndex);
+	}
+	
+	public int getSystemIndexInFrame() {
+		return parentFrame.systems.indexOf(this);
 	}
 
 }

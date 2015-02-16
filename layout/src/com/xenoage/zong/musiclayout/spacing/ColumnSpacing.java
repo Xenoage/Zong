@@ -32,7 +32,7 @@ import com.xenoage.zong.musiclayout.notations.ChordNotation;
  *
  * @author Andreas Wenger
  */
-@AllArgsConstructor @Getter
+@Getter
 public class ColumnSpacing {
 
 	/** The list of measure spacings.
@@ -46,7 +46,17 @@ public class ColumnSpacing {
 	 * At least the position of the start barline and the end barline
 	 * is available, and mid-measure barlines may also be included. */
 	public List<BeatOffset> barlineOffsets;
+	
+	/** Backward reference to the system. */
+	public SystemSpacing parentSystem = null;
 
+	
+	public ColumnSpacing(List<MeasureSpacing> measureSpacings, List<BeatOffset> beatOffsets,
+		List<BeatOffset> barlineOffsets) {
+		this.measureSpacings = measureSpacings;
+		this.beatOffsets = beatOffsets;
+		this.barlineOffsets = barlineOffsets;
+	}
 	
 	/**
 	 * Gets the width of the measure in mm.

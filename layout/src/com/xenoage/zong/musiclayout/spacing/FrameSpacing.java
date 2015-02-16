@@ -2,28 +2,44 @@ package com.xenoage.zong.musiclayout.spacing;
 
 import static com.xenoage.utils.collections.CollectionUtils.getFirst;
 import static com.xenoage.utils.collections.CollectionUtils.getLast;
+import static com.xenoage.zong.core.position.MP.atMeasure;
 
 import java.util.Collections;
 import java.util.List;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import com.xenoage.utils.math.geom.Size2f;
+import com.xenoage.zong.layout.frames.ScoreFrame;
+import com.xenoage.zong.utils.exceptions.IllegalMPException;
 
 /**
- * The arrangement of {@link SystemSpacing} on a single score frame.
+ * The spacing information of the musical layout of a {@link ScoreFrame}.
+ * 
+ * It contains the usable frame size and the {@link SystemSpacing}s, which contain the
+ * staves, measures and elements of the {@link ScoreFrame}.
  *
  * @author Andreas Wenger
  */
-@AllArgsConstructor @Getter
+@Getter
 public class FrameSpacing {
 
-	/** The systems on this frame. */
+	/** The systems in this frame. */
 	public List<SystemSpacing> systems;
-	/** The size in mm this frame arrangement may use. */
+	/** The size in mm this frame may use. */
 	public Size2f usableSizeMm;
 
+	/** Backward reference: The parent score. */
+	public ScoreSpacing score = null;
+	
+	
+	public FrameSpacing(List<SystemSpacing> systems, Size2f usableSizeMm) {
+		this.systems = systems;
+		this.usableSizeMm = usableSizeMm;
+		//set backward references
+		for (SystemSpacing system : systems)
+			system.parentFrame = this;
+	}
 	
 	/**
 	 * Returns an empty {@link FrameSpacing} with the given size.
@@ -50,6 +66,14 @@ public class FrameSpacing {
 			return -1;
 		else
 			return getLast(systems).endMeasureIndex;
+	}
+	
+	public ColumnSpacing getColumn(int scoreMeasure) {
+		for (SystemSpacing system : systems) {
+			if (scoreMeasure <= system.endMeasureIndex)
+				return system.getColumn(scoreMeasure);
+		}
+		throw new IllegalMPException(atMeasure(scoreMeasure));
 	}
 
 }

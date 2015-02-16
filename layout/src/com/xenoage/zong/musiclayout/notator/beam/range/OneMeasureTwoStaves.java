@@ -47,7 +47,7 @@ public class OneMeasureTwoStaves
 	
 
 	@Override public void compute(Beam beam, ScoreSpacing scoreSpacing) {
-		ColumnSpacing column = scoreSpacing.columns.get(getMP(beam.getChord(0)).measure);
+		ColumnSpacing column = scoreSpacing.getColumn(getMP(beam.getChord(0)).measure);
 		int beamLinesCount = beam.getMaxBeamLinesCount();
 		
 		//collect chord notations
