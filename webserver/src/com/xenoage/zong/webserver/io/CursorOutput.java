@@ -127,6 +127,8 @@ public class CursorOutput {
 						//read measure marks
 						//TODO: wrong calculation (though right result?!) - mm.getBeatOffsets() should
 						//be relative to measure beginning
+						
+						/* GOON
 						for (MeasureMarks mm : ss.staffMarks.getMeasureMarks()) {
 							Measure measure = measures.get(ss.getStartMeasureIndex() + mm.getMeasure());
 							measure.system = systemIndex;
@@ -137,7 +139,8 @@ public class CursorOutput {
 								measure.beats.put(bo.getBeat(), (offsetX + staffOffset + bo.getOffsetMm()) /
 									pageSize.width);
 							}
-						}
+						} */
+						
 					}
 					systemCount += sfl.getFrameArrangement().getSystems().size();
 				}

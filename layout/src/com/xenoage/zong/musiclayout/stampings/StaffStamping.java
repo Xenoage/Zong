@@ -1,5 +1,6 @@
 package com.xenoage.zong.musiclayout.stampings;
 
+import lombok.Getter;
 import lombok.ToString;
 
 import com.xenoage.utils.annotations.Const;
@@ -8,7 +9,7 @@ import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Rectangle2f;
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.core.position.MP;
-import com.xenoage.zong.musiclayout.StaffMarks;
+import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
 import com.xenoage.zong.musiclayout.stampings.bitmap.StaffStampingBitmapInfo;
 
 /**
@@ -17,7 +18,7 @@ import com.xenoage.zong.musiclayout.stampings.bitmap.StaffStampingBitmapInfo;
  * @author Andreas Wenger
  */
 @Const @ToString
-public final class StaffStamping
+public class StaffStamping
 	extends Stamping {
 
 	/** Top-left (TODO: really?) position (top line) of the staff in mm. */
@@ -29,22 +30,25 @@ public final class StaffStamping
 	/** The interline space, i.e. the space between two staff lines, in mm */
 	public final float is;
 
-	/** Musical position marks, to convert layout coordinates to musical positions */
-	public final StaffMarks staffMarks;
+	/** The system this staff belongs to. */
+	public final SystemSpacing system;
+	/** The staff index. */
+	@Getter public final int staffIndex;
 
 	/** Cached information about the staff for screen display */
 	public final StaffStampingBitmapInfo screenInfo;
 
 
-	public StaffStamping(Point2f position, float length, int linesCount, float is,
-		StaffMarks staffMarks) {
+	public StaffStamping(SystemSpacing system, int staffIndex,
+		Point2f position, float length, int linesCount, float is) {
 		super(null, Stamping.Level.Staff, null, new Rectangle2f(position, new Size2f(length,
 			(linesCount - 1) * is /*TODO: line width! */)));
+		this.system = system;
+		this.staffIndex = staffIndex;
 		this.position = position;
 		this.length = length;
 		this.linesCount = linesCount;
 		this.is = is;
-		this.staffMarks = staffMarks;
 		this.screenInfo = new StaffStampingBitmapInfo(this);
 	}
 
@@ -78,81 +82,82 @@ public final class StaffStamping
 	/**
 	 * Gets the start position in mm of the measure with the given global index,
 	 * or throws an {@link IllegalStateException} if positions are unknown.
+	 * @deprecated call method from {@link SystemSpacing} directly
 	 */
 	public float getMeasureStartMm(int measureIndex) {
-		return staffMarks.getMeasureMarksAt(measureIndex).getStartMm();
+		return system.getMeasureStartMm(measureIndex);
 	}
 
 	/**
 	 * Gets the end position in mm of the leading spacing of the measure with the given global index,
 	 * or throws an {@link IllegalStateException} if positions are unknown.
+	 * @deprecated call method from {@link SystemSpacing} directly
 	 */
 	public float getMeasureLeadingMm(int measureIndex) {
-		return staffMarks.getMeasureMarksAt(measureIndex).getLeadingMm();
+		return system.getMeasureStartAfterLeadingMm(measureIndex);
 	}
 
 	/**
 	 * Gets the end position in mm of the measure with the given global index,
 	 * or throws an {@link IllegalStateException} if positions are unknown.
+	 * @deprecated call method from {@link SystemSpacing} directly
 	 */
 	public float getMeasureEndMm(int measureIndex) {
-		return staffMarks.getMeasureMarksAt(measureIndex).getEndMm();
+		return system.getMeasureEndMm(measureIndex);
 	}
 
 	/**
 	 * Gets the global index of the first measure in this staff,
 	 * or throws an {@link IllegalStateException} if positions are unknown.
+	 * @deprecated call method from {@link SystemSpacing} directly
 	 */
 	public int getStartMeasureIndex() {
-		return staffMarks.getStartMeasureIndex();
+		return system.getStartMeasureIndex();
 	}
 
 	/**
 	 * Gets the global index of the last measure in this staff,
 	 * or throws an {@link IllegalStateException} if positions are unknown.
+	 * @deprecated call method from {@link SystemSpacing} directly
 	 */
 	public int getEndMeasureIndex() {
-		return staffMarks.getEndMeasureIndex();
+		return system.getEndMeasureIndex();
 	}
 
 	/**
 	 * See {@link StaffMarks#getMPAt(float)}.
 	 * Throws an {@link IllegalStateException} if positions are unknown.
+	 * @deprecated call method from {@link SystemSpacing} directly
 	 */
 	public MP getMPAtX(float positionX) {
-		return staffMarks.getMPAt(positionX);
+		return system.getMpAt(positionX, staffIndex);
 	}
 
 	/**
 	 * See {@link StaffMarks#getXMmAt(int, Fraction)}.
 	 * Throws an {@link IllegalStateException} if positions are unknown.
+	 * @deprecated call method from {@link SystemSpacing} directly
 	 */
-	public Float getXMmAt(int measureIndex, Fraction beat) {
-		return staffMarks.getXMmAt(measureIndex, beat);
+	public float getXMmAt(int measureIndex, Fraction beat) {
+		return system.getXMmAt(measureIndex, beat);
 	}
 
 	/**
 	 * See {@link StaffMarks#getXMmAt(int, Fraction)}.
 	 * Throws an {@link IllegalStateException} if positions are unknown.
+	 * @deprecated call method from {@link SystemSpacing} directly
 	 */
-	public Float getXMmAt(MP bmp) {
-		return staffMarks.getXMmAt(bmp.measure, bmp.beat);
+	public float getXMmAt(MP bmp) {
+		return system.getXMmAt(bmp.measure, bmp.beat);
 	}
 
 	/**
 	 * Gets the system index of this staff element, relative to its parent frame.
 	 * Throws an {@link IllegalStateException} if positions are unknown.
+	 * @deprecated call method from {@link SystemSpacing} directly
 	 */
 	public int getSystemIndex() {
-		return staffMarks.getSystemIndex();
-	}
-
-	/**
-	 * Gets the scorewide staff index of this staff element.
-	 * Throws an {@link IllegalStateException} if positions are unknown.
-	 */
-	public int getStaffIndex() {
-		return staffMarks.getStaffIndex();
+		return system.getSystemIndexInFrame();
 	}
 
 	/**
@@ -160,10 +165,6 @@ public final class StaffStamping
 	 */
 	@Override public StampingType getType() {
 		return StampingType.StaffStamping;
-	}
-	
-	public StaffStamping withStaffMarks(StaffMarks staffMarks) {
-		return new StaffStamping(position, length, linesCount, is, staffMarks);
 	}
 
 }

@@ -13,7 +13,6 @@ import com.xenoage.utils.annotations.NonEmpty;
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.collections.SortedList;
 import com.xenoage.utils.math.Fraction;
-import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.layout.frames.ScoreFrame;
 

@@ -1,12 +1,15 @@
 package com.xenoage.zong.musiclayout.spacing;
 
+import static com.xenoage.utils.collections.CollectionUtils.getLast;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.core.position.MP.getMP;
+import static com.xenoage.zong.core.position.MP.unknown;
 
 import java.util.List;
 
 import lombok.Getter;
 
+import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.core.music.VoiceElement;
@@ -153,6 +156,77 @@ public class ColumnSpacing {
 	 */
 	public ChordNotation getNotation(Chord chord) {
 		return (ChordNotation) getElement(chord).notation;
+	}
+	
+	/**
+	 * Gets the beat at the given horizontal position in mm,
+	 * relative to the beginning of the measure.
+	 * 
+	 * If it is between two beats (which will be true almost ever), the
+	 * the beat nearest to the position is selected (like it is usual e.g. in text
+	 * processing applications). If it is behind all known beats,
+	 * the last known beat is returned.
+	 */
+	public Fraction getBeatAt(float xMm) {
+		//find beat and return it
+		BeatOffset last = null;
+		for (BeatOffset bo : beatOffsets) {
+			if (xMm <= bo.offsetMm)
+				return getBeatAt(xMm, last, bo);
+			last = bo;
+		}
+		//return last beat
+		return getLast(beatOffsets).beat;
+	}
+	
+	/**
+	 * Like {@link #getBeatAt(float)}, but only for a single staff,
+	 * i.e. unused beats in this staff are ignored.
+	 * 
+	 * When the staff is {@link MP#unknown}, this method works like
+	 * {@link #getBeatAt(float)}. 
+	 */
+	public Fraction getBeatAt(float xMm, int staff) {
+		if (staff == unknown)
+			return getBeatAt(xMm);
+		//find beat and return it
+		MeasureSpacing measure = measures.get(staff);
+		BeatOffset last = null;
+		for (Fraction beat : measure.getUsedBeats()) {
+			BeatOffset bo = getBeatOffset(beat);
+			if (xMm <= bo.offsetMm)
+				return getBeatAt(xMm, last, bo);
+			last = bo;
+		}
+		//return last beat
+		return getLast(beatOffsets).beat;
+	}
+	
+	/**
+	 * Returns the beat at the given position from the candidate,
+	 * which position is nearer to the given position.
+	 */
+	private Fraction getBeatAt(float xMm, @MaybeNull BeatOffset leftCandidate, BeatOffset rightCandidate) {
+		if (leftCandidate == null)
+			return rightCandidate.beat;
+		//check previous or given candidate
+		boolean right = (xMm >= (leftCandidate.offsetMm + rightCandidate.offsetMm) / 2);
+		return (right ? rightCandidate : leftCandidate).beat;
+	}
+
+	/**
+	 * Gets the horizontal position in mm, relative to the beginning of the measure,
+	 * of the given beat.
+	 * If the given beat is after the last beat, the offset of the last beat is returned.
+	 */
+	public float getXMmAt(Fraction beat) {
+		//find offset and return it
+		for (BeatOffset bo : beatOffsets) {
+			if (beat.compareTo(bo.beat) <= 0)
+				return bo.offsetMm;
+		}
+		//return last offset
+		return getLast(beatOffsets).offsetMm;
 	}
 
 }

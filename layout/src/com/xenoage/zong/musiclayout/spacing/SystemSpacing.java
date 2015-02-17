@@ -3,10 +3,16 @@ package com.xenoage.zong.musiclayout.spacing;
 import static com.xenoage.utils.collections.ArrayUtils.sum;
 import static com.xenoage.utils.collections.CollectionUtils.getFirst;
 import static com.xenoage.utils.collections.CollectionUtils.getLast;
+import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.zong.core.position.MP.atBeat;
+import static com.xenoage.zong.core.position.MP.unknown;
 
 import java.util.List;
 
 import lombok.Getter;
+
+import com.xenoage.utils.math.Fraction;
+import com.xenoage.zong.core.position.MP;
 
 /**
  * The horizontal and vertical spacing of a system.
@@ -105,5 +111,82 @@ public class SystemSpacing {
 	public int getSystemIndexInFrame() {
 		return parentFrame.systems.indexOf(this);
 	}
+	
+	/**
+	 * Gets the start position in mm of the measure with the given global index
+	 * relative to the beginning of the system.
+	 */
+	public float getMeasureStartMm(int scoreMeasure) {
+		float x = 0;
+		for (int iMeasure : range(scoreMeasure - getStartMeasureIndex()))
+			x += columnSpacings.get(iMeasure).getWidthMm();
+		return x;
+	}
+	
+	/**
+	 * Gets the end position of the leading spacing in mm of the measure with the given
+	 * global index, relative to the beginning of the system.
+	 * If there is no leading spacing, this value is equal to {@link #getMeasureStartMm(int)}
+	 */
+	public float getMeasureStartAfterLeadingMm(int scoreMeasure) {
+		int systemMeasure = scoreMeasure - getStartMeasureIndex();
+		return getMeasureStartMm(scoreMeasure) + columnSpacings.get(systemMeasure).getLeadingWidthMm();
+	}
+	
+	/**
+	 * Gets the end position in mm of the measure with the given global index
+	 * relative to the beginning of the system.
+	 */
+	public float getMeasureEndMm(int scoreMeasure) {
+		int systemMeasure = scoreMeasure - getStartMeasureIndex();
+		return getMeasureStartMm(scoreMeasure) + columnSpacings.get(systemMeasure).getWidthMm();
+	}
 
+	/**
+	 * Gets the {@link MP} at the given horizontal position in mm.
+	 * If the given staff is {@link MP#unknown}, all beats of the column
+	 * are used, otherwise only the beats used by the given staff.
+	 * 
+	 * If it is between two beats (which will be true almost ever), the
+	 * the right mark is selected (like it is usual e.g. in text
+	 * processing applications). If it is behind all known beats of the
+	 * hit measure, the last known beat is returned.
+	 * 
+	 * If it is not within the boundaries of a measure, null is returned.
+	 */
+	public MP getMpAt(float xMm, int staff) {
+		//find the measure
+		int measureIndex = getSystemMeasureIndexAt(xMm);
+		//when measure was not found, return null
+		if (measureIndex == unknown)
+			return null;
+		//get the beat at the given position
+		Fraction beat = columnSpacings.get(measureIndex).getBeatAt(xMm, staff);
+		return atBeat(staff, measureIndex, unknown, beat);
+	}
+	
+	/**
+	 * Gets the horizontal position in mm, relative to the beginning of the staff,
+	 * of the given measure and beat.
+	 * If the given beat is after the last beat, the offset of the last beat is returned.
+	 */
+	public float getXMmAt(int scoreMeasure, Fraction beat) {
+		return columnSpacings.get(scoreMeasure - getStartMeasureIndex()).getXMmAt(beat);
+	}
+
+	/**
+	 * Gets the system-relative index of the measure at the given position in mm,
+	 * or {@link MP#unknown} if there is none.
+	 */
+	private int getSystemMeasureIndexAt(float xMm) {
+		if (xMm < 0)
+			return unknown;
+		float x = 0;
+		for (int iMeasure : range(columnSpacings)) {
+			x += columnSpacings.get(iMeasure).getWidthMm();
+			if (xMm < x)
+				return iMeasure;
+		}
+		return unknown;
+	}
 }

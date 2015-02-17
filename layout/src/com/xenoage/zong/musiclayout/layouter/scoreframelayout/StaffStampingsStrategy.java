@@ -1,24 +1,13 @@
 package com.xenoage.zong.musiclayout.layouter.scoreframelayout;
 
-import static com.xenoage.utils.collections.CList.clist;
-import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.collections.CollectionUtils.llist;
 import static com.xenoage.utils.kernel.Range.range;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
-import com.xenoage.utils.collections.CList;
-import com.xenoage.utils.collections.IList;
-import com.xenoage.utils.math.Fraction;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.zong.core.Score;
-import com.xenoage.zong.musiclayout.MeasureMarks;
-import com.xenoage.zong.musiclayout.StaffMarks;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.StaffStampings;
-import com.xenoage.zong.musiclayout.spacing.BeatOffset;
-import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 import com.xenoage.zong.musiclayout.spacing.FrameSpacing;
 import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
@@ -46,12 +35,15 @@ public class StaffStampingsStrategy {
 			float yOffset = system.getOffsetYMm();
 			for (int iStaff = 0; iStaff < stavesCount; iStaff++) {
 				yOffset += system.getStaffDistance(iStaff);
-				StaffStamping staff = new StaffStamping(new Point2f(systemXOffset, yOffset), system.widthMm,
-					5, score.getInterlineSpace(iStaff), null);
+				StaffStamping staff = new StaffStamping(system, iStaff,
+					new Point2f(systemXOffset, yOffset), system.widthMm, 5, score.getInterlineSpace(iStaff));
+				allStaves.add(staff);
 				systemStaves[iStaff] = staff;
 				yOffset += system.getStaffHeight(iStaff);
 			}
 
+			/* OBSOLETE
+			 
 			//create position marks
 			List<ColumnSpacing> css = system.getColumnSpacings();
 			int measuresCount = system.getColumnSpacings().size();
@@ -113,11 +105,14 @@ public class StaffStampingsStrategy {
 				}
 				StaffMarks staffMarks = new StaffMarks(iSystem, iStaff, system.getStartMeasureIndex(),
 					measureMarks.close());
-
+					
 				StaffStamping ss = systemStaves[iStaff].withStaffMarks(staffMarks);
 				systemStaves[iStaff] = ss;
+
 				allStaves.add(ss);
+
 			}
+			*/
 
 		}
 

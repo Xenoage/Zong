@@ -29,7 +29,7 @@ public class FrameSpacing {
 	/** The size in mm this frame may use. */
 	public Size2f usableSizeMm;
 
-	/** Backward reference: The parent score. */
+	/** Backward reference to the score. */
 	public ScoreSpacing score = null;
 	
 	
