@@ -24,9 +24,9 @@ import com.xenoage.zong.layout.Layout;
 import com.xenoage.zong.layout.Page;
 import com.xenoage.zong.layout.frames.Frame;
 import com.xenoage.zong.layout.frames.ScoreFrame;
-import com.xenoage.zong.musiclayout.MeasureMarks;
 import com.xenoage.zong.musiclayout.ScoreFrameLayout;
 import com.xenoage.zong.musiclayout.spacing.BeatOffset;
+import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 
 /**
@@ -128,18 +128,18 @@ public class CursorOutput {
 						//TODO: wrong calculation (though right result?!) - mm.getBeatOffsets() should
 						//be relative to measure beginning
 						
-						/* GOON
-						for (MeasureMarks mm : ss.staffMarks.getMeasureMarks()) {
-							Measure measure = measures.get(ss.getStartMeasureIndex() + mm.getMeasure());
+						SystemSpacing systemSpacing = ss.system;
+						for (int iMeasure : range(systemSpacing.getStartMeasureIndex(), systemSpacing.getEndMeasureIndex())) {
+							Measure measure = measures.get(iMeasure);
 							measure.system = systemIndex;
 							float staffOffset = ss.position.x;
-							measure.left = (offsetX + staffOffset + mm.getStartMm()) / pageSize.width;
-							measure.right = (offsetX + staffOffset + mm.getEndMm()) / pageSize.width;
-							for (BeatOffset bo : mm.getBeatOffsets()) {
+							measure.left = (offsetX + staffOffset + systemSpacing.getMeasureStartMm(iMeasure)) / pageSize.width;
+							measure.right = (offsetX + staffOffset + systemSpacing.getMeasureEndMm(iMeasure)) / pageSize.width;
+							for (BeatOffset bo : systemSpacing.getColumn(iMeasure).getBeatOffsets()) {
 								measure.beats.put(bo.getBeat(), (offsetX + staffOffset + bo.getOffsetMm()) /
 									pageSize.width);
 							}
-						} */
+						}
 						
 					}
 					systemCount += sfl.getFrameArrangement().getSystems().size();

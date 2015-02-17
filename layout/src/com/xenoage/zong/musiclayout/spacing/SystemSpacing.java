@@ -6,6 +6,7 @@ import static com.xenoage.utils.collections.CollectionUtils.getLast;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.core.position.MP.atBeat;
 import static com.xenoage.zong.core.position.MP.unknown;
+import static com.xenoage.zong.core.position.MP.unknownMp;
 
 import java.util.List;
 
@@ -152,16 +153,17 @@ public class SystemSpacing {
 	 * processing applications). If it is behind all known beats of the
 	 * hit measure, the last known beat is returned.
 	 * 
-	 * If it is not within the boundaries of a measure, null is returned.
+	 * If it is not within the boundaries of a measure, {@link MP#unknownMp} is returned.
 	 */
 	public MP getMpAt(float xMm, int staff) {
 		//find the measure
 		int measureIndex = getSystemMeasureIndexAt(xMm);
+		float xMmInMeasure = xMm - getMeasureStartMm(measureIndex);
 		//when measure was not found, return null
 		if (measureIndex == unknown)
-			return null;
+			return unknownMp;
 		//get the beat at the given position
-		Fraction beat = columnSpacings.get(measureIndex).getBeatAt(xMm, staff);
+		Fraction beat = columnSpacings.get(measureIndex).getBeatAt(xMmInMeasure, staff);
 		return atBeat(staff, measureIndex, unknown, beat);
 	}
 	
@@ -171,7 +173,9 @@ public class SystemSpacing {
 	 * If the given beat is after the last beat, the offset of the last beat is returned.
 	 */
 	public float getXMmAt(int scoreMeasure, Fraction beat) {
-		return columnSpacings.get(scoreMeasure - getStartMeasureIndex()).getXMmAt(beat);
+		float measureXMm = getMeasureStartMm(scoreMeasure);
+		float elementXMm = columnSpacings.get(scoreMeasure - getStartMeasureIndex()).getXMmAt(beat);
+		return measureXMm + elementXMm;
 	}
 
 	/**

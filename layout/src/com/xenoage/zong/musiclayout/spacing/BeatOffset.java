@@ -26,5 +26,10 @@ public class BeatOffset {
 	public final Fraction beat;
 	/** The offset in mm. */
 	public final float offsetMm;
+	
+	
+	public static BeatOffset bo(Fraction beat, float offsetMm) {
+		return new BeatOffset(beat, offsetMm);
+	}
 
 }

@@ -71,10 +71,10 @@ public class ColumnSpacing {
 	
 	/**
 	 * Gets the width of the leading spacing in mm.
-	 * If there is no leading spacing, 1 is returned. TODO
+	 * If there is no leading spacing, 0 is returned. TODO
 	 */
 	public float getLeadingWidthMm() {
-		float ret = 1; //TODO
+		float ret = 0; //TODO
 		//find the maximum width of the leading spacings
 		//of each staff
 		for (int iStaff : range(measures)) {

@@ -22,7 +22,6 @@ public abstract class StampingRenderer {
 
 
 	private static void init() {
-		init = true;
 		renderers = new HashMap<StampingType, StampingRenderer>();
 		renderers.put(StampingType.BarlineStamping, new BarlineStampingRenderer());
 		renderers.put(StampingType.BeamStamping, new BeamStampingRenderer());
@@ -43,6 +42,7 @@ public abstract class StampingRenderer {
 		renderers.put(StampingType.TupletStamping, new TupletStampingRenderer());
 		renderers.put(StampingType.VoltaStamping, new VoltaStampingRenderer());
 		renderers.put(StampingType.WedgeStamping, new WedgeStampingRenderer());
+		init = true;
 	}
 
 	/**
@@ -62,6 +62,8 @@ public abstract class StampingRenderer {
 	public static void drawAny(Stamping stamping, Canvas canvas, RendererArgs args) {
 		if (!init)
 			init();
+		if (stamping == null)
+			return;
 		StampingRenderer renderer = renderers.get(stamping.getType());
 		if (renderer != null)
 			renderer.draw(stamping, canvas, args);

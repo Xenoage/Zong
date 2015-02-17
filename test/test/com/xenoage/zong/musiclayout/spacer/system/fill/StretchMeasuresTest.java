@@ -21,11 +21,11 @@ import com.xenoage.zong.musiclayout.notations.ChordNotation;
 import com.xenoage.zong.musiclayout.spacing.BeatOffset;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
+import com.xenoage.zong.musiclayout.spacing.LeadingSpacingMock;
 import com.xenoage.zong.musiclayout.spacing.MeasureElementsSpacing;
 import com.xenoage.zong.musiclayout.spacing.MeasureSpacing;
 import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
 import com.xenoage.zong.musiclayout.spacing.VoiceSpacing;
-import com.xenoage.zong.musiclayout.spacing.horizontal.LeadingSpacingMock;
 
 /**
  * Tests for {@link StretchMeasures}.
