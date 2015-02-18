@@ -7,7 +7,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.xenoage.utils.math.Delta;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Shape;
 import com.xenoage.zong.core.format.ScoreFormat;

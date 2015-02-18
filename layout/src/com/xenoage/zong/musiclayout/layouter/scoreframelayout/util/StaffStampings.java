@@ -39,7 +39,7 @@ public class StaffStampings {
 		//fill with staves
 		for (StaffStamping s : allStaves) {
 			int staffIndex = s.getStaffIndex();
-			int systemIndex = s.getSystemIndex();
+			int systemIndex = s.system.getSystemIndexInFrame();
 			stavesByStaff.get(staffIndex).set(systemIndex, s);
 			stavesBySystem.get(systemIndex).set(staffIndex, s);
 		}

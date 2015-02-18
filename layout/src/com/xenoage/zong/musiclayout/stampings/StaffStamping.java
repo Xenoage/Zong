@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.ToString;
 
 import com.xenoage.utils.annotations.Const;
-import com.xenoage.utils.math.Fraction;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Rectangle2f;
 import com.xenoage.utils.math.geom.Size2f;
@@ -84,15 +83,6 @@ public class StaffStamping
 	 */
 	public MP getMpAtX(float positionX) {
 		return system.getMpAt(positionX, staffIndex);
-	}
-
-	/**
-	 * Gets the system index of this staff element, relative to its parent frame.
-	 * Throws an {@link IllegalStateException} if positions are unknown.
-	 * @deprecated call method from {@link SystemSpacing} directly
-	 */
-	public int getSystemIndex() {
-		return system.getSystemIndexInFrame();
 	}
 
 	/**
