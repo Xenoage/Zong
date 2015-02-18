@@ -29,7 +29,7 @@ import com.xenoage.zong.core.position.MP;
 public class SystemSpacing {
 
 	/** The list of the spacings of the measure columns in this system. */
-	public List<ColumnSpacing> columnSpacings;
+	public List<ColumnSpacing> columns;
 
 	/** The left margin of the system in mm. */
 	public float marginLeftMm;
@@ -55,7 +55,7 @@ public class SystemSpacing {
 
 	public SystemSpacing(List<ColumnSpacing> columnSpacings, float marginLeftMm, float marginRightMm,
 		float widthMm, float[] staffHeightsMm, float[] staffDistancesMm, float offsetYMm) {
-		this.columnSpacings = columnSpacings;
+		this.columns = columnSpacings;
 		this.marginLeftMm = marginLeftMm;
 		this.marginRightMm = marginRightMm;
 		this.widthMm = widthMm;
@@ -93,17 +93,17 @@ public class SystemSpacing {
 	 */
 	public float getUsedWidth() {
 		float usedWidth = 0;
-		for (ColumnSpacing mcs : columnSpacings)
+		for (ColumnSpacing mcs : columns)
 			usedWidth += mcs.getWidthMm();
 		return usedWidth;
 	}
 	
 	public int getStartMeasureIndex() {
-		return getFirst(columnSpacings).measureIndex;
+		return getFirst(columns).measureIndex;
 	}
 	
 	public int getEndMeasureIndex() {
-		return getLast(columnSpacings).measureIndex;
+		return getLast(columns).measureIndex;
 	}
 	
 	public boolean containsMeasure(int scoreMeasure) {
@@ -115,7 +115,7 @@ public class SystemSpacing {
 	}
 	
 	public ColumnSpacing getColumn(int scoreMeasure) {
-		return columnSpacings.get(scoreMeasure - getStartMeasureIndex());
+		return columns.get(scoreMeasure - getStartMeasureIndex());
 	}
 	
 	public int getSystemIndexInFrame() {
@@ -129,7 +129,7 @@ public class SystemSpacing {
 	public float getMeasureStartMm(int scoreMeasure) {
 		float x = 0;
 		for (int iMeasure : range(scoreMeasure - getStartMeasureIndex()))
-			x += columnSpacings.get(iMeasure).getWidthMm();
+			x += columns.get(iMeasure).getWidthMm();
 		return x;
 	}
 	
@@ -140,7 +140,7 @@ public class SystemSpacing {
 	 */
 	public float getMeasureStartAfterLeadingMm(int scoreMeasure) {
 		int systemMeasure = scoreMeasure - getStartMeasureIndex();
-		return getMeasureStartMm(scoreMeasure) + columnSpacings.get(systemMeasure).getLeadingWidthMm();
+		return getMeasureStartMm(scoreMeasure) + columns.get(systemMeasure).getLeadingWidthMm();
 	}
 	
 	/**
@@ -149,7 +149,7 @@ public class SystemSpacing {
 	 */
 	public float getMeasureEndMm(int scoreMeasure) {
 		int systemMeasure = scoreMeasure - getStartMeasureIndex();
-		return getMeasureStartMm(scoreMeasure) + columnSpacings.get(systemMeasure).getWidthMm();
+		return getMeasureStartMm(scoreMeasure) + columns.get(systemMeasure).getWidthMm();
 	}
 
 	/**
@@ -172,7 +172,7 @@ public class SystemSpacing {
 		if (measureIndex == unknown)
 			return unknownMp;
 		//get the beat at the given position
-		Fraction beat = columnSpacings.get(measureIndex).getBeatAt(xMmInMeasure, staff);
+		Fraction beat = columns.get(measureIndex).getBeatAt(xMmInMeasure, staff);
 		return atBeat(staff, measureIndex, unknown, beat);
 	}
 	
@@ -183,7 +183,7 @@ public class SystemSpacing {
 	 */
 	public float getXMmAt(int scoreMeasure, Fraction beat) {
 		float measureXMm = getMeasureStartMm(scoreMeasure);
-		float elementXMm = columnSpacings.get(scoreMeasure - getStartMeasureIndex()).getXMmAt(beat);
+		float elementXMm = columns.get(scoreMeasure - getStartMeasureIndex()).getXMmAt(beat);
 		return measureXMm + elementXMm;
 	}
 	
@@ -202,8 +202,8 @@ public class SystemSpacing {
 		if (xMm < 0)
 			return unknown;
 		float x = 0;
-		for (int iMeasure : range(columnSpacings)) {
-			x += columnSpacings.get(iMeasure).getWidthMm();
+		for (int iMeasure : range(columns)) {
+			x += columns.get(iMeasure).getWidthMm();
 			if (xMm < x)
 				return iMeasure;
 		}

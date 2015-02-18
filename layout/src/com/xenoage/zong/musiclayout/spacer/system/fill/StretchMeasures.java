@@ -28,7 +28,7 @@ public class StretchMeasures
 		//(leading spacings are not stretched)
 		float voicesWidthMm = 0;
 		float leadingsWidthMm = 0;
-		for (ColumnSpacing column : system.columnSpacings) {
+		for (ColumnSpacing column : system.columns) {
 			voicesWidthMm += column.getVoicesWidthMm();
 			leadingsWidthMm += column.getLeadingWidthMm();
 		}
@@ -40,7 +40,7 @@ public class StretchMeasures
 
 		//stretch the voice spacings
 		//measure columns
-		for (ColumnSpacing column : system.columnSpacings) {
+		for (ColumnSpacing column : system.columns) {
 			
 			//beat offsets
 			for (int i : range(column.beatOffsets)) {

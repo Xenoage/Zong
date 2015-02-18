@@ -54,7 +54,7 @@ public class StretchMeasuresTest {
 		//since the leading spacing (4 spaces) is not scaled, the
 		//remaining 12 spaces of the voices width have to be scaled
 		float stretch = (newWidth - leadingWidth) / offsetBeat3;
-		ColumnSpacing newCol = system.getColumnSpacings().get(0);
+		ColumnSpacing newCol = system.columns.get(0);
 		//beat offsets
 		assertEquals(offsetBeat1 * stretch, newCol.getBeatOffsets().get(0).getOffsetMm(), df);
 		assertEquals(offsetBeat2 * stretch, newCol.getBeatOffsets().get(1).getOffsetMm(), df);
@@ -83,7 +83,7 @@ public class StretchMeasuresTest {
 		testee.compute(system, newWidth);
 
 		//compare the result
-		ColumnSpacing newCol = system.getColumnSpacings().get(0);
+		ColumnSpacing newCol = system.columns.get(0);
 		float stretch = (newWidth - +newCol.getLeadingWidthMm()) / offsetMeasureEnd;
 		//beat offsets
 		assertEquals(offsetChord1 * stretch, newCol.getBeatOffsets().get(0).getOffsetMm(),

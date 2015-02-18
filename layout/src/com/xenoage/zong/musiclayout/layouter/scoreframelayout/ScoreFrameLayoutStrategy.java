@@ -219,12 +219,12 @@ public class ScoreFrameLayoutStrategy
 			//add the barlines
 			float xOffset = staffStampings.get(iSystem, 0).position.x;
 			//common barline at the beginning, when system has at least one measure
-			if (system.getColumnSpacings().size() > 0) {
+			if (system.columns.size() > 0) {
 				otherStampsPool.add(new BarlineStamping(Barline.barlineRegular(), systemStaves, xOffset,
 					BarlineGroup.Style.Common));
 			}
 			//barlines within the system and measure numbers
-			int iMeasureMax = system.getColumnSpacings().size() - 1;
+			int iMeasureMax = system.columns.size() - 1;
 			StaffStamping firstStaff = staffStampings.get(iSystem, 0);
 			for (int iMeasure = 0; iMeasure <= iMeasureMax; iMeasure++) {
 				float xLeft = xOffset;
@@ -250,8 +250,8 @@ public class ScoreFrameLayoutStrategy
 				}
 				//for the first measure in the system: begin after leading spacing
 				if (iMeasure == 0)
-					xLeft += system.getColumnSpacings().get(iMeasure).getLeadingWidthMm();
-				xOffset += system.getColumnSpacings().get(iMeasure).getWidthMm();
+					xLeft += system.columns.get(iMeasure).getLeadingWidthMm();
+				xOffset += system.columns.get(iMeasure).getWidthMm();
 				float xRight = xOffset;
 				//regard the groups of the score
 				for (iStaff = 0; iStaff < stavesCount; iStaff++) {
@@ -278,7 +278,7 @@ public class ScoreFrameLayoutStrategy
 					//middle barlines
 					for (BeatE<Barline> middleBarline : columnHeader.getMiddleBarlines()) {
 						otherStampsPool.add(new BarlineStamping(middleBarline.element, groupStaves, xLeft +
-							system.getColumnSpacings().get(iMeasure).getBarlineOffsetMm(middleBarline.beat),
+							system.columns.get(iMeasure).getBarlineOffsetMm(middleBarline.beat),
 							barlineGroupStyle));
 					}
 					//go to next group
@@ -293,9 +293,9 @@ public class ScoreFrameLayoutStrategy
 				xOffset = staff.position.x;
 				float interlineSpace = staff.is;
 
-				for (int iMeasure = 0; iMeasure < system.getColumnSpacings().size(); iMeasure++) {
+				for (int iMeasure = 0; iMeasure < system.columns.size(); iMeasure++) {
 					int globalMeasureIndex = system.getStartMeasureIndex() + iMeasure;
-					ColumnSpacing measureColumnSpacing = system.getColumnSpacings().get(iMeasure);
+					ColumnSpacing measureColumnSpacing = system.columns.get(iMeasure);
 					MeasureSpacing measureStaffSpacing = measureColumnSpacing.getMeasures().get(iStaff);
 
 					//add leading spacing elements, if available
@@ -705,7 +705,7 @@ public class ScoreFrameLayoutStrategy
 		FormattedTextStyle textStyle) {
 		ArrayList<VoltaStamping> ret = alist();
 		//find new voltas beginning in this system
-		for (int iMeasure = 0; iMeasure < system.getColumnSpacings().size(); iMeasure++) {
+		for (int iMeasure = 0; iMeasure < system.columns.size(); iMeasure++) {
 			int scoreMeasure = system.getStartMeasureIndex() + iMeasure;
 			ColumnHeader columnHeader = header.getColumnHeader(scoreMeasure);
 			if (columnHeader.getVolta() != null) {
