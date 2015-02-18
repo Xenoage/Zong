@@ -80,51 +80,6 @@ public class StaffStamping
 	}
 
 	/**
-	 * Gets the start position in mm of the measure with the given global index,
-	 * or throws an {@link IllegalStateException} if positions are unknown.
-	 * @deprecated call method from {@link SystemSpacing} directly
-	 */
-	public float getMeasureStartMm(int measureIndex) {
-		return system.getMeasureStartMm(measureIndex);
-	}
-
-	/**
-	 * Gets the end position in mm of the leading spacing of the measure with the given global index,
-	 * or throws an {@link IllegalStateException} if positions are unknown.
-	 * @deprecated call method from {@link SystemSpacing} directly
-	 */
-	public float getMeasureLeadingMm(int measureIndex) {
-		return system.getMeasureStartAfterLeadingMm(measureIndex);
-	}
-
-	/**
-	 * Gets the end position in mm of the measure with the given global index,
-	 * or throws an {@link IllegalStateException} if positions are unknown.
-	 * @deprecated call method from {@link SystemSpacing} directly
-	 */
-	public float getMeasureEndMm(int measureIndex) {
-		return system.getMeasureEndMm(measureIndex);
-	}
-
-	/**
-	 * Gets the global index of the first measure in this staff,
-	 * or throws an {@link IllegalStateException} if positions are unknown.
-	 * @deprecated call method from {@link SystemSpacing} directly
-	 */
-	public int getStartMeasureIndex() {
-		return system.getStartMeasureIndex();
-	}
-
-	/**
-	 * Gets the global index of the last measure in this staff,
-	 * or throws an {@link IllegalStateException} if positions are unknown.
-	 * @deprecated call method from {@link SystemSpacing} directly
-	 */
-	public int getEndMeasureIndex() {
-		return system.getEndMeasureIndex();
-	}
-
-	/**
 	 * See {@link SystemSpacing#getMpAt(float, int)}.
 	 */
 	public MP getMpAtX(float positionX) {

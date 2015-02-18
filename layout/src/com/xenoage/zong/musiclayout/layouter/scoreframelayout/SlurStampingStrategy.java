@@ -158,7 +158,8 @@ public class SlurStampingStrategy
 		}
 
 		//end points of the bezier curve
-		float p1x = staff.position.x + staff.getMeasureLeadingMm(staff.getStartMeasureIndex()) - 5; //TODO
+		float p1x = staff.position.x + staff.system.getMeasureStartAfterLeadingMm(
+			staff.system.getStartMeasureIndex()) - 5; //TODO
 		float p2x = staff.position.x + staff.length;
 		float yLp;
 		if (side == VSide.Top) {
@@ -188,8 +189,8 @@ public class SlurStampingStrategy
 
 		//end points of the bezier curve
 		SP p2 = computeEndPoint(slur, stopNotehead, wp2.getBezierPoint(), side, stopAdditionalDistanceIS);
-		SP p1 = sp(staff.position.x + staff.getMeasureLeadingMm(staff.getStartMeasureIndex()) - 5,
-			p2.lp); //TODO
+		SP p1 = sp(staff.position.x + staff.system.getMeasureStartAfterLeadingMm(
+			staff.system.getStartMeasureIndex()) - 5, p2.lp); //TODO
 
 		//control points of the bezier curve
 		BezierPoint b2 = wp2.getBezierPoint();

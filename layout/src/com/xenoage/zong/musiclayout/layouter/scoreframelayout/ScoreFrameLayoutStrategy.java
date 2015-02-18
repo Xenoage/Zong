@@ -739,7 +739,7 @@ public class ScoreFrameLayoutStrategy
 		//find new wedges beginning in this staff
 		for (int iStaff = 0; iStaff < score.getStavesCount(); iStaff++) {
 			Staff staff = score.getStaff(iStaff);
-			for (int iMeasure = system.getStartMeasureIndex(); iMeasure <= system.getEndMeasureIndex(); iMeasure++) {
+			for (int iMeasure : system.getMeasureIndices()) {
 				Measure measure = staff.getMeasures().get(iMeasure);
 				for (Voice voice : measure.getVoices()) {
 					for (MusicElement element : voice.getElements()) {

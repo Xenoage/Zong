@@ -127,7 +127,7 @@ public class CursorOutput {
 						
 						//read measure beats
 						float systemOffsetX = systemSpacing.marginLeftMm;
-						for (int iMeasure : range(systemSpacing.getStartMeasureIndex(), systemSpacing.getEndMeasureIndex())) {
+						for (int iMeasure : systemSpacing.getMeasureIndices()) {
 							Measure measure = measures.get(iMeasure);
 							measure.system = systemIndex;
 							

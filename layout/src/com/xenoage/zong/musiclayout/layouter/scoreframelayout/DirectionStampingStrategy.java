@@ -10,6 +10,7 @@ import static com.xenoage.zong.musiclayout.text.DefaultTexts.getTempoTextNotNull
 
 import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.collections.IList;
+import com.xenoage.utils.kernel.Range;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.direction.Direction;
 import com.xenoage.zong.core.music.direction.Dynamics;
@@ -31,6 +32,7 @@ import com.xenoage.zong.core.text.FormattedTextStyle;
 import com.xenoage.zong.core.text.FormattedTextSymbol;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.ChordStampings;
+import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
 import com.xenoage.zong.musiclayout.stampings.PedalStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffSymbolStamping;
@@ -198,28 +200,30 @@ public class DirectionStampingStrategy
 	 * wedge is clipped to the staff.
 	 */
 	public WedgeStamping createWedgeStamping(Wedge wedge, StaffStamping staffStamping) {
+		SystemSpacing system = staffStamping.system;
+		Range systemMeasures = system.getMeasureIndices();
 		//musical positions of wedge
 		MP p1 = MP.getMP(wedge);
 		MP p2 = MP.getMP(wedge.getWedgeEnd());
 		//clip start to staff
 		float x1Mm;
-		if (p1.measure < staffStamping.getStartMeasureIndex()) {
+		if (p1.measure < systemMeasures.getStart()) {
 			//begins before staff
-			x1Mm = staffStamping.getMeasureLeadingMm(staffStamping.getStartMeasureIndex());
+			x1Mm = system.getMeasureStartAfterLeadingMm(systemMeasures.getStart());
 		}
 		else {
 			//begins within staff
-			x1Mm = staffStamping.system.getXMmAt(p1);
+			x1Mm = system.getXMmAt(p1);
 		}
 		//clip end to staff
 		float x2Mm;
-		if (p2.measure > staffStamping.getEndMeasureIndex()) {
+		if (p2.measure > systemMeasures.getStop()) {
 			//ends after staff
-			x2Mm = staffStamping.getMeasureEndMm(staffStamping.getEndMeasureIndex());
+			x2Mm = system.getMeasureEndMm(systemMeasures.getStop());
 		}
 		else {
 			//ends within staff
-			x2Mm = staffStamping.system.getXMmAt(p2);
+			x2Mm = system.getXMmAt(p2);
 		}
 		//spread
 		float d1Is = 0;

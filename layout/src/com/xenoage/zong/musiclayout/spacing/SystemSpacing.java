@@ -12,6 +12,7 @@ import java.util.List;
 
 import lombok.Getter;
 
+import com.xenoage.utils.kernel.Range;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.position.MP;
 
@@ -107,6 +108,10 @@ public class SystemSpacing {
 	
 	public boolean containsMeasure(int scoreMeasure) {
 		return getStartMeasureIndex() <= scoreMeasure && scoreMeasure <= getEndMeasureIndex();
+	}
+	
+	public Range getMeasureIndices() {
+		return range(getStartMeasureIndex(), getEndMeasureIndex());
 	}
 	
 	public ColumnSpacing getColumn(int scoreMeasure) {

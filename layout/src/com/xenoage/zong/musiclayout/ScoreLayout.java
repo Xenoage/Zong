@@ -127,7 +127,7 @@ public class ScoreLayout {
 		//go through all systems of this frame
 		for (int iSystem : range(frameArr.systems)) {
 			SystemSpacing system = frameArr.systems.get(iSystem);
-			if (system.getStartMeasureIndex() <= measure && system.getEndMeasureIndex() >= measure)
+			if (system.containsMeasure(measure))
 				return iSystem;
 		}
 		//we found nothing
