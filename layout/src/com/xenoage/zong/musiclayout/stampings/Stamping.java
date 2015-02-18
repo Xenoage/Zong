@@ -9,13 +9,11 @@ import com.xenoage.zong.core.music.MusicElement;
 
 /**
  * Stampings can be visible objects like notes, clefs, texts, but
- * also invisible objects like empty rooms between staves and so on are possible.
+ * also invisible objects like empty rooms between staves.
  * 
  * Stamps were used in the early days of music notation to paint the symbols.
  * This class is called stamping, because it is the result of placing a stamp,
  * that means, in most cases, a given symbol at a given position. 
- * 
- * TIDY: make all stampings mutable
  *
  * @author Andreas Wenger
  */
@@ -45,9 +43,6 @@ public abstract class Stamping {
 	 */
 	public final StaffStamping parentStaff;
 
-	/** The musical level to which this stamping belongs to. */
-	public final Level level;
-
 	/**
 	 * The musical element for which this stamping was created,
 	 * or null, if not availabe (e.g. for staves).
@@ -61,10 +56,14 @@ public abstract class Stamping {
 	 */
 	public final Shape boundingShape;
 
-
 	/**
 	 * Gets the type of this stamping.
 	 */
 	public abstract StampingType getType();
+	
+	/**
+	 * Gets the musical level to which this stamping belongs to.
+	 */
+	public abstract Level getLevel();
 
 }

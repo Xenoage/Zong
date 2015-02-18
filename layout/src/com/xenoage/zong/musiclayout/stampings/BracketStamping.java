@@ -29,18 +29,19 @@ import com.xenoage.zong.core.music.group.BracketGroup;
 
 	public BracketStamping(StaffStamping firstStaff, StaffStamping lastStaff, float positionX,
 		BracketGroup.Style groupStyle) {
-		super(firstStaff, Level.Music, null, null);
+		super(firstStaff, null, null);
 		this.firstStaff = firstStaff;
 		this.lastStaff = lastStaff;
 		this.positionX = positionX;
 		this.groupStyle = groupStyle;
 	}
 
-	/**
-	 * Gets the type of this stamping.
-	 */
 	@Override public StampingType getType() {
 		return StampingType.BracketStamping;
 	}
 
+	@Override public Level getLevel() {
+		return Level.Music;
+	}
+	
 }

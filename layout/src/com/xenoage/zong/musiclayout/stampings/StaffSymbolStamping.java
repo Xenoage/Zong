@@ -39,7 +39,7 @@ import com.xenoage.zong.symbols.Symbol;
 
 	public StaffSymbolStamping(StaffStamping parentStaff, MusicElement musicElement, Symbol symbol,
 		Color color, SP position, float scaling, boolean mirrorV) {
-		super(parentStaff, Level.Music, musicElement, createBoundingShape(symbol, scaling, parentStaff,
+		super(parentStaff, musicElement, createBoundingShape(symbol, scaling, parentStaff,
 			position));
 		this.symbol = symbol;
 		this.color = color;
@@ -59,11 +59,12 @@ import com.xenoage.zong.symbols.Symbol;
 		return bounds;
 	}
 
-	/**
-	 * Gets the type of this stamping.
-	 */
 	@Override public StampingType getType() {
 		return StampingType.StaffSymbolStamping;
+	}
+	
+	@Override public Level getLevel() {
+		return Level.Music;
 	}
 
 }

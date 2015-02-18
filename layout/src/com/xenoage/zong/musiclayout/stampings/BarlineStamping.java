@@ -37,18 +37,19 @@ import com.xenoage.zong.core.music.group.BarlineGroup;
 
 	public BarlineStamping(Barline barline, List<StaffStamping> staves, float xPosition,
 		BarlineGroup.Style groupStyle) {
-		super(staves.get(0), Level.Music, barline, null);
+		super(staves.get(0), barline, null);
 		this.barline = barline;
 		this.staves = staves;
 		this.xPosition = xPosition;
 		this.groupStyle = groupStyle;
 	}
 
-	/**
-	 * Gets the type of this stamping.
-	 */
 	@Override public StampingType getType() {
 		return StampingType.BarlineStamping;
+	}
+	
+	@Override public Level getLevel() {
+		return Level.Music;
 	}
 
 }

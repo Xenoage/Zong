@@ -12,7 +12,7 @@ import com.xenoage.utils.math.geom.Rectangle2f;
 	extends Stamping {
 
 	public EmptySpaceStamping(Rectangle2f rectangle) {
-		super(null, Level.EmptySpace, null, rectangle);
+		super(null, null, rectangle);
 	}
 
 	/**
@@ -22,4 +22,8 @@ import com.xenoage.utils.math.geom.Rectangle2f;
 		return StampingType.EmptySpaceStamping;
 	}
 
+	@Override public Level getLevel() {
+		return Level.EmptySpace;
+	}
+	
 }

@@ -25,12 +25,16 @@ import com.xenoage.zong.core.text.FormattedText;
 
 	public TextStamping(@NonNull FormattedText text, @MaybeNull StaffStamping parentStaff,
 		@MaybeNull MusicElement musicElement, @MaybeNull Shape boundingShape) {
-		super(parentStaff, Level.Text, musicElement, boundingShape);
+		super(parentStaff, musicElement, boundingShape);
 		this.text = checkNotNull(text);
 	}
 
 	@Override public StampingType getType() {
 		return StampingType.TextStamping;
+	}
+	
+	@Override public Level getLevel() {
+		return Level.Text;
 	}
 
 	/**

@@ -40,7 +40,7 @@ import com.xenoage.zong.symbols.common.CommonSymbol;
 
 	public FlagsStamping(FlagsDirection flagsDirection, int flagsCount, float scaling,
 		StaffStamping parentStaff, Chord chord, SP position, SymbolPool symbolPool) {
-		super(parentStaff, Level.Music, chord, createBoundingShape(flagsDirection, flagsCount, scaling,
+		super(parentStaff, chord, createBoundingShape(flagsDirection, flagsCount, scaling,
 			parentStaff, position, symbolPool));
 		this.flagsDirection = flagsDirection;
 		this.flagsCount = flagsCount;
@@ -76,11 +76,12 @@ import com.xenoage.zong.symbols.common.CommonSymbol;
 		return (flagsDirection == FlagsDirection.Down ? -1 : 1) * scaling;
 	}
 
-	/**
-	 * Gets the type of this stamping.
-	 */
 	@Override public StampingType getType() {
 		return StampingType.FlagsStamping;
+	}
+	
+	@Override public Level getLevel() {
+		return Level.Music;
 	}
 
 }

@@ -21,7 +21,7 @@ import com.xenoage.utils.math.geom.Size2f;
 
 
 	public TestStamping(Point2f position, Size2f size, Color color) {
-		super(null, Level.Music, null, null);
+		super(null, null, null);
 		this.position = position;
 		this.size = size;
 		this.color = color;
@@ -31,4 +31,8 @@ import com.xenoage.utils.math.geom.Size2f;
 		return StampingType.TestStamping;
 	}
 
+	@Override public Level getLevel() {
+		return Level.Music;
+	}
+	
 }

@@ -19,16 +19,17 @@ import com.xenoage.utils.annotations.Const;
 
 
 	public StaffCursorStamping(StaffStamping parentStaff, float xMm, float offsetIs) {
-		super(parentStaff, Level.EmptySpace, null, null);
+		super(parentStaff, null, null);
 		this.xMm = xMm;
 		this.offsetIs = offsetIs;
 	}
 
-	/**
-	 * Gets the type of this stamping.
-	 */
 	@Override public StampingType getType() {
 		return StampingType.StaffCursorStamping;
+	}
+	
+	@Override public Level getLevel() {
+		return Level.EmptySpace;
 	}
 
 }

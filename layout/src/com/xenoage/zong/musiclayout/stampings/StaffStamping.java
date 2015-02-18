@@ -40,7 +40,7 @@ public class StaffStamping
 
 	public StaffStamping(SystemSpacing system, int staffIndex,
 		Point2f position, float length, int linesCount, float is) {
-		super(null, Stamping.Level.Staff, null, new Rectangle2f(position, new Size2f(length,
+		super(null, null, new Rectangle2f(position, new Size2f(length,
 			(linesCount - 1) * is /*TODO: line width! */)));
 		this.system = system;
 		this.staffIndex = staffIndex;
@@ -85,11 +85,12 @@ public class StaffStamping
 		return system.getMpAt(positionX, staffIndex);
 	}
 
-	/**
-	 * Gets the type of this stamping.
-	 */
 	@Override public StampingType getType() {
 		return StampingType.StaffStamping;
 	}
 
+	@Override public Level getLevel() {
+		return Level.Staff;
+	}
+	
 }

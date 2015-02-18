@@ -35,7 +35,7 @@ import com.xenoage.zong.core.text.FormattedText;
 
 	public TupletStamping(float x1, float x2, float lp1, float lp2, boolean bracket,
 		FormattedText text, StaffStamping parentStaff) {
-		super(parentStaff, Level.Music, null, null);
+		super(parentStaff, null, null);
 		this.x1mm = x1;
 		this.x2mm = x2;
 		this.y1lp = lp1;
@@ -46,6 +46,10 @@ import com.xenoage.zong.core.text.FormattedText;
 
 	@Override public StampingType getType() {
 		return StampingType.TupletStamping;
+	}
+	
+	@Override public Level getLevel() {
+		return Level.Music;
 	}
 
 }

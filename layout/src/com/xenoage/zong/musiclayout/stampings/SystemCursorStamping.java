@@ -23,7 +23,7 @@ import com.xenoage.utils.annotations.Const;
 
 
 	public SystemCursorStamping(StaffStamping topStaff, StaffStamping bottomStaff, float x) {
-		super(topStaff, Level.EmptySpace, null, null);
+		super(topStaff, null, null);
 		this.topStaff = topStaff;
 		this.bottomStaff = bottomStaff;
 		this.x = x;
@@ -31,6 +31,10 @@ import com.xenoage.utils.annotations.Const;
 
 	@Override public StampingType getType() {
 		return StampingType.SystemCursorStamping;
+	}
+	
+	@Override public Level getLevel() {
+		return Level.EmptySpace;
 	}
 
 }

@@ -40,7 +40,7 @@ import com.xenoage.zong.core.music.beam.Beam;
 
 	public BeamStamping(Beam beam, StaffStamping staff1, StaffStamping staff2, float x1, float x2,
 		float lp1, float lp2) {
-		super(staff1, Level.Music, beam, null);
+		super(staff1, beam, null);
 		this.staff1 = staff1;
 		this.staff2 = staff2;
 		this.x1 = x1;
@@ -49,11 +49,12 @@ import com.xenoage.zong.core.music.beam.Beam;
 		this.lp2 = lp2;
 	}
 
-	/**
-	 * Gets the type of this stamping.
-	 */
 	@Override public StampingType getType() {
 		return StampingType.BeamStamping;
 	}
 
+	@Override public Level getLevel() {
+		return Level.Music;
+	}
+	
 }

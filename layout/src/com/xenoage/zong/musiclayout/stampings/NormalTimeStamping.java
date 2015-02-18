@@ -30,7 +30,7 @@ import com.xenoage.zong.core.music.time.Time;
 
 	public NormalTimeStamping(Time time, float positionX, StaffStamping parentStaff,
 		float numeratorOffset, float denominatorOffset, float digitGap) {
-		super(parentStaff, Level.Music, null, null);
+		super(parentStaff, null, null);
 		this.time = time;
 		this.positionX = positionX;
 		this.numeratorOffset = numeratorOffset;
@@ -38,11 +38,12 @@ import com.xenoage.zong.core.music.time.Time;
 		this.digitGap = digitGap;
 	}
 
-	/**
-	 * Gets the type of this stamping.
-	 */
 	@Override public StampingType getType() {
 		return StampingType.NormalTimeStamping;
+	}
+	
+	@Override public Level getLevel() {
+		return Level.Music;
 	}
 
 }

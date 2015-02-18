@@ -47,18 +47,19 @@ import com.xenoage.zong.core.music.slur.Slur;
 	 * @param c2           t
 	 */
 	public SlurStamping(StaffStamping parentStaff, Slur slur, SP p1, SP p2, SP c1, SP c2) {
-		super(parentStaff, Level.Music, slur, null);
+		super(parentStaff, slur, null);
 		this.p1 = p1;
 		this.p2 = p2;
 		this.c1 = c1;
 		this.c2 = c2;
 	}
 
-	/**
-	 * Gets the type of this stamping.
-	 */
 	@Override public StampingType getType() {
 		return StampingType.SlurStamping;
 	}
 
+	@Override public Level getLevel() {
+		return Level.Music;
+	}
+	
 }

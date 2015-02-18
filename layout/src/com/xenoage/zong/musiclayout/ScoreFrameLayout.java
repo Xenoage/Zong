@@ -94,8 +94,8 @@ public final class ScoreFrameLayout {
 		Stamping ret = null;
 		int highestLevel = -1;
 		for (Stamping s : getMusicalStampings()) {
-			if (s.level.ordinal() > highestLevel && s.boundingShape.contains(point)) {
-				highestLevel = s.level.ordinal();
+			if (s.getLevel().ordinal() > highestLevel && s.boundingShape.contains(point)) {
+				highestLevel = s.getLevel().ordinal();
 				ret = s;
 			}
 		}

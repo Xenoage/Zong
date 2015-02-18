@@ -1,5 +1,7 @@
 package com.xenoage.zong.musiclayout.stampings;
 
+import lombok.Getter;
+
 import com.xenoage.utils.math.geom.Shape;
 import com.xenoage.zong.musiclayout.stampings.Stamping;
 
@@ -10,9 +12,13 @@ import com.xenoage.zong.musiclayout.stampings.Stamping;
  */
 public class StampingMock
 	extends Stamping {
+	
+	@Getter private Level level;
 
+	
 	public StampingMock(Stamping.Level level, Shape boundingShape) {
-		super(null, level, null, boundingShape);
+		super(null, null, boundingShape);
+		this.level = level;
 	}
 
 	@Override public StampingType getType() {

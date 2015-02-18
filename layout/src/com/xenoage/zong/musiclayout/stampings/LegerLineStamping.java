@@ -30,7 +30,7 @@ import com.xenoage.zong.core.music.chord.Chord;
 
 
 	public LegerLineStamping(StaffStamping parentStaff, Chord chord, float x, int lp, float widthIs) {
-		super(parentStaff, Level.Music, chord, null);
+		super(parentStaff, chord, null);
 		this.xMm = x;
 		this.lp = lp;
 		this.widthIs = widthIs;
@@ -38,6 +38,10 @@ import com.xenoage.zong.core.music.chord.Chord;
 
 	@Override public StampingType getType() {
 		return StampingType.LegerLineStamping;
+	}
+	
+	@Override public Level getLevel() {
+		return Level.Music;
 	}
 
 }

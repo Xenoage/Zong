@@ -35,7 +35,7 @@ import com.xenoage.zong.core.music.direction.Wedge;
 
 	public WedgeStamping(Wedge wedge, float lp, float x1Mm, float x2Mm, float d1Is, float d2Is,
 		StaffStamping parentStaff) {
-		super(parentStaff, Level.Music, wedge, null);
+		super(parentStaff, wedge, null);
 		this.lp = lp;
 		this.x1Mm = x1Mm;
 		this.x2Mm = x2Mm;
@@ -45,6 +45,10 @@ import com.xenoage.zong.core.music.direction.Wedge;
 
 	@Override public StampingType getType() {
 		return StampingType.WedgeStamping;
+	}
+	
+	@Override public Level getLevel() {
+		return Level.Music;
 	}
 
 }

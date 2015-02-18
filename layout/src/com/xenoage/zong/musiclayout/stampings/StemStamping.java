@@ -32,18 +32,19 @@ public class StemStamping
 
 	public StemStamping(StaffStamping parentStaff, Chord chord, float xMm, float noteheadLp,
 		float endLp, StemDirection direction) {
-		super(parentStaff, Level.Music, chord, null);
+		super(parentStaff, chord, null);
 		this.xMm = xMm;
 		this.noteheadLp = noteheadLp;
 		this.endLp = endLp;
 		this.direction = direction;
 	}
 
-	/**
-	 * Gets the type of this stamping.
-	 */
 	@Override public StampingType getType() {
 		return StampingType.StemStamping;
+	}
+	
+	@Override public Level getLevel() {
+		return Level.Music;
 	}
 
 }

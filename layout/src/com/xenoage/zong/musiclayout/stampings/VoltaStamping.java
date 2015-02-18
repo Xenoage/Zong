@@ -43,7 +43,7 @@ import com.xenoage.zong.core.text.FormattedText;
 
 	public VoltaStamping(Volta volta, StaffStamping parentStaff, float lp, float x1, float x2,
 		FormattedText text, boolean leftHook, boolean rightHook) {
-		super(parentStaff, Level.Music, volta, null);
+		super(parentStaff, volta, null);
 		this.lp = lp;
 		this.x1 = x1;
 		this.x2 = x2;
@@ -56,4 +56,8 @@ import com.xenoage.zong.core.text.FormattedText;
 		return StampingType.VoltaStamping;
 	}
 
+	@Override public Level getLevel() {
+		return Level.Music;
+	}
+	
 }
