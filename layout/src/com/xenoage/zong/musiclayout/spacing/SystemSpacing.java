@@ -105,6 +105,10 @@ public class SystemSpacing {
 		return getLast(columnSpacings).measureIndex;
 	}
 	
+	public boolean containsMeasure(int scoreMeasure) {
+		return getStartMeasureIndex() <= scoreMeasure && scoreMeasure <= getEndMeasureIndex();
+	}
+	
 	public ColumnSpacing getColumn(int scoreMeasure) {
 		return columnSpacings.get(scoreMeasure - getStartMeasureIndex());
 	}
@@ -176,6 +180,13 @@ public class SystemSpacing {
 		float measureXMm = getMeasureStartMm(scoreMeasure);
 		float elementXMm = columnSpacings.get(scoreMeasure - getStartMeasureIndex()).getXMmAt(beat);
 		return measureXMm + elementXMm;
+	}
+	
+	/**
+	 * See {@link #getXMmAt(int, Fraction)}.
+	 */
+	public float getXMmAt(MP mp) {
+		return getXMmAt(mp.measure, mp.beat);
 	}
 
 	/**

@@ -209,7 +209,7 @@ public class DirectionStampingStrategy
 		}
 		else {
 			//begins within staff
-			x1Mm = staffStamping.getXMmAt(p1);
+			x1Mm = staffStamping.system.getXMmAt(p1);
 		}
 		//clip end to staff
 		float x2Mm;
@@ -219,7 +219,7 @@ public class DirectionStampingStrategy
 		}
 		else {
 			//ends within staff
-			x2Mm = staffStamping.getXMmAt(p2);
+			x2Mm = staffStamping.system.getXMmAt(p2);
 		}
 		//spread
 		float d1Is = 0;
@@ -261,7 +261,7 @@ public class DirectionStampingStrategy
 		float x, lp;
 
 		//default positioning
-		x = notNull(staffStamping.getXMmAt(mp), 0f) + staffStamping.position.x;
+		x = notNull(staffStamping.system.getXMmAt(mp), 0f) + staffStamping.position.x;
 		lp = defaultLP;
 
 		//custom positioning

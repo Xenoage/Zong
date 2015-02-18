@@ -125,30 +125,10 @@ public class StaffStamping
 	}
 
 	/**
-	 * See {@link StaffMarks#getMPAt(float)}.
-	 * Throws an {@link IllegalStateException} if positions are unknown.
-	 * @deprecated call method from {@link SystemSpacing} directly
+	 * See {@link SystemSpacing#getMpAt(float, int)}.
 	 */
-	public MP getMPAtX(float positionX) {
+	public MP getMpAtX(float positionX) {
 		return system.getMpAt(positionX, staffIndex);
-	}
-
-	/**
-	 * See {@link StaffMarks#getXMmAt(int, Fraction)}.
-	 * Throws an {@link IllegalStateException} if positions are unknown.
-	 * @deprecated call method from {@link SystemSpacing} directly
-	 */
-	public float getXMmAt(int measureIndex, Fraction beat) {
-		return system.getXMmAt(measureIndex, beat);
-	}
-
-	/**
-	 * See {@link StaffMarks#getXMmAt(int, Fraction)}.
-	 * Throws an {@link IllegalStateException} if positions are unknown.
-	 * @deprecated call method from {@link SystemSpacing} directly
-	 */
-	public float getXMmAt(MP bmp) {
-		return system.getXMmAt(bmp.measure, bmp.beat);
 	}
 
 	/**

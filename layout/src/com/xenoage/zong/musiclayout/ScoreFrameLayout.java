@@ -16,6 +16,7 @@ import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.musiclayout.continued.ContinuedElement;
 import com.xenoage.zong.musiclayout.spacing.FrameSpacing;
+import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import com.xenoage.zong.musiclayout.stampings.Stamping;
 import com.xenoage.zong.musiclayout.stampings.StampingType;
@@ -35,7 +36,7 @@ import com.xenoage.zong.musiclayout.stampings.TextStamping;
 public final class ScoreFrameLayout {
 
 	/** Information about the systems in this frame. */
-	@Getter private FrameSpacing frameArrangement;
+	@Getter private FrameSpacing frameSpacing;
 
 	/** The list of all staff stampings of this frame. Staff stampings and
 	 * other stampings are divided for performance reasons. */
@@ -58,7 +59,7 @@ public final class ScoreFrameLayout {
 	public ScoreFrameLayout(FrameSpacing frameArrangement, ArrayList<StaffStamping> staffStampings,
 		ArrayList<Stamping> otherStampings, ArrayList<ContinuedElement> continuedElements)
 	{
-		this.frameArrangement = frameArrangement;
+		this.frameSpacing = frameArrangement;
 		this.staffStampings = staffStampings;
 		this.otherStampings = otherStampings;
 		this.continuedElements = continuedElements;
@@ -166,7 +167,7 @@ public final class ScoreFrameLayout {
 		//otherwise, compute the beat at this position and return it
 		else {
 			float posX = point.x - staff.position.x;
-			return staff.getMPAtX(posX);
+			return staff.getMpAtX(posX);
 		}
 	}
 
@@ -184,12 +185,9 @@ public final class ScoreFrameLayout {
 	 * Gets the staff stamping containing the given measure, or null if not found.
 	 */
 	public StaffStamping getStaffStamping(int staff, int measure) {
-		for (StaffStamping s : staffStampings) {
-			if (s.getStaffIndex() == staff && measure >= s.getStartMeasureIndex() &&
-				measure <= s.getEndMeasureIndex()) {
+		for (StaffStamping s : staffStampings)
+			if (s.getStaffIndex() == staff && s.system.containsMeasure(measure))
 				return s;
-			}
-		}
 		return null;
 	}
 
@@ -206,7 +204,7 @@ public final class ScoreFrameLayout {
 		float maxX = Float.MIN_VALUE;
 		float maxY = Float.MIN_VALUE;
 		for (StaffStamping staff : staffStampings) {
-			if (staff.getSystemIndex() == systemIndex) {
+			if (staff.system.getSystemIndexInFrame() == systemIndex) {
 				found = true;
 				minX = Math.min(minX, staff.position.x);
 				minY = Math.min(minY, staff.position.y);
@@ -226,17 +224,11 @@ public final class ScoreFrameLayout {
 	 * Only the measure and the beat of the given {@link MP} are used.
 	 */
 	public float getPositionX(MP mp) {
-		float minX = Float.MAX_VALUE;
-		//search all staves for the given musical position, beginning at the top staff
-		for (StaffStamping staff : staffStampings) {
-			Float x = staff.getXMmAt(mp);
-			if (x != null && x < minX)
-				minX = x;
-		}
-		if (minX == Float.MAX_VALUE)
-			return 0;
-		else
-			return minX;
+		//search all systems for the given musical position, beginning at the top staff
+		for (SystemSpacing system : frameSpacing.systems)
+			if (system.containsMeasure(mp.measure))
+				return system.getXMmAt(mp);
+		return 0;
 	}
 	
 }

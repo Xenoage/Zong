@@ -74,7 +74,7 @@ public class ScoreLayout {
 		//otherwise, compute the beat at this position and return it
 		else {
 			float posX = coordinates.pMm.x - staff.position.x;
-			return staff.getMPAtX(posX);
+			return staff.getMpAtX(posX);
 		}
 	}
 
@@ -91,14 +91,10 @@ public class ScoreLayout {
 		for (int iFrame = 0; iFrame < frames.size(); iFrame++) {
 			ScoreFrameLayout frame = frames.get(iFrame);
 			for (StaffStamping s : frame.getStaffStampings()) {
-				if (s.getStaffIndex() == mp.staff) {
-					//this staff stamping is part of the correct scorewide staff.
-					//look if it contains the given musical score position
-					Float posX = s.getXMmAt(mp);
-					if (posX != null) {
-						//we found it. return staff and position
-						return new StaffStampingPosition(s, iFrame, posX);
-					}
+				if (s.getStaffIndex() == mp.staff && s.system.containsMeasure(mp.measure)) {
+					//we found it. return staff and position
+					float posX = s.system.getXMmAt(mp);
+					return new StaffStampingPosition(s, iFrame, posX);
 				}
 			}
 		}
@@ -113,7 +109,7 @@ public class ScoreLayout {
 	public int getFrameIndexOf(int measure) {
 		//go through all frames
 		for (int iFrame : range(frames)) {
-			FrameSpacing frameArr = frames.get(iFrame).getFrameArrangement();
+			FrameSpacing frameArr = frames.get(iFrame).getFrameSpacing();
 			if (frameArr.getStartMeasureIndex() <= measure && frameArr.getEndMeasureIndex() >= measure)
 				return iFrame;
 		}
@@ -127,7 +123,7 @@ public class ScoreLayout {
 	 * containing the measure with the given global index. If not found, -1 is returned.
 	 */
 	public int getSystemIndexOf(int frame, int measure) {
-		FrameSpacing frameArr = frames.get(frame).getFrameArrangement();
+		FrameSpacing frameArr = frames.get(frame).getFrameSpacing();
 		//go through all systems of this frame
 		for (int iSystem : range(frameArr.systems)) {
 			SystemSpacing system = frameArr.systems.get(iSystem);
@@ -183,10 +179,9 @@ public class ScoreLayout {
 	 */
 	public ScoreFrameLayout getScoreFrameLayout(int measure) {
 		for (ScoreFrameLayout frame : frames) {
-			if (measure >= frame.getFrameArrangement().getStartMeasureIndex() &&
-				measure <= frame.getFrameArrangement().getEndMeasureIndex()) {
+			FrameSpacing spacing = frame.getFrameSpacing();
+			if (measure >= spacing.getStartMeasureIndex() && measure <= spacing.getEndMeasureIndex())
 				return frame;
-			}
 		}
 		return null;
 	}
@@ -205,7 +200,7 @@ public class ScoreLayout {
 			else
 				ss = sfl.getStaffStamping(0, bmp.measure);
 			if (ss != null) {
-				float x = ss.position.x + ss.getXMmAt(bmp);
+				float x = ss.position.x + ss.system.getXMmAt(bmp);
 				float y = ss.computeYMm(lp);
 				return new ScoreLP(iFrame, new Point2f(x, y));
 			}
