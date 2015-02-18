@@ -355,7 +355,7 @@ public class ScoreFrameLayoutStrategy
 					float voicesOffset = xOffset + measureColumnSpacing.getLeadingWidthMm();
 
 					//add measure elements within this measure
-					for (ElementSpacing spacingElement : measureStaffSpacing.getMeasureElementsSpacings().elements) {
+					for (ElementSpacing spacingElement : measureStaffSpacing.getMeasureElementsSpacings()) {
 						MusicElement element = spacingElement.getElement();
 						if (element != null) {
 							Notation notation = notations.get(element, iStaff);

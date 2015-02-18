@@ -31,7 +31,6 @@ import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.musiclayout.settings.Spacings;
 import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.ElementWidth;
-import com.xenoage.zong.musiclayout.spacing.MeasureElementsSpacing;
 import com.xenoage.zong.musiclayout.spacing.VoiceSpacing;
 
 /**
@@ -74,10 +73,10 @@ public class MeasureElementsSpacerTest {
 		Clef innerClef = new Clef(ClefType.clefTreble);
 		BeatEList<Clef> innerClefs = new BeatEList<Clef>();
 		innerClefs.add(beatE(innerClef, fr(6)));
-		MeasureElementsSpacing res = testee.compute(
+		List<ElementSpacing> res = testee.compute(
 			innerClefs, new BeatEList<Key>(), null, false, vs, 0, notations(ve, innerClef), ls);
 		//clef must be at offset 15 - padding - clefwidth/2
-		ElementSpacing[] mes = res.elements.toArray(new ElementSpacing[0]);
+		ElementSpacing[] mes = res.toArray(new ElementSpacing[0]);
 		assertEquals(1, mes.length);
 		assertEquals(fr(6), mes[0].beat);
 		assertEquals(15 - paddingWidth - clefWidth / 2, mes[0].offsetIs, Delta.DELTA_FLOAT);
@@ -113,7 +112,7 @@ public class MeasureElementsSpacerTest {
 		Clef innerClef = new Clef(ClefType.clefTreble);
 		BeatEList<Clef> innerClefs = new BeatEList<Clef>();
 		innerClefs.add(beatE(innerClef, fr(4)));
-		MeasureElementsSpacing mes = testee.compute(
+		List<ElementSpacing> mes = testee.compute(
 			innerClefs, new BeatEList<Key>(), null, false, vs, 0, notations(ve, innerClef), ls);
 		//voice spacings
 		assertEquals(2, vs.size());
@@ -122,7 +121,7 @@ public class MeasureElementsSpacerTest {
 		assertEqualsSpacings(ilist(spacing(ve[2], fr(1), 5), spacing(ve[3], fr(13, 2), 18)),
 			vs.get(1).elements);
 		//clef must be at offset 13 - padding - clefwidth/2
-		ElementSpacing[] se = mes.elements.toArray(new ElementSpacing[0]);
+		ElementSpacing[] se = mes.toArray(new ElementSpacing[0]);
 		assertEquals(1, se.length);
 		assertEquals(fr(4), se[0].beat);
 		assertEquals(13 - paddingWidth - clefWidth / 2, se[0].offsetIs, Delta.DELTA_FLOAT);

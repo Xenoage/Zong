@@ -1,5 +1,8 @@
 package com.xenoage.zong.musiclayout.spacing;
 
+import java.util.Collections;
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -28,6 +31,10 @@ public class ElementSpacing {
 	@NonNull public final Fraction beat;
 	/** The horizontal offset of the element in interline spaces */
 	public float offsetIs;
+	
+	/** Empty list of {@link ElementSpacing}s. */
+	public static final List<ElementSpacing> empty = Collections.<ElementSpacing>emptyList();
+	
 	
 	/**
 	 * Returns the MusicElement, or null, if there is none.

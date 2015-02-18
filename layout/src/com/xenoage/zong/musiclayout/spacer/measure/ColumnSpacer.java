@@ -28,8 +28,8 @@ import com.xenoage.zong.musiclayout.notations.Notations;
 import com.xenoage.zong.musiclayout.spacer.beat.BarlinesBeatOffsetter;
 import com.xenoage.zong.musiclayout.spacing.BeatOffset;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
+import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.LeadingSpacing;
-import com.xenoage.zong.musiclayout.spacing.MeasureElementsSpacing;
 import com.xenoage.zong.musiclayout.spacing.MeasureSpacing;
 import com.xenoage.zong.musiclayout.spacing.VoiceSpacing;
 
@@ -72,10 +72,10 @@ public class ColumnSpacer
 		}
 
 		//compute the measure elements (like inner clefs) and accordingly updated voice spacings
-		ArrayList<MeasureElementsSpacing> optimalMeasureElementsSpacingsByStaff = alist();
+		ArrayList<List<ElementSpacing>> optimalMeasureElementsSpacingsByStaff = alist();
 		for (int iStaff : range(column)) {
 			context.mp = MP.atMeasure(iStaff, measureIndex);
-			MeasureElementsSpacing measureSpacing = measureElementsSpacer.compute(
+			List<ElementSpacing> measureSpacing = measureElementsSpacer.compute(
 				context, createLeading, voiceSpacingsByStaff.get(iStaff), notations);
 			optimalMeasureElementsSpacingsByStaff.add(measureSpacing);
 		}
@@ -93,7 +93,7 @@ public class ColumnSpacer
 		List<BeatOffset> barlineOffsets = offsets.barlineOffsets;
 
 		//compute the spacings for the whole column, so that equal beats are aligned
-		ArrayList<MeasureElementsSpacing> alignedMeasureElementsSpacingsByStaff = alist();
+		ArrayList<List<ElementSpacing>> alignedMeasureElementsSpacingsByStaff = alist();
 		for (int iStaff : range(column)) {
 			Measure measure = column.get(iStaff);
 			//voice spacings

@@ -9,6 +9,7 @@ import static com.xenoage.zong.core.music.chord.ChordFactory.chord;
 import static com.xenoage.zong.core.music.chord.ChordFactory.graceChord;
 import static com.xenoage.zong.core.position.MP.atMeasure;
 import static com.xenoage.zong.musiclayout.spacer.system.fill.StretchMeasures.stretchMeasures;
+import static com.xenoage.zong.musiclayout.spacing.ElementSpacing.empty;
 import static org.junit.Assert.assertEquals;
 
 import java.util.List;
@@ -22,7 +23,6 @@ import com.xenoage.zong.musiclayout.spacing.BeatOffset;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.LeadingSpacingMock;
-import com.xenoage.zong.musiclayout.spacing.MeasureElementsSpacing;
 import com.xenoage.zong.musiclayout.spacing.MeasureSpacing;
 import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
 import com.xenoage.zong.musiclayout.spacing.VoiceSpacing;
@@ -122,7 +122,7 @@ public class StretchMeasuresTest {
 			new ElementSpacing(new ChordNotation(chord1), beatOffsets.get(0).getBeat(), beatOffsets.get(0).getOffsetMm()),
 			new ElementSpacing(new ChordNotation(chord2), beatOffsets.get(1).getBeat(), beatOffsets.get(1).getOffsetMm()))));
 		MeasureSpacing measureSpacing = new MeasureSpacing(atMeasure(0, 0), is, voiceSpacings,
-			MeasureElementsSpacing.empty, LeadingSpacingMock.createGClefSpacing(leadingWidth));
+			empty, LeadingSpacingMock.createGClefSpacing(leadingWidth));
 		List<MeasureSpacing> measureSpacings = alist(measureSpacing);
 		ColumnSpacing mcs = new ColumnSpacing(-1, measureSpacings, beatOffsets,
 			alist(new BeatOffset(fr(0, 4), 0), new BeatOffset(fr(6, 4), offsetBeat2)));
@@ -154,8 +154,7 @@ public class StretchMeasuresTest {
 				beatOffsets.get(1).getBeat(), beatOffsets.get(1).getOffsetMm() - 1 * graceDistance),
 			new ElementSpacing(new ChordNotation(chord4), beatOffsets.get(1).getBeat(),
 				beatOffsets.get(1).getOffsetMm()))));
-		MeasureSpacing measureSpacing = new MeasureSpacing(atMeasure(0, 0), is, voiceSpacings,
-			MeasureElementsSpacing.empty, null);
+		MeasureSpacing measureSpacing = new MeasureSpacing(atMeasure(0, 0), is, voiceSpacings, empty, null);
 		ColumnSpacing mcs = new ColumnSpacing(-1, alist(measureSpacing),
 			beatOffsets, alist(new BeatOffset(fr(0, 4), 0), new BeatOffset(fr(4, 4), offsetMeasureEnd)));
 		SystemSpacing system = new SystemSpacing(alist(mcs), 0, 0, offsetMeasureEnd,

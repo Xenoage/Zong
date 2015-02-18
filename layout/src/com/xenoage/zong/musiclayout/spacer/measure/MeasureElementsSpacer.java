@@ -2,6 +2,7 @@ package com.xenoage.zong.musiclayout.spacer.measure;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.math.Fraction._0;
+import static com.xenoage.zong.musiclayout.spacing.ElementSpacing.empty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,6 @@ import com.xenoage.zong.musiclayout.notations.Notations;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.LeadingSpacing;
-import com.xenoage.zong.musiclayout.spacing.MeasureElementsSpacing;
 import com.xenoage.zong.musiclayout.spacing.VoiceSpacing;
 
 /**
@@ -51,7 +51,7 @@ public class MeasureElementsSpacer {
 	public static final MeasureElementsSpacer measureElementsSpacer = new MeasureElementsSpacer();
 	
 
-	public MeasureElementsSpacing compute(
+	public List<ElementSpacing> compute(
 		Context context, boolean existsLeadingSpacing, List<VoiceSpacing> voiceSpacings, Notations notations) {
 		
 		Measure measure = context.score.getMeasure(context.mp);
@@ -60,7 +60,7 @@ public class MeasureElementsSpacer {
 			voiceSpacings, context.mp.staff, notations, context.settings);
 	}
 
-	MeasureElementsSpacing compute(BeatEList<Clef> clefs,
+	List<ElementSpacing> compute(BeatEList<Clef> clefs,
 		@MaybeEmpty BeatEList<Key> keys, @MaybeNull Time time, boolean existsLeadingSpacing,
 		List<VoiceSpacing> voiceSpacings, int staff, Notations notations, LayoutSettings layoutSettings) {
 		
@@ -69,7 +69,7 @@ public class MeasureElementsSpacer {
 			key0 = keys.getFirst().element;
 		if (key0 == null && time == null && (clefs == null || clefs.size() == 0)) {
 			//nothing to do
-			return MeasureElementsSpacing.empty;
+			return empty;
 		}
 
 		ArrayList<ElementSpacing> ret = alist();
@@ -179,7 +179,7 @@ public class MeasureElementsSpacer {
 		}
 
 		ret.trimToSize();
-		return new MeasureElementsSpacing(ret);
+		return ret;
 	}
 
 	/**
