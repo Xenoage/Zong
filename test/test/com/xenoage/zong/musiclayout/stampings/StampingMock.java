@@ -17,7 +17,7 @@ public class StampingMock
 
 	
 	public StampingMock(Stamping.Level level, Shape boundingShape) {
-		super(null, null, boundingShape);
+		super(null, boundingShape);
 		this.level = level;
 	}
 

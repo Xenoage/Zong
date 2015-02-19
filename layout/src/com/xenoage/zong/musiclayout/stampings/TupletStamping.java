@@ -35,7 +35,7 @@ import com.xenoage.zong.core.text.FormattedText;
 
 	public TupletStamping(float x1, float x2, float lp1, float lp2, boolean bracket,
 		FormattedText text, StaffStamping parentStaff) {
-		super(parentStaff, null, null);
+		super(parentStaff, null);
 		this.x1mm = x1;
 		this.x2mm = x2;
 		this.y1lp = lp1;

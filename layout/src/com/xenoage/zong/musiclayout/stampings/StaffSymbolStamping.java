@@ -4,7 +4,6 @@ import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.color.Color;
 import com.xenoage.utils.math.geom.Rectangle2f;
 import com.xenoage.utils.math.geom.Shape;
-import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.core.music.format.SP;
 import com.xenoage.zong.symbols.Symbol;
 
@@ -37,10 +36,9 @@ import com.xenoage.zong.symbols.Symbol;
 	public final boolean mirrorV;
 
 
-	public StaffSymbolStamping(StaffStamping parentStaff, MusicElement musicElement, Symbol symbol,
+	public StaffSymbolStamping(StaffStamping parentStaff, Symbol symbol,
 		Color color, SP position, float scaling, boolean mirrorV) {
-		super(parentStaff, musicElement, createBoundingShape(symbol, scaling, parentStaff,
-			position));
+		super(parentStaff, createBoundingShape(symbol, scaling, parentStaff, position));
 		this.symbol = symbol;
 		this.color = color;
 		this.position = position;

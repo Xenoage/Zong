@@ -67,7 +67,7 @@ public class LyricStampingStrategy
 			positionX = (syllableLeft.position.xMm + widthLeft / 2) + 2 *
 				text.getFirstParagraph().getMetrics().getWidth();
 		}
-		return new StaffTextStamping(syllableLeft.parentStaff, (Lyric) syllableLeft.musicElement, //hyphen belongs to the left syllable
+		return new StaffTextStamping(syllableLeft.parentStaff, (Lyric) syllableLeft.getElement(), //hyphen belongs to the left syllable
 			text, sp(positionX, syllableLeft.position.lp));
 	}
 
@@ -96,7 +96,7 @@ public class LyricStampingStrategy
 		float widthLeft = syllableLeft.getText().getFirstParagraph().getMetrics().getWidth();
 		float startX = syllableLeft.position.xMm + widthLeft / 2 + widthU / 4; //widthU / 4: just some distance
 		float baseLine = syllableLeft.position.lp;
-		MusicElement element = syllableLeft.musicElement;
+		MusicElement element = syllableLeft.getElement();
 		//if end notehead is given, compute the end position
 		float endX = 0;
 		if (noteheadRight != null) {

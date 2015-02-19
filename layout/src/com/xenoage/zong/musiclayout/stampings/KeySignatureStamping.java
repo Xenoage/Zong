@@ -41,7 +41,7 @@ import com.xenoage.zong.symbols.common.CommonSymbol;
 	public KeySignatureStamping(TraditionalKey traditionalKey, int linePositionC4,
 		int linePositionMin, float positionX, StaffStamping parentStaff, SymbolPool symbolPool,
 		LayoutSettings layoutSettings) {
-		super(parentStaff, null, createBoundingShape(traditionalKey, parentStaff,
+		super(parentStaff, createBoundingShape(traditionalKey, parentStaff,
 			linePositionC4, linePositionMin, positionX, symbolPool, layoutSettings));
 		this.traditionalKey = traditionalKey;
 		this.linePositionC4 = linePositionC4;

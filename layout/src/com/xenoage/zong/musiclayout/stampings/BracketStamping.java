@@ -29,7 +29,7 @@ import com.xenoage.zong.core.music.group.BracketGroup;
 
 	public BracketStamping(StaffStamping firstStaff, StaffStamping lastStaff, float positionX,
 		BracketGroup.Style groupStyle) {
-		super(firstStaff, null, null);
+		super(firstStaff, null);
 		this.firstStaff = firstStaff;
 		this.lastStaff = lastStaff;
 		this.positionX = positionX;

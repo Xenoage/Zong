@@ -3,8 +3,8 @@ package com.xenoage.zong.musiclayout.stampings;
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.math.geom.Rectangle2f;
 import com.xenoage.utils.math.geom.Shape;
-import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.format.SP;
+import com.xenoage.zong.musiclayout.notations.ChordNotation;
 import com.xenoage.zong.symbols.Symbol;
 import com.xenoage.zong.symbols.SymbolPool;
 import com.xenoage.zong.symbols.common.CommonSymbol;
@@ -26,6 +26,8 @@ import com.xenoage.zong.symbols.common.CommonSymbol;
 		Down;
 	}
 
+	/** The parent chord. */
+	public ChordNotation chord;
 	/** The direction of this flag. This is usually the opposite stem direction. */
 	public final FlagsDirection flagsDirection;
 	/** The number of flags. */
@@ -39,9 +41,10 @@ import com.xenoage.zong.symbols.common.CommonSymbol;
 
 
 	public FlagsStamping(FlagsDirection flagsDirection, int flagsCount, float scaling,
-		StaffStamping parentStaff, Chord chord, SP position, SymbolPool symbolPool) {
-		super(parentStaff, chord, createBoundingShape(flagsDirection, flagsCount, scaling,
+		StaffStamping parentStaff, ChordNotation chord, SP position, SymbolPool symbolPool) {
+		super(parentStaff, createBoundingShape(flagsDirection, flagsCount, scaling,
 			parentStaff, position, symbolPool));
+		this.chord = chord;
 		this.flagsDirection = flagsDirection;
 		this.flagsCount = flagsCount;
 		this.scaling = scaling;

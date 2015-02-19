@@ -22,9 +22,9 @@ import com.xenoage.zong.core.text.FormattedText;
 	public final SP position;
 
 
-	public StaffTextStamping(StaffStamping parentStaff, MusicElement musicElement,
+	public StaffTextStamping(StaffStamping parentStaff, MusicElement element,
 		FormattedText text, SP position) {
-		super(text, parentStaff, musicElement, computeBoundingShape(text, parentStaff, position));
+		super(text, element, parentStaff, computeBoundingShape(text, parentStaff, position));
 		this.position = position;
 	}
 

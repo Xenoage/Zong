@@ -12,12 +12,9 @@ import com.xenoage.utils.math.geom.Rectangle2f;
 	extends Stamping {
 
 	public EmptySpaceStamping(Rectangle2f rectangle) {
-		super(null, null, rectangle);
+		super(null, rectangle);
 	}
 
-	/**
-	 * Gets the type of this stamping.
-	 */
 	@Override public StampingType getType() {
 		return StampingType.EmptySpaceStamping;
 	}

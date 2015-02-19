@@ -18,6 +18,9 @@ import com.xenoage.zong.core.music.beam.Beam;
 	//TODO: move into other class
 	public static final float beamHeight = 0.5f; //height of beam in interline spaces
 	public static final float beamGap = 0.3f; //gap between lines in interline spaces
+	
+	/** The beam data. */
+	public Beam beam;
 
 	/** The {@link StaffStamping} of the start position. */
 	public final StaffStamping staff1;
@@ -40,7 +43,8 @@ import com.xenoage.zong.core.music.beam.Beam;
 
 	public BeamStamping(Beam beam, StaffStamping staff1, StaffStamping staff2, float x1, float x2,
 		float lp1, float lp2) {
-		super(staff1, beam, null);
+		super(staff1, null);
+		this.beam = beam;
 		this.staff1 = staff1;
 		this.staff2 = staff2;
 		this.x1 = x1;

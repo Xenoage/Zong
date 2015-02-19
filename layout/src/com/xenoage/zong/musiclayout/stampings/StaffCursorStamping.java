@@ -19,7 +19,7 @@ import com.xenoage.utils.annotations.Const;
 
 
 	public StaffCursorStamping(StaffStamping parentStaff, float xMm, float offsetIs) {
-		super(parentStaff, null, null);
+		super(parentStaff, null);
 		this.xMm = xMm;
 		this.offsetIs = offsetIs;
 	}

@@ -72,7 +72,7 @@ public class ChordStamper {
 		for (int iNote : range(noteheads)) {
 			NoteDisplacement note = nas.getNote(iNote);
 			Color color = Color.black;
-			NoteheadStamping noteSt = new NoteheadStamping(chord, noteheadType, color, staffStamping, sp(
+			NoteheadStamping noteSt = new NoteheadStamping(noteheadType, color, staffStamping, sp(
 				leftNoteXMm + note.xIs * staffStamping.is, note.lp), scaling, symbolPool);
 			noteheads[iNote] = noteSt;
 		}
@@ -84,7 +84,7 @@ public class ChordStamper {
 		if (beam == null && flagsCount > 0) {
 			FlagsStamping.FlagsDirection flag = (stemDir == StemDirection.Up ? FlagsStamping.FlagsDirection.Down
 				: FlagsStamping.FlagsDirection.Up);
-			flags = new FlagsStamping(flag, flagsCount, scaling, staffStamping, chord, sp(
+			flags = new FlagsStamping(flag, flagsCount, scaling, staffStamping, chordNotation, sp(
 				leftNoteXMm + nas.stemOffsetIs * staffStamping.is, chordNotation.stem.endLp), symbolPool);
 		}
 
@@ -95,7 +95,7 @@ public class ChordStamper {
 			accsSt = new AccidentalStamping[accs.accidentals.length];
 			for (int iAcc : range(accsSt)) {
 				AccidentalDisplacement acc = accs.accidentals[iAcc];
-				AccidentalStamping accSt = new AccidentalStamping(chord, acc.accidental, staffStamping,
+				AccidentalStamping accSt = new AccidentalStamping(chordNotation, acc.accidental, staffStamping,
 					sp(chordXMm +
 							(acc.xIs - chordNotation.width.frontGap + 0.5f /* 0.5f: half accidental width - TODO */) *
 							staffStamping.is, acc.yLp), 1, symbolPool);
@@ -109,7 +109,7 @@ public class ChordStamper {
 		ProlongationDotStamping[] dots = new ProlongationDotStamping[dotPositions.length * dotsPerNote];
 		for (int iNote : range(dotPositions)) {
 			for (int iDot : range(dotsPerNote)) {
-				ProlongationDotStamping dotSt = new ProlongationDotStamping(staffStamping, chord, sp(
+				ProlongationDotStamping dotSt = new ProlongationDotStamping(staffStamping, sp(
 					leftNoteXMm + nas.getDotsOffsetIs(iDot) * staffStamping.is, dotPositions[iNote]), symbolPool);
 				dots[iNote * dotsPerNote + iDot] = dotSt;
 			}
@@ -123,7 +123,7 @@ public class ChordStamper {
 			float noteheadWidth = chordWidths.get(chord.getDuration());
 			for (int iArt : range(artsSt)) {
 				ArticulationDisplacement art = arts.articulations[iArt];
-				ArticulationStamping artSt = new ArticulationStamping(chord,
+				ArticulationStamping artSt = new ArticulationStamping(chordNotation,
 					art.articulation, staffStamping, sp(leftNoteXMm + (art.xIs + (noteheadWidth / 2)) *
 						staffStamping.is, art.yLp), 1, symbolPool);
 				artsSt[iArt] = artSt;
@@ -148,7 +148,7 @@ public class ChordStamper {
 	StemStamping stampStem(ChordNotation chordNotation, float leftNoteXMm, StaffStamping staffStamping) {
 		float stemXMm = leftNoteXMm + chordNotation.notes.stemOffsetIs * staffStamping.is;
 		StemNotation sa = chordNotation.stem;
-		return new StemStamping(staffStamping, chordNotation.element, stemXMm,
+		return new StemStamping(staffStamping, chordNotation, stemXMm,
 			sa.startLp, sa.endLp, chordNotation.stemDirection);
 	}
 

@@ -23,7 +23,7 @@ import com.xenoage.utils.annotations.Const;
 
 
 	public SystemCursorStamping(StaffStamping topStaff, StaffStamping bottomStaff, float x) {
-		super(topStaff, null, null);
+		super(topStaff, null);
 		this.topStaff = topStaff;
 		this.bottomStaff = bottomStaff;
 		this.x = x;

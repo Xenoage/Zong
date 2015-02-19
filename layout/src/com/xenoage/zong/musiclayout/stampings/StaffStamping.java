@@ -40,7 +40,7 @@ public class StaffStamping
 
 	public StaffStamping(SystemSpacing system, int staffIndex,
 		Point2f position, float length, int linesCount, float is) {
-		super(null, null, new Rectangle2f(position, new Size2f(length,
+		super(null, new Rectangle2f(position, new Size2f(length,
 			(linesCount - 1) * is /*TODO: line width! */)));
 		this.system = system;
 		this.staffIndex = staffIndex;

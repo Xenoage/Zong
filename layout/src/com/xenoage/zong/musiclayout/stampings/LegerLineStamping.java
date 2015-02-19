@@ -1,7 +1,6 @@
 package com.xenoage.zong.musiclayout.stampings;
 
 import com.xenoage.utils.annotations.Const;
-import com.xenoage.zong.core.music.chord.Chord;
 
 /**
  * Class for a leger line stamping.
@@ -29,8 +28,8 @@ import com.xenoage.zong.core.music.chord.Chord;
 	public final float widthIs;
 
 
-	public LegerLineStamping(StaffStamping parentStaff, Chord chord, float x, int lp, float widthIs) {
-		super(parentStaff, chord, null);
+	public LegerLineStamping(StaffStamping parentStaff, float x, int lp, float widthIs) {
+		super(parentStaff, null);
 		this.xMm = x;
 		this.lp = lp;
 		this.widthIs = widthIs;

@@ -3,7 +3,6 @@ package com.xenoage.zong.musiclayout.stampings;
 import static com.xenoage.utils.CheckUtils.checkNotNull;
 import lombok.Getter;
 
-import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.math.geom.Point2f;
@@ -16,16 +15,19 @@ import com.xenoage.zong.core.text.FormattedText;
  *
  * @author Andreas Wenger
  */
-@Const public abstract class TextStamping
+public abstract class TextStamping
 	extends Stamping {
 
-	/** The formatted text. */
-	@NonNull @Getter protected final FormattedText text;
+	/** The text element. */
+	@NonNull @Getter FormattedText text;
+	
+	/** The element this stamping belongs to. */
+	@Getter MusicElement element;
 
 
-	public TextStamping(@NonNull FormattedText text, @MaybeNull StaffStamping parentStaff,
-		@MaybeNull MusicElement musicElement, @MaybeNull Shape boundingShape) {
-		super(parentStaff, musicElement, boundingShape);
+	public TextStamping(@NonNull FormattedText text, @MaybeNull MusicElement element,
+		@MaybeNull StaffStamping parentStaff, @MaybeNull Shape boundingShape) {
+		super(parentStaff, boundingShape);
 		this.text = checkNotNull(text);
 	}
 

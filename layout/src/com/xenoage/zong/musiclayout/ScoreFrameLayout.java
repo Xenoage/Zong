@@ -12,7 +12,6 @@ import lombok.ToString;
 import com.xenoage.utils.iterators.MultiListIt;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Rectangle2f;
-import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.musiclayout.continued.ContinuedElement;
 import com.xenoage.zong.musiclayout.spacing.FrameSpacing;
@@ -122,30 +121,6 @@ public final class ScoreFrameLayout {
 	public Stamping getOtherStampingAt(Point2f point, StampingType type) {
 		for (Stamping s : otherStampings) {
 			if (s.boundingShape != null && s.boundingShape.contains(point) && s.getType() == type)
-				return s;
-		}
-		return null;
-	}
-
-	/**
-	 * Returns the first {@link Stamping} which belongs to the given {@link MusicElement},
-	 * or null if there is none.
-	 */
-	public Stamping getStampingFor(MusicElement element) {
-		for (Stamping s : otherStampings) {
-			if (s.musicElement == element)
-				return s;
-		}
-		return null;
-	}
-	
-	/**
-	 * Returns the first {@link Stamping} of the given type which
-	 * belongs to the given {@link MusicElement}, or null if there is none.
-	 */
-	public Stamping getStampingFor(MusicElement element, StampingType stampingType) {
-		for (Stamping s : otherStampings) {
-			if (s.musicElement == element && s.getType() == stampingType)
 				return s;
 		}
 		return null;

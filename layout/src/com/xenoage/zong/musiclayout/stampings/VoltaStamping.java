@@ -1,7 +1,6 @@
 package com.xenoage.zong.musiclayout.stampings;
 
 import com.xenoage.utils.annotations.Const;
-import com.xenoage.zong.core.music.volta.Volta;
 import com.xenoage.zong.core.text.FormattedText;
 
 /**
@@ -41,9 +40,9 @@ import com.xenoage.zong.core.text.FormattedText;
 	public final boolean rightHook;
 
 
-	public VoltaStamping(Volta volta, StaffStamping parentStaff, float lp, float x1, float x2,
+	public VoltaStamping(StaffStamping parentStaff, float lp, float x1, float x2,
 		FormattedText text, boolean leftHook, boolean rightHook) {
-		super(parentStaff, volta, null);
+		super(parentStaff, null);
 		this.lp = lp;
 		this.x1 = x1;
 		this.x2 = x2;

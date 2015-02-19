@@ -42,7 +42,7 @@ import com.xenoage.zong.symbols.common.CommonSymbol;
 
 	public RestStamping(Rest restElement, DurationInfo.Type duration, StaffStamping parentStaff,
 		float positionX, float scaling, SymbolPool symbolPool) {
-		super(parentStaff, restElement, getSymbol(duration, symbolPool), null, sp(positionX,
+		super(parentStaff, getSymbol(duration, symbolPool), null, sp(positionX,
 			getLinePosition(parentStaff, duration)), scaling, false);
 	}
 

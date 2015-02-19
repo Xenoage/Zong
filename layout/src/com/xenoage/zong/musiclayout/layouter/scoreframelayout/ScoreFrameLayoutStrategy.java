@@ -571,7 +571,7 @@ public class ScoreFrameLayoutStrategy
 						if (lastLyric != null) //TODO: frame breaks...
 						{
 							//remember it
-							openLyricsCache.setUnderscore((Lyric) lastLyric.musicElement, lastLyric,
+							openLyricsCache.setUnderscore((Lyric) lastLyric.getElement(), lastLyric,
 								chordSt.noteheads[0]/* TODO*/, staffIndex);
 						}
 					}

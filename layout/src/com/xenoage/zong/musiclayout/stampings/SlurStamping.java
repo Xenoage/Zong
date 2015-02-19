@@ -47,7 +47,7 @@ import com.xenoage.zong.core.music.slur.Slur;
 	 * @param c2           t
 	 */
 	public SlurStamping(StaffStamping parentStaff, Slur slur, SP p1, SP p2, SP c1, SP c2) {
-		super(parentStaff, slur, null);
+		super(parentStaff, null);
 		this.p1 = p1;
 		this.p2 = p2;
 		this.c1 = c1;

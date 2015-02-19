@@ -30,7 +30,7 @@ import com.xenoage.zong.core.music.time.Time;
 
 	public NormalTimeStamping(Time time, float positionX, StaffStamping parentStaff,
 		float numeratorOffset, float denominatorOffset, float digitGap) {
-		super(parentStaff, null, null);
+		super(parentStaff, null);
 		this.time = time;
 		this.positionX = positionX;
 		this.numeratorOffset = numeratorOffset;

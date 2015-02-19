@@ -37,7 +37,7 @@ import com.xenoage.zong.core.music.group.BarlineGroup;
 
 	public BarlineStamping(Barline barline, List<StaffStamping> staves, float xPosition,
 		BarlineGroup.Style groupStyle) {
-		super(staves.get(0), barline, null);
+		super(staves.get(0), null);
 		this.barline = barline;
 		this.staves = staves;
 		this.xPosition = xPosition;

@@ -4,7 +4,6 @@ import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.musiclayout.notations.chord.NoteSuspension.None;
 import static com.xenoage.zong.musiclayout.notations.chord.NoteSuspension.Right;
 
-import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
 import com.xenoage.zong.musiclayout.notations.chord.NoteDisplacement;
 import com.xenoage.zong.musiclayout.notations.chord.NoteSuspension;
@@ -25,7 +24,6 @@ public class LegerLinesStamper {
 	
 	
 	public LegerLineStamping[] stamp(ChordNotation chordNotation, float chordXMm, StaffStamping staffStamping) {
-		Chord chord = chordNotation.getElement();
 		NotesNotation notes = chordNotation.notes;
 		int bottomCount = getBottomCount(notes.getBottomNote().lp);
 		int topCount = getTopCount(notes.getTopNote().lp, staffStamping.linesCount);
@@ -43,9 +41,9 @@ public class LegerLinesStamper {
 			//create stampings
 			LegerLineStamping[] ret = new LegerLineStamping[bottomCount + topCount];
 			for (int i : range(bottomCount))
-				ret[i] = new LegerLineStamping(staffStamping, chord, xBottomMm, bottomLps[i], widthBottomIs);
+				ret[i] = new LegerLineStamping(staffStamping, xBottomMm, bottomLps[i], widthBottomIs);
 			for (int i : range(topCount))
-				ret[bottomCount + i] = new LegerLineStamping(staffStamping, chord, xTopMm, topLps[i], widthTopIs);
+				ret[bottomCount + i] = new LegerLineStamping(staffStamping, xTopMm, topLps[i], widthTopIs);
 			return ret;
 		}
 		else {

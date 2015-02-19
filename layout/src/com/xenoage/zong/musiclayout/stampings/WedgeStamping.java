@@ -1,7 +1,6 @@
 package com.xenoage.zong.musiclayout.stampings;
 
 import com.xenoage.utils.annotations.Const;
-import com.xenoage.zong.core.music.direction.Wedge;
 
 /**
  * Class for a wedge (crescendo or decrescendo) stamping
@@ -33,9 +32,9 @@ import com.xenoage.zong.core.music.direction.Wedge;
 	public final float d2Is;
 
 
-	public WedgeStamping(Wedge wedge, float lp, float x1Mm, float x2Mm, float d1Is, float d2Is,
+	public WedgeStamping(float lp, float x1Mm, float x2Mm, float d1Is, float d2Is,
 		StaffStamping parentStaff) {
-		super(parentStaff, wedge, null);
+		super(parentStaff, null);
 		this.lp = lp;
 		this.x1Mm = x1Mm;
 		this.x2Mm = x2Mm;

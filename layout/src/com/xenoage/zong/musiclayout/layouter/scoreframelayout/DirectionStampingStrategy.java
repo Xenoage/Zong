@@ -100,7 +100,7 @@ public class DirectionStampingStrategy
 		FormattedTextParagraph paragraph = new FormattedTextParagraph(elements, Alignment.Center);
 		FormattedText text = fText(paragraph);
 		//create stamping
-		return new StaffTextStamping(staff, chord, text, sp);
+		return new StaffTextStamping(staff, dynamics, text, sp);
 	}
 
 	/**
@@ -252,7 +252,7 @@ public class DirectionStampingStrategy
 			lp = -6;
 		lp += Position.getRelativeY(customPos);
 
-		return new WedgeStamping(wedge, lp, x1Mm, x2Mm, d1Is, d2Is, staffStamping);
+		return new WedgeStamping(lp, x1Mm, x2Mm, d1Is, d2Is, staffStamping);
 	}
 
 	/**

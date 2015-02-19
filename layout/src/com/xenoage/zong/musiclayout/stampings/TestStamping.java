@@ -21,7 +21,7 @@ import com.xenoage.utils.math.geom.Size2f;
 
 
 	public TestStamping(Point2f position, Size2f size, Color color) {
-		super(null, null, null);
+		super(null, null);
 		this.position = position;
 		this.size = size;
 		this.color = color;

@@ -5,7 +5,6 @@ import static com.xenoage.zong.core.music.format.SP.sp;
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.color.Color;
 import com.xenoage.utils.math.geom.Rectangle2f;
-import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.format.SP;
 import com.xenoage.zong.symbols.Symbol;
 import com.xenoage.zong.symbols.SymbolPool;
@@ -30,9 +29,9 @@ import com.xenoage.zong.symbols.common.CommonSymbol;
 	public static final int SIDE_RIGHT = 2;
 
 
-	public NoteheadStamping(Chord chord, int notehead, Color color, StaffStamping parentStaff,
+	public NoteheadStamping(int notehead, Color color, StaffStamping parentStaff,
 		SP position, float scaling, SymbolPool symbolPool) {
-		super(parentStaff, chord, getSymbol(notehead, symbolPool), color, sp(
+		super(parentStaff, getSymbol(notehead, symbolPool), color, sp(
 			computePositionX(position.xMm, notehead, scaling, parentStaff, symbolPool), position.lp),
 			scaling, false);
 	}
