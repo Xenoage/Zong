@@ -36,7 +36,7 @@ public class BarlineStampingRenderer
 		BarlineStamping barlineSt = (BarlineStamping) stamping;
 
 		List<StaffStamping> staves = barlineSt.staves;
-		float xPosition = barlineSt.xPosition;
+		float xPosition = barlineSt.xMm;
 		float xCorrection = 0;
 
 		//lines

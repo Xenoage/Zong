@@ -1,9 +1,9 @@
 package com.xenoage.zong.musiclayout.stampings;
 
 import static com.xenoage.utils.annotations.Optimized.Reason.Performance;
-import lombok.AllArgsConstructor;
 import lombok.ToString;
 
+import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.Optimized;
 import com.xenoage.utils.math.geom.Shape;
 
@@ -17,7 +17,7 @@ import com.xenoage.utils.math.geom.Shape;
  *
  * @author Andreas Wenger
  */
-@AllArgsConstructor @ToString
+@ToString
 public abstract class Stamping {
 
 	/**
@@ -34,19 +34,12 @@ public abstract class Stamping {
 		Text;
 	}
 
-
 	/**
-	 * The parent staff stamping of this staff or null.
-	 * This is important for the renderer, when it needs some
-	 * information from the parent staff of this element.
-	 * But the stamping may also belong to more than only this staff.
+	 * Gets the bounding geometry, or null if unknown or not needed.
 	 */
-	public StaffStamping parentStaff;
-
-	/**
-	 * Bounding geometry, or null if unknown or not needed.
-	 */
-	public final Shape boundingShape;
+	@MaybeNull public Shape getBoundingShape() {
+		return null;
+	}
 
 	/**
 	 * Gets the type of this stamping.

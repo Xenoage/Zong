@@ -1,5 +1,8 @@
 package com.xenoage.zong.musiclayout.stampings;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.math.geom.Rectangle2f;
 
@@ -8,12 +11,12 @@ import com.xenoage.utils.math.geom.Rectangle2f;
  *
  * @author Andreas Wenger
  */
-@Const public class EmptySpaceStamping
+@Const @AllArgsConstructor
+public class EmptySpaceStamping
 	extends Stamping {
+	
+	@Getter public final Rectangle2f boundingShape;
 
-	public EmptySpaceStamping(Rectangle2f rectangle) {
-		super(null, rectangle);
-	}
 
 	@Override public StampingType getType() {
 		return StampingType.EmptySpaceStamping;

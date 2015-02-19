@@ -1,6 +1,5 @@
 package com.xenoage.zong.musiclayout.stampings;
 
-import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Shape;
 import com.xenoage.zong.core.text.FormattedText;
@@ -13,11 +12,11 @@ import com.xenoage.zong.core.text.FormattedText;
  *
  * @author Andreas Wenger
  */
-@Const public final class FrameTextStamping
+public class FrameTextStamping
 	extends TextStamping {
 
 	/** The position, relative to the top left corner of the score frame. */
-	public final Point2f position;
+	public Point2f position;
 
 
 	public FrameTextStamping(FormattedText text, Point2f position) {

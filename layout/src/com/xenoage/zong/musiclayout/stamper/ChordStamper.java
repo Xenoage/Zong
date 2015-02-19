@@ -28,7 +28,9 @@ import com.xenoage.zong.musiclayout.stampings.NoteheadStamping;
 import com.xenoage.zong.musiclayout.stampings.ProlongationDotStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import com.xenoage.zong.musiclayout.stampings.StemStamping;
+import com.xenoage.zong.symbols.Symbol;
 import com.xenoage.zong.symbols.SymbolPool;
+import com.xenoage.zong.symbols.common.CommonSymbol;
 
 /**
  * Creates stampings for chords.
@@ -84,8 +86,9 @@ public class ChordStamper {
 		if (beam == null && flagsCount > 0) {
 			FlagsStamping.FlagsDirection flag = (stemDir == StemDirection.Up ? FlagsStamping.FlagsDirection.Down
 				: FlagsStamping.FlagsDirection.Up);
-			flags = new FlagsStamping(flag, flagsCount, scaling, staffStamping, chordNotation, sp(
-				leftNoteXMm + nas.stemOffsetIs * staffStamping.is, chordNotation.stem.endLp), symbolPool);
+			Symbol flagSymbol = symbolPool.getSymbol(CommonSymbol.NoteFlag);
+			flags = new FlagsStamping(chordNotation, staffStamping, flag, flagsCount, flagSymbol, scaling,
+				sp(leftNoteXMm + nas.stemOffsetIs * staffStamping.is, chordNotation.stem.endLp));
 		}
 
 		//accidentals
@@ -98,7 +101,7 @@ public class ChordStamper {
 				AccidentalStamping accSt = new AccidentalStamping(chordNotation, acc.accidental, staffStamping,
 					sp(chordXMm +
 							(acc.xIs - chordNotation.width.frontGap + 0.5f /* 0.5f: half accidental width - TODO */) *
-							staffStamping.is, acc.yLp), 1, symbolPool);
+							staffStamping.is, acc.yLp), 1, symbolPool.getSymbol(CommonSymbol.getAccidental(acc.accidental)));
 				accsSt[iAcc] = accSt;
 			}
 		}
@@ -125,7 +128,7 @@ public class ChordStamper {
 				ArticulationDisplacement art = arts.articulations[iArt];
 				ArticulationStamping artSt = new ArticulationStamping(chordNotation,
 					art.articulation, staffStamping, sp(leftNoteXMm + (art.xIs + (noteheadWidth / 2)) *
-						staffStamping.is, art.yLp), 1, symbolPool);
+						staffStamping.is, art.yLp), 1, symbolPool.getSymbol(CommonSymbol.getArticulation(art.articulation)));
 				artsSt[iArt] = artSt;
 			}
 		}

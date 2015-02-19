@@ -1,28 +1,33 @@
 package com.xenoage.zong.musiclayout.stampings;
 
+import lombok.Getter;
+
 import com.xenoage.utils.annotations.Const;
-import com.xenoage.zong.core.music.annotation.ArticulationType;
 import com.xenoage.zong.core.music.format.SP;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
-import com.xenoage.zong.symbols.SymbolPool;
-import com.xenoage.zong.symbols.common.CommonSymbol;
+import com.xenoage.zong.symbols.Symbol;
 
 /**
  * Stamping of an articulation.
  *
  * @author Andreas Wenger
  */
-@Const public final class ArticulationStamping
+@Const @Getter
+public class ArticulationStamping
 	extends StaffSymbolStamping {
 	
-	/** The chord this articulation belongs to. */
-	public ChordNotation chord;
+	/** The index of the articulation in the chord. */
+	public final int articulationIndex;
 
-	public ArticulationStamping(ChordNotation chord, ArticulationType articulation, StaffStamping parentStaff,
-		SP position, float scaling, SymbolPool symbolPool) {
-		super(parentStaff, symbolPool.getSymbol(CommonSymbol.getArticulation(articulation)),
-			null, position, scaling, false);
-		this.chord = chord;
+	
+	public ArticulationStamping(ChordNotation chord, int articulationIndex, StaffStamping parentStaff,
+		SP position, float scaling, Symbol symbol) {
+		super(chord, parentStaff, symbol, null, position, scaling, false);
+		this.articulationIndex = articulationIndex;
+	}
+	
+	@Override public ChordNotation getElement() {
+		return (ChordNotation) element;
 	}
 
 }

@@ -1,5 +1,7 @@
 package com.xenoage.zong.musiclayout.layouter.scoreframelayout;
 
+import static com.xenoage.zong.core.music.format.SP.sp;
+
 import com.xenoage.zong.core.music.time.TimeType;
 import com.xenoage.zong.core.music.util.DurationInfo;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
@@ -8,14 +10,14 @@ import com.xenoage.zong.musiclayout.notations.RestNotation;
 import com.xenoage.zong.musiclayout.notations.TimeNotation;
 import com.xenoage.zong.musiclayout.notations.TraditionalKeyNotation;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
-import com.xenoage.zong.musiclayout.stampings.ClefStamping;
-import com.xenoage.zong.musiclayout.stampings.CommonTimeStamping;
 import com.xenoage.zong.musiclayout.stampings.KeySignatureStamping;
 import com.xenoage.zong.musiclayout.stampings.NormalTimeStamping;
 import com.xenoage.zong.musiclayout.stampings.RestStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
+import com.xenoage.zong.musiclayout.stampings.StaffSymbolStamping;
 import com.xenoage.zong.musiclayout.stampings.Stamping;
 import com.xenoage.zong.symbols.SymbolPool;
+import com.xenoage.zong.symbols.common.CommonSymbol;
 
 /**
  * Strategy to create stampings for elements like rests,
@@ -38,9 +40,11 @@ public class MusicElementStampingStrategy
 	/**
 	 * Creates a stamping for the given clef.
 	 */
-	public ClefStamping createClefStamping(ClefNotation clef, float positionX, StaffStamping staff,
+	public StaffSymbolStamping createClefStamping(ClefNotation clef, float positionX, StaffStamping staff,
 		SymbolPool symbolPool) {
-		return new ClefStamping(clef.element, staff, positionX, clef.scaling, symbolPool);
+		return new StaffSymbolStamping(clef, staff,
+			symbolPool.getSymbol(CommonSymbol.getClef(clef.element.getType().getSymbol())), null,
+			sp(positionX, clef.element.getType().getLp()), clef.scaling, false);
 	}
 
 	/**
@@ -58,7 +62,8 @@ public class MusicElementStampingStrategy
 	public Stamping createTimeStamping(TimeNotation time, float positionX, StaffStamping staff,
 		SymbolPool symbolPool) {
 		if (time.element.getType() == TimeType.timeCommon) {
-			return new CommonTimeStamping(time.element, positionX, staff, symbolPool);
+			return new StaffSymbolStamping(time, staff, symbolPool.getSymbol(CommonSymbol.TimeCommon),
+				null, sp(positionX, staff.linesCount - 1), 1f, false);
 		}
 		else {
 			return new NormalTimeStamping(time.element, positionX, staff, time.numeratorOffset,

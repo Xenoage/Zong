@@ -2,6 +2,9 @@ package com.xenoage.zong.musiclayout.stampings;
 
 import java.util.List;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.music.barline.Barline;
 import com.xenoage.zong.core.music.group.BarlineGroup;
@@ -19,30 +22,19 @@ import com.xenoage.zong.core.music.group.BarlineGroup;
  *
  * @author Andreas Wenger
  */
-@Const public final class BarlineStamping
+@Const @AllArgsConstructor @Getter
+public class BarlineStamping
 	extends Stamping {
 
 	/** The musical element, including the repeat and line style. */
 	public final Barline barline;
-
 	/** The list of staves this barline is spanning. */
 	public final List<StaffStamping> staves;
-
 	/** The horizontal position in mm, relative to the parent frame. */
-	public final float xPosition;
-
+	public final float xMm;
 	/** The grouping style of the barline. */
 	public final BarlineGroup.Style groupStyle;
 
-
-	public BarlineStamping(Barline barline, List<StaffStamping> staves, float xPosition,
-		BarlineGroup.Style groupStyle) {
-		super(staves.get(0), null);
-		this.barline = barline;
-		this.staves = staves;
-		this.xPosition = xPosition;
-		this.groupStyle = groupStyle;
-	}
 
 	@Override public StampingType getType() {
 		return StampingType.BarlineStamping;

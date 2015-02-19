@@ -1,13 +1,16 @@
 package com.xenoage.zong.musiclayout.stampings;
 
+import static com.xenoage.utils.annotations.Optimized.Reason.Performance;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import com.xenoage.utils.annotations.Const;
+import com.xenoage.utils.annotations.Optimized;
 import com.xenoage.utils.math.geom.Rectangle2f;
 import com.xenoage.utils.math.geom.Shape;
 import com.xenoage.zong.core.music.format.SP;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
 import com.xenoage.zong.symbols.Symbol;
-import com.xenoage.zong.symbols.SymbolPool;
-import com.xenoage.zong.symbols.common.CommonSymbol;
 
 /**
  * Class for a flags stamping.
@@ -17,7 +20,8 @@ import com.xenoage.zong.symbols.common.CommonSymbol;
  *
  * @author Andreas Wenger
  */
-@Const public class FlagsStamping
+@Const @AllArgsConstructor @Getter
+public class FlagsStamping
 	extends Stamping {
 
 	/** The direction of a flag. This is usually the opposite stem direction. */
@@ -27,49 +31,44 @@ import com.xenoage.zong.symbols.common.CommonSymbol;
 	}
 
 	/** The parent chord. */
-	public ChordNotation chord;
+	public final ChordNotation chord;
+	/** The parent staff. */
+	public final StaffStamping parentStaff;
 	/** The direction of this flag. This is usually the opposite stem direction. */
 	public final FlagsDirection flagsDirection;
 	/** The number of flags. */
 	public final int flagsCount;
+	/** The flag symbol. */
+	public final Symbol symbol;
 	/** The scaling of the flags. This is 1 for full chords and < 1 for grace/cue chords */
 	public final float scaling;
 	/** The position of the flag. The vertical coordinate is the LP where the flag starts.
-	 * This should always be the end position of the stem.
-	 */
+	 * This should always be the end position of the stem. */
 	public final SP position;
+	
+	@Optimized(Performance)
+	private Rectangle2f cachedBoundingShape = null;
 
 
-	public FlagsStamping(FlagsDirection flagsDirection, int flagsCount, float scaling,
-		StaffStamping parentStaff, ChordNotation chord, SP position, SymbolPool symbolPool) {
-		super(parentStaff, createBoundingShape(flagsDirection, flagsCount, scaling,
-			parentStaff, position, symbolPool));
-		this.chord = chord;
-		this.flagsDirection = flagsDirection;
-		this.flagsCount = flagsCount;
-		this.scaling = scaling;
-		this.position = position;
-	}
-
-	private static Shape createBoundingShape(FlagsDirection flagsDirection, int flagsCount,
-		float scaling, StaffStamping parentStaff, SP position, SymbolPool symbolPool) {
-		Symbol symbol = symbolPool.getSymbol(CommonSymbol.NoteFlag);
+	@Override public Shape getBoundingShape() {
+		if (cachedBoundingShape != null)
+			return cachedBoundingShape;
+		//compute bounding shape
 		float flagsDistance = getFlagsDistance(flagsDirection, scaling);
 		float interlineSpace = parentStaff.is;
-		Rectangle2f flagsBounds = null;
 		for (int i = 0; i < flagsCount; i++) {
 			Rectangle2f bounds = symbol.getBoundingRect().scale(scaling * interlineSpace);
 			if (flagsDirection == FlagsDirection.Up) {
 				bounds = bounds.move(0, -bounds.size.height);
 			}
 			bounds = bounds.move(0, -i * flagsDistance * interlineSpace);
-			if (flagsBounds == null)
-				flagsBounds = bounds;
+			if (cachedBoundingShape == null)
+				cachedBoundingShape = bounds;
 			else
-				flagsBounds = flagsBounds.extend(bounds);
+				cachedBoundingShape = cachedBoundingShape.extend(bounds);
 		}
-		flagsBounds.move(position.xMm, parentStaff.computeYMm(position.lp));
-		return flagsBounds;
+		cachedBoundingShape.move(position.xMm, parentStaff.computeYMm(position.lp));
+		return cachedBoundingShape;
 	}
 
 	/**

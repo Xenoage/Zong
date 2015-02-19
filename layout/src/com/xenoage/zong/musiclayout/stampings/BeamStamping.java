@@ -1,5 +1,8 @@
 package com.xenoage.zong.musiclayout.stampings;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.music.beam.Beam;
 
@@ -12,7 +15,8 @@ import com.xenoage.zong.core.music.beam.Beam;
  *
  * @author Andreas Wenger
  */
-@Const public final class BeamStamping
+@Const @AllArgsConstructor @Getter
+public class BeamStamping
 	extends Stamping {
 
 	//TODO: move into other class
@@ -20,38 +24,16 @@ import com.xenoage.zong.core.music.beam.Beam;
 	public static final float beamGap = 0.3f; //gap between lines in interline spaces
 	
 	/** The beam data. */
-	public Beam beam;
-
+	public final Beam beam;
 	/** The {@link StaffStamping} of the start position. */
 	public final StaffStamping staff1;
-
 	/** The {@link StaffStamping} of the end position. */
 	public final StaffStamping staff2;
+	/** The start coordinates of the beam. */
+	public final float sp1;
+	/** The end coordinates of the beam. */
+	public final float sp2;
 
-	/** The horizontal start coordinate of the beam in mm. */
-	public final float x1;
-
-	/** The horizontal end coordinate of the beam in mm. */
-	public final float x2;
-
-	/** The end line position at the start position. */
-	public final float lp1;
-
-	/** The end line position at the end position. */
-	public final float lp2;
-
-
-	public BeamStamping(Beam beam, StaffStamping staff1, StaffStamping staff2, float x1, float x2,
-		float lp1, float lp2) {
-		super(staff1, null);
-		this.beam = beam;
-		this.staff1 = staff1;
-		this.staff2 = staff2;
-		this.x1 = x1;
-		this.x2 = x2;
-		this.lp1 = lp1;
-		this.lp2 = lp2;
-	}
 
 	@Override public StampingType getType() {
 		return StampingType.BeamStamping;

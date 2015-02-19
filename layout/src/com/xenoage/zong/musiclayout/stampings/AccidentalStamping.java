@@ -1,28 +1,33 @@
 package com.xenoage.zong.musiclayout.stampings;
 
-import com.xenoage.zong.core.music.chord.Accidental;
+import lombok.Getter;
+
+import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.music.format.SP;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
-import com.xenoage.zong.symbols.SymbolPool;
-import com.xenoage.zong.symbols.common.CommonSymbol;
+import com.xenoage.zong.symbols.Symbol;
 
 /**
  * Stamping of an accidental.
  *
  * @author Andreas Wenger
  */
+@Const @Getter
 public class AccidentalStamping
 	extends StaffSymbolStamping {
 	
-	/** The chord this accidental belongs to. */
-	public ChordNotation chord;
+	/** The index of the accidental in the chord. */
+	public final int accidentalIndex;
 
 
-	public AccidentalStamping(ChordNotation chord, Accidental accidental, StaffStamping parentStaff,
-		SP position, float scaling, SymbolPool symbolPool) {
-		super(parentStaff, symbolPool.getSymbol(CommonSymbol.getAccidental(accidental)), null,
-			position, scaling, false);
-		this.chord = chord;
+	public AccidentalStamping(ChordNotation chord, int accidentalIndex, StaffStamping parentStaff,
+		SP position, float scaling, Symbol symbol) {
+		super(chord, parentStaff, symbol, null, position, scaling, false);
+		this.accidentalIndex = accidentalIndex;
+	}
+	
+	@Override public ChordNotation getElement() {
+		return (ChordNotation) element;
 	}
 
 }
