@@ -26,7 +26,7 @@ public class TextStampingRenderer
 	 */
 	@Override public void draw(Stamping stamping, Canvas canvas, RendererArgs args) {
 		TextStamping s = (TextStamping) stamping;
-		drawWith(s.getText(), null, s.getPositionInFrame(), canvas);
+		drawWith(s.getText(), null, s.getPositionMmInFrame(), canvas);
 	}
 
 	/**

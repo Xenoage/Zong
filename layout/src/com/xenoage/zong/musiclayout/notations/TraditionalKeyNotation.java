@@ -19,7 +19,9 @@ public final class TraditionalKeyNotation
 
 	@Getter public final TraditionalKey element;
 	@Getter public final ElementWidth width;
+	/** The line position of a C4. */
 	public final int c4Lp;
+	/** The minimal line position for a sharp/flat. */
 	public final int minLp;
 
 }

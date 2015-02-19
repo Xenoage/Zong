@@ -16,6 +16,7 @@ import com.xenoage.zong.musiclayout.stampings.RestStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffSymbolStamping;
 import com.xenoage.zong.musiclayout.stampings.Stamping;
+import com.xenoage.zong.symbols.Symbol;
 import com.xenoage.zong.symbols.SymbolPool;
 import com.xenoage.zong.symbols.common.CommonSymbol;
 
@@ -52,8 +53,12 @@ public class MusicElementStampingStrategy
 	 */
 	public KeySignatureStamping createKeyStamping(TraditionalKeyNotation key, float positionX,
 		StaffStamping staff, SymbolPool symbolPool, LayoutSettings layoutSettings) {
-		return new KeySignatureStamping(key.element, key.c4Lp,
-			key.minLp, positionX, staff, symbolPool, layoutSettings);
+		boolean useSharps = key.element.getFifths() > 0;
+		Symbol symbol = symbolPool.getSymbol(useSharps ? CommonSymbol.AccidentalSharp
+			: CommonSymbol.AccidentalFlat);
+		float distance = (useSharps ? layoutSettings.spacings.widthSharp
+			: layoutSettings.spacings.widthFlat);
+		return new KeySignatureStamping(key, positionX, staff, symbol, distance);
 	}
 
 	/**

@@ -25,7 +25,7 @@ public class KeySignatureStampingRenderer
 	@Override public void draw(Stamping stamping, Canvas canvas, RendererArgs args) {
 		KeySignatureStamping s = (KeySignatureStamping) stamping;
 
-		int fifths = s.traditionalKey.getFifths();
+		int fifths = s.key.element.getFifths();
 		if (fifths == 0)
 			return;
 		boolean useSharps = (fifths > 0);
@@ -37,10 +37,10 @@ public class KeySignatureStampingRenderer
 		fifths = Math.abs(fifths);
 		float interlineSpace = s.parentStaff.is;
 		for (int i = 0; i < fifths; i++) {
-			int linePosition = TraditionalKey.getLinePosition(i, useSharps, s.linePositionC4,
-				s.linePositionMin);
+			int linePosition = TraditionalKey.getLinePosition(i, useSharps, s.key.c4Lp,
+				s.key.minLp);
 			StaffSymbolStampingRenderer.drawWith(symbol, null,
-				sp(s.positionX + i * distance * interlineSpace, linePosition), 1, s.parentStaff, false,
+				sp(s.xMm + i * distance * interlineSpace, linePosition), 1, s.parentStaff, false,
 				canvas, args);
 		}
 	}
