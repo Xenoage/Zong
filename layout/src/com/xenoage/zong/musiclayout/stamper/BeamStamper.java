@@ -126,7 +126,7 @@ public class BeamStamper {
 				float leftStemEndMm = leftStaff.computeYMm(leftLp);
 				float rightStemEndMm = rightStaff.computeYMm(rightLp);
 				float endMm = leftStemEndMm + f * (rightStemEndMm - leftStemEndMm);
-				endLp = openStem.parentStaff.computeYLP(endMm);
+				endLp = openStem.parentStaff.computeYLp(endMm);
 			}
 			openStem.endLp = endLp;
 		}

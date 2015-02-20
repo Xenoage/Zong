@@ -1,6 +1,7 @@
 package com.xenoage.zong.musiclayout.stampings;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.musiclayout.notations.TimeNotation;
@@ -11,7 +12,7 @@ import com.xenoage.zong.musiclayout.notations.TimeNotation;
  *
  * @author Andreas Wenger
  */
-@Const @AllArgsConstructor
+@Const @AllArgsConstructor @Getter
 public final class NormalTimeStamping
 	extends Stamping {
 

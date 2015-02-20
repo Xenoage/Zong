@@ -30,16 +30,16 @@ public class WedgeStampingRenderer
 		float scaling = args.scaling;
 
 		//horizontal position
-		float x1Mm = wedge.x1Mm + parentStaff.position.x;
-		float x2Mm = wedge.x2Mm + parentStaff.position.x;
+		float x1Mm = wedge.leftXMm + parentStaff.positionMm.x;
+		float x2Mm = wedge.rightXMm + parentStaff.positionMm.x;
 
 		//compute vertical distances at the start and end point
-		float d1Mm = wedge.d1Is * parentStaff.is;
-		float d2Mm = wedge.d2Is * parentStaff.is;
+		float d1Mm = wedge.leftDistanceIs * parentStaff.is;
+		float d2Mm = wedge.rightDistanceIs * parentStaff.is;
 
 		//width and color of the line
 		Color color = Color.black;
-		float width = parentStaff.getLineWidth(); //like staff line
+		float width = parentStaff.getLineWidthMm(); //like staff line
 		float paintWidth;
 
 		//compute the horizontal line and color
@@ -47,7 +47,7 @@ public class WedgeStampingRenderer
 		Color paintColor;
 		if (canvas.getFormat() == CanvasFormat.Raster) {
 			BitmapStaff ss = parentStaff.screenInfo.getBitmapStaff(scaling);
-			yMm = parentStaff.position.y + ss.getLPMm(wedge.lp);
+			yMm = parentStaff.positionMm.y + ss.getYMm(wedge.lp);
 			BitmapLine screenLine = parentStaff.screenInfo.getBitmapLine(scaling, width, color);
 			paintColor = screenLine.color;
 			paintWidth = screenLine.widthMm;

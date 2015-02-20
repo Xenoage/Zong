@@ -265,7 +265,7 @@ public class DirectionStampingStrategy
 		float x, lp;
 
 		//default positioning
-		x = notNull(staffStamping.system.getXMmAt(mp), 0f) + staffStamping.position.x;
+		x = notNull(staffStamping.system.getXMmAt(mp), 0f) + staffStamping.positionMm.x;
 		lp = defaultLP;
 
 		//custom positioning

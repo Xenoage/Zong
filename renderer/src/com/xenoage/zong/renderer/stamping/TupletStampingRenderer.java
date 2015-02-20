@@ -40,7 +40,7 @@ public class TupletStampingRenderer
 
 		//width and color of the line
 		Color color = Color.black;
-		float width = parentStaff.getLineWidth() * 1.5f; //a little bit thicker than staff line
+		float width = parentStaff.getLineWidthMm() * 1.5f; //a little bit thicker than staff line
 		float paintWidth;
 
 		//compute the horizontal line and color
@@ -48,8 +48,8 @@ public class TupletStampingRenderer
 		Color paintColor;
 		if (canvas.getFormat() == CanvasFormat.Raster) {
 			BitmapStaff ss = parentStaff.screenInfo.getBitmapStaff(scaling);
-			y1Mm = parentStaff.position.y + ss.getLPMm(tuplet.y1lp);
-			y2Mm = parentStaff.position.y + ss.getLPMm(tuplet.y2lp);
+			y1Mm = parentStaff.positionMm.y + ss.getYMm(tuplet.y1lp);
+			y2Mm = parentStaff.positionMm.y + ss.getYMm(tuplet.y2lp);
 			BitmapLine screenLine = parentStaff.screenInfo.getBitmapLine(scaling, width, color);
 			paintColor = screenLine.color;
 			paintWidth = screenLine.widthMm;

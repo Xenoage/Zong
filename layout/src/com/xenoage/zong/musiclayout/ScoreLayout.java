@@ -73,7 +73,7 @@ public class ScoreLayout {
 		}
 		//otherwise, compute the beat at this position and return it
 		else {
-			float posX = coordinates.pMm.x - staff.position.x;
+			float posX = coordinates.pMm.x - staff.positionMm.x;
 			return staff.getMpAtX(posX);
 		}
 	}
@@ -200,7 +200,7 @@ public class ScoreLayout {
 			else
 				ss = sfl.getStaffStamping(0, bmp.measure);
 			if (ss != null) {
-				float x = ss.position.x + ss.system.getXMmAt(bmp);
+				float x = ss.positionMm.x + ss.system.getXMmAt(bmp);
 				float y = ss.computeYMm(lp);
 				return new ScoreLP(iFrame, new Point2f(x, y));
 			}

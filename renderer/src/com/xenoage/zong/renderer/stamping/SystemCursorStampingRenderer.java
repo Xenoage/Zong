@@ -30,17 +30,17 @@ public class SystemCursorStampingRenderer
 		StaffStamping bottomStaff = cursor.bottomStaff;
 
 		float x, y1, y2;
-		x = topStaff.position.x + cursor.x;
+		x = topStaff.positionMm.x + cursor.xMm;
 
 		if (canvas.getFormat() == CanvasFormat.Raster) {
-			float staffY = topStaff.position.y;
+			float staffY = topStaff.positionMm.y;
 			BitmapStaff ss = topStaff.screenInfo.getBitmapStaff(viewScaling);
 			//top staff: top line
-			y1 = staffY + ss.getLPMm(topStaff.linesCount * 2);
+			y1 = staffY + ss.getYMm(topStaff.linesCount * 2);
 			//bottom staff: bottom line
-			staffY = bottomStaff.position.y;
+			staffY = bottomStaff.positionMm.y;
 			ss = bottomStaff.screenInfo.getBitmapStaff(viewScaling);
-			y2 = staffY + ss.getLPMm(-2);
+			y2 = staffY + ss.getYMm(-2);
 		}
 		else {
 			y1 = topStaff.computeYMm(topStaff.linesCount * 2);

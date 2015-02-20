@@ -93,7 +93,7 @@ public class BracketStampingRenderer
 	 */
 	private static float getStaffTopY(StaffStamping staff, Canvas canvas, RendererArgs args) {
 		float scaling = args.targetScaling;
-		float ret = staff.position.y;
+		float ret = staff.positionMm.y;
 		if (canvas.getFormat() == CanvasFormat.Raster) {
 			//render on screen
 			BitmapStaff screenStaff = staff.screenInfo.getBitmapStaff(scaling);
@@ -112,11 +112,11 @@ public class BracketStampingRenderer
 		if (canvas.getFormat() == CanvasFormat.Raster) {
 			//render on screen
 			BitmapStaff screenStaff = staff.screenInfo.getBitmapStaff(scaling);
-			return staff.position.y + screenStaff.lp0Mm;
+			return staff.positionMm.y + screenStaff.lp0Mm;
 		}
 		else if (canvas.getFormat() == CanvasFormat.Vector) {
 			//render with high quality
-			return staff.position.y + staff.is * (staff.linesCount - 1) + staff.getLineWidth();
+			return staff.positionMm.y + staff.is * (staff.linesCount - 1) + staff.getLineWidthMm();
 		}
 		return 0;
 	}

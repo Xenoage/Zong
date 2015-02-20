@@ -27,9 +27,9 @@ public class StaffStampingTest {
 		StaffStamping staff1 = new StaffStamping(null, 0, new Point2f(40, 80), 160, 5, 1.6f);
 		assertEquals(5, staff1.linesCount);
 		assertEquals(scoreFormat.getInterlineSpace(), staff1.is, df);
-		assertEquals(40, staff1.position.x, df);
-		assertEquals(80, staff1.position.y, df);
-		assertEquals(160, staff1.length, df);
+		assertEquals(40, staff1.positionMm.x, df);
+		assertEquals(80, staff1.positionMm.y, df);
+		assertEquals(160, staff1.lengthMm, df);
 		//create another staff layout element
 		//with 3 lines and 4 mm interline space.
 		StaffStamping staff2 = new StaffStamping(null, 0, new Point2f(40, 160), 160, 3, 4);

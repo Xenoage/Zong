@@ -1,5 +1,8 @@
 package com.xenoage.zong.musiclayout.stampings;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import com.xenoage.utils.annotations.Const;
 
 /**
@@ -13,34 +16,23 @@ import com.xenoage.utils.annotations.Const;
  *
  * @author Andreas Wenger
  */
-@Const public final class WedgeStamping
+@Const @AllArgsConstructor @Getter
+public final class WedgeStamping
 	extends Stamping {
 
 	/** The line position of the (centered) baseline. */
 	public final float lp;
-
 	/** The horizontal start position in mm relative to the beginning of the staff. */
-	public final float x1Mm;
-
+	public final float leftXMm;
 	/** The horizontal end position in mm relative to the beginning of the staff. */
-	public final float x2Mm;
-
+	public final float rightXMm;
 	/** The vertical distance of the lines at the start position in IS. */
-	public final float d1Is;
-
+	public final float leftDistanceIs;
 	/** The vertical distance of the lines at the end position in IS. */
-	public final float d2Is;
-
-
-	public WedgeStamping(float lp, float x1Mm, float x2Mm, float d1Is, float d2Is,
-		StaffStamping parentStaff) {
-		super(parentStaff, null);
-		this.lp = lp;
-		this.x1Mm = x1Mm;
-		this.x2Mm = x2Mm;
-		this.d1Is = d1Is;
-		this.d2Is = d2Is;
-	}
+	public final float rightDistanceIs;
+	/** The parent staff. */
+	public final StaffStamping parentStaff;
+	
 
 	@Override public StampingType getType() {
 		return StampingType.WedgeStamping;

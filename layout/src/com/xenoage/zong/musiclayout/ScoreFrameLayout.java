@@ -141,7 +141,7 @@ public final class ScoreFrameLayout {
 		}
 		//otherwise, compute the beat at this position and return it
 		else {
-			float posX = point.x - staff.position.x;
+			float posX = point.x - staff.positionMm.x;
 			return staff.getMpAtX(posX);
 		}
 	}
@@ -181,10 +181,10 @@ public final class ScoreFrameLayout {
 		for (StaffStamping staff : staffStampings) {
 			if (staff.system.getSystemIndexInFrame() == systemIndex) {
 				found = true;
-				minX = Math.min(minX, staff.position.x);
-				minY = Math.min(minY, staff.position.y);
-				maxX = Math.max(maxX, staff.position.x + staff.length);
-				maxY = Math.max(maxY, staff.position.y + (staff.linesCount - 1) * staff.is);
+				minX = Math.min(minX, staff.positionMm.x);
+				minY = Math.min(minY, staff.positionMm.y);
+				maxX = Math.max(maxX, staff.positionMm.x + staff.lengthMm);
+				maxY = Math.max(maxY, staff.positionMm.y + (staff.linesCount - 1) * staff.is);
 			}
 		}
 		if (found)

@@ -130,7 +130,7 @@ public class LyricStampingStrategy
 
 			//first staff (if any): begin at the stamping, go to the end of the system
 			if (firstStaffFound) {
-				ret.add(createUnderscoreStamping(startX, currentStaff.position.x + currentStaff.length,
+				ret.add(createUnderscoreStamping(startX, currentStaff.positionMm.x + currentStaff.lengthMm,
 					baseLine, widthU, style, currentStaff, element));
 			}
 
@@ -144,14 +144,14 @@ public class LyricStampingStrategy
 					break;
 				}
 				//create underscore over whole staff
-				ret.add(createUnderscoreStamping(currentStaff.position.x, currentStaff.position.x +
-					currentStaff.length, baseLine, widthU, style, currentStaff, element));
+				ret.add(createUnderscoreStamping(currentStaff.positionMm.x, currentStaff.positionMm.x +
+					currentStaff.lengthMm, baseLine, widthU, style, currentStaff, element));
 			}
 
 			//last staff (if any): begin at the beginning (without leading spacing) of the
 			//system, stop at the notehead
 			if (lastStaffFound) {
-				ret.add(createUnderscoreStamping(currentStaff.position.x, noteheadRight.position.xMm,
+				ret.add(createUnderscoreStamping(currentStaff.positionMm.x, noteheadRight.position.xMm,
 					baseLine, widthU, style, currentStaff, element));
 			}
 

@@ -1,5 +1,7 @@
 package com.xenoage.zong.musiclayout.stampings;
 
+import lombok.Getter;
+
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.color.Color;
 import com.xenoage.zong.core.music.format.SP;
@@ -11,7 +13,7 @@ import com.xenoage.zong.symbols.Symbol;
  *
  * @author Andreas Wenger
  */
-@Const
+@Const @Getter
 public final class NoteheadStamping
 	extends StaffSymbolStamping {
 

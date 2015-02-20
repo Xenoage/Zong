@@ -26,12 +26,12 @@ public class StaffStampingRenderer
 		StaffStamping staff = (StaffStamping) stamping;
 
 		float scaling = args.targetScaling;
-		Point2f position = staff.position;
+		Point2f position = staff.positionMm;
 
 		//TODO: custom line width
-		float lineWidthMm = staff.getLineWidth();
+		float lineWidthMm = staff.getLineWidthMm();
 
-		float length = staff.length;
+		float length = staff.lengthMm;
 
 		Color color = Color.black;
 

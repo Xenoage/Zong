@@ -42,7 +42,7 @@ public class StaffSymbolStampingRenderer
 		float yPosition;
 		if (canvas.getFormat() == CanvasFormat.Raster) {
 			BitmapStaff ss = parentStaff.screenInfo.getBitmapStaff(viewScaling);
-			yPosition = parentStaff.position.y + ss.getLPMm(position.lp);
+			yPosition = parentStaff.positionMm.y + ss.getYMm(position.lp);
 			symbolScaling *= ss.heightScaling;
 
 			/*

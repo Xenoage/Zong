@@ -13,7 +13,7 @@ import lombok.Data;
  */
 @Data public final class SP {
 
-	/** Position on x-axis in mm. */
+	/** Position on x-axis in mm, relative to the left side of the parent staff. */
 	public final float xMm;
 	/** Position on y-axis as a line position (LP). */
 	public final float lp;

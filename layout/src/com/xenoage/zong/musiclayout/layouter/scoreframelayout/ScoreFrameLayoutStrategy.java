@@ -199,12 +199,12 @@ public class ScoreFrameLayoutStrategy
 				String name = (frameIndex == 0 && iSystem == 0 ? part.getName() : part.getAbbreviation());
 				if (name != null && name.length() > 0) {
 					//in the middle of the staves
-					float top = firstStaff.position.y;
-					float bottom = lastStaff.position.y + (lastStaff.linesCount - 1) * lastStaff.is;
+					float top = firstStaff.positionMm.y;
+					float bottom = lastStaff.positionMm.y + (lastStaff.linesCount - 1) * lastStaff.is;
 					FormattedText text = fText(name, new FormattedTextStyle(firstStaff.is * 2.5f * 2.67f),
 						Alignment.Right);
 					float middle = (top + bottom) / 2 + text.getFirstParagraph().getMetrics().getAscent() / 3; //correction of baseline. /3 looks good.
-					otherStampsPool.add(new FrameTextStamping(text, new Point2f(firstStaff.position.x -
+					otherStampsPool.add(new FrameTextStamping(text, new Point2f(firstStaff.positionMm.x -
 						firstStaff.is * 2.5f, middle))); //TODO
 				}
 			}
@@ -217,7 +217,7 @@ public class ScoreFrameLayoutStrategy
 			}
 
 			//add the barlines
-			float xOffset = staffStampings.get(iSystem, 0).position.x;
+			float xOffset = staffStampings.get(iSystem, 0).positionMm.x;
 			//common barline at the beginning, when system has at least one measure
 			if (system.columns.size() > 0) {
 				otherStampsPool.add(new BarlineStamping(Barline.barlineRegular(), systemStaves, xOffset,
@@ -290,7 +290,7 @@ public class ScoreFrameLayoutStrategy
 			//fill the staves
 			for (iStaff = 0; iStaff < stavesCount; iStaff++) {
 				StaffStamping staff = systemStaves.get(iStaff);
-				xOffset = staff.position.x;
+				xOffset = staff.positionMm.x;
 				float interlineSpace = staff.is;
 
 				for (int iMeasure = 0; iMeasure < system.columns.size(); iMeasure++) {

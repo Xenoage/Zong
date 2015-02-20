@@ -15,11 +15,11 @@ import com.xenoage.zong.core.text.FormattedText;
 public abstract class TextStamping
 	extends Stamping {
 
-	
+
 	public abstract FormattedText getText();
 	
 	/**
-	 * Gets the position of this stamping within the frame in mm.
+	 * Gets the position of this stamping in mm in frame space.
 	 */
 	public abstract Point2f getPositionMm();
 

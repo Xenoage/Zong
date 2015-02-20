@@ -1,6 +1,7 @@
 package com.xenoage.zong.musiclayout.stampings;
 
-import javax.rmi.CORBA.Tie;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.music.format.SP;
@@ -21,38 +22,23 @@ import com.xenoage.zong.core.music.slur.Slur;
  *
  * @author Andreas Wenger
  */
-@Const public final class SlurStamping
+@Const @AllArgsConstructor @Getter
+public final class SlurStamping
 	extends Stamping {
 
+	/** The stamped slur or tie. */
+	public final Slur slur;
 	/** The start position (left). */
 	public final SP p1;
-
 	/** The end position (right). */
 	public final SP p2;
-
 	/** The offset of the first control point relative to the start point. */
 	public final SP c1;
-
 	/** The offset of the second control point relative to the end point. */
 	public final SP c2;
+	/** The parent staff. */
+	public final StaffStamping staff;
 
-
-	/**
-	 * Creates a new {@link SlurStamping} belonging to the given staff.
-	 * @param parentStaff  the staff stamping this element belongs to
-	 * @param curvedLine   the musical element (a {@link Tie} or a {@link Slur})
-	 * @param p1           t
-	 * @param p2           t
-	 * @param c1           t
-	 * @param c2           t
-	 */
-	public SlurStamping(StaffStamping parentStaff, Slur slur, SP p1, SP p2, SP c1, SP c2) {
-		super(parentStaff, null);
-		this.p1 = p1;
-		this.p2 = p2;
-		this.c1 = c1;
-		this.c2 = c2;
-	}
 
 	@Override public StampingType getType() {
 		return StampingType.SlurStamping;

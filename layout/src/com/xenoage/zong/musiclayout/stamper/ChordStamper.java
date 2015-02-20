@@ -174,7 +174,7 @@ public class ChordStamper {
 		float ret = xMm;
 		Rectangle2f bounds = symbol.getBoundingRect().scale(scaling);
 		float interlineSpace = staff.is;
-		float lineWidth = staff.getLineWidth();
+		float lineWidth = staff.getLineWidthMm();
 		ret += (bounds.size.width / 2) * interlineSpace - lineWidth / 2;
 		return ret;
 	}

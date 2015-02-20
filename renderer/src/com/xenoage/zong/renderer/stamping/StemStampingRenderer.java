@@ -36,8 +36,8 @@ public class StemStampingRenderer
 		float noteheadLinePosition = stem.noteheadLp;
 		float endLinePosition = stem.endLp;
 
-		float lineWidthMm = parentStaff.getLineWidth(); //TODO: stem is thinner
-		Point2f p1Mm = new Point2f(positionX - lineWidthMm / 2, parentStaff.position.y);
+		float lineWidthMm = parentStaff.getLineWidthMm(); //TODO: stem is thinner
+		Point2f p1Mm = new Point2f(positionX - lineWidthMm / 2, parentStaff.positionMm.y);
 		Point2f p2Mm = new Point2f(positionX + lineWidthMm / 2, p1Mm.y);
 		Color color = Color.black;
 
@@ -51,8 +51,8 @@ public class StemStampingRenderer
 			//render on screen or print
 			BitmapLine screenLine = new BitmapLine(lineWidthMm, color, scaling);
 			BitmapStaff screenStaff = parentStaff.screenInfo.getBitmapStaff(scaling);
-			p1Mm = new Point2f(p1Mm.x, p1Mm.y + screenStaff.getLPMm(noteheadLinePosition));
-			p2Mm = new Point2f(p2Mm.x, p2Mm.y + screenStaff.getLPMm(endLinePosition));
+			p1Mm = new Point2f(p1Mm.x, p1Mm.y + screenStaff.getYMm(noteheadLinePosition));
+			p2Mm = new Point2f(p2Mm.x, p2Mm.y + screenStaff.getYMm(endLinePosition));
 			float width = screenLine.widthMm; //ensure same width for each stem in this staff
 			canvas.fillRect(new Rectangle2f(p1Mm.x, p1Mm.y, width, p2Mm.y - p1Mm.y),
 			/* TEST Color.green */screenLine.color);

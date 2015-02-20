@@ -1,6 +1,7 @@
 package com.xenoage.zong.musiclayout.stampings;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.music.format.SP;
@@ -15,7 +16,7 @@ import com.xenoage.zong.core.music.format.SP;
  *
  * @author Andreas Wenger
  */
-@Const @AllArgsConstructor
+@Const @AllArgsConstructor @Getter
 public final class LegerLineStamping
 	extends Stamping {
 	

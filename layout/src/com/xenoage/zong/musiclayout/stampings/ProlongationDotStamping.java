@@ -1,5 +1,7 @@
 package com.xenoage.zong.musiclayout.stampings;
 
+import lombok.Getter;
+
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.music.format.SP;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
@@ -15,7 +17,8 @@ import com.xenoage.zong.symbols.Symbol;
  *
  * @author Andreas Wenger
  */
-@Const public class ProlongationDotStamping
+@Const @Getter
+public class ProlongationDotStamping
 	extends StaffSymbolStamping {
 
 	public ProlongationDotStamping(ChordNotation chord, StaffStamping parentStaff, Symbol symbol, SP position) {

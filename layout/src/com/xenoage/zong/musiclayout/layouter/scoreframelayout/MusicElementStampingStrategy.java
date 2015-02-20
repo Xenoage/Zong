@@ -2,6 +2,9 @@ package com.xenoage.zong.musiclayout.layouter.scoreframelayout;
 
 import static com.xenoage.zong.core.music.format.SP.sp;
 
+import java.util.HashMap;
+
+import com.xenoage.zong.core.music.format.SP;
 import com.xenoage.zong.core.music.time.TimeType;
 import com.xenoage.zong.core.music.util.DurationInfo;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
@@ -12,7 +15,6 @@ import com.xenoage.zong.musiclayout.notations.TraditionalKeyNotation;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.musiclayout.stampings.KeySignatureStamping;
 import com.xenoage.zong.musiclayout.stampings.NormalTimeStamping;
-import com.xenoage.zong.musiclayout.stampings.RestStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffSymbolStamping;
 import com.xenoage.zong.musiclayout.stampings.Stamping;
@@ -32,10 +34,12 @@ public class MusicElementStampingStrategy
 	/**
 	 * Creates a stamping for the given rest.
 	 */
-	public RestStamping createRestStamping(RestNotation rest, float positionX, StaffStamping staff,
+	public StaffSymbolStamping createRestStamping(RestNotation rest, float positionX, StaffStamping staff,
 		SymbolPool symbolPool) {
-		return new RestStamping(rest.element, DurationInfo.getRestType(rest.element
-			.getDuration()), staff, positionX, 1, symbolPool);
+		DurationInfo.Type duration = DurationInfo.getRestType(rest.element.getDuration());
+		Symbol symbol = getRestSymbol(duration, symbolPool);
+		SP sp = sp(positionX, getRestLp(staff, duration));
+		return new StaffSymbolStamping(rest, staff, symbol, null, sp, 1, false);
 	}
 
 	/**
@@ -71,8 +75,53 @@ public class MusicElementStampingStrategy
 				null, sp(positionX, staff.linesCount - 1), 1f, false);
 		}
 		else {
-			return new NormalTimeStamping(time.element, positionX, staff, time.numeratorOffset,
-				time.denominatorOffset, time.digitGap);
+			return new NormalTimeStamping(time, positionX, time.numeratorOffset,
+				time.denominatorOffset, time.digitGap, staff);
+		}
+	}
+	
+	
+	private static HashMap<DurationInfo.Type, CommonSymbol> durationSymbolMapping =
+		new HashMap<DurationInfo.Type, CommonSymbol>();
+
+	static {
+		durationSymbolMapping.put(DurationInfo.Type.Whole, CommonSymbol.RestWhole);
+		durationSymbolMapping.put(DurationInfo.Type.Half, CommonSymbol.RestHalf);
+		durationSymbolMapping.put(DurationInfo.Type.Quarter, CommonSymbol.RestQuarter);
+		durationSymbolMapping.put(DurationInfo.Type.Eighth, CommonSymbol.RestEighth);
+		durationSymbolMapping.put(DurationInfo.Type._16th, CommonSymbol.Rest16th);
+		durationSymbolMapping.put(DurationInfo.Type._32th, CommonSymbol.Rest32th);
+		durationSymbolMapping.put(DurationInfo.Type._64th, CommonSymbol.Rest64th);
+		durationSymbolMapping.put(DurationInfo.Type._128th, CommonSymbol.Rest128th);
+		durationSymbolMapping.put(DurationInfo.Type._256th, CommonSymbol.Rest256th);
+	}
+	
+	private Symbol getRestSymbol(DurationInfo.Type duration, SymbolPool symbolPool) {
+		CommonSymbol cs = durationSymbolMapping.get(duration);
+		if (cs != null)
+			return symbolPool.getSymbol(cs);
+		else
+			return symbolPool.getWarningSymbol();
+	}
+
+	/**
+	 * The quarter rest is centered around the middle
+	 * line of the staff, the half rest sits on the
+	 * middle line and the whole rest hangs on the
+	 * line over the middle staff.
+	 */
+	private int getRestLp(StaffStamping staff, DurationInfo.Type duration) {
+		if (duration == DurationInfo.Type.Whole) {
+			//whole rest hangs on the line above the middle
+			return staff.linesCount + 1;
+		}
+		else if (duration == DurationInfo.Type.Half) {
+			//half rest sits on the line under the middle
+			return staff.linesCount - 1;
+		}
+		else {
+			//all other rests are centered on the middle line
+			return staff.linesCount - 1;
 		}
 	}
 

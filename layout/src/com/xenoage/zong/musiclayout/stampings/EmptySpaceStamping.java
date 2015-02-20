@@ -11,7 +11,7 @@ import com.xenoage.utils.math.geom.Rectangle2f;
  *
  * @author Andreas Wenger
  */
-@Const @AllArgsConstructor
+@Const @AllArgsConstructor @Getter
 public class EmptySpaceStamping
 	extends Stamping {
 	
