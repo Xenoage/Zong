@@ -33,11 +33,11 @@ public class StaffStampingsStrategy {
 			//create staves of the system
 			float yOffset = system.getOffsetYMm();
 			for (int iStaff : range(stavesCount)) {
-				yOffset += system.getStaffDistance(iStaff);
+				yOffset += system.getStaffDistanceMm(iStaff);
 				StaffStamping staff = new StaffStamping(system, iStaff,
 					new Point2f(systemXOffset, yOffset), system.widthMm, 5, score.getInterlineSpace(iStaff));
 				allStaves.add(staff);
-				yOffset += system.getStaffHeight(iStaff);
+				yOffset += system.getStaffHeightMm(iStaff);
 			}
 		}
 

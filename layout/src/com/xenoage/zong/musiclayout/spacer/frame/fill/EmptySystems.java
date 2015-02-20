@@ -7,9 +7,10 @@ import com.xenoage.utils.collections.CollectionUtils;
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.format.SystemLayout;
-import com.xenoage.zong.core.music.Staff;
+import com.xenoage.zong.musiclayout.spacer.system.StavesSpacer;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 import com.xenoage.zong.musiclayout.spacing.FrameSpacing;
+import com.xenoage.zong.musiclayout.spacing.StavesSpacing;
 import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
 
 /**
@@ -35,7 +36,7 @@ public class EmptySystems
 		float offsetY = 0;
 		if (frame.systems.size() > 0) {
 			SystemSpacing lastSystem = getLast(frame.systems);
-			offsetY = lastSystem.getOffsetYMm() + lastSystem.getHeight();
+			offsetY = lastSystem.getOffsetYMm() + lastSystem.getHeightMm();
 			remainingSpace -= offsetY;
 		}
 
@@ -45,7 +46,7 @@ public class EmptySystems
 		float defaultMargin = defaultSystemLayout.getMarginLeft() +
 			defaultSystemLayout.getMarginRight();
 		SystemSpacing newSystem = createEmptySystem(score, usableSize.width, 0);
-		float newSystemHeight = defaultSystemDistance + newSystem.getHeight();
+		float newSystemHeight = defaultSystemDistance + newSystem.getHeightMm();
 
 		//add as many additional empty staves as possible
 		int newSystemsCount = (int) (remainingSpace / newSystemHeight);
@@ -60,22 +61,13 @@ public class EmptySystems
 	 * the given width and y-offset in mm and returns it.
 	 */
 	private SystemSpacing createEmptySystem(Score score, float width, float offsetY) {
-		float[] staffHeights = new float[score.getStavesCount()];
-		float[] staffDistances = new float[score.getStavesCount() - 1];
-		//compute staff heights
-		for (int iStaff : range(score.getStavesCount())) {
-			Staff staff = score.getStaff(iStaff);
-			staffHeights[iStaff] = (staff.getLinesCount() - 1) * score.getInterlineSpace(iStaff);
-		}
-		//compute staff distances 
-		for (int iStaff : range(1, score.getStavesCount() - 1)) {
-			staffDistances[iStaff - 1] = score.getFormat().getStaffLayoutNotNull(iStaff).getDistance();
-		}
+		//compute staves spacing
+		StavesSpacing stavesSpacing = StavesSpacer.stavesSpacer.compute(score, 0);
 		//create and returns system
 		SystemLayout defaultSystemLayout = score.getFormat().getSystemLayout();
 		return new SystemSpacing(CollectionUtils.<ColumnSpacing> alist(),
 			defaultSystemLayout.getMarginLeft(), defaultSystemLayout.getMarginRight(), width,
-			staffHeights, staffDistances, offsetY);
+			stavesSpacing, offsetY);
 	}
 
 }

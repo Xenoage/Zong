@@ -5,6 +5,7 @@ import static com.xenoage.utils.Optional.of;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.musiclayout.spacer.measure.ColumnSpacer.columnSpacer;
+import static com.xenoage.zong.musiclayout.spacer.system.StavesSpacer.stavesSpacer;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ import com.xenoage.zong.musiclayout.Context;
 import com.xenoage.zong.musiclayout.notations.Notations;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 import com.xenoage.zong.musiclayout.spacing.LeadingSpacing;
+import com.xenoage.zong.musiclayout.spacing.StavesSpacing;
 import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
 
 /**
@@ -64,36 +66,11 @@ public class SystemSpacer {
 		ScoreFormat scoreFormat = score.getFormat();
 		ScoreHeader scoreHeader = score.getHeader();
 
-		//compute staff heights
-		float[] staffHeightsMm = new float[score.getStavesCount()];
-		float totalStavesHeightsMm = 0;
-		for (int iStaff : range(score.getStavesCount())) {
-			Staff staff = score.getStaff(iStaff);
-			float staffHeightMm = (staff.getLinesCount() - 1) * score.getInterlineSpace(iStaff);
-			staffHeightsMm[iStaff] = staffHeightMm;
-			totalStavesHeightsMm += staffHeightMm;
-		}
-
-		//compute staff distances
-		float[] staffDistancesMm = new float[score.getStavesCount() - 1];
-		float totalStavesDistancesMm = 0;
-		for (int iStaff : range(1, staffHeightsMm.length - 1)) {
-			StaffLayout staffLayout = scoreHeader.getStaffLayout(systemIndex, iStaff);
-			float staffDistanceMm = 0;
-			if (staffLayout != null) {
-				//use custom staff distance
-				staffDistanceMm = staffLayout.getDistance();
-			}
-			else {
-				//use default staff distance
-				staffDistanceMm = scoreFormat.getStaffLayoutNotNull(iStaff).getDistance();
-			}
-			staffDistancesMm[iStaff - 1] = staffDistanceMm;
-			totalStavesDistancesMm += staffDistanceMm;
-		}
+		//compute spacing of staves
+		StavesSpacing stavesSpacing = stavesSpacer.compute(score, systemIndex);
 
 		//enough space?
-		if (offsetYMm + totalStavesHeightsMm + totalStavesDistancesMm > usableSizeMm.height) {
+		if (offsetYMm + stavesSpacing.getTotalHeightMm() > usableSizeMm.height) {
 			//not enough space
 			return absent();
 		}
@@ -141,8 +118,7 @@ public class SystemSpacer {
 		}
 		else {
 			SystemSpacing ret = new SystemSpacing(
-				system, systemLeftMarginMm, systemRightMarginMm, usedWidthMm, staffHeightsMm,
-				staffDistancesMm, offsetYMm);
+				system, systemLeftMarginMm, systemRightMarginMm, usedWidthMm, stavesSpacing, offsetYMm);
 			return of(ret);
 		}
 

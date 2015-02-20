@@ -41,10 +41,8 @@ public class SystemSpacing {
 	 * To get the used width, call {@link #getUsedWidth()}. */
 	public float widthMm;
 
-	/** The heights of the staves in mm. (#staves-1) items. */
-	public float[] staffHeightsMm;
-	/** The distances between the staves in mm. (#staves-2) items. */
-	public float[] staffDistancesMm;
+	/** The vertical spacing of the staves. */
+	public StavesSpacing staves;
 
 	/** The vertical offset of the system in mm, relative to the top. */
 	public float offsetYMm;
@@ -54,13 +52,12 @@ public class SystemSpacing {
 	
 
 	public SystemSpacing(List<ColumnSpacing> columnSpacings, float marginLeftMm, float marginRightMm,
-		float widthMm, float[] staffHeightsMm, float[] staffDistancesMm, float offsetYMm) {
+		float widthMm, StavesSpacing staves, float offsetYMm) {
 		this.columns = columnSpacings;
 		this.marginLeftMm = marginLeftMm;
 		this.marginRightMm = marginRightMm;
 		this.widthMm = widthMm;
-		this.staffHeightsMm = staffHeightsMm;
-		this.staffDistancesMm = staffDistancesMm;
+		this.staves = staves;
 		this.offsetYMm = offsetYMm;
 		//set backward references
 		for (ColumnSpacing column : columnSpacings)
@@ -70,22 +67,22 @@ public class SystemSpacing {
 	/**
 	 * Gets the height of the staff with the given index.
 	 */
-	public float getStaffHeight(int index) {
-		return staffHeightsMm[index];
+	public float getStaffHeightMm(int staff) {
+		return staves.getStaffHeightMm(staff);
 	}
 
 	/**
 	 * Gets the distance between the previous and the given staff.
 	 */
-	public float getStaffDistance(int index) {
-		return (index > 0 ? staffDistancesMm[index - 1] : 0);
+	public float getStaffDistanceMm(int staff) {
+		return staves.getStaffDistanceMm(staff);
 	}
 
 	/**
 	 * Gets the total height of this system in mm.
 	 */
-	public float getHeight() {
-		return sum(staffHeightsMm) + sum(staffDistancesMm);
+	public float getHeightMm() {
+		return staves.getTotalHeightMm();
 	}
 
 	/**
@@ -211,13 +208,10 @@ public class SystemSpacing {
 	}
 	
 	/**
-	 * Gets the vertical offset of the given staff in mm.
+	 * Gets the vertical offset of the given staff in mm in frame space.
 	 */
-	private float getStaffOffsetY(int staff) {
-		float ret = offsetYMm;
-		for (int i : range(staff))
-			ret += staffHeightsMm[i] + staffDistancesMm[i];
-		return ret;
+	public float getStaffYOffsetMm(int staff) {
+		return offsetYMm + staves.getStaffYOffsetMm(staff);
 	}
 	
 	/** 
@@ -225,10 +219,18 @@ public class SystemSpacing {
 	 * of an object on the given line position .
 	 * Also non-integer values (fractions of interline spaces)
 	 * are allowed.
-	 * / GOON
+	 */
 	public float getYMm(int staff, float lp) {
-		float staffLp0Mm = getStaffOffsetY(staff) + staffHeightsMm[staff];
-		return staffLp0Mm + (linesCount - 1) * is - lp * is / 2;
-	} */
+		return offsetYMm + staves.getYMm(staff, lp);
+	}
+	
+	/**
+	 * Computes and returns the y-coordinate of an object in the given staff 
+	 * at the given vertical position in mm in frame space as a line position.
+	 * Also non-integer values are allowed.
+	 */
+	public float getYLp(int staff, float mm) {
+		return staves.getYLp(staff, mm - offsetYMm);
+	}
 	
 }

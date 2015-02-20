@@ -6,7 +6,6 @@ import static com.xenoage.utils.collections.CollectionUtils.getLast;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.geom.Point2f.p;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
-import static com.xenoage.zong.core.music.format.SP.sp;
 import static com.xenoage.zong.core.position.MP.getMP;
 
 import java.util.List;
@@ -17,7 +16,6 @@ import com.xenoage.zong.core.music.beam.BeamWaypoint;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.Stem;
 import com.xenoage.zong.core.music.chord.StemDirection;
-import com.xenoage.zong.core.music.format.SP;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.musiclayout.notations.BeamNotation;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
@@ -123,8 +121,8 @@ public class OneMeasureTwoStaves
 			//remember horizontal stem position
 			ElementSpacing chordSpacing = column.getElement(chord.element);
 			float stemXMm = (chordSpacing.offsetIs + chord.getStemOffsetIs()) * is;
-			float stemYMm = 0; //GOON column.parentSystem.computeYMm(staff, endLP);
-			Point2f stemPosMm = p(stemXMm, endLP);
+			float stemYMm = column.parentSystem.getYMm(staff, endLP);
+			Point2f stemPosMm = p(stemXMm, stemYMm);
 			if (i == 0)
 				leftStemPosMm = stemPosMm;
 			else
@@ -134,7 +132,6 @@ public class OneMeasureTwoStaves
 			chord.beam = beamNot;
 		}
 		
-		/*
 		for (int i : range(1, notations.size() - 2)) {
 			ChordNotation chord = notations.get(i);
 			ElementSpacing chordSpacing = column.getElement(chord.element);
@@ -142,20 +139,18 @@ public class OneMeasureTwoStaves
 			float is = column.getMeasures().get(chordMp.staff).getInterlineSpace();
 			float stemXMm = (chordSpacing.offsetIs + chord.getStemOffsetIs()) * is;
 			
-			float f = (stemXMm - leftStemSp.xMm) / (rightStemSp.xMm - leftStemSp.xMm);
+			float f = (stemXMm - leftStemPosMm.x) / (rightStemPosMm.x - leftStemPosMm.x);
 			float endLp = 0;
 
 			//two staff beam: we have first to translate
 			//the beam in absolute frame coordinates, then we have to translate it into the
 			//coordinates of the parent staff of the current stem
-			float leftStemEndMm = column.parentSystem.computeYMm(chordMp.staff, leftStemSp.lp);
-			float rightStemEndMm = rightStaff.computeYMm(rightStemSp.lp);
-			float endMm = leftStemEndMm + f * (rightStemEndMm - leftStemEndMm);
-			endLp = openStem.parentStaff.computeYLp(endMm);
+			float endMm = leftStemPosMm.y + f * (rightStemPosMm.y - leftStemPosMm.y);
+			endLp = column.parentSystem.getYLp(chordMp.staff, endMm);
 			
-			chord.stem.endLp = endLp;
+			chord.stem = new StemNotation(chord.stem.startLp, endLp);
 			chord.beam = beamNot;
-		} */
+		}
 	}
 
 }

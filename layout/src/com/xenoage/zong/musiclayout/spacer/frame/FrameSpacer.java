@@ -75,7 +75,7 @@ public class FrameSpacer {
 				systems.add(system);
 				//update offset and start measure index for next system
 				//add height of this system
-				offsetY += system.getHeight();
+				offsetY += system.getHeightMm();
 				//add system distance of the following system
 				offsetY += getSystemDistance(systemIndex + 1, scoreFormat, scoreHeader);
 				//increase indexes

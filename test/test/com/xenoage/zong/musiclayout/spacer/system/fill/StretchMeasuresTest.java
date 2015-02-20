@@ -127,7 +127,7 @@ public class StretchMeasuresTest {
 		ColumnSpacing mcs = new ColumnSpacing(-1, measureSpacings, beatOffsets,
 			alist(new BeatOffset(fr(0, 4), 0), new BeatOffset(fr(6, 4), offsetBeat2)));
 		SystemSpacing system = new SystemSpacing(ilist(mcs), 0, 0, leadingWidth +
-			offsetBeat2, new float[]{0f}, new float[0], 0);
+			offsetBeat2, null, 0);
 		return system;
 	}
 
@@ -157,8 +157,7 @@ public class StretchMeasuresTest {
 		MeasureSpacing measureSpacing = new MeasureSpacing(atMeasure(0, 0), is, voiceSpacings, empty, null);
 		ColumnSpacing mcs = new ColumnSpacing(-1, alist(measureSpacing),
 			beatOffsets, alist(new BeatOffset(fr(0, 4), 0), new BeatOffset(fr(4, 4), offsetMeasureEnd)));
-		SystemSpacing system = new SystemSpacing(alist(mcs), 0, 0, offsetMeasureEnd,
-			new float[]{0f}, new float[0], 0);
+		SystemSpacing system = new SystemSpacing(alist(mcs), 0, 0, offsetMeasureEnd, null, 0);
 		return system;
 	}
 

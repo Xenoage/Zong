@@ -25,7 +25,7 @@ public class StretchSystems
 		if (systemsCount > 1) {
 			//compute remaining space
 			SystemSpacing lastSystem = getLast(frame.systems);
-			float lastSystemEndY = lastSystem.getOffsetYMm() + lastSystem.getHeight();
+			float lastSystemEndY = lastSystem.getOffsetYMm() + lastSystem.getHeightMm();
 			float remainingSpace = frame.usableSizeMm.height - lastSystemEndY;
 			//compute additional space between the systems
 			float additionalSpace = remainingSpace / (systemsCount - 1);

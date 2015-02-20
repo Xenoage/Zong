@@ -123,7 +123,7 @@ public class CursorOutput {
 						System system = systems.get(systemIndex);
 						system.page = iPage;
 						system.top = (offsetY + systemSpacing.offsetYMm) / pageSize.height;
-						system.bottom = (offsetY + systemSpacing.offsetYMm + systemSpacing.getHeight()) / pageSize.height;
+						system.bottom = (offsetY + systemSpacing.offsetYMm + systemSpacing.getHeightMm()) / pageSize.height;
 						
 						//read measure beats
 						float systemOffsetX = systemSpacing.marginLeftMm;
