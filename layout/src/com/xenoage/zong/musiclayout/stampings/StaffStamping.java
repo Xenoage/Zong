@@ -20,7 +20,8 @@ import com.xenoage.zong.musiclayout.stampings.bitmap.StaffStampingBitmapInfo;
  *
  * @author Andreas Wenger
  */
-@Const @RequiredArgsConstructor @Getter @ToString public class StaffStamping
+@Const @RequiredArgsConstructor @Getter @ToString
+public class StaffStamping
 	extends Stamping {
 
 	/** The system this staff belongs to. */
@@ -58,7 +59,7 @@ import com.xenoage.zong.musiclayout.stampings.bitmap.StaffStampingBitmapInfo;
 	 * are allowed.
 	 */
 	public float computeYMm(float lp) {
-		return positionMm.y + (linesCount - 1) * is - lp * is / 2 + getLineWidthMm() / 2;
+		return positionMm.y + (linesCount - 1) * is - lp * is / 2;
 	}
 
 	/**
@@ -67,7 +68,7 @@ import com.xenoage.zong.musiclayout.stampings.bitmap.StaffStampingBitmapInfo;
 	 * Also non-integer values are allowed.
 	 */
 	public float computeYLp(float mm) {
-		return (positionMm.y + (linesCount - 1) * is + getLineWidthMm() / 2 - mm) * 2 / is;
+		return (positionMm.y + (linesCount - 1) * is - mm) * 2 / is;
 	}
 
 	/**

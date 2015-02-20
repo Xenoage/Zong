@@ -111,6 +111,7 @@ public class BeamStamper {
 			}
 		}
 
+		/*
 		//update middle stems
 		for (int i : range(1, beamedStems.stems.length - 2)) {
 			StemStamping openStem = beamedStems.stems[i];
@@ -131,7 +132,7 @@ public class BeamStamper {
 				endLp = openStem.parentStaff.computeYLp(endMm);
 			}
 			openStem.endLp = endLp;
-		}
+		} */
 
 		return ret;
 	}

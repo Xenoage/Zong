@@ -209,4 +209,26 @@ public class SystemSpacing {
 		}
 		return unknown;
 	}
+	
+	/**
+	 * Gets the vertical offset of the given staff in mm.
+	 */
+	private float getStaffOffsetY(int staff) {
+		float ret = offsetYMm;
+		for (int i : range(staff))
+			ret += staffHeightsMm[i] + staffDistancesMm[i];
+		return ret;
+	}
+	
+	/** 
+	 * Computes and returns the y-coordinate in mm in frame space
+	 * of an object on the given line position .
+	 * Also non-integer values (fractions of interline spaces)
+	 * are allowed.
+	 * / GOON
+	public float getYMm(int staff, float lp) {
+		float staffLp0Mm = getStaffOffsetY(staff) + staffHeightsMm[staff];
+		return staffLp0Mm + (linesCount - 1) * is - lp * is / 2;
+	} */
+	
 }

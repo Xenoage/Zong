@@ -39,5 +39,8 @@ public class ChordNotation
 		this.width = width;
 	}
 
+	public float getStemOffsetIs() {
+		return accidentals.widthIs + notes.stemOffsetIs; //TODO: right?
+	}
 	
 }
