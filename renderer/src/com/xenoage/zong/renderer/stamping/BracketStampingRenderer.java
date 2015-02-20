@@ -51,7 +51,7 @@ public class BracketStampingRenderer
 
 		float y1 = getStaffTopY(bracket.firstStaff, canvas, args);
 		float y2 = getStaffBottomY(bracket.lastStaff, canvas, args);
-		Point2f pCenter = new Point2f(bracket.positionX, (y1 + y2) / 2);
+		Point2f pCenter = new Point2f(bracket.xMm, (y1 + y2) / 2);
 
 		Symbol braceSymbol = args.symbolPool.getSymbol(CommonSymbol.BracketBrace);
 		float symbolScaling = (y2 - y1) / braceSymbol.boundingRect.size.height;
@@ -68,7 +68,7 @@ public class BracketStampingRenderer
 
 		float y1 = getStaffTopY(bracket.firstStaff, canvas, args);
 		float y2 = getStaffBottomY(bracket.lastStaff, canvas, args);
-		Point2f p1Mm = new Point2f(bracket.positionX, y1);
+		Point2f p1Mm = new Point2f(bracket.xMm, y1);
 
 		Symbol bracketLineSymbol = args.symbolPool.getSymbol(CommonSymbol.BracketBracketLine);
 		Symbol bracketEndSymbol = args.symbolPool.getSymbol(CommonSymbol.BracketBracketEnd);

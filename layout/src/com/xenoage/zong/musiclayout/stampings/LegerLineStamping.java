@@ -1,6 +1,9 @@
 package com.xenoage.zong.musiclayout.stampings;
 
+import lombok.AllArgsConstructor;
+
 import com.xenoage.utils.annotations.Const;
+import com.xenoage.zong.core.music.format.SP;
 
 /**
  * Class for a leger line stamping.
@@ -12,7 +15,8 @@ import com.xenoage.utils.annotations.Const;
  *
  * @author Andreas Wenger
  */
-@Const public final class LegerLineStamping
+@Const @AllArgsConstructor
+public final class LegerLineStamping
 	extends Stamping {
 	
 	/** Length of a normal leger line. */ //TIDY: move in layout settings
@@ -20,20 +24,13 @@ import com.xenoage.utils.annotations.Const;
 	/** Length of a leger line within a chord with suspended notes. */ //TIDY: move in layout settings
 	public static final float lengthSuspendedIs = 3 * 1.1f;
 
-	/** The horizontal position of this leger line in mm. */
-	public final float xMm;
-	/** The line position of this leger line. */
-	public final int lp;
+	/** The position of this leger line, around which the line is horizontally centered. */
+	public final SP sp;
 	/** The width of this leger line in IS. */
 	public final float widthIs;
-
-
-	public LegerLineStamping(StaffStamping parentStaff, float x, int lp, float widthIs) {
-		super(parentStaff, null);
-		this.xMm = x;
-		this.lp = lp;
-		this.widthIs = widthIs;
-	}
+	/** The parent staff. */
+	public final StaffStamping parentStaff;
+	
 
 	@Override public StampingType getType() {
 		return StampingType.LegerLineStamping;

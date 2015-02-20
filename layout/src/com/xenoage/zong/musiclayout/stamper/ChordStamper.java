@@ -5,6 +5,7 @@ import static com.xenoage.zong.core.music.format.SP.sp;
 import static com.xenoage.zong.musiclayout.stamper.LegerLinesStamper.legerLinesStamper;
 
 import com.xenoage.utils.color.Color;
+import com.xenoage.utils.math.geom.Rectangle2f;
 import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.StemDirection;
@@ -74,8 +75,11 @@ public class ChordStamper {
 		for (int iNote : range(noteheads)) {
 			NoteDisplacement note = nas.getNote(iNote);
 			Color color = Color.black;
-			NoteheadStamping noteSt = new NoteheadStamping(noteheadType, color, staffStamping, sp(
-				leftNoteXMm + note.xIs * staffStamping.is, note.lp), scaling, symbolPool);
+			Symbol noteSymbol = getNoteheadSymbol(noteheadType, symbolPool);
+			float noteXMm = getNoteheadXMm(leftNoteXMm + note.xIs * staffStamping.is,
+				scaling, staffStamping, noteSymbol);
+			NoteheadStamping noteSt = new NoteheadStamping(chordNotation,	iNote, noteSymbol,
+				color, staffStamping, sp(noteXMm, note.lp), scaling);
 			noteheads[iNote] = noteSt;
 		}
 
@@ -110,10 +114,11 @@ public class ChordStamper {
 		int[] dotPositions = nas.dotsLp;
 		int dotsPerNote = nas.getDotsPerNoteCount();
 		ProlongationDotStamping[] dots = new ProlongationDotStamping[dotPositions.length * dotsPerNote];
+		Symbol dotSymbol = symbolPool.getSymbol(CommonSymbol.NoteDot);
 		for (int iNote : range(dotPositions)) {
 			for (int iDot : range(dotsPerNote)) {
-				ProlongationDotStamping dotSt = new ProlongationDotStamping(staffStamping, sp(
-					leftNoteXMm + nas.getDotsOffsetIs(iDot) * staffStamping.is, dotPositions[iNote]), symbolPool);
+				ProlongationDotStamping dotSt = new ProlongationDotStamping(chordNotation, staffStamping,
+					dotSymbol, sp(leftNoteXMm + nas.getDotsOffsetIs(iDot) * staffStamping.is, dotPositions[iNote]));
 				dots[iNote * dotsPerNote + iDot] = dotSt;
 			}
 		}
@@ -153,6 +158,25 @@ public class ChordStamper {
 		StemNotation sa = chordNotation.stem;
 		return new StemStamping(staffStamping, chordNotation, stemXMm,
 			sa.startLp, sa.endLp, chordNotation.stemDirection);
+	}
+	
+	Symbol getNoteheadSymbol(int notehead, SymbolPool symbolPool) {
+		if (notehead == NoteheadStamping.NOTEHEAD_WHOLE)
+			return symbolPool.getSymbol(CommonSymbol.NoteWhole);
+		else if (notehead == NoteheadStamping.NOTEHEAD_HALF)
+			return symbolPool.getSymbol(CommonSymbol.NoteHalf);
+		else
+			return symbolPool.getSymbol(CommonSymbol.NoteQuarter);
+	}
+	
+	//TIDY
+	private float getNoteheadXMm(float xMm, float scaling, StaffStamping staff, Symbol symbol) {
+		float ret = xMm;
+		Rectangle2f bounds = symbol.getBoundingRect().scale(scaling);
+		float interlineSpace = staff.is;
+		float lineWidth = staff.getLineWidth();
+		ret += (bounds.size.width / 2) * interlineSpace - lineWidth / 2;
+		return ret;
 	}
 
 }

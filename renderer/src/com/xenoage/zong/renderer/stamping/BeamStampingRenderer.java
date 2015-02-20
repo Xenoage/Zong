@@ -36,10 +36,10 @@ public class BeamStampingRenderer
 		float scaling = args.targetScaling;
 
 		//TODO: stem should be thinner than lineWidth?
-		float stemWidthMm = beam.parentStaff.getLineWidth();
+		float stemWidthMm = beam.staff1.getLineWidth();
 
-		float x1Mm = beam.x1 - stemWidthMm / 2f;
-		float x2Mm = beam.x2 + stemWidthMm / 2f;
+		float x1Mm = beam.sp1.xMm - stemWidthMm / 2f;
+		float x2Mm = beam.sp2.xMm + stemWidthMm / 2f;
 
 		Color color = Color.black;
 
@@ -55,12 +55,12 @@ public class BeamStampingRenderer
 			float staff2YPos = staff2.position.y;
 			BitmapStaff screenStaff1 = staff1.screenInfo.getBitmapStaff(scaling);
 			BitmapStaff screenStaff2 = staff2.screenInfo.getBitmapStaff(scaling);
-			leftYStart = staff1YPos + screenStaff1.getLPMm(beam.lp1);
-			rightYStart = staff2YPos + screenStaff2.getLPMm(beam.lp2);
+			leftYStart = staff1YPos + screenStaff1.getLPMm(beam.sp1.lp);
+			rightYStart = staff2YPos + screenStaff2.getLPMm(beam.sp2.lp);
 		}
 		else if (canvas.getFormat() == CanvasFormat.Vector) {
-			leftYStart = staff1.computeYMm(beam.lp1);
-			rightYStart = staff2.computeYMm(beam.lp2);
+			leftYStart = staff1.computeYMm(beam.sp1.lp);
+			rightYStart = staff2.computeYMm(beam.sp1.lp);
 		}
 
 		float beamHeightMm = BeamStamping.beamHeight * staff1.is;

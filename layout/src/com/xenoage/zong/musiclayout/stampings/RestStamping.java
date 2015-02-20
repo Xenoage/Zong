@@ -7,6 +7,7 @@ import java.util.HashMap;
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.music.rest.Rest;
 import com.xenoage.zong.core.music.util.DurationInfo;
+import com.xenoage.zong.musiclayout.notations.RestNotation;
 import com.xenoage.zong.symbols.Symbol;
 import com.xenoage.zong.symbols.SymbolPool;
 import com.xenoage.zong.symbols.common.CommonSymbol;
@@ -40,9 +41,9 @@ import com.xenoage.zong.symbols.common.CommonSymbol;
 	}
 
 
-	public RestStamping(Rest restElement, DurationInfo.Type duration, StaffStamping parentStaff,
+	public RestStamping(RestNotation rest, DurationInfo.Type duration, StaffStamping parentStaff,
 		float positionX, float scaling, SymbolPool symbolPool) {
-		super(parentStaff, getSymbol(duration, symbolPool), null, sp(positionX,
+		super(rest, parentStaff, getSymbol(duration, symbolPool), null, sp(positionX,
 			getLinePosition(parentStaff, duration)), scaling, false);
 	}
 

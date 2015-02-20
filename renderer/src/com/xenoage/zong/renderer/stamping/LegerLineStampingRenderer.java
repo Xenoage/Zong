@@ -32,11 +32,11 @@ public class LegerLineStampingRenderer
 		LegerLineStamping legerLine = (LegerLineStamping) stamping;
 
 		StaffStamping parentStaff = legerLine.parentStaff;
-		float linePosition = legerLine.lp;
+		float linePosition = legerLine.sp.lp;
 
 		float scaling = args.targetScaling;
 		float width = legerLine.widthIs * parentStaff.is;
-		float p1xMm = legerLine.xMm - width / 2;
+		float p1xMm = legerLine.sp.xMm - width / 2;
 		float p2xMm = p1xMm + width;
 		float lineWidthMm = parentStaff.getLineWidth();
 		Color color = Color.black;

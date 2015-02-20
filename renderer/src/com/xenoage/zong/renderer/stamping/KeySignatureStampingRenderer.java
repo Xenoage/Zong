@@ -29,8 +29,7 @@ public class KeySignatureStampingRenderer
 		if (fifths == 0)
 			return;
 		boolean useSharps = (fifths > 0);
-		float distance = (useSharps ? s.layoutSettings.spacings.widthSharp
-			: s.layoutSettings.spacings.widthFlat);
+		float distance = s.distanceMm;
 		Symbol symbol = args.symbolPool.getSymbol(useSharps ? CommonSymbol.AccidentalSharp
 			: CommonSymbol.AccidentalFlat);
 		//paint sharps/flats

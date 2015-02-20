@@ -189,9 +189,9 @@ public class DirectionStampingStrategy
 		float defaultLPAbove = (staffStamping.linesCount - 1) * 2 + 3 * 2;
 		SP sp = computePosition(pedal, mp, staffStamping, defaultLPBelow, defaultLPAbove,
 			defaultLPBelow);
-
 		//create stamping
-		return new PedalStamping(pedal, staffStamping, sp, 1, symbolPool);
+		Symbol symbol = symbolPool.getSymbol(CommonSymbol.getPedal(pedal.getType()));
+		return new StaffSymbolStamping(null, staffStamping, symbol, null, sp, 1, false);
 	}
 
 	/**

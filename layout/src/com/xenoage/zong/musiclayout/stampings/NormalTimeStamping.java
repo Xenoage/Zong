@@ -1,7 +1,9 @@
 package com.xenoage.zong.musiclayout.stampings;
 
+import lombok.AllArgsConstructor;
+
 import com.xenoage.utils.annotations.Const;
-import com.xenoage.zong.core.music.time.Time;
+import com.xenoage.zong.musiclayout.notations.TimeNotation;
 
 /**
  * Class for a time signature stamping.
@@ -9,34 +11,23 @@ import com.xenoage.zong.core.music.time.Time;
  *
  * @author Andreas Wenger
  */
-@Const public final class NormalTimeStamping
+@Const @AllArgsConstructor
+public final class NormalTimeStamping
 	extends Stamping {
 
-	/** The horizontal position in mm. */
-	public final float positionX;
-
 	/** The normal time signature. */
-	public final Time time;
-
+	public final TimeNotation time;
+	/** The horizontal position in mm. */
+	public final float xMm;
 	/** The horizontal offset of the numerator in interline spaces. */
-	public final float numeratorOffset;
-
+	public final float numeratorOffsetIs;
 	/** The horizontal offset of the denominator in interline spaces. */
-	public final float denominatorOffset;
-
+	public final float denominatorOffsetIs;
 	/** The gap between the digits in interline spaces. */
-	public final float digitGap;
-
-
-	public NormalTimeStamping(Time time, float positionX, StaffStamping parentStaff,
-		float numeratorOffset, float denominatorOffset, float digitGap) {
-		super(parentStaff, null);
-		this.time = time;
-		this.positionX = positionX;
-		this.numeratorOffset = numeratorOffset;
-		this.denominatorOffset = denominatorOffset;
-		this.digitGap = digitGap;
-	}
+	public final float digitGapIs;
+	/** The parent staff. */
+	public final StaffStamping parentStaff;
+	
 
 	@Override public StampingType getType() {
 		return StampingType.NormalTimeStamping;

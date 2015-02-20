@@ -5,6 +5,7 @@ import lombok.Getter;
 
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.music.beam.Beam;
+import com.xenoage.zong.core.music.format.SP;
 
 /**
  * Class for a beam stamping.
@@ -30,9 +31,9 @@ public class BeamStamping
 	/** The {@link StaffStamping} of the end position. */
 	public final StaffStamping staff2;
 	/** The start coordinates of the beam. */
-	public final float sp1;
+	public final SP sp1;
 	/** The end coordinates of the beam. */
-	public final float sp2;
+	public final SP sp2;
 
 
 	@Override public StampingType getType() {
