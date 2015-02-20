@@ -1,25 +1,22 @@
 package com.xenoage.zong.musiclayout.stampings;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import com.xenoage.utils.math.geom.Shape;
-import com.xenoage.zong.musiclayout.stampings.Stamping;
 
 /**
  * Mock class for a {@link Stamping}.
  *
  * @author Andreas Wenger
  */
+@AllArgsConstructor @Getter
 public class StampingMock
 	extends Stamping {
 	
-	@Getter private Level level;
+	private Level level;
+	private Shape boundingShape;
 
-	
-	public StampingMock(Stamping.Level level, Shape boundingShape) {
-		super(null, boundingShape);
-		this.level = level;
-	}
 
 	@Override public StampingType getType() {
 		return null;

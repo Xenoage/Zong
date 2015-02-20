@@ -78,7 +78,7 @@ public class VoltaStampingStrategy
 			caption = fText(volta.getCaption(), textStyle, Alignment.Left);
 		}
 		//create stamping
-		return new VoltaStamping(staff, lp, x1, x2, caption, drawLeftHook, drawRightHook);
+		return new VoltaStamping(lp, x1, x2, caption, drawLeftHook, drawRightHook, staff);
 	}
 
 }

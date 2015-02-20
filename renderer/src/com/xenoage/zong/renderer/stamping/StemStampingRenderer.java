@@ -50,7 +50,7 @@ public class StemStampingRenderer
 		if (canvas.getFormat() == CanvasFormat.Raster) {
 			//render on screen or print
 			BitmapLine screenLine = new BitmapLine(lineWidthMm, color, scaling);
-			BitmapStaff screenStaff = parentStaff.screenInfo.getBitmapStaff(scaling);
+			BitmapStaff screenStaff = parentStaff.getBitmapInfo().getBitmapStaff(scaling);
 			p1Mm = new Point2f(p1Mm.x, p1Mm.y + screenStaff.getYMm(noteheadLinePosition));
 			p2Mm = new Point2f(p2Mm.x, p2Mm.y + screenStaff.getYMm(endLinePosition));
 			float width = screenLine.widthMm; //ensure same width for each stem in this staff

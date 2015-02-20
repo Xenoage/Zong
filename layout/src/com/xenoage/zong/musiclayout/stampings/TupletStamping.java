@@ -21,9 +21,9 @@ public final class TupletStamping
 	extends Stamping {
 
 	/** The left start position. */
-	public final SP startSP;
+	public final SP leftSP;
 	/** The right end position. */
-	public final SP endSP;
+	public final SP rightSP;
 	/** True, if a bracket should be drawn, otherwise false. */
 	public final boolean bracket;
 	/** The text in the middle of the tuplet bracket, or null. */

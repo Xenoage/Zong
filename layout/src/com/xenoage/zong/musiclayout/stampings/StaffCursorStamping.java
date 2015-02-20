@@ -20,7 +20,7 @@ public final class StaffCursorStamping
 	/** An additional offset for the cursor in interline spaces. */
 	public final float offsetIs;
 	/** The staff where the cursor is placed. */
-	public final StaffStamping staff;
+	public final StaffStamping parentStaff;
 
 
 	@Override public StampingType getType() {

@@ -23,6 +23,11 @@ import com.xenoage.zong.musiclayout.stampings.bitmap.StaffStampingBitmapInfo;
 @Const @RequiredArgsConstructor @Getter @ToString public class StaffStamping
 	extends Stamping {
 
+	/** The system this staff belongs to. */
+	public final SystemSpacing system;
+	/** The staff index. */
+	@Getter public final int staffIndex;
+	
 	/** Top-left (TODO: really?) position (top line) of the staff in mm. */
 	public final Point2f positionMm;
 	/** Length of the staff in mm. */
@@ -32,10 +37,7 @@ import com.xenoage.zong.musiclayout.stampings.bitmap.StaffStampingBitmapInfo;
 	/** The interline space, i.e. the space between two staff lines, in mm */
 	public final float is;
 
-	/** The system this staff belongs to. */
-	public final SystemSpacing system;
-	/** The staff index. */
-	@Getter public final int staffIndex;
+	
 
 	/** Cached information about the staff for screen display */
 	@Optimized(Performance)

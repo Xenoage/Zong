@@ -1,5 +1,6 @@
 package com.xenoage.zong.musiclayout.layouter.scoreframelayout;
 
+import static com.xenoage.zong.core.music.format.SP.sp;
 import static com.xenoage.zong.core.text.FormattedText.fText;
 import static com.xenoage.zong.core.text.FormattedTextParagraph.fPara;
 
@@ -85,7 +86,7 @@ public class TupletStampingStrategy
 		FormattedText text = createText(tuplet.getActualNotes(), fontSize, symbolPool);
 
 		//return result
-		return new TupletStamping(x1Mm, x2Mm, y1Lp, y2Lp, true, text, ss);
+		return new TupletStamping(sp(x1Mm, y1Lp), sp(x2Mm, y2Lp), true, text, ss);
 	}
 
 	private float computeBracketLP(ChordStampings cs, int placement, float distanceLp) {

@@ -53,8 +53,8 @@ public class BeamStampingRenderer
 			//render on screen
 			float staff1YPos = staff1.positionMm.y;
 			float staff2YPos = staff2.positionMm.y;
-			BitmapStaff screenStaff1 = staff1.screenInfo.getBitmapStaff(scaling);
-			BitmapStaff screenStaff2 = staff2.screenInfo.getBitmapStaff(scaling);
+			BitmapStaff screenStaff1 = staff1.getBitmapInfo().getBitmapStaff(scaling);
+			BitmapStaff screenStaff2 = staff2.getBitmapInfo().getBitmapStaff(scaling);
 			leftYStart = staff1YPos + screenStaff1.getYMm(beam.sp1.lp);
 			rightYStart = staff2YPos + screenStaff2.getYMm(beam.sp2.lp);
 		}

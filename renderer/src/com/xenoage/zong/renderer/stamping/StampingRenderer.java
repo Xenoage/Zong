@@ -80,8 +80,8 @@ public abstract class StampingRenderer {
 	 * {@link Rectangle2f}.
 	 */
 	public void drawBoundingShape(Stamping stamping, Canvas canvas) {
-		if (stamping.boundingShape != null && stamping.boundingShape instanceof Rectangle2f) {
-			Rectangle2f r = (Rectangle2f) stamping.boundingShape;
+		if (stamping.getBoundingShape() instanceof Rectangle2f) {
+			Rectangle2f r = (Rectangle2f) stamping.getBoundingShape();
 			Color ci = new Color(0, 0, 255, 100);
 			canvas.drawLine(r.nw(), r.ne(), ci, 0.5f);
 			canvas.drawLine(r.ne(), r.se(), ci, 0.5f);

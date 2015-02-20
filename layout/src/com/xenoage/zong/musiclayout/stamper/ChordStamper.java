@@ -102,10 +102,10 @@ public class ChordStamper {
 			accsSt = new AccidentalStamping[accs.accidentals.length];
 			for (int iAcc : range(accsSt)) {
 				AccidentalDisplacement acc = accs.accidentals[iAcc];
-				AccidentalStamping accSt = new AccidentalStamping(chordNotation, acc.accidental, staffStamping,
-					sp(chordXMm +
-							(acc.xIs - chordNotation.width.frontGap + 0.5f /* 0.5f: half accidental width - TODO */) *
-							staffStamping.is, acc.yLp), 1, symbolPool.getSymbol(CommonSymbol.getAccidental(acc.accidental)));
+				AccidentalStamping accSt = new AccidentalStamping(chordNotation, iAcc,
+					staffStamping, sp(chordXMm +
+						(acc.xIs - chordNotation.width.frontGap + 0.5f /* 0.5f: half accidental width - TODO */) *
+						staffStamping.is, acc.yLp), 1, symbolPool.getSymbol(CommonSymbol.getAccidental(acc.accidental)));
 				accsSt[iAcc] = accSt;
 			}
 		}
@@ -131,9 +131,9 @@ public class ChordStamper {
 			float noteheadWidth = chordWidths.get(chord.getDuration());
 			for (int iArt : range(artsSt)) {
 				ArticulationDisplacement art = arts.articulations[iArt];
-				ArticulationStamping artSt = new ArticulationStamping(chordNotation,
-					art.articulation, staffStamping, sp(leftNoteXMm + (art.xIs + (noteheadWidth / 2)) *
-						staffStamping.is, art.yLp), 1, symbolPool.getSymbol(CommonSymbol.getArticulation(art.articulation)));
+				ArticulationStamping artSt = new ArticulationStamping(chordNotation, iArt,
+					staffStamping, sp(leftNoteXMm + (art.xIs + (noteheadWidth / 2)) * staffStamping.is, art.yLp),
+					1, symbolPool.getSymbol(CommonSymbol.getArticulation(art.articulation)));
 				artsSt[iArt] = artSt;
 			}
 		}
@@ -156,8 +156,8 @@ public class ChordStamper {
 	StemStamping stampStem(ChordNotation chordNotation, float leftNoteXMm, StaffStamping staffStamping) {
 		float stemXMm = leftNoteXMm + chordNotation.notes.stemOffsetIs * staffStamping.is;
 		StemNotation sa = chordNotation.stem;
-		return new StemStamping(staffStamping, chordNotation, stemXMm,
-			sa.startLp, sa.endLp, chordNotation.stemDirection);
+		return new StemStamping(chordNotation, stemXMm,
+			sa.startLp, sa.endLp, chordNotation.stemDirection, staffStamping);
 	}
 	
 	Symbol getNoteheadSymbol(int notehead, SymbolPool symbolPool) {

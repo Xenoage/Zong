@@ -27,7 +27,7 @@ public final class StemStamping
 	public final float noteheadLp;
 	/** The end line position of the stem.
 	 * Also non-integer values are allowed here. */
-	public final float endLp;
+	public float endLp; //GOON: final!
 	/** Stem direction: If up, the notes are at the bottom, and vice versa. */
 	public final StemDirection direction;
 	/** The parent staff. */

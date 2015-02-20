@@ -233,8 +233,8 @@ public class BarlineStampingRenderer
 		float widthMm, Color color) {
 		if (canvas.getFormat() == CanvasFormat.Raster) {
 			float scaling = args.targetScaling;
-			BitmapStaff screenStaff1 = staff1.screenInfo.getBitmapStaff(scaling);
-			BitmapStaff screenStaff2 = staff2.screenInfo.getBitmapStaff(scaling);
+			BitmapStaff screenStaff1 = staff1.getBitmapInfo().getBitmapStaff(scaling);
+			BitmapStaff screenStaff2 = staff2.getBitmapInfo().getBitmapStaff(scaling);
 			Point2f p1 = new Point2f(xMm, staff1.positionMm.y + screenStaff1.getYMm(staff1LinePosition));
 			Point2f p2 = new Point2f(xMm, staff2.positionMm.y + screenStaff2.getYMm(staff2LinePosition));
 			canvas.drawLine(p1, p2, color, widthMm);

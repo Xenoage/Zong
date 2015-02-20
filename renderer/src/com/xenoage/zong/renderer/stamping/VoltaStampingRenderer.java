@@ -31,8 +31,8 @@ public class VoltaStampingRenderer
 		float scaling = args.scaling;
 
 		//horizontal position
-		float x1 = volta.x1 + parentStaff.positionMm.x;
-		float x2 = volta.x2 + parentStaff.positionMm.x;
+		float x1 = volta.leftXMm + parentStaff.positionMm.x;
+		float x2 = volta.rightXMm + parentStaff.positionMm.x;
 
 		//compute hooks
 		boolean hook = volta.leftHook || volta.rightHook;
@@ -51,9 +51,9 @@ public class VoltaStampingRenderer
 		float y;
 		Color paintColor;
 		if (canvas.getFormat() == CanvasFormat.Raster) {
-			BitmapStaff ss = parentStaff.screenInfo.getBitmapStaff(scaling);
+			BitmapStaff ss = parentStaff.getBitmapInfo().getBitmapStaff(scaling);
 			y = parentStaff.positionMm.y + ss.getYMm(volta.lp);
-			BitmapLine screenLine = parentStaff.screenInfo.getBitmapLine(scaling, width, color);
+			BitmapLine screenLine = parentStaff.getBitmapInfo().getBitmapLine(scaling, width, color);
 			paintColor = screenLine.color;
 			paintWidth = screenLine.widthMm;
 		}

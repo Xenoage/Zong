@@ -39,7 +39,7 @@ public final class VoltaStamping
 	/** True, if there is a right downward hook, else false. */
 	public final boolean rightHook;
 	/** The parent staff. */
-	public final StaffStamping staff;
+	public final StaffStamping parentStaff;
 	
 
 	@Override public StampingType getType() {

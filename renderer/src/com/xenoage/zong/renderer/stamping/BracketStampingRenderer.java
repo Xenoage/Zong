@@ -96,7 +96,7 @@ public class BracketStampingRenderer
 		float ret = staff.positionMm.y;
 		if (canvas.getFormat() == CanvasFormat.Raster) {
 			//render on screen
-			BitmapStaff screenStaff = staff.screenInfo.getBitmapStaff(scaling);
+			BitmapStaff screenStaff = staff.getBitmapInfo().getBitmapStaff(scaling);
 			ret += screenStaff.yOffsetMm;
 		}
 		return ret;
@@ -111,7 +111,7 @@ public class BracketStampingRenderer
 		float scaling = args.targetScaling;
 		if (canvas.getFormat() == CanvasFormat.Raster) {
 			//render on screen
-			BitmapStaff screenStaff = staff.screenInfo.getBitmapStaff(scaling);
+			BitmapStaff screenStaff = staff.getBitmapInfo().getBitmapStaff(scaling);
 			return staff.positionMm.y + screenStaff.lp0Mm;
 		}
 		else if (canvas.getFormat() == CanvasFormat.Vector) {

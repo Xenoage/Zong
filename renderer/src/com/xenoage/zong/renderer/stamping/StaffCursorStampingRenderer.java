@@ -33,7 +33,7 @@ public class StaffCursorStampingRenderer
 		float x, y1, y2;
 		if (canvas.getFormat() == CanvasFormat.Raster) {
 			float staffY = parentStaff.positionMm.y;
-			BitmapStaff ss = parentStaff.screenInfo.getBitmapStaff(viewScaling);
+			BitmapStaff ss = parentStaff.getBitmapInfo().getBitmapStaff(viewScaling);
 			//top: one interline space above staff
 			y1 = staffY + ss.getYMm(parentStaff.linesCount * 2);
 			//bottom: one interline space under staff

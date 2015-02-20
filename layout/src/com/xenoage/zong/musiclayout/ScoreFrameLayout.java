@@ -93,7 +93,7 @@ public final class ScoreFrameLayout {
 		Stamping ret = null;
 		int highestLevel = -1;
 		for (Stamping s : getMusicalStampings()) {
-			if (s.getLevel().ordinal() > highestLevel && s.boundingShape.contains(point)) {
+			if (s.getLevel().ordinal() > highestLevel && s.getBoundingShape().contains(point)) {
 				highestLevel = s.getLevel().ordinal();
 				ret = s;
 			}
@@ -107,7 +107,7 @@ public final class ScoreFrameLayout {
 	 */
 	public StaffStamping getStaffStampingAt(Point2f point) {
 		for (StaffStamping s : staffStampings) {
-			if (s.boundingShape.contains(point))
+			if (s.getBoundingShape().contains(point))
 				return (StaffStamping) s;
 		}
 		return null;
@@ -120,7 +120,7 @@ public final class ScoreFrameLayout {
 	 */
 	public Stamping getOtherStampingAt(Point2f point, StampingType type) {
 		for (Stamping s : otherStampings) {
-			if (s.boundingShape != null && s.boundingShape.contains(point) && s.getType() == type)
+			if (s.getType() == type && s.getBoundingShape().contains(point))
 				return s;
 		}
 		return null;

@@ -37,7 +37,7 @@ public final class SlurStamping
 	/** The offset of the second control point relative to the end point. */
 	public final SP c2;
 	/** The parent staff. */
-	public final StaffStamping staff;
+	public final StaffStamping parentStaff;
 
 
 	@Override public StampingType getType() {

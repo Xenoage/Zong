@@ -37,8 +37,8 @@ public class StaffStampingRenderer
 
 		if (canvas.getFormat() == CanvasFormat.Raster) {
 			//render on screen
-			BitmapLine screenLine = staff.screenInfo.getBitmapLine(scaling, lineWidthMm, color);
-			BitmapStaff ss = staff.screenInfo.getBitmapStaff(scaling);
+			BitmapLine screenLine = staff.getBitmapInfo().getBitmapLine(scaling, lineWidthMm, color);
+			BitmapStaff ss = staff.getBitmapInfo().getBitmapStaff(scaling);
 			position = new Point2f(position.x, position.y + ss.yOffsetMm);
 			if (ss.isSimplifiedStaff) {
 				//simplified staff (fill rectangle)

@@ -9,6 +9,7 @@ import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Shape;
+import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.core.music.format.SP;
 import com.xenoage.zong.core.text.FormattedText;
 import com.xenoage.zong.musiclayout.notations.Notation;
@@ -29,8 +30,8 @@ public final class StaffTextStamping
 	@NonNull public final SP position;
 	/** The parent staff. */
 	@NonNull public final StaffStamping parentStaff;
-	/** The notation this stamping belongs to. */
-	@MaybeNull public final Notation element;
+	/** The {@link Notation} (or {@link MusicElement}) this stamping belongs to. */ //TODO: clean
+	@MaybeNull public final Object element;
 	
 
 	@Override public Point2f getPositionMm() {

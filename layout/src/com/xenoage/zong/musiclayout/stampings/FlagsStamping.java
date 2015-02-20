@@ -1,8 +1,8 @@
 package com.xenoage.zong.musiclayout.stampings;
 
 import static com.xenoage.utils.annotations.Optimized.Reason.Performance;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.annotations.Optimized;
@@ -20,7 +20,7 @@ import com.xenoage.zong.symbols.Symbol;
  *
  * @author Andreas Wenger
  */
-@Const @AllArgsConstructor @Getter
+@Const @RequiredArgsConstructor @Getter
 public class FlagsStamping
 	extends Stamping {
 

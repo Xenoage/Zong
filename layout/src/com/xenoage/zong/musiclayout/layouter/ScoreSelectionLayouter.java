@@ -54,7 +54,7 @@ import com.xenoage.zong.musiclayout.stampings.Stamping;
 			StaffStamping staff = frame.getStaffStamping(mp.staff, measure);
 			if (staff != null) {
 				frame.setSelectionStampings(ilist(
-					new StaffCursorStamping(staff, frame.getPositionX(mp), -0.5f)));
+					new StaffCursorStamping(frame.getPositionX(mp), -0.5f, staff)));
 			}
 		}
 	}

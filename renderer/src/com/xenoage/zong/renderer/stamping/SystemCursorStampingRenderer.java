@@ -34,12 +34,12 @@ public class SystemCursorStampingRenderer
 
 		if (canvas.getFormat() == CanvasFormat.Raster) {
 			float staffY = topStaff.positionMm.y;
-			BitmapStaff ss = topStaff.screenInfo.getBitmapStaff(viewScaling);
+			BitmapStaff ss = topStaff.getBitmapInfo().getBitmapStaff(viewScaling);
 			//top staff: top line
 			y1 = staffY + ss.getYMm(topStaff.linesCount * 2);
 			//bottom staff: bottom line
 			staffY = bottomStaff.positionMm.y;
-			ss = bottomStaff.screenInfo.getBitmapStaff(viewScaling);
+			ss = bottomStaff.getBitmapInfo().getBitmapStaff(viewScaling);
 			y2 = staffY + ss.getYMm(-2);
 		}
 		else {

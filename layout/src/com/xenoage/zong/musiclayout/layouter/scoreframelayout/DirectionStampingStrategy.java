@@ -33,7 +33,6 @@ import com.xenoage.zong.core.text.FormattedTextSymbol;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.ChordStampings;
 import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
-import com.xenoage.zong.musiclayout.stampings.PedalStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffSymbolStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffTextStamping;
@@ -100,7 +99,7 @@ public class DirectionStampingStrategy
 		FormattedTextParagraph paragraph = new FormattedTextParagraph(elements, Alignment.Center);
 		FormattedText text = fText(paragraph);
 		//create stamping
-		return new StaffTextStamping(staff, dynamics, text, sp);
+		return new StaffTextStamping(text, sp, staff, dynamics);
 	}
 
 	/**
@@ -128,7 +127,7 @@ public class DirectionStampingStrategy
 		FormattedTextParagraph paragraph = new FormattedTextParagraph(elements, Alignment.Center);
 		FormattedText text = fText(paragraph);
 		//create stamping
-		return new StaffTextStamping(staffStamping, null, text, sp);
+		return new StaffTextStamping(text, sp, staffStamping, dynamics);
 	}
 
 	/**
@@ -149,7 +148,7 @@ public class DirectionStampingStrategy
 		FormattedText text = getTempoTextNotNull(tempo, symbolPool);
 
 		//create stamping
-		return new StaffTextStamping(staffStamping, tempo, text, p);
+		return new StaffTextStamping(text, p, staffStamping, tempo);
 	}
 
 	/**
@@ -173,7 +172,7 @@ public class DirectionStampingStrategy
 		FormattedText text = styleText(words.getText(), style);
 
 		//create stamping
-		return new StaffTextStamping(staffStamping, null, text, p);
+		return new StaffTextStamping(text, p, staffStamping, words);
 	}
 
 	/**

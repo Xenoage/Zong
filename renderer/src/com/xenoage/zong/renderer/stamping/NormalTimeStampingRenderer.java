@@ -31,7 +31,7 @@ public class NormalTimeStampingRenderer
 
 		//write numerator digits
 		float offsetX = s.numeratorOffsetIs * interlineSpace;
-		String num = Integer.toString(s.time.getType().getNumerator());
+		String num = Integer.toString(s.time.element.getType().getNumerator());
 		for (int i = 0; i < num.length(); i++) {
 			int d = num.charAt(i) - '0';
 			Symbol symbol = symbolPool.getSymbol(CommonSymbol.getDigit(d));
@@ -45,7 +45,7 @@ public class NormalTimeStampingRenderer
 
 		//write denominator digits
 		offsetX = s.denominatorOffsetIs * interlineSpace;
-		String den = Integer.toString(s.time.getType().getDenominator());
+		String den = Integer.toString(s.time.element.getType().getDenominator());
 		for (int i = 0; i < den.length(); i++) {
 			int d = den.charAt(i) - '0';
 			Symbol symbol = symbolPool.getSymbol(CommonSymbol.getDigit(d));

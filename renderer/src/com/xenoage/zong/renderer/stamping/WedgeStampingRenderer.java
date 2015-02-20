@@ -46,9 +46,9 @@ public class WedgeStampingRenderer
 		float yMm;
 		Color paintColor;
 		if (canvas.getFormat() == CanvasFormat.Raster) {
-			BitmapStaff ss = parentStaff.screenInfo.getBitmapStaff(scaling);
+			BitmapStaff ss = parentStaff.getBitmapInfo().getBitmapStaff(scaling);
 			yMm = parentStaff.positionMm.y + ss.getYMm(wedge.lp);
-			BitmapLine screenLine = parentStaff.screenInfo.getBitmapLine(scaling, width, color);
+			BitmapLine screenLine = parentStaff.getBitmapInfo().getBitmapLine(scaling, width, color);
 			paintColor = screenLine.color;
 			paintWidth = screenLine.widthMm;
 		}

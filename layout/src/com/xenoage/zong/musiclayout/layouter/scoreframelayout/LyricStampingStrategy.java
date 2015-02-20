@@ -11,7 +11,6 @@ import com.xenoage.utils.StringUtils;
 import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.collections.IList;
 import com.xenoage.utils.iterators.It;
-import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.core.music.lyric.Lyric;
 import com.xenoage.zong.core.music.lyric.SyllableType;
 import com.xenoage.zong.core.text.Alignment;
@@ -42,7 +41,7 @@ public class LyricStampingStrategy
 		if (lyric.getSyllableType() == SyllableType.Extend)
 			return null;
 		FormattedText text = styleText(lyric.getText(), style, Alignment.Center);
-		return new StaffTextStamping(staffStamping, lyric, text, sp(positionX, baseLinePosition));
+		return new StaffTextStamping(text, sp(positionX, baseLinePosition), staffStamping, lyric);
 	}
 
 	/**
@@ -67,8 +66,8 @@ public class LyricStampingStrategy
 			positionX = (syllableLeft.position.xMm + widthLeft / 2) + 2 *
 				text.getFirstParagraph().getMetrics().getWidth();
 		}
-		return new StaffTextStamping(syllableLeft.parentStaff, (Lyric) syllableLeft.getElement(), //hyphen belongs to the left syllable
-			text, sp(positionX, syllableLeft.position.lp));
+		return new StaffTextStamping(text, sp(positionX, syllableLeft.position.lp),
+			syllableLeft.parentStaff, syllableLeft.getElement()); //hyphen belongs to the left syllable
 	}
 
 	/**
@@ -96,7 +95,7 @@ public class LyricStampingStrategy
 		float widthLeft = syllableLeft.getText().getFirstParagraph().getMetrics().getWidth();
 		float startX = syllableLeft.position.xMm + widthLeft / 2 + widthU / 4; //widthU / 4: just some distance
 		float baseLine = syllableLeft.position.lp;
-		MusicElement element = syllableLeft.getElement();
+		Object element = syllableLeft.element;
 		//if end notehead is given, compute the end position
 		float endX = 0;
 		if (noteheadRight != null) {
@@ -160,14 +159,12 @@ public class LyricStampingStrategy
 	}
 
 	private StaffTextStamping createUnderscoreStamping(float startX, float endX, float baseLine,
-		float widthUnderscore, FormattedTextStyle style, StaffStamping staff, MusicElement element) {
-		//TODO: line does not look continuous in OpenGL.
-
+		float widthUnderscore, FormattedTextStyle style, StaffStamping staff, Object element) {
 		//compute number of needed "_"
 		int countU = Math.max((int) ((endX - startX) / widthUnderscore) + 1, 1);
 		//create text
 		FormattedText text = fText(StringUtils.repeat("_", countU), style, Alignment.Left);
-		return new StaffTextStamping(staff, (Lyric) element, text, sp(startX, baseLine));
+		return new StaffTextStamping(text, sp(startX, baseLine), staff, element);
 	}
 
 }

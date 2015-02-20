@@ -205,7 +205,7 @@ public class ScoreFrameLayoutStrategy
 						Alignment.Right);
 					float middle = (top + bottom) / 2 + text.getFirstParagraph().getMetrics().getAscent() / 3; //correction of baseline. /3 looks good.
 					otherStampsPool.add(new FrameTextStamping(text, new Point2f(firstStaff.positionMm.x -
-						firstStaff.is * 2.5f, middle))); //TODO
+						firstStaff.is * 2.5f, middle), null)); //TODO
 				}
 			}
 
@@ -244,9 +244,10 @@ public class ScoreFrameLayoutStrategy
 					}
 				}
 				if (showMeasureNumber) {
-					otherStampsPool.add(new StaffTextStamping(firstStaff, null, fText("" +
-						(globalMeasureIndex + 1), new FormattedTextStyle(8), Alignment.Left), sp(xLeft,
-						firstStaff.linesCount * 2)));
+					FormattedText text = fText("" + (globalMeasureIndex + 1),
+						new FormattedTextStyle(8), Alignment.Left);
+					otherStampsPool.add(new StaffTextStamping(text, sp(xLeft, firstStaff.linesCount * 2),
+						firstStaff, null));
 				}
 				//for the first measure in the system: begin after leading spacing
 				if (iMeasure == 0)

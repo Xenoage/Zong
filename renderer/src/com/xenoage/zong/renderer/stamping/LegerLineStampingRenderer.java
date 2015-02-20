@@ -45,7 +45,7 @@ public class LegerLineStampingRenderer
 		if (canvas.getFormat() == CanvasFormat.Raster) {
 			//render on screen or print
 			BitmapLine screenLine = new BitmapLine(lineWidthMm, color, scaling);
-			BitmapStaff screenStaff = parentStaff.screenInfo.getBitmapStaff(scaling);
+			BitmapStaff screenStaff = parentStaff.getBitmapInfo().getBitmapStaff(scaling);
 			yMm = parentStaff.positionMm.y + screenStaff.getYMm(linePosition);
 			lineWidthMm = screenLine.widthMm;
 		}

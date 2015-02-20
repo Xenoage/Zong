@@ -1,6 +1,7 @@
 package com.xenoage.zong.musiclayout.stamper;
 
 import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.zong.core.music.format.SP.sp;
 import static com.xenoage.zong.musiclayout.notations.chord.NoteSuspension.None;
 import static com.xenoage.zong.musiclayout.notations.chord.NoteSuspension.Right;
 
@@ -41,9 +42,9 @@ public class LegerLinesStamper {
 			//create stampings
 			LegerLineStamping[] ret = new LegerLineStamping[bottomCount + topCount];
 			for (int i : range(bottomCount))
-				ret[i] = new LegerLineStamping(staffStamping, xBottomMm, bottomLps[i], widthBottomIs);
+				ret[i] = new LegerLineStamping(sp(xBottomMm, bottomLps[i]), widthBottomIs, staffStamping);
 			for (int i : range(topCount))
-				ret[bottomCount + i] = new LegerLineStamping(staffStamping, xTopMm, topLps[i], widthTopIs);
+				ret[bottomCount + i] = new LegerLineStamping(sp(xTopMm, topLps[i]), widthTopIs, staffStamping);
 			return ret;
 		}
 		else {

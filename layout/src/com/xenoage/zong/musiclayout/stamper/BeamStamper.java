@@ -2,6 +2,7 @@ package com.xenoage.zong.musiclayout.stamper;
 
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.MathUtils.interpolateLinear;
+import static com.xenoage.zong.core.music.format.SP.sp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.music.beam.Beam.VerticalSpan;
 import com.xenoage.zong.core.music.beam.BeamWaypoint;
 import com.xenoage.zong.core.music.chord.Chord;
+import com.xenoage.zong.core.music.format.SP;
 import com.xenoage.zong.core.music.util.DurationInfo;
 import com.xenoage.zong.musiclayout.layouter.cache.util.BeamedStemStampings;
 import com.xenoage.zong.musiclayout.stampings.BeamStamping;
@@ -62,8 +64,8 @@ public class BeamStamper {
 		//first level (8th line) is always continuous
 		float leftLp = firstStem.endLp + firstStem.direction.getSign() * lineHeight / 4; //4: looks ok
 		float rightLp = lastStem.endLp + lastStem.direction.getSign() * lineHeight / 4; //4: looks ok
-		BeamStamping beam8th = new BeamStamping(beam, leftStaff, rightStaff, leftX, rightX,
-			leftLp, rightLp);
+		BeamStamping beam8th = new BeamStamping(beam, leftStaff, rightStaff,
+			sp(leftX, leftLp), sp(rightX, rightLp));
 		ret[0] = beam8th;
 		
 		//the next levels can be broken, if there are different rhythms or beam subdivisions
@@ -91,9 +93,9 @@ public class BeamStamper {
 					//end the beam line and stem it
 					float stopX = stemX +
 						(wp == Waypoint.StopHookRight ? hookLength * leftStaff.is : 0);
-					BeamStamping line = new BeamStamping(beam, leftStaff, rightStaff, startX, stopX,
-						interpolateLinear(leftLeveledLp, rightLeveledLp, leftX, rightX, startX),
-						interpolateLinear(leftLeveledLp, rightLeveledLp, leftX, rightX, stopX));
+					SP leftSp = sp(startX, interpolateLinear(leftLeveledLp, rightLeveledLp, leftX, rightX, startX));
+					SP rightSp = sp(stopX, interpolateLinear(leftLeveledLp, rightLeveledLp, leftX, rightX, stopX));
+					BeamStamping line = new BeamStamping(beam, leftStaff, rightStaff, leftSp, rightSp);
 					ret[i+1] = line;
 				}
 				else if (wp == Waypoint.HookLeft || wp == Waypoint.HookRight) {
@@ -101,9 +103,9 @@ public class BeamStamper {
 					float length = hookLength * leftStaff.is;
 					float x1 = (wp == Waypoint.HookLeft ? stemX - length : stemX);
 					float x2 = (wp == Waypoint.HookLeft ? stemX : stemX + length);
-					BeamStamping line = new BeamStamping(beam, leftStaff, rightStaff, x1, x2,
-						interpolateLinear(leftLeveledLp, rightLeveledLp, leftX, rightX, x1),
-						interpolateLinear(leftLeveledLp, rightLeveledLp, leftX, rightX, x2));
+					SP leftSp = sp(x1, interpolateLinear(leftLeveledLp, rightLeveledLp, leftX, rightX, x1));
+					SP rightSp = sp(x2, interpolateLinear(leftLeveledLp, rightLeveledLp, leftX, rightX, x2));
+					BeamStamping line = new BeamStamping(beam, leftStaff, rightStaff, leftSp, rightSp);
 					ret[i+1] = line;
 				}
 			}

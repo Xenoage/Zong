@@ -39,7 +39,7 @@ public class StaffStampingTest {
 
 	@Test public void containsPoint() {
 		StaffStamping staff = new StaffStamping(null, 0, new Point2f(40, 80), 160, 5, 1);
-		Shape shape = staff.boundingShape;
+		Shape shape = staff.getBoundingShape();
 		//don't hit it
 		assertFalse(shape.contains(new Point2f(39, 81)));
 		assertFalse(shape.contains(new Point2f(42, 79)));

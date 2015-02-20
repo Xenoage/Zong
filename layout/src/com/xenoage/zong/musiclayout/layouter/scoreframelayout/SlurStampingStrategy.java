@@ -120,7 +120,7 @@ public class SlurStampingStrategy
 		SP c2 = (b2 != null && b2.getControl() != null ? b2.getControl() : //custom formatting
 			computeRightControlPoint(slur, p1, p2, side, staff)); //default formatting
 
-		return new SlurStamping(staff, slur, p1, p2, c1, c2);
+		return new SlurStamping(slur, p1, p2, c1, c2, staff);
 	}
 
 	/**
@@ -143,7 +143,7 @@ public class SlurStampingStrategy
 			computeLeftControlPoint(slur, p1, p2, side, staff)); //default formatting
 		SP c2 = computeRightControlPoint(slur, p1, p2, side, staff); //default formatting
 
-		return new SlurStamping(staff, slur, p1, p2, c1, c2);
+		return new SlurStamping(slur, p1, p2, c1, c2, staff);
 	}
 
 	/**
@@ -175,7 +175,7 @@ public class SlurStampingStrategy
 		SP c1 = computeLeftControlPoint(slur, p1, p2, side, staff); //default formatting
 		SP c2 = computeRightControlPoint(slur, p1, p2, side, staff); //default formatting
 
-		return new SlurStamping(staff, slur, p1, p2, c1, c2);
+		return new SlurStamping(slur, p1, p2, c1, c2, staff);
 	}
 
 	/**
@@ -198,7 +198,7 @@ public class SlurStampingStrategy
 		SP c2 = (b2 != null && b2.getControl() != null ? b2.getControl() : //custom formatting
 			computeRightControlPoint(slur, p1, p2, side, staff)); //default formatting
 
-		return new SlurStamping(staff, slur, p1, p2, c1, c2);
+		return new SlurStamping(slur, p1, p2, c1, c2, staff);
 	}
 
 	/**
