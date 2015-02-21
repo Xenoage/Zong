@@ -8,7 +8,6 @@ import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import com.xenoage.utils.NullUtils;
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.annotations.Optimized;
 import com.xenoage.utils.annotations.Optimized.Reason;
@@ -91,7 +90,7 @@ public final class StavesSpacing {
 		float staffLp0Mm = getStaffYOffsetMm(staff) + getStaffHeightMm(staff);
 		Staff s = staves.get(staff);
 		float is = notNull(s.getInterlineSpace(), defaultIs);
-		return staffLp0Mm + (s.getLinesCount() - 1) * is - lp * is / 2;
+		return staffLp0Mm - lp * is / 2;
 	}
 	
 	/**

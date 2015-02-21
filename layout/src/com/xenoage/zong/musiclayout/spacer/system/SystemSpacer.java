@@ -3,7 +3,6 @@ package com.xenoage.zong.musiclayout.spacer.system;
 import static com.xenoage.utils.Optional.absent;
 import static com.xenoage.utils.Optional.of;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.musiclayout.spacer.measure.ColumnSpacer.columnSpacer;
 import static com.xenoage.zong.musiclayout.spacer.system.StavesSpacer.stavesSpacer;
 
@@ -14,10 +13,8 @@ import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.format.Break;
 import com.xenoage.zong.core.format.ScoreFormat;
-import com.xenoage.zong.core.format.StaffLayout;
 import com.xenoage.zong.core.format.SystemLayout;
 import com.xenoage.zong.core.header.ScoreHeader;
-import com.xenoage.zong.core.music.Staff;
 import com.xenoage.zong.core.music.layout.SystemBreak;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.musiclayout.Context;

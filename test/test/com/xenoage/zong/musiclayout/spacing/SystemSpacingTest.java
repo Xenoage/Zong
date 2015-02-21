@@ -119,7 +119,7 @@ public class SystemSpacingTest {
 		List<ColumnSpacing> columns = alist();
 		for (int iMeasure : range(columnsBeats))
 			columns.add(new ColumnSpacing(iMeasure, alist(), columnsBeats.get(iMeasure), barlineBeats.get(iMeasure)));
-		return new SystemSpacing(columns, 0, 0, 0, null, null, 0);
+		return new SystemSpacing(columns, 0, 0, 0, null, 0);
 	}
 
 }

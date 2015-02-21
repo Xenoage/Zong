@@ -10,7 +10,6 @@ import java.util.List;
 import com.xenoage.utils.kernel.Range;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.beam.Beam;
-import com.xenoage.zong.core.music.beam.Beam.VerticalSpan;
 import com.xenoage.zong.core.music.beam.BeamWaypoint;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.format.SP;
