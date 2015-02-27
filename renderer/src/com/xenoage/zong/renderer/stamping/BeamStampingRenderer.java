@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.xenoage.utils.color.Color;
 import com.xenoage.utils.math.geom.Point2f;
+import com.xenoage.zong.musiclayout.notations.BeamNotation;
 import com.xenoage.zong.musiclayout.stampings.BeamStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import com.xenoage.zong.musiclayout.stampings.Stamping;
@@ -63,7 +64,7 @@ public class BeamStampingRenderer
 			rightYStart = staff2.computeYMm(beam.sp1.lp);
 		}
 
-		float beamHeightMm = BeamStamping.beamHeight * staff1.is;
+		float beamHeightMm = BeamNotation.lineHeightIs * staff1.is;
 
 		//TODO: avoid edges at the stem end points
 

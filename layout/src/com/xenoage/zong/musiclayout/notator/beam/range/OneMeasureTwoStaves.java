@@ -21,6 +21,7 @@ import com.xenoage.zong.musiclayout.notations.BeamNotation;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
 import com.xenoage.zong.musiclayout.notations.chord.ChordLps;
 import com.xenoage.zong.musiclayout.notations.chord.StemNotation;
+import com.xenoage.zong.musiclayout.notator.beam.BeamNotator;
 import com.xenoage.zong.musiclayout.notator.beam.lines.BeamLines;
 import com.xenoage.zong.musiclayout.notator.beam.lines.MultipleLines;
 import com.xenoage.zong.musiclayout.notator.beam.lines.OneLine;
@@ -46,9 +47,9 @@ public class OneMeasureTwoStaves
 	public static final OneMeasureTwoStaves oneMeasureTwoStaves = new OneMeasureTwoStaves();
 	
 
-	@Override public void compute(Beam beam, ScoreSpacing scoreSpacing) {
+	@Override public BeamNotation compute(Beam beam, ScoreSpacing scoreSpacing) {
 		ColumnSpacing column = scoreSpacing.getColumn(getMP(beam.getChord(0)).measure);
-		int beamLinesCount = beam.getMaxBeamLinesCount();
+		int beamLinesCount = BeamNotator.getMaxLinesCount(beam);
 		
 		//collect chord notations
 		List<ChordNotation> chords = alist(beam.size());
@@ -58,7 +59,7 @@ public class OneMeasureTwoStaves
 			chords.add(notation);
 		}
 		
-		compute(chords, beamLinesCount, column);
+		return compute(beam, chords, beamLinesCount, column);
 	}
 
 	/**
@@ -69,7 +70,8 @@ public class OneMeasureTwoStaves
 	 * The lengths of the middle stems have to be
 	 * recomputed in a later step, since their lengths can not be computed yet.                    
 	 */
-	public void compute(List<ChordNotation> notations, int beamLinesCount, ColumnSpacing column) {
+	public BeamNotation compute(Beam beam,
+		List<ChordNotation> notations, int beamLinesCount, ColumnSpacing column) {
 		//get appropriate beam design
 		BeamLines strategy;
 		StemDirection firstStemDirection = getFirst(notations).stemDirection;
@@ -89,8 +91,6 @@ public class OneMeasureTwoStaves
 		}
 
 		//compute notations of the first and last stem
-		BeamNotation beamNot = new BeamNotation(BeamLines.beamLineHeightIs,
-			strategy.getDistanceBetweenBeamLinesIs(), beamLinesCount);
 		Point2f leftStemPosMm = null, rightStemPosMm = null;
 		for (int i : range(2)) {
 			ChordNotation chord = (i == 0 ? getFirst(notations) : getLast(notations));
@@ -129,7 +129,6 @@ public class OneMeasureTwoStaves
 				rightStemPosMm = stemPosMm;
 
 			chord.stem = new StemNotation(startLP, endLP);
-			chord.beam = beamNot;
 		}
 		
 		for (int i : range(1, notations.size() - 2)) {
@@ -149,8 +148,10 @@ public class OneMeasureTwoStaves
 			endLp = column.parentSystem.getYLp(chordMp.staff, endMm);
 			
 			chord.stem = new StemNotation(chord.stem.startLp, endLp);
-			chord.beam = beamNot;
 		}
+		
+		//compute beam notation
+		return BeamNotator.computeBeamNotation(beam, notations, beamLinesCount, strategy);
 	}
 
 }

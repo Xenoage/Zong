@@ -1,10 +1,12 @@
 package com.xenoage.zong.musiclayout.layouter.cache;
 
+import static com.xenoage.utils.collections.CollectionUtils.map;
+
 import java.util.HashMap;
 import java.util.Iterator;
 
-import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.musiclayout.layouter.cache.util.BeamedStemStampings;
+import com.xenoage.zong.musiclayout.notations.BeamNotation;
 import com.xenoage.zong.musiclayout.stampings.StemStamping;
 
 /**
@@ -16,7 +18,7 @@ public class OpenBeamsCache
 	implements Iterable<BeamedStemStampings> {
 
 	//beams, which are not stamped yet
-	private HashMap<Beam, BeamedStemStampings> openBeams = new HashMap<Beam, BeamedStemStampings>();
+	private HashMap<BeamNotation, BeamedStemStampings> openBeams = map();
 
 
 	/**
@@ -27,22 +29,22 @@ public class OpenBeamsCache
 	}
 
 	/**
-	 * Gets the {@link BeamedStemStampings} instance for the given {@link Beam}.
+	 * Gets the {@link BeamedStemStampings} instance for the given {@link BeamNotation}.
 	 * If not existing already, it is created.
 	 */
-	public BeamedStemStampings get(Beam beam) {
+	public BeamedStemStampings get(BeamNotation beam) {
 		BeamedStemStampings ret = openBeams.get(beam);
 		if (ret == null) {
-			ret = new BeamedStemStampings(beam, new StemStamping[beam.getWaypoints().size()]);
+			ret = new BeamedStemStampings(beam, new StemStamping[beam.element.size()]);
 			openBeams.put(beam, ret);
 		}
 		return ret;
 	}
 
 	/**
-	 * Sets the {@link BeamedStemStampings} instance for the given {@link Beam}.
+	 * Sets the {@link BeamedStemStampings} instance for the given {@link BeamNotation}.
 	 */
-	public void set(Beam beam, BeamedStemStampings bss) {
+	public void set(BeamNotation beam, BeamedStemStampings bss) {
 		openBeams.put(beam, bss);
 	}
 

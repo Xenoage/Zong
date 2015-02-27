@@ -25,8 +25,6 @@ import com.xenoage.zong.core.music.chord.StemDirection;
 @AllArgsConstructor
 public abstract class BeamLines {
 
-	public static final float beamLineHeightIs = 0.5f;
-
 	StemDirection stemDirection;
 	int staffLinesCount;
 

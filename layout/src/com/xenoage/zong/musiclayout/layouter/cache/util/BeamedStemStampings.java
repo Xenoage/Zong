@@ -1,10 +1,8 @@
 package com.xenoage.zong.musiclayout.layouter.cache.util;
 
-import static com.xenoage.utils.CheckUtils.checkArgsNotNull;
-import static com.xenoage.utils.CheckUtils.checkNotNullIn;
 import lombok.AllArgsConstructor;
 
-import com.xenoage.zong.core.music.beam.Beam;
+import com.xenoage.zong.musiclayout.notations.BeamNotation;
 import com.xenoage.zong.musiclayout.stampings.StemStamping;
 
 /**
@@ -16,7 +14,7 @@ import com.xenoage.zong.musiclayout.stampings.StemStamping;
 @AllArgsConstructor
 public class BeamedStemStampings {
 
-	public Beam beam;
+	public BeamNotation beam;
 	public StemStamping[] stems;
 	
 
@@ -26,11 +24,6 @@ public class BeamedStemStampings {
 	
 	public StemStamping lastStem() {
 		return stems[stems.length - 1];
-	}
-	
-	public void checkComplete() {
-		checkArgsNotNull(beam, stems);
-		checkNotNullIn(stems);
 	}
 
 }

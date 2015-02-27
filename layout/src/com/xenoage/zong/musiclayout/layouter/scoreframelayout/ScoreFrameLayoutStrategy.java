@@ -35,7 +35,6 @@ import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.WaypointPosition;
 import com.xenoage.zong.core.music.barline.Barline;
 import com.xenoage.zong.core.music.barline.BarlineStyle;
-import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.direction.Direction;
 import com.xenoage.zong.core.music.direction.Dynamics;
@@ -76,6 +75,7 @@ import com.xenoage.zong.musiclayout.layouter.cache.util.SlurCache;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.ChordStampings;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.LastLyrics;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.StaffStampings;
+import com.xenoage.zong.musiclayout.notations.BeamNotation;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
 import com.xenoage.zong.musiclayout.notations.ClefNotation;
 import com.xenoage.zong.musiclayout.notations.Notation;
@@ -506,10 +506,10 @@ public class ScoreFrameLayoutStrategy
 			//the corresponding list of beamed stems, so that the
 			//beam can be created later. the middle stems were not stamped
 			//yet, also remember them.
-			Beam beam = chordElement.getBeam();
+			BeamNotation beam = chord.beam;
 			if (beam != null) {
 				BeamedStemStampings bss = openBeamsCache.get(beam);
-				int chordIndex = beam.getWaypointIndex(chordElement);
+				int chordIndex = beam.element.getWaypointIndex(chordElement);
 				bss.stems[chordIndex] = chordSt.stem;
 				openBeamsCache.set(beam, bss);
 			}

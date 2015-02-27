@@ -21,6 +21,7 @@ import com.xenoage.zong.musiclayout.layouter.beamednotation.design.ChordBeamSpac
 import com.xenoage.zong.musiclayout.notations.BeamNotation;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
 import com.xenoage.zong.musiclayout.notations.chord.StemNotation;
+import com.xenoage.zong.musiclayout.notator.beam.BeamNotator;
 import com.xenoage.zong.musiclayout.notator.beam.lines.BeamLines;
 import com.xenoage.zong.musiclayout.notator.beam.lines.MultipleLines;
 import com.xenoage.zong.musiclayout.notator.beam.lines.OneLine;
@@ -47,7 +48,7 @@ public class OneMeasureOneStaff
 	private static final float wideSpacing = 8;
 
 
-	@Override public void compute(Beam beam, ScoreSpacing scoreSpacing) {
+	@Override public BeamNotation compute(Beam beam, ScoreSpacing scoreSpacing) {
 
 		//collect needed information
 		ColumnSpacing column = scoreSpacing.getColumn(getMP(beam.getChord(0)).measure);
@@ -56,7 +57,7 @@ public class OneMeasureOneStaff
 		Chord firstChord = beam.getStart().getChord();
 		MP firstChordMP = getMP(firstChord);
 		int staffLinesCount = firstChord.getScore().getStaff(firstChordMP).getLinesCount();
-		int beamLinesCount = beam.getMaxBeamLinesCount();
+		int beamLinesCount = BeamNotator.getMaxLinesCount(beam);
 		int i = 0;
 		StemDirection dir = column.getNotation(beam.getChord(0)).stemDirection;
 		for (BeamWaypoint waypoint : beam.getWaypoints()) {
@@ -68,13 +69,14 @@ public class OneMeasureOneStaff
 			i++;
 		}
 
-		//compute the stem alignments
-		compute(chords, stemX, staffLinesCount, beamLinesCount, dir);
+		//compute the notation
+		return compute(beam, chords, stemX, staffLinesCount, beamLinesCount, dir);
 	}
 
 	/**
 	 * Computes the vertical positions of the stems of the given
 	 * chord layouts grouped by a beam within a single staff and single measure.
+	 * @param beam             the beam element
 	 * @param chords           the notations of all chords of the beam
 	 * @param stemX            the horizontal positions of the stems in interline spaces
 	 * @param staffLinesCount  the number of lines in this staff
@@ -82,7 +84,7 @@ public class OneMeasureOneStaff
 	 * @param stemDirection    the direction of the stem
 	 * @return  the alignments of all stems of the given chords                        
 	 */
-	void compute(List<ChordNotation> chords, float[] stemX,
+	BeamNotation compute(Beam beam, List<ChordNotation> chords, float[] stemX,
 		int staffLinesCount, int beamLinesCount, StemDirection stemDirection) {
 		
 		//get appropriate beam design
@@ -106,6 +108,9 @@ public class OneMeasureOneStaff
 
 		//compute stem alignments
 		computeStemLengths(beamDesign, chords, stemX, slantIs, beamLinesCount, stemDirection);
+		
+		//compute beam notation
+		return BeamNotator.computeBeamNotation(beam, chords, beamLinesCount, beamDesign);
 	}
 
 	/**
@@ -283,10 +288,6 @@ public class OneMeasureOneStaff
 
 		//try to place the beam at LP 4 first. correct step for step, if not ok.
 		float beamStartLP = 4;
-
-		BeamNotation beamNot = new BeamNotation(BeamLines.beamLineHeightIs,
-			beamDesign.getDistanceBetweenBeamLinesIs(), beamLinesCount);
-		
 		
 		while (true) {
 
@@ -316,7 +317,6 @@ public class OneMeasureOneStaff
 				}
 
 				chords.get(i).stem = new StemNotation(startline, endline);
-				chords.get(i).beam = beamNot;
 				
 				correctStemLength = true;
 			}
