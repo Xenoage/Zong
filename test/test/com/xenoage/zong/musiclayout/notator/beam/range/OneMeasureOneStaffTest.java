@@ -17,14 +17,14 @@ import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
 import com.xenoage.zong.musiclayout.notations.chord.NoteDisplacement;
 import com.xenoage.zong.musiclayout.notations.chord.NotesNotation;
-import com.xenoage.zong.musiclayout.notator.beam.lines.BeamLines;
-import com.xenoage.zong.musiclayout.notator.beam.lines.OneLine;
+import com.xenoage.zong.musiclayout.notator.beam.lines.BeamLinesRules;
+import com.xenoage.zong.musiclayout.notator.beam.lines.Beam8thRules;
 
 /**
  * Tests for {@link OneMeasureOneStaff}.
  * 
  * This test will only work correct if the values of Ted Ross
- * are selected in the {@link OneLine} strategy.
+ * are selected in the {@link Beam8thRules} strategy.
  * 
  * @author Uli Teschemacher
  * @author Andreas Wenger

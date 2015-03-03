@@ -22,11 +22,11 @@ import com.xenoage.zong.musiclayout.notations.ChordNotation;
 import com.xenoage.zong.musiclayout.notations.chord.ChordLps;
 import com.xenoage.zong.musiclayout.notations.chord.StemNotation;
 import com.xenoage.zong.musiclayout.notator.beam.BeamNotator;
-import com.xenoage.zong.musiclayout.notator.beam.lines.BeamLines;
+import com.xenoage.zong.musiclayout.notator.beam.lines.BeamLinesRules;
 import com.xenoage.zong.musiclayout.notator.beam.lines.MultipleLines;
-import com.xenoage.zong.musiclayout.notator.beam.lines.OneLine;
+import com.xenoage.zong.musiclayout.notator.beam.lines.Beam8thRules;
 import com.xenoage.zong.musiclayout.notator.beam.lines.ThreeLines;
-import com.xenoage.zong.musiclayout.notator.beam.lines.TwoLines;
+import com.xenoage.zong.musiclayout.notator.beam.lines.Beam16thRules;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.ScoreSpacing;
@@ -73,15 +73,15 @@ public class OneMeasureTwoStaves
 	public BeamNotation compute(Beam beam,
 		List<ChordNotation> notations, int beamLinesCount, ColumnSpacing column) {
 		//get appropriate beam design
-		BeamLines strategy;
+		BeamLinesRules strategy;
 		StemDirection firstStemDirection = getFirst(notations).stemDirection;
 		switch (beamLinesCount) {
 		//TIDY: we need only a small subset of the BeamDesign class. extract it?
 			case 1:
-				strategy = new OneLine(firstStemDirection, 0);
+				strategy = new Beam8thRules(firstStemDirection, 0);
 				break;
 			case 2:
-				strategy = new TwoLines(firstStemDirection, 0);
+				strategy = new Beam16thRules(firstStemDirection, 0);
 				break;
 			case 3:
 				strategy = new ThreeLines(firstStemDirection, 0);

@@ -1,22 +1,35 @@
 package com.xenoage.zong.musiclayout.notator.beam.lines;
 
 import static com.xenoage.utils.math.MathUtils.mod;
+import static com.xenoage.zong.musiclayout.notations.BeamNotation.defaultGapIs;
+import static com.xenoage.zong.musiclayout.notations.BeamNotation.lineHeightIs;
+import lombok.AllArgsConstructor;
 
 import com.xenoage.zong.core.music.chord.StemDirection;
+import com.xenoage.zong.musiclayout.notations.BeamNotation;
 
 /**
- * Implementation of a {@link BeamLines} strategy for a two-line beam (16th).
+ * Implementation of a {@link BeamLinesRules} strategy for a two-line beam (16th).
  * 
  * @author Uli Teschemacher
  * @author Andreas Wenger
  */
-public class TwoLines
-	extends BeamLines {
+@AllArgsConstructor
+public class Beam16thRules
+	extends BeamLinesRules {
 
-	private float totalBeamHeightIs = 1.25f;
+	private static float totalBeamHeightIs = 2 * lineHeightIs + defaultGapIs;
 
+	private StemDirection stemDirection;
+	private int staffLinesCount;
+	
+	
+	@Override public int getBeamLinesCount() {
+		return 1;
+	}
+	
 
-	public TwoLines(StemDirection stemDirection, int staffLinesCount) {
+	public Beam16thRules(StemDirection stemDirection, int staffLinesCount) {
 		super(stemDirection, staffLinesCount);
 	}
 
@@ -72,25 +85,25 @@ public class TwoLines
 		return false;
 	}
 
-	@Override public float getCloseSpacingSlantIs(int startNoteLp, int endNoteLp) {
+	@Override public float getSlantCloseSpacingIs(int startNoteLp, int endNoteLp) {
 		int dir = stemDirection.getSign();
 		float startStemLp = startNoteLp + dir * getMinimumStemLengthIs(); //TODO: *2 missing for IS->LP?
 		float endStemLp = endNoteLp + dir * getMinimumStemLengthIs(); //TODO: *2 missing for IS->LP?
 		if (isBeamOutsideStaff(stemDirection, startStemLp, endStemLp, staffLinesCount, totalBeamHeightIs)) {
 			//use design of single beam
-			OneLine sbd = new OneLine(stemDirection, staffLinesCount);
-			return sbd.getNormalSpacingSlantIs(startNoteLp, endNoteLp);
+			Beam8thRules sbd = new Beam8thRules(stemDirection, staffLinesCount);
+			return sbd.getSlantNormalSpacingIs(startNoteLp, endNoteLp);
 		}
 		else {
 			return 0.5f;
 		}
 	}
 
-	@Override public float getNormalSpacingSlantIs(int startNoteLP, int endNoteLP) {
+	@Override public float getSlantNormalSpacingIs(int startNoteLP, int endNoteLP) {
 		return getNormalOrWideSpacing(startNoteLP, endNoteLP, false);
 	}
 
-	@Override public float getWideSpacingSlantIs(int startNoteLP, int endNoteLP) {
+	@Override public float getSlantWideSpacingIs(int startNoteLP, int endNoteLP) {
 		return getNormalOrWideSpacing(startNoteLP, endNoteLP, true);
 	}
 
@@ -102,8 +115,8 @@ public class TwoLines
 		if ((startStemLp < -1 && endStemLp < -1) ||
 			(startStemLp > staffMaxLp + 1 && endStemLp > staffMaxLp + 1)) {
 			//use design of single beam
-			OneLine sbd = new OneLine(stemDirection, staffLinesCount);
-			return sbd.getNormalSpacingSlantIs(startNoteLp, endNoteLp);
+			Beam8thRules sbd = new Beam8thRules(stemDirection, staffLinesCount);
+			return sbd.getSlantNormalSpacingIs(startNoteLp, endNoteLp);
 		}
 		else {
 			return getSlants(Math.abs(startNoteLp - endNoteLp))[wide ? 1 : 0];

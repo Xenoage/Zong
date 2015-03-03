@@ -15,7 +15,7 @@ import com.xenoage.zong.core.music.beam.Beam;
 public class BeamNotation {
 	
 	public static final float lineHeightIs = 0.5f;
-	public static final float defaultGapIs = 0.3f; //default gap between lines in interline spaces
+	public static final float defaultGapIs = 0.25f; //default gap between lines in interline spaces
 	public static final float hookLengthIs = 1.25f; //Chlapik TODO
 
 

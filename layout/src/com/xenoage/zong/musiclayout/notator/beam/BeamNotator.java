@@ -7,6 +7,8 @@ import static com.xenoage.utils.kernel.Range.rangeReverse;
 import static com.xenoage.zong.core.music.beam.Beam.HorizontalSpan.SingleMeasure;
 import static com.xenoage.zong.core.music.beam.Beam.VerticalSpan.SingleStaff;
 import static com.xenoage.zong.core.music.beam.Beam.VerticalSpan.TwoAdjacentStaves;
+import static com.xenoage.zong.core.music.chord.StemDirection.Down;
+import static com.xenoage.zong.core.music.chord.StemDirection.Up;
 import static com.xenoage.zong.core.music.util.DurationInfo.getFlagsCount;
 import static com.xenoage.zong.musiclayout.notator.beam.range.OneMeasureOneStaff.oneMeasureOneStaff;
 import static com.xenoage.zong.musiclayout.notator.beam.range.OneMeasureTwoStaves.oneMeasureTwoStaves;
@@ -17,12 +19,13 @@ import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.music.beam.BeamWaypoint;
 import com.xenoage.zong.core.music.chord.Chord;
+import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.core.music.util.DurationInfo;
 import com.xenoage.zong.musiclayout.notations.BeamNotation;
 import com.xenoage.zong.musiclayout.notations.BeamNotation.Waypoint;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
 import com.xenoage.zong.musiclayout.notations.chord.StemNotation;
-import com.xenoage.zong.musiclayout.notator.beam.lines.BeamLines;
+import com.xenoage.zong.musiclayout.notator.beam.lines.BeamLinesRules;
 import com.xenoage.zong.musiclayout.spacing.ScoreSpacing;
 
 /**
@@ -59,14 +62,14 @@ public class BeamNotator {
 	 * The {@link BeamNotation} is also set to all given chords of the beam.
 	 */
 	public static BeamNotation computeBeamNotation(Beam beam, List<ChordNotation> chords,
-		int beamLinesCount, BeamLines beamDesign) {
+		int beamLinesCount, BeamLinesRules beamDesign) {
 		
 		//TODO remove this - currently needed for some unit tests
 		if (beam == null)
 			return null;
 		
 		List<List<Waypoint>> waypoints = BeamNotator.computeWaypoints(beam);
-		float gapIs = beamDesign.getDistanceBetweenBeamLinesIs();
+		float gapIs = beamDesign.getGapIs();
 		BeamNotation beamNot = new BeamNotation(beam, beamLinesCount, waypoints, gapIs);
 		for (ChordNotation chord : chords)
 			chord.beam = beamNot;
@@ -200,6 +203,44 @@ public class BeamNotator {
 			}
 		}
 		return ret;
+	}
+
+	
+	/**
+	 * Returns true, when the lines of the given beam are completely outside the staff
+	 * (not even touching a staff line).
+	 * @param stemDirection      the direction of the stems
+	 * @param firstStemEndLp     the LP of the endpoint of the first stem
+	 * @param lastStemEndLp      the LP of the endpoint of the last stem  
+	 * @param staffLinesCount    the number of staff lines 
+	 * @param totalBeamHeightIs  the total height of the beam lines (including gaps) in IS
+	 */
+	public boolean isBeamOutsideStaff(StemDirection stemDirection, float firstStemEndLp,
+		float lastStemEndLp, int staffLinesCount, float totalBeamHeightIs) {
+		float maxStaffLp = (staffLinesCount - 1) * 2;
+		if (stemDirection == Up) {
+			//beam lines above the staff?
+			if (firstStemEndLp > maxStaffLp + totalBeamHeightIs * 2 &&
+				lastStemEndLp > maxStaffLp + totalBeamHeightIs * 2) {
+				return true;
+			}
+			//beam lines below the staff?
+			if (firstStemEndLp < 0 && lastStemEndLp < 0) {
+				return true;
+			}
+		}
+		else if (stemDirection == Down) {
+			//beam lines above the staff?
+			if (firstStemEndLp > maxStaffLp && lastStemEndLp > maxStaffLp) {
+				return true;
+			}
+			//beam lines below the staff?
+			if (firstStemEndLp < -1 * totalBeamHeightIs * 2 &&
+				lastStemEndLp < -1 * totalBeamHeightIs * 2) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

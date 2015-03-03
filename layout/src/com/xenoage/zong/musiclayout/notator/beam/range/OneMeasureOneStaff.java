@@ -22,11 +22,11 @@ import com.xenoage.zong.musiclayout.notations.BeamNotation;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
 import com.xenoage.zong.musiclayout.notations.chord.StemNotation;
 import com.xenoage.zong.musiclayout.notator.beam.BeamNotator;
-import com.xenoage.zong.musiclayout.notator.beam.lines.BeamLines;
+import com.xenoage.zong.musiclayout.notator.beam.lines.BeamLinesRules;
 import com.xenoage.zong.musiclayout.notator.beam.lines.MultipleLines;
-import com.xenoage.zong.musiclayout.notator.beam.lines.OneLine;
+import com.xenoage.zong.musiclayout.notator.beam.lines.Beam8thRules;
 import com.xenoage.zong.musiclayout.notator.beam.lines.ThreeLines;
-import com.xenoage.zong.musiclayout.notator.beam.lines.TwoLines;
+import com.xenoage.zong.musiclayout.notator.beam.lines.Beam16thRules;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.ScoreSpacing;
@@ -88,13 +88,13 @@ public class OneMeasureOneStaff
 		int staffLinesCount, int beamLinesCount, StemDirection stemDirection) {
 		
 		//get appropriate beam design
-		BeamLines beamDesign;
+		BeamLinesRules beamDesign;
 		switch (beamLinesCount) {
 			case 1:
-				beamDesign = new OneLine(stemDirection, staffLinesCount);
+				beamDesign = new Beam8thRules(stemDirection, staffLinesCount);
 				break;
 			case 2:
-				beamDesign = new TwoLines(stemDirection, staffLinesCount);
+				beamDesign = new Beam16thRules(stemDirection, staffLinesCount);
 				break;
 			case 3:
 				beamDesign = new ThreeLines(stemDirection, staffLinesCount);
@@ -123,7 +123,7 @@ public class OneMeasureOneStaff
 	 * @param stemDirection  the direction of the stems
 	 * @param staffLinesCount  the number of lines in this staff
 	 */
-	private float computeSlant(BeamLines beamDesign, List<ChordNotation> chords,
+	private float computeSlant(BeamLinesRules beamDesign, List<ChordNotation> chords,
 		float[] stemX, StemDirection stemDirection, int staffLinesCount) {
 		
 		//collect relevant note line positions (positions of the outermost notes)
@@ -215,7 +215,7 @@ public class OneMeasureOneStaff
 	 * @param lengthX          the horizontal distance between the first and the last note in IS
 	 * @param staffLinesCount  the number of lines in this staff
 	 */
-	private float computeNormalBeamSlant(BeamLines beamDesign, int firstNoteLp, int lastNoteLp,
+	private float computeNormalBeamSlant(BeamLinesRules beamDesign, int firstNoteLp, int lastNoteLp,
 		float lengthX, int staffLinesCount) {
 		ChordBeamSpacing spacing;
 		if (lengthX > wideSpacing)
@@ -237,7 +237,7 @@ public class OneMeasureOneStaff
 	 * @param spacing          the horizontal spacing of the beam chords
 	 * @param staffLinesCount  the number of lines in this staff
 	 */
-	private float computeSlant(BeamLines beamDesign, int firstNoteLp, int lastNoteLp,
+	private float computeSlant(BeamLinesRules beamDesign, int firstNoteLp, int lastNoteLp,
 		ChordBeamSpacing spacing, int staffLinesCount) {
 		int distanceLp = lastNoteLp - firstNoteLp;
 		float slantIs = 0;
@@ -256,11 +256,11 @@ public class OneMeasureOneStaff
 			|| firstNoteLp <= -2 || lastNoteLp <= -2); //below the first leger line
 
 		if (useSimpleSlant || spacing == Close)
-			slantIs = beamDesign.getCloseSpacingSlantIs(firstNoteLp, lastNoteLp) / 2;
+			slantIs = beamDesign.getSlantCloseSpacingIs(firstNoteLp, lastNoteLp) / 2;
 		else if (spacing == Wide)
-			slantIs = beamDesign.getWideSpacingSlantIs(firstNoteLp, lastNoteLp) / 2;
+			slantIs = beamDesign.getSlantWideSpacingIs(firstNoteLp, lastNoteLp) / 2;
 		else
-			slantIs = beamDesign.getNormalSpacingSlantIs(firstNoteLp, lastNoteLp) / 2;
+			slantIs = beamDesign.getSlantNormalSpacingIs(firstNoteLp, lastNoteLp) / 2;
 
 		if (distanceLp < 0)
 			slantIs = -1 * slantIs;
@@ -277,7 +277,7 @@ public class OneMeasureOneStaff
 	 * @param beamLinesCount   the number of beam lines         
 	 * @param stemDirection    the direction of the stems
 	 */
-	void computeStemLengths(BeamLines beamDesign, List<ChordNotation> chords,
+	void computeStemLengths(BeamLinesRules beamDesign, List<ChordNotation> chords,
 		float[] stemX, float slantIS, int beamLinesCount, StemDirection stemDirection) {
 
 		float beamStartLPCorrection = stemDirection.getSign() * 0.5f;

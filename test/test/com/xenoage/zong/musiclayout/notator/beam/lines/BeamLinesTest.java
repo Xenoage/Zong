@@ -2,14 +2,14 @@ package com.xenoage.zong.musiclayout.notator.beam.lines;
 
 import static com.xenoage.zong.core.music.chord.StemDirection.Down;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
-import static com.xenoage.zong.musiclayout.notator.beam.lines.BeamLines.isBeamOutsideStaff;
+import static com.xenoage.zong.musiclayout.notator.beam.lines.BeamLinesRules.isBeamOutsideStaff;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
 /**
- * Tests for {@link BeamLines}.
+ * Tests for {@link BeamLinesRules}.
  * 
  * @author Uli Teschemacher
  * @author Andreas Wenger

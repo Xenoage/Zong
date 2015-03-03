@@ -5,13 +5,13 @@ import static com.xenoage.utils.math.MathUtils.mod;
 import com.xenoage.zong.core.music.chord.StemDirection;
 
 /**
- * Implementation of a {@link BeamLines} strategy for a three-line beam (32th).
+ * Implementation of a {@link BeamLinesRules} strategy for a three-line beam (32th).
  * 
  * @author Uli Teschemacher
  * @author Andreas Wenger
  */
 public class ThreeLines
-	extends BeamLines {
+	extends BeamLinesRules {
 
 	private float totalBeamHeightIs = 2;
 
@@ -51,7 +51,7 @@ public class ThreeLines
 		return false;
 	}
 
-	@Override public float getCloseSpacingSlantIs(int startNoteLp, int endNoteLp) {
+	@Override public float getSlantCloseSpacingIs(int startNoteLp, int endNoteLp) {
 		if (Math.abs(startNoteLp - endNoteLp) == 1) {
 			return 0.5f;
 		}
@@ -60,11 +60,11 @@ public class ThreeLines
 		}
 	}
 
-	@Override public float getNormalSpacingSlantIs(int startNoteLp, int endNoteLp) {
+	@Override public float getSlantNormalSpacingIs(int startNoteLp, int endNoteLp) {
 		return getNormalOrWideSpacing(startNoteLp, endNoteLp, false);
 	}
 
-	@Override public float getWideSpacingSlantIs(int startNoteLp, int endNoteLp) {
+	@Override public float getSlantWideSpacingIs(int startNoteLp, int endNoteLp) {
 		return getNormalOrWideSpacing(startNoteLp, endNoteLp, true);
 	}
 
@@ -76,8 +76,8 @@ public class ThreeLines
 		if ((startStemLp < -1 && endStemLp < -1) ||
 			(startStemLp > staffMaxLP + 1 && endStemLp > staffMaxLP + 1)) {
 			//use design of single beam
-			OneLine sbd = new OneLine(stemDirection, staffLinesCount);
-			return sbd.getNormalSpacingSlantIs(startNoteLp, endNoteLp);
+			Beam8thRules sbd = new Beam8thRules(stemDirection, staffLinesCount);
+			return sbd.getSlantNormalSpacingIs(startNoteLp, endNoteLp);
 		}
 		else {
 			return getSlants(Math.abs(startNoteLp - endNoteLp))[wide ? 1 : 0];
