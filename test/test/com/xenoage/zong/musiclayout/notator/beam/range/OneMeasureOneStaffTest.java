@@ -3,6 +3,7 @@ package com.xenoage.zong.musiclayout.notator.beam.range;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Delta.df;
+import static com.xenoage.zong.core.music.beam.Beam.beamFromChords;
 import static com.xenoage.zong.core.music.chord.StemDirection.Down;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
 import static com.xenoage.zong.musiclayout.notations.chord.NoteDisplacementTest.note;
@@ -12,9 +13,11 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
 import com.xenoage.zong.musiclayout.notations.chord.NoteDisplacement;
 import com.xenoage.zong.musiclayout.notations.chord.NotesNotation;
+import com.xenoage.zong.musiclayout.notator.beam.lines.BeamLines;
 import com.xenoage.zong.musiclayout.notator.beam.lines.OneLine;
 
 /**
@@ -44,7 +47,7 @@ public class OneMeasureOneStaffTest {
 		int[][] notes = { { 6 }, { 7 } };
 		List<ChordNotation> chords = createChordNotations(notes);
 		//compute
-		testee.compute(chords, twoStemsX, staff5Lines, beam8th, Down);
+		testee.compute(null, chords, twoStemsX, staff5Lines, beam8th, Down);
 		//check
 		assertEquals(-0.5, chords.get(0).stem.endLp, df);
 		assertEquals(0, chords.get(1).stem.endLp, df);
@@ -54,7 +57,7 @@ public class OneMeasureOneStaffTest {
 		int[][] notes = { { -1, 1 }, { -1, 1 } };
 		List<ChordNotation> chords = createChordNotations(notes);
 		//compute
-		testee.compute(chords, twoStemsX, staff5Lines, beam8th, Up);
+		testee.compute(null, chords, twoStemsX, staff5Lines, beam8th, Up);
 		//check
 		assertEquals(8, chords.get(0).stem.endLp, df);
 		assertEquals(8, chords.get(1).stem.endLp, df);
@@ -64,7 +67,7 @@ public class OneMeasureOneStaffTest {
 		int[][] notes = { { 6 }, { 2 }, { 3 }, { 4 }, { 5 }, { 7 } };
 		List<ChordNotation> chords = createChordNotations(notes);
 		//compute
-		testee.compute(chords, sixStemsX, staff5Lines, beam8th, Down);
+		testee.compute(null, chords, sixStemsX, staff5Lines, beam8th, Down);
 		//check
 		assertEquals(1f, chords.get(5).stem.endLp - chords.get(0).stem.endLp, df);
 		assertEquals(-4.5, chords.get(0).stem.endLp, df);
@@ -78,7 +81,7 @@ public class OneMeasureOneStaffTest {
 		int[][] notes = { { 7 }, { 8 }, { 5 }, { 5 } };
 		List<ChordNotation> chords = createChordNotations(notes);
 		//compute
-		testee.compute(chords, fourStemsX, staff5Lines, beam8th, Down);
+		testee.compute(null, chords, fourStemsX, staff5Lines, beam8th, Down);
 		//check
 		assertEquals(-1, chords.get(0).stem.endLp, df);
 		assertEquals(-2, chords.get(3).stem.endLp, df);
@@ -88,7 +91,7 @@ public class OneMeasureOneStaffTest {
 		int[][] notes = { { 1 }, { -1 } };
 		List<ChordNotation> chords = createChordNotations(notes);
 		//compute
-		testee.compute(chords, twoStemsX, staff5Lines, beam8th, Up);
+		testee.compute(null, chords, twoStemsX, staff5Lines, beam8th, Up);
 		//check
 		assertEquals(7, chords.get(0).stem.endLp, df);
 		assertEquals(6, chords.get(1).stem.endLp, df);
@@ -98,7 +101,7 @@ public class OneMeasureOneStaffTest {
 		int[][] notes = { { 0 }, { -1 }, { 2 }, { 5 } };
 		List<ChordNotation> chords = createChordNotations(notes);
 		//compute
-		testee.compute(chords, fourStemsX, staff5Lines, beam8th, Up);
+		testee.compute(null, chords, fourStemsX, staff5Lines, beam8th, Up);
 		//check
 		assertEquals(8.5, chords.get(0).stem.endLp, df);
 		assertEquals(11, chords.get(3).stem.endLp, df);
@@ -108,7 +111,7 @@ public class OneMeasureOneStaffTest {
 		int[][] notes = { { 11 }, { 15 } };
 		List<ChordNotation> chords = createChordNotations(notes);
 		//compute
-		testee.compute(chords, twoStemsX, staff5Lines, beam8th, Down);
+		testee.compute(null, chords, twoStemsX, staff5Lines, beam8th, Down);
 		//check
 		assertEquals(3, chords.get(0).stem.endLp, df);
 		assertEquals(4, chords.get(1).stem.endLp, df);
@@ -118,7 +121,7 @@ public class OneMeasureOneStaffTest {
 		int[][] notes = { { 11 }, { 12 } };
 		List<ChordNotation> chords = createChordNotations(notes);
 		//compute
-		testee.compute(chords, twoStemsX, staff5Lines, beam8th, Down);
+		testee.compute(null, chords, twoStemsX, staff5Lines, beam8th, Down);
 		//check
 		assertEquals(3.5, chords.get(0).stem.endLp, df);
 		assertEquals(4, chords.get(1).stem.endLp, df);
@@ -128,7 +131,7 @@ public class OneMeasureOneStaffTest {
 		int[][] notes = { { 9 }, { 5 } };
 		List<ChordNotation> chords = createChordNotations(notes);
 		//compute
-		testee.compute(chords, twoStemsCloserX, staff5Lines, beam8th, Down);
+		testee.compute(null, chords, twoStemsCloserX, staff5Lines, beam8th, Down);
 		//check
 		assertEquals(0, chords.get(0).stem.endLp, df);
 		assertEquals(-1, chords.get(1).stem.endLp, df);
@@ -138,7 +141,7 @@ public class OneMeasureOneStaffTest {
 		int[][] notes = { { 9 }, { 13 } };
 		List<ChordNotation> chords = createChordNotations(notes);
 		//compute
-		testee.compute(chords, twoStemsX, staff5Lines, beam8th, Down);
+		testee.compute(null, chords, twoStemsX, staff5Lines, beam8th, Down);
 		//check
 		assertEquals(3, chords.get(0).stem.endLp, df);
 		assertEquals(4, chords.get(1).stem.endLp, df);
@@ -148,7 +151,7 @@ public class OneMeasureOneStaffTest {
 		int[][] notes = { { 5 }, { 6 }, { 9 }, { 8 }, { 7 }, { 8 } };
 		List<ChordNotation> chords = createChordNotations(notes);
 		//compute
-		testee.compute(chords, sixStemsX, staff5Lines, beam8th, Down);
+		testee.compute(null, chords, sixStemsX, staff5Lines, beam8th, Down);
 		//check
 		assertEquals(-1, chords.get(0).stem.endLp, df);
 		assertEquals(1, chords.get(5).stem.endLp, df);
@@ -158,7 +161,7 @@ public class OneMeasureOneStaffTest {
 		int[][] notes = { { 5 }, { 6 }, { 9 }, { 8 }, { 7 }, { 8 } };
 		List<ChordNotation> chords = createChordNotations(notes);
 		//compute
-		testee.compute(chords, sixStemsX, staff5Lines, beam8th, Up);
+		testee.compute(null, chords, sixStemsX, staff5Lines, beam8th, Up);
 		//check
 		assertEquals(0, chords.get(5).stem.endLp - chords.get(0).stem.endLp, df);
 	}
@@ -167,7 +170,7 @@ public class OneMeasureOneStaffTest {
 		int[][] notes = { { -2 }, { -5 }, { -2 }, { -5 } };
 		List<ChordNotation> chords = createChordNotations(notes);
 		//compute
-		testee.compute(chords, fourStemsX, staff5Lines, beam8th, Up);
+		testee.compute(null, chords, fourStemsX, staff5Lines, beam8th, Up);
 		//check
 		assertEquals(4, chords.get(0).stem.endLp, df);
 		assertEquals(4, chords.get(3).stem.endLp, df);
@@ -177,7 +180,7 @@ public class OneMeasureOneStaffTest {
 		int[][] notes = { { -2 }, { -5 }, { -2 }, { -5 } };
 		List<ChordNotation> chords = createChordNotations(notes);
 		//compute
-		testee.compute(chords, fourStemsX, staff5Lines, beam16th, Up);
+		testee.compute(null, chords, fourStemsX, staff5Lines, beam16th, Up);
 		//check
 		assertEquals(4.5, chords.get(0).stem.endLp, df);
 		assertEquals(4.5, chords.get(3).stem.endLp, df);
@@ -187,7 +190,7 @@ public class OneMeasureOneStaffTest {
 		int[][] notes = { { 13 }, { 11 }, { 12 }, { 11 } };
 		List<ChordNotation> chords = createChordNotations(notes);
 		//compute
-		testee.compute(chords, fourStemsX, staff5Lines, beam8th, Down);
+		testee.compute(null, chords, fourStemsX, staff5Lines, beam8th, Down);
 		//check
 		assertEquals(4, chords.get(0).stem.endLp, df);
 		assertEquals(4, chords.get(3).stem.endLp, df);
@@ -197,7 +200,7 @@ public class OneMeasureOneStaffTest {
 		int[][] notes = { { 13 }, { 11 }, { 12 }, { 11 } };
 		List<ChordNotation> chords = createChordNotations(notes);
 		//compute
-		testee.compute(chords, fourStemsX, staff5Lines, beam16th, Down);
+		testee.compute(null, chords, fourStemsX, staff5Lines, beam16th, Down);
 		//check
 		assertEquals(4, chords.get(0).stem.endLp, df);
 		assertEquals(4, chords.get(3).stem.endLp, df);

@@ -60,6 +60,11 @@ public class BeamNotator {
 	 */
 	public static BeamNotation computeBeamNotation(Beam beam, List<ChordNotation> chords,
 		int beamLinesCount, BeamLines beamDesign) {
+		
+		//TODO remove this - currently needed for some unit tests
+		if (beam == null)
+			return null;
+		
 		List<List<Waypoint>> waypoints = BeamNotator.computeWaypoints(beam);
 		float gapIs = beamDesign.getDistanceBetweenBeamLinesIs();
 		BeamNotation beamNot = new BeamNotation(beam, beamLinesCount, waypoints, gapIs);

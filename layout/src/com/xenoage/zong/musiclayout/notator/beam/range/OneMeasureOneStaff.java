@@ -277,7 +277,7 @@ public class OneMeasureOneStaff
 	 * @param beamLinesCount   the number of beam lines         
 	 * @param stemDirection    the direction of the stems
 	 */
-	private void computeStemLengths(BeamLines beamDesign, List<ChordNotation> chords,
+	void computeStemLengths(BeamLines beamDesign, List<ChordNotation> chords,
 		float[] stemX, float slantIS, int beamLinesCount, StemDirection stemDirection) {
 
 		float beamStartLPCorrection = stemDirection.getSign() * 0.5f;
