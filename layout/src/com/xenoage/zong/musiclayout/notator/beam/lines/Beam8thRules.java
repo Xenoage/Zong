@@ -10,14 +10,14 @@ import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.musiclayout.notations.BeamNotation;
 
 /**
- * Implementation of a {@link BeamLinesRules} strategy for a single line beam (8th).
+ * Implementation of a {@link BeamRules} strategy for a single line beam (8th).
  * 
  * @author Uli Teschemacher
  * @author Andreas Wenger
  */
 @AllArgsConstructor
 public class Beam8thRules
-	extends BeamLinesRules {
+	extends BeamRules {
 
 	public static final Beam8thRules beam8thStemUpStaff5 = new Beam8thRules(Up, 5);
 	
@@ -38,7 +38,7 @@ public class Beam8thRules
 			return true;
 		
 		//TODO: some of the following 4 are possibly not really always 4 but
-		//dependent on the staffLinesCount.
+		//are dependent on the staffLinesCount.
 		int linepositionstart = mod((int) (startLp * 2), 4);
 		int linepositionend = mod((int) ((startLp + slantIs * 2) * 2), 4);
 		if (stemDirection == Down) {

@@ -17,7 +17,7 @@ import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
 import com.xenoage.zong.musiclayout.notations.chord.NoteDisplacement;
 import com.xenoage.zong.musiclayout.notations.chord.NotesNotation;
-import com.xenoage.zong.musiclayout.notator.beam.lines.BeamLinesRules;
+import com.xenoage.zong.musiclayout.notator.beam.lines.BeamRules;
 import com.xenoage.zong.musiclayout.notator.beam.lines.Beam8thRules;
 
 /**

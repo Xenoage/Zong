@@ -8,6 +8,7 @@ import static com.xenoage.zong.musiclayout.notations.BeamNotation.lineHeightIs;
 
 import java.util.List;
 
+import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.core.music.format.SP;
 import com.xenoage.zong.musiclayout.layouter.cache.util.BeamedStemStampings;
 import com.xenoage.zong.musiclayout.notations.BeamNotation;
@@ -27,25 +28,19 @@ public class BeamStamper {
 	
 
 	/**
-	 * Computes the stampings for the given beam and returns them.
-	 * The middle {@link StemStamping}s are modified.
+	 * Computes the stampings for the given beam and returns them. TIDY
 	 */
-	public BeamStamping[] createBeamStampings(BeamedStemStampings beamedStems) {
-		BeamNotation beam = beamedStems.beam;
-		StemStamping firstStem = beamedStems.firstStem();
-		StemStamping lastStem = beamedStems.lastStem();
-		StaffStamping leftStaff = firstStem.parentStaff;
-		StaffStamping rightStaff = lastStem.parentStaff;
-		float leftX = firstStem.xMm;
-		float rightX = lastStem.xMm;
+	public BeamStamping[] createBeamStampings(BeamNotation beam) {
+		float leftX = beam.leftSp.xMm;
+		float rightX = beam.rightSp.xMm;
 		//number of beam levels
 		int levels = beam.linesCount;
 		BeamStamping[] ret = new BeamStamping[levels];
 		
 		//first line (8th line) is always continuous
-		float leftLp = firstStem.endLp + firstStem.direction.getSign() * lineHeightIs / 4; //4: looks ok
-		float rightLp = lastStem.endLp + lastStem.direction.getSign() * lineHeightIs / 4; //4: looks ok
-		BeamStamping beam8th = new BeamStamping(beam, leftStaff, rightStaff,
+		float leftLp = beam.leftSp.lp + leftStemDir.getSign() * lineHeightIs / 4; //4: looks ok
+		float rightLp = beam.rightSp.lp + rightStemDir.getSign() * lineHeightIs / 4; //4: looks ok
+		BeamStamping beam8th = new BeamStamping(beam, leftChordStaff, rightChordStaff,
 			sp(leftX, leftLp), sp(rightX, rightLp));
 		ret[0] = beam8th;
 		
@@ -53,8 +48,7 @@ public class BeamStamper {
 		//this is stored in the notation
 		for (int i : range(beam.waypoints)) {
 			int line = i + 1;
-			float lineLp = -1 * firstStem.direction.getSign() *
-				(lineHeightIs + beam.gapIs) * 2 * line;
+			float lineLp = -1 * leftStemDir.getSign() * (lineHeightIs + beam.gapIs) * 2 * line;
 			float leftLineLp = leftLp + lineLp;
 			float rightLineLp = rightLp + lineLp;
 			//create the line stampings

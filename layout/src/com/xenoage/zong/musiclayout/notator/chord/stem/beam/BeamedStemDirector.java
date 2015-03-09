@@ -3,6 +3,7 @@ package com.xenoage.zong.musiclayout.notator.chord.stem.beam;
 import static com.xenoage.zong.core.music.beam.Beam.HorizontalSpan.SingleMeasure;
 import static com.xenoage.zong.core.music.beam.Beam.VerticalSpan.SingleStaff;
 import static com.xenoage.zong.musiclayout.notator.chord.stem.beam.range.OneMeasureOneStaff.oneMeasureOneStaff;
+import static com.xenoage.zong.musiclayout.notator.chord.stem.beam.range.OneMeasureTwoStaves.oneMeasureTwoStaves;
 
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.beam.Beam;
@@ -27,7 +28,7 @@ public class BeamedStemDirector {
 			if (beam.getVerticalSpan() == SingleStaff)
 				strategy = oneMeasureOneStaff;
 			else if (beam.getVerticalSpan() == VerticalSpan.TwoAdjacentStaves)
-				strategy = null; //GOON
+				strategy = oneMeasureTwoStaves;
 			else
 				//GOON
 				throw new IllegalStateException("No strategy for more than two or non-adjacent staves");

@@ -3,10 +3,10 @@ package com.xenoage.zong.musiclayout.notator.beam.lines;
 import static com.xenoage.utils.math.MathUtils.mod;
 import static com.xenoage.zong.musiclayout.notations.BeamNotation.defaultGapIs;
 import static com.xenoage.zong.musiclayout.notations.BeamNotation.lineHeightIs;
+import static com.xenoage.zong.musiclayout.notator.beam.BeamNotator.beamNotator;
 import lombok.AllArgsConstructor;
 
 import com.xenoage.zong.core.music.chord.StemDirection;
-import com.xenoage.zong.musiclayout.notations.BeamNotation;
 
 /**
  * Implementation of a {@link BeamLinesRules} strategy for a two-line beam (16th).
@@ -16,7 +16,7 @@ import com.xenoage.zong.musiclayout.notations.BeamNotation;
  */
 @AllArgsConstructor
 public class Beam16thRules
-	extends BeamLinesRules {
+	extends BeamRules {
 
 	private static float totalBeamHeightIs = 2 * lineHeightIs + defaultGapIs;
 
@@ -25,12 +25,7 @@ public class Beam16thRules
 	
 	
 	@Override public int getBeamLinesCount() {
-		return 1;
-	}
-	
-
-	public Beam16thRules(StemDirection stemDirection, int staffLinesCount) {
-		super(stemDirection, staffLinesCount);
+		return 2;
 	}
 
 	@Override public float getMinimumStemLengthIs() {
@@ -41,44 +36,38 @@ public class Beam16thRules
 		int maxStaffLp = 2 * (staffLinesCount - 1);
 		//look whether the beam doesn't start or end at a wrong position (e.g. between the lines)
 		if ((startLp < -3 && startLp + slantIs * 2 < -3) ||
-			(startLp > maxStaffLp + 3 && startLp + slantIs * 2 > maxStaffLp + 3)) {
+			(startLp > maxStaffLp + 3 && startLp + slantIs * 2 > maxStaffLp + 3))
 			return true;
-		}
-		else {
-			//TODO: some of the following 4 are possibly not really always 4 but
-			//are dependent on the staffLinesCount.
-			int linepositionstart = mod((int) (startLp * 2), 4);
-			int linepositionend = mod((int) (startLp + slantIs * 2) * 2, 4);
-			if (stemDirection == StemDirection.Down) {
-				if (startLp <= 4 && startLp + slantIs * 2 <= 4) {
-					//downstems must only straddle the line or sit on it (at the beginning).
-					//the end of the stem must not be in the space between two lines.
-					if (Math.abs(slantIs) < 0.1f) {
-						if (linepositionstart == 0 || linepositionstart == 3) {
-							return true;
-						}
-					}
-					else {
-						if ((linepositionstart == 0 && linepositionend == 3) ||
-							(linepositionstart == 3 && linepositionend == 0)) {
-							return true;
-						}
-					}
+			
+		//TODO: some of the following 4 are possibly not really always 4 but
+		//are dependent on the staffLinesCount.
+		int linepositionstart = mod((int) (startLp * 2), 4);
+		int linepositionend = mod((int) (startLp + slantIs * 2) * 2, 4);
+		if (stemDirection == StemDirection.Down) {
+			if (startLp <= 4 && startLp + slantIs * 2 <= 4) {
+				//downstems must only straddle the line or sit on it (at the beginning).
+				//the end of the stem must not be in the space between two lines.
+				if (Math.abs(slantIs) < 0.1f) {
+					if (linepositionstart == 0 || linepositionstart == 3)
+						return true;
+				}
+				else {
+					if ((linepositionstart == 0 && linepositionend == 3) ||
+						(linepositionstart == 3 && linepositionend == 0))
+						return true;
 				}
 			}
-			else {
-				if (startLp >= 4 && startLp + slantIs * 2 >= 4) {
-					if (Math.abs(slantIs) < 0.1f) {
-						if (linepositionstart == 0 || linepositionstart == 1) {
-							return true;
-						}
-					}
-					else {
-						if ((linepositionstart == 0 && linepositionend == 1) ||
-							(linepositionstart == 1 && linepositionend == 0)) {
-							return true;
-						}
-					}
+		}
+		else {
+			if (startLp >= 4 && startLp + slantIs * 2 >= 4) {
+				if (Math.abs(slantIs) < 0.1f) {
+					if (linepositionstart == 0 || linepositionstart == 1)
+						return true;
+				}
+				else {
+					if ((linepositionstart == 0 && linepositionend == 1) ||
+						(linepositionstart == 1 && linepositionend == 0))
+						return true;
 				}
 			}
 		}
@@ -89,7 +78,7 @@ public class Beam16thRules
 		int dir = stemDirection.getSign();
 		float startStemLp = startNoteLp + dir * getMinimumStemLengthIs(); //TODO: *2 missing for IS->LP?
 		float endStemLp = endNoteLp + dir * getMinimumStemLengthIs(); //TODO: *2 missing for IS->LP?
-		if (isBeamOutsideStaff(stemDirection, startStemLp, endStemLp, staffLinesCount, totalBeamHeightIs)) {
+		if (beamNotator.isBeamOutsideStaff(stemDirection, startStemLp, endStemLp, staffLinesCount, totalBeamHeightIs)) {
 			//use design of single beam
 			Beam8thRules sbd = new Beam8thRules(stemDirection, staffLinesCount);
 			return sbd.getSlantNormalSpacingIs(startNoteLp, endNoteLp);

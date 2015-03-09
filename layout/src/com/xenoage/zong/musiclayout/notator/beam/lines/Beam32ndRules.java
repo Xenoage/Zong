@@ -1,23 +1,29 @@
 package com.xenoage.zong.musiclayout.notator.beam.lines;
 
 import static com.xenoage.utils.math.MathUtils.mod;
+import static com.xenoage.zong.musiclayout.notator.beam.BeamNotator.beamNotator;
+import lombok.AllArgsConstructor;
 
 import com.xenoage.zong.core.music.chord.StemDirection;
 
 /**
- * Implementation of a {@link BeamLinesRules} strategy for a three-line beam (32th).
+ * Implementation of a {@link BeamRules} strategy for a three-line beam (32nd).
  * 
  * @author Uli Teschemacher
  * @author Andreas Wenger
  */
-public class ThreeLines
-	extends BeamLinesRules {
+@AllArgsConstructor
+public class Beam32ndRules
+	extends BeamRules {
 
-	private float totalBeamHeightIs = 2;
+	private static final float totalBeamHeightIs = 2;
+	
+	private StemDirection stemDirection;
+	private int staffLinesCount;
 
-
-	public ThreeLines(StemDirection stemDirection, int staffLinesCount) {
-		super(stemDirection, staffLinesCount);
+	
+	@Override public int getBeamLinesCount() {
+		return 3;
 	}
 
 	@Override public float getMinimumStemLengthIs() {
@@ -34,7 +40,7 @@ public class ThreeLines
 
 	@Override public boolean isGoodStemPosition(float startLp, float slantIs) {
 		//look whether the beam doesn't start or end at a wrong position (e.g. between the lines)
-		if (isBeamOutsideStaff(stemDirection, startLp, startLp + slantIs * 2, staffLinesCount,
+		if (beamNotator.isBeamOutsideStaff(stemDirection, startLp, startLp + slantIs * 2, staffLinesCount,
 			totalBeamHeightIs)) {
 			return true;
 		}

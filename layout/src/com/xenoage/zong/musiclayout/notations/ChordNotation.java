@@ -1,5 +1,8 @@
 package com.xenoage.zong.musiclayout.notations;
 
+import static com.xenoage.utils.collections.ArrayUtils.getFirst;
+import static com.xenoage.utils.collections.ArrayUtils.getLast;
+import static com.xenoage.zong.core.music.chord.StemDirection.Up;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -43,4 +46,15 @@ public class ChordNotation
 		return accidentals.widthIs + notes.stemOffsetIs; //TODO: right?
 	}
 	
+	/**
+	 * Gets the innermost note.
+	 * For upward stems, this is the highest note, and for
+	 * downward stems or if there is no stem, this is the lowest note.
+	 */
+	public int getInnerNoteLp() {
+		if (stemDirection == Up)
+			return getFirst(notes.notes).lp;
+		else
+			return getLast(notes.notes).lp;
+	}
 }

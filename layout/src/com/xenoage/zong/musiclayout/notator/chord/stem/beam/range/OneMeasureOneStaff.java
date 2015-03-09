@@ -23,7 +23,7 @@ import com.xenoage.zong.musiclayout.notations.chord.ChordLps;
 public class OneMeasureOneStaff
 	implements Strategy {
 	
-	public static OneMeasureOneStaff oneMeasureOneStaff = new OneMeasureOneStaff();
+	public static final OneMeasureOneStaff oneMeasureOneStaff = new OneMeasureOneStaff();
 	
 
 	@Override public StemDirection[] compute(Beam beam, Score score) {
@@ -58,15 +58,17 @@ public class OneMeasureOneStaff
 				distance = chordLps.getBottom() - staffMiddleLp;
 			}
 			
-			if (distance > furthestDistance) {
+			if (distance > furthestDistance || //new furthest distance found
+				//equal furthest distance found, but Down wins (Ross, p. 95):
+				(distance == furthestDistance && preferredDir == Down)) { 
 				furthestDistance = distance;
 				furthestDistanceDir = preferredDir;
 			}
 		}
 
-		//the mostly used stem direction wins.
+		//the mostly used stem direction wins  (Ross, p. 95)
 		//if both directions are equally distributed, the stem direction of
-		//the chord with the note furthest away from the staff middle line wins
+		//the chord with the note furthest away from the staff middle line wins (Ross, p. 95)
 		StemDirection finalStemDir;
 		if (upCount != downCount)
 			finalStemDir = (upCount > downCount ? Up : Down);

@@ -13,11 +13,14 @@ import lombok.AllArgsConstructor;
  * so there is an abstract base class (this one) with different
  * implementations.
  * 
+ * The general rules are explained in Ted Ross' book, starting on
+ * page 88.
+ * 
  * @author Uli Teschemacher
  * @author Andreas Wenger
  */
 @AllArgsConstructor
-public abstract class BeamLinesRules {
+public abstract class BeamRules {
 
 	/**
 	 * Gets the maximum number of beam lines, e.g. 1 for a beam
@@ -51,13 +54,26 @@ public abstract class BeamLinesRules {
 	public float getSlantAscendingMiddleNotesIs() {
 		return 0.5f; //TODO: was 1f before, but I'm not sure if Uli already meant it as IS instead of LP
 	}
+	
+	/*-* GOON: this method should replace isGoodStemPosition. add lots of tests from Ross/Chlapik
+	 * This method returns true, iff the given end positions of a beam are correct.
+	 * @param leftEndLp   the LP of the stem endpoint at the beginning of the beam
+	 * @param rightEndLp  the LP of the stem endpoint at the end of the beam
+	 * /
+	public boolean isGoodPosition(float leftEndLp, float rightEndLp) {
+		//Ross, p. 88:
+		//The placement of a beam follows the cardinal rule that when it falls within the staff,
+		//its ends must either sit, hang or straddle a staff line, whether the beam is single
+		//or multiple.
+		return false;
+	} */
 
 	/**
 	 * This method calculates whether the current position of the beam is correct or not.
 	 * @param startLp  the LP of the stem endpoint at the beginning of the beam
 	 * @param slantIs  the vertical distance of the beam endpoints in IS
 	 */
-	public boolean isGoodStemPosition(float startLp, float slantIs) {
+	@Deprecated public boolean isGoodStemPosition(float startLp, float slantIs) {
 		return true;
 	}
 

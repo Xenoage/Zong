@@ -3,7 +3,11 @@ package com.xenoage.zong.musiclayout.notator.beam;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.music.Pitch.pi;
 import static com.xenoage.zong.core.music.beam.Beam.beamFromChords;
+import static com.xenoage.zong.core.music.chord.StemDirection.Down;
+import static com.xenoage.zong.core.music.chord.StemDirection.Up;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static com.xenoage.zong.musiclayout.notations.BeamNotation.Waypoint.HookLeft;
 import static com.xenoage.zong.musiclayout.notations.BeamNotation.Waypoint.HookRight;
@@ -51,6 +55,38 @@ public class BeamNotatorTest {
 		assertEquals(2, testee.getMaxLinesCount(exampleRow3Col4()));
 		assertEquals(3, testee.getMaxLinesCount(exampleRow3Col6()));
 	}
+	
+	@Test public void testIsBeamOutsideStaff() {
+		//stem up, above staff
+		assertTrue(testee.isBeamOutsideStaff(Up, 13, 13, 5, 2));
+		assertTrue(testee.isBeamOutsideStaff(Up, 12.1f, 13, 5, 2));
+		assertTrue(testee.isBeamOutsideStaff(Up, 13f, 12.1f, 5, 2));
+		assertFalse(testee.isBeamOutsideStaff(Up, 11.9f, 11.9f, 5, 2));
+		assertFalse(testee.isBeamOutsideStaff(Up, 11.9f, 13, 5, 2));
+		assertFalse(testee.isBeamOutsideStaff(Up, 13f, 11.9f, 5, 2));
+		//stem up, below staff
+		assertTrue(testee.isBeamOutsideStaff(Up, -1, -1, 5, 2));
+		assertTrue(testee.isBeamOutsideStaff(Up, -0.1f, -1, 5, 2));
+		assertTrue(testee.isBeamOutsideStaff(Up, -1, -0.1f, 5, 2));
+		assertFalse(testee.isBeamOutsideStaff(Up, 0.1f, 0.1f, 5, 2));
+		assertFalse(testee.isBeamOutsideStaff(Up, 0.1f, -1, 5, 2));
+		assertFalse(testee.isBeamOutsideStaff(Up, -1, 0.1f, 5, 2));
+		//stem down, above staff
+		assertTrue(testee.isBeamOutsideStaff(Down, 9, 9, 5, 2));
+		assertTrue(testee.isBeamOutsideStaff(Down, 8.1f, 9, 5, 2));
+		assertTrue(testee.isBeamOutsideStaff(Down, 9, 8.1f, 5, 2));
+		assertFalse(testee.isBeamOutsideStaff(Down, 7.9f, 7.9f, 5, 2));
+		assertFalse(testee.isBeamOutsideStaff(Down, 7.9f, 9, 5, 2));
+		assertFalse(testee.isBeamOutsideStaff(Down, 9, 7.9f, 5, 2));
+		//stem down, below staff
+		assertTrue(testee.isBeamOutsideStaff(Down, -5, -5, 5, 2));
+		assertTrue(testee.isBeamOutsideStaff(Down, -4.1f, -5, 5, 2));
+		assertTrue(testee.isBeamOutsideStaff(Down, -5, -4.1f, 5, 2));
+		assertFalse(testee.isBeamOutsideStaff(Down, -3.9f, -3.9f, 5, 2));
+		assertFalse(testee.isBeamOutsideStaff(Down, -3.9f, -5, 5, 2));
+		assertFalse(testee.isBeamOutsideStaff(Down, -5, -3.9f, 5, 2));
+	}
+
 
 	@Test public void computeWaypointsTest() {
 		Beam b;

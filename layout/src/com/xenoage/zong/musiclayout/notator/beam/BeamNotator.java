@@ -20,12 +20,13 @@ import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.music.beam.BeamWaypoint;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.StemDirection;
+import com.xenoage.zong.core.music.format.SP;
 import com.xenoage.zong.core.music.util.DurationInfo;
 import com.xenoage.zong.musiclayout.notations.BeamNotation;
 import com.xenoage.zong.musiclayout.notations.BeamNotation.Waypoint;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
 import com.xenoage.zong.musiclayout.notations.chord.StemNotation;
-import com.xenoage.zong.musiclayout.notator.beam.lines.BeamLinesRules;
+import com.xenoage.zong.musiclayout.notator.beam.lines.BeamRules;
 import com.xenoage.zong.musiclayout.spacing.ScoreSpacing;
 
 /**
@@ -62,7 +63,7 @@ public class BeamNotator {
 	 * The {@link BeamNotation} is also set to all given chords of the beam.
 	 */
 	public static BeamNotation computeBeamNotation(Beam beam, List<ChordNotation> chords,
-		int beamLinesCount, BeamLinesRules beamDesign) {
+		SP leftSp, SP rightSp, int beamLinesCount, BeamRules beamDesign) {
 		
 		//TODO remove this - currently needed for some unit tests
 		if (beam == null)
@@ -70,7 +71,7 @@ public class BeamNotator {
 		
 		List<List<Waypoint>> waypoints = BeamNotator.computeWaypoints(beam);
 		float gapIs = beamDesign.getGapIs();
-		BeamNotation beamNot = new BeamNotation(beam, beamLinesCount, waypoints, gapIs);
+		BeamNotation beamNot = new BeamNotation(beam, leftSp, rightSp, beamLinesCount, waypoints, gapIs);
 		for (ChordNotation chord : chords)
 			chord.beam = beamNot;
 		return beamNot;

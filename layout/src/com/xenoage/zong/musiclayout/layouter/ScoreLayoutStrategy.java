@@ -75,7 +75,7 @@ public class ScoreLayoutStrategy
 		//frame filling (vertical)
 		fillFramesVertically(scoreSpacing.frames, target, context.score);
 		
-		//compute beams
+		//compute beams - GOON beam "Spacing"s, not "Notation"s 
 		computeBeamNotations(scoreSpacing);
 		
 		//create score layout from the collected information

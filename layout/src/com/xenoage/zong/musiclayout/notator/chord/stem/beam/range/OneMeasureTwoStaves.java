@@ -18,6 +18,8 @@ import com.xenoage.zong.core.position.MP;
 public class OneMeasureTwoStaves
 	implements Strategy {
 
+	public static final OneMeasureTwoStaves oneMeasureTwoStaves = new OneMeasureTwoStaves();
+	
 
 	@Override public StemDirection[] compute(Beam beam, Score score) {
 		return compute(beam);

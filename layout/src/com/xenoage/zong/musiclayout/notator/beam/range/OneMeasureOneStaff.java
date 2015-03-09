@@ -1,9 +1,14 @@
 package com.xenoage.zong.musiclayout.notator.beam.range;
 
+import static com.xenoage.utils.collections.ArrayUtils.getFirst;
+import static com.xenoage.utils.collections.ArrayUtils.getLast;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static com.xenoage.utils.collections.CollectionUtils.getFirst;
+import static com.xenoage.utils.collections.CollectionUtils.getLast;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.core.music.chord.StemDirection.Down;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
+import static com.xenoage.zong.core.music.format.SP.sp;
 import static com.xenoage.zong.core.position.MP.getMP;
 import static com.xenoage.zong.musiclayout.layouter.beamednotation.design.ChordBeamSpacing.Close;
 import static com.xenoage.zong.musiclayout.layouter.beamednotation.design.ChordBeamSpacing.Normal;
@@ -16,17 +21,18 @@ import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.music.beam.BeamWaypoint;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.StemDirection;
+import com.xenoage.zong.core.music.format.SP;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.musiclayout.layouter.beamednotation.design.ChordBeamSpacing;
 import com.xenoage.zong.musiclayout.notations.BeamNotation;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
 import com.xenoage.zong.musiclayout.notations.chord.StemNotation;
 import com.xenoage.zong.musiclayout.notator.beam.BeamNotator;
-import com.xenoage.zong.musiclayout.notator.beam.lines.BeamLinesRules;
-import com.xenoage.zong.musiclayout.notator.beam.lines.MultipleLines;
-import com.xenoage.zong.musiclayout.notator.beam.lines.Beam8thRules;
-import com.xenoage.zong.musiclayout.notator.beam.lines.ThreeLines;
 import com.xenoage.zong.musiclayout.notator.beam.lines.Beam16thRules;
+import com.xenoage.zong.musiclayout.notator.beam.lines.Beam32ndRules;
+import com.xenoage.zong.musiclayout.notator.beam.lines.Beam64thOrMoreRules;
+import com.xenoage.zong.musiclayout.notator.beam.lines.Beam8thRules;
+import com.xenoage.zong.musiclayout.notator.beam.lines.BeamRules;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.ScoreSpacing;
@@ -88,7 +94,7 @@ public class OneMeasureOneStaff
 		int staffLinesCount, int beamLinesCount, StemDirection stemDirection) {
 		
 		//get appropriate beam design
-		BeamLinesRules beamDesign;
+		BeamRules beamDesign;
 		switch (beamLinesCount) {
 			case 1:
 				beamDesign = new Beam8thRules(stemDirection, staffLinesCount);
@@ -97,10 +103,10 @@ public class OneMeasureOneStaff
 				beamDesign = new Beam16thRules(stemDirection, staffLinesCount);
 				break;
 			case 3:
-				beamDesign = new ThreeLines(stemDirection, staffLinesCount);
+				beamDesign = new Beam32ndRules(stemDirection, staffLinesCount);
 				break;
 			default:
-				beamDesign = new MultipleLines(stemDirection, staffLinesCount, beamLinesCount);
+				beamDesign = new Beam64thOrMoreRules(stemDirection, staffLinesCount, beamLinesCount);
 		}
 
 		//compute beautiful slant
@@ -109,44 +115,35 @@ public class OneMeasureOneStaff
 		//compute stem alignments
 		computeStemLengths(beamDesign, chords, stemX, slantIs, beamLinesCount, stemDirection);
 		
-		//compute beam notation
-		return BeamNotator.computeBeamNotation(beam, chords, beamLinesCount, beamDesign);
+		//compute beam notation - TIDY
+		SP leftSp = sp(getFirst(stemX), getFirst(chords).stem.endLp);
+		SP rightSp = sp(getLast(stemX), getLast(chords).stem.endLp);
+		return BeamNotator.computeBeamNotation(beam, chords, leftSp, rightSp, beamLinesCount, beamDesign);
 	}
 
 	/**
 	 * Computes the slant that fits best to the given beam.
 	 * The slant is defined as the directed vertical distance of
 	 * the first stem endpoint and the last stem endpoint in IS.
-	 * @param beamDesign     design information about the beam
-	 * @param chords         the notations of all chords of the beam
-	 * @param stemX          the horizontal positions of the stems in interline spaces   
-	 * @param stemDirection  the direction of the stems
-	 * @param staffLinesCount  the number of lines in this staff
 	 */
-	private float computeSlant(BeamLinesRules beamDesign, List<ChordNotation> chords,
+	private float computeSlant(BeamRules beamDesign, List<ChordNotation> chords,
 		float[] stemX, StemDirection stemDirection, int staffLinesCount) {
 		
-		//collect relevant note line positions (positions of the outermost notes)
-		int firstRelevantNoteLp;
-		int lastRelevantNoteLp;
+		//collect relevant note line positions (positions of the innermost notes)
+		int leftInnerNoteLp;
+		int rightInnerNoteLp;
 		int chordsCount = chords.size();
-		int[] relevantNoteLps = new int[chordsCount];
-		if (stemDirection == Down) {
-			for (int i : range(chords))
-				relevantNoteLps[i] = chords.get(i).notes.getBottomNote().lp;
-		}
-		else if (stemDirection == StemDirection.Up) {
-			for (int i : range(chords))
-				relevantNoteLps[i] = chords.get(i).notes.getTopNote().lp;
-		}
-		firstRelevantNoteLp = relevantNoteLps[0];
-		lastRelevantNoteLp = relevantNoteLps[chordsCount - 1];
+		int[] innerNoteLps = new int[chordsCount];
+		for (int i : range(chords))
+			innerNoteLps[i] = chords.get(i).getInnerNoteLp();
+		leftInnerNoteLp = getFirst(innerNoteLps);
+		rightInnerNoteLp = getLast(innerNoteLps);
 
 		//if the notes outline the same interval e.g. a e a e => horizontal beam
 		if (chordsCount >= 4 && chordsCount % 2 == 0) {
 			boolean useHorizontalBeam = true;
 			for (int i = 2; i < chordsCount; i++) {
-				if (relevantNoteLps[i % 2] != relevantNoteLps[i]) {
+				if (innerNoteLps[i % 2] != innerNoteLps[i]) {
 					useHorizontalBeam = false;
 				}
 			}
@@ -159,10 +156,10 @@ public class OneMeasureOneStaff
 		//the first to the last note, a normal slant is used
 		boolean useDefaultSlant = true;
 		for (int i = 1; i < chordsCount - 2; i++) {
-			float lp = firstRelevantNoteLp + 1f * (lastRelevantNoteLp - firstRelevantNoteLp) * i /
+			float lp = leftInnerNoteLp + 1f * (rightInnerNoteLp - leftInnerNoteLp) * i /
 				(chordsCount - 1);
-			if ((stemDirection == Up && relevantNoteLps[i] > Math.ceil(lp)) ||
-				(stemDirection == Down && relevantNoteLps[i] < Math.floor(lp))) {
+			if ((stemDirection == Up && innerNoteLps[i] > Math.ceil(lp)) ||
+				(stemDirection == Down && innerNoteLps[i] < Math.floor(lp))) {
 				useDefaultSlant = false;
 				break;
 			}
@@ -170,7 +167,7 @@ public class OneMeasureOneStaff
 		if (useDefaultSlant) {
 			//use default rules (Ted Ross page 111)
 			float lengthX = stemX[chordsCount - 1] - stemX[0];
-			return computeNormalBeamSlant(beamDesign, firstRelevantNoteLp, lastRelevantNoteLp, lengthX,
+			return computeNormalBeamSlant(beamDesign, leftInnerNoteLp, rightInnerNoteLp, lengthX,
 				staffLinesCount);
 		}
 
@@ -178,10 +175,10 @@ public class OneMeasureOneStaff
 		//When the first and last notes are on different staff degrees, and all inside notes
 		//descend to the last note, the beam slants one-half space in the direction
 		//of the run of the inside notes.
-		if (firstRelevantNoteLp != lastRelevantNoteLp) {
+		if (leftInnerNoteLp != rightInnerNoteLp) {
 			boolean ascend = true;
 			for (int i = 2; i < chordsCount; i++) {
-				if (relevantNoteLps[i - 1] >= relevantNoteLps[i]) {
+				if (innerNoteLps[i - 1] >= innerNoteLps[i]) {
 					ascend = false;
 					break;
 				}
@@ -191,7 +188,7 @@ public class OneMeasureOneStaff
 			}
 			boolean descend = true;
 			for (int i = 1; i < chordsCount - 1; i++) {
-				if (relevantNoteLps[i - 1] <= relevantNoteLps[i]) {
+				if (innerNoteLps[i - 1] <= innerNoteLps[i]) {
 					descend = false;
 					break;
 				}
@@ -215,7 +212,7 @@ public class OneMeasureOneStaff
 	 * @param lengthX          the horizontal distance between the first and the last note in IS
 	 * @param staffLinesCount  the number of lines in this staff
 	 */
-	private float computeNormalBeamSlant(BeamLinesRules beamDesign, int firstNoteLp, int lastNoteLp,
+	private float computeNormalBeamSlant(BeamRules beamDesign, int firstNoteLp, int lastNoteLp,
 		float lengthX, int staffLinesCount) {
 		ChordBeamSpacing spacing;
 		if (lengthX > wideSpacing)
@@ -237,7 +234,7 @@ public class OneMeasureOneStaff
 	 * @param spacing          the horizontal spacing of the beam chords
 	 * @param staffLinesCount  the number of lines in this staff
 	 */
-	private float computeSlant(BeamLinesRules beamDesign, int firstNoteLp, int lastNoteLp,
+	private float computeSlant(BeamRules beamDesign, int firstNoteLp, int lastNoteLp,
 		ChordBeamSpacing spacing, int staffLinesCount) {
 		int distanceLp = lastNoteLp - firstNoteLp;
 		float slantIs = 0;
@@ -277,7 +274,7 @@ public class OneMeasureOneStaff
 	 * @param beamLinesCount   the number of beam lines         
 	 * @param stemDirection    the direction of the stems
 	 */
-	void computeStemLengths(BeamLinesRules beamDesign, List<ChordNotation> chords,
+	void computeStemLengths(BeamRules beamDesign, List<ChordNotation> chords,
 		float[] stemX, float slantIS, int beamLinesCount, StemDirection stemDirection) {
 
 		float beamStartLPCorrection = stemDirection.getSign() * 0.5f;

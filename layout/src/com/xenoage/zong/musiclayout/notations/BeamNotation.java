@@ -5,16 +5,22 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 
 import com.xenoage.zong.core.music.beam.Beam;
+import com.xenoage.zong.core.music.format.SP;
+import com.xenoage.zong.musiclayout.settings.Spacings;
 
 /**
  * Layout details of a {@link Beam}.
+ * 
+ * GOON: this is more a Spacing than a Notation - it contains x mm offsets and so on
  * 
  * @author Andreas Wenger
  */
 @AllArgsConstructor
 public class BeamNotation {
 	
+	/** Height of a beam line in IS. See Ross, p. 88.*/
 	public static final float lineHeightIs = 0.5f;
+	
 	public static final float defaultGapIs = 0.25f; //default gap between lines in interline spaces
 	public static final float hookLengthIs = 1.25f; //Chlapik TODO
 
@@ -34,6 +40,10 @@ public class BeamNotation {
 
 	/** The beam element. */
 	public Beam element;
+	/** The waypi point at the left stem. */
+	public SP leftSp;
+	/** The outermost point at the right stem. */
+	public SP rightSp;
 	/** The maximum number of beam lines, e.g. 2 for beams which contain at maximum 16th notes. */
 	public int linesCount;
 	/** The lists of waypoints (inner list) for the 16th, 32th, 64th, ... line (outer list). */

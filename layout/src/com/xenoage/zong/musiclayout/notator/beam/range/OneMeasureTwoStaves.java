@@ -1,11 +1,14 @@
 package com.xenoage.zong.musiclayout.notator.beam.range;
 
+import static com.xenoage.utils.collections.ArrayUtils.getFirst;
+import static com.xenoage.utils.collections.ArrayUtils.getLast;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.collections.CollectionUtils.getFirst;
 import static com.xenoage.utils.collections.CollectionUtils.getLast;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.geom.Point2f.p;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
+import static com.xenoage.zong.core.music.format.SP.sp;
 import static com.xenoage.zong.core.position.MP.getMP;
 
 import java.util.List;
@@ -16,16 +19,17 @@ import com.xenoage.zong.core.music.beam.BeamWaypoint;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.Stem;
 import com.xenoage.zong.core.music.chord.StemDirection;
+import com.xenoage.zong.core.music.format.SP;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.musiclayout.notations.BeamNotation;
 import com.xenoage.zong.musiclayout.notations.ChordNotation;
 import com.xenoage.zong.musiclayout.notations.chord.ChordLps;
 import com.xenoage.zong.musiclayout.notations.chord.StemNotation;
 import com.xenoage.zong.musiclayout.notator.beam.BeamNotator;
-import com.xenoage.zong.musiclayout.notator.beam.lines.BeamLinesRules;
-import com.xenoage.zong.musiclayout.notator.beam.lines.MultipleLines;
+import com.xenoage.zong.musiclayout.notator.beam.lines.BeamRules;
+import com.xenoage.zong.musiclayout.notator.beam.lines.Beam64thOrMoreRules;
 import com.xenoage.zong.musiclayout.notator.beam.lines.Beam8thRules;
-import com.xenoage.zong.musiclayout.notator.beam.lines.ThreeLines;
+import com.xenoage.zong.musiclayout.notator.beam.lines.Beam32ndRules;
 import com.xenoage.zong.musiclayout.notator.beam.lines.Beam16thRules;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
@@ -73,7 +77,7 @@ public class OneMeasureTwoStaves
 	public BeamNotation compute(Beam beam,
 		List<ChordNotation> notations, int beamLinesCount, ColumnSpacing column) {
 		//get appropriate beam design
-		BeamLinesRules strategy;
+		BeamRules strategy;
 		StemDirection firstStemDirection = getFirst(notations).stemDirection;
 		switch (beamLinesCount) {
 		//TIDY: we need only a small subset of the BeamDesign class. extract it?
@@ -84,10 +88,10 @@ public class OneMeasureTwoStaves
 				strategy = new Beam16thRules(firstStemDirection, 0);
 				break;
 			case 3:
-				strategy = new ThreeLines(firstStemDirection, 0);
+				strategy = new Beam32ndRules(firstStemDirection, 0);
 				break;
 			default:
-				strategy = new MultipleLines(firstStemDirection, 0, beamLinesCount);
+				strategy = new Beam64thOrMoreRules(firstStemDirection, 0, beamLinesCount);
 		}
 
 		//compute notations of the first and last stem
@@ -150,8 +154,10 @@ public class OneMeasureTwoStaves
 			chord.stem = new StemNotation(chord.stem.startLp, endLp);
 		}
 		
-		//compute beam notation
-		return BeamNotator.computeBeamNotation(beam, notations, beamLinesCount, strategy);
+		//compute beam notation - TIDY
+		SP leftSp = sp(leftStemPosMm.x, getFirst(notations).stem.endLp);
+		SP rightSp = sp(rightStemPosMm.x, getLast(notations).stem.endLp);
+		return BeamNotator.computeBeamNotation(beam, notations, leftSp, rightSp, beamLinesCount, strategy);
 	}
 
 }
