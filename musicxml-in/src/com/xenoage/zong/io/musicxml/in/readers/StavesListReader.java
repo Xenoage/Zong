@@ -3,7 +3,7 @@ package com.xenoage.zong.io.musicxml.in.readers;
 import static com.xenoage.utils.collections.ArrayUtils.containsOnlyNull;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.collections.CollectionUtils.map;
-import static com.xenoage.utils.iterators.MultiIt.multiIt;
+import static com.xenoage.utils.iterators.MultiListIt.multiListIt;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.io.musicxml.Equivalents.bracketGroupStyles;
 
@@ -280,7 +280,7 @@ public class StavesListReader {
 	 */
 	@SuppressWarnings("unchecked") private static boolean isPartInGroup(int partIndex,
 		List<PartsBarlineGroup> barlineGroups, List<PartsBracketGroup> bracketGroups) {
-		for (PartsGroup group : multiIt(barlineGroups, bracketGroups)) {
+		for (PartsGroup group : multiListIt(barlineGroups, bracketGroups)) {
 			if (group.startPartIndex >= partIndex && group.stopPartIndex <= partIndex)
 				return true;
 		}
