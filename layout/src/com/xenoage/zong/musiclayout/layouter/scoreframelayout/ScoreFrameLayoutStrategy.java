@@ -623,7 +623,7 @@ public class ScoreFrameLayoutStrategy
 	private List<Stamping> createBeams(OpenBeamsCache openBeamsCache) {
 		ArrayList<Stamping> ret = alist(openBeamsCache.size());
 		for (BeamedStemStampings beam : openBeamsCache) {
-			CollectionUtils.addAll(ret, beamStamper.createBeamStampings(beam));
+			CollectionUtils.addAll(ret, beamStamper.createBeamStampings(beam.beam));
 		}
 		return ret;
 	}

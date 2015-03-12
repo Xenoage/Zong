@@ -38,7 +38,7 @@ public class OneMeasureOneStaff
 		return compute(chordsLps, staffLinesCount);
 	}
 		
-	StemDirection[] compute(ChordLps[] chordsLps, int staffLinesCount) {
+	public StemDirection[] compute(ChordLps[] chordsLps, int staffLinesCount) {
 		int staffMiddleLp = staffLinesCount - 1;
 		int upCount = 0;
 		int downCount = 0;

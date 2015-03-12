@@ -31,6 +31,8 @@ public class BeamStamper {
 	 * Computes the stampings for the given beam and returns them. TIDY
 	 */
 	public BeamStamping[] createBeamStampings(BeamNotation beam) {
+		
+		/*
 		float leftX = beam.leftSp.xMm;
 		float rightX = beam.rightSp.xMm;
 		//number of beam levels
@@ -81,9 +83,9 @@ public class BeamStamper {
 					ret[i+1] = stamping;
 				}
 			}
-		}
+		} */
 
-		return ret;
+		return new BeamStamping[0];
 	}
 
 }

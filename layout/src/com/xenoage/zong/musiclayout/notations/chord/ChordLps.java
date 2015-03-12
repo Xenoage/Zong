@@ -32,7 +32,7 @@ public final class ChordLps {
 	 * Creates a new {@link ChordLps} object from the
 	 * given line positions.
 	 */
-	public ChordLps(int[] lps) {
+	public ChordLps(int... lps) {
 		this.lps = lps;
 		//check if sorted correctly
 		for (int i = 0; i < lps.length - 1; i++) {

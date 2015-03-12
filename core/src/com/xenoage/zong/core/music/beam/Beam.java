@@ -1,6 +1,7 @@
 package com.xenoage.zong.core.music.beam;
 
 import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.utils.math.MathUtils.min;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -10,10 +11,12 @@ import java.util.Set;
 import lombok.Getter;
 
 import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.core.music.MusicElementType;
 import com.xenoage.zong.core.music.WaypointPosition;
 import com.xenoage.zong.core.music.chord.Chord;
+import com.xenoage.zong.core.music.util.DurationInfo;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.util.InconsistentScoreException;
 
@@ -249,6 +252,16 @@ public final class Beam
 		this.verticalSpan = verticalSpan;
 		this.upperStaffIndex = minStaffIndex;
 		this.lowerStaffIndex = maxStaffIndex;
+	}
+	
+	/**
+	 * Gets the maximum number of beam lines used in the this beam.
+	 */
+	public int getMaxLinesCount() {
+		Fraction minDuration = null;
+		for (BeamWaypoint waypoint : waypoints)
+			minDuration = min(minDuration, waypoint.getChord().getDuration());
+		return DurationInfo.getFlagsCount(minDuration);
 	}
 
 	@Override public MusicElementType getMusicElementType() {
