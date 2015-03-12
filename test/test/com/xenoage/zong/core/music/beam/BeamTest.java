@@ -1,7 +1,7 @@
 package com.xenoage.zong.core.music.beam;
 
 import static org.junit.Assert.assertEquals;
-import material.chlapik.Page45Beams;
+import material.beam.fragments.ChlapikBeamFragments;
 
 import org.junit.Test;
 
@@ -13,7 +13,7 @@ import org.junit.Test;
 public class BeamTest {
 	
 	@Test public void getMaxLinesCountTest() {
-		Page45Beams source = new Page45Beams();
+		ChlapikBeamFragments source = new ChlapikBeamFragments();
 		assertEquals(2, source.exampleRow1Col1().getMaxLinesCount());
 		assertEquals(2, source.exampleRow1Col2().getMaxLinesCount());
 		assertEquals(2, source.exampleRow1Col3().getMaxLinesCount());

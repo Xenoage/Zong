@@ -1,4 +1,4 @@
-package material.chlapik;
+package material.beam.fragments;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.math.Fraction.fr;
@@ -17,7 +17,7 @@ import com.xenoage.zong.core.music.chord.Note;
  * 
  * @author Andreas Wenger
  */
-public class Page45Beams {
+public class ChlapikBeamFragments {
 
 	public Beam exampleRow1Col1() {
 		List<Chord> chords = alist();

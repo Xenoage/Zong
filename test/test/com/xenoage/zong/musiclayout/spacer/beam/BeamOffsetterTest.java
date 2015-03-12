@@ -10,8 +10,8 @@ import static org.junit.Assert.fail;
 
 import java.util.List;
 
-import material.ross.RossBeamSlant;
-import material.ross.RossBeamSlant.Example;
+import material.beam.slant.RossBeamSlant;
+import material.beam.slant.RossBeamSlant.Example;
 
 import org.junit.Test;
 

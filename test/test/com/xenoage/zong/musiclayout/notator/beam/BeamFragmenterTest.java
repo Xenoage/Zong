@@ -9,7 +9,7 @@ import static com.xenoage.zong.musiclayout.notations.beam.Fragment.Stop;
 import static com.xenoage.zong.musiclayout.notator.beam.BeamFragmenter.beamFragmenter;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import material.chlapik.Page45Beams;
+import material.beam.fragments.ChlapikBeamFragments;
 
 import org.junit.Test;
 
@@ -28,7 +28,7 @@ public class BeamFragmenterTest {
 	
 
 	@Test public void computeTest() {
-		Page45Beams source = new Page45Beams();
+		ChlapikBeamFragments source = new ChlapikBeamFragments();
 		Beam b;
 
 		//example of row 1, column 1
