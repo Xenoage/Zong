@@ -88,33 +88,7 @@ import com.xenoage.zong.core.music.chord.StemDirection;
 		return 0;
 	}
 
-	/**
-	 * Ross, p. 115, row 1: use horizontal beam, if first and last note is on the same LP.
-	 */
-	boolean firstAndLastNoteEqual() {
-		return (getFirst(notesLp) == getLast(notesLp));
-	}
-
-	/**
-	 * Ross, p. 115, rows 2, 3 and 5, and page 116, rows 3-6:
-	 * Use horizontal beam if all middle notes are lower/higher or equal than outer notes
-	 * for a downstem/upstem beam.
-	 */
-	boolean middleNotesNearestToBeam() {
-		if (stemDir == Up) {
-			int outerMax = max(getFirst(notesLp), getLast(notesLp));
-			for (int i : range(1, notesLp.length - 2))
-				if (notesLp[i] < outerMax)
-					return false;
-		}
-		else if (stemDir == Down) {
-			int outerMin = min(getFirst(notesLp), getLast(notesLp));
-			for (int i : range(1, notesLp.length - 2))
-				if (notesLp[i] > outerMin)
-					return false;
-		}
-		return true;
-	}
+	
 	
 	/**
 	 * Ross, p. 115, row 4: use horizontal beam, when the notes outline the

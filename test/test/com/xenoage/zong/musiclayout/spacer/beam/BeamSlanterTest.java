@@ -1,22 +1,13 @@
 package com.xenoage.zong.musiclayout.spacer.beam;
 
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.utils.math.Delta.df;
-import static com.xenoage.zong.musiclayout.notator.chord.stem.beam.range.OneMeasureOneStaff.oneMeasureOneStaff;
+import static com.xenoage.zong.core.music.chord.StemDirection.Down;
+import static com.xenoage.zong.core.music.chord.StemDirection.Up;
 import static com.xenoage.zong.musiclayout.spacer.beam.BeamSlanter.beamSlanter;
-import static java.lang.Math.abs;
-import static org.junit.Assert.fail;
-
-import java.util.List;
-
-import material.ross.BeamSlanting;
-import material.ross.BeamSlanting.Example;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
-
-import com.xenoage.zong.core.music.chord.StemDirection;
-import com.xenoage.zong.musiclayout.notations.chord.ChordLps;
 
 /**
  * Tests for {@link BeamSlanter}.
@@ -26,74 +17,89 @@ import com.xenoage.zong.musiclayout.notations.chord.ChordLps;
 public class BeamSlanterTest {
 	
 	private BeamSlanter testee = beamSlanter;
-	private final int staffLines = 5;
 	
 	
-	/**
-	 * Tests with examples from Ross.
-	 */
-	@Test public void computeForOneStaffTestRoss() {
-		List<String> failed = alist();
-		List<Example> examples = new BeamSlanting().examples;
-		for (Example example : examples) {
-			//collect data
-			int notesLp[] = getNotesLp(example);
-			StemDirection stemDir = getStemDir(example.stemDir, notesLp);
-			float[] stemsXIs = getStemsXIs(example, notesLp.length);
-			//run test
-			Slant slant = testee.computeForOneStaff(notesLp, stemDir, stemsXIs, 1, staffLines);
-			//check result
-			String failMessage = check(slant, example, stemDir);
-			if (failMessage != null)
-				failed.add(failMessage);
-		}
-		//success, when >95% of the examples are correct
-		if (1.0 * failed.size() / examples.size() > 0.05)
-			fail("Beam slanting incorrect for " + failed.size() + " of " + examples.size() +
-				" examples: \n" + failed);
+	@Test public void isFirstAndLastNoteEqualTest() {
+		//inspired by Ross, p. 115, row 1
+		assertTrue(testee.isFirstAndLastNoteEqual(new int[]{5, 6, 4, 5}));
+		assertFalse(testee.isFirstAndLastNoteEqual(new int[]{5, 6, 4, 6}));
 	}
 	
-	private int[] getNotesLp(Example example) {
-		int chordsCount = 2 + example.middleNotesLps.length;
-		int[] notesLp = new int[chordsCount];
-		notesLp[0] = example.leftNoteLp;
-		for (int i : range(example.middleNotesLps))
-			notesLp[1 + i] = example.middleNotesLps[i];
-		notesLp[chordsCount - 1] = example.rightNoteLp;
-		return notesLp;
-	}
-
-	private StemDirection getStemDir(StemDirection stemDir, int[] noteLps) {
-		if (stemDir != StemDirection.Default)
-			return stemDir;
-		//compute stem direction
-		ChordLps[] chordLps = new ChordLps[noteLps.length];
-		for (int i : range(noteLps))
-			chordLps[i] = new ChordLps(noteLps[i]);
-		return oneMeasureOneStaff.compute(chordLps, staffLines)[0];
+	@Test public void containsMiddleExtremumTest() {
+		//inspired by Ross, p. 115, row 2 and 3
+		assertTrue(testee.containsMiddleExtremum(new int[]{7, 3, 5}, Down));
+		assertFalse(testee.containsMiddleExtremum(new int[]{7, 3, 5}, Up));
+		assertTrue(testee.containsMiddleExtremum(new int[]{8, 6, 9}, Down));
+		assertFalse(testee.containsMiddleExtremum(new int[]{8, 6, 9}, Up));
+		assertTrue(testee.containsMiddleExtremum(new int[]{1, 4, 2}, Up));
+		assertFalse(testee.containsMiddleExtremum(new int[]{1, 4, 2}, Down));
+		assertTrue(testee.containsMiddleExtremum(new int[]{3, 4, 1}, Up));
+		assertFalse(testee.containsMiddleExtremum(new int[]{3, 4, 1}, Down));
+		//inspired by Ross, p. 115, rows 4
+		assertTrue(testee.containsMiddleExtremum(new int[]{3, 1, 3, 1}, Up));
+		assertTrue(testee.containsMiddleExtremum(new int[]{3, 10, 3, 10}, Down));
+		assertTrue(testee.containsMiddleExtremum(new int[]{3, 10, 3, 10, 3, 10, 3, 10}, Down));
+		//inspired by Ross, p. 115, row 5
+		assertTrue(testee.containsMiddleExtremum(new int[]{10, 6, 7, 9}, Down));
+		assertFalse(testee.containsMiddleExtremum(new int[]{10, 6, 7, 9}, Up));
+		assertTrue(testee.containsMiddleExtremum(new int[]{10, 6, 11, 9}, Down));
+		//inspired by Ross, p. 115, row 6
+		assertTrue(testee.containsMiddleExtremum(new int[]{5, 4, 8, 7}, Down));
+		//inspired by Ross, p. 116, rows 1-2
+		assertTrue(testee.containsMiddleExtremum(new int[]{5, 7, 2, 7}, Down));
+		assertTrue(testee.containsMiddleExtremum(new int[]{9, 6, 10, 11}, Down));
+		//inspired by Ross, p. 116, rows 3-6
+		assertTrue(testee.containsMiddleExtremum(new int[]{12, 5, 5, 5}, Down));
+		assertTrue(testee.containsMiddleExtremum(new int[]{5, 5, 5, 12}, Down));
+		assertTrue(testee.containsMiddleExtremum(new int[]{2, 2, 2, -3}, Up));
+		assertTrue(testee.containsMiddleExtremum(new int[]{-4, 1, 1, 1}, Up));
+		//inspired by Ross, p. 116, row 7
+		assertTrue(testee.containsMiddleExtremum(new int[]{1, 4, 3, 2}, Up));
+		assertTrue(testee.containsMiddleExtremum(new int[]{1, 2, 2, 0}, Up));
 	}
 	
-	private float[] getStemsXIs(Example example, int chordsCount) {
-		float[] stemsXIs = new float[chordsCount];
-		float distance = example.getStemsDistanceIs();
-		for (int i : range(chordsCount))
-			stemsXIs[i] = i * distance;
-		return stemsXIs;
+	@Test public void is3NotesMiddleEqualsOuterTest() {
+		//inspired by Ross, p. 97, row 3
+		assertTrue(testee.is3NotesMiddleEqualsOuter(new int[]{7, 5, 5}));
+		assertTrue(testee.is3NotesMiddleEqualsOuter(new int[]{5, 5, 7}));
+		assertTrue(testee.is3NotesMiddleEqualsOuter(new int[]{0, 2, 2}));
+		assertTrue(testee.is3NotesMiddleEqualsOuter(new int[]{2, 2, 0}));
+		assertFalse(testee.is3NotesMiddleEqualsOuter(new int[]{7, 5, 7}));
+		assertFalse(testee.is3NotesMiddleEqualsOuter(new int[]{4, 5, 6}));
 	}
 	
-	private String check(Slant slant, Example example, StemDirection stemDir) {
-		float expectedLeftEndLp = example.leftNoteLp +
-			stemDir.getSign() * example.leftStemLengthIs * 2;
-		float expectedRightEndLp = example.rightNoteLp +
-			stemDir.getSign() * example.rightStemLengthIs * 2;
-		if (abs(slant.leftEndLp - expectedLeftEndLp) < df &&
-			abs(slant.rightEndLp - expectedRightEndLp) < df) {
-			return null; //ok
-		}
-		else {
-			return example.name + ": expected [" + expectedLeftEndLp + "," + expectedRightEndLp +
-				"] but was [" + slant.leftEndLp + "," + slant.rightEndLp + "]";
-		}
+	@Test public void get4NotesRossSpecialDirTest() {
+		//inspired by Ross, p. 97, row 4
+		assertEquals(-1, testee.get4NotesRossSpecialDir(new int[]{7, 8, 5, 5}, Down)); //Ross
+		assertEquals(0, testee.get4NotesRossSpecialDir(new int[]{7, 7, 5, 5}, Down));
+		assertEquals(0, testee.get4NotesRossSpecialDir(new int[]{7, 5, 8, 5}, Down));
+		assertEquals(1, testee.get4NotesRossSpecialDir(new int[]{5, 5, 8, 7}, Down)); //Ross
+		assertEquals(0, testee.get4NotesRossSpecialDir(new int[]{5, 5, 7, 7}, Down));
+		assertEquals(0, testee.get4NotesRossSpecialDir(new int[]{5, 8, 5, 7}, Down));
+		assertEquals(1, testee.get4NotesRossSpecialDir(new int[]{1, 0, 3, 3}, Up)); //Ross
+		assertEquals(0, testee.get4NotesRossSpecialDir(new int[]{1, 1, 3, 3}, Up));
+		assertEquals(0, testee.get4NotesRossSpecialDir(new int[]{1, 3, 0, 3}, Up));
+		assertEquals(-1, testee.get4NotesRossSpecialDir(new int[]{3, 3, 0, 1}, Up)); //Ross
+		assertEquals(0, testee.get4NotesRossSpecialDir(new int[]{3, 3, 1, 1}, Up));
+		assertEquals(0, testee.get4NotesRossSpecialDir(new int[]{3, 0, 3, 1}, Up));
 	}
+	
+	@Test public void getInnerRunDirTest() {
+		//inspired by Ross, p. 97, row 5-6
+		assertEquals(1, testee.getInnerRunDir(new int[]{6, 2, 3, 4, 5, 7})); //Ross
+		assertEquals(1, testee.getInnerRunDir(new int[]{6, 2, 4, 6, 8, 10})); //not a scale, but ascending
+		assertEquals(0, testee.getInnerRunDir(new int[]{6, 6, 4, 6, 8, 10})); //6-6-4
+		assertEquals(0, testee.getInnerRunDir(new int[]{6, 2, 4, 4, 8, 10})); //2x 4
+		assertEquals(0, testee.getInnerRunDir(new int[]{6, 2, 4, 6, 10, 10})); //2x 10
+		assertEquals(0, testee.getInnerRunDir(new int[]{6, 2, 4, 9, 8, 10})); //4-9-8
+		assertEquals(-1, testee.getInnerRunDir(new int[]{6, 5, 4, 3, 2, 7})); //Ross
+		assertEquals(-1, testee.getInnerRunDir(new int[]{10, 9, 8, 3, 2, 7})); //not a scale, but descending
+		assertEquals(0, testee.getInnerRunDir(new int[]{10, 10, 8, 3, 2, 7})); //2x 10
+		assertEquals(0, testee.getInnerRunDir(new int[]{10, 9, 9, 3, 2, 7})); //2x 9
+		assertEquals(0, testee.getInnerRunDir(new int[]{10, 9, 8, 3, 7, 7})); //3-7-7
+		assertEquals(0, testee.getInnerRunDir(new int[]{10, 9, 8, 3, 4, 7})); //3-4-7
+	}
+	
+	
 
 }
