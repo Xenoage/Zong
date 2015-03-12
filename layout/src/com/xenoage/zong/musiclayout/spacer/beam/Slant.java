@@ -1,5 +1,7 @@
 package com.xenoage.zong.musiclayout.spacer.beam;
 
+import static java.lang.Math.abs;
+import static java.lang.Math.signum;
 import lombok.AllArgsConstructor;
 
 import com.xenoage.utils.annotations.Const;
@@ -22,13 +24,21 @@ public final class Slant {
 	public static final Slant horizontalSlant = new Slant(0, 0);
 	
 	/** The smallest possible slant in IS, e.g. -0.5 for one half-space down. */
-	public float minIs;
+	public final float minIs;
 	/** The biggest possible slant in IS, e.g. 0 for a horizontal beam. */
-	public float maxIs;
+	public final float maxIs;
 	
 	
 	public static final Slant slant(float slantIs) {
 		return new Slant(slantIs, slantIs);
 	}
 	
+	/**
+	 * Limits the values to the given absolute value.
+	 */
+	public Slant limit(float absIs) {
+		float min = (abs(minIs) > absIs ? absIs * signum(minIs) : minIs);
+		float max = (abs(maxIs) > absIs ? absIs * signum(maxIs) : maxIs);
+		return slant(min, max);
+	}
 }

@@ -2,11 +2,14 @@ package com.xenoage.zong.musiclayout.spacer.beam;
 
 import static com.xenoage.utils.collections.ArrayUtils.getFirst;
 import static com.xenoage.utils.collections.ArrayUtils.getLast;
+import static com.xenoage.utils.collections.ArrayUtils.max;
+import static com.xenoage.utils.collections.ArrayUtils.min;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.core.music.chord.StemDirection.Down;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
 import static com.xenoage.zong.musiclayout.spacer.beam.Slant.horizontalSlant;
 import static com.xenoage.zong.musiclayout.spacer.beam.Slant.slant;
+import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
@@ -20,10 +23,10 @@ import com.xenoage.zong.core.music.chord.StemDirection;
  * On page 115 ff., Ross names a lot of rules when beams have to be horizontal.
  * It seems as if they can be unified to two rules:
  * <ol>
- *   <li>A beam is horizontal, if the first and last (inner) note are on the same LP.</li>
- *   <li>A upstem/downstem beam with 3 or more chords is horizontal, if at least one of
+ *   <li>A beam is horizontal, if the first and last note are on the same LP.</li>
+ *   <li>An upstem/downstem beam with 3 or more chords is horizontal, if at least one of
  *     the middle notes is higher/lower than or equal to the left and right note.
- *     There are only some exceptions, listed in Ross, p. 97.</li> 
+ *     There are some exceptions, listed in Ross, p. 97.</li> 
  * </ol>
  * All other beams receive a non-horizontal slant.
  * 
@@ -32,6 +35,7 @@ import com.xenoage.zong.core.music.chord.StemDirection;
  *   <li>the interval between the first and last note (see Ross, p. 111) and</li>
  *   <li>the horizontal spacing (close spacing for crowded notes, normal
  *     spacing otherwise, see Ross p. 112 ff.)</li> 
+ *   <li>the LP of the notes (Ross, p. 111, rows 1 and 2)</li>
  * </ul>
  * 
  * The slant is flexible
@@ -43,7 +47,7 @@ public class BeamSlanter {
 	public static final BeamSlanter beamSlanter = new BeamSlanter();
 	
 	
-	public Slant compute(int[] notesLp, StemDirection stemDir, float[] stemsXIs) {
+	public Slant compute(int[] notesLp, StemDirection stemDir, float[] stemsXIs, int staffLines) {
 		//Ross, p. 115, row 1: use horizontal beam, if first and last note is on the same LP
 		if (isFirstAndLastNoteEqual(notesLp))
 			return horizontalSlant;
@@ -68,7 +72,10 @@ public class BeamSlanter {
 		}
 		//otherwise, compute slant dependent on the horizontal spacing
 		//GOON
-		return computeNormal(getFirst(notesLp), getLast(notesLp), stemDir);
+		Slant slant =  computeNormal(getFirst(notesLp), getLast(notesLp), stemDir);
+		//limit slant
+		slant = limitSlantForExtremeNotes(slant, notesLp, stemDir, staffLines);
+		return slant;
 	}
 	
 	/**
@@ -171,7 +178,26 @@ public class BeamSlanter {
 	 * Computes the slant for beams with normal horizontal spacing.
 	 */
 	Slant computeNormal(int firstNoteLp, int lastNoteLp, StemDirection stemDir) {
-		//GOON
 		return horizontalSlant;
 	}
+	
+	/**
+	 * Ross, p. 111: Limit the slant to 0.5 for very high and very low notes.
+	 */
+	Slant limitSlantForExtremeNotes(Slant slant, int[] notesLp,
+		StemDirection stemDir, int staffLines) {
+		float maxSlantAbs = 0.5f;
+		if (abs(slant.maxIs) > maxSlantAbs || abs(slant.minIs) > maxSlantAbs) {
+			//Ross, p. 111, row 1 and 2: upstem and only notes below bottom leger lines
+			//or downstem and only notes above top leger lines
+			int bottomLegerLp = -2;
+			int topLegerLp = staffLines * 2;
+			if ((stemDir == Up && max(notesLp) < bottomLegerLp) ||
+				(stemDir == Down && min(notesLp) > topLegerLp)) {
+				slant = slant.limit(maxSlantAbs);
+			}
+		}
+		return slant;
+	}
+	
 }

@@ -1,5 +1,6 @@
 package com.xenoage.zong.musiclayout.spacer.beam;
 
+import static com.xenoage.utils.math.Delta.df;
 import static com.xenoage.zong.core.music.chord.StemDirection.Down;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
 import static com.xenoage.zong.musiclayout.spacer.beam.BeamSlanter.beamSlanter;
@@ -8,6 +9,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
+
+import com.xenoage.utils.math.Delta;
 
 /**
  * Tests for {@link BeamSlanter}.
@@ -100,6 +103,24 @@ public class BeamSlanterTest {
 		assertEquals(0, testee.getInnerRunDir(new int[]{10, 9, 8, 3, 4, 7})); //3-4-7
 	}
 	
-	
+	@Test public void limitSlantForExtremeNotesTest() {
+		//inspired by Ross, p. 111, row 1-2
+		assertEquals(0.5, testee.limitSlantForExtremeNotes(
+			Slant.slant(2), new int[]{-9, -3}, Up, 5).minIs, df); //Ross
+		assertEquals(0.5, testee.limitSlantForExtremeNotes(
+			Slant.slant(2), new int[]{-4, -3}, Up, 5).minIs, df); //Ross
+		assertEquals(-0.5, testee.limitSlantForExtremeNotes(
+			Slant.slant(-2), new int[]{16, 12}, Down, 5).minIs, df); //Ross
+		assertEquals(-0.5, testee.limitSlantForExtremeNotes(
+			Slant.slant(-2), new int[]{12, 12}, Down, 5).minIs, df); //Ross
+		assertEquals(2, testee.limitSlantForExtremeNotes(
+			Slant.slant(2), new int[]{-9, -2}, Up, 5).minIs, df); //too high
+		assertEquals(2, testee.limitSlantForExtremeNotes(
+			Slant.slant(2), new int[]{-4, -3}, Down, 5).minIs, df); //low, but stem down
+		assertEquals(-2, testee.limitSlantForExtremeNotes(
+			Slant.slant(-2), new int[]{16, 10}, Down, 5).minIs, df); //too low
+		assertEquals(-2, testee.limitSlantForExtremeNotes(
+			Slant.slant(-2), new int[]{12, 12}, Up, 5).minIs, df); //high, but stem up
+	}
 
 }
