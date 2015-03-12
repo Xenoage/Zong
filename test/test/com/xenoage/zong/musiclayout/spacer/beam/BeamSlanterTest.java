@@ -7,10 +7,11 @@ import static com.xenoage.zong.musiclayout.spacer.beam.BeamSlanter.beamSlanter;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import material.ross.RossBeamSlant;
+import material.ross.RossBeamSlant.Example;
 
 import org.junit.Test;
-
-import com.xenoage.utils.math.Delta;
 
 /**
  * Tests for {@link BeamSlanter}.
@@ -103,6 +104,36 @@ public class BeamSlanterTest {
 		assertEquals(0, testee.getInnerRunDir(new int[]{10, 9, 8, 3, 4, 7})); //3-4-7
 	}
 	
+	@Test public void isCloseSpacingTest() {
+		assertFalse(testee.isCloseSpacing(new float[]{2, 6}));
+		assertTrue(testee.isCloseSpacing(new float[]{2, 5}));
+		assertFalse(testee.isCloseSpacing(new float[]{10, 14, 17, 21})); //avg 3.67
+		assertTrue(testee.isCloseSpacing(new float[]{10, 14, 17, 20})); //avg 3.3
+	}
+	
+	@Test public void computeCloseTest() {
+		//use tests from Ross
+		for (Example example : new RossBeamSlant().getExamples("close", 9)) {
+			float expectedSlant = example.getSlantIs();
+			Slant slant = testee.computeClose(example.getNotesLp(), example.getStemDir());
+			assertSlantContains(expectedSlant, slant, example.name);
+		}
+	}
+	
+	@Test public void computeNormalTest() {
+		//use tests from Ross
+		for (Example example : new RossBeamSlant().getExamples("interval", 14)) {
+			float expectedSlant = example.getSlantIs();
+			Slant slant = testee.computeNormal(example.leftNoteLp, example.rightNoteLp);
+			assertSlantContains(expectedSlant, slant, example.name);
+		}
+	}
+	
+	private void assertSlantContains(float expected, Slant slant, String testName) {
+		if (false == slant.contains(expected))
+			fail(testName + ": expected slant " + expected + ", but not in range of " + slant);
+	}
+	
 	@Test public void limitSlantForExtremeNotesTest() {
 		//inspired by Ross, p. 111, row 1-2
 		assertEquals(0.5, testee.limitSlantForExtremeNotes(
@@ -121,6 +152,16 @@ public class BeamSlanterTest {
 			Slant.slant(-2), new int[]{16, 10}, Down, 5).minIs, df); //too low
 		assertEquals(-2, testee.limitSlantForExtremeNotes(
 			Slant.slant(-2), new int[]{12, 12}, Up, 5).minIs, df); //high, but stem up
+	}
+	
+	@Test public void computeTest() {
+		//use tests from Ross
+		for (Example example : new RossBeamSlant().examples) {
+			float expectedSlant = example.getSlantIs();
+			Slant slant = testee.compute(example.getNotesLp(), example.getStemDir(),
+				example.getStemsXIs(), RossBeamSlant.staffLines);
+			assertSlantContains(expectedSlant, slant, example.name);
+		}
 	}
 
 }

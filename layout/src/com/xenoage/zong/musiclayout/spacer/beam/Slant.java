@@ -2,7 +2,9 @@ package com.xenoage.zong.musiclayout.spacer.beam;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.signum;
+import static lombok.AccessLevel.PRIVATE;
 import lombok.AllArgsConstructor;
+import lombok.ToString;
 
 import com.xenoage.utils.annotations.Const;
 
@@ -18,7 +20,7 @@ import com.xenoage.utils.annotations.Const;
  * 
  * @author Andreas Wenger
  */
-@Const @AllArgsConstructor(staticName="slant")
+@Const @AllArgsConstructor(access=PRIVATE) @ToString
 public final class Slant {
 	
 	public static final Slant horizontalSlant = new Slant(0, 0);
@@ -33,12 +35,30 @@ public final class Slant {
 		return new Slant(slantIs, slantIs);
 	}
 	
+	public static final Slant slantDir(float absIs, int sign) {
+		return slantDir(absIs, absIs, sign);
+	}
+	
+	public static final Slant slantDir(float minAbsIs, float maxAbsIs, int sign) {
+		if (sign > 0)
+			return new Slant(minAbsIs * sign, maxAbsIs * sign);
+		else
+			return new Slant(maxAbsIs * sign, minAbsIs * sign);	
+	}
+	
+	/**
+	 * Returns true, iff the given slant is within the range of this slant.
+	 */
+	public boolean contains(float slantIs) {
+		return (minIs <= slantIs && slantIs <= maxIs);
+	}
+	
 	/**
 	 * Limits the values to the given absolute value.
 	 */
 	public Slant limit(float absIs) {
 		float min = (abs(minIs) > absIs ? absIs * signum(minIs) : minIs);
 		float max = (abs(maxIs) > absIs ? absIs * signum(maxIs) : maxIs);
-		return slant(min, max);
+		return new Slant(min, max);
 	}
 }

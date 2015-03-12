@@ -1,12 +1,16 @@
 package material.ross;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.core.music.chord.StemDirection.Down;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
+import static com.xenoage.zong.musiclayout.notator.chord.stem.beam.range.OneMeasureOneStaff.oneMeasureOneStaff;
+import static org.junit.Assert.fail;
 
 import java.util.List;
 
 import com.xenoage.zong.core.music.chord.StemDirection;
+import com.xenoage.zong.musiclayout.notations.chord.ChordLps;
 
 
 /**
@@ -15,14 +19,18 @@ import com.xenoage.zong.core.music.chord.StemDirection;
  * 
  * @author Andreas Wenger
  */
-public class BeamSlanting {
+public class RossBeamSlant {
 	
+	public static final int staffLines = 5;
+	
+	//examples commented out with "rule?": example seems to be wrong or no
+	//rule is presented which explains it
 	public List<Example> examples = alist(
 		//hang/straddle explained
 		example("p99 1").left(5, 3).width(6).right(6, 3.25),
 		example("p99 2").left(7, 3).width(6.5).right(8, 3.25),
 		//normal length
-		example("p99 3").left(5, 3.5).width(6.5).right(4, 3.5),
+		example("p99 3").left(5, 3.5).width(6.5).right(4, 3.25),
 		//larger slant
 		example("p99 4").left(6, 3.25).width(6.5).right(8, 3.25),
 		example("p99 5").left(6, 3.25).width(6.5).right(10, 4),
@@ -35,20 +43,20 @@ public class BeamSlanting {
 		example("p100 7").left(2, 3.25).width(4.5).right(-1, 3.5),
 		example("p100 8").left(2, 3.25).width(5.0).right(-1, 3.5),
 		//close spacing. right stem is longer
-		example("p101 1").left(2, 3.25).width(1.5).right(-1, 4.5),
-		example("p101 2").left(2, 3.25).width(2.0).right(-1, 4.5),
-		example("p101 3").left(2, 3.25).width(2.5).right(-1, 4.5),
-		example("p101 4").left(2, 3.25).width(3.0).right(-1, 4.5),
-		example("p101 5").left(2, 3.25).width(3.5).right(-1, 4.5),
+		example("p101 close 1").left(2, 3.25).width(1.5).right(-1, 4.5),
+		example("p101 close 2").left(2, 3.25).width(2.0).right(-1, 4.5),
+		example("p101 close 3").left(2, 3.25).width(2.5).right(-1, 4.5),
+		example("p101 close 4").left(2, 3.25).width(3.0).right(-1, 4.5),
+		example("p101 close 5").left(2, 3.25).width(3.4).right(-1, 4.5), //from 3.5, we use normal spacing
 		//by interval
-		example("p101 3a1").left(-6, 5).width(6).right(-3, 4),
-		example("p101 3a2").left(13, 4.5).width(6).right(11, 4),
-		example("p101 3b").left(6, 3.25).width(7).right(-3, 3.5),
-		example("p101 3c1").left(1, 3).width(6).right(-1, 3.5),
-		example("p101 3c2").left(2, 3.25).width(6).right(0, 3.25),
-		example("p101 3d1").left(-1, 3).width(6).right(-4, 4),
-		example("p101 3d2").left(2, 3.25).width(6).right(-1, 3.5),
-		example("p101 3e").left(-6, 4.75).width(6).right(2, 3),
+		example("p101 a1").left(-6, 5).width(6).right(-3, 4),
+		example("p101 a2").left(13, 4.5).width(6).right(11, 4),
+		example("p101 b").left(6, 3.25).width(6).right(7, 3.5),
+		example("p101 c1").left(1, 3).width(6).right(-1, 3.5),
+		example("p101 c2").left(2, 3.25).width(6).right(0, 3.25),
+		example("p101 d1").left(-1, 3).width(6).right(-4, 4),
+		example("p101 d2").left(2, 3.25).width(6).right(-1, 3.5),
+		example("p101 e").left(9, 4.75).width(6).right(2, 3),
 		//diatonic movement of inner notes does not change the beam
 		example("p103 1").left(0, 3.25).width(6).right(3, 3),
 		example("p103 2").left(0, 3.25).middleNotes(1, 2).right(3, 3),
@@ -66,14 +74,14 @@ public class BeamSlanting {
 		example("p104 r2 c3", -2, 3.25, 1, 3),
 		example("p104 r2 c4", -2, 4, 2, 3.25),
 		example("p104 r2 c5", -2, 4.25, 3, 3),
-		example("p104 r2 c6", -2, 5.25, 4, 3.25),
+		//rule? example("p104 r2 c6", -2, 5.25, 4, 3.25),
 		example("p104 r2 c7", -2, 5.25, 5, 3),
 		example("p104 r3 c1", -2, 3.25, -3, 3.5),
 		example("p104 r3 c2", -2, 3.5, -4, 4),
 		example("p104 r3 c3", -2, 3.5, -5, 4.5),
-		example("p104 r3 c4", -2, 3.5, -6, 5),
-		example("p104 r3 c5", -2, 3.5, -7, 5.5),
-		example("p104 r4 c1", 5, 3, 4, 3.25).stemDir(Up),
+		//rule? example("p104 r3 c4", -2, 3.5, -6, 5),
+		//rule? example("p104 r3 c5", -2, 3.5, -7, 5.5),
+		//rule? example("p104 r4 c1", 5, 3, 4, 3.25).stemDir(Up),
 		example("p104 r4 c2", 5, 3, 3, 3.5).stemDir(Up),
 		example("p104 r4 c3", 5, 3, 2, 3.5),
 		example("p104 r4 c4", 5, 3, 1, 3.75),
@@ -85,12 +93,12 @@ public class BeamSlanting {
 		example("p104 r5 c3", 12, 4, 9, 3),
 		example("p104 r5 c4", 12, 4, 8, 3.25),
 		example("p104 r5 c5", 12, 4.25, 7, 3),
-		example("p104 r5 c6", 12, 5.25, 6, 3.25),
+		//rule? example("p104 r5 c6", 12, 5.25, 6, 3.25),
 		example("p104 r5 c7", 12, 5.25, 5, 3),
 		example("p104 r6 c1", 5, 3.5, 4, 3.25),
 		example("p104 r6 c2", 5, 3.5, 3, 3),
-		example("p104 r6 c3", 5, 3.75, 2, 3.25),
-		example("p104 r6 c4", 5, 3.5, 0, 2.5),
+		example("p104 r6 c3", 5, 3.75, 2, 3.25).stemDir(Down),
+		example("p104 r6 c4", 5, 3.5, 0, 2.5).stemDir(Down),
 		example("p104 r7 c1", 5, 3, 6, 3.25),
 		example("p104 r7 c2", 5, 3, 7, 3.5),
 		example("p104 r7 c3", 5, 3, 8, 3.25),
@@ -108,13 +116,13 @@ public class BeamSlanting {
 		example("p108 r2 c1", 2, 3.25, 3, 3),
 		example("p108 r2 c2", 2, 3.25, 4, 3.25),
 		example("p108 r2 c3", 2, 3.5, 5, 3),
-		example("p108 r2 c4", 2, 4, 6, 3.25),
-		example("p108 r2 c5", 2, 3.5, 7, 3.25),
-		example("p108 r2 c6", 2, 4.25, 8, 3),
-		example("p108 r2 c7", 2, 4.25, 9, 2.75),
+		example("p108 r2 c4", 2, 4, 6, 3.25).stemDir(Up),
+		//rule? example("p108 r2 c5", 2, 3.5, 7, 2.75).stemDir(Up), //Ross error: caption != notes
+		example("p108 r2 c6", 2, 4.25, 8, 3).stemDir(Up),
+		example("p108 r2 c7", 2, 4.25, 9, 2.75).stemDir(Up),
 		example("p108 r3 c1", -5, 4.5, -2, 3.5),
-		example("p108 r3 c2", -5, 4.5, -1, 3),
-		example("p108 r3 c3", -5, 4.75, 0, 3.25),
+		//rule? example("p108 r3 c2", -5, 4.5, -1, 3),
+		//rule? example("p108 r3 c3", -5, 4.75, 0, 3.25),
 		example("p108 r3 c4", -5, 4.75, 1, 3),
 		example("p108 r3 c5", -5, 5.5, 2, 3.25),
 		example("p108 r3 c6", 9, 2.75, 2, 4.25).stemDir(Up),
@@ -122,15 +130,15 @@ public class BeamSlanting {
 		example("p108 r4 c2", 2, 3.25, 0, 3.25),
 		example("p108 r4 c3", 2, 3.25, -1, 3.5),
 		example("p108 r4 c4", 2, 3.25, -2, 4),
-		example("p108 r4 c5", 2, 3.25, -3, 4.75),
-		example("p108 r4 c6", 2, 3.25, -4, 5.25),
+		//rule? example("p108 r4 c5", 2, 3.25, -3, 4.75),
+		//rule? example("p108 r4 c6", 2, 3.25, -4, 5.25),
 		example("p108 r4 c7", 2, 3.25, -5, 5.5),
 		example("p108 r5 c1", 9, 3, 10, 3.25),
 		example("p108 r5 c2", 9, 3, 11, 3.5),
 		example("p108 r5 c3", 9, 3, 12, 4),
-		example("p108 r5 c4", 9, 3, 13, 4.5),
-		example("p108 r5 c5", 9, 3, 14, 5),
-		example("p108 r5 c6", 9, 3, 15, 5.5),
+		//rule? example("p108 r5 c4", 9, 3, 13, 4.5),
+		//rule? example("p108 r5 c5", 9, 3, 14, 5),
+		//rule? example("p108 r5 c6", 9, 3, 15, 5.5),
 		example("p108 r6 c1", 9, 3.5, 8, 3.25),
 		example("p108 r6 c2", 9, 3.5, 7, 3),
 		example("p108 r6 c3", 9, 3.5, 6, 3.25),
@@ -152,37 +160,37 @@ public class BeamSlanting {
 		example("p111 r2 c1").left(16, 6).width(6).right(12, 4.5),
 		example("p111 r2 c2").left(12, 4).width(6).right(11, 3.75),
 		//interval 2nd
-		example("p111 2nd 1").left(-1, 3.5).width(6).right(0, 3.25),
-		example("p111 2nd 2").left(7, 3.5).width(6).right(6, 3.25),
+		example("p111 interval 2nd 1").left(-1, 3.5).width(6).right(0, 3.25),
+		example("p111 interval 2nd 2").left(7, 3.5).width(6).right(6, 3.25),
 		//interval 3rd
-		example("p111 3rd 1").left(0, 3.25).width(6).right(2, 3.25),
-		example("p111 3rd 2").left(1, 3.5).width(6).right(3, 3),
+		example("p111 interval 3rd 1").left(0, 3.25).width(6).right(2, 3.25),
+		example("p111 interval 3rd 2").left(1, 3.5).width(6).right(3, 3),
 		//interval 4th
-		example("p111 4th 1").left(3, 3).width(6).right(6, 3.5),
-		example("p111 4th 2").left(6, 3.25).width(6).right(9, 3.5),
+		example("p111 interval 4th 1").left(3, 3).width(6).right(6, 3.5),
+		example("p111 interval 4th 2").left(6, 3.25).width(6).right(9, 3.5),
 		//interval 5th
-		example("p111 5th 1").left(6, 3.25).width(6).right(10, 4),
-		example("p111 5th 2").left(-2, 4).width(6).right(2, 3.25),
+		example("p111 interval 5th 1").left(6, 3.25).width(6).right(10, 4),
+		example("p111 interval 5th 2").left(-2, 4).width(6).right(2, 3.25),
 		//interval 6th
-		example("p111 6th 1").left(-2, 4.25).width(6).right(3, 2.75),
-		example("p111 6th 2").left(-1, 4.5).width(6).right(4, 3.5),
+		example("p111 interval 6th 1").left(-2, 4.25).width(6).right(3, 3),
+		example("p111 interval 6th 2").left(-1, 4.5).width(6).right(4, 3.5),
 		//interval 7th
-		example("p111 7th 1").left(-1, 4.75).width(6).right(5, 2.75),
-		example("p111 7th 2").left(0, 4.25).width(6).right(6, 3.25),
+		example("p111 interval 7th 1").left(-1, 4.75).width(6).right(5, 3),
+		example("p111 interval 7th 2").left(0, 4.5).width(6).right(6, 3.25),
 		//interval 8th
-		example("p111 8th 1").left(3, 3).width(6).right(10, 5.25),
-		example("p111 8th 2").left(2, 3.25).width(6).right(9, 4.75),
+		example("p111 interval 8th 1").left(3, 3).width(6).right(10, 5.25),
+		example("p111 interval 8th 2").left(2, 3.25).width(6).right(9, 4.75),
 		//close spacing rules
-		example("p113 a1").left(0, 3.25).width(3).right(9, 5.5),
-		example("p113 a2").left(8, 3.25).width(3).right(11, 4.5),
-		example("p113 b1").left(1, 3).width(3).right(-5, 5.5),
-		example("p113 b2").left(9, 4.5).width(3).right(5, 3),
+		example("p113 close a1").left(0, 3.25).width(3).right(-5, 5.5),
+		example("p113 close a2").left(8, 3.25).width(3).right(11, 4.5),
+		example("p113 close b1").left(1, 3).width(3).right(-5, 5.5),
+		example("p113 close b2").left(9, 4.5).width(3).right(5, 3),
 		//more close spacing examples
 		example("p114 r1 1").left(-2, 3.25).width(2.5).right(-1, 3),
 		example("p114 r1 2").left(-2, 4).width(2.5).right(0, 3.25),
 		example("p114 r1 3").left(-2, 4).width(2.5).right(1, 3),
 		example("p114 r1 4").left(-2, 5).width(2.5).right(2, 3.25),
-		example("p114 r1 5").left(-2, 5).width(2.5).right(3, 2.75),
+		example("p114 r1 5").left(-2, 5).width(2.5).right(3, 3),
 		example("p114 r1 6").left(-1, 3.5).width(2.5).right(0, 3.25),
 		example("p114 r1 7").left(-1, 3.5).width(2.5).right(1, 3),
 		example("p114 r1 8").left(-1, 4.5).width(2.5).right(2, 3.25),
@@ -226,7 +234,7 @@ public class BeamSlanting {
 		example("p117 r1 1").left(0, 4.5).middleNotes(3, -1).right(2, 3.5),
 		example("p117 r1 2").left(3, 3.5).middleNotes(-1, 4).right(2, 4),
 		example("p117 r2 1").left(6, 4).middleNotes(5, 4, 3, 4).right(7, 4.5),
-		example("p117 r2 2").left(5, 3.5).middleNotes(4, 4, 5, 4).right(3, 2.5),
+		example("p117 r2 2").left(5, 3.5).middleNotes(4, 3, 5, 4).right(3, 2.5),
 		example("p117 r2 3").left(-1, 5).middleNotes(2, 3, 2, 1).right(0, 4.5),
 		example("p117 r2 4").left(3, 3).middleNotes(2, 1, 3, 2).right(1, 4),
 		example("p117 r3 1").left(6, 4.5).middleNotes(2, 3, 4, 5).right(6, 4.5),
@@ -236,6 +244,21 @@ public class BeamSlanting {
 		//TODO: p. 118
 	);
 	
+	
+	public List<Example> getExamples(String namePart, int minExpectedTestsCount) {
+		List<Example> ret = alist();
+		int found = 0;
+		for (Example example : new RossBeamSlant().examples) {
+			if (example.name.contains(namePart)) {
+				found++;
+				ret.add(example);
+			}
+		}
+		if (found < minExpectedTestsCount) {
+			fail("only " + found + " test found");
+		}
+		return ret;
+	}
 	
 	/**
 	 * Contains the data of a single example with a 2-note beam.
@@ -248,7 +271,7 @@ public class BeamSlanting {
 		public float rightStemLengthIs;
 		public float widthIs = Float.NaN;
 		public int[] middleNotesLps = new int[0];
-		public StemDirection stemDir = StemDirection.Default;
+		private StemDirection stemDir = StemDirection.Default;
 		
 		private Example left(int noteLp, double stemLengthIs) {
 			leftNoteLp = noteLp;
@@ -277,11 +300,49 @@ public class BeamSlanting {
 			return this;
 		}
 		
+		public float[] getStemsXIs() {
+			//compute positions. use same distance for each note
+			float distanceIs = getStemsDistanceIs();
+			float[] stemsXIs = new float[2 + middleNotesLps.length];
+			for (int i : range(stemsXIs)) {
+				stemsXIs[i] = i * distanceIs;
+			}
+			return stemsXIs;
+		}
+		
 		public float getStemsDistanceIs() {
 			if (Double.isNaN(widthIs))
 				return 5; //use normal distance of 5 spaces as default
 			else
 				return widthIs / (middleNotesLps.length + 1); //equally split width for all stems
+		}
+		
+		public float getSlantIs() {
+			int stemDir = getStemDir().getSign();
+			float leftStemEndLp = leftNoteLp + stemDir * leftStemLengthIs * 2;
+			float rightStemEndLp = rightNoteLp + stemDir * rightStemLengthIs * 2;
+			return (rightStemEndLp - leftStemEndLp) / 2;
+		}
+		
+		public int[] getNotesLp() {
+			int chordsCount = 2 + middleNotesLps.length;
+			int[] notesLp = new int[chordsCount];
+			notesLp[0] = leftNoteLp;
+			for (int i : range(middleNotesLps))
+				notesLp[1 + i] = middleNotesLps[i];
+			notesLp[chordsCount - 1] = rightNoteLp;
+			return notesLp;
+		}
+		
+		public StemDirection getStemDir() {
+			if (stemDir != StemDirection.Default)
+				return stemDir;
+			//compute stem direction
+			int[] notesLp = getNotesLp();
+			ChordLps[] chordLps = new ChordLps[notesLp.length];
+			for (int i : range(notesLp))
+				chordLps[i] = new ChordLps(notesLp[i]);
+			return oneMeasureOneStaff.compute(chordLps, staffLines)[0];
 		}
 	}
 	

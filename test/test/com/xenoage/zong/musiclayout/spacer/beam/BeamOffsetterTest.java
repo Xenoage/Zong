@@ -10,8 +10,8 @@ import static org.junit.Assert.fail;
 
 import java.util.List;
 
-import material.ross.BeamSlanting;
-import material.ross.BeamSlanting.Example;
+import material.ross.RossBeamSlant;
+import material.ross.RossBeamSlant.Example;
 
 import org.junit.Test;
 
@@ -34,7 +34,7 @@ public class BeamOffsetterTest {
 	 */
 	@Test public void computeForOneStaffTestRoss() {
 		List<String> failed = alist();
-		List<Example> examples = new BeamSlanting().examples;
+		List<Example> examples = new RossBeamSlant().examples;
 		for (Example example : examples) {
 			//collect data
 			int notesLp[] = getNotesLp(example);
@@ -51,26 +51,6 @@ public class BeamOffsetterTest {
 		if (1.0 * failed.size() / examples.size() > 0.05)
 			fail("Beam slanting incorrect for " + failed.size() + " of " + examples.size() +
 				" examples: \n" + failed);
-	}
-	
-	private int[] getNotesLp(Example example) {
-		int chordsCount = 2 + example.middleNotesLps.length;
-		int[] notesLp = new int[chordsCount];
-		notesLp[0] = example.leftNoteLp;
-		for (int i : range(example.middleNotesLps))
-			notesLp[1 + i] = example.middleNotesLps[i];
-		notesLp[chordsCount - 1] = example.rightNoteLp;
-		return notesLp;
-	}
-
-	private StemDirection getStemDir(StemDirection stemDir, int[] noteLps) {
-		if (stemDir != StemDirection.Default)
-			return stemDir;
-		//compute stem direction
-		ChordLps[] chordLps = new ChordLps[noteLps.length];
-		for (int i : range(noteLps))
-			chordLps[i] = new ChordLps(noteLps[i]);
-		return oneMeasureOneStaff.compute(chordLps, staffLines)[0];
 	}
 	
 	private float[] getStemsXIs(Example example, int chordsCount) {

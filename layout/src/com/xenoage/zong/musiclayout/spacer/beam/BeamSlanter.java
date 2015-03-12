@@ -9,6 +9,7 @@ import static com.xenoage.zong.core.music.chord.StemDirection.Down;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
 import static com.xenoage.zong.musiclayout.spacer.beam.Slant.horizontalSlant;
 import static com.xenoage.zong.musiclayout.spacer.beam.Slant.slant;
+import static com.xenoage.zong.musiclayout.spacer.beam.Slant.slantDir;
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -58,7 +59,7 @@ public class BeamSlanter {
 			//there are some exceptions, listed in Ross, p. 97
 			//Ross, p. 97, row 3: 3 notes with middle note equal to outer note: normal slant
 			if (is3NotesMiddleEqualsOuter(notesLp))
-				return computeNormal(getFirst(notesLp), getLast(notesLp), stemDir);
+				return computeNormal(getFirst(notesLp), getLast(notesLp));
 			//Ross, p. 97, row 4: 4 notes in special constellation: half space slant
 			int rossSpecialDir = get4NotesRossSpecialDir(notesLp, stemDir);
 			if (rossSpecialDir != 0)
@@ -71,8 +72,11 @@ public class BeamSlanter {
 			return horizontalSlant;
 		}
 		//otherwise, compute slant dependent on the horizontal spacing
-		//GOON
-		Slant slant =  computeNormal(getFirst(notesLp), getLast(notesLp), stemDir);
+		Slant slant;
+		if (isCloseSpacing(stemsXIs))
+			slant = computeClose(notesLp, stemDir);
+		else
+			slant = computeNormal(getFirst(notesLp), getLast(notesLp));
 		//limit slant
 		slant = limitSlantForExtremeNotes(slant, notesLp, stemDir, staffLines);
 		return slant;
@@ -139,12 +143,15 @@ public class BeamSlanter {
 	}
 	
 	/**
-	 * If the beam has at least 4 notes and the notes ascend or descend from the first to the
-	 * second last note or from the second to the last note, we have an "inner run".
+	 * If the beam has at least 6 notes and the notes ascend or descend
+	 * from the first to the second last note or from the second to the last note,
+	 * we have an "inner run" (see Ross p. 97).
 	 * The direction of the run is returned (1: up, -1: down, 0: no run found).
+	 * It seems that 4 notes are not enough for this rule, otherwise for
+	 * example p. 117 row 2 and row 7 col 1 would qualify, too.
 	 */
 	int getInnerRunDir(int[] notesLp) {
-		if (notesLp.length < 4)
+		if (notesLp.length < 6)
 			return 0;
 		//try both directions
 		for (int dir : new int[]{-1, 1}) {
@@ -173,12 +180,51 @@ public class BeamSlanter {
 		}
 		return 0;
 	}
+	
+	/**
+	 * Returns true, iff the given beam is very crowded on the x-axis
+	 * and requires close spacing.
+	 */
+	boolean isCloseSpacing(float[] stemsXIs) {
+		//Ross, p. 100 and p. 112:
+		//we use close spacing, if the distance is less than 3 or 4 spaces
+		//we use the average value, 3.5, and have a look at the average stem distance
+		float avgDistanceIs = (getLast(stemsXIs) - getFirst(stemsXIs)) / (stemsXIs.length - 1);
+		return avgDistanceIs < 3.5;
+	}
+	
+	/**
+	 * Computes the slant for closely spaced beams.
+	 */
+	Slant computeClose(int[] notesLp, StemDirection stemDir) {
+		//Ross, p. 112: beams in close spacing slant only 1/4 to 1/2 space
+		int dictatorLp = (stemDir == Up ? max(notesLp) : min(notesLp));
+		int dir = (getLast(notesLp) > getFirst(notesLp) ? 1 : -1); 
+		//if dictator is on a staff line, use slant of 1/4 space
+		if (dictatorLp % 2 == 0 || abs(getLast(notesLp) - getFirst(notesLp)) <= 1)
+			//on staff (Ross p. 112) or 2nd interval (Ross p. 111)
+			return slantDir(0.25f, dir);
+		else
+			return slantDir(0.5f, dir);
+	}
 
 	/**
 	 * Computes the slant for beams with normal horizontal spacing.
 	 */
-	Slant computeNormal(int firstNoteLp, int lastNoteLp, StemDirection stemDir) {
-		return horizontalSlant;
+	Slant computeNormal(int firstNoteLp, int lastNoteLp) {
+		//Ross, p. 111 (and p. 101)
+		int interval = abs(firstNoteLp - lastNoteLp);
+		int dir = (lastNoteLp > firstNoteLp ? 1 : -1);
+		switch (interval) {
+			case 0: return horizontalSlant; //unison
+			case 1: return slantDir(0.25f, dir); //2nd
+			case 2: return slantDir(0.5f, 1, dir); //3rd
+			case 3: return slantDir(0.5f, 1.25f, dir); //4th - p. 101d: min=0.5; p. 111: min=1 
+			case 4: return slantDir(1.25f, dir); //5th
+			case 5: return slantDir(1.25f, 1.5f, dir); //6th
+			case 6: return slantDir(1.25f, 1.75f, dir); //7th
+			default: return slantDir(1.25f, 2, dir); //8th or higher
+		}
 	}
 	
 	/**
