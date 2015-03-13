@@ -45,6 +45,8 @@ public class StemNotator {
 		if (stemDir == None)
 			return StemNotation.none;
 
+		//GOON: use StemDrawer here:
+		
 		//compute start position
 		if (stemDir == Down)
 			startLp = topNote.lp;
