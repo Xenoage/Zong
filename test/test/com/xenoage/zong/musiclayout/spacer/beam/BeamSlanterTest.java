@@ -1,18 +1,16 @@
 package com.xenoage.zong.musiclayout.spacer.beam;
 
-import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.math.Delta.df;
 import static com.xenoage.zong.core.music.chord.StemDirection.Down;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
 import static com.xenoage.zong.musiclayout.spacer.beam.BeamSlanter.beamSlanter;
-import static material.beam.slant.Example.filter;
+import static material.Examples.filter;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-
-import java.util.List;
-
+import material.Suite;
 import material.beam.slant.ChlapikBeamSlant;
 import material.beam.slant.Example;
 import material.beam.slant.RossBeamSlant;
@@ -162,14 +160,12 @@ public class BeamSlanterTest {
 	
 	@Test public void computeTest() {
 		//use tests from Ross and Chlapik
-		for (int i : range(2)) {
-			String suite = (i == 0 ? "Ross" : "Chlapik");
-			List<Example> examples = (i == 0 ? RossBeamSlant.examples : ChlapikBeamSlant.examples);
-			for (Example example : examples) {
+		for (Suite<Example> suite : alist(new RossBeamSlant(), new ChlapikBeamSlant())) {
+			for (Example example : suite.getExamples()) {
 				float expectedSlant = example.getSlantIs();
 				Slant slant = testee.compute(example.getNotesLp(), example.getStemDir(),
 					example.getStemsXIs(), example.staffLines);
-				assertSlantContains(expectedSlant, slant, suite + ": " + example.name);
+				assertSlantContains(expectedSlant, slant, suite.getName() + ": " + example.name);
 			}
 		}
 	}

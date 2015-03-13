@@ -1,11 +1,9 @@
 package material.beam.slant;
 
-import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.musiclayout.notator.chord.stem.beam.range.OneMeasureOneStaff.oneMeasureOneStaff;
-import static org.junit.Assert.fail;
-
-import java.util.List;
+import lombok.Getter;
+import material.ExampleBase;
 
 import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.musiclayout.notations.chord.ChordLps;
@@ -15,11 +13,12 @@ import com.xenoage.zong.musiclayout.notations.chord.ChordLps;
  * 
  * @author Andreas Wenger
  */
-public class Example {
+public class Example
+	implements ExampleBase {
 	
 	public final int staffLines = 5;
 	
-	public String name;
+	@Getter public String name;
 	public int leftNoteLp;
 	public int rightNoteLp;
 	public float leftStemLengthIs;
@@ -114,26 +113,5 @@ public class Example {
 			chordLps[i] = new ChordLps(notesLp[i]);
 		return oneMeasureOneStaff.compute(chordLps, staffLines)[0];
 	}
-	
-	/**
-	 * Filters the given list of examples by the given part of a name.
-	 * @param examples               the examples to filter
-	 * @param namePart               an example qualifies, if its name contains this string
-	 * @param minExpectedTestsCount  minimum number of expected results, otherwise fail
-	 */
-	public static List<Example> filter(List<Example> examples,
-		String namePart, int minExpectedTestsCount) {
-		List<Example> ret = alist();
-		int found = 0;
-		for (Example example : examples) {
-			if (example.name.contains(namePart)) {
-				found++;
-				ret.add(example);
-			}
-		}
-		if (found < minExpectedTestsCount) {
-			fail("only " + found + " test found");
-		}
-		return ret;
-	}
+
 }

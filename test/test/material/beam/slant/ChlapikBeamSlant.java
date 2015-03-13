@@ -6,16 +6,20 @@ import static material.beam.slant.Example.example;
 
 import java.util.List;
 
+import lombok.Getter;
+import material.ChlapikSuite;
+
 
 /**
- * Examples from Ross, Chapter 3, Section 5
- * (p. 98 ff.)
+ * Examples from Chlapik, "Das Stielen", section 8
+ * (p. 40)
  * 
  * @author Andreas Wenger
  */
-public class ChlapikBeamSlant {
+public class ChlapikBeamSlant
+	implements ChlapikSuite<Example> {
 	
-	public static final List<Example> examples = alist(
+	@Getter List<Example> examples = alist(
 		//beames groups
 		example("p40 8 r1 1").left(0, 5).middleNotes(2, 3).right(1, 4.5),
 		example("p40 8 r1 2").left(4, 3.25).middleNotes(7, 8).right(7, 3.75),

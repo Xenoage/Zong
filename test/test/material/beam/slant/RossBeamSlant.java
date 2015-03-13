@@ -7,6 +7,9 @@ import static material.beam.slant.Example.example;
 
 import java.util.List;
 
+import lombok.Getter;
+import material.RossSuite;
+
 
 /**
  * Examples from Ross, Chapter 3, Section 5
@@ -14,11 +17,12 @@ import java.util.List;
  * 
  * @author Andreas Wenger
  */
-public class RossBeamSlant {
+public class RossBeamSlant
+	implements RossSuite<Example> {
 	
 	//examples commented out with "rule?": example seems to be wrong or no
 	//rule is presented which explains it
-	public static final List<Example> examples = alist(
+	@Getter List<Example> examples = alist(
 		//hang/straddle explained
 		example("p99 1").left(5, 3).width(6).right(6, 3.25),
 		example("p99 2").left(7, 3).width(6.5).right(8, 3.25),
