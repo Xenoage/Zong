@@ -1,9 +1,14 @@
 package material.beam.slant;
 
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.musiclayout.notator.chord.stem.beam.range.OneMeasureOneStaff.oneMeasureOneStaff;
+
+import java.util.List;
+
 import lombok.Getter;
 import material.ExampleBase;
+import material.Suite;
 
 import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.musiclayout.notations.chord.ChordLps;
@@ -16,7 +21,7 @@ import com.xenoage.zong.musiclayout.notations.chord.ChordLps;
 public class Example
 	implements ExampleBase {
 	
-	public final int staffLines = 5;
+	public static List<Suite<Example>> all = alist(new ChlapikBeamSlant(), new RossBeamSlant());
 	
 	@Getter public String name;
 	public int leftNoteLp;
@@ -26,6 +31,7 @@ public class Example
 	public float widthIs = Float.NaN;
 	public int[] middleNotesLps = new int[0];
 	private StemDirection stemDir = StemDirection.Default;
+	public final int staffLines = 5;
 	
 	public static Example example(String name) {
 		Example ret = new Example();

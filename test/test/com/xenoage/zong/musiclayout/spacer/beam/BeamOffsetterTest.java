@@ -4,7 +4,7 @@ import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Delta.df;
 import static com.xenoage.zong.musiclayout.notator.chord.stem.beam.range.OneMeasureOneStaff.oneMeasureOneStaff;
-import static com.xenoage.zong.musiclayout.spacer.beam.BeamOffsetter.beamOffsetter;
+import static com.xenoage.zong.musiclayout.spacer.beam.BeamPlacer.beamOffsetter;
 import static java.lang.Math.abs;
 import static org.junit.Assert.fail;
 
@@ -19,13 +19,13 @@ import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.musiclayout.notations.chord.ChordLps;
 
 /**
- * Tests for {@link BeamOffsetter}.
+ * Tests for {@link BeamPlacer}.
  * 
  * @author Andreas Wenger
  */
 public class BeamOffsetterTest {
 	
-	private BeamOffsetter testee = beamOffsetter;
+	private BeamPlacer testee = beamOffsetter;
 	private final int staffLines = 5;
 	
 	
@@ -41,7 +41,7 @@ public class BeamOffsetterTest {
 			StemDirection stemDir = getStemDir(example.stemDir, notesLp);
 			float[] stemsXIs = getStemsXIs(example, notesLp.length);
 			//run test
-			Offset offset = testee.computeForOneStaff(notesLp, stemDir, stemsXIs, 1, staffLines);
+			Placement offset = testee.computeForOneStaff(notesLp, stemDir, stemsXIs, 1, staffLines);
 			//check result
 			String failMessage = check(offset, example, stemDir);
 			if (failMessage != null)
@@ -61,7 +61,7 @@ public class BeamOffsetterTest {
 		return stemsXIs;
 	}
 	
-	private String check(Offset offset, Example example, StemDirection stemDir) {
+	private String check(Placement offset, Example example, StemDirection stemDir) {
 		float expectedLeftEndLp = example.leftNoteLp +
 			stemDir.getSign() * example.leftStemLengthIs * 2;
 		float expectedRightEndLp = example.rightNoteLp +

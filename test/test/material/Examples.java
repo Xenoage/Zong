@@ -1,9 +1,9 @@
 package material;
 
-import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static org.junit.Assert.fail;
 
 import java.util.List;
+import java.util.function.BiConsumer;
 
 /**
  * Access to the examples.
@@ -11,26 +11,36 @@ import java.util.List;
  * @author Andreas Wenger
  */
 public class Examples {
-
+	
 	/**
-	 * Filters the given list of examples by the given part of a name.
-	 * @param examples               the examples to filter
-	 * @param namePart               an example qualifies, if its name contains this string
-	 * @param minExpectedTestsCount  minimum number of expected results, otherwise fail
+	 * Runs the given test for all examples in the given list of suites.
 	 */
-	public static <T extends ExampleBase> List<T> filter(List<T> examples,
-		String namePart, int minExpectedTestsCount) {
-		List<T> ret = alist();
+	public static <T extends ExampleBase> void test(List<Suite<T>> suites, BiConsumer<Suite<T>, T> test) {
+		for (Suite<T> suite : suites) {
+			for (T example : suite.getExamples())
+				test.accept(suite, example);
+		}
+	}
+	
+	/**
+	 * Runs the given test for the examples in the given list of suites,
+	 * which contain the given part of a name.
+	 * @param namePart       an example qualifies, if its name contains this string
+	 * @param minTestsCount  minimum number of expected results, otherwise fail
+	 */
+	public static <T extends ExampleBase> void test(List<Suite<T>> suites, String namePart,
+		int minTestsCount, BiConsumer<Suite<T>, T> test) {
 		int found = 0;
-		for (T example : examples) {
-			if (example.getName().contains(namePart)) {
-				found++;
-				ret.add(example);
+		for (Suite<T> suite : suites) {
+			for (T example : suite.getExamples()) {
+				if (example.getName().contains(namePart)) {
+					found++;
+					test.accept(suite, example);
+				}
 			}
 		}
-		if (found < minExpectedTestsCount)
+		if (found < minTestsCount)
 			fail("only " + found + " test found");
-		return ret;
 	}
 	
 }

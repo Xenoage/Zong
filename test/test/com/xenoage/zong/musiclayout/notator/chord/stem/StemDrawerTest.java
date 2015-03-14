@@ -1,5 +1,13 @@
 package com.xenoage.zong.musiclayout.notator.chord.stem;
 
+import static com.xenoage.utils.math.Delta.df;
+import static com.xenoage.zong.musiclayout.notator.chord.stem.StemDrawer.stemDrawer;
+import static material.Examples.test;
+import static org.junit.Assert.assertEquals;
+import material.stem.length.Example;
+
+import org.junit.Test;
+
 /**
  * Tests for {@link StemDrawer}.
  * 
@@ -7,10 +15,28 @@ package com.xenoage.zong.musiclayout.notator.chord.stem;
  */
 public class StemDrawerTest {
 	
-	//GOON: Chlapik, p. 39 (5, 6), p. 40 (7)
-	//Ross p. 83 (last row), p. 86 (row 3, 6, 7)
-	//all combinations of notes and stem dirs from LP -6 to 14 in a 5 line staff
+	private StemDrawer testee = stemDrawer;
 	
+	@Test public void getPreferredStemLengthTest() {
+		test(Example.all, (suite, example) -> {
+			float expectedLengthIs = example.stemLengthIs;
+			float lengthIs = testee.getPreferredStemLength(new int[]{example.noteLp},
+				example.stemDir, example.staffLines);
+			assertEquals(suite.getName() + ": " + example.name + " expected stem length of " +
+				expectedLengthIs + ", but was " + lengthIs,
+				expectedLengthIs, lengthIs, df);
+		});
+	}
 	
+	@Test public void isStemLengthenedToMiddleLineTest() {
+		test(Example.all, (suite, example) -> {
+			boolean expected = example.isLengthenedToMiddleLine;
+			boolean lengthened = testee.isStemLengthenedToMiddleLine(new int[]{example.noteLp},
+				example.stemDir, example.staffLines);
+			assertEquals(suite.getName() + ": " + example.name + " expected " +
+				(expected ? "" : "NO ") + "stem lengthening but it was " +
+				(lengthened ? "" : "NOT ") + "lengthened.", expected, lengthened);
+		});
+	}
 
 }

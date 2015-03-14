@@ -5,11 +5,11 @@ import static com.xenoage.utils.math.Delta.df;
 import static com.xenoage.zong.core.music.chord.StemDirection.Down;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
 import static com.xenoage.zong.musiclayout.spacer.beam.BeamSlanter.beamSlanter;
-import static material.Examples.filter;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import material.Examples;
 import material.Suite;
 import material.beam.slant.ChlapikBeamSlant;
 import material.beam.slant.Example;
@@ -116,21 +116,19 @@ public class BeamSlanterTest {
 	}
 	
 	@Test public void computeCloseTest() {
-		//use tests from Ross
-		for (Example example : filter(RossBeamSlant.examples, "close", 9)) {
+		Examples.test(Example.all, "close", 9, (suite, example) -> {
 			float expectedSlant = example.getSlantIs();
 			Slant slant = testee.computeClose(example.getNotesLp(), example.getStemDir());
 			assertSlantContains(expectedSlant, slant, example.name);
-		}
+		});
 	}
 	
 	@Test public void computeNormalTest() {
-		//use tests from Ross
-		for (Example example : filter(RossBeamSlant.examples, "interval", 14)) {
+		Examples.test(Example.all, "interval", 14, (suite, example) -> {
 			float expectedSlant = example.getSlantIs();
 			Slant slant = testee.computeNormal(example.leftNoteLp, example.rightNoteLp);
 			assertSlantContains(expectedSlant, slant, example.name);
-		}
+		});
 	}
 	
 	private void assertSlantContains(float expected, Slant slant, String testName) {
