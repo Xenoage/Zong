@@ -3,14 +3,20 @@ package com.xenoage.zong.musiclayout.spacer.beam;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.MathUtils.mod;
 import static com.xenoage.zong.core.music.chord.StemDirection.Down;
+import static com.xenoage.zong.core.music.chord.StemDirection.Up;
+import static com.xenoage.zong.musiclayout.spacer.beam.Anchor.Hang;
+import static com.xenoage.zong.musiclayout.spacer.beam.Anchor.Sit;
+import static com.xenoage.zong.musiclayout.spacer.beam.Anchor.Straddle;
+import static com.xenoage.zong.musiclayout.spacer.beam.Anchor.WhiteSpace;
 
 import com.xenoage.zong.core.music.StaffLines;
 import com.xenoage.zong.core.music.chord.StemDirection;
+import com.xenoage.zong.musiclayout.notations.BeamNotation;
 
 /**
  * Computes the {@link Placement} of a beam, given its {@link Slant}.
  * 
- * The rules are adopted from Ross, p. 98-101, and Chlapik, p. 41.
+ * The rules are adopted from Ross, p. 98-101 and 120-126, and Chlapik, p. 41.
  * 
  * When the beam falls within or touches the staff lines, the following rules apply:
  * <ul>
@@ -68,63 +74,92 @@ public class BeamPlacer {
 	 * Returns true, iff the given placement does not violate the rules
 	 * listed in the documentation of this class.
 	 */
-	public boolean isPlacementCorrect(Placement candidate) {
-		if (false == isTouchingStaff(candidate))
+	public boolean isPlacementCorrect(Placement candidate, StemDirection stemDir,
+		int beamLinesCount, StaffLines staffLines) {
+		//when the beam does not touch the staff at all, its exact placement
+		//does not matter (Ross p. 98)
+		if (false == isTouchingStaff(candidate, stemDir, BeamNotation.lineHeightIs, staffLines))
 			return true;
-		for (int side : range(2)) { //0: left stem, 1: right stem
-			//
-		}
-			//TODO: some of the following 4 are possibly not really always 4 but
-			//are dependent on the staffLinesCount.
-			int linepositionstart = mod((int) (startLp * 2), 4);
-			int linepositionend = mod((int) ((startLp + slantIs * 2) * 2), 4);
-			if (stemDirection == Down) {
-				if (startLp <= 4 && startLp + slantIs * 2 <= 4) {
-					//downstems must only straddle the line or sit on it (at the beginning)
-					//the end of the stem must not be in the space between two lines
-					if (Math.abs(slantIs) < 0.1f) {
-						if (linepositionstart == 0 || linepositionstart == 3)
-							return true;
-					}
-					else {
-						if (linepositionstart != 1 && linepositionend != 1)
-							return true;
-					}
-				}
-			}
-			else {
-				if (startLp >= 4 && startLp + slantIs * 2 >= 4) {
-					if (Math.abs(slantIs) < 0.1f) {
-						if (linepositionstart == 0 || linepositionstart == 1)
-							return true;
-					}
-					else {
-						if (linepositionstart != 3 && linepositionend != 3)
-							return true;
-					}
-				}
-			}
-			return false;
+		//check anchor
+		
 	}
 	
 	/**
 	 * Returns true, iff both the left LP and the right LP are completely
 	 * outside the staff and do not touch it.
 	 * @param totalBeamHeightIs  the total height of the beam lines (including gaps) in IS
-	 */ //GOON: test
+	 */
 	boolean isTouchingStaff(Placement candidate, StemDirection stemDir,
 		float beamHeightIs, StaffLines staffLines) {
-		float minDistanceIs = 0.5f;
+		float minDistanceIs = 0.45f; //at least about an half space
 		//beam lines above the staff?
-		float minLp = staffLines.topLp + minDistanceIs * 2 -
-			stemDir.getSign() * beamHeightIs * 2;
+		float minLp = staffLines.topLp + minDistanceIs * 2 +
+			(stemDir == Up ? beamHeightIs * 2 : 0);
 		if (candidate.leftEndLp >= minLp && candidate.rightEndLp >= minLp)
-			return true;
+			return false;
 		//beam lines below the staff?
-		float maxLp = -minDistanceIs * 2 +
-			stemDir.getSign() * beamHeightIs * 2;
+		float maxLp = -minDistanceIs * 2 -
+			(stemDir == Down ? beamHeightIs * 2 : 0);
 		if (candidate.leftEndLp <= maxLp && candidate.rightEndLp <= maxLp)
-			return true;
+			return false;
+		return true;
+	}
+	
+	boolean isAnchor8thCorrect(Anchor leftAnchor, Anchor rightAnchor, Placement candidate) {
+		if (candidate.isAscending()) {
+			//ascending beam: left may hang or straddle, right may sit or straddle
+			if ((leftAnchor == Hang || leftAnchor == Straddle) &&
+				(rightAnchor == Sit || rightAnchor == Straddle))
+				return true;
+		}
+		else if (candidate.isDescending()) {
+			//descending beam: left may sit or straddle, right may hang or straddle
+			if ((leftAnchor == Sit || leftAnchor == Straddle) &&
+				(rightAnchor == Hang || rightAnchor == Straddle))
+				return true;
+		}
+		else {
+			//horizontal beam: both sides may sit, hang or straddle
+			if (leftAnchor != WhiteSpace && rightAnchor != WhiteSpace)
+				return true;
+		}
+		//violates the rules
+		return false;
+	}
+	
+	boolean isAnchor16thCorrect(Anchor leftAnchor, Anchor rightAnchor, StemDirection stemDir) {
+		//see Ross, p. 120-121
+		if (stemDir == Up) {
+			//upstem beam: both sides may straddle or hang (Ross, p. 120, section 8, 1)
+			if ((leftAnchor == Straddle || leftAnchor == Hang) &&
+				(rightAnchor == Straddle || rightAnchor == Hang))
+				return true;
+		}
+		else {
+			//downstem beam: both sides may sit or straddle (Ross, p. 121, section 8, 2)
+			if ((leftAnchor == Sit || leftAnchor == Straddle) &&
+				(rightAnchor == Sit || rightAnchor == Straddle))
+				return true;
+		}
+		//violates the rules
+		return false;
+	}
+	
+	boolean isAnchor32ndOrHigherCorrect(Anchor leftAnchor, Anchor rightAnchor, StemDirection stemDir) {
+		//see Ross, p. 125, section 10
+		//Beam always hangs (upstem) or sits (downstem), so it fills exactly 2 spaces
+		//same for quadruple beams, see Ross p. 125, section 11.
+		if (stemDir == Up) {
+			//upstem beam: both sides must hang
+			if (leftAnchor == Hang & rightAnchor == Hang)
+				return true;
+		}
+		else {
+			//downstem beam: both sides must sit
+			if (leftAnchor == Sit & rightAnchor == Sit)
+				return true;
+		}
+		//violates the rules
 		return false;
 	}
 	

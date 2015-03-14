@@ -1,37 +1,37 @@
 package com.xenoage.zong.musiclayout.spacer.beam;
 
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.utils.math.Delta.df;
-import static com.xenoage.zong.musiclayout.notator.chord.stem.beam.range.OneMeasureOneStaff.oneMeasureOneStaff;
 import static com.xenoage.zong.musiclayout.spacer.beam.BeamPlacer.beamOffsetter;
-import static java.lang.Math.abs;
-import static org.junit.Assert.fail;
-
-import java.util.List;
-
-import material.beam.slant.RossBeamSlant;
-import material.beam.slant.RossBeamSlant.Example;
+import static org.junit.Assert.assertEquals;
+import material.Examples;
+import material.beam.stafftouch.TouchExample;
 
 import org.junit.Test;
-
-import com.xenoage.zong.core.music.chord.StemDirection;
-import com.xenoage.zong.musiclayout.notations.chord.ChordLps;
 
 /**
  * Tests for {@link BeamPlacer}.
  * 
  * @author Andreas Wenger
  */
-public class BeamOffsetterTest {
+public class BeamPlacerTest {
 	
 	private BeamPlacer testee = beamOffsetter;
-	private final int staffLines = 5;
+
+	
+	@Test public void isTouchingStaffTest() {
+		Examples.test(TouchExample.all, (suite, example) -> {
+			boolean expected = example.touch;
+			boolean touch = testee.isTouchingStaff(example.placement, example.stemDir,
+				example.beamHeightIs, example.staffLines);
+			assertEquals(suite.getName() + ": " + example.name, expected, touch);
+		});
+	}
+	
+	//GOON: test isAnchorXXXCorrect
 	
 	
 	/**
 	 * Tests with examples from Ross.
-	 */
+	 * /
 	@Test public void computeForOneStaffTestRoss() {
 		List<String> failed = alist();
 		List<Example> examples = new RossBeamSlant().examples;
@@ -74,6 +74,6 @@ public class BeamOffsetterTest {
 			return example.name + ": expected [" + expectedLeftEndLp + "," + expectedRightEndLp +
 				"] but was [" + offset.leftEndLp + "," + offset.rightEndLp + "]";
 		}
-	}
+	} */
 
 }
