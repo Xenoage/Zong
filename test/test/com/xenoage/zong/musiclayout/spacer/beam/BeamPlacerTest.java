@@ -1,5 +1,9 @@
 package com.xenoage.zong.musiclayout.spacer.beam;
 
+import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.utils.math.Delta.df;
+import static com.xenoage.zong.core.music.chord.StemDirection.Down;
+import static com.xenoage.zong.core.music.chord.StemDirection.Up;
 import static com.xenoage.zong.musiclayout.spacer.beam.BeamPlacer.beamOffsetter;
 import static org.junit.Assert.assertEquals;
 import material.Examples;
@@ -26,7 +30,57 @@ public class BeamPlacerTest {
 		});
 	}
 	
-	//GOON: test isAnchorXXXCorrect
+	@Test public void getDictatorStemIndexTest() {
+		float[] endLps = new float[]{10, 11, 13};
+		float[] xs = new float[]{2, 4, 6};
+		//horizontal line, downstem (find min LP)
+		assertEquals(0, testee.getDictatorStemIndex(endLps, xs, 0, Down));
+		//horizontal line, upstem (find max LP)
+		assertEquals(2, testee.getDictatorStemIndex(endLps, xs, 0, Up));
+		//ascending line, downstem (find min LP)
+		assertEquals(0, testee.getDictatorStemIndex(endLps, xs, 0.95f, Down));
+		assertEquals(1, testee.getDictatorStemIndex(endLps, xs, 1.05f, Down));
+		assertEquals(1, testee.getDictatorStemIndex(endLps, xs, 1.95f, Down));
+		assertEquals(2, testee.getDictatorStemIndex(endLps, xs, 2.05f, Down));
+		//ascending line, upstem (find max LP)
+		assertEquals(2, testee.getDictatorStemIndex(endLps, xs, 0.95f, Up));
+		assertEquals(2, testee.getDictatorStemIndex(endLps, xs, 1.05f, Up));
+		assertEquals(0, testee.getDictatorStemIndex(endLps, xs, 1.95f, Up));
+		assertEquals(0, testee.getDictatorStemIndex(endLps, xs, 2.05f, Up));
+		
+		endLps = new float[]{13, 11, 10};
+		xs = new float[]{2, 4, 6};
+		//descending line, downstem (find min LP)
+		assertEquals(2, testee.getDictatorStemIndex(endLps, xs, -0.95f, Down));
+		assertEquals(1, testee.getDictatorStemIndex(endLps, xs, -1.05f, Down));
+		assertEquals(1, testee.getDictatorStemIndex(endLps, xs, -1.95f, Down));
+		assertEquals(0, testee.getDictatorStemIndex(endLps, xs, -2.05f, Down));
+		//descending line, upstem (find max LP)
+		assertEquals(0, testee.getDictatorStemIndex(endLps, xs, -0.95f, Up));
+		assertEquals(0, testee.getDictatorStemIndex(endLps, xs, -1.05f, Up));
+		assertEquals(2, testee.getDictatorStemIndex(endLps, xs, -1.95f, Up));
+		assertEquals(2, testee.getDictatorStemIndex(endLps, xs, -2.05f, Up));
+	}
+	
+	@Test public void getDistanceToLineIsTest() {
+		int left = 2;
+		int right = 5;
+		float lp = 3;
+		//horizontal line
+		float slant = 0;
+		for (int i : range(left, right))
+			assertEquals(lp, testee.getDistanceToLineIs(lp, i, slant, left, right), df);
+		//ascending line
+		slant = 2;
+		assertEquals(lp, testee.getDistanceToLineIs(lp, left, slant, left, right), df);
+		assertEquals(lp - 4/3f, testee.getDistanceToLineIs(lp, 3, slant, left, right), df);
+		assertEquals(lp - 4, testee.getDistanceToLineIs(lp, right, slant, left, right), df);
+		//descending line
+		slant = -4;
+		assertEquals(lp, testee.getDistanceToLineIs(lp, left, slant, left, right), df);
+		assertEquals(lp + 8/3f, testee.getDistanceToLineIs(lp, 3, slant, left, right), df);
+		assertEquals(lp + 8, testee.getDistanceToLineIs(lp, right, slant, left, right), df);
+	}
 	
 	
 	/**

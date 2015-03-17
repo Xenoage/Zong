@@ -1,17 +1,24 @@
 package com.xenoage.zong.musiclayout.spacer.beam;
 
+import static com.xenoage.utils.collections.ArrayUtils.getFirst;
+import static com.xenoage.utils.collections.ArrayUtils.getLast;
+import static com.xenoage.utils.collections.CollectionUtils.getFirst;
+import static com.xenoage.utils.collections.CollectionUtils.getLast;
 import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.utils.math.MathUtils.mod;
 import static com.xenoage.zong.core.music.chord.StemDirection.Down;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
 import static com.xenoage.zong.musiclayout.spacer.beam.Anchor.Hang;
 import static com.xenoage.zong.musiclayout.spacer.beam.Anchor.Sit;
 import static com.xenoage.zong.musiclayout.spacer.beam.Anchor.Straddle;
 import static com.xenoage.zong.musiclayout.spacer.beam.Anchor.WhiteSpace;
+import static com.xenoage.zong.musiclayout.spacer.beam.Direction.Ascending;
+import static com.xenoage.zong.musiclayout.spacer.beam.Direction.Descending;
 
+import com.xenoage.utils.collections.ArrayUtils;
 import com.xenoage.zong.core.music.StaffLines;
 import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.musiclayout.notations.BeamNotation;
+import com.xenoage.zong.musiclayout.notations.ChordNotation;
 
 /**
  * Computes the {@link Placement} of a beam, given its {@link Slant}.
@@ -64,10 +71,46 @@ public class BeamPlacer {
 	 * @param stemsLengthIs  the preferred length of each stem in IS
 	 * @param staffLines     the number of staff lines, e.g. 5
 	 */
-	public Placement compute(int[] notesLp, StemDirection stemDir,
-		float[] stemsXIs, int beamLinesCount, StaffLines staffLines) {
-		//GOON
+	public Placement compute(Slant slant, int[] notesLp, StemDirection stemDir,
+		float[] stemsXIs, float[] stemsLengthIs, int beamLinesCount, StaffLines staffLines) {
+		//
 		return new Placement(0, 0);
+	}
+	
+	/**
+	 * Gets the index of the dictator stem. This is the index of the stem, which
+	 * ends at the lowest/highest LP for downstem/upstem beams, including the
+	 * given beam slant.
+	 */
+	int getDictatorStemIndex(float stemsEndLp[], float[] stemsXIs, float slantIs, StemDirection stemDir) {
+		int sign = stemDir.getSign();
+		float leftX = getFirst(stemsXIs);
+		float rightX = getLast(stemsXIs);
+		float extremeDistance = (stemDir == Up ? Float.MIN_VALUE : Float.MAX_VALUE);
+		int extremeIndex = 0;
+		for (int i : range(stemsEndLp)) {
+			float distance = getDistanceToLineIs(stemsEndLp[i], stemsXIs[i], slantIs, leftX, rightX);
+			if (distance * sign > extremeDistance * sign) {
+				extremeDistance = distance;
+				extremeIndex = i;
+			}
+		}
+		return extremeIndex;
+	}
+	
+	/**
+	 * Gets the vertical distance between the given stem end to an imaginary
+	 * line starting at (lineLeftXIs,0) and ending at (lineRightXIs,lineSlantIs).
+	 * A positive value means, that the stem ends above the line.
+	 */
+	float getDistanceToLineIs(float stemEndLp, float stemXIs, float lineSlantIs, 
+		float lineLeftXIs, float lineRightXIs) {
+		//horizontal position of stem between 0 (left) and 1 (right)
+		float t = (stemXIs - lineLeftXIs) / (lineRightXIs - lineLeftXIs);
+		//LP on the line at this position
+		float lineLp = t * lineSlantIs * 2;
+		//return distance
+		return stemEndLp - lineLp;
 	}
 	
 	/**
@@ -81,7 +124,14 @@ public class BeamPlacer {
 		if (false == isTouchingStaff(candidate, stemDir, BeamNotation.lineHeightIs, staffLines))
 			return true;
 		//check anchor
-		
+		Anchor leftAnchor = Anchor.fromLp(candidate.leftEndLp, stemDir);
+		Anchor rightAnchor = Anchor.fromLp(candidate.rightEndLp, stemDir);
+		if (beamLinesCount == 1)
+			return isAnchor8thCorrect(leftAnchor, rightAnchor, candidate.getDirection());
+		else if (beamLinesCount == 2)
+			return isAnchor16thCorrect(leftAnchor, rightAnchor, stemDir);
+		else
+			return isAnchor32ndOrHigherCorrect(leftAnchor, rightAnchor, stemDir);
 	}
 	
 	/**
@@ -105,14 +155,14 @@ public class BeamPlacer {
 		return true;
 	}
 	
-	boolean isAnchor8thCorrect(Anchor leftAnchor, Anchor rightAnchor, Placement candidate) {
-		if (candidate.isAscending()) {
+	boolean isAnchor8thCorrect(Anchor leftAnchor, Anchor rightAnchor, Direction beamDir) {
+		if (beamDir == Ascending) {
 			//ascending beam: left may hang or straddle, right may sit or straddle
 			if ((leftAnchor == Hang || leftAnchor == Straddle) &&
 				(rightAnchor == Sit || rightAnchor == Straddle))
 				return true;
 		}
-		else if (candidate.isDescending()) {
+		else if (beamDir == Descending) {
 			//descending beam: left may sit or straddle, right may hang or straddle
 			if ((leftAnchor == Sit || leftAnchor == Straddle) &&
 				(rightAnchor == Hang || rightAnchor == Straddle))

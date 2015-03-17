@@ -42,7 +42,7 @@ public class ChordNotation
 		this.width = width;
 	}
 
-	public float getStemOffsetIs() {
+	public float getStemOffsetXIs() {
 		return accidentals.widthIs + notes.stemOffsetIs; //TODO: right?
 	}
 	

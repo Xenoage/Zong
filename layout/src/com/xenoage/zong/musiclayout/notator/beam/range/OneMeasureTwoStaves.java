@@ -124,7 +124,7 @@ public class OneMeasureTwoStaves
 			
 			//remember horizontal stem position
 			ElementSpacing chordSpacing = column.getElement(chord.element);
-			float stemXMm = (chordSpacing.offsetIs + chord.getStemOffsetIs()) * is;
+			float stemXMm = (chordSpacing.offsetIs + chord.getStemOffsetXIs()) * is;
 			float stemYMm = column.parentSystem.getYMm(staff, endLP);
 			Point2f stemPosMm = p(stemXMm, stemYMm);
 			if (i == 0)
@@ -140,7 +140,7 @@ public class OneMeasureTwoStaves
 			ElementSpacing chordSpacing = column.getElement(chord.element);
 			MP chordMp = getMP(chord.element);
 			float is = column.getMeasures().get(chordMp.staff).getInterlineSpace();
-			float stemXMm = (chordSpacing.offsetIs + chord.getStemOffsetIs()) * is;
+			float stemXMm = (chordSpacing.offsetIs + chord.getStemOffsetXIs()) * is;
 			
 			float f = (stemXMm - leftStemPosMm.x) / (rightStemPosMm.x - leftStemPosMm.x);
 			float endLp = 0;

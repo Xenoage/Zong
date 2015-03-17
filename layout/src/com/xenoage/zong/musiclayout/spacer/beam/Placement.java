@@ -1,6 +1,8 @@
 package com.xenoage.zong.musiclayout.spacer.beam;
 
-import static java.lang.Math.abs;
+import static com.xenoage.zong.musiclayout.spacer.beam.Direction.Ascending;
+import static com.xenoage.zong.musiclayout.spacer.beam.Direction.Descending;
+import static com.xenoage.zong.musiclayout.spacer.beam.Direction.Horizontal;
 import lombok.AllArgsConstructor;
 
 import com.xenoage.utils.annotations.Const;
@@ -17,16 +19,14 @@ public final class Placement {
 	
 	public final float leftEndLp, rightEndLp;
 	
-	public boolean isHorizontal() {
-		return abs(rightEndLp - leftEndLp) <= 0.1f;
-	}
-	
-	public boolean isAscending() {
-		return rightEndLp - leftEndLp > 0.1f;
-	}
-	
-	public boolean isDescending() {
-		return leftEndLp - rightEndLp > 0.1f;
+	public Direction getDirection() {
+		float d = rightEndLp - leftEndLp;
+		if (d > 0.1)
+			return Ascending;
+		else if (d < 0.1)
+			return Descending;
+		else
+			return Horizontal;
 	}
 	
 }
