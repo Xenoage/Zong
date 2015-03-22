@@ -274,7 +274,22 @@ public final class Cursor
 		openBeamWaypoints = null;
 	}
 
-
+	/**
+	 * Closes a beam, checks if there's only one note before setting, will cancel beam if it is
+	 */
+	public void safeCloseBeam() {
+		if (openBeamWaypoints == null)
+			throw new IllegalStateException("No beam is open");
+		if (openBeamWayPoints.size() == 1){
+			openBeamWaypoints = null;
+			return;
+		} 
+		
+		Beam beam = beam(openBeamWaypoints);
+		for (BeamWaypoint wp : openBeamWaypoints)
+			wp.getChord().setBeam(beam);
+		openBeamWaypoints = null;
+	}
 	/**
 	 * Opens a slur of the given type. All following chords will be added to it.
 	 */
