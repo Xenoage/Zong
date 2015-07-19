@@ -20,6 +20,19 @@ public class BeamPlacerTest {
 	
 	private BeamPlacer testee = beamOffsetter;
 
+	@Test public void getPlacementTest() {
+		//exact result: no rounding required
+		assertEqualsPlacement(new Placement(2, 3.5f), testee.getPlacement(2, 7, 3, 2.3f, 0.75f));
+		//0.4 quarter spaces (= 0.2 LP) higher: should be rounded down to same result
+		assertEqualsPlacement(new Placement(2, 3.5f), testee.getPlacement(2, 7, 3, 2.3f + 0.2f, 0.75f));
+		//0.6 quarter spaces (= 0.3 LP) higher: should be rounded up to the next quarter space
+		assertEqualsPlacement(new Placement(2.5f, 4), testee.getPlacement(2, 7, 3, 2.3f + 0.3f, 0.75f));
+	}
+	
+	private void assertEqualsPlacement(Placement expected, Placement actual) {
+		assertEquals(expected.leftEndLp, actual.leftEndLp, df);
+		assertEquals(expected.rightEndLp, actual.rightEndLp, df);
+	}
 	
 	@Test public void isTouchingStaffTest() {
 		Examples.test(TouchExample.all, (suite, example) -> {

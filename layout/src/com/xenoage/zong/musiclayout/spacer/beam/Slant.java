@@ -1,7 +1,11 @@
 package com.xenoage.zong.musiclayout.spacer.beam;
 
+import static com.xenoage.zong.musiclayout.spacer.beam.Direction.Ascending;
+import static com.xenoage.zong.musiclayout.spacer.beam.Direction.Descending;
+import static com.xenoage.zong.musiclayout.spacer.beam.Direction.Horizontal;
 import static java.lang.Math.abs;
-import static java.lang.Math.signum;
+import static java.lang.Math.min;
+import static java.lang.Math.round;
 import static lombok.AccessLevel.PRIVATE;
 import lombok.AllArgsConstructor;
 import lombok.ToString;
@@ -18,47 +22,73 @@ import com.xenoage.utils.annotations.Const;
  * This allows corrections of the slant to apply to artistic ideals, like
  * avoiding white wedges within the staff (see Ross, p. 98, and Chlapik, p. 41).
  * 
+ * Since the slant is always measured in quarter spaces, to avoid rounding errors we
+ * use an integer value for the number of quater spaces (QS).
+ * 
  * @author Andreas Wenger
  */
 @Const @AllArgsConstructor(access=PRIVATE) @ToString
 public final class Slant {
 	
-	public static final Slant horizontalSlant = new Slant(0, 0);
+	public static final Slant horizontalSlant = new Slant(0, 0, Horizontal);
 	
-	/** The smallest possible slant in IS, e.g. -0.5 for one half-space down. */
-	public final float minIs;
-	/** The biggest possible slant in IS, e.g. 0 for a horizontal beam. */
-	public final float maxIs;
+	/** The smallest possible absolute slant in QS, e.g. 2 for one half-space up or down. */
+	public final int minAbsQs;
+	/** The biggest possible absolute slant in QS, e.g. 0 for a horizontal beam. */
+	public final float maxAbsQs;
+	/** The direction of the slant. */
+	public final Direction direction;
 	
 	
 	public static final Slant slant(float slantIs) {
-		return new Slant(slantIs, slantIs);
-	}
-	
-	public static final Slant slantDir(float absIs, int sign) {
-		return slantDir(absIs, absIs, sign);
-	}
-	
-	public static final Slant slantDir(float minAbsIs, float maxAbsIs, int sign) {
-		if (sign > 0)
-			return new Slant(minAbsIs * sign, maxAbsIs * sign);
+		int slantAbsQs = abs(round(slantIs * 4));
+		if (slantAbsQs == 0)
+			return horizontalSlant;
 		else
-			return new Slant(maxAbsIs * sign, minAbsIs * sign);	
+			return new Slant(slantAbsQs, slantAbsQs, slantIs > 0 ? Ascending : Descending);
+	}
+	
+	public static final Slant slantIs(float absIs, Direction direction) {
+		return slantIs(absIs, absIs, direction);
+	}
+	
+	public static final Slant slantIs(float minAbsIs, float maxAbsIs, Direction direction) {
+		int minAbsQs = round(minAbsIs * 4);
+		int maxAbsQs = round(maxAbsIs * 4);
+		return slantQs(minAbsQs, maxAbsQs, direction);
+	}
+	
+	public static final Slant slantQs(int absQs, Direction direction) {
+		return new Slant(absQs, absQs, direction);
+	}
+	
+	public static final Slant slantQs(int minAbsQs, int maxAbsQs, Direction direction) {
+		return new Slant(minAbsQs, maxAbsQs, direction);
 	}
 	
 	/**
-	 * Returns true, iff the given slant is within the range of this slant.
+	 * Returns true, iff the given slant in QS is within the range of this slant.
 	 */
-	public boolean contains(float slantIs) {
-		return (minIs <= slantIs && slantIs <= maxIs);
+	public boolean contains(int slantQs) {
+		if (direction == Direction.Descending)
+			return (-maxAbsQs <= slantQs && slantQs <= -minAbsQs);
+		else
+			return (minAbsQs <= slantQs && slantQs <= maxAbsQs);
 	}
 	
 	/**
 	 * Limits the values to the given absolute value.
 	 */
-	public Slant limit(float absIs) {
-		float min = (abs(minIs) > absIs ? absIs * signum(minIs) : minIs);
-		float max = (abs(maxIs) > absIs ? absIs * signum(maxIs) : maxIs);
-		return new Slant(min, max);
+	public Slant limit(int absQs) {
+		return new Slant(min(absQs, minAbsQs), min(absQs, maxAbsQs), direction);
 	}
+	
+	/**
+	 * Gets the slant with the minimum absolute value in IS.
+	 */
+	public float getSmallestIs() {
+		return minAbsQs * direction.getSign() / 4f;
+		
+	}
+	
 }

@@ -7,9 +7,11 @@ import static com.xenoage.utils.collections.ArrayUtils.min;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.core.music.chord.StemDirection.Down;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
+import static com.xenoage.zong.musiclayout.spacer.beam.Direction.Ascending;
+import static com.xenoage.zong.musiclayout.spacer.beam.Direction.Descending;
 import static com.xenoage.zong.musiclayout.spacer.beam.Slant.horizontalSlant;
 import static com.xenoage.zong.musiclayout.spacer.beam.Slant.slant;
-import static com.xenoage.zong.musiclayout.spacer.beam.Slant.slantDir;
+import static com.xenoage.zong.musiclayout.spacer.beam.Slant.slantIs;
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -199,13 +201,13 @@ public class BeamSlanter {
 	Slant computeClose(int[] notesLp, StemDirection stemDir) {
 		//Ross, p. 112: beams in close spacing slant only 1/4 to 1/2 space
 		int dictatorLp = (stemDir == Up ? max(notesLp) : min(notesLp));
-		int dir = (getLast(notesLp) > getFirst(notesLp) ? 1 : -1); 
+		Direction dir = (getLast(notesLp) > getFirst(notesLp) ? Ascending : Descending); 
 		//if dictator is on a staff line, use slant of 1/4 space
 		if (dictatorLp % 2 == 0 || abs(getLast(notesLp) - getFirst(notesLp)) <= 1)
 			//on staff (Ross p. 112) or 2nd interval (Ross p. 111)
-			return slantDir(0.25f, dir);
+			return slantIs(0.25f, dir);
 		else
-			return slantDir(0.5f, dir);
+			return slantIs(0.5f, dir);
 	}
 
 	/**
@@ -214,16 +216,16 @@ public class BeamSlanter {
 	Slant computeNormal(int firstNoteLp, int lastNoteLp) {
 		//Ross, p. 111 (and p. 101)
 		int interval = abs(firstNoteLp - lastNoteLp);
-		int dir = (lastNoteLp > firstNoteLp ? 1 : -1);
+		Direction dir = (lastNoteLp > firstNoteLp ? Ascending : Descending);
 		switch (interval) {
 			case 0: return horizontalSlant; //unison
-			case 1: return slantDir(0.25f, dir); //2nd
-			case 2: return slantDir(0.5f, 1, dir); //3rd
-			case 3: return slantDir(0.5f, 1.25f, dir); //4th - p. 101d: min=0.5; p. 111: min=1 
-			case 4: return slantDir(1.25f, dir); //5th
-			case 5: return slantDir(1.25f, 1.5f, dir); //6th
-			case 6: return slantDir(1.25f, 1.75f, dir); //7th
-			default: return slantDir(1.25f, 2, dir); //8th or higher
+			case 1: return slantIs(0.25f, dir); //2nd
+			case 2: return slantIs(0.5f, 1, dir); //3rd
+			case 3: return slantIs(0.5f, 1.25f, dir); //4th - p. 101d: min=0.5; p. 111: min=1 
+			case 4: return slantIs(1.25f, dir); //5th
+			case 5: return slantIs(1.25f, 1.5f, dir); //6th
+			case 6: return slantIs(1.25f, 1.75f, dir); //7th
+			default: return slantIs(1.25f, 2, dir); //8th or higher
 		}
 	}
 	
@@ -232,15 +234,15 @@ public class BeamSlanter {
 	 */
 	Slant limitSlantForExtremeNotes(Slant slant, int[] notesLp,
 		StemDirection stemDir, int staffLines) {
-		float maxSlantAbs = 0.5f;
-		if (abs(slant.maxIs) > maxSlantAbs || abs(slant.minIs) > maxSlantAbs) {
+		int maxSlantAbsQs = 2; //2 QS = 0.5 spaces
+		if (slant.minAbsQs > maxSlantAbsQs) {
 			//Ross, p. 111, row 1 and 2: upstem and only notes below bottom leger lines
 			//or downstem and only notes above top leger lines
 			int bottomLegerLp = -2;
 			int topLegerLp = staffLines * 2;
 			if ((stemDir == Up && max(notesLp) < bottomLegerLp) ||
 				(stemDir == Down && min(notesLp) > topLegerLp)) {
-				slant = slant.limit(maxSlantAbs);
+				slant = slant.limit(maxSlantAbsQs);
 			}
 		}
 		return slant;

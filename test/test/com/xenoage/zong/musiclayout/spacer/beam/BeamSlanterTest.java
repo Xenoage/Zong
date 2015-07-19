@@ -5,6 +5,7 @@ import static com.xenoage.utils.math.Delta.df;
 import static com.xenoage.zong.core.music.chord.StemDirection.Down;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
 import static com.xenoage.zong.musiclayout.spacer.beam.BeamSlanter.beamSlanter;
+import static java.lang.Math.round;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -131,29 +132,30 @@ public class BeamSlanterTest {
 		});
 	}
 	
-	private void assertSlantContains(float expected, Slant slant, String testName) {
-		if (false == slant.contains(expected))
-			fail(testName + ": expected slant " + expected + ", but not in range of " + slant);
+	private void assertSlantContains(float expectedIs, Slant slant, String testName) {
+		int expectedQs = round(expectedIs * 4);
+		if (false == slant.contains(expectedQs))
+			fail(testName + ": expected slant " + expectedQs + ", but not in range of " + slant);
 	}
 	
 	@Test public void limitSlantForExtremeNotesTest() {
 		//inspired by Ross, p. 111, row 1-2
-		assertEquals(0.5, testee.limitSlantForExtremeNotes(
-			Slant.slant(2), new int[]{-9, -3}, Up, 5).minIs, df); //Ross
-		assertEquals(0.5, testee.limitSlantForExtremeNotes(
-			Slant.slant(2), new int[]{-4, -3}, Up, 5).minIs, df); //Ross
-		assertEquals(-0.5, testee.limitSlantForExtremeNotes(
-			Slant.slant(-2), new int[]{16, 12}, Down, 5).minIs, df); //Ross
-		assertEquals(-0.5, testee.limitSlantForExtremeNotes(
-			Slant.slant(-2), new int[]{12, 12}, Down, 5).minIs, df); //Ross
-		assertEquals(2, testee.limitSlantForExtremeNotes(
-			Slant.slant(2), new int[]{-9, -2}, Up, 5).minIs, df); //too high
-		assertEquals(2, testee.limitSlantForExtremeNotes(
-			Slant.slant(2), new int[]{-4, -3}, Down, 5).minIs, df); //low, but stem down
-		assertEquals(-2, testee.limitSlantForExtremeNotes(
-			Slant.slant(-2), new int[]{16, 10}, Down, 5).minIs, df); //too low
-		assertEquals(-2, testee.limitSlantForExtremeNotes(
-			Slant.slant(-2), new int[]{12, 12}, Up, 5).minIs, df); //high, but stem up
+		assertEquals(0.5 * 4, testee.limitSlantForExtremeNotes(
+			Slant.slant(2), new int[]{-9, -3}, Up, 5).maxAbsQs, df); //Ross
+		assertEquals(0.5 * 4, testee.limitSlantForExtremeNotes(
+			Slant.slant(2), new int[]{-4, -3}, Up, 5).maxAbsQs, df); //Ross
+		assertEquals(0.5 * 4, testee.limitSlantForExtremeNotes(
+			Slant.slant(-2), new int[]{16, 12}, Down, 5).maxAbsQs, df); //Ross
+		assertEquals(0.5 * 4, testee.limitSlantForExtremeNotes(
+			Slant.slant(-2), new int[]{12, 12}, Down, 5).maxAbsQs, df); //Ross
+		assertEquals(2 * 4, testee.limitSlantForExtremeNotes(
+			Slant.slant(2), new int[]{-9, -2}, Up, 5).maxAbsQs, df); //too high
+		assertEquals(2 * 4, testee.limitSlantForExtremeNotes(
+			Slant.slant(2), new int[]{-4, -3}, Down, 5).maxAbsQs, df); //low, but stem down
+		assertEquals(2 * 4, testee.limitSlantForExtremeNotes(
+			Slant.slant(-2), new int[]{16, 10}, Down, 5).maxAbsQs, df); //too low
+		assertEquals(2 * 4, testee.limitSlantForExtremeNotes(
+			Slant.slant(-2), new int[]{12, 12}, Up, 5).maxAbsQs, df); //high, but stem up
 	}
 	
 	@Test public void computeTest() {

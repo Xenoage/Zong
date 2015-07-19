@@ -2,8 +2,6 @@ package com.xenoage.zong.musiclayout.spacer.beam;
 
 import static com.xenoage.utils.collections.ArrayUtils.getFirst;
 import static com.xenoage.utils.collections.ArrayUtils.getLast;
-import static com.xenoage.utils.collections.CollectionUtils.getFirst;
-import static com.xenoage.utils.collections.CollectionUtils.getLast;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.core.music.chord.StemDirection.Down;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
@@ -13,12 +11,11 @@ import static com.xenoage.zong.musiclayout.spacer.beam.Anchor.Straddle;
 import static com.xenoage.zong.musiclayout.spacer.beam.Anchor.WhiteSpace;
 import static com.xenoage.zong.musiclayout.spacer.beam.Direction.Ascending;
 import static com.xenoage.zong.musiclayout.spacer.beam.Direction.Descending;
+import static java.lang.Math.round;
 
-import com.xenoage.utils.collections.ArrayUtils;
 import com.xenoage.zong.core.music.StaffLines;
 import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.musiclayout.notations.BeamNotation;
-import com.xenoage.zong.musiclayout.notations.ChordNotation;
 
 /**
  * Computes the {@link Placement} of a beam, given its {@link Slant}.
@@ -73,8 +70,41 @@ public class BeamPlacer {
 	 */
 	public Placement compute(Slant slant, int[] notesLp, StemDirection stemDir,
 		float[] stemsXIs, float[] stemsLengthIs, int beamLinesCount, StaffLines staffLines) {
-		//
-		return new Placement(0, 0);
+		float leftX = getFirst(stemsXIs);
+		float rightX = getLast(stemsXIs);
+		int dictatorIndex;
+		float slantIs;
+		//compute default stem end LPs
+		float[] stemsEndLp = new float[notesLp.length];
+		for (int i : range(notesLp))
+			stemsEndLp[i] = notesLp[i] + stemDir.getSign() * stemsLengthIs[i];
+		//try to find the optimum placement
+		//start with default stem length of the dictator stem. if no solution can be found,
+		//make it longer
+		for (int stemLengthAddQs : range(0, 8)) { //at maximum 8 quarter spaces (2 spaces) longer
+		}
+		//no optimal placement could be found. just use the minimum slant
+		//and the stem lengths enforced by the dictator stem
+		slantIs = slant.getSmallestIs();
+		dictatorIndex = getDictatorStemIndex(stemsEndLp, stemsXIs, slantIs, stemDir);
+		return getPlacement(leftX, rightX, stemsXIs[dictatorIndex], stemsEndLp[dictatorIndex], slantIs);
+	}
+	
+	/**
+	 * Gets the {@link Placement}, rounded to quarter spaces, of the beam which is
+	 * placed by the given dictator stem.
+	 */
+	Placement getPlacement(float leftXIs, float rightXIs, float dictatorXIs,
+		float dictatorStemEndLp, float slantIs) {
+		float widthIs = rightXIs - leftXIs;
+		float slantIsPerIs = slantIs / widthIs;
+		//compute exact end LPs
+		float leftEndLpExact = dictatorStemEndLp + slantIsPerIs * 2 * (leftXIs - dictatorXIs);
+		float rightEndLpExact = dictatorStemEndLp + slantIsPerIs * 2 * (rightXIs - dictatorXIs);
+		//round to quarter spaces (both in the same direction!)
+		float leftEndLp = round(leftEndLpExact * 2) / 2f;
+		float rightEndLp = (int)(rightEndLpExact * 2 + (leftEndLp > leftEndLpExact ? 1 : 0)) / 2f;
+		return new Placement(leftEndLp, rightEndLp);
 	}
 	
 	/**
