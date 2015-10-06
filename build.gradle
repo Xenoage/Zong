@@ -47,6 +47,7 @@ subprojects {
 
 //project dependencies
 project(':converter') { dependencies { compile project(':desktop') } }
+project(':core') { dependencies { compile project(':utils-base') } }
 project(':demos') {
 	sourceCompatibility = 8
 	dependencies { compile project(':desktop') }
@@ -64,12 +65,14 @@ project(':renderer-awt') {
 	sourceCompatibility = 8
 	dependencies {
 		compile project(':renderer')
+		compile project(':utils-jse')
 	}
 }
 project(':renderer-javafx') {
 	sourceCompatibility = 8
 	dependencies {
 		compile project(':renderer')
+		compile project(':utils-jse8')
 	}
 }
 project(':layout') { dependencies { compile project(':core') } }
@@ -88,7 +91,12 @@ project(':test') {
 		compile files('../lib/lib/dev/cpsuite-1.2.6.jar')
 	}
 }
-project(':tools') { dependencies { compile project(':core') } }
+project(':tools') {
+	dependencies {
+		compile project(':core')
+		compile project(':utils-jse')
+	}
+}
 project(':webserver') {
 	dependencies {
 		compile project(':desktop')
@@ -109,27 +117,8 @@ task updateLib {
 task dist {
 	//update libraries
 	dependsOn updateLib
-	//first, build utils
-	dependsOn 'buildUtils'
-	//then, build the subprojects
+	//build the subprojects
 	dependsOn subprojects*.build
-}
-
-//clean Zong!
-task clean {
-	//also clean Xenoage Utils
-	dependsOn 'cleanUtils'
-}
-
-//build dist of Xenoage Utils
-task buildUtils(type: GradleBuild) {
-	buildFile = 'utils/build.gradle'
-}
-
-//build dist of Xenoage Utils
-task cleanUtils(type: GradleBuild) {
-	buildFile = 'utils/build.gradle'
-	tasks = ['clean']
 }
 
 //TODO
