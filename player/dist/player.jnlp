@@ -13,12 +13,12 @@
 	</security>
     <resources>
         <j2se version="1.8.0_20+" href="http://java.sun.com/products/autodl/j2se"/>
-        <jar href="player.jar" main="true"/>
-		<jar href="data.jar"/>
+		<property name="jnlp.versionEnabled" value="true"/>
+        <jar href="player.jar" version="71" main="true"/>
+		<jar href="data.jar" version="71"/>
     </resources>
     <application-desc
          name="Zong! Player"
          main-class="com.xenoage.zong.player.Player">
      </application-desc>
-     <update check="background"/>
 </jnlp>
