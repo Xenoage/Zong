@@ -99,6 +99,7 @@ project(':tools') {
 	}
 }
 project(':webserver') {
+	sourceCompatibility = 8
 	dependencies {
 		compile project(':desktop')
 		compile 'com.google.code.gson:gson:2.4'
