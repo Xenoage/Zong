@@ -1,7 +1,6 @@
 package com.xenoage.zong.desktop.io.ogg.out;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 import com.xenoage.utils.document.io.FileOutput;
@@ -16,29 +15,26 @@ import com.xenoage.zong.desktop.io.wav.out.WavScoreFileOutput;
  * @author Andreas Wenger
  */
 public class OggScoreFileOutput
-	implements FileOutput<Score> {
+	extends FileOutput<Score> {
 
-	@Override public void write(Score score, OutputStream stream, String filePath)
+	@Override public void write(Score score, int fileIndex, OutputStream stream)
 		throws IOException {
-		writeOgg(score, new JseOutputStream(stream));
+		writeOgg(score, stream);
 	}
 	
 	/**
 	 * Writes the given score as a OGG Vorbis file into the given stream.
 	 */
-	public static void writeOgg(Score score, java.io.OutputStream stream)
+	public static void writeOgg(Score score, OutputStream stream)
 		throws IOException {
 		//save temporary WAVE file first
 		File tempFile = File.createTempFile(OggScoreFileOutput.class.getName(), ".wav");
-		new WavScoreFileOutput().write(score, new JseOutputStream(new FileOutputStream(tempFile)),
-			tempFile.getAbsolutePath());
+		try (OutputStream tempStream = new JseOutputStream(tempFile)) {
+			WavScoreFileOutput.writeWav(score, tempStream);
+		}
 		//convert to ogg
 		VorbisEncoder.convert(tempFile.getAbsolutePath(), new JseOutputStream(stream));
 		tempFile.delete();
-	}
-
-	@Override public boolean isFilePathRequired(Score document) {
-		return false;
 	}
 	
 }

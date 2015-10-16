@@ -9,7 +9,6 @@ subprojects {
 	compileTestJava.options.encoding = 'UTF-8'
 	
 	sourceCompatibility = 6
-	targetCompatibility = 6
 	
 	repositories {
 		mavenCentral()
@@ -23,7 +22,6 @@ subprojects {
 	}*/
 	
 	dependencies {
-		compile files('../utils/build/dist/onejar/utils.jar')
 		compile/*compileOnly - use as soon as Buildship (Gradle in Eclipse) supports it*/ 'org.projectlombok:lombok:1.16.6'
 		testCompile group: 'junit', name: 'junit', version: '4.+'
 	}
@@ -110,16 +108,8 @@ project(':webserver') {
 	}
 }
 
-//update lib
-task updateLib {
-	println 'Update libraries'
-	ant.java(jar:"lib/sync.jar", fork:true, dir:"lib")
-}
-
 //build dist of Zong!
 task dist {
-	//update libraries
-	dependsOn updateLib
 	//build the subprojects
 	dependsOn subprojects*.build
 }
@@ -140,7 +130,7 @@ task distPlayer(type: Jar) {
 }
 
 //create JavaDoc using Ant task
-ant.importBuild 'javadoc.build.xml'
+//TODO ant.importBuild 'javadoc.build.xml'
 task createDoc {
-	dependsOn antZongJavadoc
+	//TODO dependsOn antZongJavadoc
 }

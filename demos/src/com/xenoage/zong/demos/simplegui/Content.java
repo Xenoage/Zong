@@ -7,7 +7,7 @@ import com.xenoage.utils.error.Err;
 import com.xenoage.utils.log.Report;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.position.MP;
-import com.xenoage.zong.desktop.io.ScoreDocIO;
+import com.xenoage.zong.desktop.io.DocumentIO;
 import com.xenoage.zong.desktop.io.midi.out.MidiScoreDocFileOutput;
 import com.xenoage.zong.desktop.io.musicxml.in.MusicXmlScoreDocFileInput;
 import com.xenoage.zong.desktop.io.ogg.out.OggScoreDocFileOutput;
@@ -57,7 +57,7 @@ public class Content
 			//stop current playback
 			Playback.stop();
 			//load the score
-			scoreDoc = ScoreDocIO.read(new File(filePath), new MusicXmlScoreDocFileInput());
+			scoreDoc = DocumentIO.read(new File(filePath), new MusicXmlScoreDocFileInput());
 			//layout the first page
 			layout = scoreDoc.getLayout();
 			Score score = scoreDoc.getScore();
@@ -82,18 +82,14 @@ public class Content
 		FileOutput<ScoreDoc> out = null;
 		switch (format) {
 			case "pdf": out = new PdfScoreDocFileOutput(); break;
-			case "png":
-				PngScoreDocFileOutput pngOut = new PngScoreDocFileOutput();
-				pngOut.setJustOnePage(true);
-				out = pngOut;
-				break;
+			case "png": out = new PngScoreDocFileOutput(); break;
 			case "mid": out = new MidiScoreDocFileOutput(); break;
 			case "ogg": out = new OggScoreDocFileOutput(); break;
 			default: return;
 		}
 		String filePath = "demo." + format;
 		try {
-			ScoreDocIO.write(scoreDoc, new File(filePath), out);
+			DocumentIO.write(scoreDoc, new File(filePath), out);
 			mainWindow.showMessageDialog(filePath + " saved.");
 		} catch (Exception ex) {
 			Err.handle(Report.error(ex));

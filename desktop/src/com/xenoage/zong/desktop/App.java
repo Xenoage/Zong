@@ -15,15 +15,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import javafx.application.Platform;
-import javafx.scene.image.Image;
-import javafx.stage.Stage;
-import javafx.stage.Window;
-
 import javax.sound.midi.MidiUnavailableException;
 import javax.swing.JOptionPane;
-
-import lombok.Getter;
 
 import org.controlsfx.dialog.Dialog;
 import org.controlsfx.dialog.Dialogs;
@@ -41,7 +34,6 @@ import com.xenoage.utils.filter.Filter;
 import com.xenoage.utils.io.InputStream;
 import com.xenoage.utils.jse.JsePlatformUtils;
 import com.xenoage.utils.jse.io.JseInputStream;
-import com.xenoage.utils.jse.io.JseOutputStream;
 import com.xenoage.utils.jse.javafx.JavaFXApp;
 import com.xenoage.utils.jse.lang.LangManager;
 import com.xenoage.utils.jse.lang.LanguageInfo;
@@ -51,10 +43,17 @@ import com.xenoage.utils.log.Log;
 import com.xenoage.zong.Voc;
 import com.xenoage.zong.Zong;
 import com.xenoage.zong.core.Score;
+import com.xenoage.zong.desktop.io.DocumentIO;
 import com.xenoage.zong.desktop.io.midi.out.MidiScorePlayer;
 import com.xenoage.zong.desktop.io.midi.out.SynthManager;
 import com.xenoage.zong.desktop.utils.FilenameDialogFilter;
 import com.xenoage.zong.io.musicxml.in.MusicXmlFileReader;
+
+import javafx.application.Platform;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
+import javafx.stage.Window;
+import lombok.Getter;
 
 /**
  * Base class for all Zong! applications based on JavaFX.
@@ -370,19 +369,18 @@ public class App<DocType extends Document>
 	/**
 	 * Saves the current document at the given path in the given format.
 	 */
-	public void saveDocument(String filePath, FileFormat<?> format) {
+	public void saveDocument(File file, FileFormat<?> format) {
 		DocType doc = getActiveDocument();
 		if (doc == null)
 			return;
 		@SuppressWarnings("unchecked") FileOutput<DocType> output =
 			(FileOutput<DocType>) format.getOutput();
 		try {
-			if (output != null)
-				output.write(doc, new JseOutputStream(new File(filePath)), filePath);
-			else
+			if (output == null)
 				throw new IOException("No writer for format " + format.getName());
+			DocumentIO.write(doc, file, output);
 		} catch (IOException ex) {
-			error(Voc.CouldNotSaveDocument, ex, filePath);
+			error(Voc.CouldNotSaveDocument, ex, file.getAbsolutePath());
 		}
 	}
 

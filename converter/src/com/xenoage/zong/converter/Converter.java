@@ -5,7 +5,6 @@ import static com.xenoage.utils.log.Report.fatal;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 import javax.sound.midi.MidiUnavailableException;
@@ -13,10 +12,10 @@ import javax.sound.midi.MidiUnavailableException;
 import com.xenoage.utils.document.io.FileFormat;
 import com.xenoage.utils.document.io.FileInput;
 import com.xenoage.utils.jse.io.JseInputStream;
-import com.xenoage.utils.jse.io.JseOutputStream;
 import com.xenoage.utils.jse.log.DesktopLogProcessing;
 import com.xenoage.utils.log.Log;
 import com.xenoage.zong.Zong;
+import com.xenoage.zong.desktop.io.DocumentIO;
 import com.xenoage.zong.desktop.io.midi.out.SynthManager;
 import com.xenoage.zong.desktop.utils.JseZongPlatformUtils;
 import com.xenoage.zong.documents.ScoreDoc;
@@ -119,13 +118,14 @@ public class Converter {
 			showFormats();
 			return;
 		}
+		//create output dir, if needed
+		outputFile.getParentFile().mkdirs();
 		//do the conversion
 		FileInput<ScoreDoc> input = supportedFormats.getReadDefaultFormat().getInput();
 		ScoreDoc doc = input.read(new JseInputStream(new FileInputStream(inputFile)),
 			inputFile.getAbsolutePath());
 		doc.getLayout().updateScoreLayouts(doc.getScore()); //TIDY
-		format.getOutput().write(doc, new JseOutputStream(new FileOutputStream(outputFile)),
-			outputFile.getAbsolutePath());
+		DocumentIO.write(doc, outputFile, format.getOutput());
 	}
 
 }

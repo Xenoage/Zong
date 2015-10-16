@@ -47,6 +47,7 @@ import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.utils.math.Units;
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.core.Score;
+import com.xenoage.zong.desktop.io.DocumentIO;
 import com.xenoage.zong.desktop.io.mp3.out.Mp3ScoreFileOutput;
 import com.xenoage.zong.desktop.io.musicxml.in.MusicXmlScoreDocFileInput;
 import com.xenoage.zong.desktop.io.ogg.out.OggScoreFileOutput;
@@ -292,18 +293,18 @@ public class OpenAction
 		writeSuccess(response, jsonResponse);
 	}
 
-	//TODO: try-with-resources
 	private void renderAndSaveAudioFile(Connection db, Doc doc, ScoreDoc scoreDoc,
 		String audioFormatID, FileOutput<Score> scoreFileOutput)
 		throws IOException, SQLException {
 		log(remark("Rendering " + audioFormatID + " audio file"));
 		File tempFile = File.createTempFile(getClass().getName(), "." + audioFormatID.toLowerCase());
-		scoreFileOutput.write(scoreDoc.getScore(), new JseOutputStream(new FileOutputStream(tempFile)),
-			tempFile.getAbsolutePath());
-		byte[] bytes = JseStreamUtils.readToByteArray(new FileInputStream(tempFile));
-		if (bytes == null)
-			throw new IOException("Could not read " + audioFormatID + " file");
-		insert(db, "audio", "doc_id, format, audio", doc.id, audioFormatID, bytes);
+		DocumentIO.write(scoreDoc.getScore(), tempFile, scoreFileOutput);
+		try (InputStream in = new FileInputStream(tempFile)) {
+			byte[] bytes = JseStreamUtils.readToByteArray(in);
+			if (bytes == null)
+				throw new IOException("Could not read " + audioFormatID + " file");
+			insert(db, "audio", "doc_id, format, audio", doc.id, audioFormatID, bytes);
+		}
 		tempFile.delete();
 	}
 
