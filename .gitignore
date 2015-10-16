@@ -23,3 +23,6 @@ lib/lib/
 .classpath
 .settings
 
+# IntelliJ IDEA settings (should be generated with Gradle import in Eclipse)
+.idea
+*.iml
