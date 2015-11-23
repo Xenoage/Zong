@@ -46,13 +46,9 @@ subprojects {
 	}
 }
 
-//project dependencies
+//project dependencies (more in build.gradle files in subprojects)
 project(':converter') { dependencies { compile project(':desktop') } }
 project(':core') { dependencies { compile project(':utils-base') } }
-project(':demos') {
-	sourceCompatibility = 8
-	dependencies { compile project(':desktop') }
-}
 project(':desktop') {
 	sourceCompatibility = 8
 	dependencies {
@@ -80,10 +76,6 @@ project(':layout') { dependencies { compile project(':core') } }
 project(':midi-out') { dependencies { compile project(':core') } }
 project(':musicxml') { dependencies { compile project(':core') } }
 project(':musicxml-in') { dependencies { compile project(':musicxml') } }
-project(':player') {
-	sourceCompatibility = 8
-	dependencies { compile project(':desktop') }
-}
 project(':renderer') { dependencies { compile project(':layout') } }
 project(':test') {
 	sourceCompatibility = 8
@@ -99,6 +91,7 @@ project(':tools') {
 	}
 }
 project(':webserver') {
+	sourceCompatibility = 8
 	dependencies {
 		compile project(':desktop')
 		compile 'com.google.code.gson:gson:2.4'

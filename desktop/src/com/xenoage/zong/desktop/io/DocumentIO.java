@@ -23,7 +23,9 @@ public class DocumentIO {
 	
 	public static <T extends Document> T read(File file, FileInput<T> input)
 		throws IOException {
-		return input.read(new JseInputStream(file), file.getAbsolutePath());
+		try (JseInputStream stream = new JseInputStream(file)) {
+			return input.read(stream, file.getAbsolutePath());
+		}
 	}
 	
 	public static <T extends Document> void write(T doc, File file, FileOutput<T> output)
