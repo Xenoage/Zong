@@ -5,7 +5,7 @@ import static com.xenoage.utils.math.Fraction.fr;
 
 import com.xenoage.zong.core.music.clef.Clef;
 import com.xenoage.zong.core.music.clef.ClefType;
-import com.xenoage.zong.musiclayout.notations.ClefNotation;
+import com.xenoage.zong.musiclayout.notation.ClefNotation;
 import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.ElementWidth;
 import com.xenoage.zong.musiclayout.spacing.LeadingSpacing;

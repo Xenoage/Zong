@@ -5,7 +5,7 @@ import lombok.Getter;
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.color.Color;
 import com.xenoage.zong.core.music.format.SP;
-import com.xenoage.zong.musiclayout.notations.ChordNotation;
+import com.xenoage.zong.musiclayout.notation.ChordNotation;
 import com.xenoage.zong.symbols.Symbol;
 
 /**

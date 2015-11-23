@@ -21,8 +21,8 @@ import com.xenoage.zong.core.util.ColumnElementIterator;
 import com.xenoage.zong.core.util.MeasureElementIterator;
 import com.xenoage.zong.core.util.VoiceElementIterator;
 import com.xenoage.zong.musiclayout.Context;
-import com.xenoage.zong.musiclayout.notations.Notation;
-import com.xenoage.zong.musiclayout.notations.Notations;
+import com.xenoage.zong.musiclayout.notation.Notation;
+import com.xenoage.zong.musiclayout.notation.Notations;
 
 /**
  * Creates layout information about the layout of {@link MusicElement}s,

@@ -1,4 +1,4 @@
-package com.xenoage.zong.musiclayout.notations.chord;
+package com.xenoage.zong.musiclayout.notation.chord;
 
 /**
  * Horizontal displacement of a note within a chord.

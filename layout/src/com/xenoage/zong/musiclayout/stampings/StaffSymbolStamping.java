@@ -7,7 +7,7 @@ import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.color.Color;
 import com.xenoage.utils.math.geom.Rectangle2f;
 import com.xenoage.zong.core.music.format.SP;
-import com.xenoage.zong.musiclayout.notations.Notation;
+import com.xenoage.zong.musiclayout.notation.Notation;
 import com.xenoage.zong.symbols.Symbol;
 
 /**

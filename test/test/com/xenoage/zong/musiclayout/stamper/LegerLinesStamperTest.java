@@ -2,17 +2,17 @@ package com.xenoage.zong.musiclayout.stamper;
 
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Delta.df;
-import static com.xenoage.zong.musiclayout.notations.chord.NoteDisplacementTest.note;
-import static com.xenoage.zong.musiclayout.notations.chord.NoteSuspension.Left;
-import static com.xenoage.zong.musiclayout.notations.chord.NoteSuspension.None;
-import static com.xenoage.zong.musiclayout.notations.chord.NoteSuspension.Right;
+import static com.xenoage.zong.musiclayout.notation.chord.NoteDisplacementTest.note;
+import static com.xenoage.zong.musiclayout.notation.chord.NoteSuspension.Left;
+import static com.xenoage.zong.musiclayout.notation.chord.NoteSuspension.None;
+import static com.xenoage.zong.musiclayout.notation.chord.NoteSuspension.Right;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.xenoage.zong.musiclayout.notations.chord.NoteDisplacement;
-import com.xenoage.zong.musiclayout.notations.chord.NoteSuspension;
+import com.xenoage.zong.musiclayout.notation.chord.NoteDisplacement;
+import com.xenoage.zong.musiclayout.notation.chord.NoteSuspension;
 
 /**
  * Tests for {@link LegerLinesStamper}.

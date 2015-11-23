@@ -7,9 +7,9 @@ import java.util.List;
 import com.xenoage.zong.core.music.MusicContext;
 import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.music.chord.Accidental;
-import com.xenoage.zong.musiclayout.notations.chord.AccidentalDisplacement;
-import com.xenoage.zong.musiclayout.notations.chord.AccidentalsNotation;
-import com.xenoage.zong.musiclayout.notations.chord.NoteDisplacement;
+import com.xenoage.zong.musiclayout.notation.chord.AccidentalDisplacement;
+import com.xenoage.zong.musiclayout.notation.chord.AccidentalsNotation;
+import com.xenoage.zong.musiclayout.notation.chord.NoteDisplacement;
 import com.xenoage.zong.musiclayout.settings.ChordWidths;
 
 /**

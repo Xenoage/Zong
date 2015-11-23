@@ -3,15 +3,15 @@ package com.xenoage.zong.musiclayout.notator.chord.accidentals;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.math.Delta.df;
 import static com.xenoage.zong.core.music.Pitch.pi;
-import static com.xenoage.zong.musiclayout.notations.chord.NoteDisplacementTest.note;
+import static com.xenoage.zong.musiclayout.notation.chord.NoteDisplacementTest.note;
 import static com.xenoage.zong.musiclayout.notator.chord.accidentals.OneAccidental.oneAccidental;
 import static com.xenoage.zong.musiclayout.notator.chord.accidentals.Strategy.getParams;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.xenoage.zong.musiclayout.notations.chord.AccidentalsNotation;
-import com.xenoage.zong.musiclayout.notations.chord.NoteDisplacement;
+import com.xenoage.zong.musiclayout.notation.chord.AccidentalsNotation;
+import com.xenoage.zong.musiclayout.notation.chord.NoteDisplacement;
 import com.xenoage.zong.musiclayout.notator.chord.accidentals.OneAccidental;
 
 /**

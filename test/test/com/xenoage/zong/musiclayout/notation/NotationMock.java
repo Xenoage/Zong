@@ -1,9 +1,10 @@
-package com.xenoage.zong.musiclayout.notations;
+package com.xenoage.zong.musiclayout.notation;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import com.xenoage.zong.core.music.MusicElement;
+import com.xenoage.zong.musiclayout.notation.Notation;
 import com.xenoage.zong.musiclayout.spacing.ElementWidth;
 
 /**

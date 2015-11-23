@@ -1,9 +1,9 @@
-package com.xenoage.zong.musiclayout.notations.beam;
+package com.xenoage.zong.musiclayout.notation.beam;
 
 import java.util.ArrayList;
 
 /**
- * Line fragments of a single beam line (8th line, or 16th line, or ...).
+ * Line fragments of a single beam line (16th line, or 32th line, or ...).
  * The line consists of continous parts and hooks.
  * 
  * @author Andreas Wenger

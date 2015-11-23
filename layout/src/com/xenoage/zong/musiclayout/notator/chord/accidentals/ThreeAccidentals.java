@@ -1,10 +1,10 @@
 package com.xenoage.zong.musiclayout.notator.chord.accidentals;
 
-import static com.xenoage.zong.musiclayout.notations.chord.NoteSuspension.Right;
+import static com.xenoage.zong.musiclayout.notation.chord.NoteSuspension.Right;
 
 import com.xenoage.zong.core.music.chord.Accidental;
-import com.xenoage.zong.musiclayout.notations.chord.AccidentalsNotation;
-import com.xenoage.zong.musiclayout.notations.chord.NoteDisplacement;
+import com.xenoage.zong.musiclayout.notation.chord.AccidentalsNotation;
+import com.xenoage.zong.musiclayout.notation.chord.NoteDisplacement;
 
 /**
  * Displacement for a chord with 3 accidentals.

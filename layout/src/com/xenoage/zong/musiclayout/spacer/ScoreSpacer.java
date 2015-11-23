@@ -13,7 +13,7 @@ import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.musiclayout.Context;
 import com.xenoage.zong.musiclayout.Target;
-import com.xenoage.zong.musiclayout.notations.Notations;
+import com.xenoage.zong.musiclayout.notation.Notations;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 import com.xenoage.zong.musiclayout.spacing.FrameSpacing;
 import com.xenoage.zong.musiclayout.spacing.ScoreSpacing;

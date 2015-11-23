@@ -11,10 +11,10 @@ import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.MusicContext;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.StemDirection;
-import com.xenoage.zong.musiclayout.notations.chord.ChordLps;
-import com.xenoage.zong.musiclayout.notations.chord.NoteDisplacement;
-import com.xenoage.zong.musiclayout.notations.chord.NoteSuspension;
-import com.xenoage.zong.musiclayout.notations.chord.NotesNotation;
+import com.xenoage.zong.musiclayout.notation.chord.ChordLps;
+import com.xenoage.zong.musiclayout.notation.chord.NoteDisplacement;
+import com.xenoage.zong.musiclayout.notation.chord.NoteSuspension;
+import com.xenoage.zong.musiclayout.notation.chord.NotesNotation;
 import com.xenoage.zong.musiclayout.settings.ChordWidths;
 
 /**

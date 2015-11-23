@@ -7,8 +7,8 @@ import com.xenoage.zong.core.music.clef.ClefType;
 import com.xenoage.zong.core.music.key.TraditionalKey;
 import com.xenoage.zong.core.position.MPElement;
 import com.xenoage.zong.musiclayout.Context;
-import com.xenoage.zong.musiclayout.notations.Notations;
-import com.xenoage.zong.musiclayout.notations.TraditionalKeyNotation;
+import com.xenoage.zong.musiclayout.notation.Notations;
+import com.xenoage.zong.musiclayout.notation.TraditionalKeyNotation;
 import com.xenoage.zong.musiclayout.spacing.ElementWidth;
 
 /**

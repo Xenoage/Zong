@@ -2,7 +2,7 @@ package com.xenoage.zong.musiclayout.layouter.cache.util;
 
 import lombok.AllArgsConstructor;
 
-import com.xenoage.zong.musiclayout.notations.BeamNotation;
+import com.xenoage.zong.musiclayout.notation.BeamNotation;
 import com.xenoage.zong.musiclayout.stampings.StemStamping;
 
 /**

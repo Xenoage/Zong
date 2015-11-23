@@ -37,7 +37,7 @@ import com.xenoage.zong.core.music.time.Time;
 import com.xenoage.zong.core.music.time.TimeType;
 import com.xenoage.zong.io.musicxml.in.MusicXMLScoreFileInputTest;
 import com.xenoage.zong.io.selection.Cursor;
-import com.xenoage.zong.musiclayout.notations.ChordNotation;
+import com.xenoage.zong.musiclayout.notation.ChordNotation;
 import com.xenoage.zong.musiclayout.spacing.BeatOffset;
 import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.VoiceSpacing;

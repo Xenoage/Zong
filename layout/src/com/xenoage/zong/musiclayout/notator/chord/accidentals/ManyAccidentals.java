@@ -1,6 +1,6 @@
 package com.xenoage.zong.musiclayout.notator.chord.accidentals;
 
-import com.xenoage.zong.musiclayout.notations.chord.AccidentalsNotation;
+import com.xenoage.zong.musiclayout.notation.chord.AccidentalsNotation;
 
 /**
  * Displacement for a chord with any number of accidentals.

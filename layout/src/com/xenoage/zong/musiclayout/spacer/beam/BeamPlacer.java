@@ -15,7 +15,7 @@ import static java.lang.Math.round;
 
 import com.xenoage.zong.core.music.StaffLines;
 import com.xenoage.zong.core.music.chord.StemDirection;
-import com.xenoage.zong.musiclayout.notations.BeamNotation;
+import com.xenoage.zong.musiclayout.notation.BeamNotation;
 
 /**
  * Computes the {@link Placement} of a beam, given its {@link Slant}.

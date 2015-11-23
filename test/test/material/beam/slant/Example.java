@@ -11,7 +11,7 @@ import material.ExampleBase;
 import material.Suite;
 
 import com.xenoage.zong.core.music.chord.StemDirection;
-import com.xenoage.zong.musiclayout.notations.chord.ChordLps;
+import com.xenoage.zong.musiclayout.notation.chord.ChordLps;
 
 /**
  * Beam slant example.

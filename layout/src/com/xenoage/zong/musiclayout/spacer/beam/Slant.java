@@ -6,8 +6,6 @@ import static com.xenoage.zong.musiclayout.spacer.beam.Direction.Horizontal;
 import static java.lang.Math.abs;
 import static java.lang.Math.min;
 import static java.lang.Math.round;
-import static lombok.AccessLevel.PRIVATE;
-import lombok.AllArgsConstructor;
 import lombok.ToString;
 
 import com.xenoage.utils.annotations.Const;
@@ -27,7 +25,7 @@ import com.xenoage.utils.annotations.Const;
  * 
  * @author Andreas Wenger
  */
-@Const @AllArgsConstructor(access=PRIVATE) @ToString
+@Const @ToString
 public final class Slant {
 	
 	public static final Slant horizontalSlant = new Slant(0, 0, Horizontal);
@@ -35,7 +33,7 @@ public final class Slant {
 	/** The smallest possible absolute slant in QS, e.g. 2 for one half-space up or down. */
 	public final int minAbsQs;
 	/** The biggest possible absolute slant in QS, e.g. 0 for a horizontal beam. */
-	public final float maxAbsQs;
+	public final int maxAbsQs;
 	/** The direction of the slant. */
 	public final Direction direction;
 	
@@ -66,20 +64,29 @@ public final class Slant {
 		return new Slant(minAbsQs, maxAbsQs, direction);
 	}
 	
+	private Slant(int minAbsQs, int maxAbsQs, Direction direction) {
+		if (minAbsQs < 0 || maxAbsQs < minAbsQs)
+			throw new IllegalArgumentException("Minimum slant must be > 0 (was " + minAbsQs + " qs) " +
+				"and maximum slant (was " + minAbsQs + " qs) must be > minimum slant");
+		this.minAbsQs = minAbsQs;
+		this.maxAbsQs = maxAbsQs;
+		this.direction = direction;
+	}
+	
 	/**
 	 * Returns true, iff the given slant in QS is within the range of this slant.
 	 */
 	public boolean contains(int slantQs) {
-		if (direction == Direction.Descending)
+		if (direction == Descending)
 			return (-maxAbsQs <= slantQs && slantQs <= -minAbsQs);
 		else
 			return (minAbsQs <= slantQs && slantQs <= maxAbsQs);
 	}
 	
 	/**
-	 * Limits the values to the given absolute value.
+	 * Limits the values to the given absolute value in quarter spaces.
 	 */
-	public Slant limit(int absQs) {
+	public Slant limitQs(int absQs) {
 		return new Slant(min(absQs, minAbsQs), min(absQs, maxAbsQs), direction);
 	}
 	
@@ -89,6 +96,20 @@ public final class Slant {
 	public float getSmallestIs() {
 		return minAbsQs * direction.getSign() / 4f;
 		
+	}
+	
+	/**
+	 * Gets the minimum directed slant value.
+	 */
+	public float getMinIs() {
+		return (direction == Ascending ? minAbsQs : maxAbsQs) * direction.getSign() / 4f;
+	}
+	
+	/**
+	 * Gets the maximum directed slant value.
+	 */
+	public float getMaxIs() {
+		return (direction == Ascending ? maxAbsQs : minAbsQs) * direction.getSign() / 4f;
 	}
 	
 }

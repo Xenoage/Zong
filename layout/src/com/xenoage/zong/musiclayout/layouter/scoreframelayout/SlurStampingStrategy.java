@@ -13,7 +13,7 @@ import com.xenoage.zong.core.music.slur.SlurWaypoint;
 import com.xenoage.zong.musiclayout.continued.ContinuedSlur;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.layouter.cache.util.SlurCache;
-import com.xenoage.zong.musiclayout.notations.ChordNotation;
+import com.xenoage.zong.musiclayout.notation.ChordNotation;
 import com.xenoage.zong.musiclayout.stampings.NoteheadStamping;
 import com.xenoage.zong.musiclayout.stampings.SlurStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;

@@ -22,10 +22,10 @@ import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.core.music.format.SP;
 import com.xenoage.zong.core.music.util.DurationInfo;
-import com.xenoage.zong.musiclayout.notations.BeamNotation;
-import com.xenoage.zong.musiclayout.notations.BeamNotation.Waypoint;
-import com.xenoage.zong.musiclayout.notations.ChordNotation;
-import com.xenoage.zong.musiclayout.notations.chord.StemNotation;
+import com.xenoage.zong.musiclayout.notation.BeamNotation;
+import com.xenoage.zong.musiclayout.notation.ChordNotation;
+import com.xenoage.zong.musiclayout.notation.BeamNotation.Waypoint;
+import com.xenoage.zong.musiclayout.notation.chord.StemNotation;
 import com.xenoage.zong.musiclayout.notator.beam.lines.BeamRules;
 import com.xenoage.zong.musiclayout.spacing.ScoreSpacing;
 

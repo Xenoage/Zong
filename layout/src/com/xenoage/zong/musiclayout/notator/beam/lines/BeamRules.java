@@ -1,5 +1,6 @@
 package com.xenoage.zong.musiclayout.notator.beam.lines;
 
+import static com.xenoage.zong.musiclayout.notation.BeamNotation.defaultGapIs;
 import lombok.AllArgsConstructor;
 
 /**
@@ -83,7 +84,7 @@ public abstract class BeamRules {
 	 * Normaly this is 0.25 but it can be up to 0.5 IS.
 	 */
 	public float getGapIs() {
-		return 0.25f;
+		return defaultGapIs;
 	}
 
 	/**

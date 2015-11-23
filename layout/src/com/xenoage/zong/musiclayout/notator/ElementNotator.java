@@ -3,8 +3,8 @@ package com.xenoage.zong.musiclayout.notator;
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.zong.core.position.MPElement;
 import com.xenoage.zong.musiclayout.Context;
-import com.xenoage.zong.musiclayout.notations.Notation;
-import com.xenoage.zong.musiclayout.notations.Notations;
+import com.xenoage.zong.musiclayout.notation.Notation;
+import com.xenoage.zong.musiclayout.notation.Notations;
 
 /**
  * Interface for the element specific notators.

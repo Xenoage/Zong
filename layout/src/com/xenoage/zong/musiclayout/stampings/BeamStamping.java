@@ -5,7 +5,7 @@ import lombok.Getter;
 
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.music.format.SP;
-import com.xenoage.zong.musiclayout.notations.BeamNotation;
+import com.xenoage.zong.musiclayout.notation.BeamNotation;
 
 /**
  * Stamping of a single beam line.

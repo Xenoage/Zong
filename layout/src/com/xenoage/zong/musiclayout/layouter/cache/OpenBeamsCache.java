@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import com.xenoage.zong.musiclayout.layouter.cache.util.BeamedStemStampings;
-import com.xenoage.zong.musiclayout.notations.BeamNotation;
+import com.xenoage.zong.musiclayout.notation.BeamNotation;
 import com.xenoage.zong.musiclayout.stampings.StemStamping;
 
 /**

@@ -1,4 +1,4 @@
-package com.xenoage.zong.musiclayout.notations;
+package com.xenoage.zong.musiclayout.notation;
 
 import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.musiclayout.spacing.ElementWidth;

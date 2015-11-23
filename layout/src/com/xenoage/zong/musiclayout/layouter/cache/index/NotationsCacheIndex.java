@@ -3,7 +3,7 @@ package com.xenoage.zong.musiclayout.layouter.cache.index;
 import com.xenoage.zong.core.music.ColumnElement;
 import com.xenoage.zong.core.music.MeasureElement;
 import com.xenoage.zong.core.music.VoiceElement;
-import com.xenoage.zong.musiclayout.notations.Notations;
+import com.xenoage.zong.musiclayout.notation.Notations;
 
 /**
  * Index for elements in the {@link Notations}.

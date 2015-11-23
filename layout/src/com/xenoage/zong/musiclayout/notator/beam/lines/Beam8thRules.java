@@ -7,7 +7,7 @@ import static com.xenoage.zong.musiclayout.notator.beam.BeamNotator.beamNotator;
 import lombok.AllArgsConstructor;
 
 import com.xenoage.zong.core.music.chord.StemDirection;
-import com.xenoage.zong.musiclayout.notations.BeamNotation;
+import com.xenoage.zong.musiclayout.notation.BeamNotation;
 
 /**
  * Implementation of a {@link BeamRules} strategy for a single line beam (8th).

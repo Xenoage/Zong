@@ -18,7 +18,7 @@ import com.xenoage.zong.core.header.ScoreHeader;
 import com.xenoage.zong.core.music.layout.SystemBreak;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.musiclayout.Context;
-import com.xenoage.zong.musiclayout.notations.Notations;
+import com.xenoage.zong.musiclayout.notation.Notations;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 import com.xenoage.zong.musiclayout.spacing.LeadingSpacing;
 import com.xenoage.zong.musiclayout.spacing.StavesSpacing;

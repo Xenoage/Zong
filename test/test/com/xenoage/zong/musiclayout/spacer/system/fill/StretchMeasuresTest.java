@@ -18,7 +18,7 @@ import org.junit.Test;
 
 import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.chord.Chord;
-import com.xenoage.zong.musiclayout.notations.ChordNotation;
+import com.xenoage.zong.musiclayout.notation.ChordNotation;
 import com.xenoage.zong.musiclayout.spacing.BeatOffset;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 import com.xenoage.zong.musiclayout.spacing.ElementSpacing;

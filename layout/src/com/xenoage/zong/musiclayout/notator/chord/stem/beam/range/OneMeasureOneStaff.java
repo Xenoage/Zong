@@ -13,7 +13,7 @@ import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.core.position.MP;
-import com.xenoage.zong.musiclayout.notations.chord.ChordLps;
+import com.xenoage.zong.musiclayout.notation.chord.ChordLps;
 
 /**
  * {@link Strategy} for a {@link Beam}, which spans over a single staff and measure.

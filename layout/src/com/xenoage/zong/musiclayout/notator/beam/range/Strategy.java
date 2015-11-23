@@ -1,9 +1,9 @@
 package com.xenoage.zong.musiclayout.notator.beam.range;
 
 import com.xenoage.zong.core.music.beam.Beam;
-import com.xenoage.zong.musiclayout.notations.BeamNotation;
-import com.xenoage.zong.musiclayout.notations.ChordNotation;
-import com.xenoage.zong.musiclayout.notations.chord.StemNotation;
+import com.xenoage.zong.musiclayout.notation.BeamNotation;
+import com.xenoage.zong.musiclayout.notation.ChordNotation;
+import com.xenoage.zong.musiclayout.notation.chord.StemNotation;
 import com.xenoage.zong.musiclayout.spacing.ScoreSpacing;
 
 /**

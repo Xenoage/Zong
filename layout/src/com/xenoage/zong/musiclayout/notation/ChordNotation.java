@@ -1,4 +1,4 @@
-package com.xenoage.zong.musiclayout.notations;
+package com.xenoage.zong.musiclayout.notation;
 
 import static com.xenoage.utils.collections.ArrayUtils.getFirst;
 import static com.xenoage.utils.collections.ArrayUtils.getLast;
@@ -8,10 +8,10 @@ import lombok.Getter;
 
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.StemDirection;
-import com.xenoage.zong.musiclayout.notations.chord.AccidentalsNotation;
-import com.xenoage.zong.musiclayout.notations.chord.ArticulationsNotation;
-import com.xenoage.zong.musiclayout.notations.chord.NotesNotation;
-import com.xenoage.zong.musiclayout.notations.chord.StemNotation;
+import com.xenoage.zong.musiclayout.notation.chord.AccidentalsNotation;
+import com.xenoage.zong.musiclayout.notation.chord.ArticulationsNotation;
+import com.xenoage.zong.musiclayout.notation.chord.NotesNotation;
+import com.xenoage.zong.musiclayout.notation.chord.StemNotation;
 import com.xenoage.zong.musiclayout.spacing.ElementWidth;
 
 /**

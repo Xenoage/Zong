@@ -24,7 +24,7 @@ import com.xenoage.zong.musiclayout.ScoreLayout;
 import com.xenoage.zong.musiclayout.Target;
 import com.xenoage.zong.musiclayout.continued.ContinuedElement;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.ScoreFrameLayoutStrategy;
-import com.xenoage.zong.musiclayout.notations.Notations;
+import com.xenoage.zong.musiclayout.notation.Notations;
 import com.xenoage.zong.musiclayout.spacer.frame.fill.FrameFiller;
 import com.xenoage.zong.musiclayout.spacer.system.fill.SystemFiller;
 import com.xenoage.zong.musiclayout.spacing.FrameSpacing;

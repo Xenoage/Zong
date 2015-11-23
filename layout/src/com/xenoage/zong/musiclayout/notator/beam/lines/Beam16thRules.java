@@ -1,8 +1,8 @@
 package com.xenoage.zong.musiclayout.notator.beam.lines;
 
 import static com.xenoage.utils.math.MathUtils.mod;
-import static com.xenoage.zong.musiclayout.notations.BeamNotation.defaultGapIs;
-import static com.xenoage.zong.musiclayout.notations.BeamNotation.lineHeightIs;
+import static com.xenoage.zong.musiclayout.notation.BeamNotation.defaultGapIs;
+import static com.xenoage.zong.musiclayout.notation.BeamNotation.lineHeightIs;
 import static com.xenoage.zong.musiclayout.notator.beam.BeamNotator.beamNotator;
 import lombok.AllArgsConstructor;
 

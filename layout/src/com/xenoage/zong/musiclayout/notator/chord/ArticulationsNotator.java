@@ -10,10 +10,10 @@ import com.xenoage.zong.core.music.annotation.Articulation;
 import com.xenoage.zong.core.music.annotation.ArticulationType;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.StemDirection;
-import com.xenoage.zong.musiclayout.notations.chord.ArticulationDisplacement;
-import com.xenoage.zong.musiclayout.notations.chord.ArticulationsNotation;
-import com.xenoage.zong.musiclayout.notations.chord.NoteDisplacement;
-import com.xenoage.zong.musiclayout.notations.chord.NotesNotation;
+import com.xenoage.zong.musiclayout.notation.chord.ArticulationDisplacement;
+import com.xenoage.zong.musiclayout.notation.chord.ArticulationsNotation;
+import com.xenoage.zong.musiclayout.notation.chord.NoteDisplacement;
+import com.xenoage.zong.musiclayout.notation.chord.NotesNotation;
 
 /**
  * Computes the notations of the articulations of a given chord.

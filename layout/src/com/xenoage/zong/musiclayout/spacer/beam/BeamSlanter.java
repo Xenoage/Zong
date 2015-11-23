@@ -41,8 +41,6 @@ import com.xenoage.zong.core.music.chord.StemDirection;
  *   <li>the LP of the notes (Ross, p. 111, rows 1 and 2)</li>
  * </ul>
  * 
- * The slant is flexible
- * 
  * @author Andreas Wenger
  */
 public class BeamSlanter {
@@ -242,7 +240,7 @@ public class BeamSlanter {
 			int topLegerLp = staffLines * 2;
 			if ((stemDir == Up && max(notesLp) < bottomLegerLp) ||
 				(stemDir == Down && min(notesLp) > topLegerLp)) {
-				slant = slant.limit(maxSlantAbsQs);
+				slant = slant.limitQs(maxSlantAbsQs);
 			}
 		}
 		return slant;

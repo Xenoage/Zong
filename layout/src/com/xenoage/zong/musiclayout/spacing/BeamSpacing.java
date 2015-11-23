@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 
 import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.music.format.SP;
-import com.xenoage.zong.musiclayout.notations.BeamNotation;
+import com.xenoage.zong.musiclayout.notation.BeamNotation;
 
 /**
  * Horizontal and vertical spacing of a {@link Beam}.

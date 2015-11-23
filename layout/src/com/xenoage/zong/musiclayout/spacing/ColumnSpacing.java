@@ -15,7 +15,7 @@ import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.position.MP;
-import com.xenoage.zong.musiclayout.notations.ChordNotation;
+import com.xenoage.zong.musiclayout.notation.ChordNotation;
 
 /**
  * The horizontal spacing for one measure column.

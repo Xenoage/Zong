@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import com.xenoage.utils.annotations.Const;
-import com.xenoage.zong.musiclayout.notations.TimeNotation;
+import com.xenoage.zong.musiclayout.notation.TimeNotation;
 
 /**
  * Class for a time signature stamping.

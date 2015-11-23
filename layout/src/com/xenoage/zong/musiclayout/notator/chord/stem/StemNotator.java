@@ -6,9 +6,9 @@ import static com.xenoage.zong.core.music.chord.StemDirection.Up;
 
 import com.xenoage.zong.core.music.chord.Stem;
 import com.xenoage.zong.core.music.chord.StemDirection;
-import com.xenoage.zong.musiclayout.notations.chord.NoteDisplacement;
-import com.xenoage.zong.musiclayout.notations.chord.NotesNotation;
-import com.xenoage.zong.musiclayout.notations.chord.StemNotation;
+import com.xenoage.zong.musiclayout.notation.chord.NoteDisplacement;
+import com.xenoage.zong.musiclayout.notation.chord.NotesNotation;
+import com.xenoage.zong.musiclayout.notation.chord.StemNotation;
 
 /**
  * Computes the {@link StemNotation} of a chord stem.

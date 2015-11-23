@@ -7,8 +7,8 @@ import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.music.clef.Clef;
 import com.xenoage.zong.core.music.clef.ClefType;
 import com.xenoage.zong.core.music.key.TraditionalKey;
-import com.xenoage.zong.musiclayout.notations.chord.AccidentalsNotation;
-import com.xenoage.zong.musiclayout.notations.chord.NoteSuspension;
+import com.xenoage.zong.musiclayout.notation.chord.AccidentalsNotation;
+import com.xenoage.zong.musiclayout.notation.chord.NoteSuspension;
 import com.xenoage.zong.musiclayout.settings.ChordWidths;
 
 /**

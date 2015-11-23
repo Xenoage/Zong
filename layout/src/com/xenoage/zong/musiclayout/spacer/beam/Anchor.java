@@ -2,7 +2,7 @@ package com.xenoage.zong.musiclayout.spacer.beam;
 
 import static com.xenoage.utils.math.MathUtils.mod;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
-import static com.xenoage.zong.musiclayout.notations.BeamNotation.lineHeightIs;
+import static com.xenoage.zong.musiclayout.notation.BeamNotation.lineHeightIs;
 import static java.lang.Math.round;
 
 import com.xenoage.zong.core.music.chord.StemDirection;

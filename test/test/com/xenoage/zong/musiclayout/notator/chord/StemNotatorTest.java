@@ -17,9 +17,9 @@ import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.ChordFactory;
 import com.xenoage.zong.core.music.chord.Stem;
 import com.xenoage.zong.core.music.chord.StemDirection;
-import com.xenoage.zong.musiclayout.notations.chord.ChordLps;
-import com.xenoage.zong.musiclayout.notations.chord.NotesNotation;
-import com.xenoage.zong.musiclayout.notations.chord.StemNotation;
+import com.xenoage.zong.musiclayout.notation.chord.ChordLps;
+import com.xenoage.zong.musiclayout.notation.chord.NotesNotation;
+import com.xenoage.zong.musiclayout.notation.chord.StemNotation;
 import com.xenoage.zong.musiclayout.notator.chord.stem.StemNotator;
 import com.xenoage.zong.musiclayout.settings.ChordWidths;
 

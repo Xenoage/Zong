@@ -7,7 +7,7 @@ import com.xenoage.zong.core.music.MusicContext;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.Stem;
 import com.xenoage.zong.core.music.chord.StemDirection;
-import com.xenoage.zong.musiclayout.notations.chord.ChordLps;
+import com.xenoage.zong.musiclayout.notation.chord.ChordLps;
 
 /**
  * Computes the {@link StemDirection} of single chords.

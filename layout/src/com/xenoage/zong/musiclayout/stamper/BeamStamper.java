@@ -3,16 +3,16 @@ package com.xenoage.zong.musiclayout.stamper;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.MathUtils.interpolateLinear;
 import static com.xenoage.zong.core.music.format.SP.sp;
-import static com.xenoage.zong.musiclayout.notations.BeamNotation.hookLengthIs;
-import static com.xenoage.zong.musiclayout.notations.BeamNotation.lineHeightIs;
+import static com.xenoage.zong.musiclayout.notation.BeamNotation.hookLengthIs;
+import static com.xenoage.zong.musiclayout.notation.BeamNotation.lineHeightIs;
 
 import java.util.List;
 
 import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.core.music.format.SP;
 import com.xenoage.zong.musiclayout.layouter.cache.util.BeamedStemStampings;
-import com.xenoage.zong.musiclayout.notations.BeamNotation;
-import com.xenoage.zong.musiclayout.notations.BeamNotation.Waypoint;
+import com.xenoage.zong.musiclayout.notation.BeamNotation;
+import com.xenoage.zong.musiclayout.notation.BeamNotation.Waypoint;
 import com.xenoage.zong.musiclayout.stampings.BeamStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import com.xenoage.zong.musiclayout.stampings.StemStamping;

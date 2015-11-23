@@ -3,9 +3,9 @@ package com.xenoage.zong.musiclayout.notator;
 import com.xenoage.zong.core.music.clef.Clef;
 import com.xenoage.zong.core.position.MPElement;
 import com.xenoage.zong.musiclayout.Context;
-import com.xenoage.zong.musiclayout.notations.ClefNotation;
-import com.xenoage.zong.musiclayout.notations.Notation;
-import com.xenoage.zong.musiclayout.notations.Notations;
+import com.xenoage.zong.musiclayout.notation.ClefNotation;
+import com.xenoage.zong.musiclayout.notation.Notation;
+import com.xenoage.zong.musiclayout.notation.Notations;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.musiclayout.spacing.ElementWidth;
 

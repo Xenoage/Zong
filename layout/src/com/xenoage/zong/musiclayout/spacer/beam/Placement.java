@@ -19,6 +19,7 @@ public final class Placement {
 	
 	public final float leftEndLp, rightEndLp;
 	
+	
 	public Direction getDirection() {
 		float d = rightEndLp - leftEndLp;
 		if (d > 0.1)

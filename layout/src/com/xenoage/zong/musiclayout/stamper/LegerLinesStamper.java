@@ -2,13 +2,13 @@ package com.xenoage.zong.musiclayout.stamper;
 
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.core.music.format.SP.sp;
-import static com.xenoage.zong.musiclayout.notations.chord.NoteSuspension.None;
-import static com.xenoage.zong.musiclayout.notations.chord.NoteSuspension.Right;
+import static com.xenoage.zong.musiclayout.notation.chord.NoteSuspension.None;
+import static com.xenoage.zong.musiclayout.notation.chord.NoteSuspension.Right;
 
-import com.xenoage.zong.musiclayout.notations.ChordNotation;
-import com.xenoage.zong.musiclayout.notations.chord.NoteDisplacement;
-import com.xenoage.zong.musiclayout.notations.chord.NoteSuspension;
-import com.xenoage.zong.musiclayout.notations.chord.NotesNotation;
+import com.xenoage.zong.musiclayout.notation.ChordNotation;
+import com.xenoage.zong.musiclayout.notation.chord.NoteDisplacement;
+import com.xenoage.zong.musiclayout.notation.chord.NoteSuspension;
+import com.xenoage.zong.musiclayout.notation.chord.NotesNotation;
 import com.xenoage.zong.musiclayout.stampings.LegerLineStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 

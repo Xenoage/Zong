@@ -19,9 +19,7 @@ public class BeamNotatorTest {
 	BeamNotator testee = BeamNotator.beamNotator;
 
 
-	
-	
-	@Test public void testIsBeamOutsideStaff() {
+	@Test public void isBeamOutsideStaffTest() {
 		//stem up, above staff
 		assertTrue(testee.isBeamOutsideStaff(Up, 13, 13, 5, 2));
 		assertTrue(testee.isBeamOutsideStaff(Up, 12.1f, 13, 5, 2));

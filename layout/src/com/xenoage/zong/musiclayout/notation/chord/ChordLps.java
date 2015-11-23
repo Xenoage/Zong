@@ -1,4 +1,4 @@
-package com.xenoage.zong.musiclayout.notations.chord;
+package com.xenoage.zong.musiclayout.notation.chord;
 
 import static com.xenoage.utils.kernel.Range.range;
 

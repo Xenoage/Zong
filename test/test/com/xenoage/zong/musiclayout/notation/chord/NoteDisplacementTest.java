@@ -1,4 +1,7 @@
-package com.xenoage.zong.musiclayout.notations.chord;
+package com.xenoage.zong.musiclayout.notation.chord;
+
+import com.xenoage.zong.musiclayout.notation.chord.NoteDisplacement;
+import com.xenoage.zong.musiclayout.notation.chord.NoteSuspension;
 
 /**
  * Tests for {@link NoteDisplacement}.

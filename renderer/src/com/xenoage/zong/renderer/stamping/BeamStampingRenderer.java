@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.xenoage.utils.color.Color;
 import com.xenoage.utils.math.geom.Point2f;
-import com.xenoage.zong.musiclayout.notations.BeamNotation;
+import com.xenoage.zong.musiclayout.notation.BeamNotation;
 import com.xenoage.zong.musiclayout.stampings.BeamStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import com.xenoage.zong.musiclayout.stampings.Stamping;

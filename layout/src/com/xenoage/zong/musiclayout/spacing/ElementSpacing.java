@@ -11,7 +11,7 @@ import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.core.music.VoiceElement;
-import com.xenoage.zong.musiclayout.notations.Notation;
+import com.xenoage.zong.musiclayout.notation.Notation;
 
 /**
  * An element spacing stores the beat, the position (offset)

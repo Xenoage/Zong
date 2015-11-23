@@ -2,7 +2,7 @@ package com.xenoage.zong.musiclayout.spacer.beam;
 
 import static com.xenoage.zong.core.music.chord.StemDirection.Down;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
-import static com.xenoage.zong.musiclayout.notations.BeamNotation.lineHeightIs;
+import static com.xenoage.zong.musiclayout.notation.BeamNotation.lineHeightIs;
 import static com.xenoage.zong.musiclayout.spacer.beam.Anchor.Hang;
 import static com.xenoage.zong.musiclayout.spacer.beam.Anchor.Sit;
 import static com.xenoage.zong.musiclayout.spacer.beam.Anchor.Straddle;

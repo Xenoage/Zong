@@ -6,7 +6,7 @@ import static com.xenoage.utils.math.Delta.df;
 import static com.xenoage.zong.core.music.beam.Beam.beamFromChords;
 import static com.xenoage.zong.core.music.chord.StemDirection.Down;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
-import static com.xenoage.zong.musiclayout.notations.chord.NoteDisplacementTest.note;
+import static com.xenoage.zong.musiclayout.notation.chord.NoteDisplacementTest.note;
 import static org.junit.Assert.assertEquals;
 
 import java.util.List;
@@ -14,9 +14,9 @@ import java.util.List;
 import org.junit.Test;
 
 import com.xenoage.zong.core.music.beam.Beam;
-import com.xenoage.zong.musiclayout.notations.ChordNotation;
-import com.xenoage.zong.musiclayout.notations.chord.NoteDisplacement;
-import com.xenoage.zong.musiclayout.notations.chord.NotesNotation;
+import com.xenoage.zong.musiclayout.notation.ChordNotation;
+import com.xenoage.zong.musiclayout.notation.chord.NoteDisplacement;
+import com.xenoage.zong.musiclayout.notation.chord.NotesNotation;
 import com.xenoage.zong.musiclayout.notator.beam.lines.BeamRules;
 import com.xenoage.zong.musiclayout.notator.beam.lines.Beam8thRules;
 

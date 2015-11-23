@@ -11,9 +11,9 @@ import com.xenoage.zong.core.music.MusicContext;
 import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.music.chord.Accidental;
 import com.xenoage.zong.core.music.chord.Chord;
-import com.xenoage.zong.musiclayout.notations.chord.AccidentalsNotation;
-import com.xenoage.zong.musiclayout.notations.chord.NotesNotation;
-import com.xenoage.zong.musiclayout.notations.chord.NoteDisplacement;
+import com.xenoage.zong.musiclayout.notation.chord.AccidentalsNotation;
+import com.xenoage.zong.musiclayout.notation.chord.NoteDisplacement;
+import com.xenoage.zong.musiclayout.notation.chord.NotesNotation;
 import com.xenoage.zong.musiclayout.notator.chord.accidentals.Strategy;
 import com.xenoage.zong.musiclayout.settings.ChordWidths;
 

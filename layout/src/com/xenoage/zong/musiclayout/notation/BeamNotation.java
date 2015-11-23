@@ -1,11 +1,11 @@
-package com.xenoage.zong.musiclayout.notations;
+package com.xenoage.zong.musiclayout.notation;
 
 import java.util.List;
 
 import lombok.AllArgsConstructor;
 
 import com.xenoage.zong.core.music.beam.Beam;
-import com.xenoage.zong.musiclayout.notations.beam.Fragments;
+import com.xenoage.zong.musiclayout.notation.beam.Fragments;
 
 /**
  * 

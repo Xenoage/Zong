@@ -9,7 +9,7 @@ import com.xenoage.utils.annotations.Optimized;
 import com.xenoage.utils.math.geom.Rectangle2f;
 import com.xenoage.utils.math.geom.Shape;
 import com.xenoage.zong.core.music.format.SP;
-import com.xenoage.zong.musiclayout.notations.ChordNotation;
+import com.xenoage.zong.musiclayout.notation.ChordNotation;
 import com.xenoage.zong.symbols.Symbol;
 
 /**

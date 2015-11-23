@@ -1,4 +1,4 @@
-package com.xenoage.zong.musiclayout.notations;
+package com.xenoage.zong.musiclayout.notation;
 
 import static com.xenoage.utils.collections.CollectionUtils.map;
 

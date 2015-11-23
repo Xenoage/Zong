@@ -10,7 +10,7 @@ import com.xenoage.utils.annotations.Optimized;
 import com.xenoage.utils.math.geom.Rectangle2f;
 import com.xenoage.utils.math.geom.Shape;
 import com.xenoage.zong.core.music.key.TraditionalKey;
-import com.xenoage.zong.musiclayout.notations.TraditionalKeyNotation;
+import com.xenoage.zong.musiclayout.notation.TraditionalKeyNotation;
 import com.xenoage.zong.symbols.Symbol;
 
 /**

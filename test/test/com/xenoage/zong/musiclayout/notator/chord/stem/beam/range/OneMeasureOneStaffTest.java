@@ -6,7 +6,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import com.xenoage.zong.core.music.chord.StemDirection;
-import com.xenoage.zong.musiclayout.notations.chord.ChordLps;
+import com.xenoage.zong.musiclayout.notation.chord.ChordLps;
 import com.xenoage.zong.musiclayout.notator.chord.stem.beam.range.OneMeasureOneStaff;
 
 /**
