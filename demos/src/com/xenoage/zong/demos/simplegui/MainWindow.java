@@ -2,6 +2,13 @@ package com.xenoage.zong.demos.simplegui;
 
 import java.awt.image.BufferedImage;
 
+import org.controlsfx.dialog.Dialog;
+import org.controlsfx.dialog.Dialogs;
+
+import com.xenoage.utils.math.geom.Point2f;
+import com.xenoage.zong.layout.Layout;
+import com.xenoage.zong.renderer.awt.AwtLayoutRenderer;
+import com.xenoage.zong.renderer.javafx.JfxLayoutRenderer;
 
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
@@ -10,15 +17,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-
-
-import org.controlsfx.dialog.Dialog;
-import org.controlsfx.dialog.Dialogs;
-
-
-import com.xenoage.zong.layout.Layout;
-import com.xenoage.zong.renderer.awt.AwtLayoutRenderer;import com.xenoage.zong.renderer.javafx.JfxLayoutRenderer;
 
 
 /**
@@ -27,6 +27,8 @@ import com.xenoage.zong.renderer.awt.AwtLayoutRenderer;import com.xenoage.zong.r
  * @author Andreas Wenger
  */
 public class MainWindow {
+	
+	public static final float zoom = 2;
 
 	//GUI elements
 	@FXML private MenuItem mnuPlaybackStop;
@@ -85,17 +87,21 @@ public class MainWindow {
 			"Any questions or ideas? Contact us: info@xenoage.com");
 	}
 	
+	@FXML void onScoreClick(MouseEvent event) {
+		content.onClick(new Point2f((float) event.getX(), (float) event.getY()));
+	}
+	
 	public void renderLayout(Layout layout) {
 		//run in JavaFX application thread
 		Platform.runLater(() -> {
 			
 			if (useJavaFX) {
 				//JavaFX renderer
-				scoreImage = JfxLayoutRenderer.paintToImage(layout, 0, 2f);
+				scoreImage = JfxLayoutRenderer.paintToImage(layout, 0, zoom);
 			}
 			else {
 				//AWT renderer
-				BufferedImage awtImage = AwtLayoutRenderer.paintToImage(layout, 0, 2f);
+				BufferedImage awtImage = AwtLayoutRenderer.paintToImage(layout, 0, zoom);
 				scoreImage = SwingFXUtils.toFXImage(awtImage, scoreImage);
 			}
 

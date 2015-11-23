@@ -5,8 +5,12 @@ import java.io.File;
 import com.xenoage.utils.document.io.FileOutput;
 import com.xenoage.utils.error.Err;
 import com.xenoage.utils.log.Report;
+import com.xenoage.utils.math.Units;
+import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.zong.core.Score;
+import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.core.position.MP;
+import com.xenoage.zong.core.position.MPElement;
 import com.xenoage.zong.desktop.io.DocumentIO;
 import com.xenoage.zong.desktop.io.midi.out.MidiScoreDocFileOutput;
 import com.xenoage.zong.desktop.io.musicxml.in.MusicXmlScoreDocFileInput;
@@ -16,7 +20,10 @@ import com.xenoage.zong.desktop.io.png.out.PngScoreDocFileOutput;
 import com.xenoage.zong.documents.ScoreDoc;
 import com.xenoage.zong.io.midi.out.PlaybackListener;
 import com.xenoage.zong.layout.Layout;
+import com.xenoage.zong.layout.frames.ScoreFrame;
+import com.xenoage.zong.musiclayout.ScoreFrameLayout;
 import com.xenoage.zong.musiclayout.layouter.PlaybackLayouter;
+import com.xenoage.zong.musiclayout.stampings.Stamping;
 
 /**
  * The loaded document, its layout and playback capabilities.
@@ -93,6 +100,38 @@ public class Content
 			mainWindow.showMessageDialog(filePath + " saved.");
 		} catch (Exception ex) {
 			Err.handle(Report.error(ex));
+		}
+	}
+	
+	/**
+	 * This method is called when the mouse was clicked on the content.
+	 * A message with the clicked element is shown to the user. 
+	 */
+	public void onClick(Point2f positionPx) {
+		//get the layout of first score frame
+		ScoreFrame frame = layout.getScoreFrames().get(0);
+		ScoreFrameLayout frameLayout = frame.getScoreFrameLayout();
+		//convert position from screen space to page space, then from page space
+		//to frame space, and them from frame space to score frame space
+		Point2f positionMm = positionPx.scale(Units.pxToMm(1, MainWindow.zoom));
+		Point2f framePositionMm = positionMm.sub(frame.getAbsolutePosition());
+		Point2f scorePositionMm = frame.getScoreLayoutPosition(framePositionMm);
+		//find elements under this position
+		for (Stamping stamping : frameLayout.getAllStampings()) {
+			if (stamping.boundingShape != null && stamping.boundingShape.contains(scorePositionMm)) {
+				MusicElement element = stamping.musicElement;
+				if (element != null) {
+					//music element found
+					String message = "An element was clicked: " + element;
+					if (element instanceof MPElement) {
+						//music element with a known musical position found
+						MPElement mpElement = (MPElement) element;
+						if (mpElement.getParent() != null)
+							message += " at " + mpElement.getParent().getMP(mpElement);
+					}
+					mainWindow.showMessageDialog(message);
+				}
+			}
 		}
 	}
 	
