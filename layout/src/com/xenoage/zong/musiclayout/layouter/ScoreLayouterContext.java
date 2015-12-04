@@ -39,9 +39,13 @@ import com.xenoage.zong.symbols.SymbolPool;
 
 	/**
 	 * Gets the biggest interline space of the score.
+	 * If the score is empty, 1 is returned.
 	 */
 	public float getMaxInterlineSpace() {
-		if (maxInterlineSpace == Float.NaN) {
+		if (Float.isNaN(maxInterlineSpace)) {
+			if(score.getStavesCount() == 0)
+        return 1f;
+			maxInterlineSpace = 0;
 			for (int staff = 0; staff < score.getStavesCount(); staff++) {
 				maxInterlineSpace = Math.max(maxInterlineSpace, score.getInterlineSpace(staff));
 			}
