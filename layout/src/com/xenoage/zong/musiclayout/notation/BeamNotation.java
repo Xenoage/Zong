@@ -8,7 +8,8 @@ import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.musiclayout.notation.beam.Fragments;
 
 /**
- * 
+ * Layout information about a beam, like the appearance
+ * of the beam lines.
  * 
  * @author Andreas Wenger
  */
