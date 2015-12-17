@@ -1,6 +1,9 @@
 package com.xenoage.zong.musiclayout.notator.beam.lines;
 
 import static com.xenoage.zong.musiclayout.notation.BeamNotation.defaultGapIs;
+
+import com.xenoage.zong.musiclayout.notation.BeamNotation;
+
 import lombok.AllArgsConstructor;
 
 /**
@@ -17,7 +20,11 @@ import lombok.AllArgsConstructor;
  * The general rules are explained in Ted Ross' book, starting on
  * page 88.
  * 
- * @author Uli Teschemacher
+ * The "slant" of a beam is defined as the vertical distance of
+ * the first stem endpoint and the last stem endpoint in IS.
+ * When not named "absolute", the slant normally denotes a directed value
+ * (negative for descending and positive for ascending beams).
+ * 
  * @author Andreas Wenger
  */
 @AllArgsConstructor
@@ -30,7 +37,7 @@ public abstract class BeamRules {
 	public abstract int getBeamLinesCount();
 	
 	/**
-	 * Gets the minimum length of a stem in IS,
+	 * Gets the minimum absolute length of a stem in IS,
 	 * from the innermost note at the stem side up to
 	 * the end of the stem.
 	 */
@@ -39,21 +46,11 @@ public abstract class BeamRules {
 	}
 
 	/**
-	 * Gets the slant of a beam, when the middle notes of the beam
-	 * are sorted descending. The slant is defined as the directed vertical distance of
-	 * the first stem endpoint and the last stem endpoint in IS.
+	 * Gets the absolute slant of a beam in IS, when the middle notes of the beam
+	 * are sorted ascending or descending (called "run" in Ross, p. 97).
 	 */
-	public float getSlantDescendingMiddleNotesIs() {
-		return -0.5f; //TODO: was -1f before, but I'm not sure if Uli already meant it as IS instead of LP
-	}
-
-	/**
-	 * Gets the slant of a beam, when the middle notes of the beam
-	 * are sorted ascending. The slant is defined as the directed vertical distance of
-	 * the first stem endpoint and the last stem endpoint in IS.
-	 */
-	public float getSlantAscendingMiddleNotesIs() {
-		return 0.5f; //TODO: was 1f before, but I'm not sure if Uli already meant it as IS instead of LP
+	public float getAbsSlantForMiddleNotesRunIs() {
+		return 0.5f; //according to Ross, p. 97
 	}
 	
 	/*-* GOON: this method should replace isGoodStemPosition. add lots of tests from Ross/Chlapik
@@ -81,44 +78,42 @@ public abstract class BeamRules {
 	/**
 	 * Returns the vertical distance between two beam lines in IS, that is
 	 * the "white space" between two beam lines.
-	 * Normaly this is 0.25 but it can be up to 0.5 IS.
+	 * Normally this is {@link BeamNotation#defaultGapIs}, but it can be up to
+	 * 0.5 IS for a beam with more than three lines.
 	 */
 	public float getGapIs() {
 		return defaultGapIs;
 	}
 
 	/**
-	 * Returns the (unsigned) slant if there is only few horizontal space between the notes.
-	 * The slant is defined as the directed vertical distance of
-	 * the first stem endpoint and the last stem endpoint in IS.
+	 * Returns the absolute slant if there is only few horizontal space between the notes.
 	 * @param startNoteLp  the LP of the first relevant note
 	 * @param endNoteLp    the LP of the last relevant note
 	 */
-	public float getSlantCloseSpacingIs(int startNoteLp, int endNoteLp) {
-		return 0.5f;
+	@Deprecated //can be 0.25 or 0.5, see Riss, p. 113, the lower examples a) and b)
+	public float getAbsSlantForCloseSpacingIs(int startNoteLp, int endNoteLp) {
+		return 0.5f; //Ross, p. 112 ff. 
 	}
-
-	/**
-	 * Returns the (unsigned) slant if there is plentiful horizontal
-	 * space between the first and the last note.
-	 * The slant is defined as the directed vertical distance of
-	 * the first stem endpoint and the last stem endpoint in IS.
-	 * @param startNoteLp  the LP of the first relevant note
-	 * @param endNoteLp    the LP of the last relevant note
-	 */
-	public float getSlantWideSpacingIs(int startNoteLp, int endNoteLp) {
-		return 2f;
-	}
-
+	
 	/**
 	 * Returns the (unsigned) slant for normal horizontal spacing conditions.
-	 * The slant is defined as the directed vertical distance of
-	 * the first stem endpoint and the last stem endpoint in IS.
 	 * @param startNoteLP  the LP of the first relevant note
 	 * @param endNoteLP    the LP of the last relevant note
 	 */
-	public float getSlantNormalSpacingIs(int startNoteLP, int endNoteLP) {
-		return 1f;
+	@Deprecated //depends on the situation, the return value 1 is a special case
+	public float getAbsSlantForNormalSpacingIs(int startNoteLP, int endNoteLP) {
+		return 1f; //TODO: apply Ross, p. 101, rule 3
+	}
+
+	/**
+	 * Returns the absolute slant if there is plentiful horizontal
+	 * space between the first and the last note.
+	 * @param startNoteLp  the LP of the first relevant note
+	 * @param endNoteLp    the LP of the last relevant note
+	 */
+	@Deprecated //depends on the situation, the return value 2 is a special case
+	public float getAbsSlantForWideSpacingIs(int startNoteLp, int endNoteLp) {
+		return 2f; //TODO: apply Ross, p. 101, rule 3
 	}
 	
 }

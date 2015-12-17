@@ -30,9 +30,9 @@ public final class Slant {
 	
 	public static final Slant horizontalSlant = new Slant(0, 0, Horizontal);
 	
-	/** The smallest possible absolute slant in QS, e.g. 2 for one half-space up or down. */
+	/** The smallest ("flattest") possible absolute slant in QS, e.g. 2 for one half-space up or down. */
 	public final int minAbsQs;
-	/** The biggest possible absolute slant in QS, e.g. 0 for a horizontal beam. */
+	/** The biggest ("steepest") possible absolute slant in QS, e.g. 0 for a horizontal beam. */
 	public final int maxAbsQs;
 	/** The direction of the slant. */
 	public final Direction direction;
@@ -91,9 +91,9 @@ public final class Slant {
 	}
 	
 	/**
-	 * Gets the slant with the minimum absolute value in IS.
+	 * Gets the directed slant with the minimum absolute value in IS.
 	 */
-	public float getSmallestIs() {
+	public float getFlattestIs() {
 		return minAbsQs * direction.getSign() / 4f;
 		
 	}

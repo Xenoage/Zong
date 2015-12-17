@@ -2,6 +2,7 @@ package com.xenoage.zong.musiclayout.notator.chord;
 
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.music.Pitch.pi;
+import static com.xenoage.zong.core.music.StaffLines.staff5Lines;
 import static com.xenoage.zong.musiclayout.notator.chord.NotesNotator.notesNotator;
 import static com.xenoage.zong.musiclayout.notator.chord.stem.StemNotator.stemNotator;
 import static com.xenoage.zong.musiclayout.notator.chord.stem.single.SingleStemDirector.singleStemDirector;
@@ -107,7 +108,7 @@ public class StemNotatorTest {
 		pitch = pi('C', 0, 3);
 		testPitch(pitch, -9, 4);
 
-		//Some Chords...
+		//some chords
 		Pitch[] pitches = new Pitch[2];
 		pitches[0] = pi('C', 0, 3);
 		pitches[1] = pi('F', 0, 3);
@@ -138,8 +139,8 @@ public class StemNotatorTest {
 		StemDirection stemDirection = singleStemDirector.compute(linepositions, 5);
 		chordNotesAlignment = notesNotator.compute(chord, stemDirection,
 			ChordWidths.defaultValue, context);
-		chordStemAlignment = testee.compute(Stem.defaultStem, chordNotesAlignment, stemDirection, 5,
-			1);
+		chordStemAlignment = testee.compute(Stem.defaultStem, chordNotesAlignment.getLps(),
+			stemDirection, staff5Lines, 1);
 		assertEquals(start, chordStemAlignment.startLp, Delta.DELTA_FLOAT);
 		assertEquals(end, chordStemAlignment.endLp, Delta.DELTA_FLOAT);
 	}

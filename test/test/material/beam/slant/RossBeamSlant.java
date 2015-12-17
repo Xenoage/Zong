@@ -53,7 +53,7 @@ public class RossBeamSlant
 		example("p101 c2").left(2, 3.25).width(6).right(0, 3.25),
 		example("p101 d1").left(-1, 3).width(6).right(-4, 4),
 		example("p101 d2").left(2, 3.25).width(6).right(-1, 3.5),
-		example("p101 e").left(9, 4.75).width(6).right(2, 3),
+		example("p101 e").left(9, 4.75).width(6).right(2, 3.25),
 		//diatonic movement of inner notes does not change the beam
 		example("p103 1").left(0, 3.25).width(6).right(3, 3),
 		example("p103 2").left(0, 3.25).middleNotes(1, 2).right(3, 3),

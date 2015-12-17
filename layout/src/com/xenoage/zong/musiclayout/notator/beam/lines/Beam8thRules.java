@@ -70,18 +70,18 @@ public class Beam8thRules
 		return false;
 	}
 
-	@Override public float getSlantCloseSpacingIs(int startNoteLp, int endNoteLp) {
+	@Override public float getAbsSlantForCloseSpacingIs(int startNoteLp, int endNoteLp) {
 		if (Math.abs(startNoteLp - endNoteLp) == 1)
 			return 0.5f;
 		else
 			return 1f;
 	}
 
-	@Override public float getSlantNormalSpacingIs(int startNoteLp, int endNoteLp) {
+	@Override public float getAbsSlantForNormalSpacingIs(int startNoteLp, int endNoteLp) {
 		return getSlants(Math.abs(startNoteLp - endNoteLp))[0];
 	}
 
-	@Override public float getSlantWideSpacingIs(int startNoteLp, int endNoteLp) {
+	@Override public float getAbsSlantForWideSpacingIs(int startNoteLp, int endNoteLp) {
 		return getSlants(Math.abs(startNoteLp - endNoteLp))[1];
 	}
 

@@ -219,7 +219,10 @@ public class BeamSlanter {
 			case 0: return horizontalSlant; //unison
 			case 1: return slantIs(0.25f, dir); //2nd
 			case 2: return slantIs(0.5f, 1, dir); //3rd
-			case 3: return slantIs(0.5f, 1.25f, dir); //4th - p. 101d: min=0.5; p. 111: min=1 
+			case 3: return slantIs(0.5f, 1.25f, dir); //4th (on p. 101d min=0.5) 
+			//GOON: (on p. 101d min=0.5) seems to be a special case, when an extreme note requires
+			//its stem to reach the middle line. then, we use the smaller slant of 0.5 IS instead
+			//of the minimal slant of 1 IS which is described on page 111 4th
 			case 4: return slantIs(1.25f, dir); //5th
 			case 5: return slantIs(1.25f, 1.5f, dir); //6th
 			case 6: return slantIs(1.25f, 1.75f, dir); //7th
@@ -228,11 +231,11 @@ public class BeamSlanter {
 	}
 	
 	/**
-	 * Ross, p. 111: Limit the slant to 0.5 for very high and very low notes.
+	 * Ross, p. 111: Limit the slant to 0.5 IS for very high and very low notes.
 	 */
 	Slant limitSlantForExtremeNotes(Slant slant, int[] notesLp,
 		StemDirection stemDir, int staffLines) {
-		int maxSlantAbsQs = 2; //2 QS = 0.5 spaces
+		int maxSlantAbsQs = 2; //2 QS = 0.5 IS
 		if (slant.minAbsQs > maxSlantAbsQs) {
 			//Ross, p. 111, row 1 and 2: upstem and only notes below bottom leger lines
 			//or downstem and only notes above top leger lines

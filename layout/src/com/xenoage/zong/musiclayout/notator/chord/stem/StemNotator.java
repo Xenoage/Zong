@@ -3,11 +3,12 @@ package com.xenoage.zong.musiclayout.notator.chord.stem;
 import static com.xenoage.zong.core.music.chord.StemDirection.Down;
 import static com.xenoage.zong.core.music.chord.StemDirection.None;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
+import static com.xenoage.zong.musiclayout.notator.chord.stem.StemDrawer.stemDrawer;
 
+import com.xenoage.zong.core.music.StaffLines;
 import com.xenoage.zong.core.music.chord.Stem;
 import com.xenoage.zong.core.music.chord.StemDirection;
-import com.xenoage.zong.musiclayout.notation.chord.NoteDisplacement;
-import com.xenoage.zong.musiclayout.notation.chord.NotesNotation;
+import com.xenoage.zong.musiclayout.notation.chord.ChordLps;
 import com.xenoage.zong.musiclayout.notation.chord.StemNotation;
 
 /**
@@ -28,52 +29,34 @@ public class StemNotator {
 	 * @param stem        the stem of the chord (direction is ignored)
 	 * @param notes       the positions of the notes of of the chord
 	 * @param stemDir     the direction of the stem
-	 * @param linesCount  the number of lines in this staff
+	 * @param staffLines  the number of lines in this staff
 	 * @param scaling     scaling of the whole chord (e.g. smaller than 1 for a grace chord).
 	 *                    ignored if the stem has a given fixed length
 	 * @return  the vertical position of the stem, or {@link StemNotation#none} if the chord has no stem.
 	 */
-	public StemNotation compute(Stem stem, NotesNotation notes, StemDirection stemDir,
-		int linesCount, float scaling) {
-		NoteDisplacement topNote = notes.getTopNote();
-		NoteDisplacement bottomNote = notes.getBottomNote();
+	public StemNotation compute(Stem stem, ChordLps notesLp, StemDirection stemDir,
+		StaffLines staffLines, float scaling) {
 		float startLp = 0;
 		float endLp = 0;
-		int staffMiddleLp = linesCount - 1;
 
 		//use a stem?
 		if (stemDir == None)
 			return StemNotation.none;
 
-		//GOON: use StemDrawer here:
-		
 		//compute start position
 		if (stemDir == Down)
-			startLp = topNote.lp;
+			startLp = notesLp.getTop();
 		else if (stemDir == Up)
-			startLp = bottomNote.lp;
+			startLp = notesLp.getBottom();
 
 		//compute end position
-		if (stem.getLength() != null) {
+		if (stem.getLengthIs() != null) {
 			//used fixed length
-			if (stemDir == Down)
-				endLp = bottomNote.lp - 2 * stem.getLength();
-			else if (stemDir == Up)
-				endLp = topNote.lp + 2 * stem.getLength();
+			endLp = startLp + stemDir.getSign() * stem.getLengthIs() * 2;
 		}
 		else {
 			//compute length
-			if (stemDir == Down) {
-				endLp = bottomNote.lp - 7 * scaling; //TODO: put 7 into LayoutSettings
-				if (endLp > staffMiddleLp)
-					endLp = staffMiddleLp;
-			}
-			else if (stemDir == Up) {
-				startLp = bottomNote.lp;
-				endLp = topNote.lp + 7 * scaling;
-				if (endLp < staffMiddleLp)
-					endLp = staffMiddleLp;
-			}
+			endLp = startLp + stemDrawer.getPreferredStemLengthIs(notesLp, stemDir, staffLines);
 		}
 
 		return new StemNotation(startLp, endLp);

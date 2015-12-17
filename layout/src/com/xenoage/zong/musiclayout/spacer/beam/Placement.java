@@ -24,7 +24,7 @@ public final class Placement {
 		float d = rightEndLp - leftEndLp;
 		if (d > 0.1)
 			return Ascending;
-		else if (d < 0.1)
+		else if (d < -0.1)
 			return Descending;
 		else
 			return Horizontal;

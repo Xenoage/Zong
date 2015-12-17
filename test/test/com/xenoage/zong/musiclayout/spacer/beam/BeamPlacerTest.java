@@ -1,15 +1,41 @@
 package com.xenoage.zong.musiclayout.spacer.beam;
 
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Delta.df;
+import static com.xenoage.zong.core.music.StaffLines.staff5Lines;
 import static com.xenoage.zong.core.music.chord.StemDirection.Down;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
-import static com.xenoage.zong.musiclayout.spacer.beam.BeamPlacer.beamOffsetter;
+import static com.xenoage.zong.musiclayout.notation.BeamNotation.lineHeightIs;
+import static com.xenoage.zong.musiclayout.spacer.beam.Anchor.fromLp;
+import static com.xenoage.zong.musiclayout.spacer.beam.BeamPlacer.beamPlacer;
+import static com.xenoage.zong.musiclayout.spacer.beam.BeamSlanter.beamSlanter;
+import static com.xenoage.zong.musiclayout.spacer.beam.Slant.slant;
+import static java.lang.Math.abs;
+import static material.ExampleResult.accepted;
+import static material.ExampleResult.failed;
+import static material.ExampleResult.perfect;
 import static org.junit.Assert.assertEquals;
-import material.Examples;
-import material.beam.stafftouch.TouchExample;
+import static org.junit.Assert.fail;
 
+import java.util.List;
+
+import org.junit.Assert;
 import org.junit.Test;
+
+import com.xenoage.utils.collections.CollectionUtils;
+import com.xenoage.zong.core.music.StaffLines;
+import com.xenoage.zong.core.music.chord.StemDirection;
+import com.xenoage.zong.musiclayout.notation.BeamNotation;
+import com.xenoage.zong.musiclayout.notator.ChordNotator;
+import com.xenoage.zong.musiclayout.notator.chord.stem.StemDirector;
+
+import material.ExampleResult;
+import material.Examples;
+import material.ExampleResult.Result;
+import material.beam.slant.Example;
+import material.beam.slant.RossBeamSlant;
+import material.beam.stafftouch.TouchExample;
 
 /**
  * Tests for {@link BeamPlacer}.
@@ -18,7 +44,7 @@ import org.junit.Test;
  */
 public class BeamPlacerTest {
 	
-	private BeamPlacer testee = beamOffsetter;
+	private BeamPlacer testee = beamPlacer;
 
 	@Test public void getPlacementTest() {
 		//exact result: no rounding required
@@ -98,26 +124,50 @@ public class BeamPlacerTest {
 	
 	/**
 	 * Tests with examples from Ross.
-	 * /
+	 */
 	@Test public void computeForOneStaffTestRoss() {
-		List<String> failed = alist();
-		List<Example> examples = new RossBeamSlant().examples;
+		List<Example> examples = new RossBeamSlant().getExamples();
+		List<ExampleResult> results = alist();
 		for (Example example : examples) {
 			//collect data
-			int notesLp[] = getNotesLp(example);
-			StemDirection stemDir = getStemDir(example.stemDir, notesLp);
+			int notesLp[] = example.getNotesLp();
+			StemDirection stemDir = example.getStemDir();
 			float[] stemsXIs = getStemsXIs(example, notesLp.length);
+			Slant slant = beamSlanter.compute(notesLp, stemDir, stemsXIs, 5);
+			float[] stemsLengthIs = example.getStemsLengthIs(); //GOON: compute!!
 			//run test
-			Placement offset = testee.computeForOneStaff(notesLp, stemDir, stemsXIs, 1, staffLines);
+			Placement offset = testee.compute(slant, notesLp, stemDir, stemsXIs,
+				stemsLengthIs, 1, StaffLines.staff5Lines);
 			//check result
-			String failMessage = check(offset, example, stemDir);
-			if (failMessage != null)
-				failed.add(failMessage);
+			ExampleResult result = check(offset, example);
+			results.add(result);
 		}
-		//success, when >95% of the examples are correct
-		if (1.0 * failed.size() / examples.size() > 0.05)
-			fail("Beam slanting incorrect for " + failed.size() + " of " + examples.size() +
-				" examples: \n" + failed);
+		//success, when 100% of the examples are perfect or at least accepted
+		//print accepted and failed results
+		int perfect = 0, accepted = 0, failed = 0;
+		for (ExampleResult result : results) {
+			if (result.getResult() != Result.Perfect) {
+				System.out.print(result.getExample().getName() + ": ");
+				if (result.getResult() == Result.Accepted) {
+					accepted++;
+					System.out.print("not perfect, but accepted");
+				}
+				else {
+					failed++;
+					System.out.print("FAILED");
+				}
+				if (result.getComment() != null)
+					System.out.print("; " + result.getComment());
+				System.out.println();
+			}
+			else {
+				perfect++;
+			}
+		}
+		System.out.println(BeamPlacerTest.class.getSimpleName() + ": " +
+			perfect + " perfect, " + accepted + " accepted, " + failed + " failed");
+		if (failed > 0)
+			fail();
 	}
 	
 	private float[] getStemsXIs(Example example, int chordsCount) {
@@ -128,19 +178,53 @@ public class BeamPlacerTest {
 		return stemsXIs;
 	}
 	
-	private String check(Placement offset, Example example, StemDirection stemDir) {
-		float expectedLeftEndLp = example.leftNoteLp +
-			stemDir.getSign() * example.leftStemLengthIs * 2;
-		float expectedRightEndLp = example.rightNoteLp +
-			stemDir.getSign() * example.rightStemLengthIs * 2;
-		if (abs(offset.leftEndLp - expectedLeftEndLp) < df &&
-			abs(offset.rightEndLp - expectedRightEndLp) < df) {
-			return null; //ok
+	private ExampleResult check(Placement actual, Example example) {
+		Placement expected = example.getPlacement();
+		//check result
+		if (abs(actual.leftEndLp - expected.leftEndLp) < df &&
+			abs(actual.rightEndLp - expected.rightEndLp) < df) {
+			//perfect solution
+			return perfect(example);
 		}
 		else {
-			return example.name + ": expected [" + expectedLeftEndLp + "," + expectedRightEndLp +
-				"] but was [" + offset.leftEndLp + "," + offset.rightEndLp + "]";
+			//not the perfect solution, but maybe it is still ok
+			//it is still ok, when the slant is smaller than expected and when
+			//the beam lines have a valid anchor
+			String comment = "expected [" + expected.leftEndLp + "," + expected.rightEndLp +
+				"] but was [" + actual.leftEndLp + "," + actual.rightEndLp + "]";
+			if (isAcceptedBeam(expected, actual, example.getStemDir()))
+				return accepted(example, comment);
+			else
+				return failed(example, comment);
 		}
-	} */
+	}
+	
+	/**
+	 * Checks, if the given 8th beam line in a 5 line staff is at least accepted.
+	 * It is accepted, when it meets the following minimal requirements defined by Ross:
+	 * <ul>
+	 * 	<li>When the slant is smaller than expected, at most 1 IS in total
+	 *      (p. 98: when in doubt, do not exceed a slant of one space)</li>
+	 *  <li>When the beam touches a staff line, use the correct anchors to avoid
+	 *      white edges (p. 98 bottom).</li>
+	 * </ul>
+	 */
+	private boolean isAcceptedBeam(Placement expected, Placement actual, StemDirection stemDir) {
+		//amout of slant: must be equal or smaller than expected, but at most 1 IS
+		float absSlantExpected = abs(expected.leftEndLp - expected.rightEndLp);
+		float absSlantActual = abs(actual.leftEndLp - actual.rightEndLp);
+		if (absSlantActual > absSlantExpected || absSlantActual > 1 * 2 /* 1 IS */)
+			return false;
+		//when beam touches staff line, anchors must be correct
+		if (beamPlacer.isTouchingStaff( //method is tested, so we can use it here
+			actual, stemDir, lineHeightIs, staff5Lines)) {
+			Anchor leftAnchor = fromLp(actual.leftEndLp, stemDir);
+			Anchor rightAnchor = fromLp(actual.rightEndLp, stemDir);
+			if (false == beamPlacer.isAnchor8thCorrect( //method is tested, so we can use it here
+				leftAnchor, rightAnchor, actual.getDirection()))
+				return false;
+		}
+		return true;
+	}
 
 }

@@ -20,11 +20,11 @@ public class SlantTest {
 		Slant slant = slantIs(1, 2, Ascending);
 		assertEquals(1, slant.getMinIs(), df);
 		assertEquals(2, slant.getMaxIs(), df);
-		assertEquals(1, slant.getSmallestIs(), df);
+		assertEquals(1, slant.getFlattestIs(), df);
 		slant = slantIs(1, 2, Descending);
 		assertEquals(-2, slant.getMinIs(), df);
 		assertEquals(-1, slant.getMaxIs(), df);
-		assertEquals(-1, slant.getSmallestIs(), df);
+		assertEquals(-1, slant.getFlattestIs(), df);
 	}
 
 	@Test public void limitQsTest() {

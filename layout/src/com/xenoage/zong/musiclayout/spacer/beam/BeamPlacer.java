@@ -3,6 +3,7 @@ package com.xenoage.zong.musiclayout.spacer.beam;
 import static com.xenoage.utils.collections.ArrayUtils.getFirst;
 import static com.xenoage.utils.collections.ArrayUtils.getLast;
 import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.utils.kernel.Range.rangeReverse;
 import static com.xenoage.zong.core.music.chord.StemDirection.Down;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
 import static com.xenoage.zong.musiclayout.spacer.beam.Anchor.Hang;
@@ -13,6 +14,7 @@ import static com.xenoage.zong.musiclayout.spacer.beam.Direction.Ascending;
 import static com.xenoage.zong.musiclayout.spacer.beam.Direction.Descending;
 import static java.lang.Math.round;
 
+import com.xenoage.utils.kernel.Range;
 import com.xenoage.zong.core.music.StaffLines;
 import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.musiclayout.notation.BeamNotation;
@@ -57,12 +59,12 @@ import com.xenoage.zong.musiclayout.notation.BeamNotation;
  */
 public class BeamPlacer {
 	
-	public static final BeamPlacer beamOffsetter = new BeamPlacer();
+	public static final BeamPlacer beamPlacer = new BeamPlacer();
 	
 	/**
 	 * Computes the {@link Placement} of a beam within a single staff.
 	 * @param slant          the preferred slant for this beam
-	 * @param notesLp        the LP of each inner note (note at the stem side)
+	 * @param notesLp        the LP of the inner note of each chord (note at the stem side)
 	 * @param stemDir        the stem direction for the whole beam
 	 * @param stemsXIs       the horizontal offset of its stem in IS
 	 * @param stemsLengthIs  the preferred length of each stem in IS
@@ -72,20 +74,31 @@ public class BeamPlacer {
 		float[] stemsXIs, float[] stemsLengthIs, int beamLinesCount, StaffLines staffLines) {
 		float leftX = getFirst(stemsXIs);
 		float rightX = getLast(stemsXIs);
-		int dictatorIndex;
 		float slantIs;
+		int dictatorIndex;
+		Placement candidate;
 		//compute default stem end LPs
 		float[] stemsEndLp = new float[notesLp.length];
 		for (int i : range(notesLp))
-			stemsEndLp[i] = notesLp[i] + stemDir.getSign() * stemsLengthIs[i];
+			stemsEndLp[i] = notesLp[i] + stemDir.getSign() * stemsLengthIs[i] * 2;
 		//try to find the optimum placement
-		//start with default stem length of the dictator stem. if no solution can be found,
-		//make it longer
-		for (int stemLengthAddQs : range(0, 8)) { //at maximum 8 quarter spaces (2 spaces) longer
+		//start with default stem length of the dictator stem, and try the allowed
+		//slants, beginning with the steepest one. if no solution can be found,
+		//try with a steeper slant, then with longer stems
+		for (int stemLengthAddQs : range(0, 8)) { //stems at maximum 8 quarter spaces (2 spaces) longer
+			for (int slantAbsQs : rangeReverse(slant.maxAbsQs, slant.minAbsQs)) { //slant in allowed range
+				slantIs = slant.direction.getSign() * slantAbsQs / 4f;
+				dictatorIndex = getDictatorStemIndex(stemsEndLp, stemsXIs, slantIs, stemDir);
+				float dictatorStemEndLp = stemsEndLp[dictatorIndex] + stemDir.getSign() * stemLengthAddQs;
+				candidate = getPlacement(leftX, rightX, stemsXIs[dictatorIndex],
+					dictatorStemEndLp, slantIs);
+				if (isPlacementCorrect(candidate, stemDir, beamLinesCount, staffLines))
+					return candidate;
+			}
 		}
 		//no optimal placement could be found. just use the minimum slant
 		//and the stem lengths enforced by the dictator stem
-		slantIs = slant.getSmallestIs();
+		slantIs = slant.getFlattestIs();
 		dictatorIndex = getDictatorStemIndex(stemsEndLp, stemsXIs, slantIs, stemDir);
 		return getPlacement(leftX, rightX, stemsXIs[dictatorIndex], stemsEndLp[dictatorIndex], slantIs);
 	}

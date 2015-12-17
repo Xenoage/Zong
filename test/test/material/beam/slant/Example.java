@@ -10,8 +10,10 @@ import lombok.Getter;
 import material.ExampleBase;
 import material.Suite;
 
+import com.xenoage.utils.collections.ArrayUtils;
 import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.musiclayout.notation.chord.ChordLps;
+import com.xenoage.zong.musiclayout.spacer.beam.Placement;
 
 /**
  * Beam slant example.
@@ -118,6 +120,27 @@ public class Example
 		for (int i : range(notesLp))
 			chordLps[i] = new ChordLps(notesLp[i]);
 		return oneMeasureOneStaff.compute(chordLps, staffLines)[0];
+	}
+	
+	public Placement getPlacement() {
+		StemDirection stemDir = getStemDir();
+		return new Placement(
+			leftNoteLp + stemDir.getSign() * leftStemLengthIs * 2,
+			rightNoteLp + stemDir.getSign() * rightStemLengthIs * 2);
+	}
+	
+	/**
+	 * Returns an array of the preferred stem lengths.
+	 * The stem length of the left and right chord is known, the other
+	 * ones are simply set to 2.5.
+	 */
+	@Deprecated
+	public float[] getStemsLengthIs() {
+		int notesCount = getNotesLp().length;
+		float[] ret = ArrayUtils.arrayFloat(notesCount, 2.5f);
+		ret[0] = leftStemLengthIs;
+		ret[notesCount - 1] = rightStemLengthIs;
+		return ret;
 	}
 
 }

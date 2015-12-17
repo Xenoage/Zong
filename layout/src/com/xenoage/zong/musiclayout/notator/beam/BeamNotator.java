@@ -43,15 +43,12 @@ public class BeamNotator {
 
 		//choose appropriate strategy
 		if (beam.getHorizontalSpan() == SingleMeasure) {
-			if (beam.getVerticalSpan() == SingleStaff) {
+			if (beam.getVerticalSpan() == SingleStaff)
 				oneMeasureOneStaff.compute(beam, scoreSpacing);
-			}
-			else if (beam.getVerticalSpan() == TwoAdjacentStaves) {
+			else if (beam.getVerticalSpan() == TwoAdjacentStaves)
 				oneMeasureTwoStaves.compute(beam, scoreSpacing);
-			}
-			else {
+			else
 				throw new IllegalStateException("No strategy for more than two or non-adjacent staves");
-			}
 		}
 		else {
 			//Multi-measure beams are not supported yet - TODO

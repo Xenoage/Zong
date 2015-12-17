@@ -1,18 +1,17 @@
 package com.xenoage.zong.musiclayout.notator.chord.stem;
 
-import static com.xenoage.utils.collections.ArrayUtils.getFirst;
-import static com.xenoage.utils.collections.ArrayUtils.getLast;
 import static com.xenoage.zong.core.music.chord.StemDirection.Down;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
 
 import com.xenoage.zong.core.music.StaffLines;
 import com.xenoage.zong.core.music.chord.StemDirection;
+import com.xenoage.zong.musiclayout.notation.chord.ChordLps;
 
 /**
  * Computes the lenght of a stem for a chord.
  * 
  * The values are valid for a stem with no beam or just a single beam line (8th).
- * For beams with more lines, more space may be required.
+ * For beams with more lines, more space may be required in a later step.
  * 
  * @author Andreas Wenger
  */
@@ -20,16 +19,18 @@ public class StemDrawer {
 	
 	public static final StemDrawer stemDrawer = new StemDrawer();
 	
+	
 	/**
 	 * Gets the ideal stem length in IS of the chord with the given notes
 	 * (ascending LPs) using the given stem direction within a staff with the
 	 * given number of lines.
 	 */
-	public float getPreferredStemLength(int[] notesLp, StemDirection stemDir, StaffLines staff) {
-		int bottomNoteLp = getFirst(notesLp);
-		int topNoteLp = getLast(notesLp);
-		//begin with the extreme LPs, to support rules also staves with more or less than 5 lines
-		if (isStemLengthenedToMiddleLine(notesLp, stemDir, staff)) {
+	public float getPreferredStemLengthIs(ChordLps notesLp, StemDirection stemDir, StaffLines staff) {
+		int bottomNoteLp = notesLp.getBottom();
+		int topNoteLp = notesLp.getTop();
+		//begin with the extreme LPs
+		//supports also staves with more or less than 5 lines
+		if (isStemExtendedToMiddleLine(notesLp, stemDir, staff)) {
 			if (stemDir == Down)
 				return (bottomNoteLp - staff.middleLp) / 2f;
 			else
@@ -69,16 +70,16 @@ public class StemDrawer {
 	 * Returns true, iff the given chord needs a stem which needs to be lengthened to
 	 * touch the middle line.
 	 */
-	public boolean isStemLengthenedToMiddleLine(int notesLp[],
+	public boolean isStemExtendedToMiddleLine(ChordLps notesLp,
 		StemDirection stemDir, StaffLines staff) {
 		//Ross, p. 86, last row. Also Chlapik p. 39, 5.
 		//For downstem/upstem notes, which are above/below the first top/bottom
 		//leger line position, lengthen the stem to the middle staff line.
 		//Ross starts this rule at the second leger line, while Chlapik starts it
 		//from the first leger line. In practice, this makes no difference, since
-		//the default length of 3.5 spaces also matches at that position.
-		return (stemDir == Down && getFirst(notesLp) > staff.topLegerLp) ||
-			(stemDir == Up && getLast(notesLp) < staff.bottomLegerLp);
+		//the default length of 3.5 spaces also matches that position.
+		return (stemDir == Down && notesLp.getBottom() > staff.topLegerLp) ||
+			(stemDir == Up && notesLp.getTop() < staff.bottomLegerLp);
 	}
 
 }

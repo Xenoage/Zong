@@ -8,6 +8,8 @@ import material.stem.length.Example;
 
 import org.junit.Test;
 
+import com.xenoage.zong.musiclayout.notation.chord.ChordLps;
+
 /**
  * Tests for {@link StemDrawer}.
  * 
@@ -20,7 +22,7 @@ public class StemDrawerTest {
 	@Test public void getPreferredStemLengthTest() {
 		test(Example.all, (suite, example) -> {
 			float expectedLengthIs = example.stemLengthIs;
-			float lengthIs = testee.getPreferredStemLength(new int[]{example.noteLp},
+			float lengthIs = testee.getPreferredStemLengthIs(new ChordLps(example.noteLp),
 				example.stemDir, example.staffLines);
 			assertEquals(suite.getName() + ": " + example.name + " expected stem length of " +
 				expectedLengthIs + ", but was " + lengthIs,
@@ -31,7 +33,7 @@ public class StemDrawerTest {
 	@Test public void isStemLengthenedToMiddleLineTest() {
 		test(Example.all, (suite, example) -> {
 			boolean expected = example.isLengthenedToMiddleLine;
-			boolean lengthened = testee.isStemLengthenedToMiddleLine(new int[]{example.noteLp},
+			boolean lengthened = testee.isStemExtendedToMiddleLine(new ChordLps(example.noteLp),
 				example.stemDir, example.staffLines);
 			assertEquals(suite.getName() + ": " + example.name + " expected " +
 				(expected ? "" : "NO ") + "stem lengthening but it was " +

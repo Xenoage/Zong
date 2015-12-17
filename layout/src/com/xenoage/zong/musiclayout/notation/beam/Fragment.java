@@ -19,8 +19,5 @@ public enum Fragment {
 	/** Just a hook at the left side. */
 	HookLeft,
 	/** Just a hook at the right side. */
-	HookRight,
-	/** End of continuous line, but extend the line to the right hook on the next level.
-	 * TODO: no example found for this beam */
-	@Deprecated StopHookRight
+	HookRight
 }

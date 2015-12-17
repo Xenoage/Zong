@@ -18,9 +18,12 @@ public class BeamNotation {
 	
 	/** Height of a beam line in IS. See Ross, p. 88.*/
 	public static final float lineHeightIs = 0.5f;
-	
-	public static final float defaultGapIs = 0.25f; //default gap between lines in interline spaces
-	public static final float hookLengthIs = 1.25f; //Chlapik TODO
+	/** Default gap between lines in IS. Since three beam lines should
+	 * fit into two IS (see Chlapik, p. 41, rule 1), the default gap
+	 * between the lines is {@value #defaultGapIs}. */ 
+	public static final float defaultGapIs = 0.25f;
+	/** Length of a beam hook in IS. See Chlapik, p. 45, rule 6. */
+	public static final float hookLengthIs = 1.25f;
 
 
 	/** The beam element. */

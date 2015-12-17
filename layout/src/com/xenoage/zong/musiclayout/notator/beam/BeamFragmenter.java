@@ -8,7 +8,6 @@ import static com.xenoage.zong.musiclayout.notation.beam.Fragment.HookLeft;
 import static com.xenoage.zong.musiclayout.notation.beam.Fragment.HookRight;
 import static com.xenoage.zong.musiclayout.notation.beam.Fragment.Start;
 import static com.xenoage.zong.musiclayout.notation.beam.Fragment.Stop;
-import static com.xenoage.zong.musiclayout.notation.beam.Fragment.StopHookRight;
 
 import java.util.List;
 
@@ -107,11 +106,7 @@ public class BeamFragmenter {
 					//simple case: more than one chord. create a normal line
 					//between those stems
 					ret.set(startChord, Start);
-					if (higherLine == null ||
-						(higherLine.get(stopChord) != HookRight && higherLine.get(stopChord) != StopHookRight))
-						ret.set(stopChord, Stop);
-					else
-						ret.set(stopChord, StopHookRight); //extend the line to the above hook
+					ret.set(stopChord, Stop);
 				}
 				else {
 					//more difficult case: exactly one chord.

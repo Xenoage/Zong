@@ -21,6 +21,6 @@ import com.xenoage.utils.annotations.NonNull;
 
 	/** The length of the stem, measured from the outermost chord not at the stem side
 	 * to the end of the stem, in interline spaces, or null for default. */
-	@MaybeNull private final Float length;
+	@MaybeNull private final Float lengthIs;
 
 }

@@ -30,11 +30,7 @@ public class Beam32ndRules
 		return 4;
 	}
 
-	@Override public float getSlantAscendingMiddleNotesIs() {
-		return 0;
-	}
-
-	@Override public float getSlantDescendingMiddleNotesIs() {
+	@Override public float getAbsSlantForMiddleNotesRunIs() {
 		return 0;
 	}
 
@@ -57,7 +53,7 @@ public class Beam32ndRules
 		return false;
 	}
 
-	@Override public float getSlantCloseSpacingIs(int startNoteLp, int endNoteLp) {
+	@Override public float getAbsSlantForCloseSpacingIs(int startNoteLp, int endNoteLp) {
 		if (Math.abs(startNoteLp - endNoteLp) == 1) {
 			return 0.5f;
 		}
@@ -66,11 +62,11 @@ public class Beam32ndRules
 		}
 	}
 
-	@Override public float getSlantNormalSpacingIs(int startNoteLp, int endNoteLp) {
+	@Override public float getAbsSlantForNormalSpacingIs(int startNoteLp, int endNoteLp) {
 		return getNormalOrWideSpacing(startNoteLp, endNoteLp, false);
 	}
 
-	@Override public float getSlantWideSpacingIs(int startNoteLp, int endNoteLp) {
+	@Override public float getAbsSlantForWideSpacingIs(int startNoteLp, int endNoteLp) {
 		return getNormalOrWideSpacing(startNoteLp, endNoteLp, true);
 	}
 
@@ -83,7 +79,7 @@ public class Beam32ndRules
 			(startStemLp > staffMaxLP + 1 && endStemLp > staffMaxLP + 1)) {
 			//use design of single beam
 			Beam8thRules sbd = new Beam8thRules(stemDirection, staffLinesCount);
-			return sbd.getSlantNormalSpacingIs(startNoteLp, endNoteLp);
+			return sbd.getAbsSlantForNormalSpacingIs(startNoteLp, endNoteLp);
 		}
 		else {
 			return getSlants(Math.abs(startNoteLp - endNoteLp))[wide ? 1 : 0];

@@ -184,7 +184,7 @@ public class OneMeasureOneStaff
 				}
 			}
 			if (ascend) {
-				return beamDesign.getSlantAscendingMiddleNotesIs();
+				return beamDesign.getAbsSlantForMiddleNotesRunIs();
 			}
 			boolean descend = true;
 			for (int i = 1; i < chordsCount - 1; i++) {
@@ -194,7 +194,7 @@ public class OneMeasureOneStaff
 				}
 			}
 			if (descend) {
-				return beamDesign.getSlantDescendingMiddleNotesIs();
+				return -1 * beamDesign.getAbsSlantForMiddleNotesRunIs();
 			}
 		}
 
@@ -253,11 +253,11 @@ public class OneMeasureOneStaff
 			|| firstNoteLp <= -2 || lastNoteLp <= -2); //below the first leger line
 
 		if (useSimpleSlant || spacing == Close)
-			slantIs = beamDesign.getSlantCloseSpacingIs(firstNoteLp, lastNoteLp) / 2;
+			slantIs = beamDesign.getAbsSlantForCloseSpacingIs(firstNoteLp, lastNoteLp) / 2;
 		else if (spacing == Wide)
-			slantIs = beamDesign.getSlantWideSpacingIs(firstNoteLp, lastNoteLp) / 2;
+			slantIs = beamDesign.getAbsSlantForWideSpacingIs(firstNoteLp, lastNoteLp) / 2;
 		else
-			slantIs = beamDesign.getSlantNormalSpacingIs(firstNoteLp, lastNoteLp) / 2;
+			slantIs = beamDesign.getAbsSlantForNormalSpacingIs(firstNoteLp, lastNoteLp) / 2;
 
 		if (distanceLp < 0)
 			slantIs = -1 * slantIs;

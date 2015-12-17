@@ -74,25 +74,25 @@ public class Beam16thRules
 		return false;
 	}
 
-	@Override public float getSlantCloseSpacingIs(int startNoteLp, int endNoteLp) {
+	@Override public float getAbsSlantForCloseSpacingIs(int startNoteLp, int endNoteLp) {
 		int dir = stemDirection.getSign();
 		float startStemLp = startNoteLp + dir * getMinimumStemLengthIs(); //TODO: *2 missing for IS->LP?
 		float endStemLp = endNoteLp + dir * getMinimumStemLengthIs(); //TODO: *2 missing for IS->LP?
 		if (beamNotator.isBeamOutsideStaff(stemDirection, startStemLp, endStemLp, staffLinesCount, totalBeamHeightIs)) {
 			//use design of single beam
 			Beam8thRules sbd = new Beam8thRules(stemDirection, staffLinesCount);
-			return sbd.getSlantNormalSpacingIs(startNoteLp, endNoteLp);
+			return sbd.getAbsSlantForNormalSpacingIs(startNoteLp, endNoteLp);
 		}
 		else {
 			return 0.5f;
 		}
 	}
 
-	@Override public float getSlantNormalSpacingIs(int startNoteLP, int endNoteLP) {
+	@Override public float getAbsSlantForNormalSpacingIs(int startNoteLP, int endNoteLP) {
 		return getNormalOrWideSpacing(startNoteLP, endNoteLP, false);
 	}
 
-	@Override public float getSlantWideSpacingIs(int startNoteLP, int endNoteLP) {
+	@Override public float getAbsSlantForWideSpacingIs(int startNoteLP, int endNoteLP) {
 		return getNormalOrWideSpacing(startNoteLP, endNoteLP, true);
 	}
 
@@ -105,7 +105,7 @@ public class Beam16thRules
 			(startStemLp > staffMaxLp + 1 && endStemLp > staffMaxLp + 1)) {
 			//use design of single beam
 			Beam8thRules sbd = new Beam8thRules(stemDirection, staffLinesCount);
-			return sbd.getSlantNormalSpacingIs(startNoteLp, endNoteLp);
+			return sbd.getAbsSlantForNormalSpacingIs(startNoteLp, endNoteLp);
 		}
 		else {
 			return getSlants(Math.abs(startNoteLp - endNoteLp))[wide ? 1 : 0];
