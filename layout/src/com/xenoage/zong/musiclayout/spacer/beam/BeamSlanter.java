@@ -236,7 +236,7 @@ public class BeamSlanter {
 	Slant limitSlantForExtremeNotes(Slant slant, int[] notesLp,
 		StemDirection stemDir, int staffLines) {
 		int maxSlantAbsQs = 2; //2 QS = 0.5 IS
-		if (slant.minAbsQs > maxSlantAbsQs) {
+		if (slant.maxAbsQs > maxSlantAbsQs) {
 			//Ross, p. 111, row 1 and 2: upstem and only notes below bottom leger lines
 			//or downstem and only notes above top leger lines
 			int bottomLegerLp = -2;

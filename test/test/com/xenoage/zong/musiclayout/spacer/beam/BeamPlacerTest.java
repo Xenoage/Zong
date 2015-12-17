@@ -229,7 +229,7 @@ public class BeamPlacerTest {
 			//the beam lines have a valid anchor
 			String comment = "expected [" + expected.leftEndLp + "," + expected.rightEndLp +
 				"] but was [" + actual.leftEndLp + "," + actual.rightEndLp + "]";
-			if (isAcceptedBeam(expected, actual, example.getStemDir()))
+			if (isAcceptedBeam(actual, example.getStemDir(), abs(example.leftNoteLp - example.rightNoteLp)))
 				return accepted(example, comment);
 			else
 				return failed(example, comment);
@@ -240,18 +240,34 @@ public class BeamPlacerTest {
 	 * Checks, if the given 8th beam line in a 5 line staff is at least accepted.
 	 * It is accepted, when it meets the following minimal requirements defined by Ross:
 	 * <ul>
-	 * 	<li>When the slant is smaller than expected, at most 1 IS in total
-	 *      (p. 98: when in doubt, do not exceed a slant of one space)</li>
+	 * 	<li>When the slant is equal to or less than the maximum allowed slant for
+	 *      the interval, defined on p. 111, or smaller (p. 98: when in doubt, do not
+	 *      exceed a slant of one space)</li>
 	 *  <li>When the beam touches a staff line, use the correct anchors to avoid
 	 *      white edges (p. 98 bottom). Otherwise, this is not needed (p. 103,
 	 *      last sentence before the box).</li>
 	 * </ul>
 	 */
-	private boolean isAcceptedBeam(Placement expected, Placement actual, StemDirection stemDir) {
-		//amout of slant: must be equal or smaller than expected, but at most 1 IS
-		float absSlantExpected = abs(expected.leftEndLp - expected.rightEndLp);
+	private boolean isAcceptedBeam(Placement actual, StemDirection stemDir,
+		int intervalLp) {
+		//slant must be in allowed range of interval (or smaller)
+		float absSlantMax;
 		float absSlantActual = abs(actual.leftEndLp - actual.rightEndLp);
-		if (absSlantActual > absSlantExpected || absSlantActual > 1 * 2 /* 1 IS */)
+		if (intervalLp < 1) //unison
+			absSlantMax = 0f;
+		else if (intervalLp < 2) //2nd
+			absSlantMax = 2 * 0.25f;
+		else if (intervalLp < 3) //3rd
+			absSlantMax = 2 * 1;
+		else if (intervalLp < 5) //4th or 5th
+			absSlantMax = 2 * 1.25f;
+		else if (intervalLp < 6) //6th
+			absSlantMax = 2 * 1.5f;
+		else if (intervalLp < 7) //7th
+			absSlantMax = 2 * 1.75f;
+		else //8th or more
+			absSlantMax = 2 * 2f;
+		if (absSlantActual > absSlantMax)
 			return false;
 		//when beam touches staff line, anchors must be correct
 		if (beamPlacer.isTouchingStaff( //method is tested, so we can use it here
