@@ -3,9 +3,10 @@ package com.xenoage.zong.musiclayout.spacer.beam;
 import static com.xenoage.zong.musiclayout.spacer.beam.Direction.Ascending;
 import static com.xenoage.zong.musiclayout.spacer.beam.Direction.Descending;
 import static com.xenoage.zong.musiclayout.spacer.beam.Direction.Horizontal;
-import lombok.AllArgsConstructor;
 
 import com.xenoage.utils.annotations.Const;
+
+import lombok.Data;
 
 
 /**
@@ -14,7 +15,7 @@ import com.xenoage.utils.annotations.Const;
  * 
  * @author Andreas Wenger
  */
-@Const @AllArgsConstructor
+@Const @Data
 public final class Placement {
 	
 	public final float leftEndLp, rightEndLp;

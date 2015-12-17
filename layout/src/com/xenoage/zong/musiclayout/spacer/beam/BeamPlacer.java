@@ -12,9 +12,9 @@ import static com.xenoage.zong.musiclayout.spacer.beam.Anchor.Straddle;
 import static com.xenoage.zong.musiclayout.spacer.beam.Anchor.WhiteSpace;
 import static com.xenoage.zong.musiclayout.spacer.beam.Direction.Ascending;
 import static com.xenoage.zong.musiclayout.spacer.beam.Direction.Descending;
+import static java.lang.Math.abs;
 import static java.lang.Math.round;
 
-import com.xenoage.utils.kernel.Range;
 import com.xenoage.zong.core.music.StaffLines;
 import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.musiclayout.notation.BeamNotation;
@@ -61,6 +61,15 @@ public class BeamPlacer {
 	
 	public static final BeamPlacer beamPlacer = new BeamPlacer();
 	
+	//stems at maximum 8 quarter spaces (2 spaces) shorter or longer
+	private static final int[] stemLengthModLp = {
+		//Ross recommends shortening first on p. 103, last paragraph.
+		0, //first, try the perfect solutin
+		-1, -2, -3, -4, //then, try to shorten (up to 1 IS)
+		+1, +2, +3, +4, //then, try to lengthen (up to 1 IS)
+		-5, +5, -6, +6, -7, +7, -8, +8 //if still not found, try to shorten or lengthen up to 2 IS
+	};
+	
 	/**
 	 * Computes the {@link Placement} of a beam within a single staff.
 	 * @param slant          the preferred slant for this beam
@@ -84,16 +93,19 @@ public class BeamPlacer {
 		//try to find the optimum placement
 		//start with default stem length of the dictator stem, and try the allowed
 		//slants, beginning with the steepest one. if no solution can be found,
-		//try with a steeper slant, then with longer stems
-		for (int stemLengthAddQs : range(0, 8)) { //stems at maximum 8 quarter spaces (2 spaces) longer
+		//try with a steeper slant, then with shorter and longer stems
+		for (int stemLengthAddQs : stemLengthModLp) { 
 			for (int slantAbsQs : rangeReverse(slant.maxAbsQs, slant.minAbsQs)) { //slant in allowed range
 				slantIs = slant.direction.getSign() * slantAbsQs / 4f;
 				dictatorIndex = getDictatorStemIndex(stemsEndLp, stemsXIs, slantIs, stemDir);
 				float dictatorStemEndLp = stemsEndLp[dictatorIndex] + stemDir.getSign() * stemLengthAddQs;
 				candidate = getPlacement(leftX, rightX, stemsXIs[dictatorIndex],
 					dictatorStemEndLp, slantIs);
-				if (isPlacementCorrect(candidate, stemDir, beamLinesCount, staffLines))
+				if (isPlacementCorrect(candidate, stemDir, beamLinesCount, staffLines)) {
+					//try to shorten
+					candidate = shorten(candidate, stemDir, notesLp, stemsXIs, beamLinesCount, staffLines);
 					return candidate;
+				}
 			}
 		}
 		//no optimal placement could be found. just use the minimum slant
@@ -132,7 +144,7 @@ public class BeamPlacer {
 		float extremeDistance = (stemDir == Up ? Float.MIN_VALUE : Float.MAX_VALUE);
 		int extremeIndex = 0;
 		for (int i : range(stemsEndLp)) {
-			float distance = getDistanceToLineIs(stemsEndLp[i], stemsXIs[i], slantIs, leftX, rightX);
+			float distance = getDistanceToLineLp(stemsEndLp[i], stemsXIs[i], slantIs, leftX, rightX);
 			if (distance * sign > extremeDistance * sign) {
 				extremeDistance = distance;
 				extremeIndex = i;
@@ -142,18 +154,19 @@ public class BeamPlacer {
 	}
 	
 	/**
-	 * Gets the vertical distance between the given stem end to an imaginary
-	 * line starting at (lineLeftXIs,0) and ending at (lineRightXIs,lineSlantIs).
-	 * A positive value means, that the stem ends above the line.
+	 * Gets the vertical distance between the given LP at the given horizontal
+	 * position in IS to an imaginary line starting at (lineLeftXIs,0) and
+	 * ending at (lineRightXIs,lineSlantIs).
+	 * A positive value means, that the lp is above the line.
 	 */
-	float getDistanceToLineIs(float stemEndLp, float stemXIs, float lineSlantIs, 
+	float getDistanceToLineLp(float lp, float xIs, float lineSlantIs, 
 		float lineLeftXIs, float lineRightXIs) {
 		//horizontal position of stem between 0 (left) and 1 (right)
-		float t = (stemXIs - lineLeftXIs) / (lineRightXIs - lineLeftXIs);
+		float t = (xIs - lineLeftXIs) / (lineRightXIs - lineLeftXIs);
 		//LP on the line at this position
 		float lineLp = t * lineSlantIs * 2;
 		//return distance
-		return stemEndLp - lineLp;
+		return lp - lineLp;
 	}
 	
 	/**
@@ -163,7 +176,7 @@ public class BeamPlacer {
 	public boolean isPlacementCorrect(Placement candidate, StemDirection stemDir,
 		int beamLinesCount, StaffLines staffLines) {
 		//when the beam does not touch the staff at all, its exact placement
-		//does not matter (Ross p. 98)
+		//does not matter (p. 98; and p. 103, last sentence before the box).
 		if (false == isTouchingStaff(candidate, stemDir, BeamNotation.lineHeightIs, staffLines))
 			return true;
 		//check anchor
@@ -254,6 +267,39 @@ public class BeamPlacer {
 		}
 		//violates the rules
 		return false;
+	}
+	
+	/**
+	 * Shortens the stem lengths of the given placement candidate by one quarter space,
+	 * if possible and when no stem gets shorter than 3 IS.
+	 * This rule not found explicitly mentioned by Ross, but applies to many examples and
+	 * conforms to the general rule that beamed stems tend to be shortened (p. 103, last
+	 * paragraph). See for example:
+	 * <ul>
+	 * 	<li>p104 r1 c1: could be 3.5/sit, but is 3.25/straddle</li>
+	 *  <li>p104 r6 c1: could be 3.75/straddle and 3.5/hang, but is 3.5/sit and 3.25/straddle</li>
+	 *  <li>p105 r1 c2: could be 3.5/hang, but is 3.25/staddle</li>
+	 * </ul>
+	 */
+	Placement shorten(Placement candidate, StemDirection stemDir, int[] notesLp, float[] stemsXIs,
+		int beamLinesCount, StaffLines staffLines) {
+		//shorten
+		Placement shorterCandidate = new Placement(
+			candidate.leftEndLp - stemDir.getSign() * 0.5f,
+			candidate.rightEndLp - stemDir.getSign() * 0.5f);
+		//stems still long enough?
+		float slantIs = (shorterCandidate.rightEndLp - shorterCandidate.leftEndLp) / 2;
+		for (int iNote : range(notesLp)) {
+			float distanceToBeam = abs(getDistanceToLineLp(notesLp[iNote], stemsXIs[iNote],
+				slantIs, getFirst(stemsXIs), getLast(stemsXIs)) - shorterCandidate.leftEndLp) / 2;
+			if (distanceToBeam < 3)
+				return candidate; //shortening not possible
+		}
+		//edges correct?
+		if (isPlacementCorrect(shorterCandidate, stemDir, beamLinesCount, staffLines))
+			return shorterCandidate; //success
+		else
+			return candidate; //shortening not possible
 	}
 	
 }

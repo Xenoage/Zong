@@ -28,9 +28,8 @@ public class RossBeamSlant
 		example("p99 2").left(7, 3).width(6.5).right(8, 3.25),
 		//normal length
 		example("p99 3").left(5, 3.5).width(6.5).right(4, 3.25),
-		//larger slant
-		example("p99 4").left(6, 3.25).width(6.5).right(8, 3.25),
-		example("p99 5").left(6, 3.25).width(6.5).right(10, 4),
+		//larger slant examples p99 4 and 5 not used, since from former times
+		//when more slant was required because of printing problems
 		//straddles
 		example("p99 6").left(6, 3.25).width(6.5).right(6, 3.25),
 		example("p99 7").left(8, 3.25).width(6.5).right(9, 3.5),

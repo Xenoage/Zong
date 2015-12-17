@@ -7,6 +7,7 @@ import static com.xenoage.zong.core.music.StaffLines.staff5Lines;
 import static com.xenoage.zong.core.music.chord.StemDirection.Down;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
 import static com.xenoage.zong.musiclayout.notation.BeamNotation.lineHeightIs;
+import static com.xenoage.zong.musiclayout.notator.chord.stem.StemDrawer.stemDrawer;
 import static com.xenoage.zong.musiclayout.spacer.beam.Anchor.fromLp;
 import static com.xenoage.zong.musiclayout.spacer.beam.BeamPlacer.beamPlacer;
 import static com.xenoage.zong.musiclayout.spacer.beam.BeamSlanter.beamSlanter;
@@ -27,8 +28,10 @@ import com.xenoage.utils.collections.CollectionUtils;
 import com.xenoage.zong.core.music.StaffLines;
 import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.musiclayout.notation.BeamNotation;
+import com.xenoage.zong.musiclayout.notation.chord.ChordLps;
 import com.xenoage.zong.musiclayout.notator.ChordNotator;
 import com.xenoage.zong.musiclayout.notator.chord.stem.StemDirector;
+import com.xenoage.zong.musiclayout.notator.chord.stem.StemDrawer;
 
 import material.ExampleResult;
 import material.Examples;
@@ -108,17 +111,47 @@ public class BeamPlacerTest {
 		//horizontal line
 		float slant = 0;
 		for (int i : range(left, right))
-			assertEquals(lp, testee.getDistanceToLineIs(lp, i, slant, left, right), df);
+			assertEquals(lp, testee.getDistanceToLineLp(lp, i, slant, left, right), df);
 		//ascending line
 		slant = 2;
-		assertEquals(lp, testee.getDistanceToLineIs(lp, left, slant, left, right), df);
-		assertEquals(lp - 4/3f, testee.getDistanceToLineIs(lp, 3, slant, left, right), df);
-		assertEquals(lp - 4, testee.getDistanceToLineIs(lp, right, slant, left, right), df);
+		assertEquals(lp, testee.getDistanceToLineLp(lp, left, slant, left, right), df);
+		assertEquals(lp - 4/3f, testee.getDistanceToLineLp(lp, 3, slant, left, right), df);
+		assertEquals(lp - 4, testee.getDistanceToLineLp(lp, right, slant, left, right), df);
 		//descending line
 		slant = -4;
-		assertEquals(lp, testee.getDistanceToLineIs(lp, left, slant, left, right), df);
-		assertEquals(lp + 8/3f, testee.getDistanceToLineIs(lp, 3, slant, left, right), df);
-		assertEquals(lp + 8, testee.getDistanceToLineIs(lp, right, slant, left, right), df);
+		assertEquals(lp, testee.getDistanceToLineLp(lp, left, slant, left, right), df);
+		assertEquals(lp + 8/3f, testee.getDistanceToLineLp(lp, 3, slant, left, right), df);
+		assertEquals(lp + 8, testee.getDistanceToLineLp(lp, right, slant, left, right), df);
+	}
+	
+	
+	@Test public void shortenTest() {
+		//the following tests use arbitrary horizontal positions, but normal spacing (not close spacing)
+		//p104 r1 c1: could be 3.5/sit, but is 3.25/straddle
+		Placement old = new Placement(5f, 5f);
+		Placement shortened = testee.shorten(old, Up, new int[]{-2, -2},
+			new float[]{5, 10}, 1, staff5Lines);
+		assertEquals(new Placement(4.5f, 4.5f), shortened);
+		//p104 r6 c1: could be 3.75/straddle and 3.5/hang, but is 3.5/sit and 3.25/straddle
+		old = new Placement(-2.5f, -3f);
+		shortened = testee.shorten(old, Down, new int[]{5, 4},
+			new float[]{10, 15}, 1, staff5Lines);
+		assertEquals(new Placement(-2f, -2.5f), shortened);
+		//p104 r7 c1: is not shortened, since then a stem would be shorter than 3 spaces
+		old = new Placement(-1f, -0.5f);
+		shortened = testee.shorten(old, Down, new int[]{5, 6},
+			new float[]{0, 5}, 1, staff5Lines);
+		assertEquals(old, shortened);
+		//p105 r1 c1: not shortened, because beam line would be within white space
+		old = new Placement(6f, 6f);
+		shortened = testee.shorten(old, Up, new int[]{-1, -1},
+			new float[]{0, 8}, 1, staff5Lines);
+		assertEquals(old, shortened);
+		//p105 r1 c2: could be 3.5/hang, but is 3.25/staddle
+		old = new Placement(-1f, -1f);
+		shortened = testee.shorten(old, Down, new int[]{6, 6},
+			new float[]{10, 15}, 1, staff5Lines);
+		assertEquals(new Placement(-0.5f, -0.5f), shortened);
 	}
 	
 	
@@ -134,7 +167,11 @@ public class BeamPlacerTest {
 			StemDirection stemDir = example.getStemDir();
 			float[] stemsXIs = getStemsXIs(example, notesLp.length);
 			Slant slant = beamSlanter.compute(notesLp, stemDir, stemsXIs, 5);
-			float[] stemsLengthIs = example.getStemsLengthIs(); //GOON: compute!!
+			float[] stemsLengthIs = new float[notesLp.length];
+			for (int i : range(notesLp)) {
+				stemsLengthIs[i] = stemDrawer.getPreferredStemLengthIs(
+					new ChordLps(notesLp[i]), stemDir, staff5Lines);
+			}
 			//run test
 			Placement offset = testee.compute(slant, notesLp, stemDir, stemsXIs,
 				stemsLengthIs, 1, StaffLines.staff5Lines);
@@ -206,7 +243,8 @@ public class BeamPlacerTest {
 	 * 	<li>When the slant is smaller than expected, at most 1 IS in total
 	 *      (p. 98: when in doubt, do not exceed a slant of one space)</li>
 	 *  <li>When the beam touches a staff line, use the correct anchors to avoid
-	 *      white edges (p. 98 bottom).</li>
+	 *      white edges (p. 98 bottom). Otherwise, this is not needed (p. 103,
+	 *      last sentence before the box).</li>
 	 * </ul>
 	 */
 	private boolean isAcceptedBeam(Placement expected, Placement actual, StemDirection stemDir) {
