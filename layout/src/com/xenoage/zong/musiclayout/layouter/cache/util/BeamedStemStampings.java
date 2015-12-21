@@ -1,9 +1,9 @@
 package com.xenoage.zong.musiclayout.layouter.cache.util;
 
-import lombok.AllArgsConstructor;
-
-import com.xenoage.zong.musiclayout.notation.BeamNotation;
+import com.xenoage.zong.musiclayout.spacing.BeamSpacing;
 import com.xenoage.zong.musiclayout.stampings.StemStamping;
+
+import lombok.AllArgsConstructor;
 
 /**
  * This class is used by the layouter
@@ -14,7 +14,7 @@ import com.xenoage.zong.musiclayout.stampings.StemStamping;
 @AllArgsConstructor
 public class BeamedStemStampings {
 
-	public BeamNotation beam;
+	public BeamSpacing beam;
 	public StemStamping[] stems;
 	
 

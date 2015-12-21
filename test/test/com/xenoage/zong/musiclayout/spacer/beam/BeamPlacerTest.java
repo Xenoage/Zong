@@ -11,7 +11,6 @@ import static com.xenoage.zong.musiclayout.notator.chord.stem.StemDrawer.stemDra
 import static com.xenoage.zong.musiclayout.spacer.beam.Anchor.fromLp;
 import static com.xenoage.zong.musiclayout.spacer.beam.BeamPlacer.beamPlacer;
 import static com.xenoage.zong.musiclayout.spacer.beam.BeamSlanter.beamSlanter;
-import static com.xenoage.zong.musiclayout.spacer.beam.Slant.slant;
 import static java.lang.Math.abs;
 import static material.ExampleResult.accepted;
 import static material.ExampleResult.failed;
@@ -21,21 +20,15 @@ import static org.junit.Assert.fail;
 
 import java.util.List;
 
-import org.junit.Assert;
 import org.junit.Test;
 
-import com.xenoage.utils.collections.CollectionUtils;
 import com.xenoage.zong.core.music.StaffLines;
 import com.xenoage.zong.core.music.chord.StemDirection;
-import com.xenoage.zong.musiclayout.notation.BeamNotation;
 import com.xenoage.zong.musiclayout.notation.chord.ChordLps;
-import com.xenoage.zong.musiclayout.notator.ChordNotator;
-import com.xenoage.zong.musiclayout.notator.chord.stem.StemDirector;
-import com.xenoage.zong.musiclayout.notator.chord.stem.StemDrawer;
 
 import material.ExampleResult;
-import material.Examples;
 import material.ExampleResult.Result;
+import material.Examples;
 import material.beam.slant.Example;
 import material.beam.slant.RossBeamSlant;
 import material.beam.stafftouch.TouchExample;

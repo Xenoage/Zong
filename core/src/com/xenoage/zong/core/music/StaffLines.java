@@ -17,6 +17,12 @@ public final class StaffLines {
 	/** Normal 5-line staff. */
 	public static final StaffLines staff5Lines = new StaffLines(5);
 	
+	/** Staves from 1 to 10 lines. */
+	private static final StaffLines[] staffLines = {
+		new StaffLines(1), new StaffLines(2), new StaffLines(3), new StaffLines(4), new StaffLines(5),
+		new StaffLines(6), new StaffLines(7), new StaffLines(8), new StaffLines(9), new StaffLines(10) 
+	};
+	
 
 	/** Number of staff lines. */
 	public final int count;
@@ -34,7 +40,19 @@ public final class StaffLines {
 	public final int bottomLegerLp = -2; //fixed by definition of LP
 	
 	
-	public StaffLines(int count) {
+	/**
+	 * Gets the {@link StaffLines} instance for the given number of staff lines.
+	 */
+	public static StaffLines staffLines(int count) {
+		if (count < 1)
+			throw new IllegalArgumentException("Staff must have at least one line");
+		else if (count <= 10)
+			return staffLines[count-1];
+		else
+			return new StaffLines(count);
+	}
+	
+	private StaffLines(int count) {
 		this.count = count;
 		this.middleLp = count - 1;
 		this.topLp = (count - 1) * 2;

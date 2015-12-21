@@ -1,24 +1,30 @@
 package com.xenoage.zong.musiclayout.stamper;
 
+import static com.xenoage.utils.collections.CollectionUtils.getFirst;
+import static com.xenoage.utils.collections.CollectionUtils.getLast;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.MathUtils.interpolateLinear;
 import static com.xenoage.zong.core.music.format.SP.sp;
 import static com.xenoage.zong.musiclayout.notation.BeamNotation.hookLengthIs;
 import static com.xenoage.zong.musiclayout.notation.BeamNotation.lineHeightIs;
-
-import java.util.List;
+import static com.xenoage.zong.musiclayout.notation.beam.Fragment.HookLeft;
+import static com.xenoage.zong.musiclayout.notation.beam.Fragment.HookRight;
+import static com.xenoage.zong.musiclayout.notation.beam.Fragment.Start;
+import static com.xenoage.zong.musiclayout.notation.beam.Fragment.Stop;
 
 import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.core.music.format.SP;
-import com.xenoage.zong.musiclayout.layouter.cache.util.BeamedStemStampings;
-import com.xenoage.zong.musiclayout.notation.BeamNotation;
-import com.xenoage.zong.musiclayout.notation.BeamNotation.Waypoint;
+import com.xenoage.zong.musiclayout.notation.beam.Fragment;
+import com.xenoage.zong.musiclayout.notation.beam.Fragments;
+import com.xenoage.zong.musiclayout.spacing.BeamSpacing;
 import com.xenoage.zong.musiclayout.stampings.BeamStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
-import com.xenoage.zong.musiclayout.stampings.StemStamping;
 
 /**
  * This strategy creates the stampings for a beam.
+ * 
+ * TODO: Correct handling for beams containing different stem
+ * directions. E.g. hooks must always be placed on the inner side (note side).
  * 
  * @author Andreas Wenger
  */
@@ -28,62 +34,71 @@ public class BeamStamper {
 	
 
 	/**
-	 * Computes the stampings for the given beam and returns them. TIDY
+	 * Computes the stampings for the given beam and returns them.
+	 * @param beam        the beam to stamp
+	 * @param leftStaff   the staff stamping, where the first chord of the beam is stamped on
+	 * @param rightStaff  the staff stamping, where the last chord of the beam is stamped on
 	 */
-	public BeamStamping[] createBeamStampings(BeamNotation beam) {
+	public BeamStamping[] createBeamStampings(BeamSpacing beam, StaffStamping leftStaff,
+		StaffStamping rightStaff) {
 		
-		/*
-		float leftX = beam.leftSp.xMm;
-		float rightX = beam.rightSp.xMm;
-		//number of beam levels
-		int levels = beam.linesCount;
-		BeamStamping[] ret = new BeamStamping[levels];
+		SP leftEndSp = getFirst(beam.stemEndSps);
+		SP rightEndSp = getLast(beam.stemEndSps);
+		StemDirection leftDir = getFirst(beam.notation.chords).stemDirection;
+		StemDirection rightDir = getLast(beam.notation.chords).stemDirection;
+		
+		//number of beam lines
+		int linesCount = beam.notation.getLinesCount();
+		BeamStamping[] ret = new BeamStamping[linesCount];
 		
 		//first line (8th line) is always continuous
-		float leftLp = beam.leftSp.lp + leftStemDir.getSign() * lineHeightIs / 4; //4: looks ok
-		float rightLp = beam.rightSp.lp + rightStemDir.getSign() * lineHeightIs / 4; //4: looks ok
-		BeamStamping beam8th = new BeamStamping(beam, leftChordStaff, rightChordStaff,
-			sp(leftX, leftLp), sp(rightX, rightLp));
+		float leftLp = leftEndSp.lp - leftDir.getSign() * lineHeightIs / 2; //vertically centered
+		float rightLp = rightEndSp.lp - rightDir.getSign() * lineHeightIs / 2;
+		BeamStamping beam8th = new BeamStamping(beam, leftStaff, rightStaff,
+			leftEndSp.withLp(leftLp), rightEndSp.withLp(rightLp));
 		ret[0] = beam8th;
 		
 		//the next lines can be broken, if there are different rhythms or beam subdivisions
 		//this is stored in the notation
-		for (int i : range(beam.waypoints)) {
+		float leftXMm = leftEndSp.xMm;
+		float rightXMm = rightEndSp.xMm;
+		for (int i : range(beam.notation.linesFragments)) {
 			int line = i + 1;
-			float lineLp = -1 * leftStemDir.getSign() * (lineHeightIs + beam.gapIs) * 2 * line;
+			float lineLp = -1 * leftDir.getSign() * (lineHeightIs + beam.notation.gapIs) * 2 * line;
 			float leftLineLp = leftLp + lineLp;
 			float rightLineLp = rightLp + lineLp;
 			//create the line stampings
 			float startX = 0;
-			List<Waypoint> waypoints = beam.waypoints.get(i);
-			for (int iChord : range(waypoints)) {
-				Waypoint wp = waypoints.get(iChord);
-				float stemX = beamedStems.stems[iChord].xMm;
-				if (wp == Waypoint.Start) {
+			Fragments fragments = beam.notation.linesFragments.get(i);
+			for (int iChord : range(fragments)) {
+				Fragment fragment = fragments.get(iChord);
+				float stemX = beam.stemEndSps.get(iChord).xMm;
+				if (fragment == Start) {
 					//begin a new beam line
 					startX = stemX;
 				}
-				else if (wp == Waypoint.Stop || wp == Waypoint.StopHookRight) {
+				else if (fragment == Stop) {
 					//end the beam line and stem it
-					float stopX = stemX +
-						(wp == Waypoint.StopHookRight ? hookLengthIs * leftStaff.is : 0);
-					SP leftSp = sp(startX, interpolateLinear(leftLineLp, rightLineLp, leftX, rightX, startX));
-					SP rightSp = sp(stopX, interpolateLinear(leftLineLp, rightLineLp, leftX, rightX, stopX));
+					float stopX = stemX;
+					SP leftSp = sp(startX,
+						interpolateLinear(leftLineLp, rightLineLp, leftXMm, rightXMm, startX));
+					SP rightSp = sp(stopX,
+						interpolateLinear(leftLineLp, rightLineLp, leftXMm, rightXMm, stopX));
 					BeamStamping stamping = new BeamStamping(beam, leftStaff, rightStaff, leftSp, rightSp);
 					ret[i+1] = stamping;
 				}
-				else if (wp == Waypoint.HookLeft || wp == Waypoint.HookRight) {
+				else if (fragment == HookLeft || fragment == HookRight) {
 					//left hook
 					float length = hookLengthIs * leftStaff.is;
-					float x1 = (wp == Waypoint.HookLeft ? stemX - length : stemX);
-					float x2 = (wp == Waypoint.HookLeft ? stemX : stemX + length);
-					SP leftSp = sp(x1, interpolateLinear(leftLineLp, rightLineLp, leftX, rightX, x1));
-					SP rightSp = sp(x2, interpolateLinear(leftLineLp, rightLineLp, leftX, rightX, x2));
+					float x1 = (fragment == HookLeft ? stemX - length : stemX);
+					float x2 = (fragment == HookLeft ? stemX : stemX + length);
+					SP leftSp = sp(x1, interpolateLinear(leftLineLp, rightLineLp, leftXMm, rightXMm, x1));
+					SP rightSp = sp(x2, interpolateLinear(leftLineLp, rightLineLp, leftXMm, rightXMm, x2));
 					BeamStamping stamping = new BeamStamping(beam, leftStaff, rightStaff, leftSp, rightSp);
 					ret[i+1] = stamping;
 				}
 			}
-		} */
+		}
 
 		return new BeamStamping[0];
 	}

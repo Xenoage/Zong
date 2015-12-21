@@ -1,6 +1,6 @@
 package com.xenoage.zong.musiclayout.notator.beam.lines;
 
-import static com.xenoage.zong.musiclayout.notation.BeamNotation.defaultGapIs;
+import static com.xenoage.zong.musiclayout.notation.BeamNotation.gapIs;
 
 import com.xenoage.zong.musiclayout.notation.BeamNotation;
 
@@ -78,11 +78,11 @@ public abstract class BeamRules {
 	/**
 	 * Returns the vertical distance between two beam lines in IS, that is
 	 * the "white space" between two beam lines.
-	 * Normally this is {@link BeamNotation#defaultGapIs}, but it can be up to
+	 * Normally this is {@link BeamNotation#gapIs}, but it can be up to
 	 * 0.5 IS for a beam with more than three lines.
 	 */
 	public float getGapIs() {
-		return defaultGapIs;
+		return gapIs;
 	}
 
 	/**

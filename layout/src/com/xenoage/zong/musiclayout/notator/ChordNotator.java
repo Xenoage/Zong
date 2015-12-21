@@ -1,6 +1,7 @@
 package com.xenoage.zong.musiclayout.notator;
 
 import static com.xenoage.utils.PlatformUtils.platformUtils;
+import static com.xenoage.zong.core.music.StaffLines.staffLines;
 import static com.xenoage.zong.core.music.util.Interval.Before;
 import static com.xenoage.zong.core.music.util.Interval.BeforeOrAt;
 import static com.xenoage.zong.core.text.FormattedTextUtils.styleText;
@@ -116,8 +117,9 @@ public class ChordNotator
 		}
 
 		//compute length of the stem (if any)
-		StemNotation stem = stemNotator.compute(chord.getStem(), notes, stemDirection, mc.getLinesCount(),
-			grace ? context.settings.scalingGrace : 1);
+		float scaling = grace ? context.settings.scalingGrace : 1;
+		StemNotation stem = stemNotator.compute(chord.getStem(), notes.getLps(),
+			stemDirection, staffLines(mc.getLinesCount()), scaling);
 
 		//compute articulations
 		ArticulationsNotation arts = articulationsNotator.compute(chord, stemDirection, notes, mc.getLinesCount());

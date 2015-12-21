@@ -2,11 +2,11 @@ package com.xenoage.zong.musiclayout.spacing;
 
 import java.util.List;
 
-import lombok.AllArgsConstructor;
-
 import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.music.format.SP;
 import com.xenoage.zong.musiclayout.notation.BeamNotation;
+
+import lombok.AllArgsConstructor;
 
 /**
  * Horizontal and vertical spacing of a {@link Beam}.

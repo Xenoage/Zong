@@ -3,7 +3,7 @@ package com.xenoage.zong.musiclayout.notation.beam;
 import java.util.ArrayList;
 
 /**
- * Line fragments of a single beam line (16th line, or 32th line, or ...).
+ * Line fragments of a single secondary beam line (16th line, or 32th line, or ...).
  * The line consists of continuous parts and hooks.
  * 
  * @author Andreas Wenger

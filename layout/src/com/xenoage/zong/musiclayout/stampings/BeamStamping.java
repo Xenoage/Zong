@@ -1,11 +1,11 @@
 package com.xenoage.zong.musiclayout.stampings;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.music.format.SP;
-import com.xenoage.zong.musiclayout.notation.BeamNotation;
+import com.xenoage.zong.musiclayout.spacing.BeamSpacing;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * Stamping of a single beam line.
@@ -21,14 +21,14 @@ public class BeamStamping
 	extends Stamping {
 
 	/** The stamped beam. */
-	public final BeamNotation beam;
+	public final BeamSpacing beam;
 	/** The {@link StaffStamping} of the start position. */
 	public final StaffStamping staff1;
 	/** The {@link StaffStamping} of the end position. */
 	public final StaffStamping staff2;
-	/** The start coordinates of the beam. */
+	/** The start coordinates of the beam. The vertical coordinate is centered on the beam line. */
 	public final SP sp1;
-	/** The end coordinates of the beam. */
+	/** The end coordinates of the beam. The vertical coordinate is centered on the beam line. */
 	public final SP sp2;
 
 

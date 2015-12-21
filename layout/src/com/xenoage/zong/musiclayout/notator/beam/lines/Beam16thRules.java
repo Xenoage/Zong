@@ -1,7 +1,7 @@
 package com.xenoage.zong.musiclayout.notator.beam.lines;
 
 import static com.xenoage.utils.math.MathUtils.mod;
-import static com.xenoage.zong.musiclayout.notation.BeamNotation.defaultGapIs;
+import static com.xenoage.zong.musiclayout.notation.BeamNotation.gapIs;
 import static com.xenoage.zong.musiclayout.notation.BeamNotation.lineHeightIs;
 import static com.xenoage.zong.musiclayout.notator.beam.BeamNotator.beamNotator;
 import lombok.AllArgsConstructor;
@@ -18,7 +18,7 @@ import com.xenoage.zong.core.music.chord.StemDirection;
 public class Beam16thRules
 	extends BeamRules {
 
-	private static float totalBeamHeightIs = 2 * lineHeightIs + defaultGapIs;
+	private static float totalBeamHeightIs = 2 * lineHeightIs + gapIs;
 
 	private StemDirection stemDirection;
 	private int staffLinesCount;

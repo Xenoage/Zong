@@ -3,8 +3,6 @@ package com.xenoage.zong.musiclayout.notation;
 import static com.xenoage.utils.collections.ArrayUtils.getFirst;
 import static com.xenoage.utils.collections.ArrayUtils.getLast;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.StemDirection;
@@ -13,6 +11,9 @@ import com.xenoage.zong.musiclayout.notation.chord.ArticulationsNotation;
 import com.xenoage.zong.musiclayout.notation.chord.NotesNotation;
 import com.xenoage.zong.musiclayout.notation.chord.StemNotation;
 import com.xenoage.zong.musiclayout.spacing.ElementWidth;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * This class contains layout information about a chord, like its width and the

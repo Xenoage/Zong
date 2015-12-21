@@ -2,6 +2,8 @@ package com.xenoage.zong.musiclayout.notation.chord;
 
 import lombok.AllArgsConstructor;
 
+import static java.lang.Math.abs;
+
 import com.xenoage.utils.annotations.Const;
 
 
@@ -20,4 +22,9 @@ public class StemNotation {
 	/** The line position where the stem ends (flag/beam side). */
 	public final float endLp;
 
+	
+	public float getLengthIs() {
+		return abs(endLp - startLp) / 2;
+	}
+	
 }

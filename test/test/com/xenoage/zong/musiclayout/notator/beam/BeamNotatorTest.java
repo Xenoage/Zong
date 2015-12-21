@@ -10,8 +10,6 @@ import org.junit.Test;
 /**
  * Tests for {@link BeamNotator}.
  * 
- * The test examples are from Chlapik, page 45, rule 6.
- * 
  * @author Andreas Wenger
  */
 public class BeamNotatorTest {

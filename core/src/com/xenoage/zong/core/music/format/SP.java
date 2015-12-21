@@ -1,6 +1,7 @@
 package com.xenoage.zong.core.music.format;
 
 import lombok.Data;
+import lombok.experimental.Wither;
 
 
 /**
@@ -11,7 +12,8 @@ import lombok.Data;
  * 
  * @author Andreas Wenger
  */
-@Data public final class SP {
+@Data @Wither
+public final class SP {
 
 	/** Position on x-axis in mm, relative to the left side of the parent staff. */
 	public final float xMm;
