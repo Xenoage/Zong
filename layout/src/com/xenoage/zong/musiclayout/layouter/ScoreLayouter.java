@@ -4,8 +4,9 @@ import static com.xenoage.utils.lang.VocByString.voc;
 import static com.xenoage.utils.log.Log.log;
 import static com.xenoage.utils.log.Report.warning;
 
+import java.util.List;
+
 import com.xenoage.utils.collections.CList;
-import com.xenoage.utils.collections.IList;
 import com.xenoage.utils.lang.Lang;
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.Zong;
@@ -33,8 +34,7 @@ import com.xenoage.zong.symbols.SymbolPool;
  */
 public class ScoreLayouter {
 
-	//strategy for the layouter and its context
-	private ScoreLayoutStrategy strategy;
+	//layouter context
 	private ScoreLayouterContext context;
 
 	//the score layout created by this layouter
@@ -54,7 +54,7 @@ public class ScoreLayouter {
 	 *                          this settings are used
 	 */
 	public static ScoreLayout createScoreLayout(Score score, SymbolPool symbolPool,
-		LayoutSettings layoutSettings, boolean isCompleteLayout, IList<ScoreLayoutArea> areas,
+		LayoutSettings layoutSettings, boolean isCompleteLayout, List<ScoreLayoutArea> areas,
 		ScoreLayoutArea additionalArea) {
 		ScoreLayouterContext context = new ScoreLayouterContext(score, symbolPool, layoutSettings,
 			isCompleteLayout, areas, additionalArea);
@@ -75,12 +75,10 @@ public class ScoreLayouter {
 		boolean isCompleteLayout, Size2f areaSize) {
 		this.context = new ScoreLayouterContext(score, symbolPool, layoutSettings,
 			isCompleteLayout, CList.<ScoreLayoutArea>ilist(), new ScoreLayoutArea(areaSize));
-		this.strategy = createStrategyTree();
 	}
 
 	public ScoreLayouter(ScoreLayouterContext c) {
 		this.context = c;
-		this.strategy = createStrategyTree();
 	}
 
 	public ScoreLayout createScoreLayout() {
@@ -104,19 +102,6 @@ public class ScoreLayouter {
 	 */
 	public ScoreLayout createLayoutWithExceptions() {
 		return strategy.computeScoreLayout(context);
-	}
-
-	/**
-	 * Creates the strategy tree.
-	 * See "doc/Layoutengine.odg"
-	 */
-	ScoreLayoutStrategy createStrategyTree() {
-		//complete tree
-		return new ScoreLayoutStrategy(
-			new ScoreFrameLayoutStrategy(new StaffStampingsStrategy(),
-				new MusicElementStampingStrategy(),
-				new SlurStampingStrategy(), new LyricStampingStrategy(), new VoltaStampingStrategy(),
-				new DirectionStampingStrategy(), new TupletStampingStrategy()));
 	}
 
 	/**

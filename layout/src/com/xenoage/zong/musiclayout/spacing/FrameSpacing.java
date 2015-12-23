@@ -1,6 +1,5 @@
 package com.xenoage.zong.musiclayout.spacing;
 
-import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.collections.CollectionUtils.getFirst;
 import static com.xenoage.utils.collections.CollectionUtils.getLast;
 import static com.xenoage.zong.core.position.MP.atMeasure;
@@ -8,11 +7,11 @@ import static com.xenoage.zong.core.position.MP.atMeasure;
 import java.util.Collections;
 import java.util.List;
 
-import lombok.Getter;
-
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.layout.frames.ScoreFrame;
 import com.xenoage.zong.utils.exceptions.IllegalMPException;
+
+import lombok.Getter;
 
 /**
  * The spacing information of the musical layout of a {@link ScoreFrame}.
@@ -30,10 +29,6 @@ public class FrameSpacing {
 	public List<SystemSpacing> systems;
 	/** The size in mm this frame may use. */
 	public Size2f usableSizeMm;
-	
-	/** The beams within this frame. */
-	public List<BeamSpacing> beams = alist();
-
 	/** Backward reference to the score. */
 	public ScoreSpacing score = null;
 	

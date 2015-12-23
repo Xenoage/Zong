@@ -1,13 +1,14 @@
 package com.xenoage.zong.musiclayout.layouter;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
 
 import com.xenoage.utils.annotations.NonNull;
-import com.xenoage.utils.collections.IList;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.symbols.SymbolPool;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 /**
  * This class can be used as a parameter in all {@link ScoreLayouterStrategy}
@@ -16,7 +17,8 @@ import com.xenoage.zong.symbols.SymbolPool;
  * 
  * @author Andreas Wenger
  */
-@RequiredArgsConstructor public final class ScoreLayouterContext {
+@RequiredArgsConstructor
+public final class ScoreLayouterContext {
 
 	/** The score which is layouted. */
 	@NonNull @Getter private final Score score;
@@ -29,7 +31,7 @@ import com.xenoage.zong.symbols.SymbolPool;
 	@Getter private final boolean isCompleteLayout;
 
 	/** Information about the score frames in which to layout. */
-	@Getter private final IList<ScoreLayoutArea> areas;
+	@Getter private final List<ScoreLayoutArea> areas;
 	/** If the given areas are not enough, additional areas with this settings are used. */
 	@Getter private final ScoreLayoutArea additionalArea;
 

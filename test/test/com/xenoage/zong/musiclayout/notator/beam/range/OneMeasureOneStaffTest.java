@@ -30,6 +30,8 @@ import com.xenoage.zong.musiclayout.notator.beam.lines.Beam8thRules;
  * @author Andreas Wenger
  */
 public class OneMeasureOneStaffTest {
+	
+	//GOON : use test again (for BeamSpacer ...?)
 
 	private OneMeasureOneStaff testee = new OneMeasureOneStaff();
 	

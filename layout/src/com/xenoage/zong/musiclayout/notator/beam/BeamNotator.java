@@ -1,83 +1,69 @@
 package com.xenoage.zong.musiclayout.notator.beam;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.utils.collections.CollectionUtils.alistInit;
-import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.utils.kernel.Range.rangeReverse;
-import static com.xenoage.zong.core.music.beam.Beam.HorizontalSpan.SingleMeasure;
-import static com.xenoage.zong.core.music.beam.Beam.VerticalSpan.SingleStaff;
-import static com.xenoage.zong.core.music.beam.Beam.VerticalSpan.TwoAdjacentStaves;
 import static com.xenoage.zong.core.music.chord.StemDirection.Down;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
-import static com.xenoage.zong.core.music.util.DurationInfo.getFlagsCount;
-import static com.xenoage.zong.musiclayout.notator.beam.range.OneMeasureOneStaff.oneMeasureOneStaff;
-import static com.xenoage.zong.musiclayout.notator.beam.range.OneMeasureTwoStaves.oneMeasureTwoStaves;
+import static com.xenoage.zong.core.position.MP.getMP;
+import static com.xenoage.zong.musiclayout.notator.beam.BeamFragmenter.beamFragmenter;
+import static com.xenoage.zong.musiclayout.notator.beam.lines.Beam128thRules.beam128thRules;
+import static com.xenoage.zong.musiclayout.notator.beam.lines.Beam16thRules.beam16thRules;
+import static com.xenoage.zong.musiclayout.notator.beam.lines.Beam32ndRules.beam32ndRules;
+import static com.xenoage.zong.musiclayout.notator.beam.lines.Beam64thRules.beam64thRules;
+import static com.xenoage.zong.musiclayout.notator.beam.lines.Beam8thRules.beam8thRules;
+import static java.lang.Math.min;
 
 import java.util.List;
 
-import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.music.beam.BeamWaypoint;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.StemDirection;
-import com.xenoage.zong.core.music.format.SP;
-import com.xenoage.zong.core.music.util.DurationInfo;
 import com.xenoage.zong.musiclayout.notation.BeamNotation;
 import com.xenoage.zong.musiclayout.notation.ChordNotation;
-import com.xenoage.zong.musiclayout.notation.BeamNotation.Waypoint;
+import com.xenoage.zong.musiclayout.notation.beam.Fragments;
 import com.xenoage.zong.musiclayout.notation.chord.StemNotation;
 import com.xenoage.zong.musiclayout.notator.beam.lines.BeamRules;
+import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
+import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.ScoreSpacing;
 
 /**
- * Computes {@link BeamNotation}s and the {@link StemNotation}s of a {@link Beam}.
+ * Computes {@link BeamNotation}s and modifies the {@link StemNotation}s of a {@link Beam}.
  * 
  * @author Andreas Wenger
  */
 public class BeamNotator {
 	
 	public static final BeamNotator beamNotator = new BeamNotator();
+	
+	private static BeamRules[] allBeamRules = { null, beam8thRules, beam16thRules,
+		beam32ndRules, beam64thRules, beam128thRules };
 
 
+	//GOON: do not require scoreSPACING!! we do notations here, not spacings
 	public void compute(Beam beam, ScoreSpacing scoreSpacing) {
-
-		//choose appropriate strategy
-		if (beam.getHorizontalSpan() == SingleMeasure) {
-			if (beam.getVerticalSpan() == SingleStaff)
-				oneMeasureOneStaff.compute(beam, scoreSpacing);
-			else if (beam.getVerticalSpan() == TwoAdjacentStaves)
-				oneMeasureTwoStaves.compute(beam, scoreSpacing);
-			else
-				throw new IllegalStateException("No strategy for more than two or non-adjacent staves");
+		//compute fragments
+		List<Fragments> fragments = beamFragmenter.compute(beam);
+		//compute stem length and gap
+		BeamRules beamRules = allBeamRules[min(beam.getMaxLinesCount(), allBeamRules.length - 1)];
+		float minStemLengthIs = beamRules.getMinimumStemLengthIs(); //GOON use in spacer
+		float gapIs = beamRules.getGapIs();
+		//collect chords
+		List<ChordNotation> chords = alist(beam.size());
+		ColumnSpacing column = scoreSpacing.getColumn(getMP(beam.getChord(0)).measure);
+		for (BeamWaypoint waypoint : beam.getWaypoints()) {
+			Chord chord = waypoint.getChord();
+			ElementSpacing cs = column.getElement(chord);
+			ChordNotation cn = (ChordNotation) cs.notation;
+			chords.add(cn);
 		}
-		else {
-			//Multi-measure beams are not supported yet - TODO
-		}
-	}
-	
-	/**
-	 * Computes and returns the {@link BeamNotation} for the given beam data.
-	 * The {@link BeamNotation} is also set to all given chords of the beam.
-	 */
-	public static BeamNotation computeBeamNotation(Beam beam, List<ChordNotation> chords,
-		SP leftSp, SP rightSp, int beamLinesCount, BeamRules beamDesign) {
-		
-		//TODO remove this - currently needed for some unit tests
-		if (beam == null)
-			return null;
-		
-		List<List<Waypoint>> waypoints = BeamNotator.computeWaypoints(beam);
-		float gapIs = beamDesign.getGapIs();
-		BeamNotation beamNot = new BeamNotation(beam, leftSp, rightSp, beamLinesCount, waypoints, gapIs);
+		//create notation
+		BeamNotation beamNotation = new BeamNotation(beam, fragments, gapIs, chords);
+		//save notation in each chord
 		for (ChordNotation chord : chords)
-			chord.beam = beamNot;
-		return beamNot;
+			chord.beam = beamNotation;
 	}
 	
-	
-	
-	
-
 	
 	/**
 	 * Returns true, when the lines of the given beam are completely outside the staff
@@ -87,6 +73,7 @@ public class BeamNotator {
 	 * @param lastStemEndLp      the LP of the endpoint of the last stem  
 	 * @param staffLinesCount    the number of staff lines 
 	 * @param totalBeamHeightIs  the total height of the beam lines (including gaps) in IS
+	 * GOON: move to BeamPlacer
 	 */
 	public boolean isBeamOutsideStaff(StemDirection stemDirection, float firstStemEndLp,
 		float lastStemEndLp, int staffLinesCount, float totalBeamHeightIs) {

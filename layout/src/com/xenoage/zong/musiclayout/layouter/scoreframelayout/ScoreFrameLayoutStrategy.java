@@ -89,6 +89,7 @@ import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.FrameSpacing;
 import com.xenoage.zong.musiclayout.spacing.LeadingSpacing;
 import com.xenoage.zong.musiclayout.spacing.MeasureSpacing;
+import com.xenoage.zong.musiclayout.spacing.ScoreSpacing;
 import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
 import com.xenoage.zong.musiclayout.spacing.VoiceSpacing;
 import com.xenoage.zong.musiclayout.stampings.BarlineStamping;
@@ -422,7 +423,7 @@ public class ScoreFrameLayoutStrategy
 		}
 
 		//create the collected beams
-		otherStampsPool.addAll(createBeams(openBeamsCache));
+		otherStampsPool.addAll(createBeams(openBeamsCache, frameArr.score));
 
 		//create the collected ties and slurs
 		otherStampsPool.addAll(createTiesAndSlurs(openCurvedLinesCache, staffStampings, frameArr
@@ -619,12 +620,13 @@ public class ScoreFrameLayoutStrategy
 
 	/**
 	 * Creates the beams collected in the given {@link OpenBeamsCache}.
+	 * TIDY
 	 */
-	private List<Stamping> createBeams(OpenBeamsCache openBeamsCache) {
+	private List<Stamping> createBeams(OpenBeamsCache openBeamsCache, ScoreSpacing scoreSpacing) {
 		ArrayList<Stamping> ret = alist(openBeamsCache.size());
 		for (BeamedStemStampings beam : openBeamsCache) {
 			CollectionUtils.addAll(ret, beamStamper.createBeamStampings(
-				beam.beam, beam.firstStem().parentStaff, beam.lastStem().parentStaff));
+				scoreSpacing.beams.get(beam.beamNotation.element), beam.firstStem().parentStaff, beam.lastStem().parentStaff));
 		}
 		return ret;
 	}

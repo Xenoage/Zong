@@ -1,5 +1,6 @@
 package com.xenoage.zong.core.music;
 
+import static com.xenoage.zong.core.music.StaffLines.staffLines;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
@@ -22,7 +23,7 @@ public class StaffLinesTest {
 	}
 	
 	@Test public void test6Lines() {
-		StaffLines testee = new StaffLines(6);
+		StaffLines testee = staffLines(6);
 		assertEquals(6, testee.count);
 		assertEquals(0, testee.bottomLp);
 		assertEquals(5, testee.middleLp);

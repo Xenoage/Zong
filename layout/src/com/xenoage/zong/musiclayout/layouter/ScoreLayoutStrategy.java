@@ -3,10 +3,12 @@ package com.xenoage.zong.musiclayout.layouter;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.iterators.It.it;
 import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.zong.core.position.MP.getMP;
 import static com.xenoage.zong.core.position.MP.mp0;
 import static com.xenoage.zong.musiclayout.notator.Notator.notator;
 import static com.xenoage.zong.musiclayout.notator.beam.BeamNotator.beamNotator;
 import static com.xenoage.zong.musiclayout.spacer.ScoreSpacer.scoreSpacer;
+import static com.xenoage.zong.musiclayout.spacer.beam.BeamSpacer.beamSpacer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,9 +26,12 @@ import com.xenoage.zong.musiclayout.ScoreLayout;
 import com.xenoage.zong.musiclayout.Target;
 import com.xenoage.zong.musiclayout.continued.ContinuedElement;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.ScoreFrameLayoutStrategy;
+import com.xenoage.zong.musiclayout.notation.BeamNotation;
+import com.xenoage.zong.musiclayout.notation.ChordNotation;
 import com.xenoage.zong.musiclayout.notation.Notations;
 import com.xenoage.zong.musiclayout.spacer.frame.fill.FrameFiller;
 import com.xenoage.zong.musiclayout.spacer.system.fill.SystemFiller;
+import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 import com.xenoage.zong.musiclayout.spacing.FrameSpacing;
 import com.xenoage.zong.musiclayout.spacing.ScoreSpacing;
 import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
@@ -39,18 +44,9 @@ import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
  */
 public class ScoreLayoutStrategy
 	implements ScoreLayouterStrategy {
+	
+	public static final ScoreLayoutStrategy scoreLayoutStrategy = new ScoreLayoutStrategy();
 
-	//used strategies
-	private final ScoreFrameLayoutStrategy scoreFrameLayoutStrategy;
-
-
-	/**
-	 * Creates a new {@link ScoreLayoutStrategy}.
-	 */
-	public ScoreLayoutStrategy(
-		ScoreFrameLayoutStrategy scoreFrameLayoutStrategy) {
-		this.scoreFrameLayoutStrategy = scoreFrameLayoutStrategy;
-	}
 
 	/**
 	 * Computes and returns the layout of the given score
@@ -75,8 +71,11 @@ public class ScoreLayoutStrategy
 		//frame filling (vertical)
 		fillFramesVertically(scoreSpacing.frames, target, context.score);
 		
-		//compute beams - GOON beam "Spacing"s, not "Notation"s 
+		//compute beams - GOON do this earlier
 		computeBeamNotations(scoreSpacing);
+		
+		//compute beam spacings
+		computeBeamSpacings(scoreSpacing);
 		
 		//create score layout from the collected information
 		List<ScoreFrameLayout> scoreFrameLayouts = createScoreFrameLayouts(scoreSpacing.frames,
@@ -114,7 +113,7 @@ public class ScoreLayoutStrategy
 	}
 
 	/**
-	 * Computes beamed notations with correct stem alignments.
+	 * Computes the {@link BeamNotation}s.
 	 */
 	void computeBeamNotations(ScoreSpacing scoreSpacing) {
 		//go through all elements, finding beams, and recompute stem alignment
@@ -126,6 +125,28 @@ public class ScoreLayoutStrategy
 				Beam beam = chord.getBeam();
 				if (beam != null && beam.getStop().getChord() == chord) {
 					beamNotator.compute(beam, scoreSpacing);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Computes the BeamSpacings with correct stem alignments.
+	 * TIDY
+	 */
+	void computeBeamSpacings(ScoreSpacing scoreSpacing) {
+		//go through all elements, finding beams, and recompute stem alignment
+		VoiceElementIterator voiceElementsIt = new VoiceElementIterator(scoreSpacing.score);
+		for (VoiceElement e : voiceElementsIt) {
+			if (e instanceof Chord) {
+				Chord chord = (Chord) e;
+				//compute each beam only one time (when the end waypoint is found)
+				Beam beam = chord.getBeam();
+				ColumnSpacing column = scoreSpacing.getColumn(getMP(chord).measure);
+				ChordNotation cn = (ChordNotation) column.getElement(chord).notation;
+				if (beam != null && beam.getStop().getChord() == chord) {
+					scoreSpacing.beams.put(beam,
+						beamSpacer.compute(cn.beam, column.parentSystem.staves, scoreSpacing));
 				}
 			}
 		}

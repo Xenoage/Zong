@@ -26,12 +26,17 @@ public class BeamNotation {
 	 * the default gap between the lines is {@value #gapIs}. */ 
 	public static final float normalGapIs = 0.25f;
 	/** Larger gap between lines in IS. It should be used when a beam
-	 * has four or more lines, to avoid beam lines centered within staff whitespace.
-	 * Ross, p. 125, at the bottom, uses a more flexible value, but it should be
-	 * fine for the moment. */
+	 * has more than four lines, to avoid beam lines centered within staff whitespace. */
 	public static final float largeGapIs = 0.5f;
-	/** Length of a beam hook in IS. See Chlapik, p. 45, rule 6. */
+	/** Length of a beam hook in IS. See Chlapik, p. 45, rule 6.
+	 * Ross, p. 124, section 9, demands the width of a notehead. */
 	public static final float hookLengthIs = 1.25f;
+	/** Minimum horizontal stem distance in IS, when wide spacing should
+	 * be used. TODO: where does this rule come from? */
+	public static final float wideSpacingIs = 8;
+	/** Maximum horizontal stem distance in IS, when close spacing should
+	 * be used. See Ross, p. 100. */
+	public static final float closeSpacingIs = 5;
 
 
 	/** The beam element. */
