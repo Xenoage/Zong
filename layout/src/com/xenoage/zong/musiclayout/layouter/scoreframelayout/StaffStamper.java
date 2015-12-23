@@ -13,12 +13,14 @@ import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 
 /**
- * This strategy creates the staves of all systems of a
- * given {@link FrameSpacing}.
+ * Creates the {@link StaffStampings} for a {@link FrameSpacing}.
  * 
  * @author Andreas Wenger
  */
-public class StaffStampingsStrategy {
+public class StaffStamper {
+	
+	public static final StaffStamper staffStamper = new StaffStamper();
+	
 
 	public StaffStampings createStaffStampings(Score score, FrameSpacing frameArr) {
 		int systemsCount = frameArr.getSystems().size();

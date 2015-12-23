@@ -10,7 +10,6 @@ import com.xenoage.zong.core.text.FormattedText;
 import com.xenoage.zong.core.text.FormattedTextParagraph;
 import com.xenoage.zong.core.text.FormattedTextStyle;
 import com.xenoage.zong.core.text.FormattedTextSymbol;
-import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenTupletsCache;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.ChordStampings;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
@@ -19,8 +18,7 @@ import com.xenoage.zong.symbols.SymbolPool;
 import com.xenoage.zong.symbols.common.CommonSymbol;
 
 /**
- * This strategy computes the {@link TupletStamping}s
- * for tuplets.
+ * Creates the {@link TupletStamping}s for tuplets.
  * 
  * The rules are inspired by Chlapik, page 66 and 67,
  * but not all rules are implemented yet.
@@ -29,8 +27,10 @@ import com.xenoage.zong.symbols.common.CommonSymbol;
  * 
  * @author Andreas Wenger
  */
-public class TupletStampingStrategy
-	implements ScoreLayouterStrategy {
+public class TupletStamper {
+	
+	public static final TupletStamper tupletStamper = new TupletStamper();
+	
 
 	/**
 	 * Computes the {@link TupletStamping} for the given {@link ChordStampings}

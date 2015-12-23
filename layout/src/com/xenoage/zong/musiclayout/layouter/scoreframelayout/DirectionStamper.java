@@ -30,24 +30,26 @@ import com.xenoage.zong.core.text.FormattedTextElement;
 import com.xenoage.zong.core.text.FormattedTextParagraph;
 import com.xenoage.zong.core.text.FormattedTextStyle;
 import com.xenoage.zong.core.text.FormattedTextSymbol;
-import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.ChordStampings;
 import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffSymbolStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffTextStamping;
+import com.xenoage.zong.musiclayout.stampings.Stamping;
 import com.xenoage.zong.musiclayout.stampings.WedgeStamping;
 import com.xenoage.zong.symbols.Symbol;
 import com.xenoage.zong.symbols.SymbolPool;
 import com.xenoage.zong.symbols.common.CommonSymbol;
 
 /**
- * This strategy computes the text stampings of {@link Direction}s.
+ * Computes the {@link Stamping}s of {@link Direction}s.
  * 
  * @author Andreas Wenger
  */
-public class DirectionStampingStrategy
-	implements ScoreLayouterStrategy {
+public class DirectionStamper {
+	
+	public static final DirectionStamper directionStamper = new DirectionStamper();
+	
 
 	private static final float FONT_SIZE_IN_IS = 3.5f * 2.67f; //TODO
 

@@ -7,12 +7,11 @@ import com.xenoage.zong.core.music.volta.Volta;
 import com.xenoage.zong.core.text.Alignment;
 import com.xenoage.zong.core.text.FormattedText;
 import com.xenoage.zong.core.text.FormattedTextStyle;
-import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import com.xenoage.zong.musiclayout.stampings.VoltaStamping;
 
 /**
- * This strategy computes the stampings of a volta.
+ * Creates the {@link VoltaStamping} of a {@link Volta}.
  * 
  * TODO: Since a volta can have line breaks inbetween, it can result
  * in more than one stamping.
@@ -20,8 +19,10 @@ import com.xenoage.zong.musiclayout.stampings.VoltaStamping;
  * 
  * @author Andreas Wenger
  */
-public class VoltaStampingStrategy
-	implements ScoreLayouterStrategy {
+public class VoltaStamper {
+	
+	public static final VoltaStamper voltaStamper = new VoltaStamper();
+	
 
 	/**
 	 * Creates a {@link VoltaStamping} for the given volta, beginning at

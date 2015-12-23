@@ -7,6 +7,13 @@ import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.core.music.format.SP.sp;
 import static com.xenoage.zong.core.position.MP.atBeat;
 import static com.xenoage.zong.core.text.FormattedText.fText;
+import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.DirectionStamper.directionStamper;
+import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.LyricStamper.lyricStamper;
+import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.MusicElementStamper.musicElementStamper;
+import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.SlurStamper.slurStamper;
+import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.StaffStamper.staffStamper;
+import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.TupletStamper.tupletStamper;
+import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.VoltaStamper.voltaStamper;
 import static com.xenoage.zong.musiclayout.stamper.BeamStamper.beamStamper;
 import static com.xenoage.zong.musiclayout.stamper.ChordStamper.chordStamper;
 
@@ -65,7 +72,6 @@ import com.xenoage.zong.musiclayout.continued.ContinuedSlur;
 import com.xenoage.zong.musiclayout.continued.ContinuedVolta;
 import com.xenoage.zong.musiclayout.continued.ContinuedWedge;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouterContext;
-import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenBeamsCache;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenLyricsCache;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenSlursCache;
@@ -113,33 +119,10 @@ import com.xenoage.zong.symbols.SymbolPool;
  * 
  * @author Andreas Wenger
  */
-public class ScoreFrameLayoutStrategy
-	implements ScoreLayouterStrategy {
+public class ScoreFrameLayouter {
+	
+	public static final ScoreFrameLayouter scoreFrameLayouter = new ScoreFrameLayouter();
 
-	//used strategies
-	private final StaffStampingsStrategy staffStampingsStrategy;
-	private final MusicElementStampingStrategy musicElementStampingStrategy;
-	private final SlurStampingStrategy curvedLineStampingStrategy;
-	private final LyricStampingStrategy lyricStampingStrategy;
-	private final VoltaStampingStrategy voltaStampingStrategy;
-	private final DirectionStampingStrategy directionStampingStrategy;
-	private final TupletStampingStrategy tupletStampingStrategy;
-
-
-	public ScoreFrameLayoutStrategy(StaffStampingsStrategy staffStampingsStrategy,
-		MusicElementStampingStrategy voiceElementStampingStrategy,
-		SlurStampingStrategy curvedLineStampingStrategy,
-		LyricStampingStrategy lyricStampingStrategy, VoltaStampingStrategy voltaStampingStrategy,
-		DirectionStampingStrategy directionStampingStrategy,
-		TupletStampingStrategy tupletStampingStrategy) {
-		this.staffStampingsStrategy = staffStampingsStrategy;
-		this.musicElementStampingStrategy = voiceElementStampingStrategy;
-		this.curvedLineStampingStrategy = curvedLineStampingStrategy;
-		this.lyricStampingStrategy = lyricStampingStrategy;
-		this.voltaStampingStrategy = voltaStampingStrategy;
-		this.directionStampingStrategy = directionStampingStrategy;
-		this.tupletStampingStrategy = tupletStampingStrategy;
-	}
 
 	/**
 	 * Creates a {@link ScoreFrameLayout} from the given {@link FrameSpacing}.
@@ -183,7 +166,7 @@ public class ScoreFrameLayoutStrategy
 		}
 
 		//create staff stampings
-		StaffStampings staffStampings = staffStampingsStrategy.createStaffStampings(score, frameArr);
+		StaffStampings staffStampings = staffStamper.createStaffStampings(score, frameArr);
 		staffStampings.addAllTo(staffStampsPool);
 
 		//go through the systems
@@ -329,22 +312,22 @@ public class ScoreFrameLayoutStrategy
 							Direction element = elementWithBeat.element;
 							Stamping stamping = null;
 							if (element instanceof Tempo) {
-								stamping = directionStampingStrategy.createTempo((Tempo) element,
+								stamping = directionStamper.createTempo((Tempo) element,
 									atBeat(iStaff, iMeasure + system.getStartMeasureIndex(), -1, elementWithBeat.beat),
 									staff, lc.getSymbolPool());
 							}
 							else if (element instanceof Dynamics) {
-								stamping = directionStampingStrategy.createDynamics((Dynamics) element,
+								stamping = directionStamper.createDynamics((Dynamics) element,
 									atBeat(iStaff, iMeasure + system.getStartMeasureIndex(), -1, elementWithBeat.beat),
 									staff, lc.getSymbolPool());
 							}
 							else if (element instanceof Pedal) {
-								stamping = directionStampingStrategy.createPedal((Pedal) element,
+								stamping = directionStamper.createPedal((Pedal) element,
 									atBeat(iStaff, iMeasure + system.getStartMeasureIndex(), -1, elementWithBeat.beat),
 									staff, lc.getSymbolPool());
 							}
 							else if (element instanceof Words) {
-								stamping = directionStampingStrategy.createWords((Words) element,
+								stamping = directionStamper.createWords((Words) element,
 									atBeat(iStaff, iMeasure + system.getStartMeasureIndex(), -1, elementWithBeat.beat),
 									staff);
 							}
@@ -396,7 +379,7 @@ public class ScoreFrameLayoutStrategy
 								}
 								else if (element instanceof Rest) {
 									//rest
-									otherStampsPool.add(musicElementStampingStrategy.createRestStamping(
+									otherStampsPool.add(musicElementStamper.createRestStamping(
 										(RestNotation) notation, x, staff, lc.getSymbolPool()));
 								}
 								else {
@@ -438,13 +421,13 @@ public class ScoreFrameLayoutStrategy
 			if (firstElement instanceof FormattedTextString) {
 				style = ((FormattedTextString) firstElement).getStyle();
 			}
-			otherStampsPool.addAll(lyricStampingStrategy.createUnderscoreStampings(openUnderscore.get1(),
+			otherStampsPool.addAll(lyricStamper.createUnderscoreStampings(openUnderscore.get1(),
 				openUnderscore.get2(), style, staffStampings.getAllOfStaff(openUnderscore.get3())));
 		}
 
 		//create tuplet brackets/numbers
 		for (Tuplet tuplet : openTupletsCache) {
-			otherStampsPool.add(tupletStampingStrategy.createTupletStamping(tuplet, openTupletsCache,
+			otherStampsPool.add(tupletStamper.createTupletStamping(tuplet, openTupletsCache,
 				lc.getSymbolPool()));
 		}
 
@@ -466,15 +449,15 @@ public class ScoreFrameLayoutStrategy
 	private Stamping createMeasureElementStamping(Notation notation, float positionX,
 		StaffStamping staff, SymbolPool symbolPool, LayoutSettings layoutSettings) {
 		if (notation instanceof ClefNotation) {
-			return musicElementStampingStrategy.createClefStamping((ClefNotation) notation, positionX,
+			return musicElementStamper.createClefStamping((ClefNotation) notation, positionX,
 				staff, symbolPool);
 		}
 		else if (notation instanceof TraditionalKeyNotation) {
-			return musicElementStampingStrategy.createKeyStamping((TraditionalKeyNotation) notation,
+			return musicElementStamper.createKeyStamping((TraditionalKeyNotation) notation,
 				positionX, staff, symbolPool, layoutSettings);
 		}
 		else if (notation instanceof TimeNotation) {
-			return musicElementStampingStrategy.createTimeStamping((TimeNotation) notation, positionX,
+			return musicElementStamper.createTimeStamping((TimeNotation) notation, positionX,
 				staff, symbolPool);
 		}
 		else {
@@ -538,7 +521,7 @@ public class ScoreFrameLayoutStrategy
 			//compute position
 			if (pos == WaypointPosition.Start) {
 				//create start information
-				float distance = curvedLineStampingStrategy.computeAdditionalDistance(chord, side);
+				float distance = slurStamper.computeAdditionalDistance(chord, side);
 				SlurCache tiedChords = SlurCache.createNew(slur, side, staffIndex, notehead, distance,
 					systemIndex);
 				openCurvedLinesCache.add(tiedChords);
@@ -551,7 +534,7 @@ public class ScoreFrameLayoutStrategy
 					//ignore it. TODO: warning
 				}
 				else {
-					float distance = curvedLineStampingStrategy.computeAdditionalDistance(chord,
+					float distance = slurStamper.computeAdditionalDistance(chord,
 						tiedChords.getSide());
 					tiedChords.setStop(notehead, distance, systemIndex);
 				}
@@ -581,7 +564,7 @@ public class ScoreFrameLayoutStrategy
 						//normal lyric
 
 						//create text stamping
-						StaffTextStamping sts = lyricStampingStrategy.createSyllableStamping(lyric,
+						StaffTextStamping sts = lyricStamper.createSyllableStamping(lyric,
 							defaultLyricStyle, staff, chordSt.noteheads[0]/* TODO*/.position.xMm,
 							baseLine);
 						ret.add(sts);
@@ -590,7 +573,7 @@ public class ScoreFrameLayoutStrategy
 						if (lastLyric != null) //TODO: frame breaks...
 						{
 							if (lyricType == SyllableType.Middle || lyricType == SyllableType.End) {
-								StaffTextStamping hyphenStamping = lyricStampingStrategy.createHyphenStamping(
+								StaffTextStamping hyphenStamping = lyricStamper.createHyphenStamping(
 									lastLyric, sts, defaultLyricStyle);
 								ret.add(hyphenStamping);
 							}
@@ -607,7 +590,7 @@ public class ScoreFrameLayoutStrategy
 		}
 
 		//directions
-		ret.addAll(directionStampingStrategy.createForChord(chordElement, chordSt, symbolPool));
+		ret.addAll(directionStamper.createForChord(chordElement, chordSt, symbolPool));
 
 		//tuplet
 		Tuplet tuplet = chordElement.getTuplet();
@@ -661,8 +644,7 @@ public class ScoreFrameLayoutStrategy
 			int middleSlurStartIndex = 0;
 			//if the start is known, begin (and if possible end) the slur in its staff
 			if (cl.isStartKnown()) {
-				Tuple2<SlurStamping, Boolean> startCLS = curvedLineStampingStrategy
-					.createSlurStampingStart(cl);
+				Tuple2<SlurStamping, Boolean> startCLS = slurStamper.createSlurStampingStart(cl);
 				ret.add(startCLS.get1());
 				if (startCLS.get2() == false) {
 					//curved line is finished, remove cache
@@ -683,14 +665,14 @@ public class ScoreFrameLayoutStrategy
 					middleSlurStopIndex = cl.getStopSystem() - 1;
 				}
 				for (int iSystem = middleSlurStartIndex; iSystem <= middleSlurStopIndex; iSystem++) {
-					SlurStamping cls = curvedLineStampingStrategy.createSlurStampingMiddle(
+					SlurStamping cls = slurStamper.createSlurStampingMiddle(
 						cl.getContinuedCurvedLine(), staffStampings.get(iSystem, cl.getStaffIndex()));
 					if (cls != null)
 						ret.add(cls);
 				}
 				//create stop slur (if any)
 				if (!simpleLine && cl.isStopKnown()) {
-					ret.add(curvedLineStampingStrategy.createSlurStampingStop(cl));
+					ret.add(slurStamper.createSlurStampingStop(cl));
 					//curved line is finished, remove cache
 					itCL.remove();
 				}
@@ -721,7 +703,7 @@ public class ScoreFrameLayoutStrategy
 		for (Iterator<ContinuedVolta> itV = openVoltasCache.iterator(); itV.hasNext();) {
 			ContinuedVolta volta = itV.next();
 			ret
-				.add(voltaStampingStrategy.createVoltaStamping(volta.getMusicElement(),
+				.add(voltaStamper.createVoltaStamping(volta.getMusicElement(),
 					volta.startMeasureIndex, staffStampings.get(systemIndex, volta.getStaffIndex()),
 					textStyle));
 			if (volta.startMeasureIndex + volta.getMusicElement().getLength() - 1 <= endMeasureIndex) {
@@ -757,7 +739,7 @@ public class ScoreFrameLayoutStrategy
 		//draw wedges in the cache, and remove them if closed in this system
 		for (Iterator<ContinuedWedge> itW = openWedgesCache.iterator(); itW.hasNext();) {
 			ContinuedWedge wedge = itW.next();
-			ret.add(directionStampingStrategy.createWedgeStamping(wedge.getMusicElement(),
+			ret.add(directionStamper.createWedgeStamping(wedge.getMusicElement(),
 				staffStampings.get(systemIndex, wedge.getStaffIndex())));
 			if (MP.getMP(wedge.getMusicElement().getWedgeEnd()).measure <= system.getEndMeasureIndex()) {
 				//wedge is closed

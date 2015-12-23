@@ -1,6 +1,5 @@
 package com.xenoage.zong.musiclayout.layouter.columnspacing;
 
-import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.spacer.voice.SingleVoiceSpacer;
 import com.xenoage.zong.musiclayout.spacing.VoiceSpacing;
 
@@ -12,9 +11,7 @@ import com.xenoage.zong.musiclayout.spacing.VoiceSpacing;
  * 
  * @author Andreas Wenger
  */
-public class LyricVoiceSpacingStrategy
-	implements ScoreLayouterStrategy
-{
+public class LyricVoiceSpacingStrategy {
 	
 	//TODO
 

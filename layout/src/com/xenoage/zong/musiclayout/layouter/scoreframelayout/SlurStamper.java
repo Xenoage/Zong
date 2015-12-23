@@ -11,7 +11,6 @@ import com.xenoage.zong.core.music.slur.Slur;
 import com.xenoage.zong.core.music.slur.SlurType;
 import com.xenoage.zong.core.music.slur.SlurWaypoint;
 import com.xenoage.zong.musiclayout.continued.ContinuedSlur;
-import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.layouter.cache.util.SlurCache;
 import com.xenoage.zong.musiclayout.notation.ChordNotation;
 import com.xenoage.zong.musiclayout.stampings.NoteheadStamping;
@@ -19,12 +18,14 @@ import com.xenoage.zong.musiclayout.stampings.SlurStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 
 /**
- * This strategy computes the stampings of a {@link Slur}.
+ * Creates the {@link SlurStamping}s for {@link Slur}s.
  * 
  * @author Andreas Wenger
  */
-public class SlurStampingStrategy
-	implements ScoreLayouterStrategy {
+public class SlurStamper {
+	
+	public static final SlurStamper slurStamper = new SlurStamper();
+	
 
 	/**
 	 * Computes the additional distance of the startpoint or endpoint of a slur

@@ -16,18 +16,20 @@ import com.xenoage.zong.core.music.lyric.SyllableType;
 import com.xenoage.zong.core.text.Alignment;
 import com.xenoage.zong.core.text.FormattedText;
 import com.xenoage.zong.core.text.FormattedTextStyle;
-import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.stampings.NoteheadStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffTextStamping;
+import com.xenoage.zong.musiclayout.stampings.Stamping;
 
 /**
- * This strategy computes the stamping of a lyric.
+ * Creates the {@link Stamping}s of a lyric.
  * 
  * @author Andreas Wenger
  */
-public class LyricStampingStrategy
-	implements ScoreLayouterStrategy {
+public class LyricStamper {
+	
+	public static final LyricStamper lyricStamper = new LyricStamper();
+	
 
 	/**
 	 * Creates and returns the {@link StaffTextStamping} for the given {@link Lyric},

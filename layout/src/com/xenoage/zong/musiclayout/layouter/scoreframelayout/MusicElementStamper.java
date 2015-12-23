@@ -7,7 +7,6 @@ import java.util.HashMap;
 import com.xenoage.zong.core.music.format.SP;
 import com.xenoage.zong.core.music.time.TimeType;
 import com.xenoage.zong.core.music.util.DurationInfo;
-import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.notation.ClefNotation;
 import com.xenoage.zong.musiclayout.notation.RestNotation;
 import com.xenoage.zong.musiclayout.notation.TimeNotation;
@@ -23,13 +22,15 @@ import com.xenoage.zong.symbols.SymbolPool;
 import com.xenoage.zong.symbols.common.CommonSymbol;
 
 /**
- * Strategy to create stampings for elements like rests,
+ * Creates the {@link Stamping}s for elements like rests,
  * clefs, keys and time signatures.
  * 
  * @author Andreas Wenger
  */
-public class MusicElementStampingStrategy
-	implements ScoreLayouterStrategy {
+public class MusicElementStamper {
+	
+	public static final MusicElementStamper musicElementStamper = new MusicElementStamper();
+	
 
 	/**
 	 * Creates a stamping for the given rest.

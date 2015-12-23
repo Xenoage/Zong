@@ -21,7 +21,6 @@ import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.util.Column;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.musiclayout.Context;
-import com.xenoage.zong.musiclayout.layouter.ScoreLayouterStrategy;
 import com.xenoage.zong.musiclayout.layouter.columnspacing.VoiceSpacingsByStaff;
 import com.xenoage.zong.musiclayout.notation.Notation;
 import com.xenoage.zong.musiclayout.notation.Notations;
@@ -38,8 +37,7 @@ import com.xenoage.zong.musiclayout.spacing.VoiceSpacing;
  * 
  * @author Andreas Wenger
  */
-public class ColumnSpacer
-	implements ScoreLayouterStrategy {
+public class ColumnSpacer {
 	
 	public static final ColumnSpacer columnSpacer = new ColumnSpacer();
 
