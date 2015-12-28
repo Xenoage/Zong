@@ -25,7 +25,7 @@ import com.xenoage.zong.core.music.lyric.SyllableType;
 import com.xenoage.zong.core.position.MPElement;
 import com.xenoage.zong.core.text.FormattedText;
 import com.xenoage.zong.core.text.FormattedTextStyle;
-import com.xenoage.zong.musiclayout.Context;
+import com.xenoage.zong.musiclayout.layouter.Context;
 import com.xenoage.zong.musiclayout.notation.ChordNotation;
 import com.xenoage.zong.musiclayout.notation.Notations;
 import com.xenoage.zong.musiclayout.notation.chord.AccidentalsNotation;

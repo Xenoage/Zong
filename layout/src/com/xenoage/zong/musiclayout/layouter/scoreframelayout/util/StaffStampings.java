@@ -3,7 +3,6 @@ package com.xenoage.zong.musiclayout.layouter.scoreframelayout.util;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.collections.CollectionUtils.alistInit;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.xenoage.zong.musiclayout.ScoreFrameLayout;
@@ -17,9 +16,9 @@ import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 public class StaffStampings {
 
 	//lists of staves, if we are interested in a certain score staff: staves[globalstaffindex][systemindex]
-	private ArrayList<ArrayList<StaffStamping>> stavesByStaff;
+	private List<List<StaffStamping>> stavesByStaff;
 	//lists of staves, if we are interested in a certain system: staves[systemindex][globalstaffindex]
-	private ArrayList<ArrayList<StaffStamping>> stavesBySystem;
+	private List<List<StaffStamping>> stavesBySystem;
 
 
 	/**

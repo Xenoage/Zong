@@ -12,8 +12,6 @@ import com.xenoage.zong.io.musiclayout.LayoutSettingsReader;
 import com.xenoage.zong.io.musicxml.in.MusicXMLScoreFileInputTest;
 import com.xenoage.zong.io.musicxml.in.MusicXmlScoreFileInput;
 import com.xenoage.zong.io.symbols.SymbolPoolReader;
-import com.xenoage.zong.musiclayout.Context;
-import com.xenoage.zong.musiclayout.Target;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.symbols.SymbolPool;
 

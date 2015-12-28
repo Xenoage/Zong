@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.xenoage.utils.math.geom.Size2f;
-import com.xenoage.zong.musiclayout.Context;
-import com.xenoage.zong.musiclayout.Target;
+import com.xenoage.zong.musiclayout.layouter.Context;
+import com.xenoage.zong.musiclayout.layouter.Target;
 import com.xenoage.zong.musiclayout.notation.Notations;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 import com.xenoage.zong.musiclayout.spacing.FrameSpacing;

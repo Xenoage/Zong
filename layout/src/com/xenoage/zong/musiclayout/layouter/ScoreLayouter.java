@@ -16,10 +16,8 @@ import java.util.Map;
 
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.beam.Beam;
-import com.xenoage.zong.musiclayout.Context;
 import com.xenoage.zong.musiclayout.ScoreFrameLayout;
 import com.xenoage.zong.musiclayout.ScoreLayout;
-import com.xenoage.zong.musiclayout.Target;
 import com.xenoage.zong.musiclayout.continued.ContinuedElement;
 import com.xenoage.zong.musiclayout.notation.Notations;
 import com.xenoage.zong.musiclayout.spacer.frame.fill.FrameFiller;

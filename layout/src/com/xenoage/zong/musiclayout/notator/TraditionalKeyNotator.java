@@ -6,7 +6,7 @@ import static com.xenoage.zong.core.music.util.Interval.Before;
 import com.xenoage.zong.core.music.clef.ClefType;
 import com.xenoage.zong.core.music.key.TraditionalKey;
 import com.xenoage.zong.core.position.MPElement;
-import com.xenoage.zong.musiclayout.Context;
+import com.xenoage.zong.musiclayout.layouter.Context;
 import com.xenoage.zong.musiclayout.notation.Notations;
 import com.xenoage.zong.musiclayout.notation.TraditionalKeyNotation;
 import com.xenoage.zong.musiclayout.spacing.ElementWidth;

@@ -1,12 +1,11 @@
 package com.xenoage.zong.musiclayout.layouter.scoreframelayout;
 
 import static com.xenoage.utils.NullUtils.notNull;
+import static com.xenoage.utils.collections.CollectionUtils.addNotNull;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.iterators.It.it;
 import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.zong.core.music.format.SP.sp;
 import static com.xenoage.zong.core.position.MP.atBeat;
-import static com.xenoage.zong.core.text.FormattedText.fText;
 import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.DirectionStamper.directionStamper;
 import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.LyricStamper.lyricStamper;
 import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.MusicElementStamper.musicElementStamper;
@@ -14,8 +13,10 @@ import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.SlurStamper
 import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.StaffStamper.staffStamper;
 import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.TupletStamper.tupletStamper;
 import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.VoltaStamper.voltaStamper;
+import static com.xenoage.zong.musiclayout.stamper.BarlinesStamper.barlinesStamper;
 import static com.xenoage.zong.musiclayout.stamper.BeamStamper.beamStamper;
 import static com.xenoage.zong.musiclayout.stamper.ChordStamper.chordStamper;
+import static com.xenoage.zong.musiclayout.stamper.PartNameStamper.partNameStamper;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -27,9 +28,7 @@ import com.xenoage.utils.collections.CollectionUtils;
 import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.utils.kernel.Tuple3;
 import com.xenoage.utils.math.VSide;
-import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.zong.core.Score;
-import com.xenoage.zong.core.format.MeasureNumbering;
 import com.xenoage.zong.core.header.ColumnHeader;
 import com.xenoage.zong.core.header.ScoreHeader;
 import com.xenoage.zong.core.music.ColumnElement;
@@ -41,8 +40,6 @@ import com.xenoage.zong.core.music.Staff;
 import com.xenoage.zong.core.music.StavesList;
 import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.WaypointPosition;
-import com.xenoage.zong.core.music.barline.Barline;
-import com.xenoage.zong.core.music.barline.BarlineStyle;
 import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.direction.Direction;
@@ -51,7 +48,6 @@ import com.xenoage.zong.core.music.direction.Pedal;
 import com.xenoage.zong.core.music.direction.Tempo;
 import com.xenoage.zong.core.music.direction.Wedge;
 import com.xenoage.zong.core.music.direction.Words;
-import com.xenoage.zong.core.music.group.BarlineGroup;
 import com.xenoage.zong.core.music.group.BracketGroup;
 import com.xenoage.zong.core.music.group.StavesRange;
 import com.xenoage.zong.core.music.lyric.Lyric;
@@ -63,17 +59,15 @@ import com.xenoage.zong.core.music.tuplet.Tuplet;
 import com.xenoage.zong.core.music.util.BeatE;
 import com.xenoage.zong.core.music.util.BeatEList;
 import com.xenoage.zong.core.position.MP;
-import com.xenoage.zong.core.text.Alignment;
-import com.xenoage.zong.core.text.FormattedText;
 import com.xenoage.zong.core.text.FormattedTextElement;
 import com.xenoage.zong.core.text.FormattedTextString;
 import com.xenoage.zong.core.text.FormattedTextStyle;
-import com.xenoage.zong.musiclayout.Context;
 import com.xenoage.zong.musiclayout.ScoreFrameLayout;
 import com.xenoage.zong.musiclayout.continued.ContinuedElement;
 import com.xenoage.zong.musiclayout.continued.ContinuedSlur;
 import com.xenoage.zong.musiclayout.continued.ContinuedVolta;
 import com.xenoage.zong.musiclayout.continued.ContinuedWedge;
+import com.xenoage.zong.musiclayout.layouter.Context;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenBeamsCache;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenLyricsCache;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenSlursCache;
@@ -100,9 +94,8 @@ import com.xenoage.zong.musiclayout.spacing.LeadingSpacing;
 import com.xenoage.zong.musiclayout.spacing.MeasureSpacing;
 import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
 import com.xenoage.zong.musiclayout.spacing.VoiceSpacing;
-import com.xenoage.zong.musiclayout.stampings.BarlineStamping;
+import com.xenoage.zong.musiclayout.stamper.PartNameStamper;
 import com.xenoage.zong.musiclayout.stampings.BracketStamping;
-import com.xenoage.zong.musiclayout.stampings.FrameTextStamping;
 import com.xenoage.zong.musiclayout.stampings.NoteheadStamping;
 import com.xenoage.zong.musiclayout.stampings.SlurStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
@@ -132,7 +125,7 @@ public class ScoreFrameLayouter {
 	 * @param continuedElements  unclosed elements from the last frame, like slurs
 	 *                           spanning over more than one frame
 	 */
-	public ScoreFrameLayout computeScoreFrameLayout(FrameSpacing frameArr, int frameIndex,
+	public ScoreFrameLayout computeScoreFrameLayout(FrameSpacing frame, int frameIndex,
 		Notations notations, List<ContinuedElement> unclosedElements, Context context,
 		Map<Beam, BeamSpacing> beamsSpacing) {
 		
@@ -145,7 +138,6 @@ public class ScoreFrameLayouter {
 		StavesList stavesList = score.getStavesList();
 		ArrayList<StaffStamping> staffStampsPool = alist();
 		ArrayList<Stamping> otherStampsPool = alist();
-		MeasureNumbering measureNumbering = score.getFormat().getMeasureNumbering();
 
 		//default lyric style
 		FormattedTextStyle defaultLyricStyle = new FormattedTextStyle(score.getFormat().getLyricFont());
@@ -173,31 +165,21 @@ public class ScoreFrameLayouter {
 		}
 
 		//create staff stampings
-		StaffStampings staffStampings = staffStamper.createStaffStampings(score, frameArr);
+		StaffStampings staffStampings = staffStamper.createStaffStampings(score, frame);
 		staffStampings.addAllTo(staffStampsPool);
 
 		//go through the systems
-		for (int iSystem : range(frameArr.getSystems())) {
-			SystemSpacing system = frameArr.getSystems().get(iSystem);
+		for (int iSystem : range(frame.getSystems())) {
+			SystemSpacing system = frame.getSystems().get(iSystem);
 			List<StaffStamping> systemStaves = staffStampings.getAllOfSystem(iSystem);
 
 			//add the part names (first system) or part abbreviations (other systems)
 			int iStaff = 0;
 			for (Part part : stavesList.getParts()) {
-				StaffStamping firstStaff = systemStaves.get(iStaff);
-				StaffStamping lastStaff = systemStaves.get(iStaff + part.getStavesCount() - 1);
+				PartNameStamper.Style style = (frameIndex == 0 && iSystem == 0 ?
+					PartNameStamper.Style.Full : PartNameStamper.Style.Abbreviated);
+				addNotNull(otherStampsPool, partNameStamper.stamp(part, iStaff, systemStaves, style));
 				iStaff += part.getStavesCount();
-				String name = (frameIndex == 0 && iSystem == 0 ? part.getName() : part.getAbbreviation());
-				if (name != null && name.length() > 0) {
-					//in the middle of the staves
-					float top = firstStaff.positionMm.y;
-					float bottom = lastStaff.positionMm.y + (lastStaff.linesCount - 1) * lastStaff.is;
-					FormattedText text = fText(name, new FormattedTextStyle(firstStaff.is * 2.5f * 2.67f),
-						Alignment.Right);
-					float middle = (top + bottom) / 2 + text.getFirstParagraph().getMetrics().getAscent() / 3; //correction of baseline. /3 looks good.
-					otherStampsPool.add(new FrameTextStamping(text, new Point2f(firstStaff.positionMm.x -
-						firstStaff.is * 2.5f, middle), null)); //TODO
-				}
 			}
 
 			//create the brackets at the beginning of the system
@@ -207,82 +189,13 @@ public class ScoreFrameLayouter {
 					.getStop()), system.getMarginLeftMm() - 1.4f, bracketGroup.getStyle()));
 			}
 
-			//add the barlines
-			float xOffset = staffStampings.get(iSystem, 0).positionMm.x;
-			//common barline at the beginning, when system has at least one measure
-			if (system.columns.size() > 0) {
-				otherStampsPool.add(new BarlineStamping(Barline.barlineRegular(), systemStaves, xOffset,
-					BarlineGroup.Style.Common));
-			}
-			//barlines within the system and measure numbers
-			int iMeasureMax = system.columns.size() - 1;
-			StaffStamping firstStaff = staffStampings.get(iSystem, 0);
-			for (int iMeasure = 0; iMeasure <= iMeasureMax; iMeasure++) {
-				float xLeft = xOffset;
-				//measure numbering
-				int globalMeasureIndex = system.getStartMeasureIndex() + iMeasure;
-				boolean showMeasureNumber = false;
-				if (measureNumbering == MeasureNumbering.System) {
-					//measure number at the beginning of each system (except the first one)
-					if (iMeasure == 0 && globalMeasureIndex > 0) {
-						showMeasureNumber = true;
-					}
-				}
-				else if (measureNumbering == MeasureNumbering.Measure) {
-					//measure number at each measure (except the first one)
-					if (globalMeasureIndex > 0) {
-						showMeasureNumber = true;
-					}
-				}
-				if (showMeasureNumber) {
-					FormattedText text = fText("" + (globalMeasureIndex + 1),
-						new FormattedTextStyle(8), Alignment.Left);
-					otherStampsPool.add(new StaffTextStamping(text, sp(xLeft, firstStaff.linesCount * 2),
-						firstStaff, null));
-				}
-				//for the first measure in the system: begin after leading spacing
-				if (iMeasure == 0)
-					xLeft += system.columns.get(iMeasure).getLeadingWidthMm();
-				xOffset += system.columns.get(iMeasure).getWidthMm();
-				float xRight = xOffset;
-				//regard the groups of the score
-				for (iStaff = 0; iStaff < stavesCount; iStaff++) {
-					ColumnHeader columnHeader = header.getColumnHeader(globalMeasureIndex);
-					BarlineGroup.Style barlineGroupStyle = BarlineGroup.Style.Single;
-					BarlineGroup group = stavesList.getBarlineGroupByStaff(iStaff);
-					if (group != null)
-						barlineGroupStyle = group.getStyle();
-					List<StaffStamping> groupStaves = getBarlineGroupStaves(systemStaves, group);
-					//start barline
-					Barline startBarline = columnHeader.getStartBarline();
-					if (startBarline != null) {
-						//don't draw a regular barline at the left side of first measure of a system
-						if ((startBarline.getStyle() == BarlineStyle.Regular && iSystem == 0) == false)
-							otherStampsPool.add(new BarlineStamping(startBarline, groupStaves, xLeft,
-								barlineGroupStyle));
-					}
-					//end barline. if none is set, use a regular one.
-					Barline endBarline = columnHeader.getEndBarline();
-					if (endBarline == null)
-						endBarline = Barline.barlineRegular();
-					otherStampsPool.add(new BarlineStamping(endBarline, groupStaves, xRight,
-						barlineGroupStyle));
-					//middle barlines
-					for (BeatE<Barline> middleBarline : columnHeader.getMiddleBarlines()) {
-						otherStampsPool.add(new BarlineStamping(middleBarline.element, groupStaves, xLeft +
-							system.columns.get(iMeasure).getBarlineOffsetMm(middleBarline.beat),
-							barlineGroupStyle));
-					}
-					//go to next group
-					if (group != null)
-						iStaff = group.getStaves().getStop();
-				}
-			}
+			//create the barlines and measure numbers
+			otherStampsPool.addAll(barlinesStamper.stamp(system, systemStaves, score));
 
 			//fill the staves
 			for (iStaff = 0; iStaff < stavesCount; iStaff++) {
 				StaffStamping staff = systemStaves.get(iStaff);
-				xOffset = staff.positionMm.x;
+				float xOffset = staff.positionMm.x;
 				float interlineSpace = staff.is;
 
 				for (int iMeasure = 0; iMeasure < system.columns.size(); iMeasure++) {
@@ -416,7 +329,7 @@ public class ScoreFrameLayouter {
 		otherStampsPool.addAll(createBeams(beamsSpacing, openBeamsCache));
 
 		//create the collected ties and slurs
-		otherStampsPool.addAll(createTiesAndSlurs(openCurvedLinesCache, staffStampings, frameArr
+		otherStampsPool.addAll(createTiesAndSlurs(openCurvedLinesCache, staffStampings, frame
 			.getSystems().size()));
 
 		//create the open lyric underscore lines
@@ -446,7 +359,7 @@ public class ScoreFrameLayouter {
 		continuedElements.addAll(openVoltasCache);
 		continuedElements.addAll(openWedgesCache);
 
-		return new ScoreFrameLayout(frameArr, staffStampsPool, otherStampsPool, continuedElements);
+		return new ScoreFrameLayout(frame, staffStampsPool, otherStampsPool, continuedElements);
 	}
 
 	/**
@@ -626,22 +539,6 @@ public class ScoreFrameLayouter {
 				beams.get(beam.beamNotation.element), beam.firstStem().parentStaff, beam.lastStem().parentStaff));
 		}
 		return ret;
-	}
-
-	/**
-	 * Gets the staves of the given group, using the given
-	 * list of all staves. If the given group is null,
-	 * all staves are returned.
-	 */
-	private List<StaffStamping> getBarlineGroupStaves(List<StaffStamping> systemStaves,
-		BarlineGroup barlineGroup) {
-		if (barlineGroup == null)
-			return systemStaves;
-		else {
-			//use efficient sublist
-			return systemStaves.subList(barlineGroup.getStaves().getStart(),
-				barlineGroup.getStaves().getStop() + 1);
-		}
 	}
 
 	/**

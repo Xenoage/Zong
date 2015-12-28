@@ -15,7 +15,7 @@ import java.util.List;
 import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.core.position.MPElement;
-import com.xenoage.zong.musiclayout.Context;
+import com.xenoage.zong.musiclayout.layouter.Context;
 import com.xenoage.zong.musiclayout.notation.BeamNotation;
 import com.xenoage.zong.musiclayout.notation.Notations;
 import com.xenoage.zong.musiclayout.notation.beam.Fragments;

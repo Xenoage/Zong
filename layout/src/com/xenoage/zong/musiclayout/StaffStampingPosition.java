@@ -7,7 +7,7 @@ import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 
 /**
  * A {@link StaffStampingPosition} is a reference
- * to a StaffStamping and a x-coordinate
+ * to a {@link StaffStamping} and an x-coordinate
  * in mm, as well as the index of its score frame.
  * 
  * @author Andreas Wenger

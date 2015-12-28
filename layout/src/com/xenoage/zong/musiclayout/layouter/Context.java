@@ -1,4 +1,4 @@
-package com.xenoage.zong.musiclayout;
+package com.xenoage.zong.musiclayout.layouter;
 
 import static com.xenoage.zong.core.position.MP.mp0;
 

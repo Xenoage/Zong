@@ -1,9 +1,7 @@
-package com.xenoage.zong.musiclayout;
+package com.xenoage.zong.musiclayout.layouter;
 
 import java.util.Collections;
 import java.util.List;
-
-import com.xenoage.zong.musiclayout.layouter.ScoreLayoutArea;
 
 import lombok.AllArgsConstructor;
 

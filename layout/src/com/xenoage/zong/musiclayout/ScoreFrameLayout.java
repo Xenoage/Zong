@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import com.xenoage.utils.annotations.Optimized;
+import com.xenoage.utils.annotations.Optimized.Reason;
 import com.xenoage.utils.iterators.MultiListIt;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Rectangle2f;
@@ -39,9 +41,11 @@ public final class ScoreFrameLayout {
 
 	/** The list of all staff stampings of this frame. Staff stampings and
 	 * other stampings are divided for performance reasons. */
+	@Optimized(Reason.Performance)
 	@Getter private ArrayList<StaffStamping> staffStampings;
 	/** The list of all other stampings of this frame. Staff stampings and
 	 * other stampings are divided for performance reasons.*/
+	@Optimized(Reason.Performance)
 	@Getter private ArrayList<Stamping> otherStampings;
 
 	/** The list of continued elements, that means the unclosed elements

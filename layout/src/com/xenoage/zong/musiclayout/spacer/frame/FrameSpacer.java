@@ -12,7 +12,7 @@ import com.xenoage.zong.core.format.ScoreFormat;
 import com.xenoage.zong.core.format.SystemLayout;
 import com.xenoage.zong.core.header.ScoreHeader;
 import com.xenoage.zong.core.position.MP;
-import com.xenoage.zong.musiclayout.Context;
+import com.xenoage.zong.musiclayout.layouter.Context;
 import com.xenoage.zong.musiclayout.notation.Notations;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 import com.xenoage.zong.musiclayout.spacing.FrameSpacing;

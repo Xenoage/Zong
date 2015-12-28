@@ -7,7 +7,7 @@ import static com.xenoage.zong.musiclayout.spacer.measure.ColumnSpacer.columnSpa
 import java.util.List;
 
 import com.xenoage.zong.core.position.MP;
-import com.xenoage.zong.musiclayout.Context;
+import com.xenoage.zong.musiclayout.layouter.Context;
 import com.xenoage.zong.musiclayout.notation.Notations;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 import com.xenoage.zong.musiclayout.spacing.LeadingSpacing;

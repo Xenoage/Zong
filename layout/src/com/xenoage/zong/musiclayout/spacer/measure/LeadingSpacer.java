@@ -11,7 +11,7 @@ import com.xenoage.zong.core.music.MusicContext;
 import com.xenoage.zong.core.music.clef.Clef;
 import com.xenoage.zong.core.music.key.Key;
 import com.xenoage.zong.core.music.key.TraditionalKey;
-import com.xenoage.zong.musiclayout.Context;
+import com.xenoage.zong.musiclayout.layouter.Context;
 import com.xenoage.zong.musiclayout.notation.ClefNotation;
 import com.xenoage.zong.musiclayout.notation.TraditionalKeyNotation;
 import com.xenoage.zong.musiclayout.spacing.ElementSpacing;

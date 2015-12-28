@@ -2,7 +2,7 @@ package com.xenoage.zong.musiclayout.notator;
 
 import com.xenoage.zong.core.music.rest.Rest;
 import com.xenoage.zong.core.position.MPElement;
-import com.xenoage.zong.musiclayout.Context;
+import com.xenoage.zong.musiclayout.layouter.Context;
 import com.xenoage.zong.musiclayout.notation.Notations;
 import com.xenoage.zong.musiclayout.notation.RestNotation;
 import com.xenoage.zong.musiclayout.spacing.ElementWidth;
