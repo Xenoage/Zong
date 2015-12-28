@@ -1,57 +1,31 @@
 package com.xenoage.zong.musiclayout.spacer;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.core.position.MP.atMeasure;
 import static com.xenoage.zong.musiclayout.spacer.frame.FrameSpacer.frameSpacer;
-import static com.xenoage.zong.musiclayout.spacer.measure.ColumnSpacer.columnSpacer;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.xenoage.utils.math.geom.Size2f;
-import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.musiclayout.Context;
 import com.xenoage.zong.musiclayout.Target;
 import com.xenoage.zong.musiclayout.notation.Notations;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 import com.xenoage.zong.musiclayout.spacing.FrameSpacing;
-import com.xenoage.zong.musiclayout.spacing.ScoreSpacing;
+import com.xenoage.zong.musiclayout.spacing.FramesSpacing;
 
 /**
  * Breaks the given optimal measure column spacings into systems and frames.
  * 
  * @author Andreas Wenger
  */
-public class ScoreSpacer {
+public class FramesSpacer {
 	
-	public static final ScoreSpacer scoreSpacer = new ScoreSpacer();
+	public static final FramesSpacer framesSpacer = new FramesSpacer();
 	
 	
-	public ScoreSpacing compute(Context context, Target target, Notations notations) {
-		//compute the optimal measure column spacings
-		List<ColumnSpacing> columns = computeColumnSpacings(notations, context);
-		//break them into systems and frames
-		List<FrameSpacing> frames = computeFrameSpacings(columns, target, context, notations);
-		ScoreSpacing scoreSpacing = new ScoreSpacing(context.score, frames);
-		return scoreSpacing;
-	}
-	
-	/**
-	 * Computes the {@link ColumnSpacing} for each measure
-	 * (without leading spacing).
-	 */
-	List<ColumnSpacing> computeColumnSpacings(Notations notations, Context context) {
-		ArrayList<ColumnSpacing> ret = alist();
-		for (int iMeasure : range(0, context.score.getMeasuresCount() - 1)) {
-			context.mp = MP.atMeasure(iMeasure);
-			ret.add(columnSpacer.compute(context, false, notations));
-		}
-		return ret;
-	}
-	
-
-	List<FrameSpacing> computeFrameSpacings(List<ColumnSpacing> columns,
+	public FramesSpacing compute(List<ColumnSpacing> columns,
 		Target target, Context context, Notations notations) {
 		
 		context.saveMp();
@@ -123,7 +97,7 @@ public class ScoreSpacer {
 		
 		context.restoreMp();
 		
-		return frames;
+		return new FramesSpacing(frames);
 	}
 	
 }

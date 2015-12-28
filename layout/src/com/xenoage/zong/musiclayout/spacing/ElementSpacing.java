@@ -16,8 +16,6 @@ import com.xenoage.zong.musiclayout.notation.Notation;
 /**
  * An element spacing stores the beat, the position (offset)
  * and the {@link Notation} of a given {@link MusicElement} in a layout.
- * 
- * All units are measured in interline spaces.
  *
  * @author Andreas Wenger
  */
@@ -52,12 +50,6 @@ public class ElementSpacing {
 		MusicElement element = getElement();
 		return (element != null && element instanceof VoiceElement &&
 			((VoiceElement) element).getDuration().isGreater0() == false);
-	}
-
-
-	@Deprecated //this class is mutable
-	public ElementSpacing withOffset(float offset) {
-		return new ElementSpacing(notation, beat, offset);
 	}
 
 }

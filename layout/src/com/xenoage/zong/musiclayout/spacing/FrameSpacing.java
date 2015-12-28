@@ -17,8 +17,7 @@ import lombok.Getter;
  * The spacing information of the musical layout of a {@link ScoreFrame}.
  * 
  * It contains the usable frame size and the {@link SystemSpacing}s, which contain the
- * staves, measures and elements of the {@link ScoreFrame}. Also the
- * {@link BeamSpacing}s are stored here.
+ * staves, measures and elements of the {@link ScoreFrame}.
  *
  * @author Andreas Wenger
  */
@@ -29,8 +28,6 @@ public class FrameSpacing {
 	public List<SystemSpacing> systems;
 	/** The size in mm this frame may use. */
 	public Size2f usableSizeMm;
-	/** Backward reference to the score. */
-	public ScoreSpacing score = null;
 	
 	
 	public FrameSpacing(List<SystemSpacing> systems, Size2f usableSizeMm) {

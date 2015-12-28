@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import com.xenoage.utils.collections.CollectionUtils;
 import com.xenoage.utils.kernel.Tuple2;
@@ -91,12 +92,12 @@ import com.xenoage.zong.musiclayout.notation.RestNotation;
 import com.xenoage.zong.musiclayout.notation.TimeNotation;
 import com.xenoage.zong.musiclayout.notation.TraditionalKeyNotation;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
+import com.xenoage.zong.musiclayout.spacing.BeamSpacing;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.FrameSpacing;
 import com.xenoage.zong.musiclayout.spacing.LeadingSpacing;
 import com.xenoage.zong.musiclayout.spacing.MeasureSpacing;
-import com.xenoage.zong.musiclayout.spacing.ScoreSpacing;
 import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
 import com.xenoage.zong.musiclayout.spacing.VoiceSpacing;
 import com.xenoage.zong.musiclayout.stampings.BarlineStamping;
@@ -132,7 +133,8 @@ public class ScoreFrameLayouter {
 	 *                           spanning over more than one frame
 	 */
 	public ScoreFrameLayout computeScoreFrameLayout(FrameSpacing frameArr, int frameIndex,
-		Notations notations, List<ContinuedElement> unclosedElements, Context context) {
+		Notations notations, List<ContinuedElement> unclosedElements, Context context,
+		Map<Beam, BeamSpacing> beamsSpacing) {
 		
 		Score score = context.score;
 		SymbolPool symbols = context.symbols;
@@ -411,7 +413,7 @@ public class ScoreFrameLayouter {
 		}
 
 		//create the collected beams
-		otherStampsPool.addAll(createBeams(openBeamsCache, frameArr.score));
+		otherStampsPool.addAll(createBeams(beamsSpacing, openBeamsCache));
 
 		//create the collected ties and slurs
 		otherStampsPool.addAll(createTiesAndSlurs(openCurvedLinesCache, staffStampings, frameArr
@@ -617,11 +619,11 @@ public class ScoreFrameLayouter {
 	 * Creates the beams collected in the given {@link OpenBeamsCache}.
 	 * TIDY
 	 */
-	private List<Stamping> createBeams(OpenBeamsCache openBeamsCache, ScoreSpacing scoreSpacing) {
+	private List<Stamping> createBeams(Map<Beam, BeamSpacing> beams, OpenBeamsCache openBeamsCache) {
 		ArrayList<Stamping> ret = alist(openBeamsCache.size());
 		for (BeamedStemStampings beam : openBeamsCache) {
 			CollectionUtils.addAll(ret, beamStamper.createBeamStampings(
-				scoreSpacing.beams.get(beam.beamNotation.element), beam.firstStem().parentStaff, beam.lastStem().parentStaff));
+				beams.get(beam.beamNotation.element), beam.firstStem().parentStaff, beam.lastStem().parentStaff));
 		}
 		return ret;
 	}

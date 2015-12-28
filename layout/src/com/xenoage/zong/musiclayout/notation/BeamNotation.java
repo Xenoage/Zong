@@ -2,13 +2,12 @@ package com.xenoage.zong.musiclayout.notation;
 
 import java.util.List;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
-import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.musiclayout.notation.beam.Fragments;
 import com.xenoage.zong.musiclayout.spacing.ElementWidth;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * Layout information about a beam, like the appearance

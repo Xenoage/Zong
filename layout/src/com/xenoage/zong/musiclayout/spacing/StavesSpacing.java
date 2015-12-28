@@ -14,7 +14,7 @@ import com.xenoage.utils.annotations.Optimized.Reason;
 import com.xenoage.zong.core.music.Staff;
 
 /**
- * Vertical spacing of a staves in a system.
+ * Vertical spacing of the staves in a system.
  * 
  * @author Andreas
  */
@@ -25,7 +25,7 @@ public final class StavesSpacing {
 	private final List<Staff> staves;
 	/** The distances between the staves in mm. (#staves-1) items. */
 	private final float[] distancesMm;
-	/** The default interline soace in mm. */
+	/** The default interline space in mm. */
 	private final float defaultIs;
 	
 	@Optimized(Reason.Performance)

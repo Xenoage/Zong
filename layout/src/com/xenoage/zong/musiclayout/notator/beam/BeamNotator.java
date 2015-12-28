@@ -47,7 +47,7 @@ public class BeamNotator
 		List<Fragments> fragments = beamFragmenter.compute(beam);
 		//compute stem length and gap
 		BeamRules beamRules = allBeamRules[min(beam.getMaxLinesCount(), allBeamRules.length - 1)];
-		float minStemLengthIs = beamRules.getMinimumStemLengthIs(); //GOON use in spacer
+		//float minStemLengthIs = beamRules.getMinimumStemLengthIs(); //GOON use in spacer
 		float gapIs = beamRules.getGapIs();
 		//create notation
 		BeamNotation beamNotation = new BeamNotation(beam, fragments, gapIs);

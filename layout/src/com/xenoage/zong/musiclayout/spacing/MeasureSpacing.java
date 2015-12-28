@@ -28,7 +28,7 @@ public final class MeasureSpacing {
 
 	/** The musical position of the measure. */
 	@NonNull private MP mp;
-	/** The interline space in mm of this voice. */
+	/** The interline space in mm of this measure. */
 	private float interlineSpace;
 	/** The spacings of the voices */
 	@NonEmpty private List<VoiceSpacing> voiceSpacings;
