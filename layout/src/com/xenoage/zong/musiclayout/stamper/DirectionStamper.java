@@ -1,12 +1,15 @@
-package com.xenoage.zong.musiclayout.layouter.scoreframelayout;
+package com.xenoage.zong.musiclayout.stamper;
 
 import static com.xenoage.utils.NullUtils.notNull;
 import static com.xenoage.utils.collections.CList.clist;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.zong.core.music.format.Position.asPosition;
 import static com.xenoage.zong.core.music.format.SP.sp;
 import static com.xenoage.zong.core.text.FormattedText.fText;
 import static com.xenoage.zong.core.text.FormattedTextUtils.styleText;
 import static com.xenoage.zong.musiclayout.text.DefaultTexts.getTempoTextNotNull;
+
+import java.util.List;
 
 import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.collections.IList;
@@ -23,6 +26,8 @@ import com.xenoage.zong.core.music.format.Placement;
 import com.xenoage.zong.core.music.format.Position;
 import com.xenoage.zong.core.music.format.Positioning;
 import com.xenoage.zong.core.music.format.SP;
+import com.xenoage.zong.core.music.util.BeatE;
+import com.xenoage.zong.core.music.util.BeatEList;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.text.Alignment;
 import com.xenoage.zong.core.text.FormattedText;
@@ -30,6 +35,7 @@ import com.xenoage.zong.core.text.FormattedTextElement;
 import com.xenoage.zong.core.text.FormattedTextParagraph;
 import com.xenoage.zong.core.text.FormattedTextStyle;
 import com.xenoage.zong.core.text.FormattedTextSymbol;
+import com.xenoage.zong.musiclayout.layouter.Context;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.ChordStampings;
 import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
@@ -52,6 +58,48 @@ public class DirectionStamper {
 	
 
 	private static final float FONT_SIZE_IN_IS = 3.5f * 2.67f; //TODO
+	
+	
+	/**
+	 * Creates all direction stampings fpr the given measure.
+	 */
+	public List<Stamping> stamp(StaffStamping staff, int iMeasureInSystem,
+		SystemSpacing system, Context context) {
+		
+		List<Stamping> ret = alist();
+		int iMeasure = iMeasureInSystem + system.getStartMeasureIndex();
+		BeatEList<Direction> directionsWithBeats = context.score.getMeasure(context.mp).getDirections();
+		
+		if (directionsWithBeats != null) {
+			//over first staff, also add tempo directions for the whole column
+			if (context.mp.staff == 0) {
+				directionsWithBeats.addAll(context.score.getColumnHeader(iMeasure).getTempos());
+			}
+			for (BeatE<Direction> elementWithBeat : directionsWithBeats) {
+				Direction element = elementWithBeat.element;
+				Stamping stamping = null;
+				MP mp = context.mp.withBeat(elementWithBeat.beat);
+				if (element instanceof Tempo) {
+					stamping = directionStamper.createTempo((Tempo) element, mp, staff, context.symbols);
+				}
+				else if (element instanceof Dynamics) {
+					stamping = directionStamper.createDynamics((Dynamics) element,
+						mp, staff, context.symbols);
+				}
+				else if (element instanceof Pedal) {
+					stamping = directionStamper.createPedal((Pedal) element,
+						mp, staff, context.symbols);
+				}
+				else if (element instanceof Words) {
+					stamping = directionStamper.createWords((Words) element, mp, staff);
+				}
+				if (stamping != null)
+					ret.add(stamping);
+			}
+		}
+		
+		return ret;
+	}
 
 
 	/**

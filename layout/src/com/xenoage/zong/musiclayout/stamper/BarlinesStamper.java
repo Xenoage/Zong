@@ -6,7 +6,6 @@ import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.core.music.format.SP.sp;
 import static com.xenoage.zong.core.text.FormattedText.fText;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.xenoage.zong.core.Score;
@@ -38,7 +37,7 @@ public class BarlinesStamper {
 	
 	public List<Stamping> stamp(SystemSpacing system, List<StaffStamping> systemStaves, Score score) {
 		
-		ArrayList<Stamping> ret = alist();
+		List<Stamping> ret = alist();
 		StaffStamping firstStaff = getFirst(systemStaves);
 		int stavesCount = systemStaves.size();
 		int systemIndex = system.getSystemIndexInFrame();
@@ -116,7 +115,6 @@ public class BarlinesStamper {
 			}
 		}
 		
-		ret.trimToSize();
 		return ret;
 	}
 	

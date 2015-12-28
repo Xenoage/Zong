@@ -5,8 +5,7 @@ import static com.xenoage.utils.collections.CollectionUtils.addNotNull;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.iterators.It.it;
 import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.zong.core.position.MP.atBeat;
-import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.DirectionStamper.directionStamper;
+import static com.xenoage.zong.core.position.MP.atMeasure;
 import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.LyricStamper.lyricStamper;
 import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.MusicElementStamper.musicElementStamper;
 import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.SlurStamper.slurStamper;
@@ -16,6 +15,9 @@ import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.VoltaStampe
 import static com.xenoage.zong.musiclayout.stamper.BarlinesStamper.barlinesStamper;
 import static com.xenoage.zong.musiclayout.stamper.BeamStamper.beamStamper;
 import static com.xenoage.zong.musiclayout.stamper.ChordStamper.chordStamper;
+import static com.xenoage.zong.musiclayout.stamper.DirectionStamper.directionStamper;
+import static com.xenoage.zong.musiclayout.stamper.LeadingStamper.leadingStamper;
+import static com.xenoage.zong.musiclayout.stamper.MeasureElementStamper.measureElementStamper;
 import static com.xenoage.zong.musiclayout.stamper.PartNameStamper.partNameStamper;
 
 import java.util.ArrayList;
@@ -42,12 +44,7 @@ import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.WaypointPosition;
 import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.music.chord.Chord;
-import com.xenoage.zong.core.music.direction.Direction;
-import com.xenoage.zong.core.music.direction.Dynamics;
-import com.xenoage.zong.core.music.direction.Pedal;
-import com.xenoage.zong.core.music.direction.Tempo;
 import com.xenoage.zong.core.music.direction.Wedge;
-import com.xenoage.zong.core.music.direction.Words;
 import com.xenoage.zong.core.music.group.BracketGroup;
 import com.xenoage.zong.core.music.group.StavesRange;
 import com.xenoage.zong.core.music.lyric.Lyric;
@@ -56,8 +53,6 @@ import com.xenoage.zong.core.music.rest.Rest;
 import com.xenoage.zong.core.music.slur.Slur;
 import com.xenoage.zong.core.music.slur.SlurWaypoint;
 import com.xenoage.zong.core.music.tuplet.Tuplet;
-import com.xenoage.zong.core.music.util.BeatE;
-import com.xenoage.zong.core.music.util.BeatEList;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.text.FormattedTextElement;
 import com.xenoage.zong.core.text.FormattedTextString;
@@ -79,18 +74,14 @@ import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.LastLyrics;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.StaffStampings;
 import com.xenoage.zong.musiclayout.notation.BeamNotation;
 import com.xenoage.zong.musiclayout.notation.ChordNotation;
-import com.xenoage.zong.musiclayout.notation.ClefNotation;
 import com.xenoage.zong.musiclayout.notation.Notation;
 import com.xenoage.zong.musiclayout.notation.Notations;
 import com.xenoage.zong.musiclayout.notation.RestNotation;
-import com.xenoage.zong.musiclayout.notation.TimeNotation;
-import com.xenoage.zong.musiclayout.notation.TraditionalKeyNotation;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.musiclayout.spacing.BeamSpacing;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.FrameSpacing;
-import com.xenoage.zong.musiclayout.spacing.LeadingSpacing;
 import com.xenoage.zong.musiclayout.spacing.MeasureSpacing;
 import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
 import com.xenoage.zong.musiclayout.spacing.VoiceSpacing;
@@ -174,12 +165,12 @@ public class ScoreFrameLayouter {
 			List<StaffStamping> systemStaves = staffStampings.getAllOfSystem(iSystem);
 
 			//add the part names (first system) or part abbreviations (other systems)
-			int iStaff = 0;
+			int iStaffInPart = 0;
 			for (Part part : stavesList.getParts()) {
 				PartNameStamper.Style style = (frameIndex == 0 && iSystem == 0 ?
 					PartNameStamper.Style.Full : PartNameStamper.Style.Abbreviated);
-				addNotNull(otherStampsPool, partNameStamper.stamp(part, iStaff, systemStaves, style));
-				iStaff += part.getStavesCount();
+				addNotNull(otherStampsPool, partNameStamper.stamp(part, iStaffInPart, systemStaves, style));
+				iStaffInPart += part.getStavesCount();
 			}
 
 			//create the brackets at the beginning of the system
@@ -193,68 +184,29 @@ public class ScoreFrameLayouter {
 			otherStampsPool.addAll(barlinesStamper.stamp(system, systemStaves, score));
 
 			//fill the staves
-			for (iStaff = 0; iStaff < stavesCount; iStaff++) {
+			for (int iStaff : range(stavesCount)) {
 				StaffStamping staff = systemStaves.get(iStaff);
 				float xOffset = staff.positionMm.x;
 				float interlineSpace = staff.is;
 
-				for (int iMeasure = 0; iMeasure < system.columns.size(); iMeasure++) {
+				for (int iMeasure : range(system.columns)) {
 					int globalMeasureIndex = system.getStartMeasureIndex() + iMeasure;
 					ColumnSpacing measureColumnSpacing = system.columns.get(iMeasure);
 					MeasureSpacing measureStaffSpacing = measureColumnSpacing.getMeasures().get(iStaff);
+					
+					context.mp = atMeasure(iStaff, globalMeasureIndex);
 
 					//add leading spacing elements, if available
-					LeadingSpacing leadingSpacing = measureStaffSpacing.getLeadingSpacing();
-					if (leadingSpacing != null) {
-						for (ElementSpacing spacingElement : leadingSpacing.elements) {
-							MusicElement element = spacingElement.getElement();
-							if (element != null) {
-								float x = xOffset + spacingElement.offsetIs * interlineSpace;
-								Notation notation = notations.get(element, iStaff);
-								if (notation == null)
-									throw new RuntimeException("No notation for element " + element + " at " +
-										MP.getMP(element));
-								otherStampsPool.add(createMeasureElementStamping(notation, x, staff,
-									symbols, settings));
-							}
-						}
-					}
+					otherStampsPool.addAll(leadingStamper.stamp(
+						measureStaffSpacing, xOffset, staff, notations, context));
 
-					//add directions - TODO
-					BeatEList<Direction> directionsWithBeats = score.getMeasure(
-						MP.atMeasure(iStaff, iMeasure + system.getStartMeasureIndex())).getDirections();
-					if (directionsWithBeats != null) {
-						//over first staff, also add tempo directions for the whole column
-						if (iStaff == 0) {
-							directionsWithBeats.addAll(header.getColumnHeader(globalMeasureIndex).getTempos());
-						}
-						for (BeatE<Direction> elementWithBeat : directionsWithBeats) {
-							Direction element = elementWithBeat.element;
-							Stamping stamping = null;
-							if (element instanceof Tempo) {
-								stamping = directionStamper.createTempo((Tempo) element,
-									atBeat(iStaff, iMeasure + system.getStartMeasureIndex(), -1, elementWithBeat.beat),
-									staff, symbols);
-							}
-							else if (element instanceof Dynamics) {
-								stamping = directionStamper.createDynamics((Dynamics) element,
-									atBeat(iStaff, iMeasure + system.getStartMeasureIndex(), -1, elementWithBeat.beat),
-									staff, symbols);
-							}
-							else if (element instanceof Pedal) {
-								stamping = directionStamper.createPedal((Pedal) element,
-									atBeat(iStaff, iMeasure + system.getStartMeasureIndex(), -1, elementWithBeat.beat),
-									staff, symbols);
-							}
-							else if (element instanceof Words) {
-								stamping = directionStamper.createWords((Words) element,
-									atBeat(iStaff, iMeasure + system.getStartMeasureIndex(), -1, elementWithBeat.beat),
-									staff);
-							}
-							if (stamping != null)
-								otherStampsPool.add(stamping);
-						}
-					}
+					//add directions
+					otherStampsPool.addAll(directionStamper.stamp(staff, iMeasure, system, context));
+					
+					//GOON
+					
+					
+					
 
 					//now begin with the voices
 					float voicesOffset = xOffset + measureColumnSpacing.getLeadingWidthMm();
@@ -267,8 +219,7 @@ public class ScoreFrameLayouter {
 							float x = voicesOffset + spacingElement.offsetIs * interlineSpace;
 							if (element instanceof MeasureElement || element instanceof ColumnElement) {
 								//clef, key, time, ...
-								otherStampsPool.add(createMeasureElementStamping(notation, x, staff,
-									symbols, settings));
+								otherStampsPool.add(measureElementStamper.stamp(notation, staff, x, context));
 							}
 							else {
 								throw new IllegalArgumentException("Notation not supported: " + notation);
@@ -360,29 +311,6 @@ public class ScoreFrameLayouter {
 		continuedElements.addAll(openWedgesCache);
 
 		return new ScoreFrameLayout(frame, staffStampsPool, otherStampsPool, continuedElements);
-	}
-
-	/**
-	 * Returns the stamping for the given notation of a {@link MeasureElement},
-	 * using an appropriate strategy.
-	 */
-	private Stamping createMeasureElementStamping(Notation notation, float positionX,
-		StaffStamping staff, SymbolPool symbolPool, LayoutSettings layoutSettings) {
-		if (notation instanceof ClefNotation) {
-			return musicElementStamper.createClefStamping((ClefNotation) notation, positionX,
-				staff, symbolPool);
-		}
-		else if (notation instanceof TraditionalKeyNotation) {
-			return musicElementStamper.createKeyStamping((TraditionalKeyNotation) notation,
-				positionX, staff, symbolPool, layoutSettings);
-		}
-		else if (notation instanceof TimeNotation) {
-			return musicElementStamper.createTimeStamping((TimeNotation) notation, positionX,
-				staff, symbolPool);
-		}
-		else {
-			throw new IllegalArgumentException("Notation not supported: " + notation);
-		}
 	}
 
 	/**
