@@ -1,5 +1,7 @@
 package com.xenoage.zong.musiclayout;
 
+import static com.xenoage.zong.core.position.MP.mp0;
+
 import java.util.Stack;
 
 import com.xenoage.zong.core.Score;
@@ -27,10 +29,17 @@ public class Context {
 	 * on the state of the layouter. This value can be saved and popped on
 	 * a stack, using {@link #saveMp()} and {@link #restoreMp()}. When a method
 	 * changes this value, it must restore it when the method is finished. */
-	public MP mp;
+	public MP mp = mp0;
 	
 	private Stack<MP> mpStack = new Stack<MP>();
 	
+	
+	public Context(Score score, SymbolPool symbols, LayoutSettings settings) {
+		this.score = score;
+		this.symbols = symbols;
+		this.settings = settings;
+	}
+
 	/**
 	 * Saves the current {@link MP} on the stack.
 	 */

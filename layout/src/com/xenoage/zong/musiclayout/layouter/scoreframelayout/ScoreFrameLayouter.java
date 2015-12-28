@@ -66,12 +66,12 @@ import com.xenoage.zong.core.text.FormattedText;
 import com.xenoage.zong.core.text.FormattedTextElement;
 import com.xenoage.zong.core.text.FormattedTextString;
 import com.xenoage.zong.core.text.FormattedTextStyle;
+import com.xenoage.zong.musiclayout.Context;
 import com.xenoage.zong.musiclayout.ScoreFrameLayout;
 import com.xenoage.zong.musiclayout.continued.ContinuedElement;
 import com.xenoage.zong.musiclayout.continued.ContinuedSlur;
 import com.xenoage.zong.musiclayout.continued.ContinuedVolta;
 import com.xenoage.zong.musiclayout.continued.ContinuedWedge;
-import com.xenoage.zong.musiclayout.layouter.ScoreLayouterContext;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenBeamsCache;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenLyricsCache;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenSlursCache;
@@ -131,8 +131,12 @@ public class ScoreFrameLayouter {
 	 *                           spanning over more than one frame
 	 */
 	public ScoreFrameLayout computeScoreFrameLayout(FrameSpacing frameArr, int frameIndex,
-		Notations notations, List<ContinuedElement> unclosedElements, ScoreLayouterContext lc) {
-		Score score = lc.getScore();
+		Notations notations, List<ContinuedElement> unclosedElements, Context context) {
+		
+		Score score = context.score;
+		SymbolPool symbols = context.symbols;
+		LayoutSettings settings = context.settings;
+		
 		ScoreHeader header = score.getHeader();
 		int stavesCount = score.getStavesCount();
 		StavesList stavesList = score.getStavesList();
@@ -295,7 +299,7 @@ public class ScoreFrameLayouter {
 									throw new RuntimeException("No notation for element " + element + " at " +
 										MP.getMP(element));
 								otherStampsPool.add(createMeasureElementStamping(notation, x, staff,
-									lc.getSymbolPool(), lc.getLayoutSettings()));
+									symbols, settings));
 							}
 						}
 					}
@@ -314,17 +318,17 @@ public class ScoreFrameLayouter {
 							if (element instanceof Tempo) {
 								stamping = directionStamper.createTempo((Tempo) element,
 									atBeat(iStaff, iMeasure + system.getStartMeasureIndex(), -1, elementWithBeat.beat),
-									staff, lc.getSymbolPool());
+									staff, symbols);
 							}
 							else if (element instanceof Dynamics) {
 								stamping = directionStamper.createDynamics((Dynamics) element,
 									atBeat(iStaff, iMeasure + system.getStartMeasureIndex(), -1, elementWithBeat.beat),
-									staff, lc.getSymbolPool());
+									staff, symbols);
 							}
 							else if (element instanceof Pedal) {
 								stamping = directionStamper.createPedal((Pedal) element,
 									atBeat(iStaff, iMeasure + system.getStartMeasureIndex(), -1, elementWithBeat.beat),
-									staff, lc.getSymbolPool());
+									staff, symbols);
 							}
 							else if (element instanceof Words) {
 								stamping = directionStamper.createWords((Words) element,
@@ -348,7 +352,7 @@ public class ScoreFrameLayouter {
 							if (element instanceof MeasureElement || element instanceof ColumnElement) {
 								//clef, key, time, ...
 								otherStampsPool.add(createMeasureElementStamping(notation, x, staff,
-									lc.getSymbolPool(), lc.getLayoutSettings()));
+									symbols, settings));
 							}
 							else {
 								throw new IllegalArgumentException("Notation not supported: " + notation);
@@ -374,13 +378,13 @@ public class ScoreFrameLayouter {
 									//chord
 									otherStampsPool.addAll(createChordStampings((ChordNotation) notation, x, staff,
 										iStaff, iSystem, defaultLyricStyle, openBeamsCache, openCurvedLinesCache,
-										openLyricsCache, lastLyrics, openTupletsCache, score, lc.getSymbolPool(),
-										lc.getLayoutSettings()));
+										openLyricsCache, lastLyrics, openTupletsCache, score, symbols,
+										settings));
 								}
 								else if (element instanceof Rest) {
 									//rest
 									otherStampsPool.add(musicElementStamper.createRestStamping(
-										(RestNotation) notation, x, staff, lc.getSymbolPool()));
+										(RestNotation) notation, x, staff, symbols));
 								}
 								else {
 									throw new IllegalArgumentException("Notation not supported: " + notation);
@@ -428,7 +432,7 @@ public class ScoreFrameLayouter {
 		//create tuplet brackets/numbers
 		for (Tuplet tuplet : openTupletsCache) {
 			otherStampsPool.add(tupletStamper.createTupletStamping(tuplet, openTupletsCache,
-				lc.getSymbolPool()));
+				symbols));
 		}
 
 		//collect elements that have to be continued on the next frame

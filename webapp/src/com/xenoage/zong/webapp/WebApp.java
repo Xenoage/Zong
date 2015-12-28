@@ -28,7 +28,10 @@ import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.util.Interval;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.io.musiclayout.LayoutSettingsReader;
+import com.xenoage.zong.musiclayout.Context;
 import com.xenoage.zong.musiclayout.ScoreLayout;
+import com.xenoage.zong.musiclayout.Target;
+import com.xenoage.zong.musiclayout.layouter.ScoreLayoutArea;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouter;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.musiclayout.stampings.Stamping;
@@ -193,8 +196,9 @@ public class WebApp
 				try {
 					LayoutSettings layoutSettings = LayoutSettingsReader.read(data);
 					Size2f areaSize = new Size2f(150, 10000);
-					ScoreLayout layout = new ScoreLayouter(score, symbolPool, layoutSettings, true,
-						areaSize).createLayoutWithExceptions();
+					Context context = new Context(score, symbolPool, layoutSettings);
+					Target target = Target.completeLayoutTarget(new ScoreLayoutArea(areaSize));
+					ScoreLayout layout = new ScoreLayouter(context, target).createLayoutWithExceptions();
 					lblLayout.setText(layout.toString().substring(0, 1000) + "...");
 					
 					//draw in canvas

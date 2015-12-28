@@ -1,10 +1,11 @@
 package com.xenoage.zong.musiclayout;
 
+import java.util.Collections;
 import java.util.List;
 
-import lombok.AllArgsConstructor;
-
 import com.xenoage.zong.musiclayout.layouter.ScoreLayoutArea;
+
+import lombok.AllArgsConstructor;
 
 /**
  * Target frames for a score layout.
@@ -22,6 +23,13 @@ public class Target {
 	 * only the given areas. */
 	public boolean isCompleteLayout;
 	
+	
+	/**
+	 * Creates a target for a complete layout with the given area size. 
+	 */
+	public static Target completeLayoutTarget(ScoreLayoutArea area) {
+		return new Target(Collections.<ScoreLayoutArea>emptyList(), area, true);
+	}
 	
 	/**
 	 * Gets a {@link ScoreLayoutArea} for the area with the given index.

@@ -24,7 +24,10 @@ import com.xenoage.zong.layout.LayoutDefaults;
 import com.xenoage.zong.layout.Page;
 import com.xenoage.zong.layout.frames.ScoreFrame;
 import com.xenoage.zong.layout.frames.ScoreFrameChain;
+import com.xenoage.zong.musiclayout.Context;
 import com.xenoage.zong.musiclayout.ScoreLayout;
+import com.xenoage.zong.musiclayout.Target;
+import com.xenoage.zong.musiclayout.layouter.ScoreLayoutArea;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouter;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.musicxml.types.MxlScorePartwise;
@@ -105,7 +108,9 @@ public class MusicXmlScoreDocFileInput
 			pageFormat.getMargins().getTop() + frameSize.height / 2);
 
 		//layout the score to find out the needed space
-		ScoreLayouter layouter = new ScoreLayouter(score, symbolPool, layoutSettings, true, frameSize);
+		Context context = new Context(score, symbolPool, layoutSettings);
+		Target target = Target.completeLayoutTarget(new ScoreLayoutArea(frameSize));
+		ScoreLayouter layouter = new ScoreLayouter(context, target);
 		ScoreLayout scoreLayout = layouter.createScoreLayout();
 
 		//create and fill at least one page

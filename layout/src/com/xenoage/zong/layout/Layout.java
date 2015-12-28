@@ -8,9 +8,6 @@ import static com.xenoage.zong.layout.LP.lp;
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-
 import com.xenoage.utils.annotations.Untested;
 import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.math.geom.Point2f;
@@ -22,13 +19,18 @@ import com.xenoage.zong.layout.frames.Frame;
 import com.xenoage.zong.layout.frames.GroupFrame;
 import com.xenoage.zong.layout.frames.ScoreFrame;
 import com.xenoage.zong.layout.frames.ScoreFrameChain;
+import com.xenoage.zong.musiclayout.Context;
 import com.xenoage.zong.musiclayout.ScoreLP;
 import com.xenoage.zong.musiclayout.ScoreLayout;
+import com.xenoage.zong.musiclayout.Target;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayoutArea;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouter;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.symbols.SymbolPool;
 import com.xenoage.zong.util.event.ScoreChangedEvent;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 /**
  * Class for the layout of a score document.
@@ -177,8 +179,10 @@ import com.xenoage.zong.util.event.ScoreChangedEvent;
 			areas.add(new ScoreLayoutArea(scoreFrame.getSize(), scoreFrame.getHFill(), scoreFrame.getVFill()));
 		}
 		areas.close();
-		ScoreLayout scoreLayout = ScoreLayouter.createScoreLayout(score, symbolPool, layoutSettings, false,
-			areas, areas.get(areas.size() - 1));
+		
+		Context context = new Context(score, symbolPool, layoutSettings);
+		Target target = new Target(areas, areas.get(areas.size() - 1), false);
+		ScoreLayout scoreLayout = ScoreLayouter.createScoreLayout(context, target);
 
 		//set updated layout
 		chain.setScoreLayout(scoreLayout);

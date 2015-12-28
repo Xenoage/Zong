@@ -12,6 +12,8 @@ import com.xenoage.zong.io.musiclayout.LayoutSettingsReader;
 import com.xenoage.zong.io.musicxml.in.MusicXMLScoreFileInputTest;
 import com.xenoage.zong.io.musicxml.in.MusicXmlScoreFileInput;
 import com.xenoage.zong.io.symbols.SymbolPoolReader;
+import com.xenoage.zong.musiclayout.Context;
+import com.xenoage.zong.musiclayout.Target;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.symbols.SymbolPool;
 
@@ -37,7 +39,10 @@ public class ScoreLayouterTest {
 				//System.out.println(file);
 				Score score = new MusicXmlScoreFileInput().read(jsePlatformUtils().openFile(file), file);
 				Size2f areaSize = new Size2f(150, 10000);
-				new ScoreLayouter(score, symbolPool, layoutSettings, true, areaSize).createLayoutWithExceptions();
+				Context context = new Context(score, symbolPool, layoutSettings);
+				Target target = Target.completeLayoutTarget(new ScoreLayoutArea(areaSize));
+				ScoreLayouter layouter = new ScoreLayouter(context, target);
+				layouter.createLayoutWithExceptions();
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				fail("Failed to layout file: " + file);
