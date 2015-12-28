@@ -9,6 +9,7 @@ import com.xenoage.zong.core.header.ColumnHeader;
 import com.xenoage.zong.core.music.ColumnElement;
 import com.xenoage.zong.core.music.Measure;
 import com.xenoage.zong.core.music.MusicElementType;
+import com.xenoage.zong.core.position.MP;
 
 /**
  * Class for a barline.
@@ -91,6 +92,10 @@ public final class Barline
 	
 	@Override public MusicElementType getMusicElementType() {
 		return MusicElementType.Barline;
+	}
+
+	@Override public MP getMP() {
+		return parent.getChildMP(this);
 	}
 
 }

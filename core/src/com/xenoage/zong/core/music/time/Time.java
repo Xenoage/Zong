@@ -8,6 +8,7 @@ import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.zong.core.header.ColumnHeader;
 import com.xenoage.zong.core.music.ColumnElement;
 import com.xenoage.zong.core.music.MusicElementType;
+import com.xenoage.zong.core.position.MP;
 
 
 /**
@@ -30,6 +31,10 @@ import com.xenoage.zong.core.music.MusicElementType;
 
 	@Override public MusicElementType getMusicElementType() {
 		return MusicElementType.Time;
+	}
+	
+	@Override public MP getMP() {
+		return MP.getMPFromParent(this);
 	}
 	
 }

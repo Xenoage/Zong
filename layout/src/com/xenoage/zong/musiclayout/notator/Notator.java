@@ -7,6 +7,7 @@ import static com.xenoage.zong.musiclayout.notator.ClefNotator.clefNotator;
 import static com.xenoage.zong.musiclayout.notator.RestNotator.restNotator;
 import static com.xenoage.zong.musiclayout.notator.TimeNotator.timeNotator;
 import static com.xenoage.zong.musiclayout.notator.TraditionalKeyNotator.traditionalKeyNotator;
+import static com.xenoage.zong.musiclayout.notator.beam.BeamNotator.beamNotator;
 
 import java.util.Map;
 
@@ -16,7 +17,9 @@ import com.xenoage.zong.core.music.MeasureElement;
 import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.core.music.MusicElementType;
 import com.xenoage.zong.core.music.VoiceElement;
+import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.position.MPElement;
+import com.xenoage.zong.core.util.BeamIterator;
 import com.xenoage.zong.core.util.ColumnElementIterator;
 import com.xenoage.zong.core.util.MeasureElementIterator;
 import com.xenoage.zong.core.util.VoiceElementIterator;
@@ -25,11 +28,12 @@ import com.xenoage.zong.musiclayout.notation.Notation;
 import com.xenoage.zong.musiclayout.notation.Notations;
 
 /**
- * Creates layout information about the layout of {@link MusicElement}s,
+ * Creates layout information about the isolated layout of {@link MusicElement}s,
  * so called {@link Notation}s.
  * 
- * For example, the detailled positioning for musical elements like chords,
- * rests, clefs and so on is computed.
+ * For example, the positioning for musical elements like chords,
+ * rests, clefs and so on is computed, but without respect to other
+ * neighboring elements. 
  *
  * @author Andreas Wenger
  */
@@ -40,6 +44,7 @@ public final class Notator {
 	private static final Map<MusicElementType, ElementNotator> notators = map();
 	
 	static {
+		notators.put(MusicElementType.Beam, beamNotator);
 		notators.put(MusicElementType.Chord, chordNotator);
 		notators.put(MusicElementType.Clef, clefNotator);
 		notators.put(MusicElementType.Rest, restNotator);
@@ -74,6 +79,11 @@ public final class Notator {
 		VoiceElementIterator itV = new VoiceElementIterator(score);
 		for (VoiceElement e : itV) {
 			context.mp = itV.getMp();
+			notations.add(compute(e, context, notations));
+		}
+		BeamIterator itB = new BeamIterator(score);
+		for (Beam e : itB) {
+			context.mp = itB.getMp();
 			notations.add(compute(e, context, notations));
 		}
 		

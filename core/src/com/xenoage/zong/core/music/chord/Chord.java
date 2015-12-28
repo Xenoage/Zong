@@ -196,7 +196,7 @@ public class Chord
 			(duration.isGreater0() ? ";dur:" + duration : ";grace") + ")";
 	}
 
-	@Override public MP getMP(MPElement child) {
+	@Override public MP getChildMP(MPElement child) {
 		//all children have the same musical position as this chord
 		return MP.getMP(this);
 	}
@@ -223,6 +223,10 @@ public class Chord
 	
 	@Override public MusicElementType getMusicElementType() {
 		return MusicElementType.Chord;
+	}
+	
+	@Override public MP getMP() {
+		return MP.getMPFromParent(this);
 	}
 
 }

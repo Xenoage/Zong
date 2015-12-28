@@ -397,7 +397,7 @@ public class Measure
 	 * Gets the MP of the given {@link ColumnElement}, or null if it is not part
 	 * of this measure or this measure is not part of a score.
 	 */
-	@Override public MP getMP(MPElement element) {
+	@Override public MP getChildMP(MPElement element) {
 		if (parent == null)
 			return null;
 		MP mp = parent.getMP(this);

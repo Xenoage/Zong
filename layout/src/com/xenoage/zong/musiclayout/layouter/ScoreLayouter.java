@@ -8,7 +8,6 @@ import static com.xenoage.utils.log.Report.warning;
 import static com.xenoage.zong.core.position.MP.getMP;
 import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.ScoreFrameLayouter.scoreFrameLayouter;
 import static com.xenoage.zong.musiclayout.notator.Notator.notator;
-import static com.xenoage.zong.musiclayout.notator.beam.BeamNotator.beamNotator;
 import static com.xenoage.zong.musiclayout.spacer.ScoreSpacer.scoreSpacer;
 import static com.xenoage.zong.musiclayout.spacer.beam.BeamSpacer.beamSpacer;
 
@@ -26,17 +25,14 @@ import com.xenoage.zong.musiclayout.ScoreFrameLayout;
 import com.xenoage.zong.musiclayout.ScoreLayout;
 import com.xenoage.zong.musiclayout.Target;
 import com.xenoage.zong.musiclayout.continued.ContinuedElement;
-import com.xenoage.zong.musiclayout.notation.BeamNotation;
 import com.xenoage.zong.musiclayout.notation.ChordNotation;
 import com.xenoage.zong.musiclayout.notation.Notations;
-import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.musiclayout.spacer.frame.fill.FrameFiller;
 import com.xenoage.zong.musiclayout.spacer.system.fill.SystemFiller;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 import com.xenoage.zong.musiclayout.spacing.FrameSpacing;
 import com.xenoage.zong.musiclayout.spacing.ScoreSpacing;
 import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
-import com.xenoage.zong.symbols.SymbolPool;
 
 /**
  * A score layouter creates the content for
@@ -84,7 +80,6 @@ public class ScoreLayouter {
 	 * If something fails, an exception is thrown.
 	 */
 	public ScoreLayout createLayoutWithExceptions() {
-		
 		//notations of elements
 		Notations notations = notator.computeAll(context);
 		
@@ -95,9 +90,6 @@ public class ScoreLayouter {
 		fillSystemsHorizontally(scoreSpacing.frames, target);
 		//frame filling (vertical)
 		fillFramesVertically(scoreSpacing.frames, target, context.score);
-		
-		//compute beams - GOON do this earlier
-		computeBeamNotations(scoreSpacing);
 		
 		//compute beam spacings
 		computeBeamSpacings(scoreSpacing);
@@ -134,24 +126,6 @@ public class ScoreLayouter {
 		for (int iFrame : range(frames)) {
 			FrameFiller vFill = target.getArea(iFrame).vFill;
 			vFill.compute(frames.get(iFrame), score);
-		}
-	}
-
-	/**
-	 * Computes the {@link BeamNotation}s.
-	 */
-	void computeBeamNotations(ScoreSpacing scoreSpacing) {
-		//go through all elements, finding beams, and recompute stem alignment
-		VoiceElementIterator voiceElementsIt = new VoiceElementIterator(scoreSpacing.score);
-		for (VoiceElement e : voiceElementsIt) {
-			if (e instanceof Chord) {
-				Chord chord = (Chord) e;
-				//compute each beam only one time (when the end waypoint is found)
-				Beam beam = chord.getBeam();
-				if (beam != null && beam.getStop().getChord() == chord) {
-					beamNotator.compute(beam, scoreSpacing);
-				}
-			}
 		}
 	}
 	

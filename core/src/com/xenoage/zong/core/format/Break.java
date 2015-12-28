@@ -9,6 +9,7 @@ import com.xenoage.zong.core.music.ColumnElement;
 import com.xenoage.zong.core.music.MusicElementType;
 import com.xenoage.zong.core.music.layout.PageBreak;
 import com.xenoage.zong.core.music.layout.SystemBreak;
+import com.xenoage.zong.core.position.MP;
 
 
 /**
@@ -35,6 +36,10 @@ public final class Break
 
 	@Override public MusicElementType getMusicElementType() {
 		return MusicElementType.Break;
+	}
+
+	@Override public MP getMP() {
+		return MP.getMPFromParent(this);
 	}
 
 }

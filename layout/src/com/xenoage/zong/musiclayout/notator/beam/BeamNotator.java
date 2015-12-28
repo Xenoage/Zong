@@ -3,7 +3,6 @@ package com.xenoage.zong.musiclayout.notator.beam;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.zong.core.music.chord.StemDirection.Down;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
-import static com.xenoage.zong.core.position.MP.getMP;
 import static com.xenoage.zong.musiclayout.notator.beam.BeamFragmenter.beamFragmenter;
 import static com.xenoage.zong.musiclayout.notator.beam.lines.Beam128thRules.beam128thRules;
 import static com.xenoage.zong.musiclayout.notator.beam.lines.Beam16thRules.beam16thRules;
@@ -18,30 +17,36 @@ import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.music.beam.BeamWaypoint;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.StemDirection;
+import com.xenoage.zong.core.position.MPElement;
+import com.xenoage.zong.musiclayout.Context;
 import com.xenoage.zong.musiclayout.notation.BeamNotation;
 import com.xenoage.zong.musiclayout.notation.ChordNotation;
+import com.xenoage.zong.musiclayout.notation.Notations;
 import com.xenoage.zong.musiclayout.notation.beam.Fragments;
 import com.xenoage.zong.musiclayout.notation.chord.StemNotation;
+import com.xenoage.zong.musiclayout.notator.ElementNotator;
 import com.xenoage.zong.musiclayout.notator.beam.lines.BeamRules;
-import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
-import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
-import com.xenoage.zong.musiclayout.spacing.ScoreSpacing;
 
 /**
  * Computes {@link BeamNotation}s and modifies the {@link StemNotation}s of a {@link Beam}.
  * 
  * @author Andreas Wenger
  */
-public class BeamNotator {
+public class BeamNotator
+	implements ElementNotator {
 	
 	public static final BeamNotator beamNotator = new BeamNotator();
 	
 	private static BeamRules[] allBeamRules = { null, beam8thRules, beam16thRules,
 		beam32ndRules, beam64thRules, beam128thRules };
+	
+	
+	@Override public BeamNotation compute(MPElement element, Context context, Notations notations) {
+		return compute((Beam) element, notations);
+	}
 
-
-	//GOON: do not require scoreSPACING!! we do notations here, not spacings
-	public void compute(Beam beam, ScoreSpacing scoreSpacing) {
+	
+	public BeamNotation compute(Beam beam, Notations notations) {
 		//compute fragments
 		List<Fragments> fragments = beamFragmenter.compute(beam);
 		//compute stem length and gap
@@ -50,18 +55,17 @@ public class BeamNotator {
 		float gapIs = beamRules.getGapIs();
 		//collect chords
 		List<ChordNotation> chords = alist(beam.size());
-		ColumnSpacing column = scoreSpacing.getColumn(getMP(beam.getChord(0)).measure);
 		for (BeamWaypoint waypoint : beam.getWaypoints()) {
 			Chord chord = waypoint.getChord();
-			ElementSpacing cs = column.getElement(chord);
-			ChordNotation cn = (ChordNotation) cs.notation;
+			ChordNotation cn = notations.getChord(chord);
 			chords.add(cn);
 		}
 		//create notation
 		BeamNotation beamNotation = new BeamNotation(beam, fragments, gapIs, chords);
-		//save notation in each chord
+		//save notation in each chord - GOON: not needed, we have the beam notation in the Notations
 		for (ChordNotation chord : chords)
 			chord.beam = beamNotation;
+		return beamNotation;
 	}
 	
 	

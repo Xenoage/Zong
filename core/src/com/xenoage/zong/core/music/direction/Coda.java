@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 
 import com.xenoage.zong.core.header.ColumnHeader;
 import com.xenoage.zong.core.music.MusicElementType;
+import com.xenoage.zong.core.position.MP;
 
 
 /**
@@ -21,6 +22,10 @@ public final class Coda
 
 	@Override public MusicElementType getMusicElementType() {
 		return MusicElementType.Coda;
+	}
+	
+	@Override public MP getMP() {
+		return MP.getMPFromParent(this);
 	}
 	
 }

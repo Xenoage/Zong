@@ -27,8 +27,8 @@ import com.xenoage.zong.core.music.chord.Chord;
 public class Notations {
 
 	@Data private static class StaffElement {
-		public final MusicElement element;
-		public final int staff;
+		final MusicElement element;
+		final int staff;
 	}
 
 	private HashMap<Object, Notation> notations;

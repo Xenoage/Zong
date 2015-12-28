@@ -31,7 +31,7 @@ public class ColumnElementRemove
 	
 
 	@Override public void execute() {
-		beat = column.getMP(element).beat;
+		beat = column.getChildMP(element).beat;
 		side = column.getSide(element);
 		column.removeColumnElement(element);
 	}

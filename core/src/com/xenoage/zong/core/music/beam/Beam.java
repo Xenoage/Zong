@@ -1,5 +1,6 @@
 package com.xenoage.zong.core.music.beam;
 
+import static com.xenoage.utils.collections.CollectionUtils.getFirst;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.MathUtils.min;
 
@@ -8,17 +9,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import lombok.Getter;
-
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.math.Fraction;
-import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.core.music.MusicElementType;
 import com.xenoage.zong.core.music.WaypointPosition;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.util.DurationInfo;
 import com.xenoage.zong.core.position.MP;
+import com.xenoage.zong.core.position.MPContainer;
+import com.xenoage.zong.core.position.MPElement;
 import com.xenoage.zong.core.util.InconsistentScoreException;
+
+import lombok.Getter;
 
 
 /**
@@ -27,7 +29,7 @@ import com.xenoage.zong.core.util.InconsistentScoreException;
  * @author Andreas Wenger
  */
 public final class Beam
-	implements MusicElement {
+	implements MPElement {
 
 	/** Spread of this beam within a staff. */
 	public enum HorizontalSpan {
@@ -267,4 +269,20 @@ public final class Beam
 	@Override public MusicElementType getMusicElementType() {
 		return MusicElementType.Beam;
 	}
+
+
+	/**
+	 * The parent of the beam is defined as the voice of the start of the beam.
+	 */
+	@Override public MPContainer getParent() {
+		return getFirst(waypoints).getChord().getParent();
+	}
+
+	/**
+	 * The MP of the beam is the same as the MP of the first chord in the beam.
+	 */
+	@Override public MP getMP() {
+		return getFirst(waypoints).getChord().getMP();
+	}
+
 }

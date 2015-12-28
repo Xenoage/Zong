@@ -390,7 +390,7 @@ public final class Voice
 	}
 
 
-	@Override public MP getMP(MPElement element) {
+	@Override public MP getChildMP(MPElement element) {
 		if (parent == null)
 			return null;
 		Fraction beat = getBeat(element);

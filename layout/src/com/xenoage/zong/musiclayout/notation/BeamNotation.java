@@ -4,8 +4,10 @@ import java.util.List;
 
 import lombok.AllArgsConstructor;
 
+import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.musiclayout.notation.beam.Fragments;
+import com.xenoage.zong.musiclayout.spacing.ElementWidth;
 
 /**
  * Layout information about a beam, like the appearance
@@ -17,7 +19,8 @@ import com.xenoage.zong.musiclayout.notation.beam.Fragments;
  * @author Andreas Wenger
  */
 @AllArgsConstructor
-public class BeamNotation {
+public class BeamNotation
+	implements Notation {
 	
 	/** Height of a beam line in IS. See Ross, p. 88.*/
 	public static final float lineHeightIs = 0.5f;
@@ -60,6 +63,18 @@ public class BeamNotation {
 	public float getTotalHeightIs() {
 		int linesCount = getLinesCount();
 		return lineHeightIs * linesCount + gapIs * (linesCount - 1);
+	}
+
+	@Override public MusicElement getElement() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * Not used for beams.
+	 */
+	@Override public ElementWidth getWidth() {
+		throw new UnsupportedOperationException();
 	}
 	
 }

@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import com.xenoage.zong.core.instrument.Instrument;
+import com.xenoage.zong.core.position.MP;
 
 
 /**
@@ -25,6 +26,10 @@ import com.xenoage.zong.core.instrument.Instrument;
 
 	@Override public MusicElementType getMusicElementType() {
 		return MusicElementType.InstrumentChange;
+	}
+	
+	@Override public MP getMP() {
+		return MP.getMPFromParent(this);
 	}
 	
 }

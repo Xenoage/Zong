@@ -176,13 +176,24 @@ import com.xenoage.zong.core.music.Voice;
 
 
 	/**
-	 * Gets the {@link MP} of the given element, or null if it or its parent is null
-	 * or if the parent is not part of a score.
+	 * Gets the {@link MP} of the given element, or null if it is unknown.
 	 */
 	public static MP getMP(MPElement element) {
+		if (element == null)
+			return null;
+		return element.getMP();
+	}
+	
+	
+	/**
+	 * Gets the {@link MP} of the given element by querying its parent, or null if it is unknown.
+	 * TODO: When Java 8 can be used for the whole project, use this method as the default
+	 * implementation for MPElement.getMP().
+	 */
+	public static MP getMPFromParent(MPElement element) {
 		if (element == null || element.getParent() == null)
 			return null;
-		return element.getParent().getMP(element);
+		return element.getParent().getChildMP(element);
 	}
 	
 	

@@ -9,6 +9,7 @@ import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.MusicElementType;
 import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.VoiceElement;
+import com.xenoage.zong.core.position.MP;
 
 
 /**
@@ -42,4 +43,9 @@ public final class Rest
 	@Override public MusicElementType getMusicElementType() {
 		return MusicElementType.Rest;
 	}
+	
+	@Override public MP getMP() {
+		return MP.getMPFromParent(this);
+	}
+	
 }

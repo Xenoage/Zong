@@ -8,6 +8,7 @@ import com.xenoage.utils.kernel.Range;
 import com.xenoage.zong.core.header.ColumnHeader;
 import com.xenoage.zong.core.music.ColumnElement;
 import com.xenoage.zong.core.music.MusicElementType;
+import com.xenoage.zong.core.position.MP;
 
 /**
  * Class for a volta (also informally called "Haus" in German).
@@ -78,6 +79,10 @@ public final class Volta
 
 	@Override public MusicElementType getMusicElementType() {
 		return MusicElementType.Volta;
+	}
+	
+	@Override public MP getMP() {
+		return MP.getMPFromParent(this);
 	}
 	
 }

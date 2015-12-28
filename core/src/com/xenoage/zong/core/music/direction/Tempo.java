@@ -10,6 +10,7 @@ import com.xenoage.zong.core.header.ColumnHeader;
 import com.xenoage.zong.core.music.ColumnElement;
 import com.xenoage.zong.core.music.MusicElementType;
 import com.xenoage.zong.core.music.TextElement;
+import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.text.Text;
 
 
@@ -45,6 +46,10 @@ public final class Tempo
 
 	@Override public MusicElementType getMusicElementType() {
 		return MusicElementType.Tempo;
+	}
+	
+	@Override public MP getMP() {
+		return MP.getMPFromParent(this);
 	}
 	
 }
