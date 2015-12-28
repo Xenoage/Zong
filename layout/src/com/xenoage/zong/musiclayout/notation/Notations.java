@@ -1,14 +1,18 @@
 package com.xenoage.zong.musiclayout.notation;
 
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.collections.CollectionUtils.map;
 
 import java.util.HashMap;
-
-import lombok.Data;
+import java.util.List;
 
 import com.xenoage.zong.core.music.ColumnElement;
 import com.xenoage.zong.core.music.MusicElement;
+import com.xenoage.zong.core.music.beam.Beam;
+import com.xenoage.zong.core.music.beam.BeamWaypoint;
 import com.xenoage.zong.core.music.chord.Chord;
+
+import lombok.Data;
 
 /**
  * Collection of already computed {@link Notation}s.
@@ -91,6 +95,16 @@ public class Notations {
 		ChordNotation ret = (ChordNotation) get(chord);
 		if (ret == null)
 			add(ret = new ChordNotation(chord));
+		return ret;
+	}
+	
+	/**
+	 * Gets the {@link ChordNotation}s of the given {@link Beam}.
+	 */
+	public List<ChordNotation> getBeamChords(Beam beam) {
+		List<ChordNotation> ret = alist(beam.size());
+		for (BeamWaypoint wp : beam.getWaypoints())
+			ret.add(getChord(wp.getChord()));
 		return ret;
 	}
 

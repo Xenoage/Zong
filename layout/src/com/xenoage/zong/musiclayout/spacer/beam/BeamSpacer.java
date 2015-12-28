@@ -13,10 +13,12 @@ import java.util.List;
 import com.xenoage.utils.collections.ArrayUtils;
 import com.xenoage.zong.core.music.Staff;
 import com.xenoage.zong.core.music.StaffLines;
+import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.core.music.format.SP;
 import com.xenoage.zong.musiclayout.notation.BeamNotation;
 import com.xenoage.zong.musiclayout.notation.ChordNotation;
+import com.xenoage.zong.musiclayout.notation.Notations;
 import com.xenoage.zong.musiclayout.spacing.BeamSpacing;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
@@ -34,22 +36,24 @@ public class BeamSpacer {
 	
 	public static final BeamSpacer beamSpacer = new BeamSpacer();
 	
-	public BeamSpacing compute(BeamNotation beam, StavesSpacing staves,
+	public BeamSpacing compute(Beam beam, Notations notations, StavesSpacing staves,
 		ScoreSpacing scoreSpacing) {
-		int size = beam.chords.size();
+		int size = beam.size();
+		BeamNotation beamNot = (BeamNotation) notations.get(beam);
+		List<ChordNotation> chords = notations.getBeamChords(beam);
 		//get LPs of inner notes
 		int[] notesLp = new int[size];
 		for (int i : range(size))
-			notesLp[i] = beam.chords.get(i).getInnerNoteLp();
+			notesLp[i] = chords.get(i).getInnerNoteLp();
 		//get horizontal position of stems
-		ColumnSpacing column = scoreSpacing.getColumn(getMP(beam.chords.get(0).element).measure);
+		ColumnSpacing column = scoreSpacing.getColumn(getMP(chords.get(0).element).measure);
 		float[] stemsXIs = new float[size];
 		for (int i : range(size)) {
-			ElementSpacing cs = column.getElement(beam.chords.get(i).element);
+			ElementSpacing cs = column.getElement(chords.get(i).element);
 			stemsXIs[i] = getStemXIs(cs);
 		}
 		//get staves
-		ChordNotation firstChord = getFirst(beam.chords);
+		ChordNotation firstChord = getFirst(chords);
 		int firstStaffIndex = getMP(firstChord.element).staff;
 		Staff firstStaff = staves.getStaves().get(firstStaffIndex);
 		//compute slant
@@ -58,16 +62,19 @@ public class BeamSpacer {
 		//get lengths of stems
 		float[] stemsLengthIs = new float[size];
 		for (int i : range(size))
-			stemsLengthIs[i] = beam.chords.get(i).stem.getLengthIs();
+			stemsLengthIs[i] = chords.get(i).stem.getLengthIs();
 		//compute the ends of the first and last stem
 		Placement offset = beamPlacer.compute(slant, notesLp, stemDir, stemsXIs,
 			stemsLengthIs, 1, StaffLines.staff5Lines);
 		//interpolate the other values
 		List<SP> stemsEndSp = alist(size);
-		for (int i : range(size))
+		List<StemDirection> stemsDirection = alist(size);
+		for (int i : range(size)) {
 			stemsEndSp.add(new SP(stemsXIs[i], interpolateLinear(offset.leftEndLp, offset.rightEndLp,
 				ArrayUtils.getFirst(stemsXIs), ArrayUtils.getLast(stemsXIs), stemsXIs[i])));
-		return new BeamSpacing(beam, stemsEndSp);
+			stemsDirection.add(chords.get(i).stemDirection);
+		}
+		return new BeamSpacing(beamNot, stemsEndSp, stemsDirection);
 	}
 
 	//TIDY: the same logic is elsewhere. should be moved in a ChordSpacing class

@@ -3,6 +3,7 @@ package com.xenoage.zong.musiclayout.notation;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.core.music.beam.Beam;
@@ -43,14 +44,12 @@ public class BeamNotation
 
 
 	/** The beam element. */
-	public Beam element;
+	@Getter public final Beam element;
 	/** The fragments for each secondary line, starting with the 16th line, then 32nd ... .
 	 * The primary 8th line is always continuous, so it is not stored. */
 	public List<Fragments> linesFragments;
 	/** The vertical gap (distance on y-axis) between the beam lines in IS. */
 	public float gapIs;
-	/** The beamed chords. */
-	public List<ChordNotation> chords;
 	
 	
 	public int getLinesCount() {
@@ -63,11 +62,6 @@ public class BeamNotation
 	public float getTotalHeightIs() {
 		int linesCount = getLinesCount();
 		return lineHeightIs * linesCount + gapIs * (linesCount - 1);
-	}
-
-	@Override public MusicElement getElement() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	/**

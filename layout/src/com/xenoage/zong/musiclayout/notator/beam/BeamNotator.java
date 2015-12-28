@@ -1,6 +1,5 @@
 package com.xenoage.zong.musiclayout.notator.beam;
 
-import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.zong.core.music.chord.StemDirection.Down;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
 import static com.xenoage.zong.musiclayout.notator.beam.BeamFragmenter.beamFragmenter;
@@ -14,13 +13,10 @@ import static java.lang.Math.min;
 import java.util.List;
 
 import com.xenoage.zong.core.music.beam.Beam;
-import com.xenoage.zong.core.music.beam.BeamWaypoint;
-import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.core.position.MPElement;
 import com.xenoage.zong.musiclayout.Context;
 import com.xenoage.zong.musiclayout.notation.BeamNotation;
-import com.xenoage.zong.musiclayout.notation.ChordNotation;
 import com.xenoage.zong.musiclayout.notation.Notations;
 import com.xenoage.zong.musiclayout.notation.beam.Fragments;
 import com.xenoage.zong.musiclayout.notation.chord.StemNotation;
@@ -53,18 +49,8 @@ public class BeamNotator
 		BeamRules beamRules = allBeamRules[min(beam.getMaxLinesCount(), allBeamRules.length - 1)];
 		float minStemLengthIs = beamRules.getMinimumStemLengthIs(); //GOON use in spacer
 		float gapIs = beamRules.getGapIs();
-		//collect chords
-		List<ChordNotation> chords = alist(beam.size());
-		for (BeamWaypoint waypoint : beam.getWaypoints()) {
-			Chord chord = waypoint.getChord();
-			ChordNotation cn = notations.getChord(chord);
-			chords.add(cn);
-		}
 		//create notation
-		BeamNotation beamNotation = new BeamNotation(beam, fragments, gapIs, chords);
-		//save notation in each chord - GOON: not needed, we have the beam notation in the Notations
-		for (ChordNotation chord : chords)
-			chord.beam = beamNotation;
+		BeamNotation beamNotation = new BeamNotation(beam, fragments, gapIs);
 		return beamNotation;
 	}
 	

@@ -32,7 +32,6 @@ public class ChordNotation
 	public StemNotation stem;
 	public AccidentalsNotation accidentals;
 	public ArticulationsNotation articulations;
-	public BeamNotation beam;
 	
 	public ChordNotation(Chord element) {
 		this.element = element;

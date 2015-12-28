@@ -3,6 +3,7 @@ package com.xenoage.zong.musiclayout.spacing;
 import java.util.List;
 
 import com.xenoage.zong.core.music.beam.Beam;
+import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.core.music.format.SP;
 import com.xenoage.zong.musiclayout.notation.BeamNotation;
 
@@ -19,6 +20,8 @@ public class BeamSpacing {
 	/** The beam notation. */
 	public BeamNotation notation;
 	/** The end positions (far from the note) of the stems. */
-	public List<SP> stemEndSps;
+	public List<SP> stemsEndSp;
+	/** The direction of the stems. */
+	public List<StemDirection> stemsDirection;
 	
 }

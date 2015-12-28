@@ -42,10 +42,10 @@ public class BeamStamper {
 	public BeamStamping[] createBeamStampings(BeamSpacing beam, StaffStamping leftStaff,
 		StaffStamping rightStaff) {
 		
-		SP leftEndSp = getFirst(beam.stemEndSps);
-		SP rightEndSp = getLast(beam.stemEndSps);
-		StemDirection leftDir = getFirst(beam.notation.chords).stemDirection;
-		StemDirection rightDir = getLast(beam.notation.chords).stemDirection;
+		SP leftEndSp = getFirst(beam.stemsEndSp);
+		SP rightEndSp = getLast(beam.stemsEndSp);
+		StemDirection leftDir = getFirst(beam.stemsDirection);
+		StemDirection rightDir = getLast(beam.stemsDirection);
 		
 		//number of beam lines
 		int linesCount = beam.notation.getLinesCount();
@@ -72,7 +72,7 @@ public class BeamStamper {
 			Fragments fragments = beam.notation.linesFragments.get(i);
 			for (int iChord : range(fragments)) {
 				Fragment fragment = fragments.get(iChord);
-				float stemX = beam.stemEndSps.get(iChord).xMm;
+				float stemX = beam.stemsEndSp.get(iChord).xMm;
 				if (fragment == Start) {
 					//begin a new beam line
 					startX = stemX;

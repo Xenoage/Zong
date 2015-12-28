@@ -25,6 +25,7 @@ import com.xenoage.zong.musiclayout.ScoreFrameLayout;
 import com.xenoage.zong.musiclayout.ScoreLayout;
 import com.xenoage.zong.musiclayout.Target;
 import com.xenoage.zong.musiclayout.continued.ContinuedElement;
+import com.xenoage.zong.musiclayout.notation.BeamNotation;
 import com.xenoage.zong.musiclayout.notation.ChordNotation;
 import com.xenoage.zong.musiclayout.notation.Notations;
 import com.xenoage.zong.musiclayout.spacer.frame.fill.FrameFiller;
@@ -92,7 +93,7 @@ public class ScoreLayouter {
 		fillFramesVertically(scoreSpacing.frames, target, context.score);
 		
 		//compute beam spacings
-		computeBeamSpacings(scoreSpacing);
+		computeBeamSpacings(scoreSpacing, notations);
 		
 		//create score layout from the collected information
 		List<ScoreFrameLayout> scoreFrameLayouts = createScoreFrameLayouts(scoreSpacing.frames,
@@ -133,7 +134,7 @@ public class ScoreLayouter {
 	 * Computes the BeamSpacings with correct stem alignments.
 	 * TIDY
 	 */
-	void computeBeamSpacings(ScoreSpacing scoreSpacing) {
+	void computeBeamSpacings(ScoreSpacing scoreSpacing, Notations notations) {
 		//go through all elements, finding beams, and recompute stem alignment
 		VoiceElementIterator voiceElementsIt = new VoiceElementIterator(scoreSpacing.score);
 		for (VoiceElement e : voiceElementsIt) {
@@ -143,9 +144,10 @@ public class ScoreLayouter {
 				Beam beam = chord.getBeam();
 				ColumnSpacing column = scoreSpacing.getColumn(getMP(chord).measure);
 				ChordNotation cn = (ChordNotation) column.getElement(chord).notation;
+				BeamNotation beamNot = (BeamNotation) notations.get(beam);
 				if (beam != null && beam.getStop().getChord() == chord) {
 					scoreSpacing.beams.put(beam,
-						beamSpacer.compute(cn.beam, column.parentSystem.staves, scoreSpacing));
+						beamSpacer.compute(beam, notations, column.parentSystem.staves, scoreSpacing));
 				}
 			}
 		}

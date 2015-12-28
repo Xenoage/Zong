@@ -42,6 +42,7 @@ import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.WaypointPosition;
 import com.xenoage.zong.core.music.barline.Barline;
 import com.xenoage.zong.core.music.barline.BarlineStyle;
+import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.direction.Direction;
 import com.xenoage.zong.core.music.direction.Dynamics;
@@ -379,7 +380,7 @@ public class ScoreFrameLayouter {
 									otherStampsPool.addAll(createChordStampings((ChordNotation) notation, x, staff,
 										iStaff, iSystem, defaultLyricStyle, openBeamsCache, openCurvedLinesCache,
 										openLyricsCache, lastLyrics, openTupletsCache, score, symbols,
-										settings));
+										settings, notations));
 								}
 								else if (element instanceof Rest) {
 									//rest
@@ -478,7 +479,7 @@ public class ScoreFrameLayouter {
 		StaffStamping staff, int staffIndex, int systemIndex, FormattedTextStyle defaultLyricStyle,
 		OpenBeamsCache openBeamsCache, OpenSlursCache openCurvedLinesCache,
 		OpenLyricsCache openLyricsCache, LastLyrics lastLyrics, OpenTupletsCache openTupletsCache,
-		Score score, SymbolPool symbolPool, LayoutSettings layoutSettings) {
+		Score score, SymbolPool symbolPool, LayoutSettings layoutSettings, Notations notations) {
 		
 		ArrayList<Stamping> ret = alist();
 		Chord chordElement = chord.getElement();
@@ -494,12 +495,19 @@ public class ScoreFrameLayouter {
 			//the corresponding list of beamed stems, so that the
 			//beam can be created later. the middle stems were not stamped
 			//yet, also remember them.
-			BeamNotation beam = chord.beam;
+			Beam beam = chord.element.getBeam();
 			if (beam != null) {
-				BeamedStemStampings bss = openBeamsCache.get(beam);
-				int chordIndex = beam.element.getWaypointIndex(chordElement);
-				bss.stems[chordIndex] = chordSt.stem;
-				openBeamsCache.set(beam, bss);
+				BeamNotation beamNot = (BeamNotation) notations.get(beam);
+				if (beamNot == null) {
+					//GOON
+					System.out.println("unknown notation for beam at " + beam.getMP());
+				}
+				else {
+					BeamedStemStampings bss = openBeamsCache.get(beamNot);
+					int chordIndex = beam.getWaypointIndex(chordElement);
+					bss.stems[chordIndex] = chordSt.stem;
+					openBeamsCache.set(beamNot, bss);
+				}
 			}
 		}
 

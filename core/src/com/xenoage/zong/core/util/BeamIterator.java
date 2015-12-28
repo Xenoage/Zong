@@ -51,8 +51,8 @@ public class BeamIterator
 			if (e instanceof Chord) {
 				Chord c = (Chord) e;
 				Beam beam = c.getBeam();
-				//return beam when its end was found
-				if (beam != null && beam.getStop().getChord() == c) {
+				//return beam when its beginning was found
+				if (beam != null && beam.getStart().getChord() == c) {
 					nextMp = it.getMp();
 					nextBeam = beam;
 					return;

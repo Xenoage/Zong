@@ -125,7 +125,7 @@ public class ChordNotator
 		ArticulationsNotation arts = articulationsNotator.compute(chord, stemDirection, notes, mc.getLinesCount());
 
 		return new ChordNotation(chord, new ElementWidth(frontGap, symbolWidth, rearGap, lyricWidth),
-			notes, stemDirection, stem, accs, arts, null);
+			notes, stemDirection, stem, accs, arts);
 	}
 
 }
