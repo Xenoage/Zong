@@ -65,14 +65,14 @@ public class VoiceElementIteratorTest {
 				if ((staff == 1 || staff == 3) && (measure == 1 || measure == 3)) {
 					//2 voices with each 4 quarter notes
 					for (int voice : range(2)) {
-						cursor.setMP(atElement(staff, measure, voice, 0));
+						cursor.setMp(atElement(staff, measure, voice, 0));
 						for (int i = 0; i < 4; i++)
 							cursor.write(new Rest(fr(1, 4)));
 					}
 				}
 				else {
 					//full rest
-					cursor.setMP(atElement(staff, measure, 0, 0));
+					cursor.setMp(atElement(staff, measure, 0, 0));
 					cursor.write(new Rest(fr(1)));
 				}
 			}

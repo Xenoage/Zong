@@ -21,9 +21,7 @@ import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.header.ColumnHeader;
 import com.xenoage.zong.core.music.ColumnElement;
 import com.xenoage.zong.core.music.barline.Barline;
-import com.xenoage.zong.core.music.key.TraditionalKey;
 import com.xenoage.zong.core.music.time.Time;
-import com.xenoage.zong.core.music.time.TimeType;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.io.selection.Cursor;
 
@@ -65,9 +63,9 @@ public class ColumnElementIteratorTest {
 		Score score = new Score();
 		Cursor cursor = new Cursor(score, MP.mp0, true);
 		for (int measure : new int[]{1, 3}) {
-			cursor.setMP(mp(unknown, measure, 0, _0, 0));
+			cursor.setMp(mp(unknown, measure, 0, _0, 0));
 			cursor.write(new Time(time_4_4));
-			cursor.setMP(mp(unknown, measure, unknown, fr(1, 4), 0));
+			cursor.setMp(mp(unknown, measure, unknown, fr(1, 4), 0));
 			cursor.write(barlineRegular());
 			ColumnHeader column = score.getColumnHeader(measure);
 			column.setEndBarline(barline(LightLight));

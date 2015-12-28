@@ -51,7 +51,7 @@ public class MeasureElementIteratorTest {
 		Cursor cursor = new Cursor(score, MP.mp0, true);
 		for (int staff : new int[]{1, 3}) {
 			for (int measure : new int[]{1, 3}) {
-				cursor.setMP(atElement(staff, measure, 0, 0));
+				cursor.setMp(atElement(staff, measure, 0, 0));
 				for (int element : range(2)) {
 					cursor.write(new Rest(fr(1, 4)));
 					cursor.write((MeasureElement) new Words(new UnformattedText(
