@@ -77,7 +77,7 @@ public class SlurStamper {
 	 */
 	public SlurStamping createSlurStampingMiddle(ContinuedSlur continuedSlur,
 		StaffStamping staffStamping) {
-		return createMiddle(staffStamping, continuedSlur.slur, continuedSlur.side);
+		return createMiddle(staffStamping, continuedSlur.element, continuedSlur.side);
 	}
 
 	/**

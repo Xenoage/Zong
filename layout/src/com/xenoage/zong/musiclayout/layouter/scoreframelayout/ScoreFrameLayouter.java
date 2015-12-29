@@ -5,7 +5,6 @@ import static com.xenoage.utils.collections.CollectionUtils.addNotNull;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.iterators.It.it;
 import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.zong.core.position.MP.atMeasure;
 import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.LyricStamper.lyricStamper;
 import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.SlurStamper.slurStamper;
 import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.StaffStamper.staffStamper;
@@ -16,7 +15,6 @@ import static com.xenoage.zong.musiclayout.stamper.BeamStamper.beamStamper;
 import static com.xenoage.zong.musiclayout.stamper.ChordStamper.chordStamper;
 import static com.xenoage.zong.musiclayout.stamper.DirectionStamper.directionStamper;
 import static com.xenoage.zong.musiclayout.stamper.MeasureStamper.measureStamper;
-import static com.xenoage.zong.musiclayout.stamper.ElementStamper.elementStamper;
 import static com.xenoage.zong.musiclayout.stamper.PartNameStamper.partNameStamper;
 import static com.xenoage.zong.musiclayout.stamper.VoiceStamper.voiceStamper;
 
@@ -47,7 +45,6 @@ import com.xenoage.zong.core.music.group.BracketGroup;
 import com.xenoage.zong.core.music.group.StavesRange;
 import com.xenoage.zong.core.music.lyric.Lyric;
 import com.xenoage.zong.core.music.lyric.SyllableType;
-import com.xenoage.zong.core.music.rest.Rest;
 import com.xenoage.zong.core.music.slur.Slur;
 import com.xenoage.zong.core.music.slur.SlurWaypoint;
 import com.xenoage.zong.core.music.tuplet.Tuplet;
@@ -72,20 +69,15 @@ import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.LastLyrics;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.StaffStampings;
 import com.xenoage.zong.musiclayout.notation.BeamNotation;
 import com.xenoage.zong.musiclayout.notation.ChordNotation;
-import com.xenoage.zong.musiclayout.notation.Notation;
 import com.xenoage.zong.musiclayout.notation.Notations;
-import com.xenoage.zong.musiclayout.notation.RestNotation;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.musiclayout.spacing.BeamSpacing;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
-import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.FrameSpacing;
 import com.xenoage.zong.musiclayout.spacing.MeasureSpacing;
 import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
-import com.xenoage.zong.musiclayout.spacing.VoiceSpacing;
 import com.xenoage.zong.musiclayout.stamper.PartNameStamper;
 import com.xenoage.zong.musiclayout.stamper.StamperContext;
-import com.xenoage.zong.musiclayout.stamper.VoiceStamper;
 import com.xenoage.zong.musiclayout.stampings.BracketStamping;
 import com.xenoage.zong.musiclayout.stampings.NoteheadStamping;
 import com.xenoage.zong.musiclayout.stampings.SlurStamping;
@@ -209,10 +201,8 @@ public class ScoreFrameLayouter {
 					//add directions
 					otherStampsPool.addAll(directionStamper.stamp(context));
 
-					//now begin with the voices
-					float voicesXMm = xMm + measureColumnSpacing.getLeadingWidthMm();
-
 					//add measure elements within this measure
+					float voicesXMm = xMm + measureColumnSpacing.getLeadingWidthMm();
 					otherStampsPool.addAll(measureStamper.stampMeasure(measure, voicesXMm, context));
 
 					//add voice elements within this measure
@@ -224,7 +214,7 @@ public class ScoreFrameLayouter {
 			}
 
 			//create all voltas in this system
-			otherStampsPool.addAll(createVoltas(iSystem, system, header, staffStampings, openVoltasCache,
+			otherStampsPool.addAll(voltaStamper.stamp(iSystem, system, header, staffStampings, openVoltasCache,
 				defaultLyricStyle));
 
 			//create all wedges in this system
@@ -477,38 +467,7 @@ public class ScoreFrameLayouter {
 		return ret;
 	}
 
-	/**
-	 * Creates all volta stampings in the given system.
-	 * All closed voltas are removed from the cache. The unclosed voltas (which have to
-	 * be continued on the next system or frame) remain in the cache (or are added, if they are new).
-	 */
-	private List<VoltaStamping> createVoltas(int systemIndex, SystemSpacing system,
-		ScoreHeader header, StaffStampings staffStampings, List<ContinuedVolta> openVoltasCache,
-		FormattedTextStyle textStyle) {
-		ArrayList<VoltaStamping> ret = alist();
-		//find new voltas beginning in this system
-		for (int iMeasure = 0; iMeasure < system.columns.size(); iMeasure++) {
-			int scoreMeasure = system.getStartMeasureIndex() + iMeasure;
-			ColumnHeader columnHeader = header.getColumnHeader(scoreMeasure);
-			if (columnHeader.getVolta() != null) {
-				openVoltasCache.add(new ContinuedVolta(columnHeader.getVolta(), scoreMeasure, 0)); //staff 0: TODO
-			}
-		}
-		//draw voltas in the cache, and remove them if closed in this system
-		int endMeasureIndex = system.getEndMeasureIndex();
-		for (Iterator<ContinuedVolta> itV = openVoltasCache.iterator(); itV.hasNext();) {
-			ContinuedVolta volta = itV.next();
-			ret
-				.add(voltaStamper.createVoltaStamping(volta.getMusicElement(),
-					volta.startMeasureIndex, staffStampings.get(systemIndex, volta.getStaffIndex()),
-					textStyle));
-			if (volta.startMeasureIndex + volta.getMusicElement().getLength() - 1 <= endMeasureIndex) {
-				//volta is closed
-				itV.remove();
-			}
-		}
-		return ret;
-	}
+
 
 	/**
 	 * Creates all wedge stampings in the given system.
@@ -535,9 +494,9 @@ public class ScoreFrameLayouter {
 		//draw wedges in the cache, and remove them if closed in this system
 		for (Iterator<ContinuedWedge> itW = openWedgesCache.iterator(); itW.hasNext();) {
 			ContinuedWedge wedge = itW.next();
-			ret.add(directionStamper.createWedgeStamping(wedge.getMusicElement(),
+			ret.add(directionStamper.createWedgeStamping(wedge.element,
 				staffStampings.get(systemIndex, wedge.getStaffIndex())));
-			if (MP.getMP(wedge.getMusicElement().getWedgeEnd()).measure <= system.getEndMeasureIndex()) {
+			if (MP.getMP(wedge.element.getWedgeEnd()).measure <= system.getEndMeasureIndex()) {
 				//wedge is closed
 				itW.remove();
 			}

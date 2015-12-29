@@ -1,6 +1,7 @@
 package com.xenoage.zong.musiclayout.continued;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.music.volta.Volta;
@@ -10,20 +11,12 @@ import com.xenoage.zong.core.music.volta.Volta;
  * 
  * @author Andreas Wenger
  */
-@Const @AllArgsConstructor public final class ContinuedVolta
+@Const @AllArgsConstructor
+public final class ContinuedVolta
 	implements ContinuedElement {
 
-	public final Volta volta;
+	@Getter public final Volta element;
+	@Getter public final int staffIndex;
 	public final int startMeasureIndex;
-	public final int staffIndex;
-
-
-	@Override public Volta getMusicElement() {
-		return volta;
-	}
-
-	@Override public int getStaffIndex() {
-		return staffIndex;
-	}
 
 }

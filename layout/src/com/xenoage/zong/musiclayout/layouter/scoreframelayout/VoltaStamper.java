@@ -1,27 +1,70 @@
 package com.xenoage.zong.musiclayout.layouter.scoreframelayout;
 
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.zong.core.text.FormattedText.fText;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import com.xenoage.utils.kernel.Range;
+import com.xenoage.zong.core.header.ColumnHeader;
+import com.xenoage.zong.core.header.ScoreHeader;
 import com.xenoage.zong.core.music.volta.Volta;
 import com.xenoage.zong.core.text.Alignment;
 import com.xenoage.zong.core.text.FormattedText;
 import com.xenoage.zong.core.text.FormattedTextStyle;
+import com.xenoage.zong.musiclayout.continued.ContinuedVolta;
+import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.StaffStampings;
+import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import com.xenoage.zong.musiclayout.stampings.VoltaStamping;
 
 /**
  * Creates the {@link VoltaStamping} of a {@link Volta}.
  * 
- * TODO: Since a volta can have line breaks inbetween, it can result
- * in more than one stamping.
- * (At the moment, all voltas are rendered like single-measure ones)
+ * Since a volta can have line breaks inbetween, the open
+ * voltas are stored in {@link ContinuedVolta}s.
  * 
  * @author Andreas Wenger
  */
 public class VoltaStamper {
 	
 	public static final VoltaStamper voltaStamper = new VoltaStamper();
+	
+	
+	/**
+	 * Creates all volta stampings in the given system.
+	 * All closed voltas are removed from the cache. The unclosed voltas (which have to
+	 * be continued on the next system or frame) remain in the cache (or are added, if they are new).
+	 */
+	public List<VoltaStamping> stamp(int systemIndex, SystemSpacing system,
+		ScoreHeader header, StaffStampings staffStampings, List<ContinuedVolta> openVoltasCache,
+		FormattedTextStyle textStyle) {
+		ArrayList<VoltaStamping> ret = alist();
+		//find new voltas beginning in this system
+		for (int iMeasure = 0; iMeasure < system.columns.size(); iMeasure++) {
+			int scoreMeasure = system.getStartMeasureIndex() + iMeasure;
+			ColumnHeader columnHeader = header.getColumnHeader(scoreMeasure);
+			if (columnHeader.getVolta() != null) {
+				openVoltasCache.add(new ContinuedVolta(columnHeader.getVolta(), scoreMeasure, 0)); //staff 0: TODO
+			}
+		}
+		//draw voltas in the cache, and remove them if closed in this system
+		int endMeasureIndex = system.getEndMeasureIndex();
+		for (Iterator<ContinuedVolta> itV = openVoltasCache.iterator(); itV.hasNext();) {
+			ContinuedVolta volta = itV.next();
+			ret
+				.add(voltaStamper.createVoltaStamping(volta.element,
+					volta.startMeasureIndex, staffStampings.get(systemIndex, volta.getStaffIndex()),
+					textStyle));
+			if (volta.startMeasureIndex + volta.element.getLength() - 1 <= endMeasureIndex) {
+				//volta is closed
+				itV.remove();
+			}
+		}
+		return ret;
+	}
 	
 
 	/**
