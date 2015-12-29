@@ -28,9 +28,4 @@ public interface ContinuedElement {
 	 */
 	public MusicElement getElement();
 
-	/**
-	 * Gets the staff index of the continued element.
-	 */
-	public int getStaffIndex();
-
 }

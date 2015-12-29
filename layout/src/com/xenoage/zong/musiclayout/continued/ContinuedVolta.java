@@ -16,7 +16,5 @@ public final class ContinuedVolta
 	implements ContinuedElement {
 
 	@Getter public final Volta element;
-	@Getter public final int staffIndex;
-	public final int startMeasureIndex;
 
 }
