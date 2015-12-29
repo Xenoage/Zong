@@ -5,6 +5,7 @@ import lombok.Getter;
 
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.music.rest.Rest;
+import com.xenoage.zong.core.music.util.DurationInfo;
 import com.xenoage.zong.musiclayout.spacing.ElementWidth;
 
 /**
@@ -17,6 +18,7 @@ import com.xenoage.zong.musiclayout.spacing.ElementWidth;
 
 	@Getter public final Rest element;
 	public final ElementWidth width;
+	public final DurationInfo.Type duration;
 
 
 	@Override public ElementWidth getWidth() {

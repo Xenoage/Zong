@@ -3,9 +3,6 @@ package com.xenoage.zong.musiclayout.spacing;
 import java.util.Collections;
 import java.util.List;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.math.Fraction;
@@ -13,13 +10,15 @@ import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.musiclayout.notation.Notation;
 
+import lombok.AllArgsConstructor;
+
 /**
  * An element spacing stores the beat, the position (offset)
  * and the {@link Notation} of a given {@link MusicElement} in a layout.
  *
  * @author Andreas Wenger
  */
-@Data @AllArgsConstructor 
+@AllArgsConstructor 
 public class ElementSpacing {
 
 	/** The corresponding element notation, e.g. a chord. May be null, e.g. when this

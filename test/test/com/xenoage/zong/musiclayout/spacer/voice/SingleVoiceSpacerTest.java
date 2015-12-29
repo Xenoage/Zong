@@ -61,12 +61,12 @@ public class SingleVoiceSpacerTest {
 		//create voice and notations
 		Voice voice = new Voice(alist((VoiceElement) r1, r2, r3, r4));
 		Notations notations = new Notations();
-		notations.add(new RestNotation(r1, new ElementWidth(2, 2, 4)));
-		notations.add(new RestNotation(r2, new ElementWidth(2, 2, 2)));
-		notations.add(new RestNotation(r3, new ElementWidth(2, 2, 3)));
-		notations.add(new RestNotation(r4, new ElementWidth(5, 2, 3)));
+		notations.add(new RestNotation(r1, new ElementWidth(2, 2, 4), null));
+		notations.add(new RestNotation(r2, new ElementWidth(2, 2, 2), null));
+		notations.add(new RestNotation(r3, new ElementWidth(2, 2, 3), null));
+		notations.add(new RestNotation(r4, new ElementWidth(5, 2, 3), null));
 		//compute spacing
-		VoiceSpacing vs = testee.compute(voice, 200f, fr(4, 4), notations, layoutSettings);
+		VoiceSpacing vs = testee.compute(voice, 200f, fr(4, 4), 5, notations, layoutSettings);
 		//check spacing
 		ElementSpacing[] ses = vs.elements.toArray(new ElementSpacing[0]);
 		float s = layoutSettings.offsetMeasureStart;
@@ -98,12 +98,12 @@ public class SingleVoiceSpacerTest {
 		//create voice and notations
 		Voice voice = new Voice(alist((VoiceElement) r1, g1, g2, r4));
 		Notations notations = new Notations();
-		notations.add(new RestNotation(r1, new ElementWidth(2, 2, 13)));
+		notations.add(new RestNotation(r1, new ElementWidth(2, 2, 13), null));
 		notations.add(new ChordNotation(g1, new ElementWidth(1, 2, 1)));
 		notations.add(new ChordNotation(g2, new ElementWidth(1, 2, 1)));
-		notations.add(new RestNotation(r4, new ElementWidth(3, 2, 3)));
+		notations.add(new RestNotation(r4, new ElementWidth(3, 2, 3), null));
 		//compute spacing
-		VoiceSpacing vs = testee.compute(voice, 300f, fr(4, 4), notations, layoutSettings);
+		VoiceSpacing vs = testee.compute(voice, 300f, fr(4, 4), 5, notations, layoutSettings);
 		//check spacing
 		ElementSpacing[] ses = vs.elements.toArray(new ElementSpacing[0]);;
 		float s = layoutSettings.offsetMeasureStart;
@@ -134,12 +134,12 @@ public class SingleVoiceSpacerTest {
 		//create voice and notations
 		Voice voice = new Voice(alist((VoiceElement) r1, g1, g2, r4));
 		Notations notations = new Notations();
-		notations.add(new RestNotation(r1, new ElementWidth(2, 2, 7)));
+		notations.add(new RestNotation(r1, new ElementWidth(2, 2, 7), null));
 		notations.add(new ChordNotation(g1, new ElementWidth(1, 2, 1)));
 		notations.add(new ChordNotation(g2, new ElementWidth(1, 2, 1)));
-		notations.add(new RestNotation(r4, new ElementWidth(3, 2, 3)));
+		notations.add(new RestNotation(r4, new ElementWidth(3, 2, 3), null));
 		//compute spacing
-		VoiceSpacing vs = testee.compute(voice, 400f, fr(4, 4), notations, layoutSettings);
+		VoiceSpacing vs = testee.compute(voice, 400f, fr(4, 4), 5, notations, layoutSettings);
 		//check spacing
 		ElementSpacing[] ses = vs.elements.toArray(new ElementSpacing[0]);;
 		float s = layoutSettings.offsetMeasureStart;
@@ -171,12 +171,12 @@ public class SingleVoiceSpacerTest {
 		//create voice and notations
 		Voice voice = new Voice(alist((VoiceElement) r1, g1, g2, r4));
 		Notations notations = new Notations();
-		notations.add(new RestNotation(r1, new ElementWidth(2, 2, 3)));
+		notations.add(new RestNotation(r1, new ElementWidth(2, 2, 3), null));
 		notations.add(new ChordNotation(g1, new ElementWidth(1, 2, 1)));
 		notations.add(new ChordNotation(g2, new ElementWidth(1, 2, 1)));
-		notations.add(new RestNotation(r4, new ElementWidth(3, 2, 3)));
+		notations.add(new RestNotation(r4, new ElementWidth(3, 2, 3), null));
 		//compute spacing
-		VoiceSpacing vs = testee.compute(voice, 400f, fr(4, 4), notations, layoutSettings);
+		VoiceSpacing vs = testee.compute(voice, 400f, fr(4, 4), 5, notations, layoutSettings);
 		//check spacing
 		ElementSpacing[] ses = vs.elements.toArray(new ElementSpacing[0]);;
 		float s = layoutSettings.offsetMeasureStart;

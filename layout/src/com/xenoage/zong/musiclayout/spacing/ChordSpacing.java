@@ -6,7 +6,7 @@ public class ChordSpacing {
 	
 	public static float getStemXIs(ElementSpacing chord) {
 		ChordNotation not = (ChordNotation) chord.notation;
-		return chord.getOffsetIs() + not.accidentals.widthIs + not.notes.stemOffsetIs;
+		return chord.offsetIs + not.accidentals.widthIs + not.notes.stemOffsetIs;
 	}
 
 }

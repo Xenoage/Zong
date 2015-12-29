@@ -35,7 +35,6 @@ import com.xenoage.zong.core.text.FormattedTextElement;
 import com.xenoage.zong.core.text.FormattedTextParagraph;
 import com.xenoage.zong.core.text.FormattedTextStyle;
 import com.xenoage.zong.core.text.FormattedTextSymbol;
-import com.xenoage.zong.musiclayout.layouter.Context;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.ChordStampings;
 import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
@@ -61,37 +60,34 @@ public class DirectionStamper {
 	
 	
 	/**
-	 * Creates all direction stampings fpr the given measure.
+	 * Creates all direction stampings for the given measure.
 	 */
-	public List<Stamping> stamp(StaffStamping staff, int iMeasureInSystem,
-		SystemSpacing system, Context context) {
+	public List<Stamping> stamp(StamperContext context) {
 		
 		List<Stamping> ret = alist();
-		int iMeasure = iMeasureInSystem + system.getStartMeasureIndex();
-		BeatEList<Direction> directionsWithBeats = context.score.getMeasure(context.mp).getDirections();
+		BeatEList<Direction> directionsWithBeats = context.layouter.score.getMeasure(
+			context.getMp()).getDirections();
 		
 		if (directionsWithBeats != null) {
 			//over first staff, also add tempo directions for the whole column
-			if (context.mp.staff == 0) {
-				directionsWithBeats.addAll(context.score.getColumnHeader(iMeasure).getTempos());
+			if (context.getMp().staff == 0) {
+				directionsWithBeats.addAll(context.layouter.score.getColumnHeader(
+					context.getMp().measure).getTempos());
 			}
 			for (BeatE<Direction> elementWithBeat : directionsWithBeats) {
 				Direction element = elementWithBeat.element;
 				Stamping stamping = null;
-				MP mp = context.mp.withBeat(elementWithBeat.beat);
 				if (element instanceof Tempo) {
-					stamping = directionStamper.createTempo((Tempo) element, mp, staff, context.symbols);
+					stamping = directionStamper.createTempo((Tempo) element, context);
 				}
 				else if (element instanceof Dynamics) {
-					stamping = directionStamper.createDynamics((Dynamics) element,
-						mp, staff, context.symbols);
+					stamping = directionStamper.createDynamics((Dynamics) element, context);
 				}
 				else if (element instanceof Pedal) {
-					stamping = directionStamper.createPedal((Pedal) element,
-						mp, staff, context.symbols);
+					stamping = directionStamper.createPedal((Pedal) element, context);
 				}
 				else if (element instanceof Words) {
-					stamping = directionStamper.createWords((Words) element, mp, staff);
+					stamping = directionStamper.createWords((Words) element, context);
 				}
 				if (stamping != null)
 					ret.add(stamping);
@@ -111,7 +107,7 @@ public class DirectionStamper {
 		CList<StaffTextStamping> ret = CList.clist();
 		for (Direction direction : chord.getDirections()) {
 			if (direction instanceof Dynamics) {
-				ret.add(createDynamics((Dynamics) direction, MP.getMP(chord), chord, chordStampings, symbolPool));
+				ret.add(createDynamics((Dynamics) direction, chord, chordStampings, symbolPool));
 			}
 		}
 		return ret.close();
@@ -121,7 +117,7 @@ public class DirectionStamper {
 	 * Creates a {@link StaffTextStamping} for the given {@link Dynamics}s
 	 * below the given {@link Chord} and its {@link ChordStampings}.
 	 */
-	public StaffTextStamping createDynamics(Dynamics dynamics, MP mp, Chord chord,
+	public StaffTextStamping createDynamics(Dynamics dynamics, Chord chord,
 		ChordStampings chordStampings, SymbolPool symbolPool) {
 		StaffStamping staff = chordStampings.staff;
 
@@ -136,7 +132,7 @@ public class DirectionStamper {
 			defaultLPAbove = Math.max(defaultLPAbove,
 				chordStampings.getLastNotehead().position.lp + 1 * 2);
 		}
-		SP sp = computePosition(dynamics, mp, staff, defaultLPBelow, defaultLPAbove, defaultLPBelow);
+		SP sp = computePosition(dynamics, staff, defaultLPBelow, defaultLPAbove, defaultLPBelow);
 
 		//create text
 		CList<FormattedTextElement> elements = clist();
@@ -153,59 +149,54 @@ public class DirectionStamper {
 	}
 
 	/**
-	 * Creates a {@link StaffTextStamping} for the given {@link Dynamics}s
-	 * at the given {@link MP} within the given {@link StaffStamping}.
+	 * Creates a {@link StaffTextStamping} for the given {@link Dynamics}s.
 	 */
-	public StaffTextStamping createDynamics(Dynamics dynamics, MP mp, StaffStamping staffStamping,
-		SymbolPool symbolPool) {
+	public StaffTextStamping createDynamics(Dynamics dynamics, StamperContext context) {
 		//positioning
 		//below (default): 3 IS below the base line, or 2 IS below the lowest note
 		//above: 2 IS above the top line, or 1 IS above the highest note
 		float defaultLPBelow = -3f * 2;
-		float defaultLPAbove = (staffStamping.linesCount - 1) * 2 + 2 * 2;
-		SP sp = computePosition(dynamics, mp, staffStamping, defaultLPBelow, defaultLPAbove,
+		float defaultLPAbove = (context.staff.linesCount - 1) * 2 + 2 * 2;
+		SP sp = computePosition(dynamics, context.staff, defaultLPBelow, defaultLPAbove,
 			defaultLPBelow);
 
 		//create text
 		CList<FormattedTextElement> elements = clist();
 		for (CommonSymbol s : CommonSymbol.getDynamics(dynamics.getType())) {
-			Symbol symbol = symbolPool.getSymbol(s);
-			elements.add(new FormattedTextSymbol(symbol, staffStamping.is * FONT_SIZE_IN_IS,
+			Symbol symbol = context.getSymbol(s);
+			elements.add(new FormattedTextSymbol(symbol, context.staff.is * FONT_SIZE_IN_IS,
 				FormattedTextStyle.defaultColor));
 		}
 		elements.close();
 		FormattedTextParagraph paragraph = new FormattedTextParagraph(elements, Alignment.Center);
 		FormattedText text = fText(paragraph);
 		//create stamping
-		return new StaffTextStamping(text, sp, staffStamping, dynamics);
+		return new StaffTextStamping(text, sp, context.staff, dynamics);
 	}
 
 	/**
-	 * Creates a {@link StaffTextStamping} for the given {@link Tempo}
-	 * at the given {@link MP} within the given {@link StaffStamping}.
+	 * Creates a {@link StaffTextStamping} for the given {@link Tempo}.
 	 */
-	public StaffTextStamping createTempo(Tempo tempo, MP mp, StaffStamping staffStamping,
-		SymbolPool symbolPool) {
+	public StaffTextStamping createTempo(Tempo tempo, StamperContext context) {
 		//positioning
 		//below: 3 IS below the base line
 		//above (default): 2 IS above the top line
 		float defaultLPBelow = -3f * 2;
-		float defaultLPAbove = (staffStamping.linesCount - 1) * 2 + 2 * 2;
-		SP p = computePosition(tempo, mp, staffStamping, defaultLPAbove, defaultLPAbove,
+		float defaultLPAbove = (context.staff.linesCount - 1) * 2 + 2 * 2;
+		SP p = computePosition(tempo, context.staff, defaultLPAbove, defaultLPAbove,
 			defaultLPBelow);
 
-		//create text
-		FormattedText text = getTempoTextNotNull(tempo, symbolPool);
+		//create text //GOON: move into NOTATION or SPACING
+		FormattedText text = getTempoTextNotNull(tempo, context.layouter.symbols);
 
 		//create stamping
-		return new StaffTextStamping(text, p, staffStamping, tempo);
+		return new StaffTextStamping(text, p, context.staff, tempo);
 	}
 
 	/**
-	 * Creates a {@link StaffTextStamping} for the given {@link Words}
-	 * at the given {@link MP} within the given {@link StaffStamping}.
+	 * Creates a {@link StaffTextStamping} for the given {@link Words}.
 	 */
-	public StaffTextStamping createWords(Words words, MP bmp, StaffStamping staffStamping) {
+	public StaffTextStamping createWords(Words words, StamperContext context) {
 		if (words.getText().getLength() == 0)
 			return null;
 
@@ -213,34 +204,32 @@ public class DirectionStamper {
 		//below: 5 IS below the base line
 		//above (default): 4 IS above the top line
 		float defaultLPBelow = -5f * 2;
-		float defaultLPAbove = (staffStamping.linesCount - 1) * 2 + 4 * 2;
-		SP p = computePosition(words, bmp, staffStamping, defaultLPAbove, defaultLPAbove,
+		float defaultLPAbove = (context.staff.linesCount - 1) * 2 + 4 * 2;
+		SP p = computePosition(words, context.staff, defaultLPAbove, defaultLPAbove,
 			defaultLPBelow);
 
 		//create text
-		FormattedTextStyle style =FormattedTextStyle.defaultStyle; //TODO: FormattedTextStyle(words.getFontInfo());
+		FormattedTextStyle style = FormattedTextStyle.defaultStyle; //TODO: FormattedTextStyle(words.getFontInfo());
 		FormattedText text = styleText(words.getText(), style);
 
 		//create stamping
-		return new StaffTextStamping(text, p, staffStamping, words);
+		return new StaffTextStamping(text, p, context.staff, words);
 	}
 
 	/**
-	 * Creates a {@link StaffSymbolStamping} for the given {@link Pedal}
-	 * at the given {@link MP} within the given {@link StaffStamping}.
+	 * Creates a {@link StaffSymbolStamping} for the given {@link Pedal}.
 	 */
-	public StaffSymbolStamping createPedal(Pedal pedal, MP mp, StaffStamping staffStamping,
-		SymbolPool symbolPool) {
+	public StaffSymbolStamping createPedal(Pedal pedal, StamperContext context) {
 		//positioning
 		//below (default): 4 IS below the base line
 		//above: 3 IS above the top line
 		float defaultLPBelow = -4f * 2;
-		float defaultLPAbove = (staffStamping.linesCount - 1) * 2 + 3 * 2;
-		SP sp = computePosition(pedal, mp, staffStamping, defaultLPBelow, defaultLPAbove,
+		float defaultLPAbove = (context.staff.linesCount - 1) * 2 + 3 * 2;
+		SP sp = computePosition(pedal, context.staff, defaultLPBelow, defaultLPAbove,
 			defaultLPBelow);
 		//create stamping
-		Symbol symbol = symbolPool.getSymbol(CommonSymbol.getPedal(pedal.getType()));
-		return new StaffSymbolStamping(null, staffStamping, symbol, null, sp, 1, false);
+		Symbol symbol = context.getSymbol(CommonSymbol.getPedal(pedal.getType()));
+		return new StaffSymbolStamping(null, context.staff, symbol, null, sp, 1, false);
 	}
 
 	/**
@@ -306,11 +295,13 @@ public class DirectionStamper {
 
 	/**
 	 * Computes the position for the given {@link Direction}
-	 * at the given {@link MP} within the given {@link StaffStamping}.
+	 * within the given {@link StaffStamping}.
 	 */
-	private SP computePosition(Direction direction, MP mp, StaffStamping staffStamping,
+	private SP computePosition(Direction direction, StaffStamping staffStamping,
 		float defaultLP, float defaultLPAbove, float defaultLPBelow) {
+		
 		Positioning customPos = direction.getPositioning();
+		MP mp = direction.getMP();
 		float x, lp;
 
 		//default positioning

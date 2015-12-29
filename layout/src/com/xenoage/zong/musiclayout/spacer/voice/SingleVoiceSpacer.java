@@ -3,6 +3,7 @@ package com.xenoage.zong.musiclayout.spacer.voice;
 import static com.xenoage.utils.collections.CList.ilist;
 import static com.xenoage.utils.collections.CollectionUtils.llist;
 import static com.xenoage.utils.iterators.ReverseIterator.reverseIt;
+import static com.xenoage.zong.musiclayout.spacer.element.RestSpacer.restSpacer;
 
 import java.util.LinkedList;
 
@@ -12,6 +13,7 @@ import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.musiclayout.layouter.Context;
 import com.xenoage.zong.musiclayout.notation.Notation;
 import com.xenoage.zong.musiclayout.notation.Notations;
+import com.xenoage.zong.musiclayout.notation.RestNotation;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.ElementWidth;
@@ -36,11 +38,12 @@ public class SingleVoiceSpacer {
 		Voice voice = context.score.getVoice(context.mp);
 		float is = context.score.getInterlineSpace(context.mp);
 		Fraction measureBeats = context.score.getMeasureBeats(context.mp.measure);
-		return compute(voice, is, measureBeats, notations, context.settings);
+		int staffLinesCount = context.score.getStaff(context.mp).getLinesCount();
+		return compute(voice, is, measureBeats, staffLinesCount, notations, context.settings);
 	}
 
 	VoiceSpacing compute(Voice voice, float interlineSpace, Fraction measureBeats, 
-		Notations notations, LayoutSettings layoutSettings) {
+		int staffLinesCount, Notations notations, LayoutSettings layoutSettings) {
 		LinkedList<ElementSpacing> ret = llist();
 
 		//special case: no elements in the measure.
@@ -82,7 +85,7 @@ public class SingleVoiceSpacer {
 			//get the width of the element (front gap, symbol's width, rear gap, lyric's width)
 			ElementWidth elementWidth = notation.getWidth();
 
-			//add spacing for element
+			//add spacing for voice element
 			float symbolOffset;
 			boolean grace = !element.getDuration().isGreater0();
 			if (!grace) {
@@ -102,7 +105,17 @@ public class SingleVoiceSpacer {
 				symbolOffset = Math.min(lastFrontGapOffset, lastSymbolOffset - elementWidth.rearGap) -
 					elementWidth.symbolWidth;
 			}
-			ret.addFirst(new ElementSpacing(notation, curBeat, symbolOffset));
+			ElementSpacing elementSpacing = null;
+			if (notation instanceof RestNotation) {
+				//rest spacing
+				elementSpacing = restSpacer.compute((RestNotation) notation, curBeat,
+					symbolOffset, staffLinesCount);
+			}
+			else {
+				//chord spacing
+				elementSpacing = new ElementSpacing(notation, curBeat, symbolOffset); //GOON : ChordSpacer
+			}
+			ret.addFirst(elementSpacing);
 			lastFrontGapOffset = symbolOffset - elementWidth.frontGap;
 			lastSymbolOffset = symbolOffset;
 		}

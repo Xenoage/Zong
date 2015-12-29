@@ -141,7 +141,7 @@ public class MeasureElementsSpacerTest {
 	}
 
 	private ElementSpacing spacing(Rest rest, Fraction beat, float offset) {
-		return new ElementSpacing(new RestNotation(rest, new ElementWidth(0)), beat, offset);
+		return new ElementSpacing(new RestNotation(rest, new ElementWidth(0), null), beat, offset);
 	}
 
 	private Notations notations(Rest[] rests, Clef clef) {

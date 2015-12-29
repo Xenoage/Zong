@@ -7,7 +7,6 @@ import static com.xenoage.utils.iterators.It.it;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.core.position.MP.atMeasure;
 import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.LyricStamper.lyricStamper;
-import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.MusicElementStamper.musicElementStamper;
 import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.SlurStamper.slurStamper;
 import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.StaffStamper.staffStamper;
 import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.TupletStamper.tupletStamper;
@@ -16,8 +15,10 @@ import static com.xenoage.zong.musiclayout.stamper.BarlinesStamper.barlinesStamp
 import static com.xenoage.zong.musiclayout.stamper.BeamStamper.beamStamper;
 import static com.xenoage.zong.musiclayout.stamper.ChordStamper.chordStamper;
 import static com.xenoage.zong.musiclayout.stamper.DirectionStamper.directionStamper;
-import static com.xenoage.zong.musiclayout.stamper.MeasureElementStamper.measureElementStamper;
+import static com.xenoage.zong.musiclayout.stamper.MeasureStamper.measureStamper;
+import static com.xenoage.zong.musiclayout.stamper.ElementStamper.elementStamper;
 import static com.xenoage.zong.musiclayout.stamper.PartNameStamper.partNameStamper;
+import static com.xenoage.zong.musiclayout.stamper.VoiceStamper.voiceStamper;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -83,6 +84,8 @@ import com.xenoage.zong.musiclayout.spacing.MeasureSpacing;
 import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
 import com.xenoage.zong.musiclayout.spacing.VoiceSpacing;
 import com.xenoage.zong.musiclayout.stamper.PartNameStamper;
+import com.xenoage.zong.musiclayout.stamper.StamperContext;
+import com.xenoage.zong.musiclayout.stamper.VoiceStamper;
 import com.xenoage.zong.musiclayout.stampings.BracketStamping;
 import com.xenoage.zong.musiclayout.stampings.NoteheadStamping;
 import com.xenoage.zong.musiclayout.stampings.SlurStamping;
@@ -114,12 +117,18 @@ public class ScoreFrameLayouter {
 	 *                           spanning over more than one frame
 	 */
 	public ScoreFrameLayout computeScoreFrameLayout(FrameSpacing frame, int frameIndex,
-		Notations notations, List<ContinuedElement> unclosedElements, Context context,
+		Notations notations, List<ContinuedElement> unclosedElements, Context layouterContext,
 		Map<Beam, BeamSpacing> beamsSpacing) {
 		
-		Score score = context.score;
-		SymbolPool symbols = context.symbols;
-		LayoutSettings settings = context.settings;
+		layouterContext.saveMp();
+		
+		Score score = layouterContext.score;
+		SymbolPool symbols = layouterContext.symbols;
+		LayoutSettings settings = layouterContext.settings;
+		
+		StamperContext context = new StamperContext();
+		context.layouter = layouterContext;
+		context.notations = notations;
 		
 		ScoreHeader header = score.getHeader();
 		int stavesCount = score.getStavesCount();
@@ -158,6 +167,7 @@ public class ScoreFrameLayouter {
 
 		//go through the systems
 		for (int iSystem : range(frame.getSystems())) {
+			context.systemIndex = iSystem;
 			SystemSpacing system = frame.getSystems().get(iSystem);
 			List<StaffStamping> systemStaves = staffStampings.getAllOfSystem(iSystem);
 
@@ -182,67 +192,33 @@ public class ScoreFrameLayouter {
 
 			//fill the staves
 			for (int iStaff : range(stavesCount)) {
-				StaffStamping staff = systemStaves.get(iStaff);
-				float xOffset = staff.positionMm.x;
-				float interlineSpace = staff.is;
+				layouterContext.mp = layouterContext.mp.withStaff(iStaff);
+				context.staff = systemStaves.get(iStaff);
+				float xMm = context.staff.positionMm.x;
 
 				for (int iMeasure : range(system.columns)) {
 					int globalMeasureIndex = system.getStartMeasureIndex() + iMeasure;
-					ColumnSpacing measureColumnSpacing = system.columns.get(iMeasure);
-					MeasureSpacing measureStaffSpacing = measureColumnSpacing.getMeasures().get(iStaff);
+					layouterContext.mp = layouterContext.mp.withMeasure(globalMeasureIndex);
 					
-					context.mp = atMeasure(iStaff, globalMeasureIndex);
+					ColumnSpacing measureColumnSpacing = system.columns.get(iMeasure);
+					MeasureSpacing measure = measureColumnSpacing.getMeasures().get(iStaff);
 
 					//add leading spacing elements, if available
-					otherStampsPool.addAll(measureElementStamper.stampLeading(
-						measureStaffSpacing, staff, xOffset, notations, context));
+					otherStampsPool.addAll(measureStamper.stampLeading(measure, xMm, context));
 
 					//add directions
-					otherStampsPool.addAll(directionStamper.stamp(staff, iMeasure, system, context));
+					otherStampsPool.addAll(directionStamper.stamp(context));
 
 					//now begin with the voices
-					float voicesXMm = xOffset + measureColumnSpacing.getLeadingWidthMm();
+					float voicesXMm = xMm + measureColumnSpacing.getLeadingWidthMm();
 
 					//add measure elements within this measure
-					otherStampsPool.addAll(measureElementStamper.stampMeasure(
-						measureStaffSpacing, staff, voicesXMm, notations, context));
+					otherStampsPool.addAll(measureStamper.stampMeasure(measure, voicesXMm, context));
 
 					//add voice elements within this measure
-					for (VoiceSpacing voiceSpacing : measureStaffSpacing.getVoiceSpacings()) {
-						List<ElementSpacing> voice = voiceSpacing.elements;
-
-						//TODO
-						//don't stamp leading rests in voice 2 - TODO: config?
-						//boolean stampRests = (iVoice == 0);
-
-						//create the voice elements
-						for (ElementSpacing spacingElement : voice) {
-							MusicElement element = spacingElement.getElement();
-							if (element != null /* TODO && (stampRests || !(element instanceof Rest)) */) {
-								Notation notation = notations.get(element, iStaff);
-								float x = voicesXMm + spacingElement.offsetIs * interlineSpace;
-								if (element instanceof Chord) {
-									//chord
-									otherStampsPool.addAll(createChordStampings((ChordNotation) notation, x, staff,
-										iStaff, iSystem, defaultLyricStyle, openBeamsCache, openCurvedLinesCache,
-										openLyricsCache, lastLyrics, openTupletsCache, score, symbols,
-										settings, notations));
-								}
-								else if (element instanceof Rest) {
-									//rest
-									otherStampsPool.add(musicElementStamper.createRestStamping(
-										(RestNotation) notation, x, staff, symbols));
-								}
-								else {
-									throw new IllegalArgumentException("Notation not supported: " + notation);
-								}
-							}
-						}
-
-					}
-
-					xOffset += measureColumnSpacing.getWidthMm();
-
+					otherStampsPool.addAll(voiceStamper.stampVoices(measure, voicesXMm, context));
+					
+					xMm += measureColumnSpacing.getWidthMm();
 				}
 
 			}
@@ -290,6 +266,7 @@ public class ScoreFrameLayouter {
 		continuedElements.addAll(openVoltasCache);
 		continuedElements.addAll(openWedgesCache);
 
+		layouterContext.restoreMp();
 		return new ScoreFrameLayout(frame, staffStampsPool, otherStampsPool, continuedElements);
 	}
 

@@ -223,6 +223,6 @@ public class AlignedVoicesSpacerTest {
 	}
 
 	private ElementSpacing graceSpacing(Fraction beat, float offsetIs) {
-		return new ElementSpacing(new RestNotation(new Rest(_0), null), beat, offsetIs);
+		return new ElementSpacing(new RestNotation(new Rest(_0), null, null), beat, offsetIs);
 	}
 }

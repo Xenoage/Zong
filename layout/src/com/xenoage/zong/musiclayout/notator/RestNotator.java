@@ -1,6 +1,7 @@
 package com.xenoage.zong.musiclayout.notator;
 
 import com.xenoage.zong.core.music.rest.Rest;
+import com.xenoage.zong.core.music.util.DurationInfo;
 import com.xenoage.zong.core.position.MPElement;
 import com.xenoage.zong.musiclayout.layouter.Context;
 import com.xenoage.zong.musiclayout.notation.Notations;
@@ -24,7 +25,8 @@ public class RestNotator
 	
 	public RestNotation compute(Rest rest, Context context) {
 		float width = context.settings.spacings.normalChordSpacings.getWidth(rest.getDuration());
-		return new RestNotation(rest, new ElementWidth(width));
+		DurationInfo.Type duration = DurationInfo.getRestType(rest.getDuration());
+		return new RestNotation(rest, new ElementWidth(width), duration);
 	}
 	
 }
