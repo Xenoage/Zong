@@ -85,4 +85,11 @@ public final class Volta
 		return MP.getMPFromParent(this);
 	}
 	
+	/**
+	 * Gets the index of the measure, where this volta ends (inclusive).
+	 */
+	public int getEndMeasureIndex() {
+		return getMP().measure + length - 1;
+	}
+	
 }

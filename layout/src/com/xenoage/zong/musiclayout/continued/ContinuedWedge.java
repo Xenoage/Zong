@@ -5,9 +5,12 @@ import lombok.Getter;
 
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.music.direction.Wedge;
+import com.xenoage.zong.core.music.volta.Volta;
 
 /**
  * Continued {@link Wedge}.
+ * 
+ * GOON: needed? Use {@link Wedge} directly in {@link OpenWedges}
  * 
  * @author Andreas Wenger
  */
@@ -16,6 +19,5 @@ public final class ContinuedWedge
 	implements ContinuedElement {
 
 	@Getter public final Wedge element;
-	@Getter public final int staffIndex;
 
 }

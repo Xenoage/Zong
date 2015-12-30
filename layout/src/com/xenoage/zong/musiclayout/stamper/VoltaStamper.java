@@ -1,6 +1,7 @@
-package com.xenoage.zong.musiclayout.layouter.scoreframelayout;
+package com.xenoage.zong.musiclayout.stamper;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static com.xenoage.utils.collections.CollectionUtils.getLast;
 import static com.xenoage.zong.core.text.FormattedText.fText;
 
 import java.util.List;
@@ -12,6 +13,8 @@ import com.xenoage.zong.core.music.volta.Volta;
 import com.xenoage.zong.core.text.Alignment;
 import com.xenoage.zong.core.text.FormattedText;
 import com.xenoage.zong.core.text.FormattedTextStyle;
+import com.xenoage.zong.musiclayout.continued.ContinuedVolta;
+import com.xenoage.zong.musiclayout.continued.OpenVolta;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import com.xenoage.zong.musiclayout.stampings.VoltaStamping;
 
@@ -26,18 +29,33 @@ public class VoltaStamper {
 	
 	
 	/**
-	 * Creates all volta stampings in the given system.
-	 * Note that the last volta may still be open and has to be stamped again
-	 * in the next system, since system breaks within voltas are possible.
+	 * Creates all volta stampings in the given system, including the voltas which
+	 * are still open from the last system.
+	 * @param openVolta  input and output parameter: voltas, which are still open from the
+	 *                   last system. After the method returns, it contains the voltas which
+	 *                   are still open after this system
 	 */
-	public List<VoltaStamping> stamp(StaffStamping systemFirstStaff,
+	public List<VoltaStamping> stampSystem(StaffStamping systemFirstStaff, OpenVolta openVolta,
 		ScoreHeader header, FormattedTextStyle textStyle) {
 		List<VoltaStamping> ret = alist();
+		//stamp open volta
+		if (openVolta.volta != null) {
+			ret.add(stamp(openVolta.volta.element, systemFirstStaff, textStyle));
+		}
+		//stamp voltas beginning in this system
 		for (int iMeasure : systemFirstStaff.system.getMeasureIndices()) {
 			ColumnHeader columnHeader = header.getColumnHeader(iMeasure);
 			if (columnHeader.getVolta() != null) {
 				ret.add(stamp(columnHeader.getVolta(), systemFirstStaff, textStyle));
 			}
+		}
+		//remember open volta
+		int systemEndMeasureIndex = systemFirstStaff.system.getEndMeasureIndex();
+		if (ret.size() > 0 && getLast(ret).element.getEndMeasureIndex() > systemEndMeasureIndex) {
+			openVolta.volta = new ContinuedVolta(getLast(ret).element);
+		}
+		else {
+			openVolta.volta = null;
 		}
 		return ret;
 	}
@@ -64,24 +82,22 @@ public class VoltaStamper {
 			caption = false;
 		}
 		//clip end measure to staff
-		int end = start + volta.getLength() - 1;
+		int end = volta.getEndMeasureIndex();
 		if (end > systemMeasures.getStop()) {
 			end = systemMeasures.getStop();
 			rightHook = false;
 		}
 		//create stamping
-		return stamp(volta, start, end, staff, textStyle, caption, leftHook, rightHook);
+		return stampInStaff(volta, start, end, staff, textStyle, caption, leftHook, rightHook);
 	}
 
 	/**
 	 * Creates a {@link VoltaStamping} for the given volta spanning
 	 * from the given start measure to the given end measure on the given staff
 	 * (global measure indices). Left and right hooks and the caption are optional.
-	 * 
-	 * The measure indices must be within the staff, otherwise an exception may
-	 * be thrown.
+	 * The measure indices must be within the staff.
 	 */
-	private VoltaStamping stamp(Volta volta, int startMeasureIndex,
+	private VoltaStamping stampInStaff(Volta volta, int startMeasureIndex,
 		int endMeasureIndex, StaffStamping staff, FormattedTextStyle textStyle, boolean drawCaption,
 		boolean drawLeftHook, boolean drawRightHook) {
 		//get start and end x coordinate of measure
@@ -95,7 +111,7 @@ public class VoltaStamper {
 			caption = fText(volta.getCaption(), textStyle, Alignment.Left);
 		}
 		//create stamping
-		return new VoltaStamping(lp, x1, x2, caption, drawLeftHook, drawRightHook, staff);
+		return new VoltaStamping(volta, lp, x1, x2, caption, drawLeftHook, drawRightHook, staff);
 	}
 
 }

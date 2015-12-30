@@ -3,13 +3,14 @@ package com.xenoage.zong.musiclayout.layouter.scoreframelayout;
 import static com.xenoage.utils.NullUtils.notNull;
 import static com.xenoage.utils.collections.CollectionUtils.addNotNull;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static com.xenoage.utils.collections.CollectionUtils.getFirst;
+import static com.xenoage.utils.collections.CollectionUtils.getLast;
 import static com.xenoage.utils.iterators.It.it;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.LyricStamper.lyricStamper;
 import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.SlurStamper.slurStamper;
 import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.StaffStamper.staffStamper;
 import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.TupletStamper.tupletStamper;
-import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.VoltaStamper.voltaStamper;
 import static com.xenoage.zong.musiclayout.stamper.BarlinesStamper.barlinesStamper;
 import static com.xenoage.zong.musiclayout.stamper.BeamStamper.beamStamper;
 import static com.xenoage.zong.musiclayout.stamper.ChordStamper.chordStamper;
@@ -17,6 +18,8 @@ import static com.xenoage.zong.musiclayout.stamper.DirectionStamper.directionSta
 import static com.xenoage.zong.musiclayout.stamper.MeasureStamper.measureStamper;
 import static com.xenoage.zong.musiclayout.stamper.PartNameStamper.partNameStamper;
 import static com.xenoage.zong.musiclayout.stamper.VoiceStamper.voiceStamper;
+import static com.xenoage.zong.musiclayout.stamper.VoltaStamper.voltaStamper;
+import static com.xenoage.zong.musiclayout.stamper.WedgeStamper.wedgeStamper;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -48,6 +51,7 @@ import com.xenoage.zong.core.music.lyric.SyllableType;
 import com.xenoage.zong.core.music.slur.Slur;
 import com.xenoage.zong.core.music.slur.SlurWaypoint;
 import com.xenoage.zong.core.music.tuplet.Tuplet;
+import com.xenoage.zong.core.music.volta.Volta;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.text.FormattedTextElement;
 import com.xenoage.zong.core.text.FormattedTextString;
@@ -57,6 +61,8 @@ import com.xenoage.zong.musiclayout.continued.ContinuedElement;
 import com.xenoage.zong.musiclayout.continued.ContinuedSlur;
 import com.xenoage.zong.musiclayout.continued.ContinuedVolta;
 import com.xenoage.zong.musiclayout.continued.ContinuedWedge;
+import com.xenoage.zong.musiclayout.continued.OpenVolta;
+import com.xenoage.zong.musiclayout.continued.OpenWedges;
 import com.xenoage.zong.musiclayout.layouter.Context;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenBeamsCache;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenLyricsCache;
@@ -78,6 +84,7 @@ import com.xenoage.zong.musiclayout.spacing.MeasureSpacing;
 import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
 import com.xenoage.zong.musiclayout.stamper.PartNameStamper;
 import com.xenoage.zong.musiclayout.stamper.StamperContext;
+import com.xenoage.zong.musiclayout.stamper.WedgeStamper;
 import com.xenoage.zong.musiclayout.stampings.BracketStamping;
 import com.xenoage.zong.musiclayout.stampings.NoteheadStamping;
 import com.xenoage.zong.musiclayout.stampings.SlurStamping;
@@ -134,11 +141,11 @@ public class ScoreFrameLayouter {
 		//caches
 		OpenBeamsCache openBeamsCache = new OpenBeamsCache();
 		OpenSlursCache openCurvedLinesCache = new OpenSlursCache();
-		ArrayList<ContinuedVolta> openVoltasCache = alist();
-		ArrayList<ContinuedWedge> openWedgesCache = alist();
+		OpenWedges openWedges = new OpenWedges();
 		OpenLyricsCache openLyricsCache = new OpenLyricsCache();
 		LastLyrics lastLyrics = new LastLyrics();
 		OpenTupletsCache openTupletsCache = new OpenTupletsCache();
+		OpenVolta openVolta = new OpenVolta();
 
 		//add continued elements
 		for (ContinuedElement ce : unclosedElements) {
@@ -146,10 +153,10 @@ public class ScoreFrameLayouter {
 				openCurvedLinesCache.add(SlurCache.createContinued((ContinuedSlur) ce));
 			}
 			else if (ce instanceof ContinuedVolta) {
-				openVoltasCache.add((ContinuedVolta) ce);
+				openVolta.volta = (ContinuedVolta) ce;
 			}
 			else if (ce instanceof ContinuedWedge) {
-				openWedgesCache.add((ContinuedWedge) ce);
+				openWedges.wedges.add((ContinuedWedge) ce);
 			}
 		}
 
@@ -161,8 +168,10 @@ public class ScoreFrameLayouter {
 		for (int iSystem : range(frame.getSystems())) {
 			context.systemIndex = iSystem;
 			SystemSpacing system = frame.getSystems().get(iSystem);
+			
 			List<StaffStamping> systemStaves = staffStampings.getAllOfSystem(iSystem);
-
+			StaffStamping systemFirstStaff = getFirst(systemStaves);
+			
 			//add the part names (first system) or part abbreviations (other systems)
 			int iStaffInPart = 0;
 			for (Part part : stavesList.getParts()) {
@@ -213,12 +222,12 @@ public class ScoreFrameLayouter {
 
 			}
 
-			//create all voltas in this system
-			otherStampsPool.addAll(voltaStamper.stamp(iSystem, system, header, staffStampings, openVoltasCache,
-				defaultLyricStyle));
+			//create all voltas in this system, including open voltas from the last system
+			otherStampsPool.addAll(voltaStamper.stampSystem(systemFirstStaff, openVolta,
+				header, defaultLyricStyle));
 
 			//create all wedges in this system
-			otherStampsPool.addAll(createWedges(iSystem, system, score, staffStampings, openWedgesCache));
+			otherStampsPool.addAll(wedgeStamper.stampSystem(system, score, staffStampings, openWedges));
 
 		}
 
@@ -253,8 +262,9 @@ public class ScoreFrameLayouter {
 		for (SlurCache clc : openCurvedLinesCache) {
 			continuedElements.add(clc.getContinuedCurvedLine());
 		}
-		continuedElements.addAll(openVoltasCache);
-		continuedElements.addAll(openWedgesCache);
+		if (openVolta.volta != null)
+			continuedElements.add(openVolta.volta);
+		continuedElements.addAll(openWedges.wedges);
 
 		layouterContext.restoreMp();
 		return new ScoreFrameLayout(frame, staffStampsPool, otherStampsPool, continuedElements);
@@ -469,39 +479,6 @@ public class ScoreFrameLayouter {
 
 
 
-	/**
-	 * Creates all wedge stampings in the given system.
-	 * All closed wedges are removed from the cache. The unclosed wedges (which have to
-	 * be continued on the next system or frame) remain in the cache (or are added, if they are new).
-	 */
-	private List<WedgeStamping> createWedges(int systemIndex, SystemSpacing system,
-		Score score, StaffStampings staffStampings, List<ContinuedWedge> openWedgesCache) {
-		ArrayList<WedgeStamping> ret = alist();
-		//find new wedges beginning in this staff
-		for (int iStaff = 0; iStaff < score.getStavesCount(); iStaff++) {
-			Staff staff = score.getStaff(iStaff);
-			for (int iMeasure : system.getMeasureIndices()) {
-				Measure measure = staff.getMeasures().get(iMeasure);
-				for (Voice voice : measure.getVoices()) {
-					for (MusicElement element : voice.getElements()) {
-						if (element instanceof Wedge) {
-							openWedgesCache.add(new ContinuedWedge((Wedge) element, iStaff));
-						}
-					}
-				}
-			}
-		}
-		//draw wedges in the cache, and remove them if closed in this system
-		for (Iterator<ContinuedWedge> itW = openWedgesCache.iterator(); itW.hasNext();) {
-			ContinuedWedge wedge = itW.next();
-			ret.add(directionStamper.createWedgeStamping(wedge.element,
-				staffStampings.get(systemIndex, wedge.getStaffIndex())));
-			if (MP.getMP(wedge.element.getWedgeEnd()).measure <= system.getEndMeasureIndex()) {
-				//wedge is closed
-				itW.remove();
-			}
-		}
-		return ret;
-	}
+	
 
 }

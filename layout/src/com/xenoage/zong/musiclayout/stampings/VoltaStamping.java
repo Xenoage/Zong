@@ -5,6 +5,7 @@ import lombok.Getter;
 
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.zong.core.music.volta.Volta;
 import com.xenoage.zong.core.text.FormattedText;
 
 /**
@@ -26,6 +27,8 @@ import com.xenoage.zong.core.text.FormattedText;
 public final class VoltaStamping
 	extends Stamping {
 
+	/** The stamped element. */
+	public final Volta element;
 	/** The line position of the horizontal line. */
 	public final float lp;
 	/** The horizontal start position in mm relative to the beginning of the staff. */
