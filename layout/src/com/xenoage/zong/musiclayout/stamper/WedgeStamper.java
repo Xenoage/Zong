@@ -10,12 +10,13 @@ import java.util.List;
 import com.xenoage.utils.kernel.Range;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.Measure;
-import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.core.music.Staff;
-import com.xenoage.zong.core.music.Voice;
+import com.xenoage.zong.core.music.direction.Direction;
 import com.xenoage.zong.core.music.direction.Wedge;
 import com.xenoage.zong.core.music.direction.WedgeType;
 import com.xenoage.zong.core.music.format.Position;
+import com.xenoage.zong.core.music.util.BeatE;
+import com.xenoage.zong.core.music.util.BeatEList;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.musiclayout.continued.ContinuedWedge;
 import com.xenoage.zong.musiclayout.continued.OpenWedges;
@@ -48,10 +49,11 @@ public class WedgeStamper {
 			Staff staff = score.getStaff(iStaff);
 			for (int iMeasure : system.getMeasureIndices()) {
 				Measure measure = staff.getMeasure(iMeasure);
-				for (Voice voice : measure.getVoices()) {
-					for (MusicElement element : voice.getElements()) {
-						if (element instanceof Wedge) {
-							openWedges.wedges.add(new ContinuedWedge((Wedge) element));
+				BeatEList<Direction> directions = measure.getDirections();
+				if (directions != null) {
+					for (BeatE<Direction> dir : directions) {
+						if (dir.element instanceof Wedge) {
+							openWedges.wedges.add(new ContinuedWedge((Wedge) dir.element));
 						}
 					}
 				}
