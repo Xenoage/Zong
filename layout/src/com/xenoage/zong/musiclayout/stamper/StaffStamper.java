@@ -1,4 +1,4 @@
-package com.xenoage.zong.musiclayout.layouter.scoreframelayout;
+package com.xenoage.zong.musiclayout.stamper;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;

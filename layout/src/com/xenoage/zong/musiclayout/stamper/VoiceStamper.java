@@ -9,6 +9,13 @@ import java.util.List;
 import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.core.music.chord.Chord;
+import com.xenoage.zong.core.text.FormattedTextStyle;
+import com.xenoage.zong.musiclayout.layouter.cache.OpenBeamsCache;
+import com.xenoage.zong.musiclayout.layouter.cache.OpenLyricsCache;
+import com.xenoage.zong.musiclayout.layouter.cache.OpenSlursCache;
+import com.xenoage.zong.musiclayout.layouter.cache.OpenTupletsCache;
+import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.LastLyrics;
+import com.xenoage.zong.musiclayout.notation.ChordNotation;
 import com.xenoage.zong.musiclayout.notation.Notation;
 import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.MeasureSpacing;
@@ -27,7 +34,12 @@ public class VoiceStamper {
 	
 	
 	public List<Stamping> stampVoices(MeasureSpacing measure, float voicesXMm,
-		StamperContext context) {
+		StamperContext context,
+	//TODO:
+			FormattedTextStyle defaultLyricStyle, OpenBeamsCache openBeamsCache,
+			OpenSlursCache openCurvedLinesCache,
+			OpenLyricsCache openLyricsCache, LastLyrics lastLyrics, OpenTupletsCache openTupletsCache) {
+		
 		List<Stamping> ret = alist();
 		context.layouter.saveMp();
 		//iterate over the voices
@@ -37,7 +49,8 @@ public class VoiceStamper {
 			//don't stamp leading rests in non-first voices
 			boolean stampLeadingRests = (iVoice == 0);
 			//create voice stampings
-			ret.addAll(stampVoice(voice, voicesXMm, stampLeadingRests, context));
+			ret.addAll(stampVoice(voice, voicesXMm, stampLeadingRests, context, defaultLyricStyle,
+				openBeamsCache, openCurvedLinesCache, openLyricsCache, lastLyrics, openTupletsCache));
 		}
 		context.layouter.restoreMp();
 		return ret;
@@ -45,7 +58,12 @@ public class VoiceStamper {
 	
 	
 	public List<Stamping> stampVoice(VoiceSpacing voice, float voiceXMm,
-		boolean stampLeadingRests, StamperContext context) {
+		boolean stampLeadingRests, StamperContext context,
+		//TODO:
+		FormattedTextStyle defaultLyricStyle, OpenBeamsCache openBeamsCache,
+		OpenSlursCache openCurvedLinesCache,
+		OpenLyricsCache openLyricsCache, LastLyrics lastLyrics, OpenTupletsCache openTupletsCache) {
+		
 		List<Stamping> ret = alist();
 		
 		//create the voice elements
@@ -58,11 +76,9 @@ public class VoiceStamper {
 				if (element instanceof Chord) {
 					//chord
 					onlyRestsSoFar = false;
-					//GOON
-					//ret.addAll(createChordStampings((ChordNotation) notation, x, context.staff,
-					//	iStaff, iSystem, defaultLyricStyle, openBeamsCache, openCurvedLinesCache,
-					//	openLyricsCache, lastLyrics, openTupletsCache, score, symbols,
-					//	settings, notations));
+					ret.addAll(ChordStamper.chordStamper.stampWithAttachments(
+						(ChordNotation) spacingElement.notation, xMm, context, defaultLyricStyle, openBeamsCache,
+						openCurvedLinesCache, openLyricsCache, lastLyrics, openTupletsCache));
 				}
 				else if (spacingElement instanceof RestSpacing) {
 					//rest

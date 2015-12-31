@@ -7,11 +7,11 @@ import static com.xenoage.zong.core.music.format.SP.sp;
 import static com.xenoage.zong.core.text.FormattedText.fText;
 import static com.xenoage.zong.core.text.FormattedTextUtils.styleText;
 import static com.xenoage.zong.musiclayout.text.DefaultTexts.getTempoTextNotNull;
+import static java.util.Collections.emptyList;
 
 import java.util.List;
 
 import com.xenoage.utils.collections.CList;
-import com.xenoage.utils.collections.IList;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.direction.Direction;
 import com.xenoage.zong.core.music.direction.Dynamics;
@@ -94,17 +94,22 @@ public class DirectionStamper {
 
 	/**
 	 * Creates the {@link StaffTextStamping}s for the {@link Direction}s of
-	 * the given {@link Chord} and its {@link ChordStampings}.
+	 * the given {@link ChordStampings}.
 	 */
-	public IList<StaffTextStamping> createForChord(Chord chord, ChordStampings chordStampings,
+	public List<StaffTextStamping> stampForChord(ChordStampings chordStampings,
 		SymbolPool symbolPool) {
-		CList<StaffTextStamping> ret = CList.clist();
+		Chord chord = chordStampings.chord;
+		int directionsCount = chord.getDirections().size();
+		if (directionsCount == 0)
+			return emptyList();
+		List<StaffTextStamping> ret = alist();
 		for (Direction direction : chord.getDirections()) {
 			if (direction instanceof Dynamics) {
 				ret.add(createDynamics((Dynamics) direction, chord, chordStampings, symbolPool));
 			}
+			//TODO: support more directions
 		}
-		return ret.close();
+		return ret;
 	}
 
 	/**

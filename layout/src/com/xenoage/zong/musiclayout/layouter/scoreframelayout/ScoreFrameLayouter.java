@@ -9,7 +9,6 @@ import static com.xenoage.utils.iterators.It.it;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.LyricStamper.lyricStamper;
 import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.SlurStamper.slurStamper;
-import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.StaffStamper.staffStamper;
 import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.TupletStamper.tupletStamper;
 import static com.xenoage.zong.musiclayout.stamper.BarlinesStamper.barlinesStamper;
 import static com.xenoage.zong.musiclayout.stamper.BeamStamper.beamStamper;
@@ -17,6 +16,7 @@ import static com.xenoage.zong.musiclayout.stamper.ChordStamper.chordStamper;
 import static com.xenoage.zong.musiclayout.stamper.DirectionStamper.directionStamper;
 import static com.xenoage.zong.musiclayout.stamper.MeasureStamper.measureStamper;
 import static com.xenoage.zong.musiclayout.stamper.PartNameStamper.partNameStamper;
+import static com.xenoage.zong.musiclayout.stamper.StaffStamper.staffStamper;
 import static com.xenoage.zong.musiclayout.stamper.VoiceStamper.voiceStamper;
 import static com.xenoage.zong.musiclayout.stamper.VoltaStamper.voltaStamper;
 import static com.xenoage.zong.musiclayout.stamper.WedgeStamper.wedgeStamper;
@@ -215,7 +215,9 @@ public class ScoreFrameLayouter {
 					otherStampsPool.addAll(measureStamper.stampMeasure(measure, voicesXMm, context));
 
 					//add voice elements within this measure
-					otherStampsPool.addAll(voiceStamper.stampVoices(measure, voicesXMm, context));
+					otherStampsPool.addAll(voiceStamper.stampVoices(measure, voicesXMm, context,
+						defaultLyricStyle, openBeamsCache, openCurvedLinesCache, openLyricsCache, lastLyrics,
+						openTupletsCache));
 					
 					xMm += measureColumnSpacing.getWidthMm();
 				}
@@ -231,7 +233,7 @@ public class ScoreFrameLayouter {
 
 		}
 
-		//create the collected beams
+		//create the beams
 		otherStampsPool.addAll(createBeams(beamsSpacing, openBeamsCache));
 
 		//create the collected ties and slurs
@@ -270,148 +272,7 @@ public class ScoreFrameLayouter {
 		return new ScoreFrameLayout(frame, staffStampsPool, otherStampsPool, continuedElements);
 	}
 
-	/**
-	 * Returns the stampings for the given {@link Chord}.
-	 * The given {@link OpenBeamsCache}, {@link OpenSlursCache},
-	 * {@link OpenLyricsCache}, {@link LastLyrics} and {@link OpenTupletsCache} may be modified.
-	 */
-	private List<Stamping> createChordStampings(ChordNotation chord, float positionX,
-		StaffStamping staff, int staffIndex, int systemIndex, FormattedTextStyle defaultLyricStyle,
-		OpenBeamsCache openBeamsCache, OpenSlursCache openCurvedLinesCache,
-		OpenLyricsCache openLyricsCache, LastLyrics lastLyrics, OpenTupletsCache openTupletsCache,
-		Score score, SymbolPool symbolPool, LayoutSettings layoutSettings, Notations notations) {
-		
-		ArrayList<Stamping> ret = alist();
-		Chord chordElement = chord.getElement();
-
-		//noteheads, leger lines, dots, accidentals, stem, flags, articulations
-		ChordStampings chordSt = chordStamper.create(chord, positionX,
-			staff, symbolPool, layoutSettings);
-		chordSt.addAllTo(ret);
-
-		//beam  
-		if (chordSt.stem != null) {
-			//if the chord belongs to a beam, add the stem to
-			//the corresponding list of beamed stems, so that the
-			//beam can be created later. the middle stems were not stamped
-			//yet, also remember them.
-			Beam beam = chord.element.getBeam();
-			if (beam != null) {
-				BeamNotation beamNot = (BeamNotation) notations.get(beam);
-				if (beamNot == null) {
-					//GOON
-					System.out.println("unknown notation for beam at " + beam.getMP());
-				}
-				else {
-					BeamedStemStampings bss = openBeamsCache.get(beamNot);
-					int chordIndex = beam.getWaypointIndex(chordElement);
-					bss.stems[chordIndex] = chordSt.stem;
-					openBeamsCache.set(beamNot, bss);
-				}
-			}
-		}
-
-		//ties and slurs
-		for (Slur slur : it(chordElement.getSlurs())) {
-			SlurWaypoint wp = slur.getWaypoint(chordElement);
-			WaypointPosition pos = slur.getWaypointPosition(chordElement);
-			int noteIndex = notNull(wp.getNoteIndex(), 0); //TODO: choose top/bottom
-			NoteheadStamping notehead = chordSt.noteheads[noteIndex];
-			//define the placement: above or below (TODO: better strategy)
-			VSide side = VSide.Top;
-			if (pos == WaypointPosition.Start) {
-				if (slur.getSide() != null) {
-					//use custom side
-					side = slur.getSide();
-				}
-				else {
-					//use default side:
-					//for all notes over line position 3, use above, else below
-					side = (notehead.position.lp > 3 ? VSide.Top : VSide.Bottom);
-				}
-			}
-			//compute position
-			if (pos == WaypointPosition.Start) {
-				//create start information
-				float distance = slurStamper.computeAdditionalDistance(chord, side);
-				SlurCache tiedChords = SlurCache.createNew(slur, side, staffIndex, notehead, distance,
-					systemIndex);
-				openCurvedLinesCache.add(tiedChords);
-			}
-			else {
-				//create stop information
-				SlurCache tiedChords = openCurvedLinesCache.get(slur);
-				if (tiedChords == null) {
-					//start notehead of this tie is unknown (must be from some preceding frame), which was forgotten
-					//ignore it. TODO: warning
-				}
-				else {
-					float distance = slurStamper.computeAdditionalDistance(chord,
-						tiedChords.getSide());
-					tiedChords.setStop(notehead, distance, systemIndex);
-				}
-			}
-		}
-
-		//lyric
-		List<Lyric> lyrics = chordElement.getLyrics();
-		if (lyrics.size() > 0) {
-			float baseLine = -10;
-
-			for (Lyric lyric : lyrics) {
-				if (lyric != null) {
-					SyllableType lyricType = lyric.getSyllableType();
-					StaffTextStamping lastLyric = lastLyrics.get(staffIndex, lyric.getVerse());
-
-					if (lyricType == SyllableType.Extend) {
-						//extend
-						if (lastLyric != null) //TODO: frame breaks...
-						{
-							//remember it
-							openLyricsCache.setUnderscore((Lyric) lastLyric.getElement(), lastLyric,
-								chordSt.noteheads[0]/* TODO*/, staffIndex);
-						}
-					}
-					else {
-						//normal lyric
-
-						//create text stamping
-						StaffTextStamping sts = lyricStamper.createSyllableStamping(lyric,
-							defaultLyricStyle, staff, chordSt.noteheads[0]/* TODO*/.position.xMm,
-							baseLine);
-						ret.add(sts);
-
-						//when middle or end syllable, add a hypen between the preceding syllable and this syllable
-						if (lastLyric != null) //TODO: frame breaks...
-						{
-							if (lyricType == SyllableType.Middle || lyricType == SyllableType.End) {
-								StaffTextStamping hyphenStamping = lyricStamper.createHyphenStamping(
-									lastLyric, sts, defaultLyricStyle);
-								ret.add(hyphenStamping);
-							}
-						}
-
-						//remember this lyric as the currently last one in the current staff and verse
-						lastLyrics.set(staffIndex, lyric.getVerse(), sts);
-
-					}
-				}
-
-				baseLine += -5;
-			}
-		}
-
-		//directions
-		ret.addAll(directionStamper.createForChord(chordElement, chordSt, symbolPool));
-
-		//tuplet
-		Tuplet tuplet = chordElement.getTuplet();
-		if (tuplet != null) {
-			openTupletsCache.addChord(chordElement, tuplet, chordSt);
-		}
-
-		return ret;
-	}
+	
 
 	/**
 	 * Creates the beams collected in the given {@link OpenBeamsCache}.
