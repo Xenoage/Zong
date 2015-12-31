@@ -55,7 +55,6 @@ import com.xenoage.zong.musiclayout.stampings.StaffTextStamping;
 import com.xenoage.zong.musiclayout.stampings.Stamping;
 import com.xenoage.zong.musiclayout.stampings.StemStamping;
 import com.xenoage.zong.symbols.Symbol;
-import com.xenoage.zong.symbols.SymbolPool;
 import com.xenoage.zong.symbols.common.CommonSymbol;
 
 /**
@@ -66,7 +65,6 @@ import com.xenoage.zong.symbols.common.CommonSymbol;
 public class ChordStamper {
 	
 	public static final ChordStamper chordStamper = new ChordStamper();
-	
 	
 	
 	/**
@@ -227,19 +225,19 @@ public class ChordStamper {
 		StemStamping stem = stampStem(chord, leftNoteXMm, context.staff);
 		
 		//type of notehead
-		int noteheadType = NoteheadStamping.NOTEHEAD_WHOLE;
+		CommonSymbol noteheadSymbol = CommonSymbol.NoteWhole;
 		DurationInfo.Type symbolType = DurationInfo.getNoteheadSymbolType(element.getDisplayedDuration());
 		if (symbolType == DurationInfo.Type.Half)
-			noteheadType = NoteheadStamping.NOTEHEAD_HALF;
+			noteheadSymbol = CommonSymbol.NoteHalf;
 		else if (symbolType == DurationInfo.Type.Quarter)
-			noteheadType = NoteheadStamping.NOTEHEAD_QUARTER;
+			noteheadSymbol = CommonSymbol.NoteQuarter;
 
 		//noteheads
 		NotesNotation notes = chord.notes;
 		NoteheadStamping[] noteheads = new NoteheadStamping[notes.getNotesCount()];
 		for (int iNote : range(noteheads)) {
 			NoteDisplacement note = notes.getNote(iNote);
-			Symbol noteSymbol = getNoteheadSymbol(noteheadType, context.layouter.symbols);
+			Symbol noteSymbol = context.getSymbol(noteheadSymbol);
 			float noteXMm = getNoteheadXMm(leftNoteXMm + note.xIs * context.staff.is,
 				scaling, context.staff, noteSymbol);
 			NoteheadStamping noteSt = new NoteheadStamping(chord,	iNote, noteSymbol,
@@ -323,15 +321,6 @@ public class ChordStamper {
 		StemNotation sa = chordNotation.stem;
 		return new StemStamping(chordNotation, stemXMm,
 			sa.startLp, sa.endLp, chordNotation.stemDirection, staffStamping);
-	}
-	
-	Symbol getNoteheadSymbol(int notehead, SymbolPool symbolPool) {
-		if (notehead == NoteheadStamping.NOTEHEAD_WHOLE)
-			return symbolPool.getSymbol(CommonSymbol.NoteWhole);
-		else if (notehead == NoteheadStamping.NOTEHEAD_HALF)
-			return symbolPool.getSymbol(CommonSymbol.NoteHalf);
-		else
-			return symbolPool.getSymbol(CommonSymbol.NoteQuarter);
 	}
 	
 	//TIDY
