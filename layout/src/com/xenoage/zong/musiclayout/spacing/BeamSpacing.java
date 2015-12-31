@@ -1,5 +1,7 @@
 package com.xenoage.zong.musiclayout.spacing;
 
+import static com.xenoage.zong.core.music.format.SP.sp;
+
 import java.util.List;
 
 import com.xenoage.zong.core.music.beam.Beam;
@@ -19,14 +21,23 @@ public class BeamSpacing {
 	
 	/** The beam notation. */
 	public BeamNotation notation;
-	/** The end positions (far from the note) of the stems. */
-	public List<SP> stemsEndSp;
+	/** The chords of the beam. */
+	private List<ElementSpacing> chords;
 	
 	/**
 	 * Gets the direction of the stem at the given chord.
 	 */
 	public StemDirection getStemDirection(int chordIndex) {
 		return notation.chords.get(chordIndex).stemDirection;
+	}
+	
+	/**
+	 * Gets the SP of the end of the stem of the given chord.
+	 */
+	public SP getStemEndSp(int chordIndex) {
+		float xMm = ChordSpacing.getStemXIs(chords.get(chordIndex));
+		float lp = notation.chords.get(chordIndex).stem.endLp;
+		return sp(xMm, lp);
 	}
 	
 }

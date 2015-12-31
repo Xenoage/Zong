@@ -5,6 +5,7 @@ import static com.xenoage.zong.core.music.chord.StemDirection.None;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
 import static com.xenoage.zong.musiclayout.notator.chord.stem.StemDrawer.stemDrawer;
 
+import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.zong.core.music.StaffLines;
 import com.xenoage.zong.core.music.chord.Stem;
 import com.xenoage.zong.core.music.chord.StemDirection;
@@ -34,17 +35,17 @@ public class StemNotator {
 	 *                    ignored if the stem has a given fixed length
 	 * @return  the vertical position of the stem, or {@link StemNotation#none} if the chord has no stem.
 	 */
-	public StemNotation compute(Stem stem, ChordLps notesLp, StemDirection stemDir,
+	@MaybeNull public StemNotation compute(Stem stem, ChordLps notesLp, StemDirection stemDir,
 		StaffLines staffLines, float scaling) {
 		float startLp = 0;
 		float endLp = 0;
 
 		//use a stem?
 		if (stemDir == None)
-			return StemNotation.none;
+			return null;
 
 		//compute start position
-		if (stemDir == Down)
+		if (stemDir == Down) 
 			startLp = notesLp.getTop();
 		else if (stemDir == Up)
 			startLp = notesLp.getBottom();

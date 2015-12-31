@@ -92,14 +92,10 @@ public class ChordStamper {
 
 		//beam  
 		if (beam != null) {
-			
-			//if the chord belongs to a beam, adjust the stem length
-			Beam beamElement = beam.notation.element;
-			int chordIndex = beamElement.getWaypointIndex(element);
-			chordSt.stem.endLp = beam.stemsEndSp.get(chordIndex).lp;
-			
 			//stamp the whole beam (when we find the end of the beam)
 			//TIDY: create/store beam stampings elsewhere?
+			Beam beamElement = beam.notation.element;
+			int chordIndex = beamElement.getWaypointIndex(element);
 			if (chordIndex == beamElement.size() - 1) {
 				StaffStamping leftStaff = staffStampings.get(context.systemIndex,
 					beamElement.getStart().getChord().getMP().staff);

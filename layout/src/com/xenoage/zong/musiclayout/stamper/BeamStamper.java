@@ -46,8 +46,8 @@ public class BeamStamper {
 		StaffStamping rightStaff) {
 		
 		int beamSize = beam.notation.element.size();
-		SP leftEndSp = getFirst(beam.stemsEndSp);
-		SP rightEndSp = getLast(beam.stemsEndSp);
+		SP leftEndSp = beam.getStemEndSp(0);
+		SP rightEndSp = beam.getStemEndSp(beamSize - 1);
 		StemDirection leftDir = beam.getStemDirection(0);
 		StemDirection rightDir = beam.getStemDirection(beamSize - 1);
 		
@@ -76,7 +76,7 @@ public class BeamStamper {
 			Fragments fragments = beam.notation.linesFragments.get(i);
 			for (int iChord : range(fragments)) {
 				Fragment fragment = fragments.get(iChord);
-				float stemX = beam.stemsEndSp.get(iChord).xMm;
+				float stemX = beam.getStemEndSp(iChord).xMm;
 				if (fragment == Start) {
 					//begin a new beam line
 					startX = stemX;

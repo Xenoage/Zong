@@ -1,10 +1,8 @@
 package com.xenoage.zong.musiclayout.notation.chord;
 
-import lombok.AllArgsConstructor;
-
 import static java.lang.Math.abs;
 
-import com.xenoage.utils.annotations.Const;
+import lombok.AllArgsConstructor;
 
 
 /**
@@ -12,15 +10,13 @@ import com.xenoage.utils.annotations.Const;
  * 
  * @author Andreas Wenger
  */
-@Const @AllArgsConstructor
+@AllArgsConstructor
 public class StemNotation {
-	
-	public static final StemNotation none = new StemNotation(0, 0);
 
 	/** The line position where the stem stars (note side). */
-	public final float startLp;
+	public float startLp;
 	/** The line position where the stem ends (flag/beam side). */
-	public final float endLp;
+	public float endLp;
 
 	
 	public float getLengthIs() {

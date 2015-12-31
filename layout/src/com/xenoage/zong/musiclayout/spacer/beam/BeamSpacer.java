@@ -12,12 +12,9 @@ import java.util.List;
 
 import com.xenoage.utils.collections.ArrayUtils;
 import com.xenoage.zong.core.music.StaffLines;
-import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.music.chord.StemDirection;
-import com.xenoage.zong.core.music.format.SP;
 import com.xenoage.zong.musiclayout.notation.BeamNotation;
 import com.xenoage.zong.musiclayout.notation.ChordNotation;
-import com.xenoage.zong.musiclayout.notation.Notations;
 import com.xenoage.zong.musiclayout.spacing.BeamSpacing;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
@@ -43,11 +40,13 @@ public class BeamSpacer {
 		for (int i : range(size))
 			notesLp[i] = beam.chords.get(i).getInnerNoteLp();
 		
-		//get horizontal position of stems - GOON remove
+		//get chord spacings
 		ColumnSpacing column = frameSpacing.getColumn(beam.element.getMP().measure);
+		List<ElementSpacing> chords = alist(size);
 		float[] stemsXIs = new float[size];
 		for (int i : range(size)) {
 			ElementSpacing cs = column.getElement(beam.chords.get(i).element);
+			chords.add(cs);
 			stemsXIs[i] = getStemXIs(cs);
 		}
 		
@@ -65,14 +64,14 @@ public class BeamSpacer {
 		Placement offset = beamPlacer.compute(slant, notesLp, stemDir, stemsXIs,
 			stemsLengthIs, 1, StaffLines.staff5Lines);
 		
-		//interpolate the other values
-		List<SP> stemsEndSp = alist(size);
+		//adjust the stem lengths by interpolating the other values
 		for (int i : range(size)) {
-			stemsEndSp.add(new SP(stemsXIs[i], interpolateLinear(offset.leftEndLp, offset.rightEndLp,
-				ArrayUtils.getFirst(stemsXIs), ArrayUtils.getLast(stemsXIs), stemsXIs[i])));
+			float lp = interpolateLinear(offset.leftEndLp, offset.rightEndLp,
+				ArrayUtils.getFirst(stemsXIs), ArrayUtils.getLast(stemsXIs), stemsXIs[i]);
+			beam.chords.get(i).stem.endLp = lp;
 		}
 		
-		return new BeamSpacing(beam, stemsEndSp);
+		return new BeamSpacing(beam, chords);
 	}
 	
 }
