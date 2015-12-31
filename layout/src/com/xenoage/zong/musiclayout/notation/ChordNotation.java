@@ -53,8 +53,8 @@ public class ChordNotation
 	 */
 	public int getInnerNoteLp() {
 		if (stemDirection == Up)
-			return getFirst(notes.notes).lp;
-		else
 			return getLast(notes.notes).lp;
+		else
+			return getFirst(notes.notes).lp;
 	}
 }

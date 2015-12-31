@@ -9,6 +9,7 @@ import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.util.BeamIterator;
+import com.xenoage.zong.musiclayout.notation.BeamNotation;
 import com.xenoage.zong.musiclayout.notation.Notations;
 import com.xenoage.zong.musiclayout.spacing.BeamSpacing;
 import com.xenoage.zong.musiclayout.spacing.FrameSpacing;
@@ -31,7 +32,7 @@ public class BeamsSpacer {
 			MP mp = itB.getMp();
 			int staffLinesCount = score.getStaff(mp).getLinesCount();
 			FrameSpacing frame = frames.getFrame(mp.measure);
-			ret.put(beam, beamSpacer.compute(beam, notations, frame, staffLinesCount));
+			ret.put(beam, beamSpacer.compute((BeamNotation) notations.get(beam), frame, staffLinesCount));
 		}
 		return ret;
 	}

@@ -34,42 +34,45 @@ public class BeamSpacer {
 	
 	public static final BeamSpacer beamSpacer = new BeamSpacer();
 	
-	public BeamSpacing compute(Beam beam, Notations notations, FrameSpacing frameSpacing,
+	public BeamSpacing compute(BeamNotation beam, FrameSpacing frameSpacing,
 		int staffLinesCount) {
-		int size = beam.size();
-		BeamNotation beamNot = (BeamNotation) notations.get(beam);
-		List<ChordNotation> chords = notations.getBeamChords(beam);
+		int size = beam.element.size();
+		
 		//get LPs of inner notes
 		int[] notesLp = new int[size];
 		for (int i : range(size))
-			notesLp[i] = chords.get(i).getInnerNoteLp();
-		//get horizontal position of stems
-		ColumnSpacing column = frameSpacing.getColumn(beam.getMP().measure);
+			notesLp[i] = beam.chords.get(i).getInnerNoteLp();
+		
+		//get horizontal position of stems - GOON remove
+		ColumnSpacing column = frameSpacing.getColumn(beam.element.getMP().measure);
 		float[] stemsXIs = new float[size];
 		for (int i : range(size)) {
-			ElementSpacing cs = column.getElement(chords.get(i).element);
+			ElementSpacing cs = column.getElement(beam.chords.get(i).element);
 			stemsXIs[i] = getStemXIs(cs);
 		}
+		
 		//compute slant
-		ChordNotation firstChord = getFirst(chords);
+		ChordNotation firstChord = getFirst(beam.chords);
 		StemDirection stemDir = firstChord.stemDirection; //TODO: stem dirs can be different
 		Slant slant = beamSlanter.compute(notesLp, stemDir, stemsXIs, staffLinesCount);
+		
 		//get lengths of stems
 		float[] stemsLengthIs = new float[size];
 		for (int i : range(size))
-			stemsLengthIs[i] = chords.get(i).stem.getLengthIs();
+			stemsLengthIs[i] = beam.chords.get(i).stem.getLengthIs();
+		
 		//compute the ends of the first and last stem
 		Placement offset = beamPlacer.compute(slant, notesLp, stemDir, stemsXIs,
 			stemsLengthIs, 1, StaffLines.staff5Lines);
+		
 		//interpolate the other values
 		List<SP> stemsEndSp = alist(size);
-		List<StemDirection> stemsDirection = alist(size);
 		for (int i : range(size)) {
 			stemsEndSp.add(new SP(stemsXIs[i], interpolateLinear(offset.leftEndLp, offset.rightEndLp,
 				ArrayUtils.getFirst(stemsXIs), ArrayUtils.getLast(stemsXIs), stemsXIs[i])));
-			stemsDirection.add(chords.get(i).stemDirection);
 		}
-		return new BeamSpacing(beamNot, stemsEndSp, stemsDirection);
+		
+		return new BeamSpacing(beam, stemsEndSp);
 	}
 	
 }

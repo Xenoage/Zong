@@ -42,13 +42,14 @@ public class BeamStamper {
 	 * @param leftStaff   the staff stamping, where the first chord of the beam is stamped on
 	 * @param rightStaff  the staff stamping, where the last chord of the beam is stamped on
 	 */
-	public List<BeamStamping> createBeamStampings(BeamSpacing beam, StaffStamping leftStaff,
+	public List<BeamStamping> stamp(BeamSpacing beam, StaffStamping leftStaff,
 		StaffStamping rightStaff) {
 		
+		int beamSize = beam.notation.element.size();
 		SP leftEndSp = getFirst(beam.stemsEndSp);
 		SP rightEndSp = getLast(beam.stemsEndSp);
-		StemDirection leftDir = getFirst(beam.stemsDirection);
-		StemDirection rightDir = getLast(beam.stemsDirection);
+		StemDirection leftDir = beam.getStemDirection(0);
+		StemDirection rightDir = beam.getStemDirection(beamSize - 1);
 		
 		//number of beam lines
 		int linesCount = beam.notation.getLinesCount();

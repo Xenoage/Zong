@@ -49,6 +49,8 @@ public class BeamNotation
 	public List<Fragments> linesFragments;
 	/** The vertical gap (distance on y-axis) between the beam lines in IS. */
 	public float gapIs;
+	/** The beamed chords. */
+	public List<ChordNotation> chords;
 	
 	
 	public int getLinesCount() {

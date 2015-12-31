@@ -105,12 +105,12 @@ public class ChordStamper {
 					beamElement.getStart().getChord().getMP().staff);
 				StaffStamping rightStaff = staffStampings.get(context.systemIndex,
 					beamElement.getStop().getChord().getMP().staff);
-				ret.addAll(beamStamper.createBeamStampings(beam, leftStaff, rightStaff));
+				ret.addAll(beamStamper.stamp(beam, leftStaff, rightStaff));
 			}
 			
 		}
 
-		//ties and slurs
+		//ties and slurs - GOON NOTATOR
 		for (Slur slur : element.getSlurs()) {
 			SlurWaypoint wp = slur.getWaypoint(element);
 			WaypointPosition pos = slur.getWaypointPosition(element);

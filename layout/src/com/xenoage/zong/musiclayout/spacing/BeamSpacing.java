@@ -21,7 +21,12 @@ public class BeamSpacing {
 	public BeamNotation notation;
 	/** The end positions (far from the note) of the stems. */
 	public List<SP> stemsEndSp;
-	/** The direction of the stems. */
-	public List<StemDirection> stemsDirection;
+	
+	/**
+	 * Gets the direction of the stem at the given chord.
+	 */
+	public StemDirection getStemDirection(int chordIndex) {
+		return notation.chords.get(chordIndex).stemDirection;
+	}
 	
 }
