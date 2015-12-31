@@ -14,7 +14,7 @@ import lombok.AllArgsConstructor;
  *
  * @author Andreas Wenger
  */
-@AllArgsConstructor
+@AllArgsConstructor @Deprecated
 public class BeamedStemStampings {
 
 	public BeamNotation beamNotation;

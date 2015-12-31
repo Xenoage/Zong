@@ -1,18 +1,13 @@
 package com.xenoage.zong.musiclayout.layouter.scoreframelayout;
 
-import static com.xenoage.utils.NullUtils.notNull;
 import static com.xenoage.utils.collections.CollectionUtils.addNotNull;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.collections.CollectionUtils.getFirst;
-import static com.xenoage.utils.collections.CollectionUtils.getLast;
-import static com.xenoage.utils.iterators.It.it;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.LyricStamper.lyricStamper;
 import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.SlurStamper.slurStamper;
 import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.TupletStamper.tupletStamper;
 import static com.xenoage.zong.musiclayout.stamper.BarlinesStamper.barlinesStamper;
-import static com.xenoage.zong.musiclayout.stamper.BeamStamper.beamStamper;
-import static com.xenoage.zong.musiclayout.stamper.ChordStamper.chordStamper;
 import static com.xenoage.zong.musiclayout.stamper.DirectionStamper.directionStamper;
 import static com.xenoage.zong.musiclayout.stamper.MeasureStamper.measureStamper;
 import static com.xenoage.zong.musiclayout.stamper.PartNameStamper.partNameStamper;
@@ -27,32 +22,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import com.xenoage.utils.collections.CollectionUtils;
 import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.utils.kernel.Tuple3;
-import com.xenoage.utils.math.VSide;
 import com.xenoage.zong.core.Score;
-import com.xenoage.zong.core.header.ColumnHeader;
 import com.xenoage.zong.core.header.ScoreHeader;
-import com.xenoage.zong.core.music.Measure;
-import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.core.music.Part;
-import com.xenoage.zong.core.music.Staff;
 import com.xenoage.zong.core.music.StavesList;
-import com.xenoage.zong.core.music.Voice;
-import com.xenoage.zong.core.music.WaypointPosition;
 import com.xenoage.zong.core.music.beam.Beam;
-import com.xenoage.zong.core.music.chord.Chord;
-import com.xenoage.zong.core.music.direction.Wedge;
 import com.xenoage.zong.core.music.group.BracketGroup;
 import com.xenoage.zong.core.music.group.StavesRange;
-import com.xenoage.zong.core.music.lyric.Lyric;
-import com.xenoage.zong.core.music.lyric.SyllableType;
-import com.xenoage.zong.core.music.slur.Slur;
-import com.xenoage.zong.core.music.slur.SlurWaypoint;
 import com.xenoage.zong.core.music.tuplet.Tuplet;
-import com.xenoage.zong.core.music.volta.Volta;
-import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.text.FormattedTextElement;
 import com.xenoage.zong.core.text.FormattedTextString;
 import com.xenoage.zong.core.text.FormattedTextStyle;
@@ -68,13 +47,9 @@ import com.xenoage.zong.musiclayout.layouter.cache.OpenBeamsCache;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenLyricsCache;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenSlursCache;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenTupletsCache;
-import com.xenoage.zong.musiclayout.layouter.cache.util.BeamedStemStampings;
 import com.xenoage.zong.musiclayout.layouter.cache.util.SlurCache;
-import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.ChordStampings;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.LastLyrics;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.StaffStampings;
-import com.xenoage.zong.musiclayout.notation.BeamNotation;
-import com.xenoage.zong.musiclayout.notation.ChordNotation;
 import com.xenoage.zong.musiclayout.notation.Notations;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.musiclayout.spacing.BeamSpacing;
@@ -84,15 +59,12 @@ import com.xenoage.zong.musiclayout.spacing.MeasureSpacing;
 import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
 import com.xenoage.zong.musiclayout.stamper.PartNameStamper;
 import com.xenoage.zong.musiclayout.stamper.StamperContext;
-import com.xenoage.zong.musiclayout.stamper.WedgeStamper;
 import com.xenoage.zong.musiclayout.stampings.BracketStamping;
 import com.xenoage.zong.musiclayout.stampings.NoteheadStamping;
 import com.xenoage.zong.musiclayout.stampings.SlurStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffTextStamping;
 import com.xenoage.zong.musiclayout.stampings.Stamping;
-import com.xenoage.zong.musiclayout.stampings.VoltaStamping;
-import com.xenoage.zong.musiclayout.stampings.WedgeStamping;
 import com.xenoage.zong.symbols.SymbolPool;
 
 /**
@@ -139,7 +111,6 @@ public class ScoreFrameLayouter {
 		FormattedTextStyle defaultLyricStyle = new FormattedTextStyle(score.getFormat().getLyricFont());
 
 		//caches
-		OpenBeamsCache openBeamsCache = new OpenBeamsCache();
 		OpenSlursCache openCurvedLinesCache = new OpenSlursCache();
 		OpenWedges openWedges = new OpenWedges();
 		OpenLyricsCache openLyricsCache = new OpenLyricsCache();
@@ -215,8 +186,8 @@ public class ScoreFrameLayouter {
 					otherStampsPool.addAll(measureStamper.stampMeasure(measure, voicesXMm, context));
 
 					//add voice elements within this measure
-					otherStampsPool.addAll(voiceStamper.stampVoices(measure, voicesXMm, context,
-						defaultLyricStyle, openBeamsCache, openCurvedLinesCache, openLyricsCache, lastLyrics,
+					otherStampsPool.addAll(voiceStamper.stampVoices(measure, voicesXMm, staffStampings, context,
+						defaultLyricStyle, beamsSpacing, openCurvedLinesCache, openLyricsCache, lastLyrics,
 						openTupletsCache));
 					
 					xMm += measureColumnSpacing.getWidthMm();
@@ -232,9 +203,6 @@ public class ScoreFrameLayouter {
 			otherStampsPool.addAll(wedgeStamper.stampSystem(system, score, staffStampings, openWedges));
 
 		}
-
-		//create the beams
-		otherStampsPool.addAll(createBeams(beamsSpacing, openBeamsCache));
 
 		//create the collected ties and slurs
 		otherStampsPool.addAll(createTiesAndSlurs(openCurvedLinesCache, staffStampings, frame
@@ -272,20 +240,6 @@ public class ScoreFrameLayouter {
 		return new ScoreFrameLayout(frame, staffStampsPool, otherStampsPool, continuedElements);
 	}
 
-	
-
-	/**
-	 * Creates the beams collected in the given {@link OpenBeamsCache}.
-	 * TIDY
-	 */
-	private List<Stamping> createBeams(Map<Beam, BeamSpacing> beams, OpenBeamsCache openBeamsCache) {
-		ArrayList<Stamping> ret = alist(openBeamsCache.size());
-		for (BeamedStemStampings beam : openBeamsCache) {
-			CollectionUtils.addAll(ret, beamStamper.createBeamStampings(
-				beams.get(beam.beamNotation.element), beam.firstStem().parentStaff, beam.lastStem().parentStaff));
-		}
-		return ret;
-	}
 
 	/**
 	 * Creates the ties and slurs collected in the given {@link OpenSlursCache}.

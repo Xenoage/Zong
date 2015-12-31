@@ -6,6 +6,7 @@ import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.core.music.format.SP.sp;
 import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.LyricStamper.lyricStamper;
 import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.SlurStamper.slurStamper;
+import static com.xenoage.zong.musiclayout.stamper.BeamStamper.beamStamper;
 import static com.xenoage.zong.musiclayout.stamper.DirectionStamper.directionStamper;
 import static com.xenoage.zong.musiclayout.stamper.LegerLinesStamper.legerLinesStamper;
 
@@ -29,11 +30,10 @@ import com.xenoage.zong.musiclayout.layouter.cache.OpenBeamsCache;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenLyricsCache;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenSlursCache;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenTupletsCache;
-import com.xenoage.zong.musiclayout.layouter.cache.util.BeamedStemStampings;
 import com.xenoage.zong.musiclayout.layouter.cache.util.SlurCache;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.ChordStampings;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.LastLyrics;
-import com.xenoage.zong.musiclayout.notation.BeamNotation;
+import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.StaffStampings;
 import com.xenoage.zong.musiclayout.notation.ChordNotation;
 import com.xenoage.zong.musiclayout.notation.chord.AccidentalDisplacement;
 import com.xenoage.zong.musiclayout.notation.chord.AccidentalsNotation;
@@ -44,6 +44,7 @@ import com.xenoage.zong.musiclayout.notation.chord.NotesNotation;
 import com.xenoage.zong.musiclayout.notation.chord.StemNotation;
 import com.xenoage.zong.musiclayout.settings.ChordWidths;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
+import com.xenoage.zong.musiclayout.spacing.BeamSpacing;
 import com.xenoage.zong.musiclayout.stampings.AccidentalStamping;
 import com.xenoage.zong.musiclayout.stampings.ArticulationStamping;
 import com.xenoage.zong.musiclayout.stampings.FlagsStamping;
@@ -68,13 +69,16 @@ public class ChordStamper {
 	
 	
 	/**
-	 * Returns the stampings for the given {@link Chord}.
+	 * Returns all the stampings for the given {@link Chord}, including beams,
+	 * tuplets, slurs and other attachments.
+	 * 
 	 * The given {@link OpenBeamsCache}, {@link OpenSlursCache},
 	 * {@link OpenLyricsCache}, {@link LastLyrics} and {@link OpenTupletsCache} may be modified.
 	 */
-	public List<Stamping> stampWithAttachments(ChordNotation chord, float xMm,
+	public List<Stamping> stampAll(ChordNotation chord, float xMm,
+		BeamSpacing beam, StaffStampings staffStampings,
 		StamperContext context, FormattedTextStyle defaultLyricStyle,
-		OpenBeamsCache openBeamsCache, OpenSlursCache openCurvedLinesCache,
+		OpenSlursCache openCurvedLinesCache,
 		OpenLyricsCache openLyricsCache, LastLyrics lastLyrics, OpenTupletsCache openTupletsCache) {
 		
 		List<Stamping> ret = alist();
@@ -83,29 +87,27 @@ public class ChordStamper {
 		int systemIndex = context.systemIndex;
 
 		//noteheads, leger lines, dots, accidentals, stem, flags, articulations
-		ChordStampings chordSt = stamp(chord, xMm, context);
+		ChordStampings chordSt = stampCore(chord, xMm, context);
 		chordSt.addAllTo(ret);
 
 		//beam  
-		if (chordSt.stem != null) {
-			//if the chord belongs to a beam, add the stem to
-			//the corresponding list of beamed stems, so that the
-			//beam can be created later. the middle stems were not stamped
-			//yet, also remember them. - GOON: not needed, we know the exact positions from the BeamSpacing
-			Beam beam = chord.element.getBeam();
-			if (beam != null) {
-				BeamNotation beamNot = (BeamNotation) context.getNotation(beam);
-				if (beamNot == null) {
-					//GOON
-					System.out.println("unknown notation for beam at " + beam.getMP());
-				}
-				else {
-					BeamedStemStampings bss = openBeamsCache.get(beamNot);
-					int chordIndex = beam.getWaypointIndex(element);
-					bss.stems[chordIndex] = chordSt.stem;
-					openBeamsCache.set(beamNot, bss);
-				}
+		if (beam != null) {
+			
+			//if the chord belongs to a beam, adjust the stem length
+			Beam beamElement = beam.notation.element;
+			int chordIndex = beamElement.getWaypointIndex(element);
+			chordSt.stem.endLp = beam.stemsEndSp.get(chordIndex).lp;
+			
+			//stamp the whole beam (when we find the end of the beam)
+			//TIDY: create/store beam stampings elsewhere?
+			if (chordIndex == beamElement.size() - 1) {
+				StaffStamping leftStaff = staffStampings.get(context.systemIndex,
+					beamElement.getStart().getChord().getMP().staff);
+				StaffStamping rightStaff = staffStampings.get(context.systemIndex,
+					beamElement.getStop().getChord().getMP().staff);
+				ret.addAll(beamStamper.createBeamStampings(beam, leftStaff, rightStaff));
 			}
+			
 		}
 
 		//ties and slurs
@@ -210,8 +212,11 @@ public class ChordStamper {
 		return ret;
 	}
 	
-	
-	public ChordStampings stamp(ChordNotation chord, float chordXMm, StamperContext context) {
+	/**
+	 * Draws the given chord, including noteheads, stem, flags, accidentals, dots,
+	 * articulations and leger lines.
+	 */
+	public ChordStampings stampCore(ChordNotation chord, float chordXMm, StamperContext context) {
 		
 		Chord element = chord.element;
 		boolean grace = element.isGrace();
@@ -219,6 +224,7 @@ public class ChordStamper {
 		float scaling = (grace ? settings.scalingGrace : 1);
 		ChordWidths chordWidths = (grace ? settings.graceChordWidths : settings.chordWidths);
 
+		//GOON: move into ChordSpacing
 		float leftNoteXMm = getLeftNoteXMm(chordXMm, chord.notes, context.staff.is);
 		
 		//stem
@@ -316,7 +322,8 @@ public class ChordStamper {
 		return leftNoteXMm;
 	}
 	
-	StemStamping stampStem(ChordNotation chordNotation, float leftNoteXMm, StaffStamping staffStamping) {
+	StemStamping stampStem(ChordNotation chordNotation, float leftNoteXMm,
+		StaffStamping staffStamping) {
 		float stemXMm = leftNoteXMm + chordNotation.notes.stemOffsetIs * staffStamping.is;
 		StemNotation sa = chordNotation.stem;
 		return new StemStamping(chordNotation, stemXMm,

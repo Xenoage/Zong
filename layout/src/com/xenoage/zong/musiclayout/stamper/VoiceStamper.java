@@ -2,21 +2,25 @@ package com.xenoage.zong.musiclayout.stamper;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.zong.musiclayout.stamper.ChordStamper.chordStamper;
 import static com.xenoage.zong.musiclayout.stamper.ElementStamper.elementStamper;
 
 import java.util.List;
+import java.util.Map;
 
 import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.core.music.VoiceElement;
+import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.text.FormattedTextStyle;
-import com.xenoage.zong.musiclayout.layouter.cache.OpenBeamsCache;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenLyricsCache;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenSlursCache;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenTupletsCache;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.LastLyrics;
+import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.StaffStampings;
 import com.xenoage.zong.musiclayout.notation.ChordNotation;
 import com.xenoage.zong.musiclayout.notation.Notation;
+import com.xenoage.zong.musiclayout.spacing.BeamSpacing;
 import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.MeasureSpacing;
 import com.xenoage.zong.musiclayout.spacing.RestSpacing;
@@ -34,9 +38,9 @@ public class VoiceStamper {
 	
 	
 	public List<Stamping> stampVoices(MeasureSpacing measure, float voicesXMm,
-		StamperContext context,
+		StaffStampings staffStampings, StamperContext context,
 	//TODO:
-			FormattedTextStyle defaultLyricStyle, OpenBeamsCache openBeamsCache,
+			FormattedTextStyle defaultLyricStyle, Map<Beam, BeamSpacing> beams,
 			OpenSlursCache openCurvedLinesCache,
 			OpenLyricsCache openLyricsCache, LastLyrics lastLyrics, OpenTupletsCache openTupletsCache) {
 		
@@ -49,8 +53,8 @@ public class VoiceStamper {
 			//don't stamp leading rests in non-first voices
 			boolean stampLeadingRests = (iVoice == 0);
 			//create voice stampings
-			ret.addAll(stampVoice(voice, voicesXMm, stampLeadingRests, context, defaultLyricStyle,
-				openBeamsCache, openCurvedLinesCache, openLyricsCache, lastLyrics, openTupletsCache));
+			ret.addAll(stampVoice(voice, voicesXMm, staffStampings, stampLeadingRests, context, defaultLyricStyle,
+				beams, openCurvedLinesCache, openLyricsCache, lastLyrics, openTupletsCache));
 		}
 		context.layouter.restoreMp();
 		return ret;
@@ -58,9 +62,9 @@ public class VoiceStamper {
 	
 	
 	public List<Stamping> stampVoice(VoiceSpacing voice, float voiceXMm,
-		boolean stampLeadingRests, StamperContext context,
+		StaffStampings staffStampings, boolean stampLeadingRests, StamperContext context,
 		//TODO:
-		FormattedTextStyle defaultLyricStyle, OpenBeamsCache openBeamsCache,
+		FormattedTextStyle defaultLyricStyle, Map<Beam, BeamSpacing> beams,
 		OpenSlursCache openCurvedLinesCache,
 		OpenLyricsCache openLyricsCache, LastLyrics lastLyrics, OpenTupletsCache openTupletsCache) {
 		
@@ -76,8 +80,10 @@ public class VoiceStamper {
 				if (element instanceof Chord) {
 					//chord
 					onlyRestsSoFar = false;
-					ret.addAll(ChordStamper.chordStamper.stampWithAttachments(
-						(ChordNotation) spacingElement.notation, xMm, context, defaultLyricStyle, openBeamsCache,
+					Chord chord = (Chord) element;
+					BeamSpacing beam = beams.get(chord.getBeam());
+					ret.addAll(chordStamper.stampAll(
+						(ChordNotation) spacingElement.notation, xMm, beam, staffStampings, context, defaultLyricStyle,
 						openCurvedLinesCache, openLyricsCache, lastLyrics, openTupletsCache));
 				}
 				else if (spacingElement instanceof RestSpacing) {

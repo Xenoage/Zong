@@ -1,5 +1,6 @@
 package com.xenoage.zong.musiclayout.stamper;
 
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.collections.CollectionUtils.getFirst;
 import static com.xenoage.utils.collections.CollectionUtils.getLast;
 import static com.xenoage.utils.kernel.Range.range;
@@ -11,6 +12,8 @@ import static com.xenoage.zong.musiclayout.notation.beam.Fragment.HookLeft;
 import static com.xenoage.zong.musiclayout.notation.beam.Fragment.HookRight;
 import static com.xenoage.zong.musiclayout.notation.beam.Fragment.Start;
 import static com.xenoage.zong.musiclayout.notation.beam.Fragment.Stop;
+
+import java.util.List;
 
 import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.core.music.format.SP;
@@ -39,7 +42,7 @@ public class BeamStamper {
 	 * @param leftStaff   the staff stamping, where the first chord of the beam is stamped on
 	 * @param rightStaff  the staff stamping, where the last chord of the beam is stamped on
 	 */
-	public BeamStamping[] createBeamStampings(BeamSpacing beam, StaffStamping leftStaff,
+	public List<BeamStamping> createBeamStampings(BeamSpacing beam, StaffStamping leftStaff,
 		StaffStamping rightStaff) {
 		
 		SP leftEndSp = getFirst(beam.stemsEndSp);
@@ -49,14 +52,14 @@ public class BeamStamper {
 		
 		//number of beam lines
 		int linesCount = beam.notation.getLinesCount();
-		BeamStamping[] ret = new BeamStamping[linesCount];
+		List<BeamStamping> ret = alist(linesCount);
 		
 		//first line (8th line) is always continuous
 		float leftLp = leftEndSp.lp - leftDir.getSign() * lineHeightIs / 2; //vertically centered
 		float rightLp = rightEndSp.lp - rightDir.getSign() * lineHeightIs / 2;
 		BeamStamping beam8th = new BeamStamping(beam, leftStaff, rightStaff,
 			leftEndSp.withLp(leftLp), rightEndSp.withLp(rightLp));
-		ret[0] = beam8th;
+		ret.add(beam8th);
 		
 		//the next lines can be broken, if there are different rhythms or beam subdivisions
 		//this is stored in the notation
@@ -85,7 +88,7 @@ public class BeamStamper {
 					SP rightSp = sp(stopX,
 						interpolateLinear(leftLineLp, rightLineLp, leftXMm, rightXMm, stopX));
 					BeamStamping stamping = new BeamStamping(beam, leftStaff, rightStaff, leftSp, rightSp);
-					ret[i+1] = stamping;
+					ret.add(stamping);
 				}
 				else if (fragment == HookLeft || fragment == HookRight) {
 					//left hook
@@ -95,12 +98,12 @@ public class BeamStamper {
 					SP leftSp = sp(x1, interpolateLinear(leftLineLp, rightLineLp, leftXMm, rightXMm, x1));
 					SP rightSp = sp(x2, interpolateLinear(leftLineLp, rightLineLp, leftXMm, rightXMm, x2));
 					BeamStamping stamping = new BeamStamping(beam, leftStaff, rightStaff, leftSp, rightSp);
-					ret[i+1] = stamping;
+					ret.add(stamping);
 				}
 			}
 		}
 
-		return new BeamStamping[0];
+		return ret;
 	}
 
 }
