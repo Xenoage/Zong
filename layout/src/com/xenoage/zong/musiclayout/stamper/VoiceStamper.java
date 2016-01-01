@@ -47,9 +47,9 @@ public class VoiceStamper {
 		List<Stamping> ret = alist();
 		context.layouter.saveMp();
 		//iterate over the voices
-		for (int iVoice : range(measure.getVoiceSpacings())) {
+		for (int iVoice : range(measure.voices)) {
 			context.layouter.mp = context.layouter.mp.withVoice(iVoice);
-			VoiceSpacing voice = measure.getVoiceSpacings().get(iVoice);
+			VoiceSpacing voice = measure.voices.get(iVoice);
 			//don't stamp leading rests in non-first voices
 			boolean stampLeadingRests = (iVoice == 0);
 			//create voice stampings
@@ -76,7 +76,7 @@ public class VoiceStamper {
 			MusicElement element = spacingElement.getElement();
 			if (element != null /* TODO && (stampRests || !(element instanceof Rest)) */) {
 				Notation notation = context.getNotation(element);
-				float xMm = voiceXMm + spacingElement.offsetIs * voice.interlineSpace;
+				float xMm = voiceXMm + spacingElement.xIs * voice.interlineSpace;
 				if (element instanceof Chord) {
 					//chord
 					onlyRestsSoFar = false;

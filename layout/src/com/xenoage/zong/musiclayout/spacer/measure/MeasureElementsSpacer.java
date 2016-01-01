@@ -242,7 +242,7 @@ public class MeasureElementsSpacer {
 	private float getLeftX(ElementSpacing element) {
 		//element and notation may be null, e.g. for last SE in measure
 		Notation notation = element.notation;
-		return element.offsetIs - (notation != null ? notation.getWidth().frontGap : 0);
+		return element.xIs - (notation != null ? notation.getWidth().frontGap : 0);
 	}
 
 	/**
@@ -252,7 +252,7 @@ public class MeasureElementsSpacer {
 	private float getRightX(ElementSpacing element) {
 		//element and notation may be null, e.g. for last SE in measure
 		Notation notation = element.notation;
-		return element.offsetIs + (notation != null ? notation.getWidth().symbolWidth : 0);
+		return element.xIs + (notation != null ? notation.getWidth().symbolWidth : 0);
 	}
 
 	/**
@@ -261,7 +261,7 @@ public class MeasureElementsSpacer {
 	public void shift(List<VoiceSpacing> vss, float offsetIs) {
 		for (VoiceSpacing vs : vss)
 			for (ElementSpacing se : vs.elements)
-				se.offsetIs += offsetIs;
+				se.xIs += offsetIs;
 	}
 
 	/**
@@ -272,7 +272,7 @@ public class MeasureElementsSpacer {
 		for (VoiceSpacing vs : vss)
 			for (ElementSpacing se : vs.elements)
 				if (se.beat.compareTo(beat) >= 0)
-					se.offsetIs += offsetIs;
+					se.xIs += offsetIs;
 	}
 
 }

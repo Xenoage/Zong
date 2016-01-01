@@ -50,7 +50,7 @@ public class StemReader {
 				getFarNoteLP(context, chord, stemEndLinePosition, staff)) / 2;
 		}
 		//create stem
-		return new Stem(direction, length);
+		return new Stem(direction, length + 0);
 	}
 	
 	private StemDirection readStemDirection() {

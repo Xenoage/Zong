@@ -35,18 +35,18 @@ public class MeasureStamper {
 	public List<Stamping> stampLeading(MeasureSpacing measure, float leadingXMm,
 		StamperContext context) {
 		
-		LeadingSpacing leadingSpacing = measure.getLeadingSpacing();
-		if (leadingSpacing == null)
+		LeadingSpacing leading = measure.leading;
+		if (leading == null)
 			return emptyList;
 		
-		List<Stamping> ret = alist(leadingSpacing.elements.size());
-		for (ElementSpacing spacingElement : leadingSpacing.elements) {
-			MusicElement element = spacingElement.getElement();
-			if (element != null) {
-				float xMm = leadingXMm + spacingElement.offsetIs * measure.getInterlineSpace();
-				Notation notation = context.getNotation(element);
+		List<Stamping> ret = alist(leading.elements.size());
+		for (ElementSpacing element : leading.elements) {
+			MusicElement me = element.getElement();
+			if (me != null) {
+				float xMm = leadingXMm + element.xIs * measure.interlineSpace;
+				Notation notation = context.getNotation(me);
 				if (notation == null)
-					throw new RuntimeException("No notation for element " + element + " at " + MP.getMP(element));
+					throw new RuntimeException("No notation for element " + me + " at " + MP.getMP(me));
 				ret.add(stamp(notation, xMm, context));
 			}
 		}
@@ -62,11 +62,11 @@ public class MeasureStamper {
 	public List<Stamping> stampMeasure(MeasureSpacing measure, float measureXMm,
 		StamperContext context) {
 		List<Stamping> ret = alist();
-		for (ElementSpacing spacingElement : measure.getMeasureElementsSpacings()) {
-			MusicElement element = spacingElement.getElement();
-			if (element != null) {
-				Notation notation = context.getNotation(element);
-				float xMm = measureXMm + spacingElement.offsetIs * measure.getInterlineSpace();
+		for (ElementSpacing element : measure.elements) {
+			MusicElement me = element.getElement();
+			if (me != null) {
+				Notation notation = context.getNotation(me);
+				float xMm = measureXMm + element.xIs * measure.interlineSpace;
 				ret.add(stamp(notation, xMm, context));
 			}
 		}

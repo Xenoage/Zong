@@ -70,7 +70,7 @@ public class VoicesBeatOffsetter {
 				//if last beat offset has same beat, overwrite it
 				if (ret.get(ret.size() - 1).getBeat().equals(se.beat))
 					ret.remove(ret.size() - 1);
-				ret.add(new BeatOffset(se.beat, se.offsetIs * interlineSpace));
+				ret.add(new BeatOffset(se.beat, se.xIs * interlineSpace));
 			}
 		}
 		else {
@@ -232,7 +232,7 @@ public class VoicesBeatOffsetter {
 				float lastUsedBeatVoiceSpacingOffset = 0;
 				for (ElementSpacing spacing : spacings) {
 					if (spacing.beat.equals(lastUsedBeat)) {
-						lastUsedBeatVoiceSpacingOffset = spacing.offsetIs * interlineSpace;
+						lastUsedBeatVoiceSpacingOffset = spacing.xIs * interlineSpace;
 						break;
 					}
 				}
@@ -290,7 +290,7 @@ public class VoicesBeatOffsetter {
 				while (i + 1 < spacings.size() && spacings.get(i + 1).beat.equals(beat)) {
 					i++;
 				}
-				return spacings.get(i).offsetIs;
+				return spacings.get(i).xIs;
 			}
 		}
 		return 0;

@@ -123,7 +123,7 @@ public class SingleVoiceSpacer {
 		//shift spacings to the right
 		float shift = (-lastFrontGapOffset) + layoutSettings.offsetMeasureStart;
 		for (ElementSpacing e : ret)
-			e.offsetIs += shift;
+			e.xIs += shift;
 
 		return new VoiceSpacing(voice, interlineSpace, ilist(ret));
 	}

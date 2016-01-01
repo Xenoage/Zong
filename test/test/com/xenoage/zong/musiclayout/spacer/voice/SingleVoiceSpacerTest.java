@@ -72,11 +72,11 @@ public class SingleVoiceSpacerTest {
 		float s = layoutSettings.offsetMeasureStart;
 		float d = layoutSettings.spacings.widthDistanceMin;
 		assertEquals(5, ses.length);
-		assertEquals(s + 2, ses[0].offsetIs, DELTA_FLOAT);
-		assertEquals(s + 8, ses[1].offsetIs, DELTA_FLOAT);
-		assertEquals(s + 12 + d, ses[2].offsetIs, DELTA_FLOAT);
-		assertEquals(s + 19 + 2 * d, ses[3].offsetIs, DELTA_FLOAT);
-		assertEquals(s + 24 + 2 * d, ses[4].offsetIs, DELTA_FLOAT);
+		assertEquals(s + 2, ses[0].xIs, DELTA_FLOAT);
+		assertEquals(s + 8, ses[1].xIs, DELTA_FLOAT);
+		assertEquals(s + 12 + d, ses[2].xIs, DELTA_FLOAT);
+		assertEquals(s + 19 + 2 * d, ses[3].xIs, DELTA_FLOAT);
+		assertEquals(s + 24 + 2 * d, ses[4].xIs, DELTA_FLOAT);
 		//check beats
 		assertEquals(fr(0, 8), ses[0].beat);
 		assertEquals(fr(2, 8), ses[1].beat);
@@ -108,11 +108,11 @@ public class SingleVoiceSpacerTest {
 		ElementSpacing[] ses = vs.elements.toArray(new ElementSpacing[0]);;
 		float s = layoutSettings.offsetMeasureStart;
 		assertEquals(5, ses.length);
-		assertEquals(s + 2, ses[0].offsetIs, DELTA_FLOAT);
-		assertEquals(s + 9, ses[1].offsetIs, DELTA_FLOAT);
-		assertEquals(s + 12, ses[2].offsetIs, DELTA_FLOAT);
-		assertEquals(s + 17, ses[3].offsetIs, DELTA_FLOAT);
-		assertEquals(s + 22, ses[4].offsetIs, DELTA_FLOAT);
+		assertEquals(s + 2, ses[0].xIs, DELTA_FLOAT);
+		assertEquals(s + 9, ses[1].xIs, DELTA_FLOAT);
+		assertEquals(s + 12, ses[2].xIs, DELTA_FLOAT);
+		assertEquals(s + 17, ses[3].xIs, DELTA_FLOAT);
+		assertEquals(s + 22, ses[4].xIs, DELTA_FLOAT);
 		//check beats
 		assertEquals(fr(0, 8), ses[0].beat);
 		assertEquals(fr(2, 8), ses[1].beat);
@@ -145,11 +145,11 @@ public class SingleVoiceSpacerTest {
 		float s = layoutSettings.offsetMeasureStart;
 		float d = layoutSettings.spacings.widthDistanceMin;
 		assertEquals(5, ses.length);
-		assertEquals(s + 2, ses[0].offsetIs, DELTA_FLOAT);
-		assertEquals(s + 5 + d, ses[1].offsetIs, DELTA_FLOAT);
-		assertEquals(s + 8 + d, ses[2].offsetIs, DELTA_FLOAT);
-		assertEquals(s + 13 + d, ses[3].offsetIs, DELTA_FLOAT);
-		assertEquals(s + 18 + d, ses[4].offsetIs, DELTA_FLOAT);
+		assertEquals(s + 2, ses[0].xIs, DELTA_FLOAT);
+		assertEquals(s + 5 + d, ses[1].xIs, DELTA_FLOAT);
+		assertEquals(s + 8 + d, ses[2].xIs, DELTA_FLOAT);
+		assertEquals(s + 13 + d, ses[3].xIs, DELTA_FLOAT);
+		assertEquals(s + 18 + d, ses[4].xIs, DELTA_FLOAT);
 		//check beats
 		assertEquals(fr(0, 8), ses[0].beat);
 		assertEquals(fr(2, 8), ses[1].beat);
@@ -182,11 +182,11 @@ public class SingleVoiceSpacerTest {
 		float s = layoutSettings.offsetMeasureStart;
 		float d = layoutSettings.spacings.widthDistanceMin;
 		assertEquals(5, ses.length);
-		assertEquals(s + 2, ses[0].offsetIs, DELTA_FLOAT);
-		assertEquals(s + 5 + d, ses[1].offsetIs, DELTA_FLOAT);
-		assertEquals(s + 8 + d, ses[2].offsetIs, DELTA_FLOAT);
-		assertEquals(s + 13 + d, ses[3].offsetIs, DELTA_FLOAT);
-		assertEquals(s + 18 + d, ses[4].offsetIs, DELTA_FLOAT);
+		assertEquals(s + 2, ses[0].xIs, DELTA_FLOAT);
+		assertEquals(s + 5 + d, ses[1].xIs, DELTA_FLOAT);
+		assertEquals(s + 8 + d, ses[2].xIs, DELTA_FLOAT);
+		assertEquals(s + 13 + d, ses[3].xIs, DELTA_FLOAT);
+		assertEquals(s + 18 + d, ses[4].xIs, DELTA_FLOAT);
 		//check beats
 		assertEquals(fr(0, 8), ses[0].beat);
 		assertEquals(fr(2, 8), ses[1].beat);

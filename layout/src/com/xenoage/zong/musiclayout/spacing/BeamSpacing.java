@@ -22,7 +22,7 @@ public class BeamSpacing {
 	/** The beam notation. */
 	public BeamNotation notation;
 	/** The chords of the beam. */
-	private List<ElementSpacing> chords;
+	public List<ElementSpacing> chords;
 	
 	/**
 	 * Gets the direction of the stem at the given chord.
@@ -35,7 +35,8 @@ public class BeamSpacing {
 	 * Gets the SP of the end of the stem of the given chord.
 	 */
 	public SP getStemEndSp(int chordIndex) {
-		float xMm = ChordSpacing.getStemXIs(chords.get(chordIndex));
+		ElementSpacing chord = chords.get(chordIndex);
+		float xMm = chord.getMeasureXMm() + ChordSpacing.getStemXIs(chord) * chord.parent.interlineSpace;
 		float lp = notation.chords.get(chordIndex).stem.endLp;
 		return sp(xMm, lp);
 	}

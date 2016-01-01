@@ -23,39 +23,45 @@ import com.xenoage.zong.layout.frames.ScoreFrame;
  * 
  * @author Andreas Wenger
  */
-@Const @Getter
 public final class MeasureSpacing {
 
 	/** The musical position of the measure. */
-	@NonNull private MP mp;
+	@NonNull public MP mp;
 	/** The interline space in mm of this measure. */
-	private float interlineSpace;
+	public float interlineSpace;
 	/** The spacings of the voices */
-	@NonEmpty private List<VoiceSpacing> voiceSpacings;
+	@NonEmpty public List<VoiceSpacing> voices;
 	/** The spacings of the measure elements, like inner clefs */
-	@NonNull private List<ElementSpacing> measureElementsSpacings;
+	@NonNull public List<ElementSpacing> elements;
 	/** The leading spacing, which may contain elements like initial clefs or key signatures */
-	@MaybeNull private LeadingSpacing leadingSpacing;
+	@MaybeNull public LeadingSpacing leading;
 	/** A sorted list of all used beats in this measure */
-	@MaybeEmpty private List<Fraction> usedBeats;
+	@MaybeEmpty public List<Fraction> usedBeats;
 
+	/** The parent column. */
+	public ColumnSpacing parent;
+	
 
-	public MeasureSpacing(MP mp, float interlineSpace, List<VoiceSpacing> voiceSpacings,
-		List<ElementSpacing> measureElementSpacings, LeadingSpacing leadingSpacing) {
+	public MeasureSpacing(MP mp, float interlineSpace, List<VoiceSpacing> voices,
+		List<ElementSpacing> elements, LeadingSpacing leading) {
 		this.mp = mp;
 		this.interlineSpace = interlineSpace;
-		this.voiceSpacings = voiceSpacings;
-		this.measureElementsSpacings = measureElementSpacings;
-		this.leadingSpacing = leadingSpacing;
+		this.voices = voices;
+		this.elements = elements;
+		this.leading = leading;
 
 		//compute the list of all used beats
 		SortedList<Fraction> usedBeats = new SortedList<Fraction>(false);
-		for (VoiceSpacing vs : voiceSpacings) {
+		for (VoiceSpacing vs : voices) {
 			for (ElementSpacing se : vs.elements) {
 				usedBeats.add(se.beat);
 			}
 		}
 		this.usedBeats = alist(usedBeats.getLinkedList());
+		
+		//set backward references
+		for (VoiceSpacing voice : voices)
+			voice.parent = this;
 	}
 
 }

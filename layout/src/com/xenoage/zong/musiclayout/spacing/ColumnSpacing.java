@@ -59,6 +59,10 @@ public class ColumnSpacing {
 		this.measures = measureSpacings;
 		this.beatOffsets = beatOffsets;
 		this.barlineOffsets = barlineOffsets;
+		
+		//set backward references
+		for (MeasureSpacing measure : measureSpacings)
+			measure.parent = this;
 	}
 	
 	/**
@@ -78,10 +82,10 @@ public class ColumnSpacing {
 		//find the maximum width of the leading spacings
 		//of each staff
 		for (int iStaff : range(measures)) {
-			MeasureSpacing measureSpacing = measures.get(iStaff);
-			LeadingSpacing leadingSpacing = measureSpacing.getLeadingSpacing();
-			if (leadingSpacing != null) {
-				float width = leadingSpacing.widthIs * measureSpacing.getInterlineSpace();
+			MeasureSpacing measure = measures.get(iStaff);
+			LeadingSpacing leading = measure.leading;
+			if (leading != null) {
+				float width = leading.widthIs * measure.interlineSpace;
 				if (width > ret)
 					ret = width;
 			}
@@ -114,9 +118,9 @@ public class ColumnSpacing {
 	 */
 	public float getOffsetIs(MusicElement element, int staffIndex, int voiceIndex) {
 		MeasureSpacing measure = measures.get(staffIndex);
-		for (ElementSpacing se : measure.getVoiceSpacings().get(voiceIndex).elements) {
+		for (ElementSpacing se : measure.voices.get(voiceIndex).elements) {
 			if (se.getElement() == element) {
-				return se.offsetIs;
+				return se.xIs;
 			}
 		}
 		return 0;
@@ -137,7 +141,7 @@ public class ColumnSpacing {
 	 * Gets the VoiceSpacing at the given staff and voice.
 	 */
 	public VoiceSpacing getVoice(int staff, int voice) {
-		return measures.get(staff).getVoiceSpacings().get(voice);
+		return measures.get(staff).voices.get(voice);
 	}
 	
 	/**
@@ -192,7 +196,7 @@ public class ColumnSpacing {
 		//find beat and return it
 		MeasureSpacing measure = measures.get(staff);
 		BeatOffset last = null;
-		for (Fraction beat : measure.getUsedBeats()) {
+		for (Fraction beat : measure.usedBeats) {
 			BeatOffset bo = getBeatOffset(beat);
 			if (xMm <= bo.offsetMm)
 				return getBeatAt(xMm, last, bo);

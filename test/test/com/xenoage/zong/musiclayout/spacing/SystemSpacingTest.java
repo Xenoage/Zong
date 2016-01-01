@@ -118,7 +118,8 @@ public class SystemSpacingTest {
 		List<List<BeatOffset>> columnsBeats) {
 		List<ColumnSpacing> columns = alist();
 		for (int iMeasure : range(columnsBeats))
-			columns.add(new ColumnSpacing(iMeasure, alist(), columnsBeats.get(iMeasure), barlineBeats.get(iMeasure)));
+			columns.add(new ColumnSpacing(iMeasure, alist(),
+				columnsBeats.get(iMeasure), barlineBeats.get(iMeasure)));
 		return new SystemSpacing(columns, 0, 0, 0, null, 0);
 	}
 

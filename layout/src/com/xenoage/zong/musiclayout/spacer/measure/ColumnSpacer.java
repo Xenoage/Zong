@@ -50,6 +50,7 @@ public class ColumnSpacer {
 	 * @param notations       the precomputed notations of the measure and voice elements
 	 */
 	public ColumnSpacing compute(Context context, boolean createLeading, Notations notations) {
+		
 		context.saveMp();
 		
 		int measureIndex = context.mp.measure;

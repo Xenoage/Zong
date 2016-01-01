@@ -39,16 +39,16 @@ public class BeamStampingRenderer
 		//TODO: stem should be thinner than lineWidth?
 		float stemWidthMm = beam.staff1.getLineWidthMm();
 
-		float x1Mm = beam.sp1.xMm - stemWidthMm / 2f;
-		float x2Mm = beam.sp2.xMm + stemWidthMm / 2f;
+		StaffStamping staff1 = beam.staff1;
+		StaffStamping staff2 = beam.staff2;
+		
+		float x1Mm = staff1.positionMm.x + beam.sp1.xMm - stemWidthMm / 2f;
+		float x2Mm = staff2.positionMm.x + beam.sp2.xMm + stemWidthMm / 2f;
 
 		Color color = Color.black;
 
 		float leftYStart = 0;
 		float rightYStart = 0;
-
-		StaffStamping staff1 = beam.staff1;
-		StaffStamping staff2 = beam.staff2;
 
 		if (canvas.getFormat() == CanvasFormat.Raster) {
 			//render on screen

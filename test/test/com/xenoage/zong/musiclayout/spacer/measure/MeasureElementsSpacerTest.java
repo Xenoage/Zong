@@ -79,7 +79,7 @@ public class MeasureElementsSpacerTest {
 		ElementSpacing[] mes = res.toArray(new ElementSpacing[0]);
 		assertEquals(1, mes.length);
 		assertEquals(fr(6), mes[0].beat);
-		assertEquals(15 - paddingWidth - clefWidth / 2, mes[0].offsetIs, Delta.DELTA_FLOAT);
+		assertEquals(15 - paddingWidth - clefWidth / 2, mes[0].xIs, Delta.DELTA_FLOAT);
 		//voice spacings must be unchanged - GOON - clone original
 		assertEquals(vs, vs);
 	}
@@ -124,7 +124,7 @@ public class MeasureElementsSpacerTest {
 		ElementSpacing[] se = mes.toArray(new ElementSpacing[0]);
 		assertEquals(1, se.length);
 		assertEquals(fr(4), se[0].beat);
-		assertEquals(13 - paddingWidth - clefWidth / 2, se[0].offsetIs, Delta.DELTA_FLOAT);
+		assertEquals(13 - paddingWidth - clefWidth / 2, se[0].xIs, Delta.DELTA_FLOAT);
 	}
 	
 	private void assertEqualsSpacings(List<ElementSpacing> expected, List<ElementSpacing> actual) {
@@ -132,7 +132,7 @@ public class MeasureElementsSpacerTest {
 		for (int i : range(expected)) {
 			assertEquals(expected.get(i).getElement(), expected.get(i).getElement());
 			assertEquals(expected.get(i).beat, expected.get(i).beat);
-			assertEquals(expected.get(i).offsetIs, expected.get(i).offsetIs, df);
+			assertEquals(expected.get(i).xIs, expected.get(i).xIs, df);
 		}
 	}
 

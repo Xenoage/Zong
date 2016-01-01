@@ -13,15 +13,27 @@ import com.xenoage.zong.core.music.VoiceElement;
  *
  * @author Andreas Wenger
  */
-@AllArgsConstructor
 public final class VoiceSpacing {
 
 	/** The {@link Voice} this spacing belongs to. */
 	public final Voice voice;
 	/** The interline space in mm of this voice. */
-	public final float interlineSpace;
+	public final float interlineSpace; //GOON: move into measure spacing
 	/** The {@link ElementSpacing}s of this voice. */
 	public final List<ElementSpacing> elements;
+	
+	/** The parent measure. */
+	public MeasureSpacing parent;
+	
+	
+	public VoiceSpacing(Voice voice, float interlineSpace, List<ElementSpacing> elements) {
+		this.voice = voice;
+		this.interlineSpace = interlineSpace;
+		this.elements = elements;
+		//set backward references
+		for (ElementSpacing element : elements)
+			element.parent = this;
+	}
 	
 	
 	public ElementSpacing getLast() {

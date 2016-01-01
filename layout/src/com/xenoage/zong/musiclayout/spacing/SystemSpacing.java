@@ -1,5 +1,6 @@
 package com.xenoage.zong.musiclayout.spacing;
 
+import static com.xenoage.utils.annotations.Optimized.Reason.Performance;
 import static com.xenoage.utils.collections.CollectionUtils.getFirst;
 import static com.xenoage.utils.collections.CollectionUtils.getLast;
 import static com.xenoage.utils.kernel.Range.range;
@@ -11,6 +12,8 @@ import java.util.List;
 
 import lombok.Getter;
 
+import com.xenoage.utils.annotations.Optimized;
+import com.xenoage.utils.annotations.Optimized.Reason;
 import com.xenoage.utils.kernel.Range;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.position.MP;
@@ -49,6 +52,9 @@ public class SystemSpacing {
 	/** Backward reference to the frame. */
 	public FrameSpacing parentFrame = null;
 	
+	//the horizontal offsets of the columns
+	@Optimized(Performance) private float[] cacheColumnsXMm;
+	
 
 	public SystemSpacing(List<ColumnSpacing> columnSpacings, float marginLeftMm, float marginRightMm,
 		float widthMm, StavesSpacing staves, float offsetYMm) {
@@ -58,6 +64,7 @@ public class SystemSpacing {
 		this.widthMm = widthMm;
 		this.staves = staves;
 		this.offsetYMm = offsetYMm;
+		onColumnsWidthChange();
 		//set backward references
 		for (ColumnSpacing column : columnSpacings)
 			column.parentSystem = this;
@@ -232,4 +239,25 @@ public class SystemSpacing {
 		return staves.getYLp(staff, mm - offsetYMm);
 	}
 	
+	/**
+	 * Call this method when the width of a column has been changed.
+	 */
+	public void onColumnsWidthChange() {
+		//recompute cache
+		if (cacheColumnsXMm == null || cacheColumnsXMm.length != columns.size())
+			cacheColumnsXMm = new float[columns.size()];
+		float xMm = 0;
+		for (int measure : range(columns)) {
+			ColumnSpacing column = columns.get(measure);
+			cacheColumnsXMm[measure] = xMm;
+			xMm += column.getWidthMm();
+		}
+	}
+	
+	/**
+	 * Gets the horizontal offset in mm of the measure with the given global index.
+	 */
+	public float getColumnXMm(int scoreMeasure) {
+		return cacheColumnsXMm[scoreMeasure - getStartMeasureIndex()];
+	}
 }

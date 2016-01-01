@@ -31,7 +31,8 @@ public class ColumnsSpacer {
 		List<ColumnSpacing> ret = alist();
 		for (int iMeasure : range(context.score.getMeasuresCount())) {
 			context.mp = MP.atMeasure(iMeasure);
-			ret.add(columnSpacer.compute(context, noLeading, notations));
+			ColumnSpacing column = columnSpacer.compute(context, noLeading, notations);
+			ret.add(column);
 		}
 		context.restoreMp();
 		return ret;

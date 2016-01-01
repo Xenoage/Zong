@@ -98,13 +98,13 @@ public class AlignedVoicesSpacerTest {
 		List<ElementSpacing> finalSpacing = voiceSpacing.elements;
 		assertEquals(4, finalSpacing.size());
 		assertEquals(beat(2), finalSpacing.get(0).beat);
-		assertEquals(4f / is, finalSpacing.get(0).offsetIs, df);
+		assertEquals(4f / is, finalSpacing.get(0).xIs, df);
 		assertEquals(beat(4), finalSpacing.get(1).beat);
-		assertEquals(8f / is, finalSpacing.get(1).offsetIs, df);
+		assertEquals(8f / is, finalSpacing.get(1).xIs, df);
 		assertEquals(beat(7), finalSpacing.get(2).beat);
-		assertEquals(14f / is, finalSpacing.get(2).offsetIs, df);
+		assertEquals(14f / is, finalSpacing.get(2).xIs, df);
 		assertEquals(beat(8), finalSpacing.get(3).beat);
-		assertEquals(20f / is, finalSpacing.get(3).offsetIs, df);
+		assertEquals(20f / is, finalSpacing.get(3).xIs, df);
 	}
 
 	@Test public void computeTest2() {
@@ -133,9 +133,9 @@ public class AlignedVoicesSpacerTest {
 		List<ElementSpacing> finalSpacing = voiceSpacing.elements;
 		assertEquals(2, finalSpacing.size());
 		assertEquals(beat(0), finalSpacing.get(0).beat);
-		assertEquals(0f / is, finalSpacing.get(0).offsetIs, df);
+		assertEquals(0f / is, finalSpacing.get(0).xIs, df);
 		assertEquals(beat(2), finalSpacing.get(1).beat);
-		assertEquals(2f / is, finalSpacing.get(1).offsetIs, df);
+		assertEquals(2f / is, finalSpacing.get(1).xIs, df);
 	}
 
 	@Test public void computeTest3() {
@@ -164,9 +164,9 @@ public class AlignedVoicesSpacerTest {
 		List<ElementSpacing> finalSpacing = voiceSpacing.elements;
 		assertEquals(2, finalSpacing.size());
 		assertEquals(beat(0), finalSpacing.get(0).beat);
-		assertEquals(2f / is, finalSpacing.get(0).offsetIs, df);
+		assertEquals(2f / is, finalSpacing.get(0).xIs, df);
 		assertEquals(beat(2), finalSpacing.get(1).beat);
-		assertEquals(6f / is, finalSpacing.get(1).offsetIs, df);
+		assertEquals(6f / is, finalSpacing.get(1).xIs, df);
 	}
 
 	/**
@@ -207,15 +207,15 @@ public class AlignedVoicesSpacerTest {
 		List<ElementSpacing> finalSpacing = voiceSpacing.elements;
 		assertEquals(5, finalSpacing.size());
 		assertEquals(beat(0), finalSpacing.get(0).beat);
-		assertEquals(10f / is, finalSpacing.get(0).offsetIs, df);
+		assertEquals(10f / is, finalSpacing.get(0).xIs, df);
 		assertEquals(beat(2), finalSpacing.get(1).beat);
-		assertEquals(12f / is, finalSpacing.get(1).offsetIs, df);
+		assertEquals(12f / is, finalSpacing.get(1).xIs, df);
 		assertEquals(beat(8), finalSpacing.get(2).beat);
-		assertEquals(26f / is, finalSpacing.get(2).offsetIs, df);
+		assertEquals(26f / is, finalSpacing.get(2).xIs, df);
 		assertEquals(beat(8), finalSpacing.get(3).beat);
-		assertEquals(28f / is, finalSpacing.get(3).offsetIs, df);
+		assertEquals(28f / is, finalSpacing.get(3).xIs, df);
 		assertEquals(beat(8), finalSpacing.get(4).beat);
-		assertEquals(30f / is, finalSpacing.get(4).offsetIs, df);
+		assertEquals(30f / is, finalSpacing.get(4).xIs, df);
 	}
 
 	private Fraction beat(int quarters) {

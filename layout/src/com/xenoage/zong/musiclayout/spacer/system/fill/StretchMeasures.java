@@ -57,12 +57,12 @@ public class StretchMeasures
 			//measures
 			for (MeasureSpacing measure : column.measures) {
 				//measure elements
-				for (ElementSpacing element : measure.getMeasureElementsSpacings()) {
+				for (ElementSpacing element : measure.elements) {
 					//stretch the offset
-					element.offsetIs *= stretch;
+					element.xIs *= stretch;
 				}
 				//voices
-				for (VoiceSpacing voice : measure.getVoiceSpacings()) {
+				for (VoiceSpacing voice : measure.voices) {
 					//traverse elements in reverse order, so we can align grace elements correctly
 					//grace elements are not stretched, but the distance to their following full element
 					//stays the same
@@ -71,14 +71,14 @@ public class StretchMeasures
 						ElementSpacing element = voice.elements.get(i);
 						if (element.isGrace()) {
 							//grace element: keep distance to following element
-							float oldDistance = lastElementOriginalOffsetIs - element.offsetIs;
-							lastElementOriginalOffsetIs = element.offsetIs;
-							element.offsetIs = voice.elements.get(i + 1).offsetIs - oldDistance;
+							float oldDistance = lastElementOriginalOffsetIs - element.xIs;
+							lastElementOriginalOffsetIs = element.xIs;
+							element.xIs = voice.elements.get(i + 1).xIs - oldDistance;
 						}
 						else {
 							//normal element: stretch the offset
-							lastElementOriginalOffsetIs = element.offsetIs;
-							element.offsetIs *= stretch;
+							lastElementOriginalOffsetIs = element.xIs;
+							element.xIs *= stretch;
 						}
 					}
 				}
@@ -87,6 +87,9 @@ public class StretchMeasures
 
 		//full system width
 		system.widthMm = usableWidthMm;
+		
+		//columns have been changed
+		system.onColumnsWidthChange();
 	}
 
 }

@@ -58,7 +58,7 @@ public class AlignedVoicesSpacer {
 			//last shared beat up to the current shared beat.
 			float currentGivenBeatPosition = sharedBeats.get(iGivenBeat).getOffsetMm() / interlineSpace; //we calculate in interline spaces here
 			float givenBeatsDistance = currentGivenBeatPosition - lastGivenBeatPosition;
-			float currentEndElementPosition = spacingElements.get(lastElement).offsetIs;
+			float currentEndElementPosition = spacingElements.get(lastElement).xIs;
 			float elementsDistance = currentEndElementPosition - lastEndElementPosition;
 			//interpolate the offsets of the current voice spacing
 			//between the last shared beat and the current shared beat.
@@ -69,7 +69,7 @@ public class AlignedVoicesSpacer {
 				ElementSpacing e = spacingElements.get(iElement);
 				if (false == e.isGrace()) {
 					//normal element: interpolate position
-					float currentElementOffset = e.offsetIs - lastEndElementPosition;
+					float currentElementOffset = e.xIs - lastEndElementPosition;
 					float newElementOffset;
 					if (elementsDistance != 0) {
 						newElementOffset = currentElementOffset / elementsDistance * givenBeatsDistance; //scale offset according to the given beats distance
@@ -77,14 +77,14 @@ public class AlignedVoicesSpacer {
 					else {
 						newElementOffset = currentGivenBeatPosition;
 					}
-					lastOriginalOffsetIs = e.offsetIs;
-					e.offsetIs = newElementOffset + lastGivenBeatPosition;
+					lastOriginalOffsetIs = e.xIs;
+					e.xIs = newElementOffset + lastGivenBeatPosition;
 				}
 				else {
 					//grace element: same distance to the main note as before
-					float distanceBefore = lastOriginalOffsetIs - e.offsetIs;
-					lastOriginalOffsetIs = e.offsetIs;
-					e.offsetIs = spacingElements.get(iElement + 1).offsetIs - distanceBefore;
+					float distanceBefore = lastOriginalOffsetIs - e.xIs;
+					lastOriginalOffsetIs = e.xIs;
+					e.xIs = spacingElements.get(iElement + 1).xIs - distanceBefore;
 				}
 			}
 			//next range up to next shared beat

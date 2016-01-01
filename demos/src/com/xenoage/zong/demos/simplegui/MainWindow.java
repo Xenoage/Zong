@@ -89,7 +89,7 @@ public class MainWindow {
 			
 			if (useJavaFX) {
 				//JavaFX renderer
-				scoreImage = JfxLayoutRenderer.paintToImage(layout, 0, 2f);
+				scoreImage = JfxLayoutRenderer.paintToImage(layout, 0, 6f);
 			}
 			else {
 				//AWT renderer
