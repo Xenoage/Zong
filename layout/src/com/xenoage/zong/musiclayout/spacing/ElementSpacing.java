@@ -61,12 +61,14 @@ public class ElementSpacing {
 	}
 	
 	/**
-	 * Gets the horizontal position in mm of the beginning of the parent measure
+	 * Gets the horizontal position in mm of the beginning of the parent voice
 	 * relative to beginning of the parent staff.
 	 */
-	public float getMeasureXMm() {
+	public float getVoiceXMm() {
 		ColumnSpacing column = parent.parent.parent;
-		return column.parentSystem.getColumnXMm(column.measureIndex);
+		float measureXMm = column.parentSystem.getColumnXMm(column.measureIndex);
+		float leadingMm = column.getLeadingWidthMm();
+		return measureXMm + leadingMm;
 	}
 
 }

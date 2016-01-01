@@ -36,7 +36,7 @@ public class BeamSpacing {
 	 */
 	public SP getStemEndSp(int chordIndex) {
 		ElementSpacing chord = chords.get(chordIndex);
-		float xMm = chord.getMeasureXMm() + ChordSpacing.getStemXIs(chord) * chord.parent.interlineSpace;
+		float xMm = chord.getVoiceXMm() + ChordSpacing.getStemXIs(chord) * chord.parent.interlineSpace;
 		float lp = notation.chords.get(chordIndex).stem.endLp;
 		return sp(xMm, lp);
 	}
