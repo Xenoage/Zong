@@ -1,8 +1,6 @@
 package com.xenoage.zong.musiclayout.stamper;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.utils.collections.CollectionUtils.getFirst;
-import static com.xenoage.utils.collections.CollectionUtils.getLast;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.MathUtils.interpolateLinear;
 import static com.xenoage.zong.core.music.format.SP.sp;
@@ -56,10 +54,10 @@ public class BeamStamper {
 		List<BeamStamping> ret = alist(linesCount);
 		
 		//first line (8th line) is always continuous
-		float leftLp = leftEndSp.lp - leftDir.getSign() * lineHeightIs / 2; //vertically centered
-		float rightLp = rightEndSp.lp - rightDir.getSign() * lineHeightIs / 2;
+		float leftLp = leftEndSp.lp;
+		float rightLp = rightEndSp.lp;
 		BeamStamping beam8th = new BeamStamping(beam, leftStaff, rightStaff,
-			leftEndSp.withLp(leftLp), rightEndSp.withLp(rightLp));
+			leftEndSp.withLp(leftLp), rightEndSp.withLp(rightLp), leftDir);
 		ret.add(beam8th);
 		
 		//the next lines can be broken, if there are different rhythms or beam subdivisions
@@ -88,7 +86,8 @@ public class BeamStamper {
 						interpolateLinear(leftLineLp, rightLineLp, leftXMm, rightXMm, startX));
 					SP rightSp = sp(stopX,
 						interpolateLinear(leftLineLp, rightLineLp, leftXMm, rightXMm, stopX));
-					BeamStamping stamping = new BeamStamping(beam, leftStaff, rightStaff, leftSp, rightSp);
+					BeamStamping stamping = new BeamStamping(beam, leftStaff, rightStaff,
+						leftSp, rightSp, leftDir);
 					ret.add(stamping);
 				}
 				else if (fragment == HookLeft || fragment == HookRight) {
@@ -98,7 +97,8 @@ public class BeamStamper {
 					float x2 = (fragment == HookLeft ? stemX : stemX + length);
 					SP leftSp = sp(x1, interpolateLinear(leftLineLp, rightLineLp, leftXMm, rightXMm, x1));
 					SP rightSp = sp(x2, interpolateLinear(leftLineLp, rightLineLp, leftXMm, rightXMm, x2));
-					BeamStamping stamping = new BeamStamping(beam, leftStaff, rightStaff, leftSp, rightSp);
+					BeamStamping stamping = new BeamStamping(beam, leftStaff, rightStaff,
+						leftSp, rightSp, leftDir);
 					ret.add(stamping);
 				}
 			}

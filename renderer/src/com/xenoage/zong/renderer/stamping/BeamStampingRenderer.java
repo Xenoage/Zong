@@ -47,9 +47,7 @@ public class BeamStampingRenderer
 
 		Color color = Color.black;
 
-		float leftYStart = 0;
-		float rightYStart = 0;
-
+		float leftYStart, rightYStart, beamHeightMm;
 		if (canvas.getFormat() == CanvasFormat.Raster) {
 			//render on screen
 			float staff1YPos = staff1.positionMm.y;
@@ -58,19 +56,22 @@ public class BeamStampingRenderer
 			BitmapStaff screenStaff2 = staff2.getBitmapInfo().getBitmapStaff(scaling);
 			leftYStart = staff1YPos + screenStaff1.getYMm(beam.sp1.lp);
 			rightYStart = staff2YPos + screenStaff2.getYMm(beam.sp2.lp);
+			beamHeightMm = BeamNotation.lineHeightIs * screenStaff1.interlineSpaceMm;
 		}
-		else if (canvas.getFormat() == CanvasFormat.Vector) {
+		else {
 			leftYStart = staff1.computeYMm(beam.sp1.lp);
 			rightYStart = staff2.computeYMm(beam.sp1.lp);
+			beamHeightMm = BeamNotation.lineHeightIs * staff1.is;
 		}
 
-		float beamHeightMm = BeamNotation.lineHeightIs * staff1.is;
-
 		//TODO: avoid edges at the stem end points
+		
+		//beam sits on or hangs from the vertical position, dependent on stem direction
+		float vAdd = (beam.stemDir.getSign() - 1) / 2f * beamHeightMm;
 
-		Point2f sw = new Point2f(x1Mm, leftYStart - 0.5f * beamHeightMm);
+		Point2f sw = new Point2f(x1Mm, leftYStart + vAdd);
 		Point2f nw = new Point2f(x1Mm, sw.y + beamHeightMm);
-		Point2f se = new Point2f(x2Mm, rightYStart - 0.5f * beamHeightMm);
+		Point2f se = new Point2f(x2Mm, rightYStart + vAdd);
 		Point2f ne = new Point2f(x2Mm, se.y + beamHeightMm);
 		
 		List<PathElement> elements = alist(4);
