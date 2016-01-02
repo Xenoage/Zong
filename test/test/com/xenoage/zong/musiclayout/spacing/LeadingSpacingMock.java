@@ -25,7 +25,7 @@ public class LeadingSpacingMock {
 	 */
 	public static LeadingSpacing createGClefSpacing(float widthIs) {
 		ClefNotation notation = new ClefNotation(new Clef(ClefType.clefTreble), new ElementWidth(widthIs), 0, 1);
-		ElementSpacing spacing = new ElementSpacing(notation, fr(0), 0);
+		ElementSpacing spacing = new SimpleSpacing(notation, fr(0), 0);
 		return new LeadingSpacing(alist(spacing), widthIs);
 	}
 

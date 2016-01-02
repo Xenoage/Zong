@@ -17,6 +17,7 @@ import com.xenoage.zong.musiclayout.notation.TraditionalKeyNotation;
 import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.ElementWidth;
 import com.xenoage.zong.musiclayout.spacing.LeadingSpacing;
+import com.xenoage.zong.musiclayout.spacing.SimpleSpacing;
 
 /**
  * Computes the {@link LeadingSpacing} for a measure.
@@ -49,7 +50,7 @@ public class LeadingSpacer {
 		ClefNotation clefNotation = new ClefNotation(clef, new ElementWidth(0,
 			context.settings.spacings.widthClef, 0), musicContext.getClef().getType().getLp(), 1);
 		xOffset += context.settings.spacings.widthClef / 2;
-		elements.add(new ElementSpacing(clefNotation, fr(0), xOffset));
+		elements.add(new SimpleSpacing(clefNotation, fr(0), xOffset));
 		xOffset += context.settings.spacings.widthClef / 2;
 
 		if (useKey) {
@@ -57,7 +58,7 @@ public class LeadingSpacer {
 			xOffset += context.settings.spacings.widthDistanceMin;
 			TraditionalKey tradKey = new TraditionalKey(tkey.getFifths(), tkey.getMode()); //it is not the same element instance, but has the same meaning
 			TraditionalKeyNotation keyNotation = traditionalKeyNotator.compute(tradKey, context);
-			elements.add(new ElementSpacing(keyNotation, fr(0), xOffset));
+			elements.add(new SimpleSpacing(keyNotation, fr(0), xOffset));
 			xOffset += keyNotation.getWidth().getWidth();
 		}
 

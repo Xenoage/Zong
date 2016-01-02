@@ -13,6 +13,7 @@ import static com.xenoage.zong.core.position.MP.atElement;
 import static com.xenoage.zong.core.position.MP.atMeasure;
 import static com.xenoage.zong.core.position.MP.mp0;
 import static com.xenoage.zong.musiclayout.spacer.beat.VoicesBeatOffsetter.voicesBeatOffsetter;
+import static com.xenoage.zong.musiclayout.spacing.TestSpacing.spacing;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -39,6 +40,8 @@ import com.xenoage.zong.io.musicxml.in.MusicXMLScoreFileInputTest;
 import com.xenoage.zong.io.selection.Cursor;
 import com.xenoage.zong.musiclayout.notation.ChordNotation;
 import com.xenoage.zong.musiclayout.spacing.BeatOffset;
+import com.xenoage.zong.musiclayout.spacing.BorderSpacing;
+import com.xenoage.zong.musiclayout.spacing.ChordSpacing;
 import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.VoiceSpacing;
 
@@ -333,14 +336,15 @@ public class VoicesBeatOffsetterTest {
 	}
 
 	private List<ElementSpacing> createTestElementSpacings1Voice() {
-		return alist(new ElementSpacing(null, fr(0, 4), 1), //clef. width: 3
-			new ElementSpacing(null, fr(0, 4), 4), //key. width: 2
-			new ElementSpacing(null, fr(0, 4), 6), //time. width: 3
-			new ElementSpacing(null, fr(0, 4), 9), //note. width: 2
-			new ElementSpacing(null, fr(2, 4), 11), //note. width: 2
-			new ElementSpacing(null, fr(3, 4), 13), //note. width: 2
-			new ElementSpacing(null, fr(4, 4), 15), //note. width: 2
-			new ElementSpacing(null, fr(8, 4), 17) //note. width: 2
+		return alist(
+			spacing(fr(0, 4), 1), //clef. width: 3
+			spacing(fr(0, 4), 4), //key. width: 2
+			spacing(fr(0, 4), 6), //time. width: 3
+			spacing(fr(0, 4), 9), //note. width: 2
+			spacing(fr(2, 4), 11), //note. width: 2
+			spacing(fr(3, 4), 13), //note. width: 2
+			spacing(fr(4, 4), 15), //note. width: 2
+			spacing(fr(8, 4), 17) //note. width: 2
 		);
 	}
 
@@ -489,11 +493,11 @@ public class VoicesBeatOffsetterTest {
 					else if (e.getDuration().equals(dur_1_1))
 						width = width_1_1;
 					//create spacing element with offset
-					se.add(new ElementSpacing(new ChordNotation((Chord) e), beat, offset));
+					se.add(new ChordSpacing(new ChordNotation((Chord) e), beat, offset));
 					beat = beat.add(e.getDuration());
 					offset += width;
 				}
-				se.add(new ElementSpacing(null, beat, offset));
+				se.add(new BorderSpacing(beat, offset));
 				ret.add(new VoiceSpacing(voice, score.getFormat().getInterlineSpace(), se));
 			}
 		}

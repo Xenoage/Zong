@@ -20,8 +20,8 @@ import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.musiclayout.notation.ChordNotation;
 import com.xenoage.zong.musiclayout.spacing.BeatOffset;
+import com.xenoage.zong.musiclayout.spacing.ChordSpacing;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
-import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.LeadingSpacingMock;
 import com.xenoage.zong.musiclayout.spacing.MeasureSpacing;
 import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
@@ -119,8 +119,8 @@ public class StretchMeasuresTest {
 			fr(3, 4), offsetBeat1), new BeatOffset(fr(5, 4), offsetBeat2));
 		float is = 1;
 		List<VoiceSpacing> voiceSpacings = alist(new VoiceSpacing(voice, is, alist(
-			new ElementSpacing(new ChordNotation(chord1), beatOffsets.get(0).getBeat(), beatOffsets.get(0).getOffsetMm()),
-			new ElementSpacing(new ChordNotation(chord2), beatOffsets.get(1).getBeat(), beatOffsets.get(1).getOffsetMm()))));
+			new ChordSpacing(new ChordNotation(chord1), beatOffsets.get(0).getBeat(), beatOffsets.get(0).getOffsetMm()),
+			new ChordSpacing(new ChordNotation(chord2), beatOffsets.get(1).getBeat(), beatOffsets.get(1).getOffsetMm()))));
 		MeasureSpacing measureSpacing = new MeasureSpacing(atMeasure(0, 0), is, voiceSpacings,
 			empty, LeadingSpacingMock.createGClefSpacing(leadingWidth));
 		List<MeasureSpacing> measureSpacings = alist(measureSpacing);
@@ -146,13 +146,13 @@ public class StretchMeasuresTest {
 			fr(2, 4), offsetChord2), new BeatOffset(fr(4, 4), offsetMeasureEnd));
 		float is = 1;
 		List<VoiceSpacing> voiceSpacings = alist(new VoiceSpacing(voice, is, alist(
-			new ElementSpacing(new ChordNotation(chord1), beatOffsets.get(0).getBeat(),
+			new ChordSpacing(new ChordNotation(chord1), beatOffsets.get(0).getBeat(),
 				beatOffsets.get(0).getOffsetMm()),
-			new ElementSpacing(new ChordNotation(chord2grace), beatOffsets.get(1).getBeat(),
+			new ChordSpacing(new ChordNotation(chord2grace), beatOffsets.get(1).getBeat(),
 				beatOffsets.get(1).getOffsetMm() - 2 * graceDistance),
-			new ElementSpacing(new ChordNotation(chord3grace),
+			new ChordSpacing(new ChordNotation(chord3grace),
 				beatOffsets.get(1).getBeat(), beatOffsets.get(1).getOffsetMm() - 1 * graceDistance),
-			new ElementSpacing(new ChordNotation(chord4), beatOffsets.get(1).getBeat(),
+			new ChordSpacing(new ChordNotation(chord4), beatOffsets.get(1).getBeat(),
 				beatOffsets.get(1).getOffsetMm()))));
 		MeasureSpacing measureSpacing = new MeasureSpacing(atMeasure(0, 0), is, voiceSpacings, empty, null);
 		ColumnSpacing mcs = new ColumnSpacing(-1, alist(measureSpacing),

@@ -39,7 +39,7 @@ public final class MeasureSpacing {
 	@MaybeEmpty public List<Fraction> usedBeats;
 
 	/** The parent column. */
-	public ColumnSpacing parent;
+	public ColumnSpacing column;
 	
 
 	public MeasureSpacing(MP mp, float interlineSpace, List<VoiceSpacing> voices,
@@ -61,7 +61,7 @@ public final class MeasureSpacing {
 		
 		//set backward references
 		for (VoiceSpacing voice : voices)
-			voice.parent = this;
+			voice.measure = this;
 	}
 
 }

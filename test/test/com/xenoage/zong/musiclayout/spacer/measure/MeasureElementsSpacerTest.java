@@ -31,6 +31,7 @@ import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.musiclayout.settings.Spacings;
 import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.ElementWidth;
+import com.xenoage.zong.musiclayout.spacing.SimpleSpacing;
 import com.xenoage.zong.musiclayout.spacing.VoiceSpacing;
 
 /**
@@ -141,7 +142,7 @@ public class MeasureElementsSpacerTest {
 	}
 
 	private ElementSpacing spacing(Rest rest, Fraction beat, float offset) {
-		return new ElementSpacing(new RestNotation(rest, new ElementWidth(0), null), beat, offset);
+		return new SimpleSpacing(new RestNotation(rest, new ElementWidth(0), null), beat, offset);
 	}
 
 	private Notations notations(Rest[] rests, Clef clef) {

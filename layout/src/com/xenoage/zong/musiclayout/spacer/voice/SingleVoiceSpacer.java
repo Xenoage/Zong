@@ -1,6 +1,7 @@
 package com.xenoage.zong.musiclayout.spacer.voice;
 
 import static com.xenoage.utils.collections.CList.ilist;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.collections.CollectionUtils.llist;
 import static com.xenoage.utils.iterators.ReverseIterator.reverseIt;
 import static com.xenoage.zong.musiclayout.spacer.element.RestSpacer.restSpacer;
@@ -11,10 +12,13 @@ import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.musiclayout.layouter.Context;
+import com.xenoage.zong.musiclayout.notation.ChordNotation;
 import com.xenoage.zong.musiclayout.notation.Notation;
 import com.xenoage.zong.musiclayout.notation.Notations;
 import com.xenoage.zong.musiclayout.notation.RestNotation;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
+import com.xenoage.zong.musiclayout.spacing.BorderSpacing;
+import com.xenoage.zong.musiclayout.spacing.ChordSpacing;
 import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.ElementWidth;
 import com.xenoage.zong.musiclayout.spacing.VoiceSpacing;
@@ -48,8 +52,8 @@ public class SingleVoiceSpacer {
 
 		//special case: no elements in the measure.
 		if (voice.getElements().size() == 0) {
-			return new VoiceSpacing(voice, interlineSpace, ilist(
-				new ElementSpacing(null, Fraction._0, 0), new ElementSpacing(null, measureBeats,
+			return new VoiceSpacing(voice, interlineSpace, alist((ElementSpacing)
+				new BorderSpacing(Fraction._0, 0), new BorderSpacing(measureBeats,
 					layoutSettings.spacings.widthMeasureEmpty)));
 		}
 
@@ -73,7 +77,7 @@ public class SingleVoiceSpacer {
 
 		//at last beat
 		Fraction curBeat = voice.getFilledBeats();
-		ret.addFirst(new ElementSpacing(null, curBeat, lastFrontGapOffset));
+		ret.addFirst(new BorderSpacing(curBeat, lastFrontGapOffset));
 
 		//iterate through the elements in reverse order
 		for (VoiceElement element : reverseIt(voice.getElements())) {
@@ -113,7 +117,7 @@ public class SingleVoiceSpacer {
 			}
 			else {
 				//chord spacing
-				elementSpacing = new ElementSpacing(notation, curBeat, symbolOffset); //GOON : ChordSpacer
+				elementSpacing = new ChordSpacing((ChordNotation) notation, curBeat, symbolOffset);
 			}
 			ret.addFirst(elementSpacing);
 			lastFrontGapOffset = symbolOffset - elementWidth.frontGap;

@@ -6,6 +6,7 @@ import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.music.Voice.voice;
 import static com.xenoage.zong.musiclayout.spacer.voice.AlignedVoicesSpacer.alignedVoicesSpacer;
+import static com.xenoage.zong.musiclayout.spacing.TestSpacing.spacing;
 import static org.junit.Assert.assertEquals;
 
 import java.util.List;
@@ -17,6 +18,8 @@ import com.xenoage.zong.core.music.rest.Rest;
 import com.xenoage.zong.musiclayout.notation.RestNotation;
 import com.xenoage.zong.musiclayout.spacing.BeatOffset;
 import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
+import com.xenoage.zong.musiclayout.spacing.RestSpacing;
+import com.xenoage.zong.musiclayout.spacing.TestSpacing;
 import com.xenoage.zong.musiclayout.spacing.VoiceSpacing;
 
 /**
@@ -33,9 +36,9 @@ public class AlignedVoicesSpacerTest {
 		//list 1 beats: 0  3   789
 		//list 2 beats: 0    5 7 9
 		//shared beats: 0      7 9
-		List<ElementSpacing> list1 = alist(new ElementSpacing(null, beat(0), 0f), new ElementSpacing(
-			null, beat(3), 0f), new ElementSpacing(null, beat(7), 0f), new ElementSpacing(null, beat(8),
-			0f), new ElementSpacing(null, beat(9), 0f));
+		List<ElementSpacing> list1 = alist(spacing(beat(0), 0f),
+			spacing(beat(3), 0f), spacing(beat(7), 0f), spacing(beat(8),
+			0f), spacing(beat(9), 0f));
 		List<BeatOffset> list2 = alist(new BeatOffset(beat(0), 0f), new BeatOffset(beat(5), 0f),
 			new BeatOffset(beat(7), 0f), new BeatOffset(beat(9), 0f));
 		List<BeatOffset> res = testee.computeSharedBeats(list1, list2);
@@ -46,17 +49,17 @@ public class AlignedVoicesSpacerTest {
 		//list 1 beats: 01 3
 		//list 2 beats:   2 4  
 		//shared beats: (none)
-		list1 = alist(new ElementSpacing(null, beat(0), 0f), new ElementSpacing(null, beat(1), 0f),
-			new ElementSpacing(null, beat(3), 0f));
+		list1 = alist(spacing(beat(0), 0f), spacing(beat(1), 0f),
+			spacing(beat(3), 0f));
 		list2 = alist(new BeatOffset(beat(2), 0f), new BeatOffset(beat(4), 0f));
 		res = testee.computeSharedBeats(list1, list2);
 		assertEquals(0, res.size());
 		//list 1 beats: 000033
 		//list 2 beats: 0123
 		//shared beats: 0 and 3 (no duplicate values!)
-		list1 = alist(new ElementSpacing(null, beat(0), 0f), new ElementSpacing(null, beat(0), 0f),
-			new ElementSpacing(null, beat(0), 0f), new ElementSpacing(null, beat(0), 0f),
-			new ElementSpacing(null, beat(3), 0f), new ElementSpacing(null, beat(3), 0f));
+		list1 = alist(spacing(beat(0), 0f), spacing(beat(0), 0f),
+			spacing(beat(0), 0f), spacing(beat(0), 0f),
+			spacing(beat(3), 0f), spacing(beat(3), 0f));
 		list2 = alist(new BeatOffset(beat(0), 0f), new BeatOffset(beat(1), 0f), new BeatOffset(beat(2),
 			0f), new BeatOffset(beat(3), 0f));
 		res = testee.computeSharedBeats(list1, list2);
@@ -74,9 +77,9 @@ public class AlignedVoicesSpacerTest {
 		//           | |  ⌎-- 4
 		//           | ⌎----- 2
 		//           ⌎------- 1
-		VoiceSpacing voiceSpacing = new VoiceSpacing(voice(), is, alist(new ElementSpacing(null,
-			beat(2), 1f), new ElementSpacing(null, beat(4), 2f), new ElementSpacing(null, beat(7), 4f),
-			new ElementSpacing(null, beat(8), 6f)));
+		VoiceSpacing voiceSpacing = new VoiceSpacing(voice(), is, alist(
+			spacing(beat(2), 1f), spacing(beat(4), 2f), spacing(beat(7), 4f),
+			spacing(beat(8), 6f)));
 		//given beat offsets:
 		//beats:   0...4...8
 		//offsets: |   |   | 
@@ -114,8 +117,8 @@ public class AlignedVoicesSpacerTest {
 		//offsets: | | 
 		//         | ⌎- 2
 		//         ⌎--- 0
-		VoiceSpacing voiceSpacing = new VoiceSpacing(voice(), is, alist(new ElementSpacing(null,
-			beat(0), 0f), new ElementSpacing(null, beat(2), 2f)));
+		VoiceSpacing voiceSpacing = new VoiceSpacing(voice(), is, alist(
+			spacing(beat(0), 0f), spacing(beat(2), 2f)));
 		//given beat offsets:
 		//beats:   0.2
 		//offsets: | | 
@@ -145,8 +148,8 @@ public class AlignedVoicesSpacerTest {
 		//offsets: | | 
 		//         | ⌎- 2
 		//         ⌎--- 0
-		VoiceSpacing voiceSpacing = new VoiceSpacing(voice(), is, alist(new ElementSpacing(null,
-			beat(0), 0f), new ElementSpacing(null, beat(2), 2f)));
+		VoiceSpacing voiceSpacing = new VoiceSpacing(voice(), is, alist(
+			spacing(beat(0), 0f), spacing(beat(2), 2f)));
 		//given beat offsets:
 		//beats:   0.2
 		//offsets: | | 
@@ -184,9 +187,9 @@ public class AlignedVoicesSpacerTest {
 		//         | |   ⌎--- 58 (grace note)
 		//         | ⌎------- 51
 		//         ⌎--------- 50
-		VoiceSpacing voiceSpacing = new VoiceSpacing(voice(), is, alist(new ElementSpacing(null,
-			beat(0), 0f), new ElementSpacing(null, beat(2), 1f), graceSpacing(beat(8), 8f),
-			graceSpacing(beat(8), 9f), new ElementSpacing(null, beat(8), 10f)));
+		VoiceSpacing voiceSpacing = new VoiceSpacing(voice(), is, alist(
+			spacing(beat(0), 0f), spacing(beat(2), 1f), graceSpacing(beat(8), 8f),
+			graceSpacing(beat(8), 9f), spacing(beat(8), 10f)));
 		//given beat offsets:
 		//beats:   0.......8
 		//offsets: |       | 
@@ -223,6 +226,6 @@ public class AlignedVoicesSpacerTest {
 	}
 
 	private ElementSpacing graceSpacing(Fraction beat, float offsetIs) {
-		return new ElementSpacing(new RestNotation(new Rest(_0), null, null), beat, offsetIs);
+		return new RestSpacing(new RestNotation(new Rest(_0), null, null), beat, offsetIs, 4);
 	}
 }

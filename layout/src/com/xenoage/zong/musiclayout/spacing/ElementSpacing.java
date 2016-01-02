@@ -1,10 +1,9 @@
 package com.xenoage.zong.musiclayout.spacing;
 
-import java.util.Collections;
+import static java.util.Collections.emptyList;
+
 import java.util.List;
 
-import com.xenoage.utils.annotations.MaybeNull;
-import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.core.music.VoiceElement;
@@ -14,61 +13,66 @@ import com.xenoage.zong.musiclayout.notation.Notation;
  * An element spacing stores the beat, the position (offset)
  * and the {@link Notation} of a given {@link MusicElement} in a layout.
  *
- * GOON: TIDY just interface, and two implementations: ChordSpacing and RestSpacing
- *
  * @author Andreas Wenger
  */
-public class ElementSpacing {
+public abstract class ElementSpacing {
 
-	/** The corresponding element notation, e.g. a chord. May be null, e.g. when this
-	 * element denotes the end point of the measure. */ //GOON: no! never null!
-	@MaybeNull public final Notation notation;
-	/** The beat where this music element can be found in the measure */
-	@NonNull public final Fraction beat;
+	
+	/** The beat where this music element can be found in the measure. */
+	public Fraction beat;
+	
 	/** The horizontal offset of the element in interline spaces, relative to the
 	 * beginning of the measure. */
 	public float xIs;
 	
 	/** The parent voice spacing. */
-	public VoiceSpacing parent;
+	public VoiceSpacing voice;
 	
 	/** Empty list of {@link ElementSpacing}s. */
-	public static final List<ElementSpacing> empty = Collections.<ElementSpacing>emptyList();
+	public static final List<ElementSpacing> empty = emptyList();
 	
 
-	public ElementSpacing(Notation notation, Fraction beat, float offsetIs) {
-		this.notation = notation;
+	public ElementSpacing(Fraction beat, float xIs) {
 		this.beat = beat;
-		this.xIs = offsetIs;
+		this.xIs = xIs;
 	}
-
+	
 	/**
-	 * Returns the MusicElement, or null, if there is none.
+	 * Gets the {@link Notation} associated with this spacing, or null.
+	 */
+	public Notation getNotation() {
+		return null;
+	}
+	
+	/**
+	 * Gets the {@link MusicElement} associated with this spacing, or null.
 	 */
 	public MusicElement getElement() {
-		if (notation == null)
+		Notation notation = getNotation();
+		if (notation != null)
+			return notation.getElement();
+		else
 			return null;
-		return notation.getElement();
 	}
-	
-	/**
-	 * Returns true, if this element is a grace chord, otherwise false.
-	 */
-	public boolean isGrace() {
-		MusicElement element = getElement();
-		return (element != null && element instanceof VoiceElement &&
-			((VoiceElement) element).getDuration().isGreater0() == false);
-	}
-	
+
 	/**
 	 * Gets the horizontal position in mm of the beginning of the parent voice
 	 * relative to beginning of the parent staff.
 	 */
 	public float getVoiceXMm() {
-		ColumnSpacing column = parent.parent.parent;
+		ColumnSpacing column = voice.measure.column;
 		float measureXMm = column.parentSystem.getColumnXMm(column.measureIndex);
 		float leadingMm = column.getLeadingWidthMm();
 		return measureXMm + leadingMm;
 	}
 
+	/**
+	 * Returns true, if this element is a grace chord or rest, otherwise false.
+	 */
+	public boolean isGrace() {
+		MusicElement element = getElement();
+		return (element instanceof VoiceElement &&
+			((VoiceElement) element).getDuration().isGreater0() == false);
+	}
+	
 }

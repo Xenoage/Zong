@@ -83,8 +83,8 @@ public class VoiceStamper {
 					Chord chord = (Chord) element;
 					BeamSpacing beam = beams.get(chord.getBeam());
 					ret.addAll(chordStamper.stampAll(
-						(ChordNotation) spacingElement.notation, xMm, beam, staffStampings, context, defaultLyricStyle,
-						openCurvedLinesCache, openLyricsCache, lastLyrics, openTupletsCache));
+						(ChordNotation) spacingElement.getNotation(), xMm, beam, staffStampings, context,
+						defaultLyricStyle, openCurvedLinesCache, openLyricsCache, lastLyrics, openTupletsCache));
 				}
 				else if (spacingElement instanceof RestSpacing) {
 					//rest

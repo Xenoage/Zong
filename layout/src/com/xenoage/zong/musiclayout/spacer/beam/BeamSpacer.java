@@ -6,7 +6,6 @@ import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.MathUtils.interpolateLinear;
 import static com.xenoage.zong.musiclayout.spacer.beam.BeamPlacer.beamPlacer;
 import static com.xenoage.zong.musiclayout.spacer.beam.BeamSlanter.beamSlanter;
-import static com.xenoage.zong.musiclayout.spacing.ChordSpacing.getStemXIs;
 
 import java.util.List;
 
@@ -16,8 +15,8 @@ import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.musiclayout.notation.BeamNotation;
 import com.xenoage.zong.musiclayout.notation.ChordNotation;
 import com.xenoage.zong.musiclayout.spacing.BeamSpacing;
+import com.xenoage.zong.musiclayout.spacing.ChordSpacing;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
-import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.FrameSpacing;
 
 /**
@@ -42,12 +41,12 @@ public class BeamSpacer {
 		
 		//get chord spacings
 		ColumnSpacing column = frameSpacing.getColumn(beam.element.getMP().measure);
-		List<ElementSpacing> chords = alist(size);
+		List<ChordSpacing> chords = alist(size);
 		float[] stemsXIs = new float[size];
 		for (int i : range(size)) {
-			ElementSpacing cs = column.getElement(beam.chords.get(i).element);
+			ChordSpacing cs = (ChordSpacing) column.getElement(beam.chords.get(i).element);
 			chords.add(cs);
-			stemsXIs[i] = getStemXIs(cs);
+			stemsXIs[i] = cs.getStemXIs();
 		}
 		
 		//compute slant

@@ -2,8 +2,9 @@ package com.xenoage.zong.musiclayout.spacing;
 
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.rest.Rest;
-import com.xenoage.zong.musiclayout.notation.Notation;
 import com.xenoage.zong.musiclayout.notation.RestNotation;
+
+import lombok.Getter;
 
 /**
  * Spacing of a {@link Rest}.
@@ -13,21 +14,18 @@ import com.xenoage.zong.musiclayout.notation.RestNotation;
 public class RestSpacing
 	extends ElementSpacing {
 	
-	/** LP of the rest symbol. */
+	@Getter public RestNotation notation;
 	public int lp;
 	
 	
-	public RestSpacing(Notation notation, Fraction beat, float offsetIs, int lp) {
-		super(notation, beat, offsetIs);
+	public RestSpacing(RestNotation notation, Fraction beat, float xIs, int lp) {
+		super(beat, xIs);
+		this.notation = notation;
 		this.lp = lp;
 	}
 
-	@Override public Rest getElement() {
+	public Rest getElement() {
 		return (Rest) notation.getElement();
-	}
-	
-	public RestNotation getNotation() {
-		return (RestNotation) notation;
 	}
 
 }

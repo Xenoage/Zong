@@ -26,6 +26,7 @@ import com.xenoage.zong.musiclayout.notation.Notations;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.LeadingSpacing;
+import com.xenoage.zong.musiclayout.spacing.SimpleSpacing;
 import com.xenoage.zong.musiclayout.spacing.VoiceSpacing;
 
 /**
@@ -86,7 +87,7 @@ public class MeasureElementsSpacer {
 			//***
 			if (isKey) {
 				Notation keyNotation = notations.get(key0, staff);
-				ret.add(new ElementSpacing(keyNotation, _0, startOffset));
+				ret.add(new SimpleSpacing(keyNotation, _0, startOffset));
 				currentOffset += keyNotation.getWidth().getUsedWidth();
 			}
 
@@ -94,7 +95,7 @@ public class MeasureElementsSpacer {
 			//****
 			if (time != null) {
 				Notation timeNotation = notations.get(time, staff);
-				ret.add(new ElementSpacing(timeNotation, _0, currentOffset +
+				ret.add(new SimpleSpacing(timeNotation, _0, currentOffset +
 					timeNotation.getWidth().symbolWidth / 2));
 				currentOffset += timeNotation.getWidth().getUsedWidth();
 			}
@@ -173,7 +174,7 @@ public class MeasureElementsSpacer {
 	
 				//add measure element
 				float MEx = VE2x - layoutSettings.spacings.widthDistanceMin - MEwidth / 2;
-				ret.add(new ElementSpacing(MEnotation, ME.beat, MEx));
+				ret.add(new SimpleSpacing(MEnotation, ME.beat, MEx));
 	
 			}
 		}
@@ -241,7 +242,7 @@ public class MeasureElementsSpacer {
 	 */
 	private float getLeftX(ElementSpacing element) {
 		//element and notation may be null, e.g. for last SE in measure
-		Notation notation = element.notation;
+		Notation notation = element.getNotation();
 		return element.xIs - (notation != null ? notation.getWidth().frontGap : 0);
 	}
 
@@ -251,7 +252,7 @@ public class MeasureElementsSpacer {
 	 */
 	private float getRightX(ElementSpacing element) {
 		//element and notation may be null, e.g. for last SE in measure
-		Notation notation = element.notation;
+		Notation notation = element.getNotation();
 		return element.xIs + (notation != null ? notation.getWidth().symbolWidth : 0);
 	}
 

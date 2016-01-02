@@ -62,7 +62,7 @@ public class ColumnSpacing {
 		
 		//set backward references
 		for (MeasureSpacing measure : measureSpacings)
-			measure.parent = this;
+			measure.column = this;
 	}
 	
 	/**
@@ -159,7 +159,7 @@ public class ColumnSpacing {
 	 * {@link Chord} in this column.
 	 */
 	public ChordNotation getNotation(Chord chord) {
-		return (ChordNotation) getElement(chord).notation;
+		return (ChordNotation) getElement(chord).getNotation();
 	}
 	
 	/**

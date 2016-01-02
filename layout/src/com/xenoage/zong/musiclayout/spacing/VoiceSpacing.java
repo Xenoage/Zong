@@ -23,7 +23,7 @@ public final class VoiceSpacing {
 	public final List<ElementSpacing> elements;
 	
 	/** The parent measure. */
-	public MeasureSpacing parent;
+	public MeasureSpacing measure;
 	
 	
 	public VoiceSpacing(Voice voice, float interlineSpace, List<ElementSpacing> elements) {
@@ -32,7 +32,7 @@ public final class VoiceSpacing {
 		this.elements = elements;
 		//set backward references
 		for (ElementSpacing element : elements)
-			element.parent = this;
+			element.voice = this;
 	}
 	
 	
@@ -46,7 +46,7 @@ public final class VoiceSpacing {
 	 */
 	public ElementSpacing getElement(VoiceElement element) {
 		for (ElementSpacing e : elements) {
-			if (e.notation.getElement() == element)
+			if (e.getElement() == element)
 				return e;
 		}
 		throw new IllegalArgumentException("unknown element");
