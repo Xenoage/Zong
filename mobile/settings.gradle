@@ -1,0 +1,2 @@
+include "utils-kernel"
+project(':utils-kernel').projectDir = new File('../utils/utils-kernel')
