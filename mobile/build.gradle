@@ -9,6 +9,7 @@ buildscript {
 }
 
 apply plugin: 'com.android.application'
+defaultTasks 'build'
 
 android {
     compileSdkVersion 23
