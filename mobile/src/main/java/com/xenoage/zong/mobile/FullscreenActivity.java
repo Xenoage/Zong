@@ -8,6 +8,8 @@ import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.xenoage.utils.color.Color;
+import com.xenoage.utils.jse.JsePlatformUtils;
 import com.xenoage.utils.kernel.Range;
 
 /**
@@ -108,6 +110,8 @@ public class FullscreenActivity extends ActionBarActivity {
         // Schedule a runnable to remove the status and navigation bar after a delay
         mHideHandler.removeCallbacks(mShowPart2Runnable);
         mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY);
+
+        actionBar.setTitle(Color.red.r + " = Red");
     }
 
     private final Runnable mHidePart2Runnable = new Runnable() {

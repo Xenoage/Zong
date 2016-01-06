@@ -35,7 +35,9 @@ repositories {
 }
 
 dependencies {
-		compile project(':utils-kernel')
+    compile project(':utils-base')
+    compile project(':utils-kernel')
+    compile project(':utils-jse')
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.+'
     compile 'com.android.support:appcompat-v7:23.+'

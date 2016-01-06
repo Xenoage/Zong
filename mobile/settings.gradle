@@ -1,2 +1,4 @@
-include "utils-kernel"
-project(':utils-kernel').projectDir = new File('../utils/utils-kernel')
+include "utils-base", "utils-kernel", "utils-jse"
+project(":utils-base").projectDir = new File("../utils/utils-base")
+project(":utils-kernel").projectDir = new File("../utils/utils-kernel")
+project(":utils-jse").projectDir = new File("../utils/utils-jse")
