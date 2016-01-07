@@ -1,3 +1,4 @@
+apply plugin: 'java'
 sourceCompatibility = 8
 
 apply plugin: 'application'
@@ -5,4 +6,10 @@ mainClassName = 'com.xenoage.zong.player.Player'
 
 dependencies {
     compile project(':desktop')
+}
+
+jar {
+	from 'license.txt'
+	from 'readme.txt'
+	manifest.attributes 'Created-By': 'Xenoage Software'
 }

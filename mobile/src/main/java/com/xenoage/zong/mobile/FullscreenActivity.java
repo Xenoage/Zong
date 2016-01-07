@@ -9,7 +9,6 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.xenoage.utils.color.Color;
-import com.xenoage.utils.jse.JsePlatformUtils;
 import com.xenoage.utils.kernel.Range;
 
 /**
@@ -111,7 +110,7 @@ public class FullscreenActivity extends ActionBarActivity {
         mHideHandler.removeCallbacks(mShowPart2Runnable);
         mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY);
 
-        actionBar.setTitle(Color.red.r + " = Red");
+        actionBar.setTitle(Color.blue.r + " = Blue");
     }
 
     private final Runnable mHidePart2Runnable = new Runnable() {

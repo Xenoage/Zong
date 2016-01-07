@@ -1,7 +1,7 @@
 Zong! Player
 ************
 
-Copyright © 2009-2014 by Xenoage Software
+Copyright © 2009-2016 by Xenoage Software
 
 
 The Zong! Player allows to playback MusicXML files and to save them

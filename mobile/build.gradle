@@ -11,6 +11,12 @@ buildscript {
 apply plugin: 'com.android.application'
 defaultTasks 'build'
 
+allprojects {
+	repositories {
+		mavenCentral()
+	}
+}
+
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
@@ -28,16 +34,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-}
-
-repositories {
-		mavenCentral()
+		lintOptions {
+			abortOnError false
+    }
 }
 
 dependencies {
+    compile project(':musicxml-in')
+    compile project(':renderer')
     compile project(':utils-base')
-    compile project(':utils-kernel')
-    compile project(':utils-jse')
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.+'
     compile 'com.android.support:appcompat-v7:23.+'

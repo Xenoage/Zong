@@ -1,0 +1,17 @@
+apply plugin: 'java'
+sourceCompatibility = 8
+
+dependencies {
+	compile project(':desktop')
+	compile 'com.google.code.gson:gson:2.4'
+	compile 'com.h2database:h2:1.4.190'
+	compile 'org.eclipse.jetty:jetty-server:9.3.4.v20151007'
+	compile 'org.eclipse.jetty:jetty-servlet:9.3.4.v20151007'
+}
+
+sourceSets {
+	main {
+		java { srcDir 'src' }
+		resources { srcDir 'src' }
+	}
+}
