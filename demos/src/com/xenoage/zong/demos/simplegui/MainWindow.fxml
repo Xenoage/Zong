@@ -45,7 +45,7 @@
          <content>
             <AnchorPane>
                <children>
-                  <ImageView fx:id="scoreView" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
+                  <ImageView fx:id="scoreView" fitHeight="200.0" fitWidth="200.0" onMouseClicked="#onScoreClick" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
                </children>
             </AnchorPane>
          </content>

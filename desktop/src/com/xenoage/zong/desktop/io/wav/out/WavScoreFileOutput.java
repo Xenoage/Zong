@@ -24,17 +24,17 @@ import com.xenoage.zong.io.midi.out.MidiSequence;
  * @author Andreas Wenger
  */
 public class WavScoreFileOutput
-	implements FileOutput<Score> {
+	extends FileOutput<Score> {
 
-	@Override public void write(Score score, OutputStream stream, String filePath)
+	@Override public void write(Score score, int fileIndex, OutputStream stream)
 		throws IOException {
-		writeWav(score, new JseOutputStream(stream));
+		writeWav(score, stream);
 	}
 	
 	/**
 	 * Writes the given score as a WAV file into the given stream.
 	 */
-	public static void writeWav(Score score, java.io.OutputStream stream)
+	public static void writeWav(Score score, OutputStream stream)
 		throws IOException {
 		//save WAVE file
 		try {
@@ -49,10 +49,6 @@ public class WavScoreFileOutput
 			log(warning(ex));
 			throw new IOException(ex);
 		}
-	}
-
-	@Override public boolean isFilePathRequired(Score document) {
-		return false;
 	}
 
 }

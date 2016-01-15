@@ -3,7 +3,8 @@ package com.xenoage.zong.demos.minimal;
 import java.awt.Desktop;
 import java.io.File;
 
-import com.xenoage.zong.desktop.io.ScoreDocIO;
+import com.xenoage.zong.desktop.io.DocumentIO;
+import com.xenoage.zong.desktop.io.musicxml.in.MusicXmlScoreDocFileInput;
 import com.xenoage.zong.desktop.io.pdf.out.PdfScoreDocFileOutput;
 import com.xenoage.zong.desktop.utils.JseZongPlatformUtils;
 import com.xenoage.zong.documents.ScoreDoc;
@@ -26,10 +27,10 @@ public class MinimalDemo {
 		JseZongPlatformUtils.init(appName);
 		//load MusicXML file
 		File inFile = new File("scores/BeetAnGeSample.xml");
-		ScoreDoc doc = ScoreDocIO.read(inFile, new MusicXmlScoreDocFileInput());
+		ScoreDoc doc = DocumentIO.read(inFile, new MusicXmlScoreDocFileInput());
 		//convert to PDF
 		File outFile = new File("demo.pdf");
-		ScoreDocIO.write(doc, outFile, new PdfScoreDocFileOutput());
+		DocumentIO.write(doc, outFile, new PdfScoreDocFileOutput());
 		//finished. open the PDF file.
 		Desktop.getDesktop().open(outFile);
 	}

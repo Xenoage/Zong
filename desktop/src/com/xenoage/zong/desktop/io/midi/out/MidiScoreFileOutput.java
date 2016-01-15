@@ -1,8 +1,5 @@
 package com.xenoage.zong.desktop.io.midi.out;
 
-import static com.xenoage.utils.log.Log.log;
-import static com.xenoage.utils.log.Report.remark;
-
 import java.io.IOException;
 
 import javax.sound.midi.MidiSystem;
@@ -13,7 +10,6 @@ import com.xenoage.utils.io.OutputStream;
 import com.xenoage.utils.jse.io.JseOutputStream;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.io.midi.out.MidiConverter;
-import com.xenoage.zong.io.midi.out.MidiSequence;
 
 
 /**
@@ -23,24 +19,27 @@ import com.xenoage.zong.io.midi.out.MidiSequence;
  * @author Uli Teschemacher
  */
 public class MidiScoreFileOutput
-	implements FileOutput<Score>
+	extends FileOutput<Score>
 {
 
 	//ANDROID: using android-midi-lib
 	//MidiFile midi = MidiConverterAndroid.convertToMidiFile(score, false, false);
 	//midi.writeToFile(new File(filePath));
 
-	@Override public void write(Score score, OutputStream stream, String filePath)
+	@Override public void write(Score score, int fileIndex, OutputStream stream)
 		throws IOException {
-		MidiSequence<Sequence> sequence = MidiConverter.convertToSequence(score, false, false,
-			new JseMidiSequenceWriter());
-		int type = getPreferredMidiType(sequence.getSequence());
-		MidiSystem.write(sequence.getSequence(), type, new JseOutputStream(stream));
-		log(remark("Midi file written in format " + type));
+		writeMidi(score, stream);
 	}
-
-	@Override public boolean isFilePathRequired(Score document) {
-		return false;
+	
+	/**
+	 * Writes the given score as a MIDI file into the given stream.
+	 */
+	public static void writeMidi(Score score, OutputStream stream)
+		throws IOException {
+		Sequence sequence = MidiConverter.convertToSequence(score, false, false,
+			new JseMidiSequenceWriter()).getSequence();
+		int type = MidiScoreFileOutput.getPreferredMidiType(sequence);
+		MidiSystem.write(sequence, type, new JseOutputStream(stream));
 	}
 
 	/**

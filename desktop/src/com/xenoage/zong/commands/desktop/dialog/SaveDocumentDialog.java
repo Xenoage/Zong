@@ -63,7 +63,7 @@ import com.xenoage.utils.jse.settings.FileSettings;
 			if (!file.getName().endsWith(defaultExt)) {
 				file = new File(file.getAbsolutePath() + defaultExt);
 			}
-			app().saveDocument(file.getAbsolutePath(), format);
+			app().saveDocument(file, format);
 			//save document directory
 			FileSettings.rememberDir(file);
 		}

@@ -30,6 +30,16 @@ public class SimpleGuiDemo
 	 */
 	public static void main(String... args)
 		throws Exception {
+		initZong();
+		//start the JavaFX app
+		Application.launch(SimpleGuiDemo.class, args);
+	}
+
+	/**
+	 * Initializes the Zong! engine.
+	 */
+	public static void initZong()
+		throws Exception {
 		//initialize platform-dependent utilities, including I/O
 		JseZongPlatformUtils.init(appName);
 		//init logging and error handling
@@ -37,8 +47,6 @@ public class SimpleGuiDemo
 		Err.init(new GuiErrorProcessing());
 		//init audio engine
 		SynthManager.init(false);
-		//start the JavaFX app
-		Application.launch(SimpleGuiDemo.class, args);
 	}
 
 	/**

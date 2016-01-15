@@ -1,0 +1,20 @@
+sourceCompatibility = 8
+
+apply plugin: 'application'
+mainClassName = 'com.xenoage.zong.demos.Demos'
+
+dependencies {
+    compile project(':desktop')
+}
+
+task runMinimalDemo(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'com.xenoage.zong.demos.Demos'
+    args 'MinimalDemo'
+}
+
+task runSimpleGuiDemo(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'com.xenoage.zong.demos.Demos'
+    args 'SimpleGuiDemo'
+}

@@ -1,3 +1,4 @@
+apply plugin: 'java'
 defaultTasks 'dist'
 
 //definition of subprojects
@@ -11,17 +12,17 @@ subprojects {
 	
 	repositories {
 		mavenCentral()
+		maven { url "http://files.xenoage.com/maven2" }
 	}
 	
 	//additional configurations for compile classpaths
-	configurations {
+	/*configurations { //TODO: add configuration as soon as Buildship (Gradle in Eclipse) supports it
 		compileOnly
 		testCompileOnly { extendsFrom compileOnly }
-	}
+	}*/
 	
 	dependencies {
-		compile files('../utils/build/dist/onejar/utils.jar')
-		compileOnly group: "org.projectlombok", name: "lombok", version: "1.14.2"
+		compile/*compileOnly - use as soon as Buildship (Gradle in Eclipse) supports it*/ 'org.projectlombok:lombok:1.16.6'
 		testCompile group: 'junit', name: 'junit', version: '4.+'
 	}
 
@@ -29,12 +30,12 @@ subprojects {
 		main {
 			java { srcDir 'src' }
 			resources { srcDir 'src' }
-			compileClasspath += configurations.compileOnly
+			//compileClasspath += configurations.compileOnly //TODO: add configuration as soon as Buildship (Gradle in Eclipse) supports it
 		}
 		test {
 			java { srcDir 'test' }
 			resources { srcDir 'test' }
-			compileClasspath += configurations.compileOnly + configurations.testCompileOnly
+			//compileClasspath += configurations.compileOnly + configurations.testCompileOnly //TODO: add configuration as soon as Buildship (Gradle in Eclipse) supports it
 		}
 	}
 
@@ -45,92 +46,65 @@ subprojects {
 	}
 }
 
-//project dependencies
+//project dependencies (more in build.gradle files in subprojects)
 project(':converter') { dependencies { compile project(':desktop') } }
-project(':demos') {
-	sourceCompatibility = 8
-	dependencies { compile project(':desktop') }
-}
+project(':core') { dependencies { compile project(':utils-base') } }
 project(':desktop') {
 	sourceCompatibility = 8
 	dependencies {
 		compile project(':renderer-awt'), project(':renderer-javafx'), project(':midi-out')
-		compile group: "org.controlsfx", name: "controlsfx", version: "8.20.7"
-		compile group: "com.itextpdf", name: "itextpdf", version: "5.4.5"
-		compile files('../lib/lib/vorbis-java-1.0.0-beta.jar')
+		compile 'org.controlsfx:controlsfx:8.40.9'
+		compile 'com.itextpdf:itextpdf:5.5.7'
+		compile 'org.xiph:vorbis-java:1.0.0-beta'
 	}
 }
 project(':renderer-awt') {
 	sourceCompatibility = 8
 	dependencies {
 		compile project(':renderer')
+		compile project(':utils-jse')
 	}
 }
 project(':renderer-javafx') {
 	sourceCompatibility = 8
 	dependencies {
 		compile project(':renderer')
+		compile project(':utils-jse8')
 	}
 }
 project(':layout') { dependencies { compile project(':core'), project(':musicxml-in') } }
 project(':midi-out') { dependencies { compile project(':core') } }
 project(':musicxml') { dependencies { compile project(':core') } }
 project(':musicxml-in') { dependencies { compile project(':musicxml') } }
-project(':player') {
-	sourceCompatibility = 8
-	dependencies { compile project(':desktop') }
-}
 project(':renderer') { dependencies { compile project(':layout') } }
 project(':test') {
 	sourceCompatibility = 8
 	dependencies {
 		compile project(':converter'), project(':webserver')
-		compile files('../lib/lib/dev/cpsuite-1.2.6.jar')
+		compile 'com.googlecode.cedar-common:cpsuite:1.2.6'
 	}
 }
-project(':tools') { dependencies { compile project(':core') } }
+project(':tools') {
+	dependencies {
+		compile project(':core')
+		compile project(':utils-jse')
+	}
+}
 project(':webserver') {
+	sourceCompatibility = 8
 	dependencies {
 		compile project(':desktop')
-		compile group: "com.google.code.gson", name: "gson", version: "2.2.4"
-		compile group: "com.h2database", name: "h2", version: "1.3.174"
-		compile group: "org.eclipse.jetty", name: "jetty-server", version: "9.1.0.v20131115"
-		compile group: "org.eclipse.jetty", name: "jetty-servlet", version: "9.1.0.v20131115"
+		compile 'com.google.code.gson:gson:2.4'
+		compile 'com.h2database:h2:1.4.190'
+		compile 'org.eclipse.jetty:jetty-server:9.3.4.v20151007'
+		compile 'org.eclipse.jetty:jetty-servlet:9.3.4.v20151007'
 	}
-}
-
-//create JavaDoc
-task createJavaDoc {
-	description = 'Creates the JavaDoc for Zong!'
-    group = 'build'
-	println 'Create JavaDoc'
-	ant.importBuild 'javadoc.build.xml'
-	dependsOn antZongJavadoc
 }
 
 //build dist of Zong!
 task dist {
-	//first, build utils
-	dependsOn 'buildUtils'
-	//then, build the subprojects
+	//build the subprojects
 	dependsOn subprojects*.build
-}
-
-//clean Zong!
-task clean {
-	//also clean Xenoage Utils
-	dependsOn 'cleanUtils'
-}
-
-//build dist of Xenoage Utils
-task buildUtils(type: GradleBuild) {
-	buildFile = 'utils/build.gradle'
-}
-
-//build dist of Xenoage Utils
-task cleanUtils(type: GradleBuild) {
-	buildFile = 'utils/build.gradle'
-	tasks = ['clean']
 }
 
 //TODO
@@ -149,7 +123,7 @@ task distPlayer(type: Jar) {
 }
 
 //create JavaDoc using Ant task
-ant.importBuild 'javadoc.build.xml'
+//TODO ant.importBuild 'javadoc.build.xml'
 task createDoc {
-	dependsOn antZongJavadoc
+	//TODO dependsOn antZongJavadoc
 }

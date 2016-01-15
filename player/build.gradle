@@ -1,0 +1,8 @@
+sourceCompatibility = 8
+
+apply plugin: 'application'
+mainClassName = 'com.xenoage.zong.player.Player'
+
+dependencies {
+    compile project(':desktop')
+}

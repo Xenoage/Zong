@@ -18,3 +18,11 @@ build
 # Libraries #
 lib/lib/
 
+# Eclipse settings (should be generated with Gradle import in Eclipse)
+.project
+.classpath
+.settings
+
+# IntelliJ IDEA settings (should be generated with Gradle import in Eclipse)
+.idea
+*.iml

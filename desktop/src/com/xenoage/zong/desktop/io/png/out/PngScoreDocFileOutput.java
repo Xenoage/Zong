@@ -1,16 +1,14 @@
 package com.xenoage.zong.desktop.io.png.out;
 
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.io.FilenameUtils.numberFiles;
-import static com.xenoage.utils.kernel.Range.range;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-import lombok.Setter;
-
 import com.xenoage.utils.document.io.FileOutput;
 import com.xenoage.utils.io.FilenameUtils;
+import com.xenoage.utils.io.OutputStream;
 import com.xenoage.utils.jse.io.JseOutputStream;
 import com.xenoage.zong.desktop.io.print.PngPrinter;
 import com.xenoage.zong.documents.ScoreDoc;
@@ -25,32 +23,27 @@ import com.xenoage.zong.layout.Layout;
  * @author Andreas Wenger
  */
 public class PngScoreDocFileOutput
-	implements FileOutput<ScoreDoc> {
+	extends FileOutput<ScoreDoc> {
 	
-	@Setter private boolean justOnePage = false;
-
-
-	@Override public void write(ScoreDoc document, com.xenoage.utils.io.OutputStream stream,
-		String filePath)
+	
+	@Override public void write(ScoreDoc document, int fileIndex, OutputStream stream)
 		throws IOException {
 		Layout layout = document.getLayout();
-		if (justOnePage || layout.getPages().size() == 1 || filePath == null) {
+		PngPrinter.print(layout, fileIndex, new JseOutputStream(stream));
+	}
+
+	@Override public List<String> getFileNames(ScoreDoc document, String fileName) {
+		Layout layout = document.getLayout();
+		if (layout.getPages().size() == 1) {
 			//simple case: just one page
-			PngPrinter.print(layout, 0, new JseOutputStream(stream));
+			return alist(fileName);
 		}
 		else {
 			//more pages and file path is given: one PNG file for each page
-			List<String> filenames = numberFiles(filePath, layout.getPages().size());
-			for (int page : range(layout.getPages()))
-				PngPrinter.print(document.getLayout(), page, new FileOutputStream(filenames.get(page)));
+			return numberFiles(fileName, layout.getPages().size());
 		}
 	}
 
-	/**
-	 * Returns true, since multiple files may be required.
-	 */
-	@Override public boolean isFilePathRequired(ScoreDoc document) {
-		return true;
-	}
+	
 
 }
