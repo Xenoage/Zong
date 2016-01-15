@@ -1,11 +1,14 @@
 package com.xenoage.zong.io.musicxml.in.readers;
 
+import static com.xenoage.utils.collections.CollectionUtils.getFirst;
+import static com.xenoage.utils.collections.CollectionUtils.getLast;
 import static com.xenoage.zong.core.music.chord.Stem.defaultStem;
 
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 
+import com.xenoage.utils.math.VSide;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.MusicContext;
 import com.xenoage.zong.core.music.Pitch;
@@ -46,8 +49,9 @@ public class StemReader {
 			//convert position in tenths relative to topmost staff line into
 			//a length in interline spaces measured from the outermost chord note on stem side
 			float stemEndLinePosition = convertDefaultYToLP(context, yPos.getDefaultY(), staff);
+			VSide side = (direction == StemDirection.Up ? VSide.Top : VSide.Bottom);
 			length = Math.abs(stemEndLinePosition -
-				getFarNoteLP(context, chord, stemEndLinePosition, staff)) / 2;
+				getOuterNoteLp(context, chord, side, staff)) / 2;
 		}
 		//create stem
 		return new Stem(direction, length);
@@ -82,22 +86,12 @@ public class StemReader {
 	}
 
 	/**
-	 * Gets the line position of the note which is furthest from the given line position,
-	 * using the musical context from the given staff.
+	 * Gets the line position of the note at the bottom or top side of the given chord.
 	 */
-	private static float getFarNoteLP(Context context, Chord chord, float nearTo, int staff) {
+	private static float getOuterNoteLp(Context context, Chord chord, VSide side, int staff) {
 		MusicContext mc = context.getMusicContext(staff);
 		List<Pitch> pitches = chord.getPitches();
-		//if there is just one note, it's easy
-		if (pitches.size() == 1) {
-			return mc.getLp(pitches.get(0));
-		}
-		//otherwise, test for the topmost and bottommost note
-		else {
-			float top = mc.getLp(pitches.get(pitches.size() - 1));
-			float bottom = mc.getLp(pitches.get(0));
-			return (Math.abs(top - nearTo) > Math.abs(bottom - nearTo) ? top : bottom);
-		}
+		return mc.getLp(side == VSide.Top ? getLast(pitches) : getFirst(pitches));
 	}
 
 }
