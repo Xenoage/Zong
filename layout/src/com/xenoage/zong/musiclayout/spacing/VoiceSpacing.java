@@ -2,8 +2,6 @@ package com.xenoage.zong.musiclayout.spacing;
 
 import java.util.List;
 
-import lombok.AllArgsConstructor;
-
 import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.VoiceElement;
 

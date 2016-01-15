@@ -6,6 +6,7 @@ import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.MathUtils.interpolateLinear;
 import static com.xenoage.zong.musiclayout.spacer.beam.BeamPlacer.beamPlacer;
 import static com.xenoage.zong.musiclayout.spacer.beam.BeamSlanter.beamSlanter;
+import static java.lang.Math.abs;
 
 import java.util.List;
 
@@ -57,7 +58,7 @@ public class BeamSpacer {
 		//get lengths of stems
 		float[] stemsLengthIs = new float[size];
 		for (int i : range(size))
-			stemsLengthIs[i] = beam.chords.get(i).stem.getLengthIs();
+			stemsLengthIs[i] = abs(beam.chords.get(i).stem.endLp - beam.chords.get(i).getInnerNoteLp()) / 2; //GOON beam.chords.get(i).stem.getLengthIs();
 		
 		//compute the ends of the first and last stem
 		Placement offset = beamPlacer.compute(slant, notesLp, stemDir, stemsXIs,

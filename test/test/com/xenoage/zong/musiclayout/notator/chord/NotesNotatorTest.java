@@ -5,6 +5,7 @@ import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.music.Pitch.pi;
 import static com.xenoage.zong.core.music.chord.ChordFactory.chord;
 import static com.xenoage.zong.musiclayout.notator.chord.NotesNotator.notesNotator;
+import static com.xenoage.zong.musiclayout.settings.ChordWidths.defaultChordWidthsNormal;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
@@ -29,7 +30,7 @@ public class NotesNotatorTest {
 	private NotesNotator testee = notesNotator;
 	
 	private MusicContext context = MusicContext.simpleInstance;
-	private ChordWidths cw = ChordWidths.defaultValue;
+	private ChordWidths cw = defaultChordWidthsNormal;
 	private float n = cw.quarter;
 	private float dg = cw.dotGap;
 

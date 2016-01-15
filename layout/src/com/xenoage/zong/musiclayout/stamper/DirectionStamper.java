@@ -240,6 +240,9 @@ public class DirectionStamper {
 		
 		Positioning customPos = direction.getPositioning();
 		MP mp = direction.getMP();
+		if (mp == null)
+			return SP.sp(0, 0); //TODO. Happens. But just with offical MusicXML sample Telemann.xml
+				
 		float x, lp;
 
 		//default positioning

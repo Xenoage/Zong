@@ -1,4 +1,4 @@
-package com.xenoage.zong.desktop.io.musicxml.in;
+package com.xenoage.zong.io.musicxml.in;
 
 import static com.xenoage.utils.collections.CList.clist;
 import static com.xenoage.utils.iterators.It.it;

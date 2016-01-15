@@ -24,7 +24,7 @@ public class RestSpacing
 		this.lp = lp;
 	}
 
-	public Rest getElement() {
+	@Override public Rest getElement() {
 		return (Rest) notation.getElement();
 	}
 

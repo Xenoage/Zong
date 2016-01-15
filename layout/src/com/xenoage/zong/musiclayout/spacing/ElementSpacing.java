@@ -10,8 +10,8 @@ import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.musiclayout.notation.Notation;
 
 /**
- * An element spacing stores the beat, the position (offset)
- * and the {@link Notation} of a given {@link MusicElement} in a layout.
+ * Stores the beat, the position (offset) and maybe other
+ * spacing information of an element in a voice.
  *
  * @author Andreas Wenger
  */

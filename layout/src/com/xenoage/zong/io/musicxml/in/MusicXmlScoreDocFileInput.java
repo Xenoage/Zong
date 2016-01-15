@@ -1,7 +1,7 @@
-package com.xenoage.zong.desktop.io.musicxml.in;
+package com.xenoage.zong.io.musicxml.in;
 
-import static com.xenoage.utils.jse.JsePlatformUtils.jsePlatformUtils;
 import static com.xenoage.utils.jse.async.Sync.sync;
+import static com.xenoage.zong.musiclayout.settings.LayoutSettings.defaultLayoutSettings;
 import static com.xenoage.zong.util.ZongPlatformUtils.zongPlatformUtils;
 
 import java.io.IOException;
@@ -17,8 +17,6 @@ import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.format.LayoutFormat;
 import com.xenoage.zong.core.format.PageFormat;
 import com.xenoage.zong.documents.ScoreDoc;
-import com.xenoage.zong.io.musiclayout.LayoutSettingsReader;
-import com.xenoage.zong.io.musicxml.in.MusicXmlFileReader;
 import com.xenoage.zong.layout.Layout;
 import com.xenoage.zong.layout.LayoutDefaults;
 import com.xenoage.zong.layout.Page;
@@ -90,9 +88,8 @@ public class MusicXmlScoreDocFileInput
 		//use default symbol pool
 		SymbolPool symbolPool = zongPlatformUtils().getSymbolPool();
 
-		//load layout settings - TIDY: do not reload each time when a score is loaded
-		LayoutSettings layoutSettings = LayoutSettingsReader.read(jsePlatformUtils().openFile(
-			"data/layout/default.xml"));
+		//load layout settings - TODO: load settings one time from "data/layout/default.xml"
+		LayoutSettings layoutSettings = defaultLayoutSettings; //LayoutSettingsReader.read("data/layout/default.xml");
 
 		//create layout defaults
 		LayoutDefaults layoutDefaults = new LayoutDefaults(layoutFormat, symbolPool, layoutSettings);

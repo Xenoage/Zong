@@ -1,6 +1,7 @@
 package com.xenoage.zong.musiclayout.notator.chord.accidentals;
 
 import static com.xenoage.zong.core.music.Pitch.pi;
+import static com.xenoage.zong.musiclayout.settings.ChordWidths.defaultChordWidthsNormal;
 
 import com.xenoage.zong.core.music.MusicContext;
 import com.xenoage.zong.core.music.Pitch;
@@ -24,7 +25,7 @@ public class TestData {
 
 	public float noteOffset;
 	
-	public ChordWidths cw = ChordWidths.defaultValue;
+	public ChordWidths cw = defaultChordWidthsNormal;
 
 	public NoteSuspension susNone = NoteSuspension.None;
 	public NoteSuspension susLeft = NoteSuspension.Left;

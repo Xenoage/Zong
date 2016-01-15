@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="com/xenoage/zong/musiclayout/notator/beam/range/OneMeasureOneStaffTest.java" kind="src" path="test"/>
+	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="src" path="nightly"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/core"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/utils-base"/>

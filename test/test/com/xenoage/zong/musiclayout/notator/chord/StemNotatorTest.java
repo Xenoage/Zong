@@ -6,6 +6,7 @@ import static com.xenoage.zong.core.music.StaffLines.staff5Lines;
 import static com.xenoage.zong.musiclayout.notator.chord.NotesNotator.notesNotator;
 import static com.xenoage.zong.musiclayout.notator.chord.stem.StemNotator.stemNotator;
 import static com.xenoage.zong.musiclayout.notator.chord.stem.single.SingleStemDirector.singleStemDirector;
+import static com.xenoage.zong.musiclayout.settings.ChordWidths.defaultChordWidthsNormal;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
@@ -138,7 +139,7 @@ public class StemNotatorTest {
 		ChordLps linepositions = new ChordLps(chord, context);
 		StemDirection stemDirection = singleStemDirector.compute(linepositions, 5);
 		chordNotesAlignment = notesNotator.compute(chord, stemDirection,
-			ChordWidths.defaultValue, context);
+			defaultChordWidthsNormal, context);
 		chordStemAlignment = testee.compute(Stem.defaultStem, chordNotesAlignment.getLps(),
 			stemDirection, staff5Lines, 1);
 		assertEquals(start, chordStemAlignment.startLp, Delta.DELTA_FLOAT);

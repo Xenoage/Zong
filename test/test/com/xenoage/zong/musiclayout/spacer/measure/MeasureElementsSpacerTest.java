@@ -2,15 +2,14 @@ package com.xenoage.zong.musiclayout.spacer.measure;
 
 import static com.xenoage.utils.collections.CList.ilist;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.utils.collections.CollectionUtils.map;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Delta.df;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.music.util.BeatE.beatE;
+import static com.xenoage.zong.musiclayout.settings.LayoutSettings.defaultLayoutSettings;
 import static com.xenoage.zong.musiclayout.spacer.measure.MeasureElementsSpacer.measureElementsSpacer;
 import static org.junit.Assert.assertEquals;
 
-import java.util.HashMap;
 import java.util.List;
 
 import org.junit.Test;
@@ -25,10 +24,7 @@ import com.xenoage.zong.core.music.util.BeatEList;
 import com.xenoage.zong.musiclayout.notation.ClefNotation;
 import com.xenoage.zong.musiclayout.notation.Notations;
 import com.xenoage.zong.musiclayout.notation.RestNotation;
-import com.xenoage.zong.musiclayout.settings.ChordSpacings;
-import com.xenoage.zong.musiclayout.settings.ChordWidths;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
-import com.xenoage.zong.musiclayout.settings.Spacings;
 import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.ElementWidth;
 import com.xenoage.zong.musiclayout.spacing.SimpleSpacing;
@@ -48,7 +44,7 @@ public class MeasureElementsSpacerTest {
 	
 	private float paddingWidth = 1;
 	private float clefWidth = 6;
-	private LayoutSettings ls = ls();
+	private LayoutSettings ls = defaultLayoutSettings;
 
 
 	/**
@@ -149,14 +145,6 @@ public class MeasureElementsSpacerTest {
 		Notations ret = new Notations();
 		ret.add(new ClefNotation(clef, new ElementWidth(clefWidth), 0, 1));
 		return ret;
-	}
-
-	private LayoutSettings ls() {
-		HashMap<Fraction, Float> dw = map();
-		dw.put(fr(1), 1f);
-		ChordSpacings spacings = new ChordSpacings(dw);
-		return new LayoutSettings(ChordWidths.defaultValue, ChordWidths.defaultValue, new Spacings(
-			spacings, spacings, 1, 1, clefWidth, 0, paddingWidth), 1, 1, 0, 0);
 	}
 
 }

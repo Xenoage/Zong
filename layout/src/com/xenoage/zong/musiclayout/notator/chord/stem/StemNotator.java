@@ -37,28 +37,33 @@ public class StemNotator {
 	 */
 	@MaybeNull public StemNotation compute(Stem stem, ChordLps notesLp, StemDirection stemDir,
 		StaffLines staffLines, float scaling) {
-		float startLp = 0;
-		float endLp = 0;
+		float startLp = 0, innerLp = 0, endLp;
 
 		//use a stem?
 		if (stemDir == None)
 			return null;
 
 		//compute start position
-		if (stemDir == Down) 
+		if (stemDir == Down) {
 			startLp = notesLp.getTop();
-		else if (stemDir == Up)
+			innerLp = notesLp.getBottom();
+		}
+		else if (stemDir == Up) {
 			startLp = notesLp.getBottom();
+			innerLp = notesLp.getTop();
+		}
 
 		//compute end position
+		float stemLengthIs; 
 		if (stem.getLengthIs() != null) {
 			//used fixed length
-			endLp = startLp + stemDir.getSign() * stem.getLengthIs() * 2;
+			stemLengthIs = stem.getLengthIs();
 		}
 		else {
 			//compute length
-			endLp = startLp + stemDrawer.getPreferredStemLengthIs(notesLp, stemDir, staffLines);
+			stemLengthIs = stemDrawer.getPreferredStemLengthIs(notesLp, stemDir, staffLines);
 		}
+		endLp = innerLp + stemDir.getSign() * stemLengthIs * 2;
 
 		return new StemNotation(startLp, endLp);
 	}

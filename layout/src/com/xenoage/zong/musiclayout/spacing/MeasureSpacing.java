@@ -4,9 +4,6 @@ import static com.xenoage.utils.collections.CollectionUtils.alist;
 
 import java.util.List;
 
-import lombok.Getter;
-
-import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.annotations.MaybeEmpty;
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.NonEmpty;

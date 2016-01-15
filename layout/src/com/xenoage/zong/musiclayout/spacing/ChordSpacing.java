@@ -23,7 +23,7 @@ public class ChordSpacing
 		this.notation = notation;
 	}
 
-	public Chord getElement() {
+	@Override public Chord getElement() {
 		return (Chord) notation.getElement();
 	}
 	

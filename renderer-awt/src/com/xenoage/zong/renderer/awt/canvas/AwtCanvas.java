@@ -45,7 +45,7 @@ public class AwtCanvas
 
 	/**
 	 * Creates an {@link AwtCanvas} with the given size in mm for the given context,
-	 * format, decoration mode and itegrity.
+	 * format, decoration mode and integrity.
 	 */
 	public AwtCanvas(Graphics2D g2d, Size2f sizeMm, CanvasFormat format, CanvasDecoration decoration,
 		CanvasIntegrity integrity) {

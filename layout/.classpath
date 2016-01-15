@@ -10,5 +10,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/utils-jse"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/lombok"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/musicxml-in"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/musicxml"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

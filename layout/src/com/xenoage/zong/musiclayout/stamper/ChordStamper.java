@@ -252,7 +252,7 @@ public class ChordStamper {
 		Beam beam = element.getBeam();
 		StemDirection stemDir = chord.stemDirection;
 		FlagsStamping flags = null;
-		if (beam == null && flagsCount > 0) {
+		if (beam == null && flagsCount > 0 && chord.stem != null /* can happen when no stem is used */) {
 			FlagsStamping.FlagsDirection flag = (stemDir == StemDirection.Up ?
 				FlagsStamping.FlagsDirection.Down : FlagsStamping.FlagsDirection.Up);
 			Symbol flagSymbol = context.getSymbol(CommonSymbol.NoteFlag);
@@ -320,10 +320,12 @@ public class ChordStamper {
 	
 	StemStamping stampStem(ChordNotation chordNotation, float leftNoteXMm,
 		StaffStamping staffStamping) {
+		StemNotation stem = chordNotation.stem;
+		if (stem == null)
+			return null;
 		float stemXMm = leftNoteXMm + chordNotation.notes.stemOffsetIs * staffStamping.is;
-		StemNotation sa = chordNotation.stem;
 		return new StemStamping(chordNotation, stemXMm,
-			sa.startLp, sa.endLp, chordNotation.stemDirection, staffStamping);
+			stem.startLp, stem.endLp, chordNotation.stemDirection, staffStamping);
 	}
 	
 	//TIDY

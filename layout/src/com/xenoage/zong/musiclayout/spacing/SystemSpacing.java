@@ -10,13 +10,12 @@ import static com.xenoage.zong.core.position.MP.unknownMp;
 
 import java.util.List;
 
-import lombok.Getter;
-
 import com.xenoage.utils.annotations.Optimized;
-import com.xenoage.utils.annotations.Optimized.Reason;
 import com.xenoage.utils.kernel.Range;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.position.MP;
+
+import lombok.Getter;
 
 /**
  * The horizontal and vertical spacing of a system.
