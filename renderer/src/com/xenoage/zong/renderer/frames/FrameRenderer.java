@@ -10,8 +10,6 @@ import com.xenoage.zong.renderer.canvas.Canvas;
 /**
  * Abstract renderer class for one type of {@link Frame}.
  * 
- * Platform-specific implementations are provided as subclasses.
- * 
  * @author Andreas Wenger
  */
 public abstract class FrameRenderer {

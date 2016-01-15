@@ -5,9 +5,11 @@ import android.graphics.Paint;
 import android.graphics.Paint.Cap;
 import android.graphics.Paint.Join;
 import android.graphics.Paint.Style;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 
+import com.xenoage.utils.android.Conversion;
 import com.xenoage.utils.android.color.AndroidColorUtils;
 import com.xenoage.utils.color.Color;
 import com.xenoage.utils.font.TextMetrics;
@@ -15,20 +17,23 @@ import com.xenoage.utils.math.Units;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Rectangle2f;
 import com.xenoage.utils.math.geom.Size2f;
-import com.xenoage.zong.android.renderer.slur.AndroidSlurRenderer;
-import com.xenoage.zong.android.renderer.symbols.AndroidSymbolsRenderer;
+import com.xenoage.zong.android.renderer.path.AndroidPath;
 import com.xenoage.zong.core.text.Alignment;
+import com.xenoage.zong.core.text.FormattedText;
+import com.xenoage.zong.core.text.FormattedTextElement;
+import com.xenoage.zong.core.text.FormattedTextParagraph;
+import com.xenoage.zong.core.text.FormattedTextString;
+import com.xenoage.zong.core.text.FormattedTextSymbol;
 import com.xenoage.zong.io.selection.text.TextSelection;
 import com.xenoage.zong.renderer.canvas.CanvasDecoration;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
 import com.xenoage.zong.renderer.canvas.CanvasIntegrity;
 import com.xenoage.zong.renderer.slur.SimpleSlurShape;
+import com.xenoage.zong.symbols.PathSymbol;
 import com.xenoage.zong.symbols.Symbol;
-import com.xenoage.zong.text.FormattedText;
-import com.xenoage.zong.text.FormattedTextElement;
-import com.xenoage.zong.text.FormattedTextParagraph;
-import com.xenoage.zong.text.FormattedTextString;
-import com.xenoage.zong.text.FormattedTextSymbol;
+import com.xenoage.zong.symbols.path.Path;
+
+import static com.xenoage.zong.android.renderer.symbols.AndroidSymbolsRenderer.androidSymbolsRenderer;
 
 /**
  * This class contains methods for painting
@@ -39,13 +44,13 @@ import com.xenoage.zong.text.FormattedTextSymbol;
 public class AndroidCanvas
 	extends com.xenoage.zong.renderer.canvas.Canvas {
 
-	//the Android graphics context
+	/** The Android graphics context. */
 	private Canvas canvas;
 
 
 	/**
 	 * Creates an {@link AndroidCanvas} with the given size in mm for the given context,
-	 * format, decoration mode and itegrity.
+	 * format, decoration mode and integrity.
 	 */
 	public AndroidCanvas(Canvas canvas, Size2f sizeMm, CanvasFormat format,
 		CanvasDecoration decoration, CanvasIntegrity integrity) {
@@ -62,8 +67,8 @@ public class AndroidCanvas
 
 	/**
 	 * Convenience method: Gets the {@link Canvas} graphics context from
-	 * the given {@link com.xenoage.zong.renderer.canvas.Canvas}. If it is not a {@link Canvas},
-	 * a {@link ClassCastException} is thrown.
+	 * the given {@link com.xenoage.zong.renderer.canvas.Canvas}.
+	 * If it is not a {@link AndroidCanvas}, a {@link ClassCastException} is thrown.
 	 */
 	public static Canvas getCanvas(com.xenoage.zong.renderer.canvas.Canvas canvas) {
 		return ((AndroidCanvas) canvas).getGraphicsContext();
@@ -110,9 +115,9 @@ public class AndroidCanvas
 					//symbol
 					FormattedTextSymbol fts = (FormattedTextSymbol) e;
 					float scaling = fts.getScaling();
-					AndroidSymbolsRenderer.instance.draw(fts.getSymbol(), this, Color.black, new Point2f(
-						offsetX + fts.getOffsetX(), offsetY + fts.getSymbol().baselineOffset * scaling),
-						new Point2f(scaling, scaling));
+					androidSymbolsRenderer.draw((PathSymbol) fts.getSymbol(), canvas, Color.black,
+							new Point2f(offsetX + fts.getOffsetX(), offsetY + fts.getSymbol().baselineOffset * scaling),
+							new Point2f(scaling, scaling));
 				}
 				offsetX += e.getMetrics().getWidth();
 			}
@@ -121,10 +126,6 @@ public class AndroidCanvas
 		}
 
 		canvas.restoreToCount(oldTransform);
-	}
-
-	@Override public void drawSymbol(Symbol symbol, Color color, Point2f position, Point2f scaling) {
-		AndroidSymbolsRenderer.instance.draw(symbol, this, color, position, scaling);
 	}
 
 	@Override public void drawLine(Point2f p1, Point2f p2, Color color, float lineWidth) {
@@ -138,7 +139,7 @@ public class AndroidCanvas
 	}
 
 	@Override public void drawStaff(Point2f pos, float length, int lines, Color color,
-		float lineWidth, float interlineSpace) {
+									float lineWidth, float interlineSpace) {
 		Paint paint = AndroidColorUtils.createPaintFill(color);
 		for (int i = 0; i < lines; i++) {
 			float x = pos.x;
@@ -152,41 +153,20 @@ public class AndroidCanvas
 		canvas.drawRect(new RectF(pos.x, pos.y, pos.x + length, pos.y + height), paint);
 	}
 
-	public void fillEllipse(Point2f pCenter, float width, float height, Color color) {
+	@Override public void fillPath(Path path, Color color) {
 		Paint paint = AndroidColorUtils.createPaintFill(color);
-		canvas.drawOval(new RectF(pCenter.x - width / 2, pCenter.y - height / 2, pCenter.x + width / 2,
-			pCenter.y + height / 2), paint);
-	}
-
-	@Override public void drawBeam(Point2f[] points, Color color, float interlineSpace) {
-		RectF beamSymbol = new RectF(-1f, -0.25f, 1f, 0.25f);
-
-		Paint paint = AndroidColorUtils.createPaintFill(color);
-
-		int oldTransform = canvas.save();
-
-		float imageWidth = points[2].x - points[0].x;
-		float imageHeight = points[3].y - points[0].y;
-		float beamGrowthHeight = points[2].y - points[0].y;
-
-		canvas.translate(points[0].x + imageWidth / 2, points[0].y + imageHeight / 2);
-		canvas.skew(0, beamGrowthHeight / imageWidth);
-		canvas.scale(imageWidth / beamSymbol.width(), (points[1].y - points[0].y) / beamSymbol.height());
-		canvas.drawRect(beamSymbol, paint);
-
-		canvas.restoreToCount(oldTransform);
-	}
-
-	@Override public void drawCurvedLine(Point2f p1, Point2f p2, Point2f c1, Point2f c2,
-		float interlineSpace, Color color) {
-		Paint paint = AndroidColorUtils.createPaintFill(color);
-		SimpleSlurShape slurShape = new SimpleSlurShape(p1, p2, c1, c2, interlineSpace);
-		canvas.drawPath(AndroidSlurRenderer.getPath(slurShape), paint);
+		android.graphics.Path p = AndroidPath.createPath(path);
+		canvas.drawPath(p, paint);
 	}
 
 	@Override public void fillRect(Rectangle2f rect, Color color) {
 		Paint paint = AndroidColorUtils.createPaintFill(color);
-		canvas.drawRect(new RectF(rect.x1(), rect.y1(), rect.x2(), rect.y2()), paint);
+		Rect r = Conversion.rect(rect);
+		canvas.drawRect(r, paint);
+	}
+
+	@Override public void drawImage(Rectangle2f rect, String imagePath) {
+		//TODO: not supported yet
 	}
 
 	@Override public void transformSave() {

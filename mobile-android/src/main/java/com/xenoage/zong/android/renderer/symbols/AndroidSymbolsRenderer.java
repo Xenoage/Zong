@@ -9,47 +9,48 @@ import com.xenoage.utils.android.color.AndroidColorUtils;
 import com.xenoage.utils.color.Color;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.zong.android.renderer.canvas.AndroidCanvas;
-import com.xenoage.zong.renderer.symbols.SymbolsRenderer;
+import com.xenoage.zong.android.renderer.path.AndroidPath;
+import com.xenoage.zong.renderer.symbol.SymbolsRenderer;
 import com.xenoage.zong.symbols.PathSymbol;
 import com.xenoage.zong.symbols.Symbol;
 import com.xenoage.zong.symbols.WarningSymbol;
 
 /**
  * Android renderer for {@link Symbol}s.
+ *
+ * TODO: needed? Code is trivial, integrate it into {@link AndroidCanvas}
  * 
  * @author Andreas Wenger
  */
-public class AndroidSymbolsRenderer
-	extends SymbolsRenderer {
+public class AndroidSymbolsRenderer {
 
-	public static final AndroidSymbolsRenderer instance = new AndroidSymbolsRenderer();
+	public static final AndroidSymbolsRenderer androidSymbolsRenderer =
+			new AndroidSymbolsRenderer();
 
 
 	/**
-	 * Draws the given {@link PathSymbol} on the given {@link AndroidGraphicsContext}
+	 * Draws the given {@link PathSymbol} on the given {@link Canvas}
 	 * with the given color at the given position and the given scaling.
 	 */
-	@Override public void draw(PathSymbol symbol, com.xenoage.zong.renderer.canvas.Canvas canvas,
+	public void draw(PathSymbol symbol, Canvas canvas,
 		Color color, Point2f position, Point2f scaling) {
-		Canvas c = AndroidCanvas.getCanvas(canvas);
-		c.save();
-		c.translate(position.x, position.y);
-		c.scale(scaling.x, scaling.y);
 
-		Paint paint = new Paint();
-		paint.setColor(AndroidColorUtils.createColor(color));
-		paint.setStyle(Paint.Style.FILL);
-		paint.setAntiAlias(true);
-		c.drawPath((Path) symbol.path, paint);
-		Log.w("", symbol.boundingRect.toString());
-		c.restore();
+		canvas.save();
+		canvas.translate(position.x, position.y);
+		canvas.scale(scaling.x, scaling.y);
+
+		Paint paint = AndroidColorUtils.createPaintFill(color);
+		Path path = AndroidPath.createPath(symbol.path);
+		canvas.drawPath(path, paint);
+
+		canvas.restore();
 	}
 
 	/**
-	 * Draws the given {@link WarningSymbol} on the given {@link AndroidGraphicsContext}
+	 * Draws the given {@link WarningSymbol} on the given {@link Canvas}
 	 * with the given color at the given position and the given scaling.
 	 */
-	@Override public void draw(WarningSymbol symbol, com.xenoage.zong.renderer.canvas.Canvas canvas,
+	public void draw(WarningSymbol symbol, Canvas canvas,
 		Color color, Point2f position, Point2f scaling) {
 		//the warning symbol is not supported yet
 	}

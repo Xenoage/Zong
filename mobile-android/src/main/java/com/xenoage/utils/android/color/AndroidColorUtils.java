@@ -6,6 +6,11 @@ import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 
+import com.xenoage.utils.annotations.Optimized;
+
+import static com.xenoage.utils.annotations.Optimized.Reason.Performance;
+import static com.xenoage.utils.color.Color.color;
+
 /**
  * Useful methods for working with Android colors.
  * 
@@ -21,8 +26,8 @@ public class AndroidColorUtils {
 	 * @param color      the Android color
 	 */
 	public static com.xenoage.utils.color.Color createColorInfo(int color) {
-		return new com.xenoage.utils.color.Color(Color.red(color), Color.green(color),
-			Color.blue(color), Color.alpha(color));
+		return color(Color.red(color), Color.green(color),
+				Color.blue(color), Color.alpha(color));
 	}
 
 	/**
@@ -35,7 +40,12 @@ public class AndroidColorUtils {
 	/**
 	 * Gets the Android {@link Paint} for fillings from the given {@link com.xenoage.utils.color.Color}.
 	 */
+	@Optimized(Performance)
 	public static Paint createPaintFill(com.xenoage.utils.color.Color colorInfo) {
+		//optimized: black is so frequently used, that we share a single instance
+		if (colorInfo == com.xenoage.utils.color.Color.black)
+			return black;
+
 		Paint paint = new Paint();
 		paint.setColor(createColor(colorInfo));
 		paint.setStyle(Style.FILL);
