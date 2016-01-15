@@ -1,5 +1,7 @@
 package com.xenoage.zong.renderer.stamping;
 
+import static com.xenoage.utils.color.Color.color;
+
 import com.xenoage.utils.color.Color;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
@@ -43,7 +45,7 @@ public class StaffStampingRenderer
 			if (ss.isSimplifiedStaff) {
 				//simplified staff (fill rectangle)
 				color = screenLine.color;
-				color = new Color(color.r, color.g, color.b, (int) (0.7f * color.a));
+				color = color(color.r, color.g, color.b, (int) (0.7f * color.a));
 
 				//don't forget the line heights, they belong into the rectangle
 				position = position.add(0, -1 * ss.lineHeightMm / 2);

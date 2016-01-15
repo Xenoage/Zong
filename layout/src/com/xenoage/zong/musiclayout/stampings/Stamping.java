@@ -10,6 +10,8 @@ import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.Optimized;
 import com.xenoage.utils.math.geom.NoShape;
 import com.xenoage.utils.math.geom.Shape;
+import com.xenoage.zong.core.music.MusicElement;
+import com.xenoage.zong.musiclayout.notation.Notation;
 
 import lombok.ToString;
 
@@ -63,5 +65,25 @@ public abstract class Stamping {
 	 * Gets the musical level to which this stamping belongs to.
 	 */
 	public abstract Level getLevel();
+	
+	/**
+	 * Gets the {@link MusicElement} or {@link Notation} behind the stamping, or null.
+	 * TIDY
+	 */
+	public Object getElement() {
+		return null;
+	}
+	
+	/**
+	 * Gets the {@link MusicElement} behind the stamping, or null.
+	 */
+	public MusicElement getMusicElement() {
+		Object element = getElement();
+		if (element instanceof Notation)
+			return ((Notation) element).getElement();
+		else if (element instanceof MusicElement)
+			return (MusicElement) element;
+		return null;
+	}
 
 }

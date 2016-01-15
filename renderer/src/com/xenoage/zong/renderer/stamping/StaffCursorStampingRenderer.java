@@ -1,7 +1,8 @@
 package com.xenoage.zong.renderer.stamping;
 
+import static com.xenoage.utils.color.Color.color;
+
 import com.xenoage.utils.math.Units;
-import com.xenoage.utils.color.Color;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.zong.musiclayout.stampings.StaffCursorStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
@@ -45,7 +46,7 @@ public class StaffCursorStampingRenderer
 		}
 		x = parentStaff.positionMm.x + cursor.xMm + cursor.offsetIs * parentStaff.is;
 
-		canvas.drawLine(new Point2f(x, y1), new Point2f(x, y2), new Color(30, 200, 30),
+		canvas.drawLine(new Point2f(x, y1), new Point2f(x, y2), color(30, 200, 30),
 			getCursorWidth(viewScaling));
 	}
 

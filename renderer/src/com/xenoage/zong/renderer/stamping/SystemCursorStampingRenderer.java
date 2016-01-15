@@ -1,6 +1,7 @@
 package com.xenoage.zong.renderer.stamping;
 
-import com.xenoage.utils.color.Color;
+import static com.xenoage.utils.color.Color.color;
+
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import com.xenoage.zong.musiclayout.stampings.Stamping;
@@ -47,7 +48,7 @@ public class SystemCursorStampingRenderer
 			y2 = bottomStaff.computeYMm(-2);
 		}
 
-		canvas.drawLine(new Point2f(x, y1), new Point2f(x, y2), new Color(50, 50, 230),
+		canvas.drawLine(new Point2f(x, y1), new Point2f(x, y2), color(50, 50, 230),
 			getCursorWidth(viewScaling));
 
 	}

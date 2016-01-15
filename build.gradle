@@ -52,7 +52,7 @@ project(':core') { dependencies { compile project(':utils-base') } }
 project(':desktop') {
 	sourceCompatibility = 8
 	dependencies {
-		compile project(':renderer-awt'), project(':renderer-javafx'), project(':midi-out')
+		compile project(':renderer-awt'), project(':renderer-javafx'), project(':midi-out'), project(':musicxml-layout')
 		compile 'org.controlsfx:controlsfx:8.40.9'
 		compile 'com.itextpdf:itextpdf:5.5.7'
 		compile 'org.xiph:vorbis-java:1.0.0-beta'
@@ -72,10 +72,17 @@ project(':renderer-javafx') {
 		compile project(':utils-jse8')
 	}
 }
-project(':layout') { dependencies { compile project(':core'), project(':musicxml-in') } }
+project(':layout') { dependencies { compile project(':core') } }
 project(':midi-out') { dependencies { compile project(':core') } }
 project(':musicxml') { dependencies { compile project(':core') } }
 project(':musicxml-in') { dependencies { compile project(':musicxml') } }
+project(':musicxml-layout') {
+	dependencies {
+		compile project(':layout')
+		compile project(':musicxml-in')
+		compile project(':utils-jse')
+	}
+}
 project(':renderer') { dependencies { compile project(':layout') } }
 project(':test') {
 	sourceCompatibility = 8

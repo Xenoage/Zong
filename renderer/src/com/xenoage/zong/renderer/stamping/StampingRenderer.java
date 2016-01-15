@@ -1,5 +1,7 @@
 package com.xenoage.zong.renderer.stamping;
 
+import static com.xenoage.utils.color.Color.color;
+
 import java.util.HashMap;
 
 import com.xenoage.utils.color.Color;
@@ -82,7 +84,7 @@ public abstract class StampingRenderer {
 	public void drawBoundingShape(Stamping stamping, Canvas canvas) {
 		if (stamping.getBoundingShape() instanceof Rectangle2f) {
 			Rectangle2f r = (Rectangle2f) stamping.getBoundingShape();
-			Color ci = new Color(0, 0, 255, 100);
+			Color ci = color(0, 0, 255, 100);
 			canvas.drawLine(r.nw(), r.ne(), ci, 0.5f);
 			canvas.drawLine(r.ne(), r.se(), ci, 0.5f);
 			canvas.drawLine(r.se(), r.sw(), ci, 0.5f);

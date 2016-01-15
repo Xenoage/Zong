@@ -19,7 +19,7 @@ import com.xenoage.utils.annotations.NonNull;
 	/** The direction of the stem, or null for default. */
 	@NonNull private final StemDirection direction;
 
-	/** The length of the stem, measured from the outermost chord not at the stem side
+	/** The length of the stem, measured from the outermost chord note at the stem side
 	 * to the end of the stem, in interline spaces, or null for default. */
 	@MaybeNull private final Float lengthIs;
 
