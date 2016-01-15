@@ -1,6 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Zong! Mobile</string>
-
-    <string name="dummy_button">Zong! Button</string>
-    <string name="dummy_content">Score</string>
+    <string name="app_name">Zong! Mobile Viewer</string>
+    <string name="bloglink">http://blog.zong-music.com</string>
 </resources>

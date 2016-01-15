@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <!-- header -->
+	<FrameLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content">
+		<ImageView
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		   	android:adjustViewBounds="true"
+		    android:src="@drawable/logo"
+		    android:scaleType="fitXY"/>
+	</FrameLayout>
+
+	
+	<!-- version -->
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:gravity="center_horizontal|center_vertical"
+	    android:orientation="horizontal"
+	    android:padding="4dp"
+	    android:background="@drawable/menu_bg">
+
+		<ImageView
+		    android:id="@+id/imageView1"
+		    android:layout_width="22dp"
+			android:layout_height="22dp"
+			android:src="@drawable/warning"
+			android:scaleType="fitXY"
+			android:layout_marginRight="5dp"/>
+
+		<TextView
+		    android:id="@+id/info_menu_version"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="Prototype p0.x.xx"
+		    style="@style/SmallText" />
+		
+	</LinearLayout>
+
+	<!-- text -->
+	<RelativeLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent" >
+
+	    <LinearLayout
+	        android:id="@+id/linearLayout1"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerHorizontal="true"
+	        android:layout_centerVertical="true"
+	        android:orientation="vertical" >
+
+	        <TextView
+	            android:id="@+id/info_title"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center_horizontal"
+	            android:gravity="center_horizontal"
+	            android:text="Program Title"
+	            style="@style/BigText" />
+	        
+	        <TextView
+		        android:id="@+id/info_version"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="center_horizontal"
+		        android:gravity="center_horizontal"
+		        android:text="v0.x.x"
+		        android:paddingBottom="15sp"
+		        style="@style/NormalText"/>
+	        
+	        <TextView
+	            android:id="@+id/info_authors"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center_horizontal"
+	            android:gravity="center_horizontal"
+	            android:paddingBottom="15sp"
+	            android:text="© 2006-2013\nXenoage Software\nAndreas Wenger\nUli Teschemacher"
+	            style="@style/NormalText" />
+	        
+	        <TextView
+	            android:id="@+id/info_moreinfo"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center_horizontal"
+	            android:gravity="center_horizontal"
+	            android:text="For more information,\nplease visit our blog:"
+	            android:paddingBottom="15sp"
+	            style="@style/NormalText" />
+	        
+	        <TextView
+	            android:id="@+id/info_link"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center_horizontal"
+	            android:gravity="center_horizontal"
+	            android:text="@string/bloglink"
+	            android:linksClickable="true"
+	            style="@style/NormalText"
+	            android:autoLink="web" />
+	        
+	    </LinearLayout>
+	    
+	</RelativeLayout>
+
+</LinearLayout>
