@@ -12,7 +12,7 @@ import com.xenoage.utils.math.Units;
  * Because a bitmap works with integer coordinates, no lines
  * thinner than 1 px can be drawn.
  * 
- * This class computes the best possible display of lines:
+ * This class computes the best possible display of lines.
  * It ensures that each line is at least 1 px wide,
  * but is drawn with some transparency to fake the "thinner"-effect.
  *

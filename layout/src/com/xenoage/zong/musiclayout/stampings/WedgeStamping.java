@@ -1,7 +1,9 @@
 package com.xenoage.zong.musiclayout.stampings;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import com.xenoage.utils.annotations.Const;
-import com.xenoage.zong.core.music.direction.Wedge;
 
 /**
  * Class for a wedge (crescendo or decrescendo) stamping
@@ -14,37 +16,30 @@ import com.xenoage.zong.core.music.direction.Wedge;
  *
  * @author Andreas Wenger
  */
-@Const public final class WedgeStamping
+@Const @AllArgsConstructor @Getter
+public final class WedgeStamping
 	extends Stamping {
 
 	/** The line position of the (centered) baseline. */
 	public final float lp;
-
 	/** The horizontal start position in mm relative to the beginning of the staff. */
-	public final float x1Mm;
-
+	public final float leftXMm;
 	/** The horizontal end position in mm relative to the beginning of the staff. */
-	public final float x2Mm;
-
+	public final float rightXMm;
 	/** The vertical distance of the lines at the start position in IS. */
-	public final float d1Is;
-
+	public final float leftDistanceIs;
 	/** The vertical distance of the lines at the end position in IS. */
-	public final float d2Is;
-
-
-	public WedgeStamping(Wedge wedge, float lp, float x1Mm, float x2Mm, float d1Is, float d2Is,
-		StaffStamping parentStaff) {
-		super(parentStaff, Level.Music, wedge, null);
-		this.lp = lp;
-		this.x1Mm = x1Mm;
-		this.x2Mm = x2Mm;
-		this.d1Is = d1Is;
-		this.d2Is = d2Is;
-	}
+	public final float rightDistanceIs;
+	/** The parent staff. */
+	public final StaffStamping parentStaff;
+	
 
 	@Override public StampingType getType() {
 		return StampingType.WedgeStamping;
+	}
+	
+	@Override public Level getLevel() {
+		return Level.Music;
 	}
 
 }

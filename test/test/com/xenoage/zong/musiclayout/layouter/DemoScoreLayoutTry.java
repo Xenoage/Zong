@@ -29,7 +29,9 @@ public class DemoScoreLayoutTry {
 		try {
 			Score score = ScoreRevolutionary.createScore();
 			Size2f areaSize = new Size2f(150, 10000);
-			ScoreLayout layout = new ScoreLayouter(score, symbolPool, layoutSettings, true, areaSize).createLayoutWithExceptions();
+			Context context = new Context(score, symbolPool, layoutSettings);
+			Target target = Target.completeLayoutTarget(new ScoreLayoutArea(areaSize));
+			ScoreLayout layout = new ScoreLayouter(context, target).createLayoutWithExceptions();
 			System.out.println(layout.toString());
 		} catch (Exception ex) {
 			ex.printStackTrace();

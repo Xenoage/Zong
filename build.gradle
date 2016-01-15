@@ -54,7 +54,7 @@ project(':demos') {
 project(':desktop') {
 	sourceCompatibility = 8
 	dependencies {
-		compile project(':renderer-awt'), project(':renderer-javafx'), project(':midi-out'), project(':musicxml-in')
+		compile project(':renderer-awt'), project(':renderer-javafx'), project(':midi-out')
 		compile group: "org.controlsfx", name: "controlsfx", version: "8.20.7"
 		compile group: "com.itextpdf", name: "itextpdf", version: "5.4.5"
 		compile files('../lib/lib/vorbis-java-1.0.0-beta.jar')
@@ -72,7 +72,7 @@ project(':renderer-javafx') {
 		compile project(':renderer')
 	}
 }
-project(':layout') { dependencies { compile project(':core') } }
+project(':layout') { dependencies { compile project(':core'), project(':musicxml-in') } }
 project(':midi-out') { dependencies { compile project(':core') } }
 project(':musicxml') { dependencies { compile project(':core') } }
 project(':musicxml-in') { dependencies { compile project(':musicxml') } }
@@ -99,16 +99,17 @@ project(':webserver') {
 	}
 }
 
-//update lib
-task updateLib {
-	println 'Update libraries'
-	ant.java(jar:"lib/sync.jar", fork:true, dir:"lib")
+//create JavaDoc
+task createJavaDoc {
+	description = 'Creates the JavaDoc for Zong!'
+    group = 'build'
+	println 'Create JavaDoc'
+	ant.importBuild 'javadoc.build.xml'
+	dependsOn antZongJavadoc
 }
 
 //build dist of Zong!
 task dist {
-	//update libraries
-	dependsOn updateLib
 	//first, build utils
 	dependsOn 'buildUtils'
 	//then, build the subprojects

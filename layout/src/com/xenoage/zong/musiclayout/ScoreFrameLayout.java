@@ -9,12 +9,15 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import com.xenoage.utils.annotations.Optimized;
+import com.xenoage.utils.annotations.Optimized.Reason;
 import com.xenoage.utils.iterators.MultiListIt;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Rectangle2f;
-import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.musiclayout.continued.ContinuedElement;
+import com.xenoage.zong.musiclayout.spacing.FrameSpacing;
+import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import com.xenoage.zong.musiclayout.stampings.Stamping;
 import com.xenoage.zong.musiclayout.stampings.StampingType;
@@ -34,13 +37,15 @@ import com.xenoage.zong.musiclayout.stampings.TextStamping;
 public final class ScoreFrameLayout {
 
 	/** Information about the systems in this frame. */
-	@Getter private FrameArrangement frameArrangement;
+	@Getter private FrameSpacing frameSpacing;
 
 	/** The list of all staff stampings of this frame. Staff stampings and
 	 * other stampings are divided for performance reasons. */
+	@Optimized(Reason.Performance)
 	@Getter private ArrayList<StaffStamping> staffStampings;
 	/** The list of all other stampings of this frame. Staff stampings and
 	 * other stampings are divided for performance reasons.*/
+	@Optimized(Reason.Performance)
 	@Getter private ArrayList<Stamping> otherStampings;
 
 	/** The list of continued elements, that means the unclosed elements
@@ -54,10 +59,10 @@ public final class ScoreFrameLayout {
 	@Getter @Setter private List<? extends Stamping> playbackStampings = alist();
 
 	
-	public ScoreFrameLayout(FrameArrangement frameArrangement, ArrayList<StaffStamping> staffStampings,
+	public ScoreFrameLayout(FrameSpacing frameArrangement, ArrayList<StaffStamping> staffStampings,
 		ArrayList<Stamping> otherStampings, ArrayList<ContinuedElement> continuedElements)
 	{
-		this.frameArrangement = frameArrangement;
+		this.frameSpacing = frameArrangement;
 		this.staffStampings = staffStampings;
 		this.otherStampings = otherStampings;
 		this.continuedElements = continuedElements;
@@ -92,8 +97,8 @@ public final class ScoreFrameLayout {
 		Stamping ret = null;
 		int highestLevel = -1;
 		for (Stamping s : getMusicalStampings()) {
-			if (s.level.ordinal() > highestLevel && s.boundingShape.contains(point)) {
-				highestLevel = s.level.ordinal();
+			if (s.getLevel().ordinal() > highestLevel && s.getBoundingShape().contains(point)) {
+				highestLevel = s.getLevel().ordinal();
 				ret = s;
 			}
 		}
@@ -106,7 +111,7 @@ public final class ScoreFrameLayout {
 	 */
 	public StaffStamping getStaffStampingAt(Point2f point) {
 		for (StaffStamping s : staffStampings) {
-			if (s.boundingShape.contains(point))
+			if (s.getBoundingShape().contains(point))
 				return (StaffStamping) s;
 		}
 		return null;
@@ -119,19 +124,7 @@ public final class ScoreFrameLayout {
 	 */
 	public Stamping getOtherStampingAt(Point2f point, StampingType type) {
 		for (Stamping s : otherStampings) {
-			if (s.boundingShape != null && s.boundingShape.contains(point) && s.getType() == type)
-				return s;
-		}
-		return null;
-	}
-
-	/**
-	 * Returns the first {@link Stamping} which belongs to the given {@link MusicElement},
-	 * or null if there is none.
-	 */
-	public Stamping getStampingFor(MusicElement element) {
-		for (Stamping s : otherStampings) {
-			if (s.musicElement == element)
+			if (s.getType() == type && s.getBoundingShape().contains(point))
 				return s;
 		}
 		return null;
@@ -152,8 +145,8 @@ public final class ScoreFrameLayout {
 		}
 		//otherwise, compute the beat at this position and return it
 		else {
-			float posX = point.x - staff.position.x;
-			return staff.getMPAtX(posX);
+			float posX = point.x - staff.positionMm.x;
+			return staff.getMpAtX(posX);
 		}
 	}
 
@@ -171,12 +164,9 @@ public final class ScoreFrameLayout {
 	 * Gets the staff stamping containing the given measure, or null if not found.
 	 */
 	public StaffStamping getStaffStamping(int staff, int measure) {
-		for (StaffStamping s : staffStampings) {
-			if (s.getStaffIndex() == staff && measure >= s.getStartMeasureIndex() &&
-				measure <= s.getEndMeasureIndex()) {
+		for (StaffStamping s : staffStampings)
+			if (s.getStaffIndex() == staff && s.system.containsMeasure(measure))
 				return s;
-			}
-		}
 		return null;
 	}
 
@@ -193,12 +183,12 @@ public final class ScoreFrameLayout {
 		float maxX = Float.MIN_VALUE;
 		float maxY = Float.MIN_VALUE;
 		for (StaffStamping staff : staffStampings) {
-			if (staff.getSystemIndex() == systemIndex) {
+			if (staff.system.getSystemIndexInFrame() == systemIndex) {
 				found = true;
-				minX = Math.min(minX, staff.position.x);
-				minY = Math.min(minY, staff.position.y);
-				maxX = Math.max(maxX, staff.position.x + staff.length);
-				maxY = Math.max(maxY, staff.position.y + (staff.linesCount - 1) * staff.is);
+				minX = Math.min(minX, staff.positionMm.x);
+				minY = Math.min(minY, staff.positionMm.y);
+				maxX = Math.max(maxX, staff.positionMm.x + staff.lengthMm);
+				maxY = Math.max(maxY, staff.positionMm.y + (staff.linesCount - 1) * staff.is);
 			}
 		}
 		if (found)
@@ -213,17 +203,11 @@ public final class ScoreFrameLayout {
 	 * Only the measure and the beat of the given {@link MP} are used.
 	 */
 	public float getPositionX(MP mp) {
-		float minX = Float.MAX_VALUE;
-		//search all staves for the given musical position, beginning at the top staff
-		for (StaffStamping staff : staffStampings) {
-			Float x = staff.getXMmAt(mp);
-			if (x != null && x < minX)
-				minX = x;
-		}
-		if (minX == Float.MAX_VALUE)
-			return 0;
-		else
-			return minX;
+		//search all systems for the given musical position, beginning at the top staff
+		for (SystemSpacing system : frameSpacing.systems)
+			if (system.containsMeasure(mp.measure))
+				return system.getXMmAt(mp);
+		return 0;
 	}
 	
 }

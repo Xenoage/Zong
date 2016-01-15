@@ -5,6 +5,7 @@ import static com.xenoage.utils.collections.CollectionUtils.getMax;
 import static com.xenoage.utils.collections.CollectionUtils.getMin;
 import static com.xenoage.utils.collections.CollectionUtils.map;
 import static com.xenoage.utils.math.Fraction._0;
+import static com.xenoage.utils.math.Fraction.fr;
 
 import java.util.Map;
 
@@ -23,6 +24,27 @@ public class ChordSpacings {
 	//cache
 	private Fraction durationWidthsLowestDuration = _0, durationWidthsHighestDuration = _0;
 	private Map<Fraction, Float> durationWidthsCache = map();
+	
+	public static final ChordSpacings defaultChordSpacingsNormal;
+	public static final ChordSpacings defaultChordSpacingsGrace;
+	
+	static {
+		Map<Fraction, Float> n = map();
+		n.put(fr(1,64), 1+1/2f);
+		n.put(fr(1,32), 1+3/2f);
+		n.put(fr(1,16), 2f);
+		n.put(fr(1,8), 2+1/2f);
+		n.put(fr(1,4), 3+1/2f);
+		n.put(fr(3,8), 4+1/4f);
+		n.put(fr(1,2), 4+3/4f);
+		n.put(fr(1,1), 7+1/4f);
+		defaultChordSpacingsNormal = new ChordSpacings(n);
+		Map<Fraction, Float> g = map();
+		g.put(fr(1,16), 1+1/4f);
+		g.put(fr(1,8), 1+1/2f);
+		g.put(fr(1,4), 1+3/4f);
+		defaultChordSpacingsGrace = new ChordSpacings(g);
+	}
 
 
 	public ChordSpacings(Map<Fraction, Float> durationWidths) {

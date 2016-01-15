@@ -1,5 +1,6 @@
 package musicxmltestsuite.tests.base;
 
+import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.core.music.Pitch.pi;
 
 import com.xenoage.zong.core.music.Pitch;
@@ -35,6 +36,16 @@ public interface Base01a
 		expectedPitches[iPitch++] = pi(0, 1, 5);
 		expectedPitches[iPitch++] = pi(0, 1, 5);
 		return expectedPitches;
+	}
+	
+	default int[] getExpectedLPs() {
+		int[] expectedLPs = new int[24 * 4 + 6];
+		for (int i1 : range(3))
+			for (int i2 : range(8 * 4))
+				expectedLPs[i1 * 8 * 4 + i2] = -12 + i2;
+		for (int i : range(4))
+			expectedLPs[3 * 8 * 4 + i] = 5;
+		return expectedLPs;
 	}
 
 }

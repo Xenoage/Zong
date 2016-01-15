@@ -32,22 +32,21 @@ public class LegerLineStampingRenderer
 		LegerLineStamping legerLine = (LegerLineStamping) stamping;
 
 		StaffStamping parentStaff = legerLine.parentStaff;
-		float linePosition = legerLine.lp;
-		float x = legerLine.x;
+		float linePosition = legerLine.sp.lp;
 
 		float scaling = args.targetScaling;
-		int width = (int) (1.6f * parentStaff.is);
-		float p1xMm = x - width / 2;
+		float width = legerLine.widthIs * parentStaff.is;
+		float p1xMm = legerLine.sp.xMm - width / 2;
 		float p2xMm = p1xMm + width;
-		float lineWidthMm = parentStaff.getLineWidth();
+		float lineWidthMm = parentStaff.getLineWidthMm();
 		Color color = Color.black;
 
 		float yMm = 0;
 		if (canvas.getFormat() == CanvasFormat.Raster) {
 			//render on screen or print
 			BitmapLine screenLine = new BitmapLine(lineWidthMm, color, scaling);
-			BitmapStaff screenStaff = parentStaff.screenInfo.getBitmapStaff(scaling);
-			yMm = parentStaff.position.y + screenStaff.getLPMm(linePosition);
+			BitmapStaff screenStaff = parentStaff.getBitmapInfo().getBitmapStaff(scaling);
+			yMm = parentStaff.positionMm.y + screenStaff.getYMm(linePosition);
 			lineWidthMm = screenLine.widthMm;
 		}
 		else if (canvas.getFormat() == CanvasFormat.Vector) {

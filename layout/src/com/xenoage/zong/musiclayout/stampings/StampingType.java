@@ -1,5 +1,9 @@
 package com.xenoage.zong.musiclayout.stampings;
 
+import static com.xenoage.utils.annotations.Optimized.Reason.Performance;
+
+import com.xenoage.utils.annotations.Optimized;
+
 /**
  * List of types of stampings.
  * 
@@ -9,6 +13,7 @@ package com.xenoage.zong.musiclayout.stampings;
  * 
  * @author Andreas Wenger
  */
+@Optimized(Performance)
 public enum StampingType {
 	BarlineStamping,
 	BeamStamping,

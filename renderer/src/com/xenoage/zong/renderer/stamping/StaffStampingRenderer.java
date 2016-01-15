@@ -26,19 +26,19 @@ public class StaffStampingRenderer
 		StaffStamping staff = (StaffStamping) stamping;
 
 		float scaling = args.targetScaling;
-		Point2f position = staff.position;
+		Point2f position = staff.positionMm;
 
 		//TODO: custom line width
-		float lineWidthMm = staff.getLineWidth();
+		float lineWidthMm = staff.getLineWidthMm();
 
-		float length = staff.length;
+		float length = staff.lengthMm;
 
 		Color color = Color.black;
 
 		if (canvas.getFormat() == CanvasFormat.Raster) {
 			//render on screen
-			BitmapLine screenLine = staff.screenInfo.getBitmapLine(scaling, lineWidthMm, color);
-			BitmapStaff ss = staff.screenInfo.getBitmapStaff(scaling);
+			BitmapLine screenLine = staff.getBitmapInfo().getBitmapLine(scaling, lineWidthMm, color);
+			BitmapStaff ss = staff.getBitmapInfo().getBitmapStaff(scaling);
 			position = new Point2f(position.x, position.y + ss.yOffsetMm);
 			if (ss.isSimplifiedStaff) {
 				//simplified staff (fill rectangle)

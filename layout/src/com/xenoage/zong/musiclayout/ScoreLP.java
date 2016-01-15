@@ -12,7 +12,8 @@ import com.xenoage.utils.math.geom.Point2f;
  * 
  * @author Andreas Wenger
  */
-@Const @AllArgsConstructor public final class ScoreLP {
+@Const @AllArgsConstructor
+public final class ScoreLP {
 
 	public final int frameIndex;
 	public final Point2f pMm;

@@ -36,7 +36,7 @@ public class BarlineStampingRenderer
 		BarlineStamping barlineSt = (BarlineStamping) stamping;
 
 		List<StaffStamping> staves = barlineSt.staves;
-		float xPosition = barlineSt.xPosition;
+		float xPosition = barlineSt.xMm;
 		float xCorrection = 0;
 
 		//lines
@@ -96,7 +96,7 @@ public class BarlineStampingRenderer
 	private static float paintBarline(Canvas canvas, RendererArgs args, StaffStamping staff1,
 		float staff1LP, StaffStamping staff2, float staff2LP, float xPosition, BarlineStyle style) {
 		Color col = Color.black;
-		float lightMm = staff1.getLineWidth() * 1.5f; //barline a little bit thicker than staff line
+		float lightMm = staff1.getLineWidthMm() * 1.5f; //barline a little bit thicker than staff line
 		float heavyMm = lightMm * 3f;
 		float gapMm = lightMm * 1.5f;
 		float l = lightMm;
@@ -129,8 +129,8 @@ public class BarlineStampingRenderer
 		} */
 		//if on the very left or very right side of the staff, don't center
 		//the barline but place it completely within the staff
-		boolean isLeft = (xPosition <= staff1.position.x + lightMm);
-		boolean isRight = (xPosition >= staff1.position.x + staff1.length - lightMm);
+		boolean isLeft = (xPosition <= staff1.positionMm.x + lightMm);
+		boolean isRight = (xPosition >= staff1.positionMm.x + staff1.lengthMm - lightMm);
 		float x = xPosition;
 		float c = 0;
 		//half of light/heavy/gap
@@ -233,16 +233,16 @@ public class BarlineStampingRenderer
 		float widthMm, Color color) {
 		if (canvas.getFormat() == CanvasFormat.Raster) {
 			float scaling = args.targetScaling;
-			BitmapStaff screenStaff1 = staff1.screenInfo.getBitmapStaff(scaling);
-			BitmapStaff screenStaff2 = staff2.screenInfo.getBitmapStaff(scaling);
-			Point2f p1 = new Point2f(xMm, staff1.position.y + screenStaff1.getLPMm(staff1LinePosition));
-			Point2f p2 = new Point2f(xMm, staff2.position.y + screenStaff2.getLPMm(staff2LinePosition));
+			BitmapStaff screenStaff1 = staff1.getBitmapInfo().getBitmapStaff(scaling);
+			BitmapStaff screenStaff2 = staff2.getBitmapInfo().getBitmapStaff(scaling);
+			Point2f p1 = new Point2f(xMm, staff1.positionMm.y + screenStaff1.getYMm(staff1LinePosition));
+			Point2f p2 = new Point2f(xMm, staff2.positionMm.y + screenStaff2.getYMm(staff2LinePosition));
 			canvas.drawLine(p1, p2, color, widthMm);
 		}
 		else if (canvas.getFormat() == CanvasFormat.Vector) {
-			Point2f p1 = new Point2f(xMm, staff1.position.y + staff1.is *
+			Point2f p1 = new Point2f(xMm, staff1.positionMm.y + staff1.is *
 				(staff1.linesCount - 1 - staff1LinePosition / 2));
-			Point2f p2 = new Point2f(xMm, staff2.position.y + staff2.is *
+			Point2f p2 = new Point2f(xMm, staff2.positionMm.y + staff2.is *
 				(staff2.linesCount - 1 - staff2LinePosition / 2));
 			canvas.drawLine(p1, p2, color, widthMm);
 		}

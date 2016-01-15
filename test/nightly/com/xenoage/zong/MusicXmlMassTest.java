@@ -14,8 +14,8 @@ import org.junit.Test;
 
 import com.xenoage.utils.iterators.It;
 import com.xenoage.utils.jse.io.JseInputStream;
-import com.xenoage.zong.desktop.io.musicxml.in.MusicXmlScoreDocFileInput;
 import com.xenoage.zong.documents.ScoreDoc;
+import com.xenoage.zong.io.musicxml.in.MusicXmlScoreDocFileInput;
 
 /**
  * This test tries to load and layout a huge range of MusicXML files.

@@ -1,6 +1,7 @@
 package com.xenoage.zong.musiclayout.continued;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.math.VSide;
@@ -16,21 +17,13 @@ import com.xenoage.zong.core.music.slur.Slur;
  * 
  * @author Andreas Wenger
  */
-@Const @AllArgsConstructor public final class ContinuedSlur
+@Const @AllArgsConstructor
+public final class ContinuedSlur
 	implements ContinuedElement {
 
-	public final Slur slur;
+	@Getter public final Slur element;
+	@Getter public final int staffIndex;
 	public final VSide side;
-	public final int staffIndex;
 	public final int level;
-
-
-	@Override public Slur getMusicElement() {
-		return slur;
-	}
-
-	@Override public int getStaffIndex() {
-		return staffIndex;
-	}
 
 }

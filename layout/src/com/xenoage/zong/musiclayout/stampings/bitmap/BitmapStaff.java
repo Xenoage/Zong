@@ -38,27 +38,20 @@ import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 
 	/** The width of a px in mm */
 	public final float pxMm;
-
 	/** True, if a simplified staff (just a filled rectangle) should be drawn */
 	public final boolean isSimplifiedStaff;
-
 	/** The adjusted height of the staff in mm, that fits best to the screen.
 	 * The half top line and half bottom line are, as always in a "staff height", not included! */
 	public final float heightMm;
-
 	/** The height of a line in mm. This value may be less than 1. If you need the displayed height
 	 * of the line, use the {@link BitmapLine} class. */
 	public final float lineHeightMm;
-
 	/** The height scaling factor of the staff, that fits best to the screen */
 	public final float heightScaling;
-
 	/** The adjusted interline space of the staff in mm, that fits best to the screen */
 	public final float interlineSpaceMm;
-
 	/** The additional vertical offset of the staff in mm, that fits best to the screen. */
 	public final float yOffsetMm;
-
 	/** The vertical position in mm, relative to the normal y-position
 	 * of the {@link StaffStamping}, of line position 0 (bottom line).
 	 * This is the y-offset plus the adjusted staff height and is just stored
@@ -114,8 +107,8 @@ import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 	 * Gets the vertical position in mm, relative to the normal y-position
 	 * of the {@link StaffStamping}, of the given line position.
 	 */
-	public float getLPMm(float lp) {
-		return lp0Mm - lp / 2 * interlineSpaceMm;
+	public float getYMm(float lp) {
+		return lp0Mm - lp / 2 * interlineSpaceMm; //TODO: wrong?! is relative to LP0!
 	}
 
 }

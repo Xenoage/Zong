@@ -24,10 +24,9 @@ import com.xenoage.zong.layout.Layout;
 import com.xenoage.zong.layout.Page;
 import com.xenoage.zong.layout.frames.Frame;
 import com.xenoage.zong.layout.frames.ScoreFrame;
-import com.xenoage.zong.musiclayout.BeatOffset;
-import com.xenoage.zong.musiclayout.MeasureMarks;
 import com.xenoage.zong.musiclayout.ScoreFrameLayout;
-import com.xenoage.zong.musiclayout.stampings.StaffStamping;
+import com.xenoage.zong.musiclayout.spacing.BeatOffset;
+import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
 
 /**
  * This class creates a JSON object which contains a mapping from time
@@ -114,32 +113,34 @@ public class CursorOutput {
 					float offsetX = absPos.x - frame.getSize().width / 2;
 					float offsetY = absPos.y - frame.getSize().height / 2;
 					ScoreFrameLayout sfl = ((ScoreFrame) frame).getScoreFrameLayout();
-					for (StaffStamping ss : sfl.getStaffStampings()) {
+					
+					for (SystemSpacing systemSpacing : sfl.getFrameSpacing().getSystems()) {
 						//read system data
-						int systemIndex = systemCount + ss.getSystemIndex();
+						int systemIndex = systemCount + systemSpacing.getSystemIndexInFrame();
 						while (systems.size() - 1 < systemIndex)
 							systems.add(new System());
+						
 						System system = systems.get(systemIndex);
 						system.page = iPage;
-						system.top = Math.min((ss.position.y + offsetY) / pageSize.height, system.top);
-						system.bottom = Math.max((ss.position.y + (ss.linesCount - 1) * ss.is + offsetY) /
-							pageSize.height, system.bottom);
-						//read measure marks
-						//TODO: wrong calculation (though right result?!) - mm.getBeatOffsets() should
-						//be relative to measure beginning
-						for (MeasureMarks mm : ss.staffMarks.getMeasureMarks()) {
-							Measure measure = measures.get(ss.getStartMeasureIndex() + mm.getMeasure());
+						system.top = (offsetY + systemSpacing.offsetYMm) / pageSize.height;
+						system.bottom = (offsetY + systemSpacing.offsetYMm + systemSpacing.getHeightMm()) / pageSize.height;
+						
+						//read measure beats
+						float systemOffsetX = systemSpacing.marginLeftMm;
+						for (int iMeasure : systemSpacing.getMeasureIndices()) {
+							Measure measure = measures.get(iMeasure);
 							measure.system = systemIndex;
-							float staffOffset = ss.position.x;
-							measure.left = (offsetX + staffOffset + mm.getStartMm()) / pageSize.width;
-							measure.right = (offsetX + staffOffset + mm.getEndMm()) / pageSize.width;
-							for (BeatOffset bo : mm.getBeatOffsets()) {
-								measure.beats.put(bo.getBeat(), (offsetX + staffOffset + bo.getOffsetMm()) /
+							
+							measure.left = (offsetX + systemOffsetX + systemSpacing.getMeasureStartMm(iMeasure)) / pageSize.width;
+							measure.right = (offsetX + systemOffsetX + systemSpacing.getMeasureEndMm(iMeasure)) / pageSize.width;
+							for (BeatOffset bo : systemSpacing.getColumn(iMeasure).getBeatOffsets()) {
+								measure.beats.put(bo.getBeat(), (offsetX + systemOffsetX + bo.getOffsetMm()) /
 									pageSize.width);
 							}
 						}
+						
 					}
-					systemCount += sfl.getFrameArrangement().getSystems().size();
+					systemCount += sfl.getFrameSpacing().getSystems().size();
 				}
 			}
 		}

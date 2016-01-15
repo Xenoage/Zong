@@ -1,29 +1,21 @@
 package com.xenoage.zong.musiclayout.continued;
 
-import lombok.AllArgsConstructor;
-
-import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.music.volta.Volta;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * Continued {@link Volta}.
  * 
+ * GOON: needed? Use {@link Volta} directly in {@link OpenVolta}
+ * 
  * @author Andreas Wenger
  */
-@Const @AllArgsConstructor public final class ContinuedVolta
+@AllArgsConstructor
+public final class ContinuedVolta
 	implements ContinuedElement {
 
-	public final Volta volta;
-	public final int startMeasureIndex;
-	public final int staffIndex;
-
-
-	@Override public Volta getMusicElement() {
-		return volta;
-	}
-
-	@Override public int getStaffIndex() {
-		return staffIndex;
-	}
+	@Getter public Volta element;
 
 }

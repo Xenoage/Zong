@@ -32,31 +32,31 @@ public class TupletStampingRenderer
 		float scaling = args.targetScaling;
 
 		//horizontal position
-		float x1Mm = tuplet.x1mm;
-		float x2Mm = tuplet.x2mm;
+		float x1Mm = tuplet.leftSP.xMm;
+		float x2Mm = tuplet.rightSP.xMm;
 
 		//height of hook is 1 IS
 		float hookHeightPx = Units.mmToPx(parentStaff.is, scaling);
 
 		//width and color of the line
 		Color color = Color.black;
-		float width = parentStaff.getLineWidth() * 1.5f; //a little bit thicker than staff line
+		float width = parentStaff.getLineWidthMm() * 1.5f; //a little bit thicker than staff line
 		float paintWidth;
 
 		//compute the horizontal line and color
 		float y1Mm, y2Mm;
 		Color paintColor;
 		if (canvas.getFormat() == CanvasFormat.Raster) {
-			BitmapStaff ss = parentStaff.screenInfo.getBitmapStaff(scaling);
-			y1Mm = parentStaff.position.y + ss.getLPMm(tuplet.y1lp);
-			y2Mm = parentStaff.position.y + ss.getLPMm(tuplet.y2lp);
-			BitmapLine screenLine = parentStaff.screenInfo.getBitmapLine(scaling, width, color);
+			BitmapStaff ss = parentStaff.getBitmapInfo().getBitmapStaff(scaling);
+			y1Mm = parentStaff.positionMm.y + ss.getYMm(tuplet.leftSP.lp);
+			y2Mm = parentStaff.positionMm.y + ss.getYMm(tuplet.rightSP.lp);
+			BitmapLine screenLine = parentStaff.getBitmapInfo().getBitmapLine(scaling, width, color);
 			paintColor = screenLine.color;
 			paintWidth = screenLine.widthMm;
 		}
 		else {
-			y1Mm = parentStaff.computeYMm(tuplet.y1lp);
-			y2Mm = parentStaff.computeYMm(tuplet.y2lp);
+			y1Mm = parentStaff.computeYMm(tuplet.leftSP.lp);
+			y2Mm = parentStaff.computeYMm(tuplet.rightSP.lp);
 			paintColor = color;
 			paintWidth = width;
 		}
@@ -89,9 +89,9 @@ public class TupletStampingRenderer
 		}
 		//hooks
 		canvas.drawLine(new Point2f(x1Mm, y1Mm), new Point2f(x1Mm, y1Mm + hookHeightPx *
-			(tuplet.y1lp < 0 ? -1 : 1)), paintColor, paintWidth);
+			(tuplet.leftSP.lp < 0 ? -1 : 1)), paintColor, paintWidth);
 		canvas.drawLine(new Point2f(x2Mm, y2Mm), new Point2f(x2Mm, y2Mm + hookHeightPx *
-			(tuplet.y2lp < 0 ? -1 : 1)), paintColor, paintWidth);
+			(tuplet.rightSP.lp < 0 ? -1 : 1)), paintColor, paintWidth);
 
 		//draw text
 		if (text != null && text.getParagraphs().size() > 0) {

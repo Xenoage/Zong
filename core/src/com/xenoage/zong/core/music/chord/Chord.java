@@ -4,8 +4,11 @@ import static com.xenoage.utils.CheckUtils.checkArgsNotNull;
 import static com.xenoage.utils.annotations.Optimized.Reason.MemorySaving;
 import static com.xenoage.utils.collections.CollectionUtils.addOrNew;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static com.xenoage.utils.collections.CollectionUtils.getFirst;
+import static com.xenoage.utils.collections.CollectionUtils.getLast;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Fraction._0;
+import static com.xenoage.zong.core.music.chord.StemDirection.Up;
 import static java.util.Collections.emptyList;
 
 import java.util.ArrayList;
@@ -19,6 +22,8 @@ import com.xenoage.utils.annotations.NonEmpty;
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.annotations.Optimized;
 import com.xenoage.utils.math.Fraction;
+import com.xenoage.zong.core.Score;
+import com.xenoage.zong.core.music.MusicElementType;
 import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.VoiceElement;
@@ -58,8 +63,8 @@ public class Chord
 	@NonNull @NonEmpty private List<Note> notes;
 	/** The duration of this chord. For a grace chord, this is 0. */
 	@NonNull private Fraction duration;
-	/** The stem of this chord, or null if a default stem is used. */
-	@MaybeNull private Stem stem = null;
+	/** The stem of this chord. */
+	@NonNull private Stem stem = Stem.defaultStem;
 	/** True, if this chord has cue size, otherwise false. */
 	private boolean cue = false;
 	/** The grace value of this chord, or null if it is a normal chord. */
@@ -191,7 +196,7 @@ public class Chord
 			(duration.isGreater0() ? ";dur:" + duration : ";grace") + ")";
 	}
 
-	@Override public MP getMP(MPElement child) {
+	@Override public MP getChildMP(MPElement child) {
 		//all children have the same musical position as this chord
 		return MP.getMP(this);
 	}
@@ -200,14 +205,28 @@ public class Chord
 	 * Gets the articulations on this chord, in ascending distance to the chord.
 	 */
 	public List<Articulation> getArticulations() { //TIDY: this method should not be needed
-		if (annotations == null)
-			return null;
 		ArrayList<Articulation> ret = alist();
 		for (Annotation a : annotations) {
 			if (a instanceof Articulation)
 				ret.add((Articulation) a);
 		}
 		return ret;
+	}
+	
+	/**
+	 * Convenience method. Gets the parent score of this chord,
+	 * or null, if this chord is not part of a score.
+	 */
+	public Score getScore() {
+		return (parent != null ? parent.getScore() : null);
+	}
+	
+	@Override public MusicElementType getMusicElementType() {
+		return MusicElementType.Chord;
+	}
+	
+	@Override public MP getMP() {
+		return MP.getMPFromParent(this);
 	}
 
 }

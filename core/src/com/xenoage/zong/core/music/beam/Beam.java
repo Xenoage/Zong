@@ -1,22 +1,26 @@
 package com.xenoage.zong.core.music.beam;
 
+import static com.xenoage.utils.collections.CollectionUtils.getFirst;
 import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.utils.math.MathUtils.min;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import lombok.Getter;
-
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.math.Fraction;
-import com.xenoage.zong.core.music.MusicElement;
+import com.xenoage.zong.core.music.MusicElementType;
 import com.xenoage.zong.core.music.WaypointPosition;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.util.DurationInfo;
 import com.xenoage.zong.core.position.MP;
+import com.xenoage.zong.core.position.MPContainer;
+import com.xenoage.zong.core.position.MPElement;
 import com.xenoage.zong.core.util.InconsistentScoreException;
+
+import lombok.Getter;
 
 
 /**
@@ -25,7 +29,7 @@ import com.xenoage.zong.core.util.InconsistentScoreException;
  * @author Andreas Wenger
  */
 public final class Beam
-	implements MusicElement {
+	implements MPElement {
 
 	/** Spread of this beam within a staff. */
 	public enum HorizontalSpan {
@@ -80,6 +84,11 @@ public final class Beam
 	private Beam(List<BeamWaypoint> waypoints) {
 		this.waypoints = waypoints;
 	}
+	
+	
+	public int size() {
+		return waypoints.size();
+	}
 
 
 	public BeamWaypoint getStart() {
@@ -96,18 +105,7 @@ public final class Beam
 	 * Gets the position of the given waypoint.
 	 */
 	public WaypointPosition getWaypointPosition(BeamWaypoint wp) {
-		if (wp == waypoints.get(0)) {
-			return WaypointPosition.Start;
-		}
-		else if (wp == waypoints.get(waypoints.size() - 1)) {
-			return WaypointPosition.Stop;
-		}
-		else if (waypoints.contains(wp)) {
-			return WaypointPosition.Continue;
-		}
-		else {
-			throw new IllegalArgumentException("Given BeamWaypoint is not part of this Beam.");
-		}
+		return getWaypointPosition(wp.getChord());
 	}
 
 
@@ -115,20 +113,23 @@ public final class Beam
 	 * Gets the position of the given chord: Start, Stop or Continue.
 	 */
 	public WaypointPosition getWaypointPosition(Chord chord) {
-		if (chord == waypoints.get(0).getChord()) {
+		int index = getWaypointIndex(chord);
+		if (index == 0)
 			return WaypointPosition.Start;
-		}
-		else if (chord == waypoints.get(waypoints.size() - 1).getChord()) {
+		else if (index == waypoints.size() - 1)
 			return WaypointPosition.Stop;
-		}
-		else {
-			for (int i : range(1, waypoints.size() - 2)) {
-				if (chord == waypoints.get(i).getChord()) {
-					return WaypointPosition.Continue;
-				}
-			}
-			throw new IllegalArgumentException("Given chord is not part of this Beam.");
-		}	
+		else
+			return WaypointPosition.Continue;
+	}
+	
+	/**
+	 * Gets the index of the given chord within the beam.
+	 */
+	public int getWaypointIndex(Chord chord) {
+		for (int i : range(waypoints))
+			if (chord == waypoints.get(i).getChord())
+				return i;
+		throw new IllegalArgumentException("Given chord is not part of this beam.");
 	}
 
 
@@ -169,21 +170,6 @@ public final class Beam
 		if (lowerStaffIndex == -1)
 			computeSpan();
 		return lowerStaffIndex;
-	}
-
-
-	/**
-	 * Gets the maximum number of beam lines used in this beam.
-	 */
-	public int getMaxBeamLinesCount() {
-		Fraction minDuration = waypoints.get(0).getChord().getDuration();
-		for (BeamWaypoint waypoint : waypoints) {
-			Fraction duration = waypoint.getChord().getDuration();
-			if (duration.compareTo(minDuration) < 0) {
-				minDuration = duration;
-			}
-		}
-		return DurationInfo.getFlagsCount(minDuration);
 	}
 
 
@@ -269,6 +255,34 @@ public final class Beam
 		this.upperStaffIndex = minStaffIndex;
 		this.lowerStaffIndex = maxStaffIndex;
 	}
+	
+	/**
+	 * Gets the maximum number of beam lines used in the this beam.
+	 */
+	public int getMaxLinesCount() {
+		Fraction minDuration = null;
+		for (BeamWaypoint waypoint : waypoints)
+			minDuration = min(minDuration, waypoint.getChord().getDuration());
+		return DurationInfo.getFlagsCount(minDuration);
+	}
 
+	@Override public MusicElementType getMusicElementType() {
+		return MusicElementType.Beam;
+	}
+
+
+	/**
+	 * The parent of the beam is defined as the voice of the start of the beam.
+	 */
+	@Override public MPContainer getParent() {
+		return getFirst(waypoints).getChord().getParent();
+	}
+
+	/**
+	 * The MP of the beam is the same as the MP of the first chord in the beam.
+	 */
+	@Override public MP getMP() {
+		return getFirst(waypoints).getChord().getMP();
+	}
 
 }

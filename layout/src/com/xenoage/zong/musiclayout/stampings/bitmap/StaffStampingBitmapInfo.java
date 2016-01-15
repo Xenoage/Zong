@@ -1,19 +1,21 @@
 package com.xenoage.zong.musiclayout.stampings.bitmap;
 
+import static com.xenoage.utils.annotations.Optimized.Reason.Performance;
+
+import com.xenoage.utils.annotations.Optimized;
 import com.xenoage.utils.color.Color;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 
 /**
- * This class contains some information that is
- * useful to draw a staff on a bitmap, like on the
- * screen or in a bitmap file.
+ * This class contains some information that is useful to draw a staff on a bitmap,
+ * like on the screen or in a bitmap file.
  * 
- * It could be recomputed in each rendering
- * step, but caching this information saves
- * some time.
+ * It could be recomputed in each rendering step, but caching this information
+ * saves some time.
  * 
  * @author Andreas Wenger
  */
+@Optimized(Performance)
 public final class StaffStampingBitmapInfo {
 
 	private final StaffStamping parentStaff;
@@ -48,7 +50,7 @@ public final class StaffStampingBitmapInfo {
 	public BitmapStaff getBitmapStaff(float scaling) {
 		if (bitmapStaff == null || scaling != lastBitmapStaffScaling) {
 			bitmapStaff = new BitmapStaff(parentStaff.linesCount, parentStaff.is,
-				parentStaff.getLineWidth() / parentStaff.is, scaling);
+				parentStaff.getLineWidthMm() / parentStaff.is, scaling);
 			lastBitmapStaffScaling = scaling;
 		}
 		return bitmapStaff;

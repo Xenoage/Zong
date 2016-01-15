@@ -1,6 +1,10 @@
 package com.xenoage.zong.musiclayout.stampings;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import com.xenoage.utils.annotations.Const;
+import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.zong.core.music.volta.Volta;
 import com.xenoage.zong.core.text.FormattedText;
 
@@ -19,41 +23,34 @@ import com.xenoage.zong.core.text.FormattedText;
  *
  * @author Andreas Wenger
  */
-@Const public final class VoltaStamping
+@Const @AllArgsConstructor @Getter
+public final class VoltaStamping
 	extends Stamping {
 
+	/** The stamped element. */
+	public final Volta element;
 	/** The line position of the horizontal line. */
 	public final float lp;
-
 	/** The horizontal start position in mm relative to the beginning of the staff. */
-	public final float x1;
-
+	public final float leftXMm;
 	/** The horizontal end position in mm relative to the beginning of the staff. */
-	public final float x2;
-
+	public final float rightXMm;
 	/** The caption of the volta (or null). */
-	public final FormattedText text;
-
+	@MaybeNull public final FormattedText text;
 	/** True, if there is a left downward hook, else false. */
 	public final boolean leftHook;
-
 	/** True, if there is a right downward hook, else false. */
 	public final boolean rightHook;
-
-
-	public VoltaStamping(Volta volta, StaffStamping parentStaff, float lp, float x1, float x2,
-		FormattedText text, boolean leftHook, boolean rightHook) {
-		super(parentStaff, Level.Music, volta, null);
-		this.lp = lp;
-		this.x1 = x1;
-		this.x2 = x2;
-		this.text = text;
-		this.leftHook = leftHook;
-		this.rightHook = rightHook;
-	}
+	/** The parent staff. */
+	public final StaffStamping parentStaff;
+	
 
 	@Override public StampingType getType() {
 		return StampingType.VoltaStamping;
 	}
 
+	@Override public Level getLevel() {
+		return Level.Music;
+	}
+	
 }

@@ -1,10 +1,11 @@
 package com.xenoage.zong.musiclayout.stampings;
 
+import lombok.Getter;
+
 import com.xenoage.utils.annotations.Const;
-import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.format.SP;
-import com.xenoage.zong.symbols.SymbolPool;
-import com.xenoage.zong.symbols.common.CommonSymbol;
+import com.xenoage.zong.musiclayout.notation.ChordNotation;
+import com.xenoage.zong.symbols.Symbol;
 
 /**
  * Class for a prolongation dot stamping.
@@ -16,12 +17,12 @@ import com.xenoage.zong.symbols.common.CommonSymbol;
  *
  * @author Andreas Wenger
  */
-@Const public class ProlongationDotStamping
+@Const @Getter
+public class ProlongationDotStamping
 	extends StaffSymbolStamping {
 
-	public ProlongationDotStamping(StaffStamping parentStaff, Chord chord, SP position,
-		SymbolPool symbolPool) {
-		super(parentStaff, chord, symbolPool.getSymbol(CommonSymbol.NoteDot), null, position, 1, false);
+	public ProlongationDotStamping(ChordNotation chord, StaffStamping parentStaff, Symbol symbol, SP position) {
+		super(chord, parentStaff, symbol, null, position, 1, false);
 	}
 
 }

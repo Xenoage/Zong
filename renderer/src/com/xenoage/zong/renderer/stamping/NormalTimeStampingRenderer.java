@@ -30,30 +30,30 @@ public class NormalTimeStampingRenderer
 		float linesCount = s.parentStaff.linesCount;
 
 		//write numerator digits
-		float offsetX = s.numeratorOffset * interlineSpace;
-		String num = Integer.toString(s.time.getType().getNumerator());
+		float offsetX = s.numeratorOffsetIs * interlineSpace;
+		String num = Integer.toString(s.time.element.getType().getNumerator());
 		for (int i = 0; i < num.length(); i++) {
 			int d = num.charAt(i) - '0';
 			Symbol symbol = symbolPool.getSymbol(CommonSymbol.getDigit(d));
 			if (symbol != null) {
 				float symbolWidth = symbol.boundingRect.size.width;
 				StaffSymbolStampingRenderer.drawWith(symbol, null,
-					sp(s.positionX + offsetX, linesCount + 1), 1, s.parentStaff, false, canvas, args);
-				offsetX += (symbolWidth + s.digitGap) * interlineSpace;
+					sp(s.xMm + offsetX, linesCount + 1), 1, s.parentStaff, false, canvas, args);
+				offsetX += (symbolWidth + s.digitGapIs) * interlineSpace;
 			}
 		}
 
 		//write denominator digits
-		offsetX = s.denominatorOffset * interlineSpace;
-		String den = Integer.toString(s.time.getType().getDenominator());
+		offsetX = s.denominatorOffsetIs * interlineSpace;
+		String den = Integer.toString(s.time.element.getType().getDenominator());
 		for (int i = 0; i < den.length(); i++) {
 			int d = den.charAt(i) - '0';
 			Symbol symbol = symbolPool.getSymbol(CommonSymbol.getDigit(d));
 			if (symbol != null) {
 				float symbolWidth = symbol.boundingRect.size.width;
 				StaffSymbolStampingRenderer.drawWith(symbol, null,
-					sp(s.positionX + offsetX, linesCount - 3), 1, s.parentStaff, false, canvas, args);
-				offsetX += (symbolWidth + s.digitGap) * interlineSpace;
+					sp(s.xMm + offsetX, linesCount - 3), 1, s.parentStaff, false, canvas, args);
+				offsetX += (symbolWidth + s.digitGapIs) * interlineSpace;
 			}
 		}
 	}

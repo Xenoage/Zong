@@ -22,7 +22,6 @@ public abstract class StampingRenderer {
 
 
 	private static void init() {
-		init = true;
 		renderers = new HashMap<StampingType, StampingRenderer>();
 		renderers.put(StampingType.BarlineStamping, new BarlineStampingRenderer());
 		renderers.put(StampingType.BeamStamping, new BeamStampingRenderer());
@@ -43,6 +42,7 @@ public abstract class StampingRenderer {
 		renderers.put(StampingType.TupletStamping, new TupletStampingRenderer());
 		renderers.put(StampingType.VoltaStamping, new VoltaStampingRenderer());
 		renderers.put(StampingType.WedgeStamping, new WedgeStampingRenderer());
+		init = true;
 	}
 
 	/**
@@ -62,6 +62,8 @@ public abstract class StampingRenderer {
 	public static void drawAny(Stamping stamping, Canvas canvas, RendererArgs args) {
 		if (!init)
 			init();
+		if (stamping == null)
+			return;
 		StampingRenderer renderer = renderers.get(stamping.getType());
 		if (renderer != null)
 			renderer.draw(stamping, canvas, args);
@@ -78,8 +80,8 @@ public abstract class StampingRenderer {
 	 * {@link Rectangle2f}.
 	 */
 	public void drawBoundingShape(Stamping stamping, Canvas canvas) {
-		if (stamping.boundingShape != null && stamping.boundingShape instanceof Rectangle2f) {
-			Rectangle2f r = (Rectangle2f) stamping.boundingShape;
+		if (stamping.getBoundingShape() instanceof Rectangle2f) {
+			Rectangle2f r = (Rectangle2f) stamping.getBoundingShape();
 			Color ci = new Color(0, 0, 255, 100);
 			canvas.drawLine(r.nw(), r.ne(), ci, 0.5f);
 			canvas.drawLine(r.ne(), r.se(), ci, 0.5f);

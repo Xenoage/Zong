@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import com.xenoage.zong.core.header.ColumnHeader;
+import com.xenoage.zong.core.music.MusicElementType;
+import com.xenoage.zong.core.position.MP;
 
 
 /**
@@ -18,4 +20,12 @@ public final class Segno
 	extends Direction
 	implements NavigationMarker {
 
+	@Override public MusicElementType getMusicElementType() {
+		return MusicElementType.Segno;
+	}
+	
+	@Override public MP getMP() {
+		return MP.getMPFromParent(this);
+	}
+	
 }

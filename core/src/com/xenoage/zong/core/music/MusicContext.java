@@ -103,5 +103,4 @@ import com.xenoage.zong.core.music.key.TraditionalKey.Mode;
 		}
 	}
 
-
 }

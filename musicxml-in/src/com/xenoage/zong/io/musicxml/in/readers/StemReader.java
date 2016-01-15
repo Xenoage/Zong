@@ -1,5 +1,7 @@
 package com.xenoage.zong.io.musicxml.in.readers;
 
+import static com.xenoage.zong.core.music.chord.Stem.defaultStem;
+
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
@@ -27,14 +29,14 @@ public class StemReader {
 	
 	/**
 	 * Reads and returns the stem of the given chord.
-	 * If not available, null is returned.
+	 * If not available, {@link Stem#defaultStem} is returned.
 	 * @param context   the global context
 	 * @param chord     the chord, whose notes are already collected
 	 * @param staff     the staff index of the current chord
 	 */
 	public Stem read(Context context, Chord chord, int staff) {
 		if (mxlStem == null)
-			return null;
+			return defaultStem;
 		//direction
 		StemDirection direction = readStemDirection();
 		//length
@@ -45,7 +47,7 @@ public class StemReader {
 			//a length in interline spaces measured from the outermost chord note on stem side
 			float stemEndLinePosition = convertDefaultYToLP(context, yPos.getDefaultY(), staff);
 			length = Math.abs(stemEndLinePosition -
-				getNoteLP(context, chord, stemEndLinePosition, staff)) / 2;
+				getFarNoteLP(context, chord, stemEndLinePosition, staff)) / 2;
 		}
 		//create stem
 		return new Stem(direction, length);
@@ -80,10 +82,10 @@ public class StemReader {
 	}
 
 	/**
-	 * Gets the line position of the note which is nearest to the given line position,
+	 * Gets the line position of the note which is furthest from the given line position,
 	 * using the musical context from the given staff.
 	 */
-	private static float getNoteLP(Context context, Chord chord, float nearTo, int staff) {
+	private static float getFarNoteLP(Context context, Chord chord, float nearTo, int staff) {
 		MusicContext mc = context.getMusicContext(staff);
 		List<Pitch> pitches = chord.getPitches();
 		//if there is just one note, it's easy
@@ -94,7 +96,7 @@ public class StemReader {
 		else {
 			float top = mc.getLp(pitches.get(pitches.size() - 1));
 			float bottom = mc.getLp(pitches.get(0));
-			return (Math.abs(top - nearTo) < Math.abs(bottom - nearTo) ? top : bottom);
+			return (Math.abs(top - nearTo) > Math.abs(bottom - nearTo) ? top : bottom);
 		}
 	}
 

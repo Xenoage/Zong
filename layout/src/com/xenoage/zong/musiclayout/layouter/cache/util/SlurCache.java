@@ -35,7 +35,7 @@ public class SlurCache {
 	 */
 	public static SlurCache createNew(Slur slur, VSide side, int staffIndex,
 		NoteheadStamping startNotehead, float startDistanceIS, int startSystem) {
-		return new SlurCache(new ContinuedSlur(slur, side, staffIndex, 1), //1: TODO
+		return new SlurCache(new ContinuedSlur(slur, staffIndex, side, 1), //1: TODO
 			startNotehead, startDistanceIS, startSystem);
 	}
 
@@ -65,7 +65,7 @@ public class SlurCache {
 	 * Gets the {@link Slur} instance this data belongs to.
 	 */
 	public Slur getSlur() {
-		return continuedSlur.slur;
+		return continuedSlur.element;
 	}
 
 	/**

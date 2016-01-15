@@ -34,8 +34,10 @@ import com.xenoage.zong.core.music.chord.Accidental;
 	public final float doubleFlat;
 
 	/** Reasonable default values */
-	public static final ChordWidths defaultValue = new ChordWidths(2, 1.2f, 1.2f, 0.7f, 0.6f, 0.5f,
-		0.25f, 0.95f, 1f, 0.96f, 0.97f, 1.8f);
+	public static final ChordWidths defaultChordWidthsNormal = new ChordWidths(
+		2, 1.2f, 1.2f, 0.7f, 0.6f, 0.5f, 0.25f, 0.95f, 1f, 0.96f, 0.97f, 1.8f);
+	public static final ChordWidths defaultChordWidthsGrace =
+		defaultChordWidthsNormal.scale(0.6f);
 
 
 	/**

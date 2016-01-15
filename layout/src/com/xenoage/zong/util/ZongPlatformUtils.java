@@ -6,7 +6,6 @@ import com.xenoage.utils.PlatformUtils;
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.error.Err;
 import com.xenoage.utils.log.Report;
-import com.xenoage.zong.io.symbols.SvgPathReader;
 import com.xenoage.zong.symbols.SymbolPool;
 
 /**

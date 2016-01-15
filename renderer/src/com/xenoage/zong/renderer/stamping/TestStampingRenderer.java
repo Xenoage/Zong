@@ -28,7 +28,7 @@ public class TestStampingRenderer
 	 */
 	@Override public void draw(Stamping stamping, Canvas canvas, RendererArgs args) {
 		TestStamping s = (TestStamping) stamping;
-		drawWith(s.position, s.size, s.color, canvas, args);
+		drawWith(s.positionMm, s.sizeMm, s.color, canvas, args);
 	}
 
 	public static void drawWith(Point2f position, Size2f size, Color color, Canvas canvas,

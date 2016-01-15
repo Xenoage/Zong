@@ -1,9 +1,15 @@
 package com.xenoage.zong.musiclayout.stampings;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import com.xenoage.utils.annotations.Const;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Shape;
 import com.xenoage.zong.core.text.FormattedText;
+import com.xenoage.zong.musiclayout.notation.Notation;
 
 /**
  * Class for a text stamping positioned within a frame, e.g. a part name.
@@ -13,30 +19,20 @@ import com.xenoage.zong.core.text.FormattedText;
  *
  * @author Andreas Wenger
  */
-@Const public final class FrameTextStamping
+@Const @AllArgsConstructor @Getter
+public class FrameTextStamping
 	extends TextStamping {
 
-	/** The position, relative to the top left corner of the score frame. */
-	public final Point2f position;
+	/** The text element. */
+	@NonNull public final FormattedText text;
+	/** The position in Mm, relative to the top left corner of the score frame. */
+	@NonNull public final Point2f positionMm;
+	/** The notation this stamping belongs to. */
+	@MaybeNull public final Notation element;
 
 
-	public FrameTextStamping(FormattedText text, Point2f position) {
-		super(text, null, null, computeBoundingShape(text, position));
-		this.position = position;
-	}
-
-	/**
-	 * Gets the position within the frame in mm.
-	 */
-	@Override public Point2f getPositionInFrame() {
-		return position;
-	}
-
-	/**
-	 * Returns the bounding shape of this text.
-	 */
-	private static Shape computeBoundingShape(FormattedText text, Point2f position) {
-		return text.getBoundingRect().move(position);
+	@Override public Shape getBoundingShape() {
+		return text.getBoundingRect().move(positionMm);
 	}
 
 }
