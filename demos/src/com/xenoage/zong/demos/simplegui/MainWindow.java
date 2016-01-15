@@ -11,14 +11,13 @@ import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-
-import org.controlsfx.dialog.Dialog;
-import org.controlsfx.dialog.Dialogs;
 
 
 /**
@@ -112,11 +111,15 @@ public class MainWindow {
 	}
 	
 	public void showMessageDialog(String message) {
-		dialog().message(message).showInformation();
+		Alert dialog = dialog();
+		dialog.setContentText(message);
+		dialog.showAndWait();
 	}
 	
-	private Dialogs dialog() {
-		return Dialogs.create().title(SimpleGuiDemo.appName).styleClass(Dialog.STYLE_CLASS_NATIVE);
+	private Alert dialog() {
+		Alert ret = new Alert(AlertType.INFORMATION);
+		ret.setTitle(SimpleGuiDemo.appName);
+		return ret;
 	}
 
 }
