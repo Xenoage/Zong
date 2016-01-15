@@ -1,7 +1,10 @@
 package com.xenoage.zong.android.scoreview;
 
 import static com.xenoage.utils.PlatformUtils.platformUtils;
+import static com.xenoage.utils.android.AndroidPlatformUtils.io;
+import static com.xenoage.utils.android.io.AndroidIO.*;
 import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.zong.android.renderer.AndroidLayoutRenderer.androidLayoutRenderer;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,13 +19,15 @@ import android.graphics.drawable.NinePatchDrawable;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.xenoage.utils.android.AndroidPlatformUtils;
+import com.xenoage.utils.android.io.AndroidIO;
 import com.xenoage.utils.jse.io.JseInputStream;
 import com.xenoage.utils.math.Units;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Rectangle2i;
 import com.xenoage.utils.math.geom.Size2i;
 import com.xenoage.zong.android.R;
-import com.xenoage.zong.android.renderer.AndroidBitmapPageRenderer;
+import com.xenoage.zong.android.renderer.AndroidLayoutRenderer;
 import com.xenoage.zong.documents.ScoreDoc;
 import com.xenoage.zong.layout.Layout;
 import com.xenoage.zong.view.PageViewManager;
@@ -71,8 +76,7 @@ public class ScorePageView
 		this.pageViewManager = new PageViewManager(layout);
 		//load desktop and page image
 		try {
-			desktopBitmap = BitmapFactory.decodeStream(new JseInputStream(
-				platformUtils().openFile("data/img/desktop/desktop.png")));
+			desktopBitmap = BitmapFactory.decodeStream(io().openFile("data/img/desktop/desktop.png"));
 			page9Patch = (NinePatchDrawable) getContext().getResources().getDrawable(R.drawable.page);
 		} catch (IOException ex) {
 		}
@@ -185,7 +189,7 @@ public class ScorePageView
 	private Bitmap getPageBitmap(int pageIndex) {
 		Bitmap ret = pagesBitmaps.get(pageIndex);
 		if (ret == null) {
-			ret = AndroidBitmapPageRenderer.paint(layout, pageIndex, scaling);
+			ret = androidLayoutRenderer.paint(layout, pageIndex, scaling);
 			pagesBitmaps.set(pageIndex, ret);
 		}
 		return ret;

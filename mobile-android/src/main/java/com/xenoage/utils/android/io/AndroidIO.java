@@ -119,7 +119,7 @@ public class AndroidIO
 	/**
 	 * Like {@link #openFileAsync(String, AsyncResult)}, but with direct return.
 	 */
-	public InputStream openFile(String filePath)
+	public JseInputStream openFile(String filePath)
 		throws IOException {
 		return new JseInputStream(res.getAssets().open(filePath));
 	}

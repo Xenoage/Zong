@@ -10,6 +10,8 @@ import com.xenoage.zong.renderer.RendererArgs;
 import com.xenoage.zong.renderer.canvas.Canvas;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
 
+import static com.xenoage.utils.color.Color.color;
+
 /**
  * Renderer for a staff stamping.
  *
@@ -43,7 +45,7 @@ public class StaffStampingRenderer
 			if (ss.isSimplifiedStaff) {
 				//simplified staff (fill rectangle)
 				color = screenLine.color;
-				color = new Color(color.r, color.g, color.b, (int) (0.7f * color.a));
+				color = color(color.r, color.g, color.b, (int) (0.7f * color.a));
 
 				//don't forget the line heights, they belong into the rectangle
 				position = position.add(0, -1 * ss.lineHeightMm / 2);

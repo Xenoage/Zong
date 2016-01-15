@@ -10,6 +10,8 @@ import com.xenoage.zong.renderer.RendererArgs;
 import com.xenoage.zong.renderer.canvas.Canvas;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
 
+import static com.xenoage.utils.color.Color.color;
+
 /**
  * Renderer for a {@link SystemCursorStamping}.
  *
@@ -47,8 +49,8 @@ public class SystemCursorStampingRenderer
 			y2 = bottomStaff.computeYMm(-2);
 		}
 
-		canvas.drawLine(new Point2f(x, y1), new Point2f(x, y2), new Color(50, 50, 230),
-			getCursorWidth(viewScaling));
+		canvas.drawLine(new Point2f(x, y1), new Point2f(x, y2), color(50, 50, 230),
+				getCursorWidth(viewScaling));
 
 	}
 

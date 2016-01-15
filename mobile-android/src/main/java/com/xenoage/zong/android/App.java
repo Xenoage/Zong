@@ -1,6 +1,7 @@
 package com.xenoage.zong.android;
 
 import static com.xenoage.utils.PlatformUtils.platformUtils;
+import static com.xenoage.utils.android.AndroidPlatformUtils.io;
 import static com.xenoage.zong.util.ZongPlatformUtils.zongPlatformUtils;
 
 import java.io.IOException;
@@ -8,6 +9,7 @@ import java.io.IOException;
 import android.content.Context;
 import android.graphics.Bitmap;
 
+import com.xenoage.utils.android.AndroidPlatformUtils;
 import com.xenoage.utils.android.log.AndroidLogProcessing;
 import com.xenoage.utils.io.InputStream;
 import com.xenoage.utils.log.Log;
@@ -69,7 +71,7 @@ public class App {
 	public static ScoreDoc load(String filename)
 		throws IOException {
 		String filepath = "files/" + filename;
-		InputStream in = platformUtils().openFile(filepath);
+		InputStream in = io().openFile(filepath);
 		Score score = new MusicXmlScoreFileInput().read(in, filepath);
 		return new MusicXmlScoreDocFileInput().read(score, filepath);
 	}

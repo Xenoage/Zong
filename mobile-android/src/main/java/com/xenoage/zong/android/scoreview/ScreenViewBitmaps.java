@@ -1,8 +1,5 @@
 package com.xenoage.zong.android.scoreview;
 
-import static com.xenoage.utils.NullUtils.notNull;
-import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.zong.android.renderer.AndroidPageLayoutRenderer.androidPageLayoutRenderer;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -18,7 +15,6 @@ import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.utils.math.geom.Size2i;
 import com.xenoage.zong.android.App;
 import com.xenoage.zong.android.R;
-import com.xenoage.zong.android.renderer.AndroidPageLayoutRenderer;
 import com.xenoage.zong.android.renderer.canvas.AndroidCanvas;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.format.PageFormat;
@@ -38,9 +34,13 @@ import com.xenoage.zong.renderer.canvas.CanvasDecoration;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
 import com.xenoage.zong.renderer.canvas.CanvasIntegrity;
 
+import static com.xenoage.utils.NullUtils.notNull;
+import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.zong.android.renderer.AndroidLayoutRenderer.androidLayoutRenderer;
+
 /**
  * This class manages the bitmaps of a given {@link ScoreDoc}
- * and scaling shown on a {@link ScoreScreenView}.
+ * and scaling shown on a {@link ScorePageView}.
  * 
  * When the document or the scaling is changed, a new instance
  * of this class is required.
@@ -90,12 +90,12 @@ public class ScreenViewBitmaps {
 		//delete unnecessary layout information, like system distances
 		//or system breaks
 		Score score = doc.getScore();
-		score.setFormat(ScoreFormat.defaultValue);
+		score.setFormat(new ScoreFormat());
 		ScoreHeader header = score.getHeader();
 		for (int i : range(header.getSystemLayouts())) {
 			SystemLayout sl = header.getSystemLayout(i);
 			if (sl != null) {
-				sl.setDistance(ScoreFormat.defaultValue.getSystemLayout().getDistance());
+				sl.setDistance(new SystemLayout().getDistance());
 			}
 		}
 		for (int i : range(header.getColumnHeaders())) {
@@ -192,7 +192,7 @@ public class ScreenViewBitmaps {
 		canvas.drawBitmap(bmp, null, canvas.getClipBounds(), null);
 		AndroidCanvas context = new AndroidCanvas(canvas, layout.getPages().get(page).getFormat().getSize(),
 			CanvasFormat.Raster, CanvasDecoration.None, CanvasIntegrity.Perfect);
-		androidPageLayoutRenderer.paint(layout, page, context, scaling);
+		androidLayoutRenderer.paint(layout, page, context, scaling);
 		//first page: draw title
 		if (page == 0) {
 			Paint paint = new Paint();

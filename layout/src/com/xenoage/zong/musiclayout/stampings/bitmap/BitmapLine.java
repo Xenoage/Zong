@@ -5,6 +5,8 @@ import com.xenoage.utils.color.Color;
 import com.xenoage.utils.math.MathUtils;
 import com.xenoage.utils.math.Units;
 
+import static com.xenoage.utils.color.Color.color;
+
 /**
  * This class helps drawing nice lines on a bitmap,
  * like the screen or in a bitmap file.
@@ -38,7 +40,7 @@ import com.xenoage.utils.math.Units;
 		this.widthMm = Units.pxToMm(widthPx, scaling);
 		//color
 		if (widthPxFloat < 1)
-			this.color = new Color(color.r, color.g, color.b, (int) (color.a * widthPxFloat));
+			this.color = Color.color(color.r, color.g, color.b, (int) (color.a * widthPxFloat));
 		else
 			this.color = color;
 	}

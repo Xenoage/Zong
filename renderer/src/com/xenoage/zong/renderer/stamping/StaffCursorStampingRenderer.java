@@ -11,6 +11,8 @@ import com.xenoage.zong.renderer.RendererArgs;
 import com.xenoage.zong.renderer.canvas.Canvas;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
 
+import static com.xenoage.utils.color.Color.color;
+
 /**
  * Renderer for a cursor stamping
  * that belongs to one staff.
@@ -45,8 +47,8 @@ public class StaffCursorStampingRenderer
 		}
 		x = parentStaff.position.x + cursor.xMm + cursor.offsetIs * parentStaff.is;
 
-		canvas.drawLine(new Point2f(x, y1), new Point2f(x, y2), new Color(30, 200, 30),
-			getCursorWidth(viewScaling));
+		canvas.drawLine(new Point2f(x, y1), new Point2f(x, y2), color(30, 200, 30),
+				getCursorWidth(viewScaling));
 	}
 
 	public float getCursorWidth(float viewScaling) {

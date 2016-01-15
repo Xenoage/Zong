@@ -9,6 +9,8 @@ import com.xenoage.zong.musiclayout.stampings.StampingType;
 import com.xenoage.zong.renderer.RendererArgs;
 import com.xenoage.zong.renderer.canvas.Canvas;
 
+import static com.xenoage.utils.color.Color.color;
+
 /**
  * Renderer for all kinds of {@link Stamping}s.
  * Subclasses implement the specific stamping algorithms.
@@ -80,11 +82,11 @@ public abstract class StampingRenderer {
 	public void drawBoundingShape(Stamping stamping, Canvas canvas) {
 		if (stamping.boundingShape != null && stamping.boundingShape instanceof Rectangle2f) {
 			Rectangle2f r = (Rectangle2f) stamping.boundingShape;
-			Color ci = new Color(0, 0, 255, 100);
-			canvas.drawLine(r.nw(), r.ne(), ci, 0.5f);
-			canvas.drawLine(r.ne(), r.se(), ci, 0.5f);
-			canvas.drawLine(r.se(), r.sw(), ci, 0.5f);
-			canvas.drawLine(r.sw(), r.nw(), ci, 0.5f);
+			Color color = color(0, 0, 255, 100);
+			canvas.drawLine(r.nw(), r.ne(), color, 0.5f);
+			canvas.drawLine(r.ne(), r.se(), color, 0.5f);
+			canvas.drawLine(r.se(), r.sw(), color, 0.5f);
+			canvas.drawLine(r.sw(), r.nw(), color, 0.5f);
 		}
 	}
 
