@@ -12,8 +12,13 @@ public interface MPElement
 	extends MusicElement {
 
 	/**
-	 * Gets the parent element, or null.
+	 * Gets the parent element, or null if unknown.
 	 */
 	public MPContainer getParent();
+	
+	/**
+	 * Gets the {@link MP}, or null if unknown.
+	 */
+	public MP getMP();
 
 }

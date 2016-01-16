@@ -1,6 +1,12 @@
 <project name="javadoc" default="antZongJavadoc">
-	<taskdef classname="lombok.delombok.ant.DelombokTask" classpath="lib/lib/dev/lombok-1.14.8.jar" name="delombok"/>
+
+	<!-- download lombok and create ant task -->
+	<mkdir dir="lib"/>
+	<get src="http://search.maven.org/remotecontent?filepath=org/projectlombok/lombok/1.16.6/lombok-1.16.6.jar"
+		dest="lib/lombok-1.16.6.jar" skipexisting="true" verbose="true"/>
+	<taskdef classname="lombok.delombok.ant.Tasks$Delombok" classpath="lib/lombok-1.16.6.jar" name="delombok"/>
 	
+	<!-- create docs -->
 	<target name="antZongJavadoc">
 		<!-- settings -->
 		<property name="docdir" value="doc"/>
@@ -16,11 +22,14 @@
 			<fileset dir="utils/utils-gwt/src"/>
 			<fileset dir="converter/src"/>
 			<fileset dir="core/src"/>
+			<fileset dir="demos/src"/>
 			<fileset dir="desktop/src"/>
 			<fileset dir="layout/src"/>
 			<fileset dir="midi-out/src"/>
 			<fileset dir="musicxml/src"/>
 			<fileset dir="musicxml-in/src"/>
+			<fileset dir="musicxml-layout/src"/>
+			<fileset dir="player/src"/>
 			<fileset dir="renderer/src"/>
 			<fileset dir="renderer-awt/src"/>
 			<fileset dir="renderer-javafx/src"/>
@@ -43,4 +52,5 @@
 		<!-- delete temp dir -->
 		<delete dir="${tempdir}"/>
 	</target>
+	
 </project>

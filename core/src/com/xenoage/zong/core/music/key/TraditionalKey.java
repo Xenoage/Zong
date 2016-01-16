@@ -7,7 +7,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import com.xenoage.utils.math.MathUtils;
+import com.xenoage.zong.core.music.MusicElementType;
 import com.xenoage.zong.core.music.Pitch;
+import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.position.MPContainer;
 
 /**
@@ -202,6 +204,14 @@ public final class TraditionalKey
 			default:
 				throw new IllegalArgumentException("Invalid index: " + index);
 		}
+	}
+	
+	@Override public MusicElementType getMusicElementType() {
+		return MusicElementType.TraditionalKey;
+	}
+	
+	@Override public MP getMP() {
+		return MP.getMPFromParent(this);
 	}
 
 }

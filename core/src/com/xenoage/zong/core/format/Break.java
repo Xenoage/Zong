@@ -6,8 +6,10 @@ import lombok.EqualsAndHashCode;
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.header.ColumnHeader;
 import com.xenoage.zong.core.music.ColumnElement;
+import com.xenoage.zong.core.music.MusicElementType;
 import com.xenoage.zong.core.music.layout.PageBreak;
 import com.xenoage.zong.core.music.layout.SystemBreak;
+import com.xenoage.zong.core.position.MP;
 
 
 /**
@@ -32,5 +34,12 @@ public final class Break
 		return "Break (" + pageBreak + ", " + systemBreak + ")";
 	}
 
+	@Override public MusicElementType getMusicElementType() {
+		return MusicElementType.Break;
+	}
+
+	@Override public MP getMP() {
+		return MP.getMPFromParent(this);
+	}
 
 }

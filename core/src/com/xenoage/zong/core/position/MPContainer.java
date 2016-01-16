@@ -13,6 +13,6 @@ public interface MPContainer {
 	 * Gets the {@link MP} of the given child, or null, if the given child is not part of this element
 	 * or if this element is not part of a score.
 	 */
-	public MP getMP(MPElement child);
+	public MP getChildMP(MPElement child);
 
 }

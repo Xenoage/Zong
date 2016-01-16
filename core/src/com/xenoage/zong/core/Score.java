@@ -24,6 +24,7 @@ import com.xenoage.utils.collections.SortedList;
 import com.xenoage.utils.document.Document;
 import com.xenoage.utils.document.command.CommandPerformer;
 import com.xenoage.utils.document.io.SupportedFormats;
+import com.xenoage.utils.kernel.Range;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.utils.math.MathUtils;
 import com.xenoage.zong.core.format.ScoreFormat;
@@ -157,6 +158,16 @@ public final class Score
 			return is;
 		else
 			return format.getInterlineSpace();
+	}
+	
+	/**
+	 * Gets the biggest interline space of the score.
+	 */
+	public float getMaxInterlineSpace() {
+		float ret = 0;
+		for (int iStaff : range(getStavesCount()))
+			ret = Math.max(ret, getInterlineSpace(iStaff));
+		return ret;
 	}
 	
 	

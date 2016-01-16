@@ -118,8 +118,9 @@ public class Content
 		Point2f scorePositionMm = frame.getScoreLayoutPosition(framePositionMm);
 		//find elements under this position
 		for (Stamping stamping : frameLayout.getAllStampings()) {
-			if (stamping.boundingShape != null && stamping.boundingShape.contains(scorePositionMm)) {
-				MusicElement element = stamping.musicElement;
+			if (stamping.getBoundingShape() != null &&
+				stamping.getBoundingShape().contains(scorePositionMm)) {
+				MusicElement element = stamping.getMusicElement();
 				if (element != null) {
 					//music element found
 					String message = "An element was clicked: " + element;
@@ -127,7 +128,7 @@ public class Content
 						//music element with a known musical position found
 						MPElement mpElement = (MPElement) element;
 						if (mpElement.getParent() != null)
-							message += " at " + mpElement.getParent().getMP(mpElement);
+							message += " at " + mpElement.getMP();
 					}
 					mainWindow.showMessageDialog(message);
 				}

@@ -8,10 +8,8 @@ allprojects {
 	}
 
 	plugins.withType(JavaPlugin).whenPluginAdded {
-
 		compileJava.options.encoding = 'UTF-8'
 		compileTestJava.options.encoding = 'UTF-8'
-
 	}
 
 }
@@ -42,7 +40,7 @@ task distPlayer(type: Jar) {
 }
 
 //create JavaDoc using Ant task
-//TODO ant.importBuild 'javadoc.build.xml'
+ant.importBuild 'javadoc.build.xml'
 task createDoc {
-	//TODO dependsOn antZongJavadoc
+	dependsOn antZongJavadoc
 }

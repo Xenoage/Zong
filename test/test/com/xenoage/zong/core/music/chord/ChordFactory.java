@@ -17,11 +17,9 @@ public class ChordFactory {
 		return new Chord(new Note(pitch), duration);
 	}
 
-
 	public static Chord chord(Pitch[] pitches, Fraction duration) {
 		return new Chord(Note.notes(pitches), duration);
 	}
-
 
 	public static Chord graceChord(Pitch pitch) {
 		Chord chord = new Chord(Note.notes(pitch), new Grace(true, _1$8));

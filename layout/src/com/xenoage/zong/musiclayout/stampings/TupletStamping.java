@@ -1,6 +1,11 @@
 package com.xenoage.zong.musiclayout.stampings;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import com.xenoage.utils.annotations.Const;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.zong.core.music.format.SP;
 import com.xenoage.zong.core.text.FormattedText;
 
 /**
@@ -11,41 +16,28 @@ import com.xenoage.zong.core.text.FormattedText;
  *
  * @author Andreas Wenger
  */
-@Const public final class TupletStamping
+@Const @AllArgsConstructor @Getter
+public final class TupletStamping
 	extends Stamping {
 
-	/** The horizontal start position in mm. */
-	public final float x1mm;
-
-	/** The horizontal end position in mm. */
-	public final float x2mm;
-
-	/** The vertical start position as a LP. */
-	public final float y1lp;
-
-	/** The vertical end position as a LP. */
-	public final float y2lp;
-
+	/** The left start position. */
+	public final SP leftSP;
+	/** The right end position. */
+	public final SP rightSP;
 	/** True, if a bracket should be drawn, otherwise false. */
 	public final boolean bracket;
-
 	/** The text in the middle of the tuplet bracket, or null. */
-	public final FormattedText text;
-
-
-	public TupletStamping(float x1, float x2, float lp1, float lp2, boolean bracket,
-		FormattedText text, StaffStamping parentStaff) {
-		super(parentStaff, Level.Music, null, null);
-		this.x1mm = x1;
-		this.x2mm = x2;
-		this.y1lp = lp1;
-		this.y2lp = lp2;
-		this.bracket = bracket;
-		this.text = text;
-	}
+	@MaybeNull public final FormattedText text;
+	/** The parent staff. */
+	public final StaffStamping parentStaff;
+	
 
 	@Override public StampingType getType() {
 		return StampingType.TupletStamping;
+	}
+	
+	@Override public Level getLevel() {
+		return Level.Music;
 	}
 
 }

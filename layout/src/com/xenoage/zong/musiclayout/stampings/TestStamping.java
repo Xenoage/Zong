@@ -1,5 +1,8 @@
 package com.xenoage.zong.musiclayout.stampings;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.annotations.Demo;
 import com.xenoage.utils.color.Color;
@@ -12,23 +15,22 @@ import com.xenoage.utils.math.geom.Size2f;
  *
  * @author Andreas Wenger
  */
-@Demo @Const public final class TestStamping
+@Demo @Const @AllArgsConstructor @Getter
+public final class TestStamping
 	extends Stamping {
 
-	public final Point2f position;
-	public final Size2f size;
+	/** The top-left position in mm in frame space. */
+	public final Point2f positionMm;
+	public final Size2f sizeMm;
 	public final Color color;
-
-
-	public TestStamping(Point2f position, Size2f size, Color color) {
-		super(null, Level.Music, null, null);
-		this.position = position;
-		this.size = size;
-		this.color = color;
-	}
+	
 
 	@Override public StampingType getType() {
 		return StampingType.TestStamping;
 	}
 
+	@Override public Level getLevel() {
+		return Level.Music;
+	}
+	
 }

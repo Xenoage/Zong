@@ -1,5 +1,8 @@
 package com.xenoage.zong.musiclayout.stampings;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.music.group.BracketGroup;
 
@@ -11,36 +14,26 @@ import com.xenoage.zong.core.music.group.BracketGroup;
  *
  * @author Andreas Wenger
  */
-@Const public final class BracketStamping
+@Const @AllArgsConstructor @Getter
+public class BracketStamping
 	extends Stamping {
 
 	/** The first staff stamping this bracket embraces. */
 	public final StaffStamping firstStaff;
-
 	/** The last staff stamping this bracket embraces. */
 	public final StaffStamping lastStaff;
-
 	/** The horizontal position of the bracket in mm. */
-	public final float positionX;
-
+	public final float xMm;
 	/** The style of the bracket. */
 	public final BracketGroup.Style groupStyle;
 
 
-	public BracketStamping(StaffStamping firstStaff, StaffStamping lastStaff, float positionX,
-		BracketGroup.Style groupStyle) {
-		super(firstStaff, Level.Music, null, null);
-		this.firstStaff = firstStaff;
-		this.lastStaff = lastStaff;
-		this.positionX = positionX;
-		this.groupStyle = groupStyle;
-	}
-
-	/**
-	 * Gets the type of this stamping.
-	 */
 	@Override public StampingType getType() {
 		return StampingType.BracketStamping;
 	}
 
+	@Override public Level getLevel() {
+		return Level.Music;
+	}
+	
 }

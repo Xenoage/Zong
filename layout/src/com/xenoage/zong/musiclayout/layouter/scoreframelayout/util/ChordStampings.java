@@ -1,12 +1,12 @@
 package com.xenoage.zong.musiclayout.layouter.scoreframelayout.util;
 
+import static com.xenoage.utils.collections.CollectionUtils.addAll;
+
 import java.util.List;
 
 import lombok.AllArgsConstructor;
 
-import com.xenoage.utils.annotations.Const;
-import com.xenoage.utils.collections.IList;
-import com.xenoage.zong.musiclayout.layouter.cache.util.OpenBeamMiddleStem;
+import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.musiclayout.stampings.AccidentalStamping;
 import com.xenoage.zong.musiclayout.stampings.ArticulationStamping;
 import com.xenoage.zong.musiclayout.stampings.FlagsStamping;
@@ -18,34 +18,40 @@ import com.xenoage.zong.musiclayout.stampings.Stamping;
 import com.xenoage.zong.musiclayout.stampings.StemStamping;
 
 /**
- * The stampings belonging to a chord: a list of noteheads,
+ * Layout information on a chord: a list of noteheads,
  * leger lines, dots, accidentals and a stem and flag.
  * 
  * @author Andreas Wenger
  */
-@Const @AllArgsConstructor public final class ChordStampings {
+@AllArgsConstructor
+public class ChordStampings {
 
-	public final float positionX;
-	public final StaffStamping staffStamping;
+	public Chord chord;
+	public float xMm;
+	public StaffStamping staff;
+	public NoteheadStamping[] noteheads;
+	public ProlongationDotStamping[] dots;
+	public AccidentalStamping[] accidentals;
+	public LegerLineStamping[] legerLines;
+	public ArticulationStamping[] articulations;
+	public FlagsStamping flags;
+	public StemStamping stem;
 
-	public final IList<NoteheadStamping> noteheads;
-	public final IList<LegerLineStamping> legerLines;
-	public final IList<ProlongationDotStamping> dots;
-	public final IList<AccidentalStamping> accidentals;
-	public final IList<ArticulationStamping> articulations;
-	public final FlagsStamping flags;
-
-	//stamped or open stem
-	public final StemStamping stem;
-	public final OpenBeamMiddleStem openStem;
-
+	
+	public NoteheadStamping getFirstNotehead() {
+		return noteheads[0];
+	}
+	
+	public NoteheadStamping getLastNotehead() {
+		return noteheads[noteheads.length - 1];
+	}
 
 	public void addAllTo(List<Stamping> list) {
-		list.addAll(noteheads);
-		list.addAll(legerLines);
-		list.addAll(dots);
-		list.addAll(accidentals);
-		list.addAll(articulations);
+		addAll(list, noteheads);
+		addAll(list, dots);
+		addAll(list, accidentals);
+		addAll(list, legerLines);
+		addAll(list, articulations);
 		if (stem != null)
 			list.add(stem);
 		if (flags != null)

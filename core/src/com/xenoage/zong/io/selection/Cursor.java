@@ -105,8 +105,16 @@ public final class Cursor
 
 	/**
 	 * Sets the position of the cursor. The {@link MP#element} field must be set.
+	 * @deprecated new naming: setMp
 	 */
 	public void setMP(MP mp) {
+		setMp(mp);
+	}
+	
+	/**
+	 * Sets the position of the cursor. The {@link MP#element} field must be set.
+	 */
+	public void setMp(MP mp) {
 		if (mp.element == MP.unknown)
 			throw new IllegalArgumentException("unknown element");
 		if (mp.beat == MP.unknownBeat) {

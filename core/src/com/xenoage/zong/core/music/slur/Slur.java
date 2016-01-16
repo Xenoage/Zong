@@ -10,6 +10,7 @@ import lombok.Data;
 
 import com.xenoage.utils.math.VSide;
 import com.xenoage.zong.core.music.MusicElement;
+import com.xenoage.zong.core.music.MusicElementType;
 import com.xenoage.zong.core.music.WaypointPosition;
 import com.xenoage.zong.core.music.chord.Chord;
 
@@ -96,7 +97,6 @@ import com.xenoage.zong.core.music.chord.Chord;
 		}
 	}
 
-
 	/**
 	 * Replaces the given chord.
 	 */
@@ -113,5 +113,7 @@ import com.xenoage.zong.core.music.chord.Chord;
 		throw new IllegalArgumentException("Given chord is not part of this beam");
 	}
 
-
+	@Override public MusicElementType getMusicElementType() {
+		return MusicElementType.Slur;
+	}
 }

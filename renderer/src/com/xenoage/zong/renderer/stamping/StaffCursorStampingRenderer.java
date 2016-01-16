@@ -1,7 +1,8 @@
 package com.xenoage.zong.renderer.stamping;
 
+import static com.xenoage.utils.color.Color.color;
+
 import com.xenoage.utils.math.Units;
-import com.xenoage.utils.color.Color;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.zong.musiclayout.stampings.StaffCursorStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
@@ -10,8 +11,6 @@ import com.xenoage.zong.musiclayout.stampings.bitmap.BitmapStaff;
 import com.xenoage.zong.renderer.RendererArgs;
 import com.xenoage.zong.renderer.canvas.Canvas;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
-
-import static com.xenoage.utils.color.Color.color;
 
 /**
  * Renderer for a cursor stamping
@@ -34,21 +33,21 @@ public class StaffCursorStampingRenderer
 
 		float x, y1, y2;
 		if (canvas.getFormat() == CanvasFormat.Raster) {
-			float staffY = parentStaff.position.y;
-			BitmapStaff ss = parentStaff.screenInfo.getBitmapStaff(viewScaling);
+			float staffY = parentStaff.positionMm.y;
+			BitmapStaff ss = parentStaff.getBitmapInfo().getBitmapStaff(viewScaling);
 			//top: one interline space above staff
-			y1 = staffY + ss.getLPMm(parentStaff.linesCount * 2);
+			y1 = staffY + ss.getYMm(parentStaff.linesCount * 2);
 			//bottom: one interline space under staff
-			y2 = staffY + ss.getLPMm(-2);
+			y2 = staffY + ss.getYMm(-2);
 		}
 		else {
 			y1 = parentStaff.computeYMm(parentStaff.linesCount * 2);
 			y2 = parentStaff.computeYMm(-2);
 		}
-		x = parentStaff.position.x + cursor.xMm + cursor.offsetIs * parentStaff.is;
+		x = parentStaff.positionMm.x + cursor.xMm + cursor.offsetIs * parentStaff.is;
 
 		canvas.drawLine(new Point2f(x, y1), new Point2f(x, y2), color(30, 200, 30),
-				getCursorWidth(viewScaling));
+			getCursorWidth(viewScaling));
 	}
 
 	public float getCursorWidth(float viewScaling) {

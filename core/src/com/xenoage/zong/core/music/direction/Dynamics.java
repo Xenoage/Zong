@@ -1,5 +1,8 @@
 package com.xenoage.zong.core.music.direction;
 
+import com.xenoage.zong.core.music.MusicElementType;
+import com.xenoage.zong.core.position.MP;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -15,5 +18,12 @@ public final class Dynamics
 
 	private final DynamicsType type;
 
-
+	@Override public MusicElementType getMusicElementType() {
+		return MusicElementType.Dynamics;
+	}
+	
+	@Override public MP getMP() {
+		return MP.getMPFromParent(this);
+	}
+	
 }

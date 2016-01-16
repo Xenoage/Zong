@@ -43,7 +43,7 @@ public class AndroidColorUtils {
 	@Optimized(Performance)
 	public static Paint createPaintFill(com.xenoage.utils.color.Color colorInfo) {
 		//optimized: black is so frequently used, that we share a single instance
-		if (colorInfo == com.xenoage.utils.color.Color.black)
+		if (colorInfo == com.xenoage.utils.color.Color.black && black != null)
 			return black;
 
 		Paint paint = new Paint();

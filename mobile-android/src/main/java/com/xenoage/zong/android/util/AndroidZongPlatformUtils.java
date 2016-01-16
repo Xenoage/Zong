@@ -4,12 +4,18 @@ import android.content.res.Resources;
 
 import com.xenoage.utils.PlatformUtils;
 import com.xenoage.utils.android.AndroidPlatformUtils;
+import com.xenoage.utils.error.Err;
 import com.xenoage.utils.jse.JsePlatformUtils;
-import com.xenoage.zong.android.io.symbols.AndroidSvgPathReader;
-import com.xenoage.zong.desktop.io.symbols.SymbolPoolReader;
+import com.xenoage.utils.log.Report;
+import com.xenoage.zong.Voc;
 import com.xenoage.zong.io.symbols.SvgPathReader;
+import com.xenoage.zong.io.symbols.SymbolPoolReader;
 import com.xenoage.zong.symbols.SymbolPool;
 import com.xenoage.zong.util.ZongPlatformUtils;
+
+import static com.xenoage.utils.error.Err.handle;
+import static com.xenoage.utils.jse.async.Sync.sync;
+import static com.xenoage.utils.log.Report.fatal;
 
 /**
  * Android implementation of {@link ZongPlatformUtils}.
@@ -32,15 +38,15 @@ public class AndroidZongPlatformUtils
 		AndroidPlatformUtils.init(resources);
 		ZongPlatformUtils.init(instance);
 		//load default symbol pool
-		instance.symbolPool = SymbolPoolReader.readSymbolPool("default");
+		try {
+			instance.symbolPool = sync(new SymbolPoolReader("default"));
+		} catch (Exception ex) {
+			handle(fatal(Voc.CouldNotLoadSymbolPool, ex));
+		}
 	}
 	
 	@Override public SymbolPool getSymbolPool() {
 		return symbolPool;
-	}
-
-	@Override public SvgPathReader<?> getSvgPathReader() {
-		return new AndroidSvgPathReader();
 	}
 
 }

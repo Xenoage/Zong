@@ -36,8 +36,8 @@ public class SlurStampingRenderer
 		float c2xMm = p2xMm + slur.c2.xMm;
 		float p1yMm = 0, p2yMm = 0, c1yMm = 0, c2yMm = 0;
 		if (canvas.getFormat() == CanvasFormat.Raster) {
-			float staffYPos = parentStaff.position.y;
-			BitmapStaff screenStaff = parentStaff.screenInfo.getBitmapStaff(scaling);
+			float staffYPos = parentStaff.positionMm.y;
+			BitmapStaff screenStaff = parentStaff.getBitmapInfo().getBitmapStaff(scaling);
 			float bottomLineMm = staffYPos + screenStaff.lp0Mm;
 			float isMm = screenStaff.interlineSpaceMm;
 			p1yMm = bottomLineMm - isMm * slur.p1.lp / 2;

@@ -390,7 +390,7 @@ public final class Voice
 	}
 
 
-	@Override public MP getMP(MPElement element) {
+	@Override public MP getChildMP(MPElement element) {
 		if (parent == null)
 			return null;
 		Fraction beat = getBeat(element);
@@ -403,8 +403,8 @@ public final class Voice
 	
 	
 	/**
-	 * Convenience method. Gets the parent score of this measure,
-	 * or null, if this element is not part of a score.
+	 * Convenience method. Gets the parent score of this voice,
+	 * or null, if this voice is not part of a score.
 	 */
 	public Score getScore() {
 		return (parent != null ? parent.getScore() : null);

@@ -2,6 +2,10 @@ package com.xenoage.zong.musiclayout.settings;
 
 import lombok.Data;
 
+import static com.xenoage.zong.musiclayout.settings.ChordWidths.defaultChordWidthsGrace;
+import static com.xenoage.zong.musiclayout.settings.ChordWidths.defaultChordWidthsNormal;
+import static com.xenoage.zong.musiclayout.settings.Spacings.defaultSpacings;
+
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.annotations.NonNull;
 
@@ -35,5 +39,8 @@ import com.xenoage.utils.annotations.NonNull;
 	//offsets
 	public final float offsetMeasureStart; //offset of the first element in a measure
 	public final float offsetBeatsMinimal; //minimal offset between to different beats
+	
+	public static LayoutSettings defaultLayoutSettings = new LayoutSettings(
+		defaultChordWidthsNormal, defaultChordWidthsGrace, defaultSpacings, 0.75f, 0.6f, 1f, 1.5f);
 
 }

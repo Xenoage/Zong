@@ -452,7 +452,7 @@ public final class ColumnHeader
 	 * Gets the {@link MP} of the given {@link ColumnElement}, or null if it is not part
 	 * of this column or this column is not part of a score.
 	 */
-	@Override public MP getMP(MPElement element) {
+	@Override public MP getChildMP(MPElement element) {
 		if (parentScore == null || parentMeasureIndex == null)
 			return null;
 		//elements at the beginning of the measure

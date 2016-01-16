@@ -5,6 +5,8 @@ import lombok.EqualsAndHashCode;
 
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.zong.core.music.MeasureElement;
+import com.xenoage.zong.core.music.MusicElementType;
+import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.position.MPContainer;
 
 
@@ -24,4 +26,12 @@ public final class Clef
 	/** Back reference: the parent element, or null, if not part of a score. */
 	private MPContainer parent;
 
+	@Override public MusicElementType getMusicElementType() {
+		return MusicElementType.Clef;
+	}
+	
+	@Override public MP getMP() {
+		return MP.getMPFromParent(this);
+	}
+	
 }

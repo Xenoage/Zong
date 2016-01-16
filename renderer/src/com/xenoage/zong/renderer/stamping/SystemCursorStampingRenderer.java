@@ -1,6 +1,7 @@
 package com.xenoage.zong.renderer.stamping;
 
-import com.xenoage.utils.color.Color;
+import static com.xenoage.utils.color.Color.color;
+
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import com.xenoage.zong.musiclayout.stampings.Stamping;
@@ -9,8 +10,6 @@ import com.xenoage.zong.musiclayout.stampings.bitmap.BitmapStaff;
 import com.xenoage.zong.renderer.RendererArgs;
 import com.xenoage.zong.renderer.canvas.Canvas;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
-
-import static com.xenoage.utils.color.Color.color;
 
 /**
  * Renderer for a {@link SystemCursorStamping}.
@@ -32,17 +31,17 @@ public class SystemCursorStampingRenderer
 		StaffStamping bottomStaff = cursor.bottomStaff;
 
 		float x, y1, y2;
-		x = topStaff.position.x + cursor.x;
+		x = topStaff.positionMm.x + cursor.xMm;
 
 		if (canvas.getFormat() == CanvasFormat.Raster) {
-			float staffY = topStaff.position.y;
-			BitmapStaff ss = topStaff.screenInfo.getBitmapStaff(viewScaling);
+			float staffY = topStaff.positionMm.y;
+			BitmapStaff ss = topStaff.getBitmapInfo().getBitmapStaff(viewScaling);
 			//top staff: top line
-			y1 = staffY + ss.getLPMm(topStaff.linesCount * 2);
+			y1 = staffY + ss.getYMm(topStaff.linesCount * 2);
 			//bottom staff: bottom line
-			staffY = bottomStaff.position.y;
-			ss = bottomStaff.screenInfo.getBitmapStaff(viewScaling);
-			y2 = staffY + ss.getLPMm(-2);
+			staffY = bottomStaff.positionMm.y;
+			ss = bottomStaff.getBitmapInfo().getBitmapStaff(viewScaling);
+			y2 = staffY + ss.getYMm(-2);
 		}
 		else {
 			y1 = topStaff.computeYMm(topStaff.linesCount * 2);
@@ -50,7 +49,7 @@ public class SystemCursorStampingRenderer
 		}
 
 		canvas.drawLine(new Point2f(x, y1), new Point2f(x, y2), color(50, 50, 230),
-				getCursorWidth(viewScaling));
+			getCursorWidth(viewScaling));
 
 	}
 

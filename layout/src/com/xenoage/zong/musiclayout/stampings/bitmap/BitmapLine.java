@@ -1,5 +1,7 @@
 package com.xenoage.zong.musiclayout.stampings.bitmap;
 
+import static com.xenoage.utils.color.Color.color;
+
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.color.Color;
 import com.xenoage.utils.math.MathUtils;
@@ -14,7 +16,7 @@ import static com.xenoage.utils.color.Color.color;
  * Because a bitmap works with integer coordinates, no lines
  * thinner than 1 px can be drawn.
  * 
- * This class computes the best possible display of lines:
+ * This class computes the best possible display of lines.
  * It ensures that each line is at least 1 px wide,
  * but is drawn with some transparency to fake the "thinner"-effect.
  *
@@ -40,7 +42,7 @@ import static com.xenoage.utils.color.Color.color;
 		this.widthMm = Units.pxToMm(widthPx, scaling);
 		//color
 		if (widthPxFloat < 1)
-			this.color = Color.color(color.r, color.g, color.b, (int) (color.a * widthPxFloat));
+			this.color = color(color.r, color.g, color.b, (int) (color.a * widthPxFloat));
 		else
 			this.color = color;
 	}

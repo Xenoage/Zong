@@ -1,8 +1,5 @@
 package com.xenoage.zong.android;
 
-import java.io.File;
-import java.io.IOException;
-
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -12,6 +9,9 @@ import com.xenoage.zong.android.io.midi.out.AndroidMidiSequenceWriter;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.io.midi.out.MidiConverter;
 import com.xenoage.zong.io.midi.out.MidiSequence;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Midi playback of scores.

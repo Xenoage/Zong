@@ -7,6 +7,8 @@ import lombok.Setter;
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.zong.core.header.ColumnHeader;
 import com.xenoage.zong.core.music.ColumnElement;
+import com.xenoage.zong.core.music.MusicElementType;
+import com.xenoage.zong.core.position.MP;
 
 
 /**
@@ -27,4 +29,12 @@ import com.xenoage.zong.core.music.ColumnElement;
 	/** Back reference: the parent column header, or null, if not part of a score. */
 	@Getter @Setter private ColumnHeader parent = null;
 
+	@Override public MusicElementType getMusicElementType() {
+		return MusicElementType.Time;
+	}
+	
+	@Override public MP getMP() {
+		return MP.getMPFromParent(this);
+	}
+	
 }

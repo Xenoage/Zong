@@ -29,7 +29,10 @@ import com.xenoage.zong.layout.Page;
 import com.xenoage.zong.layout.frames.ScoreFrame;
 import com.xenoage.zong.layout.frames.ScoreFrameChain;
 import com.xenoage.zong.musiclayout.ScoreLayout;
+import com.xenoage.zong.musiclayout.layouter.Context;
+import com.xenoage.zong.musiclayout.layouter.ScoreLayoutArea;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayouter;
+import com.xenoage.zong.musiclayout.layouter.Target;
 import com.xenoage.zong.renderer.canvas.CanvasDecoration;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
 import com.xenoage.zong.renderer.canvas.CanvasIntegrity;
@@ -106,8 +109,10 @@ public class ScreenViewBitmaps {
 		}
 
 		//layout the score to find out the needed space
-		ScoreLayouter layouter = new ScoreLayouter(score, App.getSymbolPool(),
-			doc.getLayout().getDefaults().getLayoutSettings(), true, frameSizeMm);
+		Context context = new Context(score, App.getSymbolPool(),
+				doc.getLayout().getDefaults().getLayoutSettings());
+		Target target = Target.completeLayoutTarget(new ScoreLayoutArea(frameSizeMm));
+		ScoreLayouter layouter = new ScoreLayouter(context, target);
 		ScoreLayout scoreLayout = layouter.createScoreLayout();
 
 		//create and fill at least one page

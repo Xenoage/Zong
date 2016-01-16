@@ -30,7 +30,7 @@ import com.xenoage.zong.core.music.util.StartOrStop;
 
 
 /**
- * Test cases for {@link Voice}.
+ * Tests for {@link Voice}.
  * 
  * @author Andreas Wenger
  */

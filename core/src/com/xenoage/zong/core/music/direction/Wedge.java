@@ -1,5 +1,8 @@
 package com.xenoage.zong.core.music.direction;
 
+import com.xenoage.zong.core.music.MusicElementType;
+import com.xenoage.zong.core.position.MP;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -25,4 +28,12 @@ public final class Wedge
 	/** Height of the opening in IS, or null for default. */
 	private Float spread;
 
+	@Override public MusicElementType getMusicElementType() {
+		return MusicElementType.Wedge;
+	}
+	
+	@Override public MP getMP() {
+		return MP.getMPFromParent(this);
+	}
+	
 }

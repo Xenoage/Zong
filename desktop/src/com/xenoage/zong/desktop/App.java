@@ -18,9 +18,6 @@ import java.util.List;
 import javax.sound.midi.MidiUnavailableException;
 import javax.swing.JOptionPane;
 
-import org.controlsfx.dialog.Dialog;
-import org.controlsfx.dialog.Dialogs;
-
 import com.xenoage.utils.document.Document;
 import com.xenoage.utils.document.command.Command;
 import com.xenoage.utils.document.command.CommandPerformer;
@@ -50,6 +47,8 @@ import com.xenoage.zong.desktop.utils.FilenameDialogFilter;
 import com.xenoage.zong.io.musicxml.in.MusicXmlFileReader;
 
 import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -312,12 +311,14 @@ public class App<DocType extends Document>
 	}
 	
 	/**
-	 * Gets a factor for creating controlsfx dialogs.
+	 * Gets a factory for creating controlsfx dialogs.
 	 * It is preconfigured with the program's name as the title and
 	 * and with for native style dialogs.
 	 */
-	public Dialogs dialog() {
-		return Dialogs.create().title(getName()).styleClass(Dialog.STYLE_CLASS_NATIVE);
+	public Alert dialog() {
+		Alert ret = new Alert(AlertType.INFORMATION);
+		ret.setTitle(getName());
+		return ret;
 	}
 
 	/**
@@ -325,7 +326,9 @@ public class App<DocType extends Document>
 	 */
 	public void showMessageDialog(final String message, final String title) {
 		log(remark("Message: " + message));
-		dialog().message(message).showInformation();
+		Alert dialog = dialog();
+		dialog.setContentText(message);
+		dialog.showAndWait();
 	}
 
 	/**

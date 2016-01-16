@@ -51,7 +51,7 @@ public class BracketStampingRenderer
 
 		float y1 = getStaffTopY(bracket.firstStaff, canvas, args);
 		float y2 = getStaffBottomY(bracket.lastStaff, canvas, args);
-		Point2f pCenter = new Point2f(bracket.positionX, (y1 + y2) / 2);
+		Point2f pCenter = new Point2f(bracket.xMm, (y1 + y2) / 2);
 
 		Symbol braceSymbol = args.symbolPool.getSymbol(CommonSymbol.BracketBrace);
 		float symbolScaling = (y2 - y1) / braceSymbol.boundingRect.size.height;
@@ -68,7 +68,7 @@ public class BracketStampingRenderer
 
 		float y1 = getStaffTopY(bracket.firstStaff, canvas, args);
 		float y2 = getStaffBottomY(bracket.lastStaff, canvas, args);
-		Point2f p1Mm = new Point2f(bracket.positionX, y1);
+		Point2f p1Mm = new Point2f(bracket.xMm, y1);
 
 		Symbol bracketLineSymbol = args.symbolPool.getSymbol(CommonSymbol.BracketBracketLine);
 		Symbol bracketEndSymbol = args.symbolPool.getSymbol(CommonSymbol.BracketBracketEnd);
@@ -93,10 +93,10 @@ public class BracketStampingRenderer
 	 */
 	private static float getStaffTopY(StaffStamping staff, Canvas canvas, RendererArgs args) {
 		float scaling = args.targetScaling;
-		float ret = staff.position.y;
+		float ret = staff.positionMm.y;
 		if (canvas.getFormat() == CanvasFormat.Raster) {
 			//render on screen
-			BitmapStaff screenStaff = staff.screenInfo.getBitmapStaff(scaling);
+			BitmapStaff screenStaff = staff.getBitmapInfo().getBitmapStaff(scaling);
 			ret += screenStaff.yOffsetMm;
 		}
 		return ret;
@@ -111,12 +111,12 @@ public class BracketStampingRenderer
 		float scaling = args.targetScaling;
 		if (canvas.getFormat() == CanvasFormat.Raster) {
 			//render on screen
-			BitmapStaff screenStaff = staff.screenInfo.getBitmapStaff(scaling);
-			return staff.position.y + screenStaff.lp0Mm;
+			BitmapStaff screenStaff = staff.getBitmapInfo().getBitmapStaff(scaling);
+			return staff.positionMm.y + screenStaff.lp0Mm;
 		}
 		else if (canvas.getFormat() == CanvasFormat.Vector) {
 			//render with high quality
-			return staff.position.y + staff.is * (staff.linesCount - 1) + staff.getLineWidth();
+			return staff.positionMm.y + staff.is * (staff.linesCount - 1) + staff.getLineWidthMm();
 		}
 		return 0;
 	}

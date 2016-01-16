@@ -7,6 +7,8 @@ import lombok.ToString;
 import com.xenoage.utils.kernel.Range;
 import com.xenoage.zong.core.header.ColumnHeader;
 import com.xenoage.zong.core.music.ColumnElement;
+import com.xenoage.zong.core.music.MusicElementType;
+import com.xenoage.zong.core.position.MP;
 
 /**
  * Class for a volta (also informally called "Haus" in German).
@@ -75,4 +77,19 @@ public final class Volta
 		return caption;
 	}
 
+	@Override public MusicElementType getMusicElementType() {
+		return MusicElementType.Volta;
+	}
+	
+	@Override public MP getMP() {
+		return MP.getMPFromParent(this);
+	}
+	
+	/**
+	 * Gets the index of the measure, where this volta ends (inclusive).
+	 */
+	public int getEndMeasureIndex() {
+		return getMP().measure + length - 1;
+	}
+	
 }

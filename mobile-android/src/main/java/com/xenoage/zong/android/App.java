@@ -2,6 +2,7 @@ package com.xenoage.zong.android;
 
 import static com.xenoage.utils.PlatformUtils.platformUtils;
 import static com.xenoage.utils.android.AndroidPlatformUtils.io;
+import static com.xenoage.utils.jse.async.Sync.sync;
 import static com.xenoage.zong.util.ZongPlatformUtils.zongPlatformUtils;
 
 import java.io.IOException;
@@ -12,12 +13,13 @@ import android.graphics.Bitmap;
 import com.xenoage.utils.android.AndroidPlatformUtils;
 import com.xenoage.utils.android.log.AndroidLogProcessing;
 import com.xenoage.utils.io.InputStream;
+import com.xenoage.utils.jse.async.Sync;
 import com.xenoage.utils.log.Log;
 import com.xenoage.zong.Zong;
 import com.xenoage.zong.android.util.AndroidZongPlatformUtils;
 import com.xenoage.zong.core.Score;
-import com.xenoage.zong.desktop.io.musicxml.in.MusicXmlScoreDocFileInput;
 import com.xenoage.zong.documents.ScoreDoc;
+import com.xenoage.zong.io.musicxml.in.MusicXmlScoreDocFileReader;
 import com.xenoage.zong.io.musicxml.in.MusicXmlScoreFileInput;
 import com.xenoage.zong.symbols.SymbolPool;
 import com.xenoage.zong.util.ZongPlatformUtils;
@@ -72,8 +74,11 @@ public class App {
 		throws IOException {
 		String filepath = "files/" + filename;
 		InputStream in = io().openFile(filepath);
-		Score score = new MusicXmlScoreFileInput().read(in, filepath);
-		return new MusicXmlScoreDocFileInput().read(score, filepath);
+		try {
+			return sync(new MusicXmlScoreDocFileReader(in, filepath));
+		} catch (Exception ex) {
+			throw new IOException(ex);
+		}
 	}
 
 }
