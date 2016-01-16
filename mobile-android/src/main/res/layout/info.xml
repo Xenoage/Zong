@@ -82,7 +82,7 @@
 	            android:layout_gravity="center_horizontal"
 	            android:gravity="center_horizontal"
 	            android:paddingBottom="15sp"
-	            android:text="© 2006-2013\nXenoage Software\nAndreas Wenger\nUli Teschemacher"
+	            android:text="© 2006-2016\nXenoage Software"
 	            style="@style/NormalText" />
 	        
 	        <TextView
