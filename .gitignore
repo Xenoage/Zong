@@ -16,7 +16,7 @@ build
 /doc
 
 # Libraries #
-lib/lib/
+/lib
 
 # Eclipse settings (should be generated with Gradle import in Eclipse)
 .project
