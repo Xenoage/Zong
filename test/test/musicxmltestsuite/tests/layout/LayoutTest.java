@@ -6,8 +6,8 @@ import musicxmltestsuite.tests.musicxmlin.MusicXmlInTest;
 
 import org.junit.Assert;
 
+import com.xenoage.zong.desktop.io.musicxml.in.MusicXmlScoreDocFileInput;
 import com.xenoage.zong.documents.ScoreDoc;
-import com.xenoage.zong.io.musicxml.in.MusicXmlScoreDocFileInput;
 import com.xenoage.zong.musiclayout.ScoreFrameLayout;
 
 /**

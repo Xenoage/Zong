@@ -80,7 +80,6 @@ project(':musicxml-layout') {
 	dependencies {
 		compile project(':layout')
 		compile project(':musicxml-in')
-		compile project(':utils-jse')
 	}
 }
 project(':renderer') { dependencies { compile project(':layout') } }

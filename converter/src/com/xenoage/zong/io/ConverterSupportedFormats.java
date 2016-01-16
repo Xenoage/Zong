@@ -5,12 +5,12 @@ import com.xenoage.utils.document.io.SupportedFormats;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.desktop.io.midi.out.MidiScoreDocFileOutput;
 import com.xenoage.zong.desktop.io.mp3.out.Mp3ScoreDocFileOutput;
+import com.xenoage.zong.desktop.io.musicxml.in.MusicXmlScoreDocFileInput;
 import com.xenoage.zong.desktop.io.ogg.out.OggScoreDocFileOutput;
 import com.xenoage.zong.desktop.io.pdf.out.PdfScoreDocFileOutput;
 import com.xenoage.zong.desktop.io.png.out.PngScoreDocFileOutput;
 import com.xenoage.zong.desktop.io.wav.out.WavScoreDocFileOutput;
 import com.xenoage.zong.documents.ScoreDoc;
-import com.xenoage.zong.io.musicxml.in.MusicXmlScoreDocFileInput;
 
 /**
  * This class contains a list of all formats which can be used

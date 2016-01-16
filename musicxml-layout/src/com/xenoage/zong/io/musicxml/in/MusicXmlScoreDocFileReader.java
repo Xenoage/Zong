@@ -1,13 +1,13 @@
 package com.xenoage.zong.io.musicxml.in;
 
-import static com.xenoage.utils.jse.async.Sync.sync;
 import static com.xenoage.zong.musiclayout.settings.LayoutSettings.defaultLayoutSettings;
 import static com.xenoage.zong.util.ZongPlatformUtils.zongPlatformUtils;
 
 import java.io.IOException;
 import java.util.List;
 
-import com.xenoage.utils.document.io.FileInput;
+import com.xenoage.utils.async.AsyncProducer;
+import com.xenoage.utils.async.AsyncResult;
 import com.xenoage.utils.exceptions.InvalidFormatException;
 import com.xenoage.utils.filter.AllFilter;
 import com.xenoage.utils.io.InputStream;
@@ -31,47 +31,54 @@ import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.musicxml.types.MxlScorePartwise;
 import com.xenoage.zong.symbols.SymbolPool;
 
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+
 /**
- * This class reads a MusicXML 2.0 file
- * into a instance of the {@link ScoreDoc} class.
- *
- * @author Andreas Wenger
+ * Creates a {@link ScoreDoc} instance from the document
+ * at the given path.
+ * 
+ * The filepath must be given, when the opened file is an opus document,
+ * otherwise null is returned.
+ * 
+ * If no score is opened, null is returned.
  */
-public class MusicXmlScoreDocFileInput
-	implements FileInput<ScoreDoc> {
+@RequiredArgsConstructor
+public class MusicXmlScoreDocFileReader
+	implements AsyncProducer<ScoreDoc> {
 
-	/**
-	 * Creates a {@link ScoreDoc} instance from the document
-	 * at the given path.
-	 * 
-	 * The filepath must be given, when the opened file is an opus document,
-	 * otherwise null is returned.
-	 * 
-	 * If none is opened, null is returned.
-	 */
-	@Override public ScoreDoc read(InputStream stream, String filePath)
-		throws InvalidFormatException, IOException {
+	private final InputStream stream;
+	private final String filePath;
+	
+	
+	@Override public void produce(final AsyncResult<ScoreDoc> result) {
+		val reader = new MusicXmlFileReader(stream, filePath, new AllFilter<String>());
+		reader.produce(new AsyncResult<List<Score>>() {
 
-		Score score;
+			@Override public void onSuccess(List<Score> scores) {
+				if (scores.size() == 0) {
+					//no score was opened
+					result.onSuccess(null);
+				}
+				else {
+					//open first selected score
+					Score score = scores.get(0);
+					ScoreDoc scoreDoc;
+					try {
+						scoreDoc = read(score, filePath);
+						result.onSuccess(scoreDoc);
+					} catch (Exception ex) {
+						result.onFailure(ex);
+					}
+				}
+			}
 
-		List<Score> scores;
-		try {
-			scores = sync(new MusicXmlFileReader(stream, filePath, new AllFilter<String>()));
-		} catch (InvalidFormatException ex) {
-			throw ex; //forward
-		} catch (IOException ex) {
-			throw ex; //forward
-		} catch (Exception ex) {
-			throw new IOException(ex);
-		}
-		if (scores.size() > 0)
-			score = scores.get(0);
-		else
-			return null;
-
-		return read(score, filePath);
+			@Override public void onFailure(Exception ex) {
+				result.onFailure(ex);
+			}
+		});
 	}
-
+	
 	/**
 	 * Creates a {@link ScoreDoc} instance from the given score.
 	 */
@@ -136,5 +143,5 @@ public class MusicXmlScoreDocFileInput
 
 		return ret;
 	}
-
+	
 }
