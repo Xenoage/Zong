@@ -1,4 +1,4 @@
-include ":converter", ":core", ":demos", ":desktop", ":layout", ":midi-out", ":mobile-android", ":musicxml", ":musicxml-in", ":musicxml-layout", ":player", ":renderer", ":renderer-awt", ":renderer-javafx", ":test", ":tools", ":webserver"
+include ":converter", ":core", ":demos", ":desktop", ":layout", ":midi-out", ":musicxml", ":musicxml-in", ":musicxml-layout", ":player", ":renderer", ":renderer-awt", ":renderer-javafx", ":test", ":tools", ":webserver"
 include "utils-base", "utils-kernel", "utils-jse", "utils-jse8"
 project(':utils-base').projectDir = new File('utils/utils-base')
 project(':utils-kernel').projectDir = new File('utils/utils-kernel')
