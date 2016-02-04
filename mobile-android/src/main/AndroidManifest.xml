@@ -6,7 +6,7 @@
     <uses-sdk android:minSdkVersion="9" />
 
     <application android:icon="@drawable/icon" android:label="@string/app_name"
-        android:theme="@style/LightThemeSelector" android:debuggable="true">
+        android:theme="@style/LightThemeSelector">
         <activity android:name="com.xenoage.zong.android.HomeActivity"
                   android:label="@string/app_name"
                   android:screenOrientation="portrait">
