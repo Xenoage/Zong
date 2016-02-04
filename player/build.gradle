@@ -8,6 +8,13 @@ dependencies {
     compile project(':desktop')
 }
 
+sourceSets {
+	main {
+		java { srcDir 'src' }
+		resources { srcDir 'src' }
+	}
+}
+
 jar {
 	from 'license.txt'
 	from 'readme.txt'

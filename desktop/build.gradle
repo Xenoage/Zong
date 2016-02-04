@@ -2,7 +2,7 @@ apply plugin: 'java'
 sourceCompatibility = 8
 
 dependencies {
-	compile project(':renderer-awt'), project(':renderer-javafx'), project(':midi-out'), project(':musicxml-in')
+	compile project(':renderer-awt'), project(':renderer-javafx'), project(':midi-out'), project(':musicxml-in'), project(':musicxml-layout')
 	compile 'org.controlsfx:controlsfx:8.40.10'
 	compile 'com.itextpdf:itextpdf:5.5.7'
 	compile 'org.xiph:vorbis-java:1.0.0-beta'

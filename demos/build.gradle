@@ -8,6 +8,13 @@ dependencies {
     compile project(':desktop')
 }
 
+sourceSets {
+	main {
+		java { srcDir 'src' }
+		resources { srcDir 'src' }
+	}
+}
+
 task runMinimalDemo(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     main = 'com.xenoage.zong.demos.Demos'
