@@ -108,7 +108,7 @@ public class AndroidCanvas
 					Paint paint = new Paint(AndroidColorUtils.black);
 					paint.setTypeface(Typeface.SERIF);
 					paint.setTextSize(Units.pxToMm(t.getStyle().getFont().getSize(), 1));
-					paint.setAntiAlias(true);
+					paint.setFlags(Paint.LINEAR_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG); //nice, smooth drawing
 					canvas.drawText(t.getText(), offsetX, offsetY, paint);
 				}
 				else {
