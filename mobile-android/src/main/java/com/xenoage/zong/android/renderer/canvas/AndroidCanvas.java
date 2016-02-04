@@ -161,7 +161,7 @@ public class AndroidCanvas
 
 	@Override public void fillRect(Rectangle2f rect, Color color) {
 		Paint paint = AndroidColorUtils.createPaintFill(color);
-		Rect r = Conversion.rect(rect);
+		RectF r = Conversion.rectF(rect);
 		canvas.drawRect(r, paint);
 	}
 
