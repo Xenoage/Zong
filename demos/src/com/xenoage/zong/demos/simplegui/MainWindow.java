@@ -18,6 +18,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import lombok.Getter;
 
 
 /**
@@ -27,8 +28,6 @@ import javafx.scene.layout.BorderPane;
  */
 public class MainWindow {
 	
-	public static final float zoom = 2;
-
 	//GUI elements
 	@FXML private MenuItem mnuPlaybackStop;
 	@FXML private MenuItem mnuPlaybackStart;
@@ -41,6 +40,10 @@ public class MainWindow {
 	
 	//rendering engine
 	private boolean useJavaFX = true;
+	
+	//zoom
+	@Getter private float zoom = 2;
+	private final float zoomFactor = 2;
 	
 	
 	@FXML public void initialize() {
@@ -70,6 +73,16 @@ public class MainWindow {
 
 	@FXML void onExit(ActionEvent event) {
 		SimpleGuiDemo.exit();
+	}
+	
+	@FXML void onZoomIn(ActionEvent event) {
+		zoom *= zoomFactor;
+		renderLayout(content.getLayout());
+	}
+	
+	@FXML void onZoomOut(ActionEvent event) {
+		zoom /= zoomFactor;
+		renderLayout(content.getLayout());
 	}
 
 	@FXML void onPlaybackStart(ActionEvent event) {

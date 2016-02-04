@@ -26,6 +26,12 @@
                   <MenuItem mnemonicParsing="false" onAction="#onExit" text="Exit" />
             </items>
           </Menu>
+          <Menu mnemonicParsing="false" text="View">
+            <items>
+              <MenuItem fx:id="mnuViewZoomIn" mnemonicParsing="false" onAction="#onZoomIn" text="Zoom in" />
+                  <MenuItem fx:id="mnuViewZoomOut" mnemonicParsing="false" onAction="#onZoomOut" text="Zoom out" />
+            </items>
+          </Menu>
           <Menu mnemonicParsing="false" text="Playback">
             <items>
               <MenuItem fx:id="mnuPlaybackStart" mnemonicParsing="false" onAction="#onPlaybackStart" text="Start" />

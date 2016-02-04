@@ -25,6 +25,8 @@ import com.xenoage.zong.musiclayout.ScoreFrameLayout;
 import com.xenoage.zong.musiclayout.layouter.PlaybackLayouter;
 import com.xenoage.zong.musiclayout.stampings.Stamping;
 
+import lombok.Getter;
+
 /**
  * The loaded document, its layout and playback capabilities.
  * 
@@ -37,7 +39,7 @@ public class Content
 	
 	private int scoreIndex = 0;
 	private ScoreDoc scoreDoc = null;
-	private Layout layout = null;
+	@Getter private Layout layout = null;
 	private PlaybackLayouter playbackLayouter = null;
 	
 	
@@ -113,7 +115,7 @@ public class Content
 		ScoreFrameLayout frameLayout = frame.getScoreFrameLayout();
 		//convert position from screen space to page space, then from page space
 		//to frame space, and them from frame space to score frame space
-		Point2f positionMm = positionPx.scale(Units.pxToMm(1, MainWindow.zoom));
+		Point2f positionMm = positionPx.scale(Units.pxToMm(1, mainWindow.getZoom()));
 		Point2f framePositionMm = positionMm.sub(frame.getAbsolutePosition());
 		Point2f scorePositionMm = frame.getScoreLayoutPosition(framePositionMm);
 		//find elements under this position
