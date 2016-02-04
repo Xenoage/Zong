@@ -1,5 +1,7 @@
 package com.xenoage.zong.renderer.awt;
 
+import static com.xenoage.utils.math.geom.Point2i.origin;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -43,9 +45,9 @@ public class AwtLayoutRenderer {
 		g2d.setColor(Color.WHITE);
 		g2d.fillRect(0, 0, width, height);
 
-		g2d.scale(zoom, zoom);
-		LayoutRenderer.paintToCanvas(layout, pageIndex, new AwtCanvas(g2d, pageSize, CanvasFormat.Raster,
-			CanvasDecoration.Interactive, CanvasIntegrity.Perfect));
+		LayoutRenderer.paintToCanvas(layout, pageIndex, zoom, origin,
+			new AwtCanvas(g2d, pageSize, CanvasFormat.Raster,
+				CanvasDecoration.Interactive, CanvasIntegrity.Perfect));
 		g2d.dispose();
 
 		return img;

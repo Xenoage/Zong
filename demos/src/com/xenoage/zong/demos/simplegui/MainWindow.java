@@ -76,12 +76,16 @@ public class MainWindow {
 	}
 	
 	@FXML void onZoomIn(ActionEvent event) {
-		zoom *= zoomFactor;
-		renderLayout(content.getLayout());
+		zoom(zoomFactor);
 	}
 	
 	@FXML void onZoomOut(ActionEvent event) {
-		zoom /= zoomFactor;
+		zoom(1 / zoomFactor);
+	}
+	
+	private void zoom(float zoomFactor) {
+		zoom *= zoomFactor;
+		scoreImage = null;
 		renderLayout(content.getLayout());
 	}
 

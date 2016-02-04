@@ -1,9 +1,6 @@
 package com.xenoage.zong.renderer.javafx;
 
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.WritableImage;
-import javafx.scene.paint.Color;
+import static com.xenoage.utils.math.geom.Point2i.origin;
 
 import com.xenoage.utils.math.Units;
 import com.xenoage.utils.math.geom.Size2f;
@@ -14,6 +11,11 @@ import com.xenoage.zong.renderer.canvas.CanvasDecoration;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
 import com.xenoage.zong.renderer.canvas.CanvasIntegrity;
 import com.xenoage.zong.renderer.javafx.canvas.JfxCanvas;
+
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.WritableImage;
+import javafx.scene.paint.Color;
 
 /**
  * Like {@link LayoutRenderer}, but more JavaFx specific rendering methods.
@@ -40,9 +42,9 @@ public class JfxLayoutRenderer {
     context.setFill(Color.WHITE);
     context.fillRect(0, 0, width, height);
 
-    context.scale(zoom, zoom);
-		LayoutRenderer.paintToCanvas(layout, pageIndex, new JfxCanvas(context, pageSize, CanvasFormat.Raster,
-			CanvasDecoration.Interactive, CanvasIntegrity.Perfect));
+		LayoutRenderer.paintToCanvas(layout, pageIndex, zoom, origin,
+			new JfxCanvas(context, pageSize, CanvasFormat.Raster,
+				CanvasDecoration.Interactive, CanvasIntegrity.Perfect));
 		jfxCanvas.snapshot(null, wim);
 
 		return wim;
