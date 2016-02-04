@@ -16,6 +16,8 @@ import com.xenoage.zong.renderer.canvas.CanvasDecoration;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
 import com.xenoage.zong.renderer.canvas.CanvasIntegrity;
 
+import static com.xenoage.utils.math.geom.Point2i.origin;
+
 /**
  * Like {@link LayoutRenderer}, but more Android specific rendering methods.
  *
@@ -53,11 +55,8 @@ public class AndroidLayoutRenderer {
      * with no offset and the given scaling.
      */
     public void paint(Layout layout, int pageIndex, AndroidCanvas canvas, float scaling) {
-        canvas.transformSave();
-        canvas.transformScale(scaling, scaling);
         Page page = layout.getPages().get(pageIndex);
-        LayoutRenderer.paintToCanvas(layout, pageIndex, canvas);
-        canvas.transformRestore();
+        LayoutRenderer.paintToCanvas(layout, pageIndex, scaling, origin, canvas);
     }
 
 }
