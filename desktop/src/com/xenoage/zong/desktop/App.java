@@ -413,14 +413,7 @@ public class App<DocType extends Document>
 	 */
 	public List<Score> loadMxlScores(String path, Filter<String> filter) {
 		try {
-			
-			//GOON: integrate absolute path in DesktopIO
-			InputStream is;
-			if (new File(path).isAbsolute())
-				is = new JseInputStream(new File(path));
-			else
-				is = io().openFile(path);
-				
+			InputStream is = io().openFile(path);
 			return sync(new MusicXmlFileReader(is, path, filter));
 		} catch (Exception ex) {
 			reportOpenFileError(ex, path);
