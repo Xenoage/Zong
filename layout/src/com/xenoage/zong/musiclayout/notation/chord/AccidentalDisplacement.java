@@ -14,8 +14,14 @@ import com.xenoage.zong.core.music.chord.Accidental;
 @Const @AllArgsConstructor
 public class AccidentalDisplacement {
 
+	/** The vertical position of the accidental as a LP. */
 	public final int yLp;
+	
+	/** The horizontal offset of the accidental in IS.
+	 * The leftmost accidental usually has a value of 0. */
 	public final float xIs;
+	
+	/** The accidental. */
 	public final Accidental accidental;
 
 }

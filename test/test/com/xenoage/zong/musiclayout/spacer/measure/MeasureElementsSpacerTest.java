@@ -64,9 +64,10 @@ public class MeasureElementsSpacerTest {
 	 */
 	@Test public void testEnoughExistingSpace() {
 		Rest[] ve = ve();
-		List<VoiceSpacing> vs = alist(
+		List<VoiceSpacing> originalVs = alist(
 			new VoiceSpacing(null, 1, alist(spacing(ve[0], fr(1, 2), 4), spacing(ve[1], fr(6), 15))),
 			new VoiceSpacing(null, 1, alist(spacing(ve[2], fr(1), 5), spacing(ve[3], fr(17, 2), 20))));
+		List<VoiceSpacing> vs = alist(originalVs);
 		Clef innerClef = new Clef(ClefType.clefTreble);
 		BeatEList<Clef> innerClefs = new BeatEList<Clef>();
 		innerClefs.add(beatE(innerClef, fr(6)));
@@ -77,8 +78,8 @@ public class MeasureElementsSpacerTest {
 		assertEquals(1, mes.length);
 		assertEquals(fr(6), mes[0].beat);
 		assertEquals(15 - paddingWidth - clefWidth / 2, mes[0].xIs, Delta.DELTA_FLOAT);
-		//voice spacings must be unchanged - GOON - clone original
-		assertEquals(vs, vs);
+		//voice spacings must be unchanged
+		assertEquals(originalVs, vs);
 	}
 
 	/**

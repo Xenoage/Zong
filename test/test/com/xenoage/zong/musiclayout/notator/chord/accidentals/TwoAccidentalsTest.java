@@ -134,17 +134,16 @@ public class TwoAccidentalsTest
 		//(no accidental at top note, middle note suspended)
 		//TODO: accidentals nearer to chord (Ab4-accidental
 		//has enough room under Eb5)
-		/* GOON caa = testee.computeAccidentalsAlignment(alist(pi(5, -1, 4), pi(2, -1, 5), pi(3, 0, 5)),
+		accs = testee.compute(getParams(
+			alist(pi(5, -1, 4), pi(2, -1, 5), pi(3, 0, 5)),
 			new NoteDisplacement[] { note(3, cw.quarter, susNone), note(7, 0, susLeft),
-				note(8, cw.quarter, susNone) }, cw, contextC);
-		assertEquals(2, caa.accidentals.length);
-		assertEquals(cw.flat + cw.accToAccGap + cw.flat + cw.accToNoteGap, caa.width,
-			df);
-		assertEquals(cw.flat + cw.accToAccGap, caa.accidentals[0].offsetIs,
-			df);
-		assertEquals(3, caa.accidentals[0].lp);
-		assertEquals(0f, caa.accidentals[1].offsetIs, df);
-		assertEquals(7, caa.accidentals[1].lp); */
+				note(8, cw.quarter, susNone) }, 2, cw, contextC));
+		assertEquals(2, accs.accidentals.length);
+		assertEquals(cw.flat + cw.accToAccGap + cw.flat + cw.accToNoteGap, accs.widthIs, df);
+		assertEquals(cw.flat + cw.accToAccGap, accs.accidentals[0].xIs, df);
+		assertEquals(3, accs.accidentals[0].yLp);
+		assertEquals(0f, accs.accidentals[1].xIs, df);
+		assertEquals(7, accs.accidentals[1].yLp);
 	}
 
 }

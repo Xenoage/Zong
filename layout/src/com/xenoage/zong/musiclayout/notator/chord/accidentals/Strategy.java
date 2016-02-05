@@ -16,6 +16,8 @@ import com.xenoage.zong.musiclayout.settings.ChordWidths;
  * Strategy for displacing accidentals.
  * Thread-safe.
  * 
+ * TODO (ZONG-89): Use free space in accidentals to bring them closer together.
+ * 
  * @author Andreas Wenger
  */
 public abstract class Strategy {

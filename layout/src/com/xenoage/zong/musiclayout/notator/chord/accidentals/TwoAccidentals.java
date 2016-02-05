@@ -1,13 +1,19 @@
 package com.xenoage.zong.musiclayout.notator.chord.accidentals;
 
+import static com.xenoage.zong.musiclayout.notation.chord.NoteSuspension.Left;
 import static com.xenoage.zong.musiclayout.notation.chord.NoteSuspension.Right;
 
 import com.xenoage.zong.core.music.chord.Accidental;
 import com.xenoage.zong.musiclayout.notation.chord.AccidentalsNotation;
 import com.xenoage.zong.musiclayout.notation.chord.NoteDisplacement;
+import com.xenoage.zong.musiclayout.notation.chord.NoteSuspension;
+
+import javafx.geometry.Side;
 
 /**
  * Displacement for a chord with 2 accidentals.
+ * 
+ * The strategy is based on Ross, p. 132.
  * 
  * @author Andreas Wenger
  */
@@ -36,8 +42,13 @@ public class TwoAccidentals
 			boolean bottomFirst = true;
 			//when the bottom note with an accidental is suspended
 			//on the right side of the stem, and the top note with an accidental
-			//is not, then the bottom accidental is nearer to the note (see Ross, p. 132)
+			//is not, then the bottom accidental is nearer to the stem (Ross p.12, 3rd row)
 			if (bottomNote.suspension == Right && topNote.suspension != Right)
+				bottomFirst = false;
+			//when the top note with an accidental is suspended
+			//on the left side of the stem, and the bottom note with an accidental
+			//is not, then the bottom accidental is nearer to the stem (Ross p.12, 4th row)
+			if (topNote.suspension == Left && bottomNote.suspension != Left)
 				bottomFirst = false;
 			//horizontal position
 			float bottomWidth = p.chordWidths.get(bottomAcc);
