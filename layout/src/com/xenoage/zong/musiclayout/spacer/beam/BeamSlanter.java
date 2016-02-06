@@ -249,14 +249,19 @@ public class BeamSlanter {
 		//Ross, p. 111 (and p. 101)
 		int interval = abs(firstNoteLp - lastNoteLp);
 		Direction dir = (lastNoteLp > firstNoteLp ? Ascending : Descending);
+		
+		//Ross' rules for 4th are inconsistent p. 101d min=0.5 and p. 111:
+		//101d min=0.5 seems to be a special case, when an extreme note requires its stem to
+		//reach the middle line. then, we could use the smaller slant of 0.5 IS instead of the
+		//minimal slant of 1 IS which is described on page 111 4th.
+		//we already tried to apply this rule, but the tests with lots of examples
+		//showed no real improvements, so we ignore it and assume a minimum of 1 IS for a 4th slant
+		
 		switch (interval) {
 			case 0: return horizontalSlant; //unison
 			case 1: return slantIs(0.25f, dir); //2nd
 			case 2: return slantIs(0.5f, 1, dir); //3rd
-			case 3: return slantIs(0.5f, 1.25f, dir); //4th (on p. 101d min=0.5) 
-			//GOON: (on p. 101d min=0.5) seems to be a special case, when an extreme note requires
-			//its stem to reach the middle line. then, we use the smaller slant of 0.5 IS instead
-			//of the minimal slant of 1 IS which is described on page 111 4th
+			case 3: return slantIs(1f, 1.25f, dir); //4th
 			case 4: return slantIs(1.25f, dir); //5th
 			case 5: return slantIs(1.25f, 1.5f, dir); //6th
 			case 6: return slantIs(1.25f, 1.75f, dir); //7th

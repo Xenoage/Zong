@@ -11,7 +11,6 @@ import static musicxmltestsuite.tests.utils.Utils.fermata;
 
 import java.util.List;
 
-import com.xenoage.utils.collections.CollectionUtils;
 import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.zong.core.music.annotation.ArticulationType;
 import com.xenoage.zong.core.music.chord.Chord;

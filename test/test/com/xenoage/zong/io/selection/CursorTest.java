@@ -52,14 +52,14 @@ public class CursorTest {
 		cursor.write(new Rest(fr(1, 4)));
 		//write clef at 1/4
 		Clef clef1 = new Clef(ClefType.clefBass);
-		cursor.setMP(atElement(0, 0, 0, 1));
+		cursor.setMp(atElement(0, 0, 0, 1));
 		cursor.write(clef1);
 		BeatEList<Clef> clefs = score.getMeasure(atMeasure(0, 0)).getClefs();
 		assertEquals(1, clefs.size());
 		assertEquals(beatE(clef1, fr(1, 4)), clefs.getFirst());
 		//write clef at 2/4
 		Clef clef2 = new Clef(ClefType.clefTreble);
-		cursor.setMP(atElement(0, 0, 0, 2));
+		cursor.setMp(atElement(0, 0, 0, 2));
 		cursor.write(clef2);
 		clefs = score.getMeasure(atMeasure(0, 0)).getClefs();
 		assertEquals(2, clefs.size());
@@ -67,7 +67,7 @@ public class CursorTest {
 		assertEquals(beatE(clef2, fr(2, 4)), clefs.getElements().get(1));
 		//overwrite clef at 1/4
 		Clef clef3 = new Clef(ClefType.clefTreble);
-		cursor.setMP(atElement(0, 0, 0, 1));
+		cursor.setMp(atElement(0, 0, 0, 1));
 		cursor.write(clef3);
 		clefs = score.getMeasure(atMeasure(0, 0)).getClefs();
 		assertEquals(2, clefs.size());
@@ -75,27 +75,27 @@ public class CursorTest {
 		assertEquals(beatE(clef2, fr(2, 4)), clefs.getElements().get(1));
 		//write key at 1/4
 		Key key = new TraditionalKey(5, Mode.Major);
-		cursor.setMP(atElement(0, 0, 0, 1));
+		cursor.setMp(atElement(0, 0, 0, 1));
 		cursor.write((MeasureElement) key);
 		assertEquals(2, score.getMeasure(atMeasure(0, 0)).getClefs().size()); //clefs must still be there
 		assertEquals(1, score.getMeasure(atMeasure(0, 0)).getPrivateKeys().size());
 		//write direction at 1/4
 		Direction direction1 = new Dynamics(DynamicsType.ff);
-		cursor.setMP(atElement(0, 0, 0, 1));
+		cursor.setMp(atElement(0, 0, 0, 1));
 		cursor.write((MeasureElement) direction1);
 		assertEquals(2, score.getMeasure(atMeasure(0, 0)).getClefs().size()); //clefs must still be there
 		assertEquals(1, score.getMeasure(atMeasure(0, 0)).getPrivateKeys().size()); //key must still be there
 		assertEquals(1, score.getMeasure(atMeasure(0, 0)).getDirections().size());
 		//write another direction at 1/4, which does not replace the first one
 		Direction direction2 = new Coda();
-		cursor.setMP(atElement(0, 0, 0, 1));
+		cursor.setMp(atElement(0, 0, 0, 1));
 		cursor.write((MeasureElement) direction2);
 		assertEquals(2, score.getMeasure(atMeasure(0, 0)).getClefs().size()); //clefs must still be there
 		assertEquals(1, score.getMeasure(atMeasure(0, 0)).getPrivateKeys().size()); //key must still be there
 		assertEquals(2, score.getMeasure(atMeasure(0, 0)).getDirections().size()); //now two directions
 		//write instrument change at 1/4
 		InstrumentChange instrChange = new InstrumentChange(Instrument.defaultInstrument);
-		cursor.setMP(atElement(0, 0, 0, 1));
+		cursor.setMp(atElement(0, 0, 0, 1));
 		cursor.write(instrChange);
 		assertEquals(2, score.getMeasure(atMeasure(0, 0)).getClefs().size()); //clefs must still be there
 		assertEquals(1, score.getMeasure(atMeasure(0, 0)).getPrivateKeys().size()); //key must still be there

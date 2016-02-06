@@ -4,18 +4,12 @@ import static com.xenoage.utils.CheckUtils.checkArgsNotNull;
 import static com.xenoage.utils.annotations.Optimized.Reason.MemorySaving;
 import static com.xenoage.utils.collections.CollectionUtils.addOrNew;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.utils.collections.CollectionUtils.getFirst;
-import static com.xenoage.utils.collections.CollectionUtils.getLast;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Fraction._0;
-import static com.xenoage.zong.core.music.chord.StemDirection.Up;
 import static java.util.Collections.emptyList;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import lombok.Getter;
-import lombok.Setter;
 
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.NonEmpty;
@@ -38,6 +32,9 @@ import com.xenoage.zong.core.music.tuplet.Tuplet;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.position.MPElement;
 import com.xenoage.zong.core.util.InconsistentScoreException;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Class for a chord.

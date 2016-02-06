@@ -1,7 +1,6 @@
 package com.xenoage.zong.demos;
 
 import com.xenoage.utils.EnumUtils;
-import com.xenoage.utils.kernel.Range;
 import com.xenoage.zong.Zong;
 import com.xenoage.zong.demos.minimal.MinimalDemo;
 import com.xenoage.zong.demos.simplegui.SimpleGuiDemo;
@@ -9,14 +8,11 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.control.ChoiceDialog;
 import javafx.stage.Stage;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import static com.xenoage.utils.kernel.Range.range;
 
 /**
  * Shows a window, where the user can select a demo application to run.

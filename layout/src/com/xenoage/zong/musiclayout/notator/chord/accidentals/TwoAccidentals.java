@@ -6,9 +6,6 @@ import static com.xenoage.zong.musiclayout.notation.chord.NoteSuspension.Right;
 import com.xenoage.zong.core.music.chord.Accidental;
 import com.xenoage.zong.musiclayout.notation.chord.AccidentalsNotation;
 import com.xenoage.zong.musiclayout.notation.chord.NoteDisplacement;
-import com.xenoage.zong.musiclayout.notation.chord.NoteSuspension;
-
-import javafx.geometry.Side;
 
 /**
  * Displacement for a chord with 2 accidentals.

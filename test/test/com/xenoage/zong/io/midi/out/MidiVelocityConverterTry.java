@@ -134,7 +134,7 @@ public class MidiVelocityConverterTry {
 		chord.addDirection(new Dynamics(DynamicsType.sfp));
 		*/
 
-		cursor.setMP(mp0.withVoice(1));
+		cursor.setMp(mp0.withVoice(1));
 
 		cursor.write(attachC = chord(f4, Pitch.pi(Pitch.C, 4)));
 		attachC.addDirection(new Dynamics(DynamicsType.fff));
@@ -146,7 +146,7 @@ public class MidiVelocityConverterTry {
 		chord.addDirection(new Dynamics(DynamicsType.fff));
 		*/
 
-		cursor.setMP(mp0.withMeasure(1));
+		cursor.setMp(mp0.withMeasure(1));
 
 		cursor.write(attachC = chord(f4, Pitch.pi(Pitch.G, 4)));
 		//cursor.withScore(ScoreController.attachElement(cursor.getScore(), attachC, new Dynamics(DynamicsType.pp)));
@@ -157,7 +157,7 @@ public class MidiVelocityConverterTry {
 		cursor.write(attachC = chord(f4, Pitch.pi(Pitch.G, 4)));
 		attachC.addDirection(new Dynamics(DynamicsType.pp));
 
-		cursor.setMP(cursor.getMP().withElement(0).withVoice(1));
+		cursor.setMp(cursor.getMP().withElement(0).withVoice(1));
 
 		cursor.write(attachC = chord(f4, Pitch.pi(Pitch.C, 5)));
 		/*		
@@ -177,7 +177,7 @@ public class MidiVelocityConverterTry {
 		chord = voice.addNote(pi'C', 0, 5), fr(1, 4));
 		*/
 
-		cursor.setMP(mp0.withMeasure(2));
+		cursor.setMp(mp0.withMeasure(2));
 
 		cursor.write(attachC = chord(f4, Pitch.pi(Pitch.G, 4)));
 		attachC.addDirection(new Dynamics(DynamicsType.sfz));
@@ -188,7 +188,7 @@ public class MidiVelocityConverterTry {
 		cursor.write(chord(f4, Pitch.pi(Pitch.G, 4)));
 		//cursor = cursor.withScore(ScoreController.attachElement(cursor.getScore(), attachC, new Dynamics(DynamicsType.pp)));
 
-		cursor.setMP(mp0.withMeasure(2).withVoice(2));
+		cursor.setMp(mp0.withMeasure(2).withVoice(2));
 
 		cursor.write(chord(f4, Pitch.pi(Pitch.C, 5)));
 		/*

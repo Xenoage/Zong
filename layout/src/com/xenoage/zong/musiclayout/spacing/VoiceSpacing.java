@@ -16,7 +16,7 @@ public final class VoiceSpacing {
 	/** The {@link Voice} this spacing belongs to. */
 	public final Voice voice;
 	/** The interline space in mm of this voice. */
-	public final float interlineSpace; //GOON: move into measure spacing
+	public final float interlineSpace;
 	/** The {@link ElementSpacing}s of this voice. */
 	public final List<ElementSpacing> elements;
 	

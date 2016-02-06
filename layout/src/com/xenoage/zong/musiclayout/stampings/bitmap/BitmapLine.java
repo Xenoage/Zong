@@ -7,8 +7,6 @@ import com.xenoage.utils.color.Color;
 import com.xenoage.utils.math.MathUtils;
 import com.xenoage.utils.math.Units;
 
-import static com.xenoage.utils.color.Color.color;
-
 /**
  * This class helps drawing nice lines on a bitmap,
  * like the screen or in a bitmap file.

@@ -30,7 +30,6 @@ import com.xenoage.utils.exceptions.InvalidFormatException;
 import com.xenoage.utils.filter.Filter;
 import com.xenoage.utils.io.InputStream;
 import com.xenoage.utils.jse.JsePlatformUtils;
-import com.xenoage.utils.jse.io.JseInputStream;
 import com.xenoage.utils.jse.javafx.JavaFXApp;
 import com.xenoage.utils.jse.lang.LangManager;
 import com.xenoage.utils.jse.lang.LanguageInfo;

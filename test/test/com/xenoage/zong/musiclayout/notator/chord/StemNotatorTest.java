@@ -23,7 +23,6 @@ import com.xenoage.zong.musiclayout.notation.chord.ChordLps;
 import com.xenoage.zong.musiclayout.notation.chord.NotesNotation;
 import com.xenoage.zong.musiclayout.notation.chord.StemNotation;
 import com.xenoage.zong.musiclayout.notator.chord.stem.StemNotator;
-import com.xenoage.zong.musiclayout.settings.ChordWidths;
 
 /**
  * Tests for {@link StemNotator}.

@@ -12,8 +12,6 @@ import com.xenoage.zong.renderer.RendererArgs;
 import com.xenoage.zong.renderer.canvas.Canvas;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
 
-import static com.xenoage.utils.color.Color.color;
-
 /**
  * Renderer for a staff stamping.
  *

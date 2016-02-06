@@ -57,7 +57,7 @@ public interface Base42b
 		cursor.write(chord(pi('G', 0, 4), fr(1, 8)));
 		cursor.write(chord(pi('F', 0, 4), fr(1, 4)));
 		//staff 1, measure 0
-		cursor.setMP(atElement(1, 0, 0, 0));
+		cursor.setMp(atElement(1, 0, 0, 0));
 		cursor.write(new Rest(fr(1, 8)));
 		cursor.write(chord(pi('G', 0, 2), fr(1, 8)));
 		cursor.write(chord(pi('G', 0, 2), fr(1, 8)));

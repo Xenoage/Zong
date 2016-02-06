@@ -8,8 +8,6 @@ import lombok.Getter;
 /**
  * Continued {@link Volta}.
  * 
- * GOON: needed? Use {@link Volta} directly in {@link OpenVolta}
- * 
  * @author Andreas Wenger
  */
 @AllArgsConstructor

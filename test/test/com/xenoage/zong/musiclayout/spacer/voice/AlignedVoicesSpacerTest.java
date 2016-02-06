@@ -19,7 +19,6 @@ import com.xenoage.zong.musiclayout.notation.RestNotation;
 import com.xenoage.zong.musiclayout.spacing.BeatOffset;
 import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.RestSpacing;
-import com.xenoage.zong.musiclayout.spacing.TestSpacing;
 import com.xenoage.zong.musiclayout.spacing.VoiceSpacing;
 
 /**

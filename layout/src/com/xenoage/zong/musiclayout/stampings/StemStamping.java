@@ -1,11 +1,11 @@
 package com.xenoage.zong.musiclayout.stampings;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.musiclayout.notation.ChordNotation;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * Class for a stem stamping.
@@ -27,7 +27,7 @@ public final class StemStamping
 	public final float noteheadLp;
 	/** The end line position of the stem.
 	 * Also non-integer values are allowed here. */
-	public float endLp; //GOON: final!
+	public final float endLp;
 	/** Stem direction: If up, the notes are at the bottom, and vice versa. */
 	public final StemDirection direction;
 	/** The parent staff. */

@@ -1,21 +1,16 @@
 package musicxmltestsuite.tests.layout;
 
-import static org.junit.Assert.assertEquals;
 import musicxmltestsuite.tests.base.Base01a;
 import musicxmltestsuite.tests.utils.ToDo;
 
 import org.junit.Test;
 
 import com.xenoage.zong.core.music.Measure;
-import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.music.Staff;
 import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.musiclayout.ScoreFrameLayout;
-import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.ChordStampings;
-import com.xenoage.zong.musiclayout.stampings.NoteheadStamping;
-import com.xenoage.zong.musiclayout.stampings.StampingType;
 
 
 public class Test01a

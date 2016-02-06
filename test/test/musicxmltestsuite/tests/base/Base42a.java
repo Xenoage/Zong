@@ -46,7 +46,7 @@ public interface Base42a
 		cursor.write(addLyric(chord(pi('B', 0, 3), fr(3, 8)), "of"));
 		cursor.write(addLyric(chord(pi('C', 0, 5), fr(1, 8)), "Voice1"));
 		//measure 0, voice 1
-		cursor.setMP(atElement(0, 0, 1, 0));
+		cursor.setMp(atElement(0, 0, 1, 0));
 		cursor.write(addLyric(chord(pi('C', 0, 5), fr(1, 2)), "This"));
 		cursor.write(addLyric(chord(pi('B', 0, 4), fr(1, 4)), "is"));
 		cursor.write(addLyric(chord(pi('G', 0, 4), fr(1, 4)), "the"));
