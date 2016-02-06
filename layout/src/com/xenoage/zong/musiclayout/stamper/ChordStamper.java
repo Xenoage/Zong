@@ -26,7 +26,6 @@ import com.xenoage.zong.core.music.slur.SlurWaypoint;
 import com.xenoage.zong.core.music.tuplet.Tuplet;
 import com.xenoage.zong.core.music.util.DurationInfo;
 import com.xenoage.zong.core.text.FormattedTextStyle;
-import com.xenoage.zong.musiclayout.layouter.cache.OpenBeamsCache;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenLyricsCache;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenSlursCache;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenTupletsCache;

@@ -20,7 +20,8 @@ import com.xenoage.utils.annotations.NonNull;
 	@NonNull private final StemDirection direction;
 
 	/** The length of the stem, measured from the outermost chord note at the stem side
-	 * to the end of the stem, in interline spaces, or null for default. */
+	 * to the end of the stem, in interline spaces, or null for default. For example,
+	 * a stem length of 3.25 IS is a common value for unbeamed chords. */
 	@MaybeNull private final Float lengthIs;
 
 }

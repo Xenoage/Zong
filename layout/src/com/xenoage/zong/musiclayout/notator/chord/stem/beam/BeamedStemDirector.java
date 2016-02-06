@@ -1,5 +1,6 @@
 package com.xenoage.zong.musiclayout.notator.chord.stem.beam;
 
+import static com.xenoage.utils.collections.ArrayUtils.setValues;
 import static com.xenoage.zong.core.music.beam.Beam.HorizontalSpan.SingleMeasure;
 import static com.xenoage.zong.core.music.beam.Beam.VerticalSpan.SingleStaff;
 import static com.xenoage.zong.musiclayout.notator.chord.stem.beam.range.OneMeasureOneStaff.oneMeasureOneStaff;
@@ -30,15 +31,24 @@ public class BeamedStemDirector {
 			else if (beam.getVerticalSpan() == VerticalSpan.TwoAdjacentStaves)
 				strategy = oneMeasureTwoStaves;
 			else
-				//GOON
-				throw new IllegalStateException("No strategy for more than two or non-adjacent staves");
+				//no strategy for more than two or non-adjacent staves
+				return fallback(beam.size());
 		}
 		else {
-			//GOON
-			throw new IllegalStateException("Multi-measure beams are not supported yet");
+			//multi-measure beams are not supported yet
+			return fallback(beam.size());
 		}
 		
 		return strategy.compute(beam, score);
+	}
+	
+	/**
+	 * Fallback for unsupported beams: All stems up.
+	 */
+	private StemDirection[] fallback(int stemsCount) {
+		StemDirection[] ret = new StemDirection[stemsCount];
+		setValues(ret, StemDirection.Up);
+		return ret;
 	}
 
 }

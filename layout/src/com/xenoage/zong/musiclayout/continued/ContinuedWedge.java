@@ -10,8 +10,6 @@ import com.xenoage.zong.core.music.volta.Volta;
 /**
  * Continued {@link Wedge}.
  * 
- * GOON: needed? Use {@link Wedge} directly in {@link OpenWedges}
- * 
  * @author Andreas Wenger
  */
 @Const @AllArgsConstructor

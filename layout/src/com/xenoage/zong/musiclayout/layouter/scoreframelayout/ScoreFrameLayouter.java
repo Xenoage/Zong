@@ -43,7 +43,6 @@ import com.xenoage.zong.musiclayout.continued.ContinuedWedge;
 import com.xenoage.zong.musiclayout.continued.OpenVolta;
 import com.xenoage.zong.musiclayout.continued.OpenWedges;
 import com.xenoage.zong.musiclayout.layouter.Context;
-import com.xenoage.zong.musiclayout.layouter.cache.OpenBeamsCache;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenLyricsCache;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenSlursCache;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenTupletsCache;

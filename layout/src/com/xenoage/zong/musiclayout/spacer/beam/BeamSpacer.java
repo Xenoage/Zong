@@ -57,9 +57,11 @@ public class BeamSpacer {
 		
 		//get lengths of stems
 		float[] stemsLengthIs = new float[size];
-		for (int i : range(size))
-			stemsLengthIs[i] = abs(beam.chords.get(i).stem.endLp - beam.chords.get(i).getInnerNoteLp()) / 2; //GOON beam.chords.get(i).stem.getLengthIs();
-		
+		for (int i : range(size)) {
+			ChordNotation chord = beam.chords.get(i);
+			stemsLengthIs[i] = abs(chord.stem.endLp - chord.getInnerNoteLp()) / 2;
+		}
+			
 		//compute the ends of the first and last stem
 		Placement offset = beamPlacer.compute(slant, notesLp, stemDir, stemsXIs,
 			stemsLengthIs, 1, StaffLines.staff5Lines);
