@@ -18,6 +18,7 @@ import static java.lang.Math.round;
 import com.xenoage.zong.core.music.StaffLines;
 import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.musiclayout.notation.BeamNotation;
+import com.xenoage.zong.musiclayout.notator.beam.lines.BeamRules;
 
 /**
  * Computes the {@link Placement} of a beam, given its {@link Slant}.
@@ -271,7 +272,7 @@ public class BeamPlacer {
 	
 	/**
 	 * Shortens the stem lengths of the given placement candidate by one quarter space,
-	 * if possible and when no stem gets shorter than 3 IS.
+	 * if possible and when no stem gets shorter than the {@link BeamRules} allow it.
 	 * This rule not found explicitly mentioned by Ross, but applies to many examples and
 	 * conforms to the general rule that beamed stems tend to be shortened (p. 103, last
 	 * paragraph). See for example:
@@ -289,10 +290,11 @@ public class BeamPlacer {
 			candidate.rightEndLp - stemDir.getSign() * 0.5f);
 		//stems still long enough?
 		float slantIs = (shorterCandidate.rightEndLp - shorterCandidate.leftEndLp) / 2;
+		BeamRules beamRules = BeamRules.getRules(beamLinesCount);
 		for (int iNote : range(notesLp)) {
 			float distanceToBeam = abs(getDistanceToLineLp(notesLp[iNote], stemsXIs[iNote],
 				slantIs, getFirst(stemsXIs), getLast(stemsXIs)) - shorterCandidate.leftEndLp) / 2;
-			if (distanceToBeam < 3)
+			if (distanceToBeam < beamRules.getMinimumStemLengthIs())
 				return candidate; //shortening not possible
 		}
 		//edges correct?

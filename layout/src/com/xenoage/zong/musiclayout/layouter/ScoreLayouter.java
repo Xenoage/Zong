@@ -94,8 +94,7 @@ public class ScoreLayouter {
 		//exact spacings
 		Map<Beam, BeamSpacing> beams = beamsSpacer.compute(context.score, notations, frames);
 		
-		//create score layout from the collected information
-		//GOON ScoreSpacing scoreSpacing = new ScoreSpacing(context.score, frames, beams);
+		//create score frame layouts from the collected information
 		List<ScoreFrameLayout> scoreFrameLayouts = createScoreFrameLayouts(frames,
 			notations, context, beams);
 		

@@ -3,12 +3,6 @@ package com.xenoage.zong.musiclayout.notator.beam;
 import static com.xenoage.zong.core.music.chord.StemDirection.Down;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
 import static com.xenoage.zong.musiclayout.notator.beam.BeamFragmenter.beamFragmenter;
-import static com.xenoage.zong.musiclayout.notator.beam.lines.Beam128thRules.beam128thRules;
-import static com.xenoage.zong.musiclayout.notator.beam.lines.Beam16thRules.beam16thRules;
-import static com.xenoage.zong.musiclayout.notator.beam.lines.Beam32ndRules.beam32ndRules;
-import static com.xenoage.zong.musiclayout.notator.beam.lines.Beam64thRules.beam64thRules;
-import static com.xenoage.zong.musiclayout.notator.beam.lines.Beam8thRules.beam8thRules;
-import static java.lang.Math.min;
 
 import java.util.List;
 
@@ -34,9 +28,6 @@ public class BeamNotator
 	
 	public static final BeamNotator beamNotator = new BeamNotator();
 	
-	private static BeamRules[] allBeamRules = { null, beam8thRules, beam16thRules,
-		beam32ndRules, beam64thRules, beam128thRules };
-	
 	
 	@Override public BeamNotation compute(MPElement element, Context context, Notations notations) {
 		return compute((Beam) element, notations);
@@ -47,8 +38,7 @@ public class BeamNotator
 		//compute fragments
 		List<Fragments> fragments = beamFragmenter.compute(beam);
 		//compute stem length and gap
-		BeamRules beamRules = allBeamRules[min(beam.getMaxLinesCount(), allBeamRules.length - 1)];
-		//float minStemLengthIs = beamRules.getMinimumStemLengthIs(); //GOON use in spacer
+		BeamRules beamRules = BeamRules.getRules(beam);
 		float gapIs = beamRules.getGapIs();
 		//collect chords
 		List<ChordNotation> chords = notations.getBeamChords(beam);

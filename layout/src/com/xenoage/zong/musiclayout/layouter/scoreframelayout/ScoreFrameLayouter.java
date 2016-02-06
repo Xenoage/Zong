@@ -50,7 +50,6 @@ import com.xenoage.zong.musiclayout.layouter.cache.util.SlurCache;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.LastLyrics;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.StaffStampings;
 import com.xenoage.zong.musiclayout.notation.Notations;
-import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.musiclayout.spacing.BeamSpacing;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 import com.xenoage.zong.musiclayout.spacing.FrameSpacing;
@@ -94,7 +93,6 @@ public class ScoreFrameLayouter {
 		
 		Score score = layouterContext.score;
 		SymbolPool symbols = layouterContext.symbols;
-		LayoutSettings settings = layouterContext.settings;
 		
 		StamperContext context = new StamperContext();
 		context.layouter = layouterContext;
