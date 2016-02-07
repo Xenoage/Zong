@@ -35,10 +35,10 @@ public class BeamSpacer {
 		int staffLinesCount) {
 		int size = beam.element.size();
 		
-		//get LPs of inner notes
+		//get LPs of stem-side notes
 		int[] notesLp = new int[size];
 		for (int i : range(size))
-			notesLp[i] = beam.chords.get(i).getInnerNoteLp();
+			notesLp[i] = beam.chords.get(i).getStemSideNoteLp();
 		
 		//get chord spacings
 		ColumnSpacing column = frameSpacing.getColumn(beam.element.getMP().measure);
@@ -59,7 +59,7 @@ public class BeamSpacer {
 		float[] stemsLengthIs = new float[size];
 		for (int i : range(size)) {
 			ChordNotation chord = beam.chords.get(i);
-			stemsLengthIs[i] = abs(chord.stem.endLp - chord.getInnerNoteLp()) / 2;
+			stemsLengthIs[i] = abs(chord.stem.endLp - chord.getStemSideNoteLp()) / 2;
 		}
 			
 		//compute the ends of the first and last stem

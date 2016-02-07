@@ -47,11 +47,11 @@ public class ChordNotation
 	}
 	
 	/**
-	 * Gets the innermost note.
+	 * Gets the outermost note at the stem side.
 	 * For upward stems, this is the highest note, and for
 	 * downward stems or if there is no stem, this is the lowest note.
 	 */
-	public int getInnerNoteLp() {
+	public int getStemSideNoteLp() {
 		if (stemDirection == Up)
 			return getLast(notes.notes).lp;
 		else

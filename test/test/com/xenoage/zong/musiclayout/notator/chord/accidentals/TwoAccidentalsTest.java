@@ -64,7 +64,7 @@ public class TwoAccidentalsTest
 		//Db5, Eb5 (p. 132)
 		accs = testee.compute(getParams(
 			alist(pi(1, -1, 5), pi(2, -1, 5)),
-			new NoteDisplacement[] { note(6, 0, susLeft), note(7, cw.quarter, susNone) }, 2, cw, contextC));
+			new NoteDisplacement[] { note(6, 0, susLeft), note(7, cw.quarter) }, 2, cw, contextC));
 		assertEquals(2, accs.accidentals.length);
 		assertEquals(cw.flat + cw.accToAccGap + cw.flat + cw.accToNoteGap, accs.widthIs, df);
 		assertEquals(0f, accs.accidentals[0].xIs, df);
@@ -136,8 +136,8 @@ public class TwoAccidentalsTest
 		//has enough room under Eb5)
 		accs = testee.compute(getParams(
 			alist(pi(5, -1, 4), pi(2, -1, 5), pi(3, 0, 5)),
-			new NoteDisplacement[] { note(3, cw.quarter, susNone), note(7, 0, susLeft),
-				note(8, cw.quarter, susNone) }, 2, cw, contextC));
+			new NoteDisplacement[] { note(3, cw.quarter), note(7, 0, susLeft),
+				note(8, cw.quarter) }, 2, cw, contextC));
 		assertEquals(2, accs.accidentals.length);
 		assertEquals(cw.flat + cw.accToAccGap + cw.flat + cw.accToNoteGap, accs.widthIs, df);
 		assertEquals(cw.flat + cw.accToAccGap, accs.accidentals[0].xIs, df);

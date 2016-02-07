@@ -1,8 +1,5 @@
 package com.xenoage.zong.musiclayout.notation.chord;
 
-import com.xenoage.zong.musiclayout.notation.chord.NoteDisplacement;
-import com.xenoage.zong.musiclayout.notation.chord.NoteSuspension;
-
 /**
  * Tests for {@link NoteDisplacement}.
  * 
@@ -12,6 +9,10 @@ public class NoteDisplacementTest {
 	
 	public static NoteDisplacement note(int lp) {
 		return new NoteDisplacement(lp, 0, NoteSuspension.None);
+	}
+	
+	public static NoteDisplacement note(int lp, float offsetIs) {
+		return new NoteDisplacement(lp, offsetIs, NoteSuspension.None);
 	}
 	
 	public static NoteDisplacement note(int lp, float offsetIs, NoteSuspension suspension) {
