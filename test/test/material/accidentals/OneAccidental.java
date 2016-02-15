@@ -8,7 +8,6 @@ import static com.xenoage.zong.musiclayout.notator.chord.accidentals.TestData.co
 import static com.xenoage.zong.musiclayout.notator.chord.accidentals.TestData.cw;
 import static com.xenoage.zong.musiclayout.notator.chord.accidentals.TestData.noteOffset;
 import static com.xenoage.zong.musiclayout.notator.chord.accidentals.TestData.susRight;
-import static material.accidentals.Example.example;
 
 import java.util.List;
 
@@ -28,19 +27,20 @@ public class OneAccidental
 	
 	
 	@Getter List<Example> examples = alist(
-		example("1 acc: C#5",
+		//TODO: static import of material.accidentals.Example.example failes. javac bug? 2016-02-15
+		material.accidentals.Example.example("1 acc: C#5",
 			alist(pi(0, 1, 5)),
 			new NoteDisplacement[] { note(5) }, contextC,
 			cw.sharp + cw.accToNoteGap, null),
-		example("1 acc: C##5",
+		material.accidentals.Example.example("1 acc: C##5",
 			alist(pi(0, 2, 5)),
 			new NoteDisplacement[] { note(5) }, contextC,
 			cw.doubleSharp + cw.accToNoteGap, null),
-		example("1 acc: C4, D4, Gbb4",
+		material.accidentals.Example.example("1 acc: C4, D4, Gbb4",
 			alist(pi(0, 0, 4), pi(1, 0, 4), pi(4, -2, 4)),
 			new NoteDisplacement[] { note(-2), note(-1, noteOffset, susRight), note(2) }, contextC,
 			cw.doubleFlat + cw.accToNoteGap, null),
-		example("1 acc: Eb4, A4, G##5 with contextEb",
+		material.accidentals.Example.example("1 acc: Eb4, A4, G##5 with contextEb",
 			alist(pi(2, -1, 4), pi(5, 0, 4), pi(4, 2, 5)),
 			new NoteDisplacement[] { note(0), note(3), note(9) }, contextEb,
 			cw.natural + cw.accToNoteGap, null)
