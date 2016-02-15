@@ -41,8 +41,6 @@ import com.xenoage.zong.core.music.rest.Rest;
 import com.xenoage.zong.core.music.time.Time;
 import com.xenoage.zong.core.music.time.TimeType;
 import com.xenoage.zong.core.text.FormattedTextStyle;
-import com.xenoage.zong.core.text.FormattedTextUtils;
-import com.xenoage.zong.core.text.UnformattedText;
 import com.xenoage.zong.io.selection.Cursor;
 import com.xenoage.zong.musiclayout.notation.chord.AccidentalsNotation;
 import com.xenoage.zong.musiclayout.settings.ChordWidths;
@@ -139,7 +137,6 @@ public class StrategyTest
 		//one chord in each measure
 		Score score = ScoreFactory.create1Staff();
 		Cursor cursor = new Cursor(score, mp0, true);
-		cursor.write(new Clef(clefTreble));
 		cursor.write(new Time(TimeType.time_3_4));
 		for (int i : range(examples)) {
 			Example example = examples.get(i);

@@ -5,6 +5,7 @@ import static com.xenoage.utils.kernel.Range.rangeReverse;
 import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.header.ScoreHeader.scoreHeader;
+import static com.xenoage.zong.core.music.MusicContext.noAccidentals;
 import static com.xenoage.zong.core.music.util.BeatE.selectLatest;
 import static com.xenoage.zong.core.music.util.Interval.At;
 import static com.xenoage.zong.core.music.util.Interval.BeforeOrAt;
@@ -318,7 +319,7 @@ public final class Score
 	 * {@link MP}, also over measure boundaries. If there is
 	 * none, a default g clef is returned. The beat in the {@link MP} is required.
 	 */
-	public Clef getClef(MP mp, Interval interval) {
+	public ClefType getClef(MP mp, Interval interval) {
 		if (!interval.isPrecedingOrAt())
 			throw new IllegalArgumentException("Illegal interval for this method");
 		if (mp.beat == MP.unknownBeat)
@@ -329,7 +330,7 @@ public final class Score
 		if (measure.getClefs() != null) {
 			ret = measure.getClefs().getLastBefore(interval, mp.beat);
 			if (ret != null)
-				return ret.element;
+				return ret.element.getType();
 		}
 		if (interval != At) {
 			//search in the preceding measures
@@ -338,12 +339,12 @@ public final class Score
 				if (measure.getClefs() != null) {
 					ret = measure.getClefs().getLast();
 					if (ret != null)
-						return ret.element;
+						return ret.element.getType();
 				}
 			}
 		}
 		//no clef found. return default clef.
-		return new Clef(ClefType.clefTreble);
+		return ClefType.clefTreble;
 	}
 	
 	
@@ -368,9 +369,9 @@ public final class Score
 	{
 		if (clefAndKeyInterval == At)
 			clefAndKeyInterval = BeforeOrAt; //At and BeforeOrAt mean the same in this context
-		Clef clef = getClef(mp, clefAndKeyInterval);
+		ClefType clef = getClef(mp, clefAndKeyInterval);
 		Key key = getKey(mp, clefAndKeyInterval).element;
-		Map<Pitch, Integer> accidentals = null;
+		Map<Pitch, Integer> accidentals = noAccidentals;
 		if (accidentalsInterval != null)
 			accidentals = getAccidentals(mp, accidentalsInterval);
 		return new MusicContext(clef, key, accidentals, getStaff(mp).getLinesCount());

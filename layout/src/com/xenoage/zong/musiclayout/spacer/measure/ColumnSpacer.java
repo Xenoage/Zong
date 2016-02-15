@@ -111,7 +111,7 @@ public class ColumnSpacer {
 			LeadingSpacing leadingSpacing = null;
 			if (createLeading) {
 				context.mp = atBeat(iStaff, measureIndex, 0, Fraction._0);
-				leadingSpacing = leadingSpacer.compute(context);
+				leadingSpacing = leadingSpacer.compute(context, notations);
 			}
 			//create measure spacing
 			float interlineSpace = context.score.getInterlineSpace(iStaff);

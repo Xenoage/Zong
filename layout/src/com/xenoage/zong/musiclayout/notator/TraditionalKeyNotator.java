@@ -37,7 +37,7 @@ public class TraditionalKeyNotator
 		ElementWidth keyWidth = new ElementWidth(0, width, 1);
 		
 		//compute LPs
-		ClefType contextClef = context.score.getClef(context.mp, Before).getType();
+		ClefType contextClef = context.score.getClef(context.mp, Before);
 		int c4Lp = contextClef.getLp(pi(0, 0, 4));
 		int minLp = contextClef.getKeySignatureLowestLp(fifth);
 		

@@ -24,7 +24,7 @@ public class Test12b
 		//musical context must be 4/4, C clef and no accidentals
 		MusicContext context = score.getMusicContext(mp0, Interval.At, Interval.At);
 		assertEquals(fr(4, 4), score.getMeasureBeats(0));
-		assertEquals(ClefType.clefTreble, context.getClef().getType());
+		assertEquals(ClefType.clefTreble, context.getClef());
 		for (int i = 0; i < 7; i++)
 			assertEquals(0, context.getKey().getAlterations()[i]);
 		//there should be a C clef in the first measure

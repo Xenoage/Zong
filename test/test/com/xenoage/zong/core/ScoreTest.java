@@ -1,5 +1,6 @@
 package com.xenoage.zong.core;
 
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Tuple3.t3;
 import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.utils.math.Fraction.fr;
@@ -14,7 +15,6 @@ import static com.xenoage.zong.core.position.MP.atVoice;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -128,7 +128,7 @@ public class ScoreTest {
 	
 	
 	@Test public void getKeyTest() {
-		Tuple3<Score, List<Clef>, List<Key>> testData = createTestScoreClefsKeys();
+		Tuple3<Score, List<ClefType>, List<Key>> testData = createTestScoreClefsKeys();
 		Score score = testData.get1();
 		List<Key> keys = testData.get3();
 		assertTrue(keys.get(0) != score.getKey(atBeat(0, 0, 0, fr(0, 4)), Before).element);
@@ -150,30 +150,30 @@ public class ScoreTest {
 	 * and a number of clefs, keys and chords.
 	 * The score, the list of clefs and the list of keys is returned.
 	 */
-	private Tuple3<Score, List<Clef>, List<Key>> createTestScoreClefsKeys()
+	private Tuple3<Score, List<ClefType>, List<Key>> createTestScoreClefsKeys()
 	{
 		//create two measures:
 		//clef-g, key-Gmaj, C#1/4, clef-f, Db1/4, clef-g, key-Fmaj, Cnat1/4 |
 		//C#1/4, key-Cmaj, clef-f, C2/4.
 		Score score = ScoreFactory.create1Staff();
 		new MeasureAdd(score, 1).execute();
-		List<Clef> clefs = new ArrayList<Clef>();
-		List<Key> keys = new ArrayList<Key>();
-		Clef c;
+		List<ClefType> clefs = alist();
+		List<Key> keys = alist();
+		ClefType c;
 		Key k;
 		//measure 0
 		Measure measure = score.getMeasure(atMeasure(0, 0));
 		new Clef(ClefType.clefTreble);
-		clefs.add(c = new Clef(ClefType.clefTreble));
-    new MeasureElementWrite(c, measure, fr(0, 4)).execute();
+		clefs.add(c = ClefType.clefTreble);
+    new MeasureElementWrite(new Clef(c), measure, fr(0, 4)).execute();
     keys.add(k = new TraditionalKey(1, Mode.Major));
     new MeasureElementWrite(k, measure, fr(0, 4)).execute();
     new VoiceElementWrite(measure.getVoice(0), atElement(0, 0, 0, 0), chord(pi(0, 1, 4), fr(1, 4)), null).execute();
-    clefs.add(c = new Clef(ClefType.clefBass));
-    new MeasureElementWrite(c, measure, fr(1, 4)).execute();
+    clefs.add(c = ClefType.clefBass);
+    new MeasureElementWrite(new Clef(c), measure, fr(1, 4)).execute();
     new VoiceElementWrite(measure.getVoice(0), atElement(0, 0, 0, 1), chord(pi(1, -1, 4), fr(1, 4)), null).execute();
-    clefs.add(c = new Clef(ClefType.clefTreble));
-    new MeasureElementWrite(c, measure, fr(2, 4)).execute();
+    clefs.add(c = ClefType.clefTreble);
+    new MeasureElementWrite(new Clef(c), measure, fr(2, 4)).execute();
     keys.add(k = new TraditionalKey(-1, Mode.Major));
     new MeasureElementWrite(k, measure, fr(2, 4)).execute();
     new VoiceElementWrite(measure.getVoice(0), atElement(0, 0, 0, 2), chord(pi(0, 0, 4), fr(1, 4)), null).execute();
@@ -182,8 +182,8 @@ public class ScoreTest {
     new VoiceElementWrite(measure.getVoice(0), atElement(0, 1, 0, 0), chord(pi(0, 1, 4), fr(1, 4)), null).execute();
     keys.add(k = new TraditionalKey(0, Mode.Major));
     new MeasureElementWrite(k, measure, fr(1, 4)).execute();
-    clefs.add(c = new Clef(ClefType.clefBass));
-    new MeasureElementWrite(c, measure, fr(1, 4)).execute();
+    clefs.add(c = ClefType.clefBass);
+    new MeasureElementWrite(new Clef(c), measure, fr(1, 4)).execute();
     new VoiceElementWrite(measure.getVoice(0), atElement(0, 1, 0, 1), chord(pi(0, 0, 4), fr(2, 4)), null).execute();
     return t3(score, clefs, keys);
 	}
@@ -258,10 +258,9 @@ public class ScoreTest {
 	
 	
 	@Test public void getClefTest() {
-		Tuple3<Score, List<Clef>, List<Key>> testData = createTestScoreClefsKeys();
+		Tuple3<Score, List<ClefType>, List<Key>> testData = createTestScoreClefsKeys();
 		Score score = testData.get1();
-		List<Clef> clefs = testData.get2();
-		assertTrue(clefs.get(0) != score.getClef(atBeat(0, 0, 0, fr(0, 4)), Before));
+		List<ClefType> clefs = testData.get2();
 		assertTrue(clefs.get(0) == score.getClef(atBeat(0, 0, 0, fr(0, 4)), BeforeOrAt));
 		assertTrue(clefs.get(0) == score.getClef(atBeat(0, 0, 0, fr(1, 4)), Before));
 		assertTrue(clefs.get(1) == score.getClef(atBeat(0, 0, 0, fr(1, 4)), BeforeOrAt));
@@ -276,9 +275,9 @@ public class ScoreTest {
 	
 	
 	@Test public void getMusicContextTest() {
-		Tuple3<Score, List<Clef>, List<Key>> testData = createTestScoreClefsKeys();
+		Tuple3<Score, List<ClefType>, List<Key>> testData = createTestScoreClefsKeys();
 		Score score = testData.get1();
-		List<Clef> clefs = testData.get2();
+		List<ClefType> clefs = testData.get2();
 		List<Key> keys = testData.get3();
 		//measure 1: before 0/4: no accidentals
 		MusicContext musicContext = score.getMusicContext(atBeat(0, 1, 0, fr(0, 4)), BeforeOrAt, Before);

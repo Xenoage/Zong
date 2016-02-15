@@ -6,6 +6,8 @@ import static com.xenoage.zong.util.ZongPlatformUtils.zongPlatformUtils;
 
 import java.io.IOException;
 
+import com.xenoage.utils.jse.log.DesktopLogProcessing;
+import com.xenoage.utils.log.Log;
 import com.xenoage.zong.core.format.LayoutFormat;
 import com.xenoage.zong.demos.simplegui.SimpleGuiDemo;
 import com.xenoage.zong.desktop.utils.JseZongPlatformUtils;
@@ -25,6 +27,8 @@ public class VisualTester {
 	
 	public static void start(VisualTest test) {
 		try {
+			JseZongPlatformUtils.init(test.getClass().getSimpleName());
+			Log.init(new DesktopLogProcessing(test.getClass().getSimpleName()));
 			ScoreDoc scoreDoc = createScoreDoc(test);
 			SimpleGuiDemo.start(scoreDoc);
 		} catch (Exception ex) {
@@ -34,7 +38,6 @@ public class VisualTester {
 	
 	private static ScoreDoc createScoreDoc(VisualTest test)
 		throws IOException {
-		JseZongPlatformUtils.init(test.getClass().getSimpleName());
 		return MusicXmlScoreDocFileReader.read(test.getScore());
 	}
 	

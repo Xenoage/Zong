@@ -1,18 +1,21 @@
 package com.xenoage.zong.core.music;
 
+import static com.xenoage.utils.collections.CollectionUtils.map;
+import static java.util.Collections.unmodifiableMap;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import lombok.Data;
-import lombok.NonNull;
-
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.music.chord.Accidental;
-import com.xenoage.zong.core.music.clef.Clef;
 import com.xenoage.zong.core.music.clef.ClefType;
 import com.xenoage.zong.core.music.key.Key;
 import com.xenoage.zong.core.music.key.TraditionalKey;
 import com.xenoage.zong.core.music.key.TraditionalKey.Mode;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NonNull;
 
 
 /**
@@ -24,42 +27,38 @@ import com.xenoage.zong.core.music.key.TraditionalKey.Mode;
  *
  * @author Andreas Wenger
  */
-@Const @Data public class MusicContext {
+@Const @Data @AllArgsConstructor
+public class MusicContext {
+	
+	public static final Map<Pitch, Integer> noAccidentals =
+		unmodifiableMap(new HashMap<Pitch, Integer>());
 
-	public static final MusicContext simpleInstance = new MusicContext(new Clef(ClefType.clefTreble),
+	public static final MusicContext simpleInstance = new MusicContext(ClefType.clefTreble,
 		new TraditionalKey(0, Mode.Major), new Pitch[0], 5);
 
 
 	/** The current clef. */
-	@NonNull private final Clef clef;
+	@NonNull private final ClefType clef;
 	/** The current key signature. */
 	@NonNull private final Key key;
 	/** The list of current accidentals (key: pitch without alter, value: alter). */
 	@NonNull private final Map<Pitch, Integer> accidentals;
 	/** The number of staff lines. */
 	private final int linesCount;
-
-
-	/**
-	 * Creates a context with the given clef, key and map of accidentals.
-	 */
-	public MusicContext(Clef clef, Key key, Map<Pitch, Integer> accidentals, int linesCount) {
-		this.clef = clef;
-		this.key = key;
-		this.accidentals = accidentals;
-		this.linesCount = linesCount;
-	}
 	
 	
 	/**
 	 * Creates a context with the given clef, key and list of accidentals.
 	 */
-	public MusicContext(Clef clef, Key key, Pitch[] accidentals, int linesCount) {
+	public MusicContext(ClefType clef, Key key, Pitch[] accidentals, int linesCount) {
 		this.clef = clef;
 		this.key = key;
-		Map<Pitch, Integer> accidentalsMap = new HashMap<Pitch, Integer>();
-		for (Pitch acc : accidentals)
-			accidentalsMap.put(acc.withoutAlter(), (int) acc.getAlter());
+		Map<Pitch, Integer> accidentalsMap = noAccidentals;
+		if (accidentals.length > 0) {
+			accidentalsMap = map();
+			for (Pitch acc : accidentals)
+				accidentalsMap.put(acc.withoutAlter(), (int) acc.getAlter());
+		}
 		this.accidentals = accidentalsMap;
 		this.linesCount = linesCount;
 	}
@@ -71,7 +70,7 @@ import com.xenoage.zong.core.music.key.TraditionalKey.Mode;
 	 * from the bottom line.
 	 */
 	public int getLp(Pitch pitch) {
-		return clef.getType().getLp(pitch);
+		return clef.getLp(pitch);
 	}
 
 

@@ -35,7 +35,7 @@ public class RossThreeAccidentals
 	 * Ross, p. 132/133, rule 1.
 	 */
 	List<Example> chordsRule1 = alist(
-		material.accidentals.Example.example("3 accs: D#4, F#4, C#5",
+		material.accidentals.Example.example("p. 133: 3 accs: D#4, F#4, C#5",
 			alist(pi(1, 1, 4), pi(3, 1, 4), pi(0, 1, 5)),
 			new NoteDisplacement[] { note(-1), note(1), note(5) }, contextC,
 			cw.sharp + cw.accToAccGap + cw.sharp + cw.accToNoteGap,
@@ -46,7 +46,7 @@ public class RossThreeAccidentals
 	 * Ross, p. 132/133, rule 2.
 	 */
 	List<Example> chordsRule2 = alist(
-		material.accidentals.Example.example("3 accs: D#4, F#4, B4 with contextAccB4",
+		material.accidentals.Example.example("p. 133: 3 accs: D#4, F#4, B4",
 			alist(pi(1, 1, 4), pi(3, 1, 4), pi(6, 0, 4)),
 			new NoteDisplacement[] { note(-1), note(1), note(4) }, contextAccB4,
 			2 * (cw.sharp + cw.accToAccGap) + cw.natural + cw.accToNoteGap,
@@ -57,7 +57,7 @@ public class RossThreeAccidentals
 	 * Ross, p. 132/133, rule 3.
 	 */
 	List<Example> chordsRule3 = alist(
-		material.accidentals.Example.example("3 accs: D#4, E#4, C#5",
+		material.accidentals.Example.example("p. 133: 3 accs: D#4, E#4, C#5",
 			alist(pi(1, 1, 4), pi(2, 1, 4), pi(0, 1, 5)),
 			new NoteDisplacement[] { note(-1), note(0, cw.quarter, susRight), note(5) }, contextC,
 			2 * (cw.sharp + cw.accToAccGap) + cw.sharp + cw.accToNoteGap,
@@ -68,7 +68,7 @@ public class RossThreeAccidentals
 	 * Ross, p. 133, rule 4.
 	 */
 	List<Example> chordsRule4 = alist(
-		material.accidentals.Example.example("3 accs: D#4, C#5, D#5",
+		material.accidentals.Example.example("p. 133: 3 accs: D#4, C#5, D#5",
 			alist(pi(1, 1, 4), pi(0, 1, 5), pi(1, 1, 5)),
 			new NoteDisplacement[] { note(-1), note(5), note(6, cw.quarter, susRight) }, contextC,
 			cw.sharp + cw.accToAccGap + cw.sharp + cw.accToNoteGap,
@@ -80,7 +80,7 @@ public class RossThreeAccidentals
 	 */
 	List<Example> chordsRule5 = alist(
 		//TODO: natural can be indented nearer to the chord
-		material.accidentals.Example.example("3 accs: D4, Ab4, Bb4 with contextAccD4",
+		material.accidentals.Example.example("p. 133: 3 accs: D4, Ab4, Bb4",
 			alist(pi(1, 0, 4), pi(5, -1, 4), pi(6, -1, 4)),
 			new NoteDisplacement[] { note(-1), note(3), note(4, cw.quarter, susRight) }, contextAccD4,
 			cw.flat + cw.accToAccGap + cw.natural + cw.accToAccGap + cw.flat + cw.accToNoteGap,
@@ -93,7 +93,7 @@ public class RossThreeAccidentals
 	 */
 	List<Example> chordsRule6 = alist(
 		//TODO: natural can be indented nearer to the chord
-		material.accidentals.Example.example("3 accs: D4, E#4, B4 with contextAccsD4B4",
+		material.accidentals.Example.example("p. 133: 3 accs: D4, E#4, B4",
 			alist(pi(1, 0, 4), pi(2, 1, 4), pi(6, 0, 4)),
 			new NoteDisplacement[] { note(-1), note(0, cw.quarter, susRight), note(4) }, contextAccsD4B4,
 			cw.natural + cw.accToAccGap + cw.natural + cw.accToAccGap + cw.sharp + cw.accToNoteGap,
