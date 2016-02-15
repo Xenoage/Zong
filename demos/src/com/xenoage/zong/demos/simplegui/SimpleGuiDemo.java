@@ -1,17 +1,18 @@
 package com.xenoage.zong.demos.simplegui;
 
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-
 import com.xenoage.utils.error.Err;
 import com.xenoage.utils.jse.log.DesktopLogProcessing;
 import com.xenoage.utils.log.Log;
 import com.xenoage.zong.desktop.io.midi.out.SynthManager;
 import com.xenoage.zong.desktop.utils.JseZongPlatformUtils;
 import com.xenoage.zong.desktop.utils.error.GuiErrorProcessing;
+import com.xenoage.zong.documents.ScoreDoc;
+
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 /**
  * Main class of this simple GUI demo app.
@@ -24,12 +25,21 @@ public class SimpleGuiDemo
 	public static final String appName = "SimpleDemo";
 	public static final String appVersion = "0.1";
 	
+	public static MainWindow mainWindow;
+	public static ScoreDoc startDoc;
+	
 	
 	/**
 	 * Entry point.
 	 */
 	public static void main(String... args)
 		throws Exception {
+		start(null, args);
+	}
+	
+	public static void start(ScoreDoc startDoc, String... args)
+		throws Exception {
+		SimpleGuiDemo.startDoc = startDoc;
 		initZong();
 		//start the JavaFX app
 		Application.launch(SimpleGuiDemo.class, args);
@@ -55,7 +65,9 @@ public class SimpleGuiDemo
 	@Override public void start(Stage stage)
 		throws Exception {
 		//load main window FXML into stage and show it
-		Parent root = FXMLLoader.load(getClass().getResource("MainWindow.fxml"));
+		FXMLLoader fxmlLoader = new FXMLLoader();
+		Parent root = fxmlLoader.load(getClass().getResource("MainWindow.fxml").openStream());
+		mainWindow = (MainWindow) fxmlLoader.getController();
     stage.setTitle("Simple Demo App based on Zong!");
     stage.setScene(new Scene(root));
     stage.setOnCloseRequest(e -> exit());

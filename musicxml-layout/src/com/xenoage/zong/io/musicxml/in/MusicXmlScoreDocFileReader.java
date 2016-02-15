@@ -1,5 +1,6 @@
 package com.xenoage.zong.io.musicxml.in;
 
+import static com.xenoage.zong.core.format.LayoutFormat.defaultLayoutFormat;
 import static com.xenoage.zong.musiclayout.settings.LayoutSettings.defaultLayoutSettings;
 import static com.xenoage.zong.util.ZongPlatformUtils.zongPlatformUtils;
 
@@ -65,7 +66,7 @@ public class MusicXmlScoreDocFileReader
 					Score score = scores.get(0);
 					ScoreDoc scoreDoc;
 					try {
-						scoreDoc = read(score, filePath);
+						scoreDoc = read(score);
 						result.onSuccess(scoreDoc);
 					} catch (Exception ex) {
 						result.onFailure(ex);
@@ -81,12 +82,13 @@ public class MusicXmlScoreDocFileReader
 	
 	/**
 	 * Creates a {@link ScoreDoc} instance from the given score.
+	 * TIDY: move elsewhere, e.g. in a ScoreDocFactory class
 	 */
-	public ScoreDoc read(Score score, String filePath)
+	public static ScoreDoc read(Score score)
 		throws InvalidFormatException, IOException {
 
 		//page format
-		LayoutFormat layoutFormat = null;
+		LayoutFormat layoutFormat = defaultLayoutFormat;
 		Object oLayoutFormat = score.getMetaData().get("layoutformat");
 		if (oLayoutFormat instanceof LayoutFormat) {
 			layoutFormat = (LayoutFormat) oLayoutFormat;

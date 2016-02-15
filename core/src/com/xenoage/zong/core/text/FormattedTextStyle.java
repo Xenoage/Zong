@@ -3,6 +3,7 @@ package com.xenoage.zong.core.text;
 import static com.xenoage.utils.NullUtils.notNull;
 import lombok.Data;
 import lombok.Getter;
+import lombok.experimental.Wither;
 
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.annotations.MaybeNull;
@@ -19,7 +20,7 @@ import com.xenoage.utils.font.FontInfo;
  *
  * @author Andreas Wenger
  */
-@Const @Data public class FormattedTextStyle {
+@Const @Data @Wither public class FormattedTextStyle {
 
 	//default values
 	public static final Superscript defaultSuperscript = Superscript.Normal;

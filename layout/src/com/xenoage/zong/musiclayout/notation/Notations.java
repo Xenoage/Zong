@@ -26,6 +26,9 @@ import lombok.Data;
  * But if an element is registered with a staff but searched for without
  * a staff, it won't be found.
  * 
+ * GOON: notations are missing for some elements, e.g. when an implicit
+ * clef is used at the beginning of a staff.
+ * 
  * @author Andreas Wenger
  */
 public class Notations {

@@ -1,6 +1,6 @@
 package com.xenoage.zong.io.musicxml.in.readers;
 
-import lombok.RequiredArgsConstructor;
+import static com.xenoage.zong.core.format.LayoutFormat.defaultLayoutFormat;
 
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.NonNull;
@@ -11,6 +11,8 @@ import com.xenoage.zong.core.format.PageMargins;
 import com.xenoage.zong.musicxml.types.MxlPageLayout;
 import com.xenoage.zong.musicxml.types.MxlPageMargins;
 import com.xenoage.zong.musicxml.types.groups.MxlLayout;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * Reads a {@link LayoutFormat} from a {@link MxlLayout}.
@@ -27,7 +29,7 @@ public class LayoutFormatReader {
 
 
 	@NonNull public LayoutFormat read() {
-		layoutFormat = LayoutFormat.defaultValue;
+		layoutFormat = defaultLayoutFormat;
 		if (mxlLayout != null)
 			readPageLayout();
 		return layoutFormat;

@@ -29,9 +29,6 @@ import com.xenoage.utils.font.TextMetrics;
 
 	public FormattedTextString(String text, FormattedTextStyle style) {
 		checkArgsNotNull(text, style);
-		//text may not be empty
-		if (text.length() == 0)
-			throw new IllegalArgumentException("Must contain at least one character.");
 		//text may not contain a line break. this must be represented
 		//as several FormattedTextParagraphs.
 		if (text.indexOf("\n") > -1) {

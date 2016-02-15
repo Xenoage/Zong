@@ -111,7 +111,7 @@ public class JfxCanvas
 				offsetX += e.getMetrics().getWidth();
 			}
 
-			offsetY += (pMetrics.getDescent() + pMetrics.getLeading());
+			offsetY += (pMetrics.getDescent() + pMetrics.getLeading()) * 5; //GOON: *5 
 		}
 
 		context.restore();

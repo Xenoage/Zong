@@ -43,6 +43,14 @@ public class FormattedTextUtils {
 		else
 			return fText(text.toString(), defaultStyle, Alignment.Left);
 	}
+	
+	/**
+	 * Creates a {@link FormattedText} from the given String.
+	 * The given default style and left alignment is applied.
+	 */
+	public static FormattedText styleText(String text, FormattedTextStyle defaultStyle) {
+		return fText(text, defaultStyle, Alignment.Left);
+	}
 
 	/**
 	 * Merges the given two texts.

@@ -63,11 +63,15 @@ import com.xenoage.utils.math.geom.Rectangle2f;
 	}
 
 	/**
-	 * Creates a {@link FormattedText} with a single paragraph, using
-	 * the given style and alignment.
+	 * Creates a {@link FormattedText} with the given text, using
+	 * the given style and alignment. Paragraphs are divided by "\n".
 	 */
 	public static FormattedText fText(String text, FormattedTextStyle style, Alignment alignment) {
-		return fText(fPara(fString(text, style), alignment));
+		String[] lines = text.split("\\n");
+		CList<FormattedTextParagraph> paras = clist();
+		for (String line : lines)
+			paras.add(fPara(fString(line, style), alignment));
+		return fText(paras);
 	}
 
 	/**

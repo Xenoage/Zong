@@ -16,7 +16,6 @@ import static material.accidentals.Example.example;
 import java.util.List;
 
 import com.xenoage.zong.musiclayout.notation.chord.NoteDisplacement;
-import com.xenoage.zong.musiclayout.notator.chord.accidentals.TestData;
 import com.xenoage.zong.musiclayout.notator.chord.accidentals.TwoAccidentals;
 
 import lombok.Getter;

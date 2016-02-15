@@ -61,26 +61,34 @@ public class Content
 	/**
 	 * Loads the MusicXML score from the given file path.
 	 */
-	private void loadScore(String filePath) {
+	public void loadScore(String filePath) {
 		try {
-			//stop current playback
-			Playback.stop();
-			//load the score
-			scoreDoc = DocumentIO.read(new File(filePath), new MusicXmlScoreDocFileInput());
-			//layout the first page
-			layout = scoreDoc.getLayout();
-			Score score = scoreDoc.getScore();
-			layout.updateScoreLayouts(score);
-			//create playback layouter for the playback cursor
-			playbackLayouter = new PlaybackLayouter(layout.getScoreFrameChain(score).getScoreLayout());
-			//set image to view
-			mainWindow.renderLayout(layout);
-			//load score into MIDI playback
-			Playback.openScore(scoreDoc.getScore());
+			ScoreDoc scoreDoc = DocumentIO.read(new File(filePath), new MusicXmlScoreDocFileInput());
+			loadScore(scoreDoc);
 		}
 		catch (Exception ex) {
 			Err.handle(Report.error(ex));
 		}
+	}
+	
+	/**
+	 * Loads the given MusicXML score document.
+	 */
+	public void loadScore(ScoreDoc scoreDoc) {
+		//stop current playback
+		Playback.stop();
+		//load the score
+		this.scoreDoc = scoreDoc;
+		//layout the first page
+		layout = scoreDoc.getLayout();
+		Score score = scoreDoc.getScore();
+		layout.updateScoreLayouts(score);
+		//create playback layouter for the playback cursor
+		playbackLayouter = new PlaybackLayouter(layout.getScoreFrameChain(score).getScoreLayout());
+		//set image to view
+		mainWindow.renderLayout(layout);
+		//load score into MIDI playback
+		Playback.openScore(scoreDoc.getScore());
 	}
 	
 	/**

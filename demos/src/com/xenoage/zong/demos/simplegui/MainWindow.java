@@ -47,8 +47,14 @@ public class MainWindow {
 	
 	
 	@FXML public void initialize() {
-		//load the first demo score
-		content.loadNextScore();
+		if (SimpleGuiDemo.startDoc == null) {
+			//load the first demo score
+			content.loadNextScore();
+		}
+		else {
+			//load the given start document
+			content.loadScore(SimpleGuiDemo.startDoc);
+		}
 	}
 
 	@FXML void onFileOpen(ActionEvent event) {

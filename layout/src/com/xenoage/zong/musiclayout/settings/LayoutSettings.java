@@ -40,7 +40,7 @@ import com.xenoage.utils.annotations.NonNull;
 	public final float offsetMeasureStart; //offset of the first element in a measure
 	public final float offsetBeatsMinimal; //minimal offset between to different beats
 	
-	public static LayoutSettings defaultLayoutSettings = new LayoutSettings(
+	public static final LayoutSettings defaultLayoutSettings = new LayoutSettings(
 		defaultChordWidthsNormal, defaultChordWidthsGrace, defaultSpacings, 0.75f, 0.6f, 1f, 1.5f);
 
 }
