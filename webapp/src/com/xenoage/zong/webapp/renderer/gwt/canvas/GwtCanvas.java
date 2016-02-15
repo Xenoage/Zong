@@ -109,7 +109,9 @@ public class GwtCanvas
 				offsetX += e.getMetrics().getWidth();
 			}
 
-			offsetY += (pMetrics.getDescent() + pMetrics.getLeading());
+			//next line
+			offsetY += p.getMetrics().getAscent() +
+				p.getMetrics().getDescent() + p.getMetrics().getLeading();
 		}
 
 		context.restore();

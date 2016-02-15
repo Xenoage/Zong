@@ -67,10 +67,9 @@ public class TextLayoutTools {
 			if (tl != null)
 				items.add(new TextLayouts.Item(tl, p(offsetX, offsetY), p.getText().length()));
 
-			//bottom y correction
-			if (baseline0)
-				offsetY += p.getMetrics().getAscent();
-			offsetY += (p.getMetrics().getDescent() + p.getMetrics().getLeading());
+			//next line
+			offsetY += p.getMetrics().getAscent() +
+				p.getMetrics().getDescent() + p.getMetrics().getLeading();
 		}
 
 		return new TextLayouts(items);
