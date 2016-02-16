@@ -1,12 +1,9 @@
 package com.xenoage.zong.io.musicxml.in.util;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.utils.collections.CollectionUtils.map;
 
 import java.util.List;
-import java.util.Map;
 
-import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.music.direction.Wedge;
 
 import lombok.Getter;
@@ -24,7 +21,7 @@ public final class OpenElements {
 	private OpenBeams openBeams;
 	private List<OpenSlur> openSlurs;
 	private List<OpenSlur> openTies;
-	private Map<Pitch, OpenSlur> openUnnumberedTies;
+	private OpenUnnumberedTieds openUnnumberedTies;
 	@Setter private OpenVolta openVolta;
 
 
@@ -33,7 +30,7 @@ public final class OpenElements {
 		this.openBeams = new OpenBeams();
 		this.openSlurs = alist(null, null, null, null, null, null);
 		this.openTies = alist(null, null, null, null, null, null);
-		this.openUnnumberedTies = map();
+		this.openUnnumberedTies = new OpenUnnumberedTieds();
 	}
 
 }

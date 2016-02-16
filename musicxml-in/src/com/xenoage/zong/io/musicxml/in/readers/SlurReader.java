@@ -11,6 +11,8 @@ import com.xenoage.zong.core.music.format.BezierPoint;
 import com.xenoage.zong.core.music.slur.Slur;
 import com.xenoage.zong.core.music.slur.SlurType;
 import com.xenoage.zong.core.music.slur.SlurWaypoint;
+import com.xenoage.zong.io.musicxml.in.util.OpenSlur;
+import com.xenoage.zong.io.musicxml.in.util.OpenUnnumberedTieds;
 import com.xenoage.zong.musicxml.types.MxlSlurOrTied;
 import com.xenoage.zong.musicxml.types.MxlSlurOrTied.MxlElementType;
 import com.xenoage.zong.musicxml.types.enums.MxlStartStopContinue;
@@ -43,10 +45,14 @@ public class SlurReader {
 		SlurWaypoint wp = new SlurWaypoint(chord, noteIndex, bezierPoint);
 		if (type == SlurType.Tie && number == null) {
 			//unnumbered tied
-			if (mxlSlur.getType() == MxlStartStopContinue.Start)
-				context.openUnnumberedTied(pitch, wp, side);
-			else
-				context.closeUnnumberedTied(pitch, wp, side);
+			OpenUnnumberedTieds openTieds = context.getOpenElements().getOpenUnnumberedTies();
+			if (mxlSlur.getType() == MxlStartStopContinue.Start) {
+				openTieds.startTied(wp, side);
+			}
+			else if (mxlSlur.getType() == MxlStartStopContinue.Stop) {
+				OpenSlur openTied = openTieds.stopTied(wp, side, context);
+				context.createSlur(openTied);
+			}
 		}
 		else {
 			//numbered

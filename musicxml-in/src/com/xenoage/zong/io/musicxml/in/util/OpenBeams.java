@@ -2,6 +2,8 @@ package com.xenoage.zong.io.musicxml.in.util;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.utils.log.Log.log;
+import static com.xenoage.utils.log.Report.warning;
 
 import java.util.HashMap;
 import java.util.List;
@@ -41,10 +43,15 @@ public class OpenBeams {
 	
 	/**
 	 * Begins a new beam with the given chord.
-	 * If a beam was already open with this context, it is overwritten.
+	 * If a beam was already open with this context, it is overwritten,
+	 * but a warning is logged.
 	 */
-	public void beginBeam(Chord chord, String voice) {
-		OpenBeam openBeam = new OpenBeam();
+	public void beginBeam(Chord chord, String voice, Context context) {
+		OpenBeam openBeam = getOpenBeam(voice, chord);
+		if (openBeam != null)
+			log(warning("Beginning a new beam, although there is still an open one at " +
+				context.getMp()));
+		openBeam = new OpenBeam();
 		openBeam.addChord(chord);
 		int category = getCategory(chord);
 		openBeams.get(category).put(voice, openBeam);

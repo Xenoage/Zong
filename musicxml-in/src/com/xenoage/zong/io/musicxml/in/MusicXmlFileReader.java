@@ -25,6 +25,12 @@ import com.xenoage.zong.io.musicxml.opus.Opus;
  * may have to be opened and only non-blocking IO is supported
  * by all platforms.
  * 
+ * TODO: be tolerant when loading files and try to accepts errors.
+ * however, collect them in a list of warnings, which can be
+ * presented to the user or which could be logged. Change the setting
+ * settings.isIgnoringErrors() to a enum with the options:
+ * silently accept; accept with warnings; error.
+ * 
  * @author Andreas Wenger
  */
 public class MusicXmlFileReader

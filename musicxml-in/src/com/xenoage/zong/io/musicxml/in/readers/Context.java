@@ -8,10 +8,6 @@ import static com.xenoage.zong.io.musicxml.in.util.CommandPerformer.execute;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
-import lombok.Getter;
-import lombok.Setter;
 
 import com.xenoage.utils.kernel.Range;
 import com.xenoage.utils.math.Fraction;
@@ -31,7 +27,6 @@ import com.xenoage.zong.core.music.MeasureElement;
 import com.xenoage.zong.core.music.MeasureSide;
 import com.xenoage.zong.core.music.MusicContext;
 import com.xenoage.zong.core.music.Part;
-import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.music.StavesList;
 import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.core.music.WaypointPosition;
@@ -52,6 +47,9 @@ import com.xenoage.zong.io.musicxml.in.util.OpenElements;
 import com.xenoage.zong.io.musicxml.in.util.OpenSlur;
 import com.xenoage.zong.io.musicxml.in.util.OpenVolta;
 import com.xenoage.zong.utils.exceptions.MeasureFullException;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * This class stores the current context when
@@ -221,9 +219,7 @@ public final class Context {
 				throw new MusicReaderException(wpPos + " waypoint already set for " + type + " " + number,
 					this);
 		}
-		OpenSlur.Waypoint openSlurWP = new OpenSlur.Waypoint();
-		openSlurWP.wp = wp;
-		openSlurWP.side = side;
+		OpenSlur.Waypoint openSlurWP = new OpenSlur.Waypoint(wp, side);
 		if (start)
 			openSlur.start = openSlurWP;
 		else
@@ -241,7 +237,7 @@ public final class Context {
 	/**
 	 * Creates and writes a slur or tie from the given {@link OpenSlur} object.
 	 */
-	private void createSlur(OpenSlur openSlur) {
+	public void createSlur(OpenSlur openSlur) {
 		if (checkSlur(openSlur)) {
 			Slur slur = new Slur(openSlur.type, alist(openSlur.start.wp,
 				openSlur.stop.wp), openSlur.start.side);
@@ -258,42 +254,11 @@ public final class Context {
 			return gap.compareTo(_0) >= 0;
 		}
 		else if (slur.type == SlurType.Tie) {
-			//tie must end directly after the start chord (no gap)
+			//tie must end directly after the start chord (no gap), since
+			//it is played as a single note without a break inbetween
 			return gap.compareTo(_0) == 0;
 		}
 		return false;
-	}
-
-	/**
-	 * Sets a start waypoint for a tied element without a number.
-	 */
-	public void openUnnumberedTied(Pitch pitch, SlurWaypoint wp, VSide side) {
-		Map<Pitch, OpenSlur> openUnnumberedTies = openElements.getOpenUnnumberedTies();
-		OpenSlur openTied = new OpenSlur();
-		openTied.type = SlurType.Tie;
-		openTied.start = new OpenSlur.Waypoint();
-		openTied.start.wp = wp;
-		openTied.start.side = side;
-		openUnnumberedTies.put(pitch, openTied);
-	}
-
-	/**
-	 * Closes a tied element without a number.
-	 */
-	public void closeUnnumberedTied(Pitch pitch, SlurWaypoint stopWP, VSide side) {
-		Map<Pitch, OpenSlur> openUnnumberedTies = openElements.getOpenUnnumberedTies();
-		OpenSlur openTied = openUnnumberedTies.get(pitch);
-		if (openTied == null) {
-			if (false == settings.isIgnoringErrors())
-				return;
-			else
-				throw new InconsistentScoreException("No tie open with pitch " + pitch);
-		}
-		openUnnumberedTies.remove(pitch);
-		openTied.stop = new OpenSlur.Waypoint();
-		openTied.stop.wp = stopWP;
-		openTied.stop.side = side;
-		createSlur(openTied);
 	}
 
 	/**

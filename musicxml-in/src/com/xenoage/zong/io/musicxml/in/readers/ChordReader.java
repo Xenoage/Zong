@@ -179,7 +179,7 @@ public final class ChordReader {
 			switch (mxlBeam.getValue()) {
 				case Begin: {
 					//open new beam
-					openBeams.beginBeam(chord, mxlVoice);
+					openBeams.beginBeam(chord, mxlVoice, context);
 					break;
 				}
 				case ForwardHook:
