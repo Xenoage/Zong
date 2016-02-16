@@ -192,50 +192,7 @@ public final class Context {
 		this.mp = atBeat(this.mp.staff, measureIndex, 0, _0);
 	}
 
-	/**
-	 * Opens a new beam with the given number.
-	 */
-	public void openBeam(int number) {
-		checkNumber1to6(number);
-		List<List<Chord>> openBeams = this.openElements.getOpenBeams();
-		if (openBeams.get(number - 1) != null) {
-			//error: this beam is already open
-			if (false == settings.isIgnoringErrors()) {
-				throw new MusicReaderException("Beam " + number + " already open", this);
-			}
-		}
-		//open beam
-		openBeams.set(number - 1, new ArrayList<Chord>());
-	}
-
-	/**
-	 * Adds the given chord to the open beam
-	 * with the given number.
-	 */
-	public void addBeamChord(Chord chord, int number) {
-		checkNumber1to6(number);
-		List<List<Chord>> openBeams = this.openElements.getOpenBeams();
-		if (openBeams.get(number - 1) == null) {
-			//error: this beam is not open
-			if (false == settings.isIgnoringErrors())
-				throw new MusicReaderException("Beam " + number + " not open", this);
-			return;
-		}
-		openBeams.get(number - 1).add(chord);
-	}
-
-	/**
-	 * Closes the open beam with the given number
-	 * and returns its chords.
-	 */
-	public List<Chord> closeBeam(int number) {
-		checkNumber1to6(number);
-		List<List<Chord>> openBeams = this.openElements.getOpenBeams();
-		List<Chord> ret = openBeams.get(number - 1);
-		openBeams.set(number - 1, null);
-		return ret;
-	}
-
+	
 	/**
 	 * Sets a waypoint for a slur or tie with the given number.
 	 * When all required waypoints of the slur are set, the slur is created.

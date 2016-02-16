@@ -20,6 +20,7 @@ import com.xenoage.zong.core.music.chord.Grace;
 import com.xenoage.zong.core.music.chord.Note;
 import com.xenoage.zong.core.music.chord.Stem;
 import com.xenoage.zong.core.music.rest.Rest;
+import com.xenoage.zong.io.musicxml.in.util.OpenBeams;
 import com.xenoage.zong.musicxml.types.MxlBeam;
 import com.xenoage.zong.musicxml.types.MxlNote;
 import com.xenoage.zong.musicxml.types.MxlPitch;
@@ -49,6 +50,7 @@ public final class ChordReader {
 	private VoiceElement chordOrRest;
 	private Chord chord;
 	private int staff;
+	private String mxlVoice;
 	
 	
 	/**
@@ -69,9 +71,10 @@ public final class ChordReader {
 		//TODO: might not exist! we have to use a helper algorithm to determine the right voice
 		//then, see MusicReader class documentation.
 		int staffVoice = 0;
+		mxlVoice = null;
 		MxlEditorialVoice editorialVoice = mxlFirstNote.getEditorialVoice();
 		if (editorialVoice != null) {
-			String mxlVoice = editorialVoice.getVoice();
+			mxlVoice = editorialVoice.getVoice();
 			if (mxlVoice != null) {
 				staffVoice = context.getVoice(staff, mxlVoice);
 			}
@@ -165,35 +168,31 @@ public final class ChordReader {
 	}
 		
 	private void readBeams() {
-		//add beams
-		//TODO: also read beams for grace and cue chords
-		if (false == (chord.isGrace() || chord.isCue())) {
-			//currently we read only the beam elements with number 1
-			for (MxlBeam mxlBeam : it(mxlFirstNote.getBeams())) {
-				int number = mxlBeam.getNumber();
-				//read only level 1 beams
-				if (number != 1)
-					continue;
-				switch (mxlBeam.getValue()) {
-					case Begin: {
-						//open new beam
-						context.openBeam(number);
-						context.addBeamChord(chord, number);
-						break;
-					}
-					case ForwardHook:
-					case BackwardHook:
-					case Continue: {
-						//add chord to beam
-						context.addBeamChord(chord, number);
-						break;
-					}
-					case End: {
-						//close the beam and create it
-						context.addBeamChord(chord, number);
-						List<Chord> beamedChords = context.closeBeam(number);
-						context.writeBeam(beamedChords);
-					}
+		OpenBeams openBeams = context.getOpenElements().getOpenBeams();
+		//we read only the beam elements with number 1
+		//beam subdivisions are computed by the program itself
+		for (MxlBeam mxlBeam : it(mxlFirstNote.getBeams())) {
+			int number = mxlBeam.getNumber();
+			//read only level 1 beams
+			if (number != 1)
+				continue;
+			switch (mxlBeam.getValue()) {
+				case Begin: {
+					//open new beam
+					openBeams.beginBeam(chord, mxlVoice);
+					break;
+				}
+				case ForwardHook:
+				case BackwardHook:
+				case Continue: {
+					//add chord to beam
+					openBeams.continueBeam(chord, mxlVoice, context);
+					break;
+				}
+				case End: {
+					//close the beam and create it
+					List<Chord> beamedChords = openBeams.endBeam(chord, mxlVoice, context);
+					context.writeBeam(beamedChords);
 				}
 			}
 		}
