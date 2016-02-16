@@ -118,6 +118,8 @@ public class Content
 	 * A message with the clicked element is shown to the user. 
 	 */
 	public void onClick(Point2f positionPx) {
+		if (layout.getScoreFrames().size() == 0)
+			return;
 		//get the layout of first score frame
 		ScoreFrame frame = layout.getScoreFrames().get(0);
 		ScoreFrameLayout frameLayout = frame.getScoreFrameLayout();

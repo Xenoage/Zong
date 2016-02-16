@@ -120,20 +120,28 @@ public class MusicXmlScoreDocFileReader
 		ScoreLayout scoreLayout = layouter.createScoreLayout();
 
 		//create and fill at least one page
-		ScoreFrameChain chain = null;
-		for (int i = 0; i < scoreLayout.frames.size(); i++) {
+		if (scoreLayout.frames.size() > 1) {
+			//normal layout: one frame per page
+			ScoreFrameChain chain = null;
+			for (int i = 0; i < scoreLayout.frames.size(); i++) {
+				Page page = new Page(pageFormat);
+				layout.addPage(page);
+				ScoreFrame frame = new ScoreFrame();
+				frame.setPosition(framePos);
+				frame.setSize(frameSize);
+				//TEST frame = frame.withHFill(NoHorizontalSystemFillingStrategy.getInstance());
+				page.addFrame(frame);
+				if (chain == null) {
+					chain = new ScoreFrameChain(score);
+					chain.setScoreLayout(scoreLayout);
+				}
+				chain.add(frame);
+			}
+		}
+		else {
+			//no frames: create a single empty page
 			Page page = new Page(pageFormat);
 			layout.addPage(page);
-			ScoreFrame frame = new ScoreFrame();
-			frame.setPosition(framePos);
-			frame.setSize(frameSize);
-			//TEST frame = frame.withHFill(NoHorizontalSystemFillingStrategy.getInstance());
-			page.addFrame(frame);
-			if (chain == null) {
-				chain = new ScoreFrameChain(score);
-				chain.setScoreLayout(scoreLayout);
-			}
-			chain.add(frame);
 		}
 
 		//add credit elements - TIDY

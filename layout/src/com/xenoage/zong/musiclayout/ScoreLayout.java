@@ -166,8 +166,7 @@ public class ScoreLayout {
 	/**
 	 * Creates an layout for showing an error.
 	 * This can be used if the layouter could not finish its work successfully.
-	 * Currently, the error layout consists of a single frame containing nothing.
-	 * TODO: show warning text in this frame!
+	 * Currently, the error layout is completely empty..
 	 */
 	public static ScoreLayout createErrorLayout(Score score, SymbolPool symbolPool) {
 		return new ScoreLayout(score, new ArrayList<ScoreFrameLayout>(), symbolPool, null);
