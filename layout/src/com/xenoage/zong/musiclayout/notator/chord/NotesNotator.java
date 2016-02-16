@@ -166,7 +166,7 @@ public class NotesNotator {
 		for (int i : rangeReverse(lps.getNotesCount())) {
 			int lp = lps.get(i);
 			//place dot between (leger) lines, not on them. use the space above.
-			int dotLp = lp - (lp % 2) + 1;
+			int dotLp = (lp % 2 == 0 ? lp + 1 : lp);
 			if (dotLp < lastDotLp) {
 				//space is free, use it
 				dotsLp.add(0, dotLp);

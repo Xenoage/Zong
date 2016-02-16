@@ -145,6 +145,24 @@ public class NotesNotatorTest {
 		assertEquals(2, notes.getDotsPerNoteCount());
 		assertEquals(1, notes.dotsLp.length);
 		assertEquals(5, notes.dotsLp[0]);
+		//D4: position -1
+		chord = chord(pi(1, 0, 4), fr(3, 4));
+		notes = testee.compute(chord, StemDirection.Up, cw, context);
+		assertEquals(1, notes.getDotsPerNoteCount());
+		assertEquals(1, notes.dotsLp.length);
+		assertEquals(-1, notes.dotsLp[0]);
+		//C4: position -1
+		chord = chord(pi(0, 0, 4), fr(3, 4));
+		notes = testee.compute(chord, StemDirection.Up, cw, context);
+		assertEquals(1, notes.getDotsPerNoteCount());
+		assertEquals(1, notes.dotsLp.length);
+		assertEquals(-1, notes.dotsLp[0]);
+		//B3: position -3
+		chord = chord(pi(6, 0, 3), fr(3, 4));
+		notes = testee.compute(chord, StemDirection.Up, cw, context);
+		assertEquals(1, notes.getDotsPerNoteCount());
+		assertEquals(1, notes.dotsLp.length);
+		assertEquals(-3, notes.dotsLp[0]);
 		//F4, F4: position 1
 		chord = chord(new Pitch[] { pi(3, 0, 4), pi(3, 0, 4) }, fr(7, 16));
 		notes = testee.compute(chord, StemDirection.Down, cw, context);
