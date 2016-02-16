@@ -38,7 +38,8 @@ public class PrintReader {
 			//MusicXML print is in the first broken measure, but we
 			//store the break in the last measure before the break (thus -1)
 			int breakMeasure = measure - 1;
-			context.writeColumnElement(break_, breakMeasure);
+			if (breakMeasure >= 0) //ignore, when in the first measure
+				context.writeColumnElement(break_, breakMeasure);
 		}
 
 		//we assume that custom system layout information is just used in combination with
