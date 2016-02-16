@@ -14,8 +14,8 @@ import org.junit.Test;
 
 import com.xenoage.utils.iterators.It;
 import com.xenoage.utils.jse.io.JseInputStream;
+import com.xenoage.zong.desktop.io.musicxml.in.MusicXmlScoreDocFileInput;
 import com.xenoage.zong.documents.ScoreDoc;
-import com.xenoage.zong.io.musicxml.in.MusicXmlScoreDocFileInput;
 
 /**
  * This test tries to load and layout a huge range of MusicXML files.
@@ -23,6 +23,9 @@ import com.xenoage.zong.io.musicxml.in.MusicXmlScoreDocFileInput;
  * If the files do not exist, nothing is tested. This class allows to test
  * a large number of files locally, which can not be uploaded to the
  * public repository because of copyright restrictions.
+ * 
+ * This test should be excluded from the normal test suite and
+ * should only be started manually.
  * 
  * @author Andreas Wenger
  */
@@ -52,10 +55,10 @@ public class MusicXmlMassTest {
 			Assert.fail();
 	}
 
-	/*
+	//*
 	@Test public void testSingleFile()
 	{
-		File file = new File(dir + "/MusicXML/MusicXML 1.1/MozaChloSample.xml");
+		File file = new File(dir + "/MusicXML/Andi/MusicXML 2.0/Aba heidschi bubeidschi - 4.xml");
 		if (!testFile(file)) Assert.fail();
 	} //*/
 
