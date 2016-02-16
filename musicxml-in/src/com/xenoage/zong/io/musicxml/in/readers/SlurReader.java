@@ -51,7 +51,8 @@ public class SlurReader {
 			}
 			else if (mxlSlur.getType() == MxlStartStopContinue.Stop) {
 				OpenSlur openTied = openTieds.stopTied(wp, side, context);
-				context.createSlur(openTied);
+				if (openTied != null)
+					context.createSlur(openTied);
 			}
 		}
 		else {
