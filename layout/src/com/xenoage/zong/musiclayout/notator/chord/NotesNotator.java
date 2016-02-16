@@ -2,6 +2,7 @@ package com.xenoage.zong.musiclayout.notator.chord;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.rangeReverse;
+import static java.lang.Math.abs;
 
 import java.util.ArrayList;
 
@@ -118,7 +119,7 @@ public class NotesNotator {
 			}
 			else {
 				//following note: change side, if last note is 1 or 0 LPs away
-				if (lps.get(i) - lps.get(i - dir) <= 1) {
+				if (abs(lps.get(i) - lps.get(i - dir)) <= 1) {
 					//change side
 					side = 1 - lastSide;
 					if (side != 1 - stemSide) {
