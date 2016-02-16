@@ -47,40 +47,6 @@ public class BeamSlanter {
 	
 	public static final BeamSlanter beamSlanter = new BeamSlanter();
 	
-	//GOON: slants for multiline beams:
-	
-	/*private float[] getSlantsFor16th(int differenceLp) {
-		differenceLp = Math.abs(differenceLp);
-		float[][] ted = { //like in Ted Ross' book
-		{ 0, 0 }, { 0.5F, 0.5F }, { 0.5F, 1.5F }, { 2, 2.5F }, { 2.5F, 2.5F }, { 2.5F, 2.5F },
-			{ 2.5F, 3.5F }, { 2.5F, 4F } };
-		/*float[][] sib = {  //like in sibelius
-			{0,0},
-			{0.5F,0.5F},
-			{0.5F,0.5F},
-			{1.5F,2}
-		};*-/
-		float[][] used = ted;
-		if (used.length - 1 < differenceLp) {
-			return used[used.length - 1];
-		}
-		else {
-			return used[differenceLp];
-		}
-	} */
-	
-	/* private float[] getSlantsFor32nd(int differenceLp) {
-		differenceLp = Math.abs(differenceLp);
-		float[][] ted = { { 0, 0 }, { 0, 0 }, { 2, 2 }, }; //values from Ted Ross' book
-		float[][] used = ted;
-		if (used.length - 1 < differenceLp) {
-			return used[used.length - 1];
-		}
-		else {
-			return used[differenceLp];
-		}
-	} */
-	
 	
 	public Slant compute(int[] notesLp, StemDirection stemDir, float[] stemsXIs, int staffLines) {
 		//Ross, p. 115, row 1: use horizontal beam, if first and last note is on the same LP

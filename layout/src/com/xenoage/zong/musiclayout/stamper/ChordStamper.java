@@ -60,6 +60,8 @@ import com.xenoage.zong.symbols.common.CommonSymbol;
 /**
  * Creates the {@link Stamping}s for a chord.
  * 
+ * TODO (ZONG-91): clean up by using a ChordSpacer/ChordSpacing
+ * 
  * @author Andreas Wenger
  */
 public class ChordStamper {
@@ -105,7 +107,7 @@ public class ChordStamper {
 			
 		}
 
-		//ties and slurs - GOON NOTATOR
+		//ties and slurs
 		for (Slur slur : element.getSlurs()) {
 			SlurWaypoint wp = slur.getWaypoint(element);
 			WaypointPosition pos = slur.getWaypointPosition(element);
@@ -219,7 +221,6 @@ public class ChordStamper {
 		float scaling = (grace ? settings.scalingGrace : 1);
 		ChordWidths chordWidths = (grace ? settings.graceChordWidths : settings.chordWidths);
 
-		//GOON: move into ChordSpacing
 		float leftNoteXMm = getLeftNoteXMm(chordXMm, chord.notes, context.staff.is);
 		
 		//stem

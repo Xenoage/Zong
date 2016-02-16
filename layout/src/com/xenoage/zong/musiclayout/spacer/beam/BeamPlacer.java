@@ -56,6 +56,8 @@ import com.xenoage.zong.musiclayout.notator.beam.lines.BeamRules;
  * should not be exceeded (Ross, p. 98). Also, shortening the stems is usually better
  * than lengthening them (Ross, p. 103).
  * 
+ * TODO (ZONG-92): Support multi-line beams
+ * 
  * @author Andreas Wenger
  */
 public class BeamPlacer {
@@ -302,6 +304,46 @@ public class BeamPlacer {
 			return shorterCandidate; //success
 		else
 			return candidate; //shortening not possible
+	}
+	
+	
+	/**
+	 * Returns true, when the lines of the given beam are completely outside the staff
+	 * (not even touching a staff line).
+	 * @param stemDirection      the direction of the stems
+	 * @param firstStemEndLp     the LP of the endpoint of the first stem
+	 * @param lastStemEndLp      the LP of the endpoint of the last stem  
+	 * @param staffLinesCount    the number of staff lines 
+	 * @param totalBeamHeightIs  the total height of the beam lines (including gaps) in IS
+	 * TODO (ZONG-92): use this method for multiline beams to find the smallest
+	 * possible line distance
+	 */
+	public boolean isBeamOutsideStaff(StemDirection stemDirection, float firstStemEndLp,
+		float lastStemEndLp, int staffLinesCount, float totalBeamHeightIs) {
+		float maxStaffLp = (staffLinesCount - 1) * 2;
+		if (stemDirection == Up) {
+			//beam lines above the staff?
+			if (firstStemEndLp > maxStaffLp + totalBeamHeightIs * 2 &&
+				lastStemEndLp > maxStaffLp + totalBeamHeightIs * 2) {
+				return true;
+			}
+			//beam lines below the staff?
+			if (firstStemEndLp < 0 && lastStemEndLp < 0) {
+				return true;
+			}
+		}
+		else if (stemDirection == Down) {
+			//beam lines above the staff?
+			if (firstStemEndLp > maxStaffLp && lastStemEndLp > maxStaffLp) {
+				return true;
+			}
+			//beam lines below the staff?
+			if (firstStemEndLp < -1 * totalBeamHeightIs * 2 &&
+				lastStemEndLp < -1 * totalBeamHeightIs * 2) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 }

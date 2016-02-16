@@ -46,44 +46,5 @@ public class BeamNotator
 		BeamNotation beamNotation = new BeamNotation(beam, fragments, gapIs, chords);
 		return beamNotation;
 	}
-	
-	
-	/**
-	 * Returns true, when the lines of the given beam are completely outside the staff
-	 * (not even touching a staff line).
-	 * @param stemDirection      the direction of the stems
-	 * @param firstStemEndLp     the LP of the endpoint of the first stem
-	 * @param lastStemEndLp      the LP of the endpoint of the last stem  
-	 * @param staffLinesCount    the number of staff lines 
-	 * @param totalBeamHeightIs  the total height of the beam lines (including gaps) in IS
-	 * GOON: move to BeamPlacer
-	 */
-	public boolean isBeamOutsideStaff(StemDirection stemDirection, float firstStemEndLp,
-		float lastStemEndLp, int staffLinesCount, float totalBeamHeightIs) {
-		float maxStaffLp = (staffLinesCount - 1) * 2;
-		if (stemDirection == Up) {
-			//beam lines above the staff?
-			if (firstStemEndLp > maxStaffLp + totalBeamHeightIs * 2 &&
-				lastStemEndLp > maxStaffLp + totalBeamHeightIs * 2) {
-				return true;
-			}
-			//beam lines below the staff?
-			if (firstStemEndLp < 0 && lastStemEndLp < 0) {
-				return true;
-			}
-		}
-		else if (stemDirection == Down) {
-			//beam lines above the staff?
-			if (firstStemEndLp > maxStaffLp && lastStemEndLp > maxStaffLp) {
-				return true;
-			}
-			//beam lines below the staff?
-			if (firstStemEndLp < -1 * totalBeamHeightIs * 2 &&
-				lastStemEndLp < -1 * totalBeamHeightIs * 2) {
-				return true;
-			}
-		}
-		return false;
-	}
 
 }

@@ -185,7 +185,7 @@ public class DirectionStamper {
 		SP p = computePosition(tempo, context.staff, defaultLPAbove, defaultLPAbove,
 			defaultLPBelow);
 
-		//create text //GOON: move into NOTATION or SPACING
+		//create text
 		FormattedText text = getTempoTextNotNull(tempo, context.layouter.symbols);
 
 		//create stamping
