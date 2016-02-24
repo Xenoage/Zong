@@ -262,7 +262,7 @@ public final class Beam
 	public int getMaxLinesCount() {
 		Fraction minDuration = null;
 		for (BeamWaypoint waypoint : waypoints)
-			minDuration = min(minDuration, waypoint.getChord().getDuration());
+			minDuration = min(minDuration, waypoint.getChord().getDisplayedDuration());
 		return DurationInfo.getFlagsCount(minDuration);
 	}
 

@@ -1,9 +1,19 @@
 package com.xenoage.zong.core.music.beam;
 
+import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static com.xenoage.utils.math.Fraction.fr;
+import static com.xenoage.zong.core.music.Pitch.pi;
+import static com.xenoage.zong.core.music.beam.Beam.beamFromChords;
+import static com.xenoage.zong.core.music.chord.ChordFactory.graceChord;
 import static org.junit.Assert.assertEquals;
-import material.beam.fragments.ChlapikBeamFragments;
+
+import java.util.List;
 
 import org.junit.Test;
+
+import com.xenoage.zong.core.music.chord.Chord;
+
+import material.beam.fragments.ChlapikBeamFragments;
 
 /**
  * Tests for {@link Beam}.
@@ -27,6 +37,14 @@ public class BeamTest {
 		assertEquals(2, source.exampleRow3Col2().getMaxLinesCount());
 		assertEquals(2, source.exampleRow3Col4().getMaxLinesCount());
 		assertEquals(3, source.exampleRow3Col6().getMaxLinesCount());
+	}
+	
+	@Test public void getMaxLinesCountTest_Grace() {
+		List<Chord> chords = alist();
+		chords.add(graceChord(pi(0, 4), fr(1, 32)));
+		chords.add(graceChord(pi(0, 4), fr(1, 32)));
+		Beam beam = beamFromChords(chords);
+		assertEquals(3, beam.getMaxLinesCount());
 	}
 
 }

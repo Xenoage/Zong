@@ -22,7 +22,11 @@ public class ChordFactory {
 	}
 
 	public static Chord graceChord(Pitch pitch) {
-		Chord chord = new Chord(Note.notes(pitch), new Grace(true, _1$8));
+		return graceChord(pitch, _1$8);
+	}
+	
+	public static Chord graceChord(Pitch pitch, Fraction displayedDuration) {
+		Chord chord = new Chord(Note.notes(pitch), new Grace(true, displayedDuration));
 		return chord;
 	}
 
