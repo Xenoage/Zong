@@ -64,13 +64,21 @@ public final class MxlNote
 		while (reader.openNextChildElement()) {
 			String n = reader.getElementName();
 			//first element determines note content
-			if (content == null) {
-				if (n.equals(MxlGraceNote.elemName))
-					content = MxlGraceNote.read(reader);
-				else if (n.equals(MxlCueNote.elemName))
-					content = MxlCueNote.read();
-				else
-					content = MxlNormalNote.read();
+			//but, be tolerant for errors, and also accept late grace or cue elements
+			if (n.equals(MxlGraceNote.elemName)) {
+				MxlGraceNote graceNote = MxlGraceNote.read(reader);
+				if (content instanceof MxlNormalNote) //grace element too late, but accept it
+					graceNote.setFullNote(((MxlNormalNote) content).getFullNote());
+				content = graceNote;
+			}
+			else if (n.equals(MxlCueNote.elemName)) {
+				MxlCueNote cueNote = MxlCueNote.read();
+				if (content instanceof MxlNormalNote) //cue element too late, but accept it
+					cueNote.setFullNote(((MxlNormalNote) content).getFullNote());
+				content = cueNote;
+			}
+			else if (content == null) {
+				content = MxlNormalNote.read();
 			}
 			//read content of child elements
 			if (n.equals(MxlStem.elemName))
