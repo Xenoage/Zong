@@ -44,7 +44,7 @@ public class FramesSpacer {
 			Size2f frameSize;
 			if (iFrame < target.areas.size()) {
 				//there is another existing score frame
-				frameSize = target.getArea(iFrame).size;
+				frameSize = target.getArea(iFrame).sizeMm;
 			}
 			else {
 				//there is no another existing score frame
@@ -58,7 +58,7 @@ public class FramesSpacer {
 				}
 				else {
 					//still material to layout and additional frames requested. create one.
-					frameSize = target.additionalArea.size;
+					frameSize = target.additionalArea.sizeMm;
 					additionalFrameIteration = true;
 				}
 			}

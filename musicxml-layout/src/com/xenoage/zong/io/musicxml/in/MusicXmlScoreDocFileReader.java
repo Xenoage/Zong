@@ -93,15 +93,7 @@ public class MusicXmlScoreDocFileReader
 		if (oLayoutFormat instanceof LayoutFormat) {
 			layoutFormat = (LayoutFormat) oLayoutFormat;
 		}
-
-		//use default symbol pool
-		SymbolPool symbolPool = zongPlatformUtils().getSymbolPool();
-
-		//load layout settings - TODO: load settings one time from "data/layout/default.xml"
-		LayoutSettings layoutSettings = defaultLayoutSettings; //LayoutSettingsReader.read("data/layout/default.xml");
-
-		//create layout defaults
-		LayoutDefaults layoutDefaults = new LayoutDefaults(layoutFormat, symbolPool, layoutSettings);
+		LayoutDefaults layoutDefaults = new LayoutDefaults(layoutFormat);
 
 		//create the document
 		ScoreDoc ret = new ScoreDoc(score, layoutDefaults);
@@ -114,10 +106,8 @@ public class MusicXmlScoreDocFileReader
 			pageFormat.getMargins().getTop() + frameSize.height / 2);
 
 		//layout the score to find out the needed space
-		Context context = new Context(score, symbolPool, layoutSettings);
 		Target target = Target.completeLayoutTarget(new ScoreLayoutArea(frameSize));
-		ScoreLayouter layouter = new ScoreLayouter(context, target);
-		ScoreLayout scoreLayout = layouter.createScoreLayout();
+		ScoreLayout scoreLayout = new ScoreLayouter(ret, target).createScoreLayout();
 
 		//create and fill at least one page
 		if (scoreLayout.frames.size() > 1) {

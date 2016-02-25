@@ -43,42 +43,4 @@ public class ScoreDoc
 		this.layout = new Layout(layoutDefaults);
 	}
 
-	/**
-	 * Sets the score and the updated layout.
-	 * It is not possible to change the score without also updating the layout.
-	 */
-	public void setScoreAndLayout(Score score, Layout layout) {
-		//check consistency
-		/* for (Score sfcScore : layout.scoreFrameChains.keySet()) {
-			if (sfcScore != score)
-				throw new IllegalArgumentException("Unknown score");
-		} */
-		//save score and layout
-		this.score = score;
-		this.layout = layout;
-		layoutChanged();
-	}
-
-	/**
-	 * This method is called when the layout was changed.
-	 */
-	void layoutChanged() {
-	}
-
-	/**
-	 * Sets the layout of the document.
-	 */
-	public void setLayout(Layout layout) {
-		this.layout = layout;
-		layoutChanged();
-	}
-
-	/**
-	 * Gets the {@link ScoreLayout}.
-	 */
-	public ScoreLayout getScoreLayout() {
-		ScoreFrameChain chain = layout.getScoreFrameChain(score);
-		return chain.getScoreLayout();
-	}
-
 }

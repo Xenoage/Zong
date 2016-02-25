@@ -16,6 +16,8 @@ import java.util.Map;
 
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.beam.Beam;
+import com.xenoage.zong.documents.ScoreDoc;
+import com.xenoage.zong.layout.LayoutDefaults;
 import com.xenoage.zong.musiclayout.ScoreFrameLayout;
 import com.xenoage.zong.musiclayout.ScoreLayout;
 import com.xenoage.zong.musiclayout.continued.ContinuedElement;
@@ -45,11 +47,12 @@ public class ScoreLayouter {
 
 
 	/**
-	 * Creates a {@link ScoreLayout} for the given context and target.
-	 * If an error occurs, an error layout is returned.
+	 * Creates a {@link ScoreLayouter} for the given score document and target.
 	 */
-	public static ScoreLayout createScoreLayout(Context context, Target target) {
-		return new ScoreLayouter(context, target).createScoreLayout();
+	public ScoreLayouter(ScoreDoc doc, Target target) {
+		LayoutDefaults defaults = doc.getLayout().getDefaults();
+		this.context = new Context(doc.getScore(), defaults.getSymbolPool(), defaults.getLayoutSettings());
+		this.target = target;
 	}
 
 	public ScoreLayouter(Context context, Target target) {
@@ -57,6 +60,10 @@ public class ScoreLayouter {
 		this.target = target;
 	}
 
+	/**
+	 * Creates the {@link ScoreLayout}. If an error occurs, an error layout
+	 * is returned.
+	 */
 	public ScoreLayout createScoreLayout() {
 		try {
 			layout = createLayoutWithExceptions();

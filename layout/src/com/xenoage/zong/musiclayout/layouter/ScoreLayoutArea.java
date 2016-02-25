@@ -16,7 +16,7 @@ import com.xenoage.zong.musiclayout.spacer.system.fill.SystemFiller;
 @AllArgsConstructor @RequiredArgsConstructor
 public class ScoreLayoutArea {
 
-	public final Size2f size;
+	public final Size2f sizeMm;
 	public SystemFiller hFill = ScoreFrame.defaultHFill;
 	public FrameFiller vFill = ScoreFrame.defaultVFill;
 

@@ -3,12 +3,14 @@ package com.xenoage.zong.io.musicxml.in.util;
 import static com.xenoage.utils.collections.CollectionUtils.map;
 import static com.xenoage.utils.log.Log.log;
 import static com.xenoage.utils.log.Report.warning;
+import static com.xenoage.utils.math.Fraction._0;
 
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Stack;
 
+import com.xenoage.utils.math.Fraction;
 import com.xenoage.utils.math.VSide;
 import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.music.chord.Chord;
@@ -28,14 +30,16 @@ import com.xenoage.zong.io.musicxml.in.readers.Context;
  * of a long tie (which means that it has both a start and a stop
  * element) provided the start element for the following tied first
  * and then a stop element for the preceding tied.
- * To support this case, we use a queue of tieds for each pitch.
- * This ensures that tieds created earlier will be closed earlier. 
- * 
+ * To support this case, we remember up to two tieds. When a tied
+ * is closed at the same musical position where the last one was
+ * opened, the earlier tied is used instead.
+ *  
  * @author Andreas Wenger
  */
 public class OpenUnnumberedTieds {
 
-	private Map<Pitch, Queue<OpenSlur>> openTieds = map();
+	private Map<Pitch, OpenSlur> openTieds = map();
+	private Map<Pitch, OpenSlur> openEarlierTieds = map();
 	
 	/**
 	 * Starts a tie.
@@ -43,17 +47,14 @@ public class OpenUnnumberedTieds {
 	public void startTied(SlurWaypoint wp, VSide side) {
 		Chord chord = wp.getChord();
 		Pitch pitch = chord.getNotes().get(wp.getNoteIndex()).getPitch();
-		//get stack for this pitch
-		Queue<OpenSlur> pitchTieds = openTieds.get(pitch);
-		if (pitchTieds == null) {
-			pitchTieds = new LinkedList<OpenSlur>();
-			openTieds.put(pitch, pitchTieds);
-		}
+		//already a tied open for this pitch? then remember it, too
+		if (openTieds.get(pitch) != null)
+			openEarlierTieds.put(pitch, openTieds.get(pitch));
 		//add new tied
 		OpenSlur openTied = new OpenSlur();
 		openTied.type = SlurType.Tie;
 		openTied.start = new OpenSlur.Waypoint(wp, side);
-		pitchTieds.add(openTied);
+		openTieds.put(pitch, openTied);
 	}
 	
 	/**
@@ -63,13 +64,23 @@ public class OpenUnnumberedTieds {
 	public OpenSlur stopTied(SlurWaypoint wp, VSide side, Context context) {
 		Chord chord = wp.getChord();
 		Pitch pitch = chord.getNotes().get(wp.getNoteIndex()).getPitch();
-		//get stack for this pitch
-		Queue<OpenSlur> pitchTieds = openTieds.get(pitch);
-		if (pitchTieds == null || pitchTieds.size() == 0) {
+		//get tied for this pitch
+		OpenSlur openTied = openTieds.remove(pitch);
+		if (openTied == null) {
 			log(warning("Can not stop non-existing tied at " + context.getMp()));
 			return null;
 		}
-		OpenSlur openTied = pitchTieds.poll();
+		//is tied closed at the same musical position where it was opened?
+		//then close the earlier open tied instead, if there is one
+		if (openTied.start.wp.getChord().getMP().equals(context.getMp())) {
+			openTieds.put(pitch, openTied); //remember last tied
+			openTied = openEarlierTieds.remove(pitch); //use earlier tied instead
+			if (openTied == null) {
+				log(warning("Tied can not be stopped on starting position, " +
+					"and there is no earlier tied, at " + context.getMp()));
+				return null;
+			}
+		}
 		openTied.stop = new OpenSlur.Waypoint(wp, side);
 		return openTied;
 	}

@@ -182,7 +182,7 @@ import lombok.Data;
 		
 		Context context = new Context(score, symbolPool, layoutSettings);
 		Target target = new Target(areas, areas.get(areas.size() - 1), false);
-		ScoreLayout scoreLayout = ScoreLayouter.createScoreLayout(context, target);
+		ScoreLayout scoreLayout = new ScoreLayouter(context, target).createScoreLayout();
 
 		//set updated layout
 		chain.setScoreLayout(scoreLayout);

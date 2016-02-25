@@ -3,6 +3,8 @@ package com.xenoage.zong.musiclayout.layouter;
 import java.util.Collections;
 import java.util.List;
 
+import com.xenoage.utils.math.geom.Size2f;
+
 import lombok.AllArgsConstructor;
 
 /**
@@ -27,6 +29,15 @@ public class Target {
 	 */
 	public static Target completeLayoutTarget(ScoreLayoutArea area) {
 		return new Target(Collections.<ScoreLayoutArea>emptyList(), area, true);
+	}
+	
+	/**
+	 * Creates a target for a complete layout with A4 paper size (2 cm margins).
+	 */
+	public static Target targetA4() {
+		float m = 20;
+		Size2f s = new Size2f(210 - 2 * m, 297 - 2 * m);
+		return completeLayoutTarget(new ScoreLayoutArea(s));
 	}
 	
 	/**
