@@ -69,9 +69,6 @@ public final class OtherReader {
 	 * Returns the duration as a {@link Fraction} from the given duration in divisions.
 	 */
 	public static Fraction readDuration(int duration, int divisionsPerQuarter) {
-		if (duration == 0) {
-			throw new RuntimeException("Element has a duration of 0.");
-		}
 		Fraction ret = fr(duration, 4 * divisionsPerQuarter);
 		return ret;
 	}

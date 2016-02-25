@@ -3,6 +3,8 @@ package com.xenoage.zong.io.musicxml.in.readers;
 import static com.xenoage.utils.NullUtils.notNull;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.iterators.It.it;
+import static com.xenoage.utils.log.Log.log;
+import static com.xenoage.utils.log.Report.warning;
 import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.position.MP.getMP;
@@ -131,6 +133,12 @@ public final class ChordReader {
 		}
 		else if (mxlFirstCueNote != null) {
 			duration = readDuration(mxlFirstCueNote.getDuration(), context.getDivisions());
+		}
+		
+		//when duration is 0, ignore the chord
+		if (false == duration.isGreater0()) {
+			log(warning("duration of chord is 0 at " + context.getMp()));
+			return;
 		}
 
 		//create new chord or rest

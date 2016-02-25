@@ -106,10 +106,8 @@ public final class Context {
 		Fraction newBeat = this.mp.beat.add(beat);
 		//never step back behind 0
 		if (newBeat.getNumerator() < 0) {
-			if (settings.isIgnoringErrors())
-				newBeat = _0;
-			else
-				throw new MusicReaderException("Step back behind beat 0", this);
+			log(warning("Step back behind beat 0; at " + mp));
+			newBeat = _0;
 		}
 		this.mp = this.mp.withBeat(newBeat);
 	}
@@ -219,9 +217,7 @@ public final class Context {
 		}
 		//this point must not already be set
 		if ((start && openSlur.start != null) || (stop && openSlur.stop != null)) {
-			if (false == settings.isIgnoringErrors())
-				throw new MusicReaderException(wpPos + " waypoint already set for " + type + " " + number,
-					this);
+			log(warning(wpPos + " waypoint already set for " + type + " " + number + " at " + mp));
 		}
 		OpenSlur.Waypoint openSlurWP = new OpenSlur.Waypoint(wp, side);
 		if (start)
