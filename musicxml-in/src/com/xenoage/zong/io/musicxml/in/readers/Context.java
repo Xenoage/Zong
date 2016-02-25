@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.xenoage.utils.kernel.Range;
+import com.xenoage.utils.log.Report;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.utils.math.VSide;
 import com.xenoage.zong.commands.core.music.ColumnElementWrite;
@@ -201,7 +202,8 @@ public final class Context {
 	 */
 	public void registerSlur(SlurType type, WaypointPosition wpPos,
 		int number, SlurWaypoint wp, VSide side) {
-		checkNumber1to6(number);
+		if (false == checkNumber1to6(number))
+			return;
 		//ignore continue waypoints at the moment
 		if (wpPos == WaypointPosition.Continue)
 			return;
@@ -268,14 +270,15 @@ public final class Context {
 	}
 
 	/**
-	 * Checks if the given beam/slur/tie number is valid,
-	 * i.e. between 1 and 6. Otherwise an
-	 * {@link IllegalArgumentException} is thrown.
+	 * Returns true, if the given beam/slur/tie number is valid,
+	 * i.e. between 1 and 6.
 	 */
-	private void checkNumber1to6(int number) {
+	private boolean checkNumber1to6(int number) {
 		if (number < 1 || number > 6) {
-			throw new IllegalArgumentException("Number must be between 1 and 6.");
+			log(warning("beam/slur number is not valid: " + number + "; at " + mp));
+			return false;
 		}
+		return true;
 	}
 
 	/**
@@ -447,12 +450,14 @@ public final class Context {
 	public ClosedVolta closeVolta(boolean rightHook) {
 		OpenVolta openVolta = openElements.getOpenVolta();
 		if (openVolta == null) {
-			if (settings.isIgnoringErrors())
-				return null;
-			else 
-				throw new InconsistentScoreException("No volta open at " + mp);
+			log(warning("No volta open at " + mp));
+			return null;
 		}
 		int length = mp.measure - openVolta.startMeasure + 1;
+		if (length < 1) {
+			log(warning("Invalid volta at " + mp));
+			return null;
+		}
 		Volta volta = new Volta(length, openVolta.numbers, openVolta.caption, rightHook);
 		openElements.setOpenVolta(null);
 		return new ClosedVolta(volta, openVolta.startMeasure);
