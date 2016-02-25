@@ -43,8 +43,10 @@ public final class MxlNormalNote
 
 	@Override public void check(XmlReader reader) {
 		fullNote.check(reader);
-		if (duration <= 0)
-			throw reader.dataException("duration <= 0");
+		if (duration < 0) {
+			//it should also be not 0, but we accept it
+			throw reader.dataException("duration < 0");
+		}
 	}
 
 	@Override public void write(XmlWriter writer) {
