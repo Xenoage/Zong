@@ -43,6 +43,8 @@ public class VoltaReader {
 		int min = Integer.MAX_VALUE;
 		int max = Integer.MIN_VALUE;
 		for (String n : numbers) {
+			//read only numbers. accept "1." for example, even though an integer is required
+			n = n.replaceAll("[^0-9]", "");
 			int i = Integer.parseInt(n.trim());
 			min = Math.min(min, i);
 			max = Math.max(max, i);
