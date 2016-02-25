@@ -2,6 +2,8 @@ package com.xenoage.zong.io.musicxml.in.readers;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.iterators.It.it;
+import static com.xenoage.utils.log.Log.log;
+import static com.xenoage.utils.log.Report.warning;
 import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.zong.core.position.MP.atBeat;
 import static com.xenoage.zong.io.musicxml.in.util.CommandPerformer.execute;
@@ -249,6 +251,10 @@ public final class Context {
 		if (slur.start == null || slur.stop == null)
 			return false;
 		Fraction gap = score.getGapBetween(slur.start.wp.getChord(), slur.stop.wp.getChord());
+		if (gap == null) {
+			log(warning("Can not determine gap between slurred/tied elements; slur/tie is ignored at" + mp));
+			return false;
+		}
 		if (slur.type == SlurType.Slur) {
 			//slur must end after the start chord
 			return gap.compareTo(_0) >= 0;

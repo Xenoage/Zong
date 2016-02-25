@@ -2,6 +2,8 @@ package com.xenoage.zong.core;
 
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.kernel.Range.rangeReverse;
+import static com.xenoage.utils.log.Log.log;
+import static com.xenoage.utils.log.Report.warning;
 import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.header.ScoreHeader.scoreHeader;
@@ -25,6 +27,8 @@ import com.xenoage.utils.collections.SortedList;
 import com.xenoage.utils.document.Document;
 import com.xenoage.utils.document.command.CommandPerformer;
 import com.xenoage.utils.document.io.SupportedFormats;
+import com.xenoage.utils.log.Log;
+import com.xenoage.utils.log.Report;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.utils.math.MathUtils;
 import com.xenoage.zong.core.format.ScoreFormat;
@@ -426,12 +430,17 @@ public final class Score
 	
 	/**
 	 * Gets the gap in beats between the end of the left element and
-	 * the start of the right element.
+	 * the start of the right element. If it can not be determined, because
+	 * the musical position of one of the elements is unknown, null is returned.
 	 */
 	public Fraction getGapBetween(VoiceElement left, VoiceElement right) {
 		MP mpLeft = MP.getMP(left);
+		if (mpLeft == null)
+			return null;
 		mpLeft = mpLeft.withBeat(mpLeft.beat.add(left.getDuration()));
 		MP mpRight = MP.getMP(right);
+		if (mpRight == null)
+			return null;
 		if (mpRight.measure == mpLeft.measure) {
 			//simple case: same measure. just subtract beats
 			return mpRight.beat.sub(mpLeft.beat);
