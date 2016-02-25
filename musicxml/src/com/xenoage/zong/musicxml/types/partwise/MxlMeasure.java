@@ -32,7 +32,6 @@ public final class MxlMeasure {
 			musicData.readElement(reader);
 			reader.closeElement();
 		}
-		musicData.check(reader);
 		return new MxlMeasure(musicData, number);
 	}
 

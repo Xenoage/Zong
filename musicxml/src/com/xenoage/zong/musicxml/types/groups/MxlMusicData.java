@@ -66,11 +66,6 @@ public final class MxlMusicData {
 		if (item != null)
 			content.add(item);
 	}
-	
-	public void check(XmlReader reader) {
-		if (content.size() < 1)
-			throw reader.dataException("no content");
-	}
 
 	public void write(XmlWriter writer) {
 		for (MxlMusicDataContent item : content) {
