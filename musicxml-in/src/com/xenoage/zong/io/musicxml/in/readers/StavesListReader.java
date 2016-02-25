@@ -5,6 +5,8 @@ import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.collections.CollectionUtils.map;
 import static com.xenoage.utils.iterators.MultiListIt.multiListIt;
 import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.utils.log.Log.log;
+import static com.xenoage.utils.log.Report.warning;
 import static com.xenoage.zong.io.musicxml.Equivalents.bracketGroupStyles;
 
 import java.util.HashMap;
@@ -148,7 +150,7 @@ public class StavesListReader {
 		if (type == MxlStartStop.Start) {
 			//group begins here
 			if (openBarlineGroups[number] != null || openBracketGroups[number] != null) {
-				throw new RuntimeException("score-group \"" + number + "\" was already opened");
+				log(warning("part-group \"" + number + "\" was already opened"));
 			}
 			//read group-barline and group-symbol (bracket)
 			BarlineGroup.Style barlineStyle = readBarlineGroupStyle(mxlPartGroup.getGroupBarline());
@@ -168,7 +170,7 @@ public class StavesListReader {
 		else if (type == MxlStartStop.Stop) {
 			//group ends here
 			if (openBarlineGroups[number] == null && openBracketGroups[number] == null) {
-				throw new RuntimeException("score-group \"" + number + "\" was closed before it was opened");
+				log(warning("score-group \"" + number + "\" was closed before it was opened"));
 			}
 			//close open barline group and/or bracket group
 			PartsBarlineGroup closedBarlineGroup = null;
