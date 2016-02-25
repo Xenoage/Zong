@@ -62,19 +62,27 @@ public class OpenBeams {
 	 */
 	public void continueBeam(Chord chord, String voice, Context context) {
 		OpenBeam openBeam = getOpenBeamTolerant(voice, chord);
-		if (openBeam == null)
-			throw new MusicReaderException("Can not continue beam which was not started", context);
-		openBeam.addChord(chord);
+		if (openBeam == null) {
+			log(warning("Can not continue beam which was not started; starting a new one at " +
+				context.getMp()));
+			beginBeam(chord, voice, context);
+		}
+		else {
+			openBeam.addChord(chord);
+		}
 	}
 	
 	/**
-	 * Ends an existing beam with the given chord
-	 * and returnes the beamed chords.
+	 * Ends an existing beam with the given chord and returnes the beamed chords.
+	 * In case of an error, null is returned.
 	 */
 	public List<Chord> endBeam(Chord chord, String voice, Context context) {
 		OpenBeam openBeam = getOpenBeamTolerant(voice, chord);
-		if (openBeam == null)
-			throw new MusicReaderException("Can not end beam which was not started", context);
+		if (openBeam == null) {
+			log(warning("Can not end beam which was not started; ignoring beam ending at " +
+				context.getMp()));
+			return null;
+		}
 		openBeam.addChord(chord);
 		openBeams.get(getCategory(chord)).remove(voice);
 		return openBeam.getChords();

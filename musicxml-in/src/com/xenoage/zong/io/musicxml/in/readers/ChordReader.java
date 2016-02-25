@@ -192,7 +192,8 @@ public final class ChordReader {
 				case End: {
 					//close the beam and create it
 					List<Chord> beamedChords = openBeams.endBeam(chord, mxlVoice, context);
-					context.writeBeam(beamedChords);
+					if (beamedChords != null)
+						context.writeBeam(beamedChords);
 				}
 			}
 		}
