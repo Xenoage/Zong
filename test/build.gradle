@@ -7,15 +7,19 @@ dependencies {
 	testCompile 'com.googlecode.cedar-common:cpsuite:1.2.6'
 }
 
+test {
+	exclude '**/MusicXmlMassTest.class'
+}
+
 sourceSets {
 	test {
 		java {
 			srcDir 'test'
-			//srcDir 'nightly'
+			srcDir 'nightly'
 		}
 		resources {
 			srcDir 'test'
-			//srcDir 'nightly'
+			srcDir 'nightly'
 		}
 	}
 }
