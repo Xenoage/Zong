@@ -112,17 +112,19 @@ public final class ChordReader {
 		MxlNormalNote mxlFirstNormalNote = null;
 		MxlCueNote mxlFirstCueNote = null;
 		MxlGraceNote mxlFirstGraceNote = null;
-		boolean cue = false;
+		boolean isCue = false;
+		boolean isGrace = false;
 		if (mxlFirstNoteType == MxlNoteContentType.Normal) {
 			mxlFirstNormalNote = (MxlNormalNote) mxlNotes.get(0).getContent();
 		}
 		else if (mxlFirstNoteType == MxlNoteContentType.Cue) {
 			mxlFirstCueNote = (MxlCueNote) mxlNotes.get(0).getContent();
-			cue = true;
+			isCue = true;
 		}
 		else if (mxlFirstNoteType == MxlNoteContentType.Grace) {
 			mxlFirstGraceNote = (MxlGraceNote) mxlNotes.get(0).getContent();
-			cue = false; //may also be true later, see (TODO) "Zong-Library/Discussions/MusicXML/Note - cue vs grace.txt"
+			isGrace = true;
+			isCue = false; //may also be true later, see (TODO) "Zong-Library/Discussions/MusicXML/Note - cue vs grace.txt"
 		}
 		MxlFullNoteContentType mxlFNCType = mxlFirstFullNote.getContent().getFullNoteContentType();
 
@@ -135,8 +137,8 @@ public final class ChordReader {
 			duration = readDuration(mxlFirstCueNote.getDuration(), context.getDivisions());
 		}
 		
-		//when duration is 0, ignore the chord
-		if (false == duration.isGreater0()) {
+		//when duration of normal note is 0, ignore the chord
+		if (false == isGrace && false == duration.isGreater0()) {
 			log(warning("duration of chord is 0 at " + context.getMp()));
 			return;
 		}
@@ -158,13 +160,13 @@ public final class ChordReader {
 			else {
 				chord = new Chord(alist(new Note(pitch)), duration);
 			}
-			chord.setCue(cue);
+			chord.setCue(isCue);
 			chordOrRest = chord;
 		}
 		else if (mxlFNCType == MxlFullNoteContentType.Rest) {
 			//create a rest
 			Rest rest = new Rest(duration);
-			rest.setCue(cue);
+			rest.setCue(isCue);
 			chordOrRest = rest;
 		}
 	}
