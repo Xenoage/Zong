@@ -1,6 +1,5 @@
 package com.xenoage.zong.io.musicxml.in.readers;
 
-import static com.xenoage.utils.collections.ArrayUtils.containsOnlyNull;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.collections.CollectionUtils.map;
 import static com.xenoage.utils.iterators.MultiListIt.multiListIt;
@@ -12,9 +11,6 @@ import static com.xenoage.zong.io.musicxml.Equivalents.bracketGroupStyles;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import com.xenoage.zong.core.music.Part;
 import com.xenoage.zong.core.music.Staff;
@@ -36,6 +32,9 @@ import com.xenoage.zong.musicxml.types.choice.MxlPartListContent.PartListContent
 import com.xenoage.zong.musicxml.types.enums.MxlStartStop;
 import com.xenoage.zong.musicxml.types.partwise.MxlMeasure;
 import com.xenoage.zong.musicxml.types.partwise.MxlPart;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 /**
  * This reads an empty {@link StavesList} from the
@@ -86,8 +85,8 @@ public class StavesListReader {
 		List<PartsBarlineGroup> barlineGroups = alist();
 		List<PartsBracketGroup> bracketGroups = alist();
 		//open groups with number as index
-		PartsBarlineGroup[] openBarlineGroups = new PartsBarlineGroup[6];
-		PartsBracketGroup[] openBracketGroups = new PartsBracketGroup[6];
+		Map<String, PartsBarlineGroup> openBarlineGroups = map();
+		Map<String, PartsBracketGroup> openBracketGroups = map();
 		//read score-part and part-group elements
 		//each score-part is a part in our application
 		MxlPartList mxlPartList = mxlScore.getScoreHeader().getPartList();
@@ -114,10 +113,9 @@ public class StavesListReader {
 				}
 			}
 		}
-		//if there are unclosed score-groups, throw an exception
-		if (false == containsOnlyNull(openBarlineGroups) ||
-			false == containsOnlyNull(openBracketGroups)) {
-			throw new IllegalStateException("There are unclosed score-groups");
+		//if there are unclosed score-groups, create a warning
+		if (openBarlineGroups.size() > 0 || openBracketGroups.size() > 0) {
+			log(warning("There are unclosed score-groups"));
 		}
 		//count the number of staves and measures used by each part
 		HashMap<String, Integer> partsStaves = countStaves(mxlScore);
@@ -138,51 +136,53 @@ public class StavesListReader {
 
 	/**
 	 * Reads a part-group element.
-	 * If a group was closed, it is returned. If a group was opened,
+	 * If a group was closed, it is returned. If a group was opened or it can not be read,
 	 * null is returned. While MusicXML groups can be combined barline and bracket groups,
 	 * these are separated values in Zong!. This is why they are returned as a tuple
 	 * (with null if not set).
 	 */
 	private PartsGroups readPartGroup(int currentPartIndex, MxlPartGroup mxlPartGroup,
-		PartsBarlineGroup[] openBarlineGroups, PartsBracketGroup[] openBracketGroups) {
-		int number = mxlPartGroup.getNumber();
+		Map<String, PartsBarlineGroup> openBarlineGroups, Map<String, PartsBracketGroup> openBracketGroups) {
+		String number = mxlPartGroup.getNumber();
 		MxlStartStop type = mxlPartGroup.getType();
+		PartsBarlineGroup openBarlineGroup = openBarlineGroups.get(number);
+		PartsBracketGroup openBracketGroup = openBracketGroups.get(number);
 		if (type == MxlStartStop.Start) {
 			//group begins here
-			if (openBarlineGroups[number] != null || openBracketGroups[number] != null) {
+			if (openBarlineGroup != null || openBracketGroup != null) {
 				log(warning("part-group \"" + number + "\" was already opened"));
 			}
 			//read group-barline and group-symbol (bracket)
 			BarlineGroup.Style barlineStyle = readBarlineGroupStyle(mxlPartGroup.getGroupBarline());
 			if (barlineStyle != BarlineGroup.Style.Single) {
-				openBarlineGroups[number] = new PartsBarlineGroup();
-				openBarlineGroups[number].startPartIndex = currentPartIndex;
-				openBarlineGroups[number].style = barlineStyle;
+				openBarlineGroups.put(number, openBarlineGroup = new PartsBarlineGroup());
+				openBarlineGroup.startPartIndex = currentPartIndex;
+				openBarlineGroup.style = barlineStyle;
 			}
 			BracketGroup.Style bracketStyle = readBracketGroupStyle(mxlPartGroup.getGroupSymbol());
 			if (bracketStyle != BracketGroup.Style.None) {
-				openBracketGroups[number] = new PartsBracketGroup();
-				openBracketGroups[number].startPartIndex = currentPartIndex;
-				openBracketGroups[number].style = bracketStyle;
+				openBracketGroups.put(number, openBracketGroup = new PartsBracketGroup());
+				openBracketGroup.startPartIndex = currentPartIndex;
+				openBracketGroup.style = bracketStyle;
 			}
 			return null;
 		}
 		else if (type == MxlStartStop.Stop) {
 			//group ends here
-			if (openBarlineGroups[number] == null && openBracketGroups[number] == null) {
+			if (openBarlineGroup == null && openBracketGroup == null) {
 				log(warning("score-group \"" + number + "\" was closed before it was opened"));
 			}
 			//close open barline group and/or bracket group
 			PartsBarlineGroup closedBarlineGroup = null;
-			if (openBarlineGroups[number] != null) {
-				closedBarlineGroup = openBarlineGroups[number];
-				openBarlineGroups[number] = null;
+			if (openBarlineGroup != null) {
+				closedBarlineGroup = openBarlineGroup;
+				openBarlineGroups.remove(number);
 				closedBarlineGroup.stopPartIndex = currentPartIndex - 1;
 			}
 			PartsBracketGroup closedBracketGroup = null;
-			if (openBracketGroups[number] != null) {
-				closedBracketGroup = openBracketGroups[number];
-				openBracketGroups[number] = null;
+			if (openBracketGroup != null) {
+				closedBracketGroup = openBracketGroup;
+				openBracketGroups.remove(number);
 				closedBracketGroup.stopPartIndex = currentPartIndex - 1;
 			}
 			PartsGroups ret = new PartsGroups();

@@ -31,9 +31,9 @@ public final class MxlPartGroup
 	@MaybeNull private final MxlGroupSymbol groupSymbol;
 	@MaybeNull private final MxlGroupBarline groupBarline;
 	@NonNull private final MxlStartStop type;
-	private final int number;
+	private final String number;
 
-	private static final int defaultNumber = 1;
+	private static final String defaultNumber = "1";
 
 
 	@Override public PartListContentType getPartListContentType() {
@@ -43,7 +43,7 @@ public final class MxlPartGroup
 	@NonNull public static MxlPartGroup read(XmlReader reader) {
 		//attributes
 		MxlStartStop type = MxlStartStop.read(reader.getAttributeNotNull("type"));
-		int number = notNull(reader.getAttributeInt("number"), defaultNumber);
+		String number = notNull(reader.getAttribute("number"), defaultNumber);
 		//elements
 		String groupName = null;
 		String groupAbbreviation = null;
