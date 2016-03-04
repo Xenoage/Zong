@@ -1,16 +1,15 @@
 package com.xenoage.zong.musicxml.types;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
 import com.xenoage.utils.annotations.MaybeNull;
-import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.attributes.MxlFont;
 import com.xenoage.zong.musicxml.types.groups.MxlLayout;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * MusicXML defaults.
@@ -24,7 +23,7 @@ public final class MxlDefaults {
 	public static final String elemName = "defaults";
 
 	@MaybeNull private MxlScaling scaling;
-	@NonNull private MxlLayout layout;
+	@MaybeNull private MxlLayout layout;
 	@MaybeNull private MxlFont wordFont;
 	@MaybeNull private MxlLyricFont lyricFont;
 
