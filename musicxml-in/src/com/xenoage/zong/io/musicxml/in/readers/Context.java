@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.xenoage.utils.kernel.Range;
-import com.xenoage.utils.log.Report;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.utils.math.VSide;
 import com.xenoage.zong.commands.core.music.ColumnElementWrite;
@@ -310,12 +309,13 @@ public final class Context {
 	 * Gets the voice index for the given MusicXML voice and MusicXML staff.
 	 * This is needed, because voices are defined for staves in this program, while
 	 * voices are defined for parts in MusicXML. If the voice does not exist yet, it
-	 * is created.
+	 * is created. If the staff does not exist, a {@link MusicReaderException} is thrown.
 	 * @param mxlStaff  0-based staff index, found in staff-element minus 1
 	 * @param mxlVoice  voice id, found in voice-element
 	 * @return the updated context and the voice index
 	 */
-	public int getVoice(int mxlStaff, String mxlVoice) {
+	public int getVoice(int mxlStaff, String mxlVoice)
+		throws MusicReaderException {
 		try {
 			//gets the voices list for the given staff
 			List<String> voices = voiceMappings.get(mxlStaff);
@@ -328,8 +328,8 @@ public final class Context {
 			voices.add(mxlVoice);
 			return voices.size() - 1;
 		} catch (IndexOutOfBoundsException ex) {
-			throw new RuntimeException("MusicXML staff " + mxlStaff + " and voice \"" + mxlVoice +
-				"\" are invalid for the current position. Enough staves defined in attributes?");
+			throw new MusicReaderException("MusicXML staff " + mxlStaff + " and voice \"" + mxlVoice +
+				"\" are invalid for the current position. Enough staves defined in attributes?", this);
 		}
 	}
 

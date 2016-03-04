@@ -22,6 +22,7 @@ import com.xenoage.zong.core.music.chord.Grace;
 import com.xenoage.zong.core.music.chord.Note;
 import com.xenoage.zong.core.music.chord.Stem;
 import com.xenoage.zong.core.music.rest.Rest;
+import com.xenoage.zong.io.musicxml.in.util.MusicReaderException;
 import com.xenoage.zong.io.musicxml.in.util.OpenBeams;
 import com.xenoage.zong.musicxml.types.MxlBeam;
 import com.xenoage.zong.musicxml.types.MxlNote;
@@ -78,7 +79,13 @@ public final class ChordReader {
 		if (editorialVoice != null) {
 			mxlVoice = editorialVoice.getVoice();
 			if (mxlVoice != null) {
-				staffVoice = context.getVoice(staff, mxlVoice);
+				try {
+					staffVoice = context.getVoice(staff, mxlVoice);
+				}
+				catch (MusicReaderException ex) {
+					log(warning(ex.getMessage()));
+					return;
+				}
 			}
 		}
 		
