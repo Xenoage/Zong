@@ -47,7 +47,7 @@ public final class MxlDynamics
 
 	/**
 	 * Reads the given element and returns it, or returns null if
-	 * the element is not supported.
+	 * the element is empty or not supported.
 	 */
 	@MaybeNull public static MxlDynamics read(XmlReader reader) {
 		//attributes
@@ -55,7 +55,7 @@ public final class MxlDynamics
 		MxlPlacement placement = MxlPlacement.read(reader);
 		//get first element
 		if (false == reader.openNextChildElement())
-			throw reader.dataException("no child element found");
+			return null; //dynamics element may be empty according to schema
 		String childText = reader.getElementName();
 		reader.closeElement();
 		DynamicsType element = getEnumValue(childText, DynamicsType.values());
