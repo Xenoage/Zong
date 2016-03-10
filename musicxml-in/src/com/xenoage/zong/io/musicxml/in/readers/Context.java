@@ -270,7 +270,7 @@ public final class Context {
 	 */
 	private boolean checkNumber1to6(int number) {
 		if (number < 1 || number > 6) {
-			log(warning("beam/slur number is not valid: " + number + "; at " + mp));
+			log(warning("number is not valid: " + number + "; at " + mp));
 			return false;
 		}
 		return true;
@@ -280,16 +280,19 @@ public final class Context {
 	 * Sets the beginning of a wedge with the given number.
 	 */
 	public void openWedge(int number, Wedge wedge) {
-		checkNumber1to6(number);
+		if (false == checkNumber1to6(number))
+			return;
 		List<Wedge> openWedges = openElements.getOpenWedges();
 		openWedges.set(number - 1, wedge);
 	}
 
 	/**
-	 * Closes the wedge with the given number and returns it.
+	 * Closes the wedge with the given number and returns it,
+	 * or null when the number is invalid.
 	 */
 	public Wedge closeWedge(int number) {
-		checkNumber1to6(number);
+		if (false == checkNumber1to6(number))
+			return null;
 		Wedge ret = openElements.getOpenWedges().get(number - 1);
 		List<Wedge> openWedges = openElements.getOpenWedges();
 		openWedges.set(number - 1, null);

@@ -55,21 +55,23 @@ public final class MxlPitch
 
 	private static int readStep(XmlReader reader) {
 		String s = reader.getTextNotNull();
-		switch (s.charAt(0)) {
-			case 'C':
-				return 0;
-			case 'D':
-				return 1;
-			case 'E':
-				return 2;
-			case 'F':
-				return 3;
-			case 'G':
-				return 4;
-			case 'A':
-				return 5;
-			case 'B':
-				return 6;
+		if (s.length() > 0) {
+			switch (s.charAt(0)) {
+				case 'C':
+					return 0;
+				case 'D':
+					return 1;
+				case 'E':
+					return 2;
+				case 'F':
+					return 3;
+				case 'G':
+					return 4;
+				case 'A':
+					return 5;
+				case 'B':
+					return 6;
+			}
 		}
 		throw reader.dataException("unknown step: " + s);
 	}
