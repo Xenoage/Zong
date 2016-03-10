@@ -1,6 +1,8 @@
 package com.xenoage.zong.io.musicxml.in;
 
 import static com.xenoage.utils.PlatformUtils.platformUtils;
+import static com.xenoage.utils.log.Log.log;
+import static com.xenoage.utils.log.Report.warning;
 
 import java.io.IOException;
 
@@ -20,6 +22,8 @@ import com.xenoage.zong.io.musicxml.in.readers.ScoreFormatReader;
 import com.xenoage.zong.io.musicxml.in.readers.ScoreInfoReader;
 import com.xenoage.zong.io.musicxml.in.readers.ScoreReader;
 import com.xenoage.zong.io.musicxml.in.readers.StavesListReader;
+import com.xenoage.zong.io.musicxml.in.util.ErrorHandling;
+import com.xenoage.zong.io.musicxml.in.util.ErrorHandling.Level;
 import com.xenoage.zong.musicxml.MusicXMLDocument;
 import com.xenoage.zong.musicxml.types.MxlDefaults;
 import com.xenoage.zong.musicxml.types.MxlScorePartwise;
@@ -64,17 +68,15 @@ public class MusicXmlScoreFileInput
 			throw new IOException(ex);
 		}
 
-		return read(score, true);
+		return read(score, Level.LogErrors);
 	}
 
 	/**
 	 * Builds a {@link Score} entity from a {@link MxlScorePartwise} document.
-	 * @param doc           the provided score-partwise document
-	 * @param ignoreErrors  if true, try to ignore errors (like overfull measures) as long
-	 *                      as a consistent state can be guaranteed, or false, to cancel
-	 *                      loading as soon as something is wrong
+	 * @param doc            the provided score-partwise document
+	 * @param errorHandling  how to deal with errors
 	 */
-	public Score read(MxlScorePartwise mxlScore, boolean ignoreErrors)
+	public Score read(MxlScorePartwise mxlScore, Level errorHandling)
 		throws InvalidFormatException {
 		try {
 			//create new score
@@ -97,17 +99,25 @@ public class MusicXmlScoreFileInput
 			score.setMetaData("layoutformat", layoutFormat); //TIDY
 	
 			//create the list of staves
-			StavesListReader stavesListReader = new StavesListReader(mxlScore);
+			ErrorHandling mxlErrorHandling = new ErrorHandling(errorHandling);
+			StavesListReader stavesListReader = new StavesListReader(mxlScore, mxlErrorHandling);
 			StavesList stavesList = stavesListReader.read();
 			stavesList.setScore(score);
 			score.setStavesList(stavesList);
 	
 			//read the musical contents
-			new ScoreReader(mxlScore).readToScore(score, ignoreErrors);
+			new ScoreReader(mxlScore).readToScore(score, mxlErrorHandling);
 	
 			//remember the XML document for further application-dependend processing
 			score.setMetaData("mxldoc", mxlScore); //TIDY
 	
+			//when errors were collected, log them and save them as metadata
+			if (mxlErrorHandling.getErrorMessages().size() > 0) {
+				log(warning("The file could be loaded, but the following error(s) were reported: " +
+					mxlErrorHandling.getErrorMessages()));
+				score.setMetaData("mxlerrors", mxlErrorHandling.getErrorMessages());
+			}
+			
 			return score;
 		}
 		catch (RuntimeException ex) {

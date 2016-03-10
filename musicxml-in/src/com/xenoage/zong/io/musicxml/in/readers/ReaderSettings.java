@@ -1,5 +1,7 @@
 package com.xenoage.zong.io.musicxml.in.readers;
 
+import com.xenoage.zong.io.musicxml.in.util.ErrorHandling;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -11,7 +13,7 @@ import lombok.Getter;
 @AllArgsConstructor @Getter
 public class ReaderSettings {
 
-	private final boolean ignoringErrors;
+	private final ErrorHandling errorHandling;
 	private final TextReader textReader = new FormattedTextReader();
 
 }

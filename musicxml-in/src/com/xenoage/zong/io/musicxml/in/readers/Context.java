@@ -2,8 +2,6 @@ package com.xenoage.zong.io.musicxml.in.readers;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.iterators.It.it;
-import static com.xenoage.utils.log.Log.log;
-import static com.xenoage.utils.log.Report.warning;
 import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.zong.core.position.MP.atBeat;
 import static com.xenoage.zong.io.musicxml.in.util.CommandPerformer.execute;
@@ -42,7 +40,6 @@ import com.xenoage.zong.core.music.slur.SlurWaypoint;
 import com.xenoage.zong.core.music.util.Interval;
 import com.xenoage.zong.core.music.volta.Volta;
 import com.xenoage.zong.core.position.MP;
-import com.xenoage.zong.core.util.InconsistentScoreException;
 import com.xenoage.zong.io.musicxml.in.util.ClosedVolta;
 import com.xenoage.zong.io.musicxml.in.util.MusicReaderException;
 import com.xenoage.zong.io.musicxml.in.util.OpenElements;
@@ -105,7 +102,7 @@ public final class Context {
 		Fraction newBeat = this.mp.beat.add(beat);
 		//never step back behind 0
 		if (newBeat.getNumerator() < 0) {
-			log(warning("Step back behind beat 0; at " + mp));
+			reportError("Step back behind beat 0");
 			newBeat = _0;
 		}
 		this.mp = this.mp.withBeat(newBeat);
@@ -216,7 +213,7 @@ public final class Context {
 		}
 		//this point must not already be set
 		if ((start && openSlur.start != null) || (stop && openSlur.stop != null)) {
-			log(warning(wpPos + " waypoint already set for " + type + " " + number + " at " + mp));
+			reportError(wpPos + " waypoint already set for " + type + " " + number);
 		}
 		OpenSlur.Waypoint openSlurWP = new OpenSlur.Waypoint(wp, side);
 		if (start)
@@ -249,7 +246,7 @@ public final class Context {
 			return false;
 		Fraction gap = score.getGapBetween(slur.start.wp.getChord(), slur.stop.wp.getChord());
 		if (gap == null) {
-			log(warning("Can not determine gap between slurred/tied elements; slur/tie is ignored at" + mp));
+			reportError("Can not determine gap between slurred/tied elements; slur/tie is ignored");
 			return false;
 		}
 		if (slur.type == SlurType.Slur) {
@@ -270,7 +267,7 @@ public final class Context {
 	 */
 	private boolean checkNumber1to6(int number) {
 		if (number < 1 || number > 6) {
-			log(warning("number is not valid: " + number + "; at " + mp));
+			reportError("number is not valid: " + number);
 			return false;
 		}
 		return true;
@@ -383,8 +380,7 @@ public final class Context {
 				execute(new VoiceAdd(measure, voice));
 			execute(new VoiceElementWrite(score.getVoice(mp), mp, element, writeVoicElementOptions));
 		} catch (MeasureFullException ex) {
-			if (!settings.isIgnoringErrors())
-				throw new MusicReaderException(ex, this);
+			reportError(ex.getMessage());
 		}
 	}
 
@@ -432,10 +428,7 @@ public final class Context {
 		}
 		if (newInstrument == null) {
 			//error: instrument is unknown to this part
-			if (settings.isIgnoringErrors())
-				return; //don't change instrument
-			else
-				throw new InconsistentScoreException("Unknown instrument: \"" + instrumentID + "\"");
+			reportError("Unknown instrument: \"" + instrumentID + "\"");
 		}
 		//apply instrument change
 		new MeasureElementWrite(new InstrumentChange(newInstrument), score.getMeasure(this.mp), mp.beat).execute();
@@ -449,12 +442,12 @@ public final class Context {
 	public ClosedVolta closeVolta(boolean rightHook) {
 		OpenVolta openVolta = openElements.getOpenVolta();
 		if (openVolta == null) {
-			log(warning("No volta open at " + mp));
+			reportError("No volta open");
 			return null;
 		}
 		int length = mp.measure - openVolta.startMeasure + 1;
 		if (length < 1) {
-			log(warning("Invalid volta at " + mp));
+			reportError("Invalid volta");
 			return null;
 		}
 		Volta volta = new Volta(length, openVolta.numbers, openVolta.caption, rightHook);
@@ -464,6 +457,16 @@ public final class Context {
 	
 	public ReaderSettings getSettings() {
 		return settings;
+	}
+	
+	public void reportError(String message) {
+		try {
+			settings.getErrorHandling().reportError(message + "; at " + mp);
+		}
+		catch (Exception ex) {
+			//when an exception was thrown, forward it with this context attached
+			throw new MusicReaderException(ex.getMessage(), this);
+		}
 	}
 
 	@Override public String toString() {

@@ -3,16 +3,12 @@ package com.xenoage.zong.io.musicxml.in.readers;
 import static com.xenoage.utils.NullUtils.notNull;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.iterators.It.it;
-import static com.xenoage.utils.log.Log.log;
-import static com.xenoage.utils.log.Report.warning;
 import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.position.MP.getMP;
 import static com.xenoage.zong.io.musicxml.in.readers.OtherReader.readDuration;
 
 import java.util.List;
-
-import lombok.RequiredArgsConstructor;
 
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.Pitch;
@@ -36,6 +32,8 @@ import com.xenoage.zong.musicxml.types.choice.MxlNoteContent.MxlNoteContentType;
 import com.xenoage.zong.musicxml.types.enums.MxlYesNo;
 import com.xenoage.zong.musicxml.types.groups.MxlEditorialVoice;
 import com.xenoage.zong.musicxml.types.groups.MxlFullNote;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * This class reads a {@link Chord} from a given list
@@ -83,7 +81,7 @@ public final class ChordReader {
 					staffVoice = context.getVoice(staff, mxlVoice);
 				}
 				catch (MusicReaderException ex) {
-					log(warning(ex.getMessage()));
+					context.reportError(ex.getMessage());
 					return;
 				}
 			}
@@ -146,7 +144,7 @@ public final class ChordReader {
 		
 		//when duration of normal note is 0, ignore the chord
 		if (false == isGrace && false == duration.isGreater0()) {
-			log(warning("duration of chord is 0 at " + context.getMp()));
+			context.reportError("duration of chord is 0");
 			return;
 		}
 

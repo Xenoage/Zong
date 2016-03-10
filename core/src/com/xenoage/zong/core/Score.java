@@ -2,8 +2,6 @@ package com.xenoage.zong.core;
 
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.kernel.Range.rangeReverse;
-import static com.xenoage.utils.log.Log.log;
-import static com.xenoage.utils.log.Report.warning;
 import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.header.ScoreHeader.scoreHeader;
@@ -18,17 +16,11 @@ import static com.xenoage.zong.core.position.MP.mpb0;
 import java.util.HashMap;
 import java.util.Map;
 
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
-
 import com.xenoage.utils.annotations.Unneeded;
 import com.xenoage.utils.collections.SortedList;
 import com.xenoage.utils.document.Document;
 import com.xenoage.utils.document.command.CommandPerformer;
 import com.xenoage.utils.document.io.SupportedFormats;
-import com.xenoage.utils.log.Log;
-import com.xenoage.utils.log.Report;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.utils.math.MathUtils;
 import com.xenoage.zong.core.format.ScoreFormat;
@@ -54,6 +46,10 @@ import com.xenoage.zong.core.music.util.Interval;
 import com.xenoage.zong.core.music.util.MPE;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.utils.exceptions.IllegalMPException;
+
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
 
 
 /**

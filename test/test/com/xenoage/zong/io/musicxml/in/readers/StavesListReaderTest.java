@@ -14,6 +14,8 @@ import org.junit.Test;
 import com.xenoage.zong.core.music.StavesList;
 import com.xenoage.zong.core.music.group.BarlineGroup;
 import com.xenoage.zong.core.music.group.BracketGroup;
+import com.xenoage.zong.io.musicxml.in.util.ErrorHandling;
+import com.xenoage.zong.io.musicxml.in.util.ErrorHandling.Level;
 import com.xenoage.zong.musicxml.MusicXMLDocument;
 
 /**
@@ -89,7 +91,8 @@ public class StavesListReaderTest {
 		} catch (Exception ex) {
 			fail(ex.toString());
 		}
-		StavesListReader stavesListReader = new StavesListReader(doc.getScore());
+		StavesListReader stavesListReader = new StavesListReader(doc.getScore(),
+			new ErrorHandling(Level.ThrowException));
 		StavesList stavesList = null;
 		try {
 			stavesList = stavesListReader.read();

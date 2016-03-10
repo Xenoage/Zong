@@ -194,10 +194,8 @@ public class DirectionReader {
 				break;
 			case Stop:
 				Wedge wedge = context.closeWedge(number);
-				if (wedge == null) {
-					if (false == context.getSettings().isIgnoringErrors())
-						throw new RuntimeException("Wedge " + (number + 1) + " is not open!");
-				}
+				if (wedge == null)
+					context.reportError("Wedge " + (number + 1) + " is not open!");
 				else
 					context.writeMeasureElement(wedge.getWedgeEnd(), staff);
 				break;

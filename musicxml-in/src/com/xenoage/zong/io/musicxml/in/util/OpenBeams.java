@@ -2,8 +2,6 @@ package com.xenoage.zong.io.musicxml.in.util;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.utils.log.Log.log;
-import static com.xenoage.utils.log.Report.warning;
 
 import java.util.HashMap;
 import java.util.List;
@@ -43,14 +41,12 @@ public class OpenBeams {
 	
 	/**
 	 * Begins a new beam with the given chord.
-	 * If a beam was already open with this context, it is overwritten,
-	 * but a warning is logged.
+	 * If a beam was already open with this context, it is tried to be overwritten.
 	 */
 	public void beginBeam(Chord chord, String voice, Context context) {
 		OpenBeam openBeam = getOpenBeam(voice, chord);
 		if (openBeam != null)
-			log(warning("Beginning a new beam, although there is still an open one at " +
-				context.getMp()));
+			context.reportError("Beginning a new beam, although there is still an open one");
 		openBeam = new OpenBeam();
 		openBeam.addChord(chord);
 		int category = getCategory(chord);
@@ -63,9 +59,8 @@ public class OpenBeams {
 	public void continueBeam(Chord chord, String voice, Context context) {
 		OpenBeam openBeam = getOpenBeamTolerant(voice, chord);
 		if (openBeam == null) {
-			log(warning("Can not continue beam which was not started; starting a new one at " +
-				context.getMp()));
-			beginBeam(chord, voice, context);
+			context.reportError("Can not continue beam which was not started");
+			beginBeam(chord, voice, context); //begin new beam instead
 		}
 		else {
 			openBeam.addChord(chord);
@@ -79,9 +74,8 @@ public class OpenBeams {
 	public List<Chord> endBeam(Chord chord, String voice, Context context) {
 		OpenBeam openBeam = getOpenBeamTolerant(voice, chord);
 		if (openBeam == null) {
-			log(warning("Can not end beam which was not started; ignoring beam ending at " +
-				context.getMp()));
-			return null;
+			context.reportError("Can not end beam which was not started");
+			return null; //ignore beam
 		}
 		openBeam.addChord(chord);
 		openBeams.get(getCategory(chord)).remove(voice);

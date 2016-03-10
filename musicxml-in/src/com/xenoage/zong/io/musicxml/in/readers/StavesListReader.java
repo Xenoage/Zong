@@ -4,8 +4,6 @@ import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.collections.CollectionUtils.map;
 import static com.xenoage.utils.iterators.MultiListIt.multiListIt;
 import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.utils.log.Log.log;
-import static com.xenoage.utils.log.Report.warning;
 import static com.xenoage.zong.io.musicxml.Equivalents.bracketGroupStyles;
 
 import java.util.HashMap;
@@ -18,6 +16,7 @@ import com.xenoage.zong.core.music.StavesList;
 import com.xenoage.zong.core.music.group.BarlineGroup;
 import com.xenoage.zong.core.music.group.BracketGroup;
 import com.xenoage.zong.core.music.group.StavesRange;
+import com.xenoage.zong.io.musicxml.in.util.ErrorHandling;
 import com.xenoage.zong.musicxml.types.MxlAttributes;
 import com.xenoage.zong.musicxml.types.MxlGroupBarline;
 import com.xenoage.zong.musicxml.types.MxlGroupSymbol;
@@ -49,6 +48,7 @@ import lombok.RequiredArgsConstructor;
 public class StavesListReader {
 
 	private final MxlScorePartwise mxlScore;
+	private final ErrorHandling errorHandling;
 	
 	private StavesList stavesList;
 	@Getter private Map<String, Integer> partsIDtoIndex;
@@ -113,9 +113,9 @@ public class StavesListReader {
 				}
 			}
 		}
-		//if there are unclosed score-groups, create a warning
+		//if there are unclosed score-groups, report a problem
 		if (openBarlineGroups.size() > 0 || openBracketGroups.size() > 0) {
-			log(warning("There are unclosed score-groups"));
+			errorHandling.reportError("There are unclosed score-groups");
 		}
 		//count the number of staves and measures used by each part
 		HashMap<String, Integer> partsStaves = countStaves(mxlScore);
@@ -150,7 +150,7 @@ public class StavesListReader {
 		if (type == MxlStartStop.Start) {
 			//group begins here
 			if (openBarlineGroup != null || openBracketGroup != null) {
-				log(warning("part-group \"" + number + "\" was already opened"));
+				errorHandling.reportError("part-group \"" + number + "\" was already opened");
 			}
 			//read group-barline and group-symbol (bracket)
 			BarlineGroup.Style barlineStyle = readBarlineGroupStyle(mxlPartGroup.getGroupBarline());
@@ -170,7 +170,7 @@ public class StavesListReader {
 		else if (type == MxlStartStop.Stop) {
 			//group ends here
 			if (openBarlineGroup == null && openBracketGroup == null) {
-				log(warning("score-group \"" + number + "\" was closed before it was opened"));
+				errorHandling.reportError("score-group \"" + number + "\" was closed before it was opened");
 			}
 			//close open barline group and/or bracket group
 			PartsBarlineGroup closedBarlineGroup = null;

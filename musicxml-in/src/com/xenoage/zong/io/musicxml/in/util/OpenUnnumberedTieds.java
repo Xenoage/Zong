@@ -1,16 +1,9 @@
 package com.xenoage.zong.io.musicxml.in.util;
 
 import static com.xenoage.utils.collections.CollectionUtils.map;
-import static com.xenoage.utils.log.Log.log;
-import static com.xenoage.utils.log.Report.warning;
-import static com.xenoage.utils.math.Fraction._0;
 
-import java.util.LinkedList;
 import java.util.Map;
-import java.util.Queue;
-import java.util.Stack;
 
-import com.xenoage.utils.math.Fraction;
 import com.xenoage.utils.math.VSide;
 import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.music.chord.Chord;
@@ -67,7 +60,7 @@ public class OpenUnnumberedTieds {
 		//get tied for this pitch
 		OpenSlur openTied = openTieds.remove(pitch);
 		if (openTied == null) {
-			log(warning("Can not stop non-existing tied at " + context.getMp()));
+			context.reportError("Can not stop non-existing tied");
 			return null;
 		}
 		//is tied closed at the same musical position where it was opened?
@@ -76,8 +69,8 @@ public class OpenUnnumberedTieds {
 			openTieds.put(pitch, openTied); //remember last tied
 			openTied = openEarlierTieds.remove(pitch); //use earlier tied instead
 			if (openTied == null) {
-				log(warning("Tied can not be stopped on starting position, " +
-					"and there is no earlier tied, at " + context.getMp()));
+				context.reportError("Tied can not be stopped on starting position, " +
+					"and there is no earlier tied");
 				return null;
 			}
 		}

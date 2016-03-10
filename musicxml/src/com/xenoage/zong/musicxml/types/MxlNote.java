@@ -64,7 +64,7 @@ public final class MxlNote
 		while (reader.openNextChildElement()) {
 			String n = reader.getElementName();
 			//first element determines note content
-			//but, be tolerant for errors, and also accept late grace or cue elements - GOON
+			//but, be tolerant for errors, and also accept late grace or cue elements
 			if (n.equals(MxlGraceNote.elemName)) {
 				MxlGraceNote graceNote = MxlGraceNote.read(reader);
 				if (content instanceof MxlNormalNote) //grace element too late, but accept it

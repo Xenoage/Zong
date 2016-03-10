@@ -7,7 +7,6 @@ import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.position.MP.atElement;
 import static com.xenoage.zong.core.position.MP.atStaff;
 import static com.xenoage.zong.io.musicxml.in.util.CommandPerformer.execute;
-import lombok.RequiredArgsConstructor;
 
 import com.xenoage.utils.iterators.It;
 import com.xenoage.utils.math.Fraction;
@@ -28,10 +27,13 @@ import com.xenoage.zong.core.music.rest.Rest;
 import com.xenoage.zong.core.music.time.Time;
 import com.xenoage.zong.core.music.time.TimeType;
 import com.xenoage.zong.core.position.MP;
+import com.xenoage.zong.io.musicxml.in.util.ErrorHandling;
 import com.xenoage.zong.io.musicxml.in.util.MusicReaderException;
 import com.xenoage.zong.musicxml.types.MxlScorePartwise;
 import com.xenoage.zong.musicxml.types.partwise.MxlMeasure;
 import com.xenoage.zong.musicxml.types.partwise.MxlPart;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * This class reads the actual musical contents of
@@ -53,8 +55,8 @@ public class ScoreReader {
 	private final MxlScorePartwise doc;
 	
 	
-	public void readToScore(Score score, boolean ignoreErrors) {
-		Context context = new Context(score, new ReaderSettings(ignoreErrors));
+	public void readToScore(Score score, ErrorHandling errorHandling) {
+		Context context = new Context(score, new ReaderSettings(errorHandling));
 		
 		//create the measures of the parts
 		It<MxlPart> mxlParts = it(doc.getParts());
