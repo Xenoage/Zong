@@ -5,9 +5,13 @@ import static com.xenoage.utils.jse.io.JseFileUtils.listFilesDeep;
 import static com.xenoage.zong.musicxml.util.MusicXMLFilenameFilter.musicXMLFilenameFilter;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.text.DecimalFormat;
 import java.util.List;
 
+import com.xenoage.utils.jse.io.JseOutputStream;
+import com.xenoage.zong.desktop.io.midi.out.MidiScoreDocFileOutput;
+import com.xenoage.zong.desktop.io.pdf.out.PdfScoreDocFileOutput;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -31,6 +35,13 @@ import com.xenoage.zong.documents.ScoreDoc;
 public class MusicXmlMassTest {
 
 	private static final String dir = "../../Zong-Test/";
+	private static final String tempDir = "../../Zong-Test/Temp/";
+
+	//configure the test: just load the MusicXML or try to save it in different formats and load it again?
+	private static boolean saveAsMxl = false; //not supported yet
+	private static boolean saveAsPdf = true;
+	private static boolean saveAsMid = true;
+	private static boolean loadFromSavedMxl = saveAsMxl && true; //not supported yet
 
 
 	/**
@@ -69,23 +80,43 @@ public class MusicXmlMassTest {
 
 	private boolean testFile(File file) {
 		try {
+
+			//Load the file
 			ScoreDoc score = new MusicXmlScoreDocFileInput().read(new JseInputStream(file),
 				file.getAbsolutePath());
-			String tempFile = "temp.xml";
-			//TODO new MusicXMLScoreDocFileOutput().write(score, new FileOutputStream(tempFile), tempFile);
 
-			//*
+			//Check loaded file
 			System.out.print("OK:   " + file.toString().substring(dir.length()) + " (" +
-			score.getScore().getInfo().getTitle() + ")");
+					score.getScore().getInfo().getTitle() + ")");
 			@SuppressWarnings("unchecked") List<String> errorMessages =
-				(List<String>) score.getScore().getMetaData().get("mxlerrors");
+					(List<String>) score.getScore().getMetaData().get("mxlerrors");
 			if (errorMessages != null)
 				System.out.print("  ! " + errorMessages.size() + " warning(s)");
 			System.out.println();
-			
-			/*/
-			System.out.print("."); //*/
-			new File(tempFile).delete();
+
+			//Save it as MusicXML
+			File mxlSavedFile = getTempOutputPath(file, "-saved.mxl");
+			if (saveAsMxl) {
+				//new MusicXMLScoreDocFileOutput().write(score, new FileOutputStream(mxlSavedFile), mxlSavedFile);
+			}
+
+			//Save it as PDF
+			if (saveAsPdf) {
+				File pdfFile = getTempOutputPath(file, ".pdf");
+				new PdfScoreDocFileOutput().write(score, 0, new JseOutputStream(pdfFile));
+			}
+
+			//Save it as MIDI
+			if (saveAsMid) {
+				File midFile = getTempOutputPath(file, ".mid");
+				new MidiScoreDocFileOutput().write(score, 0, new JseOutputStream(midFile));
+			}
+
+			//Load it from saved MusicXML
+			if (loadFromSavedMxl) {
+				//TODO
+			}
+
 			return true;
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -93,6 +124,17 @@ public class MusicXmlMassTest {
 			System.out.println("fail: " + file.toString().substring(dir.length()));
 			return false;
 		}
+	}
+
+	/**
+	 * Creates a filepath for an output file in the {@value #tempDir} directory,
+	 * with the same relative path as the original file and the given extension (like ".pdf") added.
+	 * If the parent directory for that file does not exist yet, it is created.
+	 */
+	private static File getTempOutputPath(File originalFile, String ext) {
+		File file = new File(tempDir + originalFile.getPath().substring(dir.length()) + ext);
+		file.getParentFile().mkdirs();
+		return file;
 	}
 
 }
