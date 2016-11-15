@@ -1,7 +1,6 @@
 package com.xenoage.zong.musiclayout.notator.chord.stem.beam;
 
 import static com.xenoage.utils.collections.ArrayUtils.setValues;
-import static com.xenoage.zong.core.music.beam.Beam.HorizontalSpan.SingleMeasure;
 import static com.xenoage.zong.core.music.beam.Beam.VerticalSpan.SingleStaff;
 import static com.xenoage.zong.musiclayout.notator.chord.stem.beam.range.OneMeasureOneStaff.oneMeasureOneStaff;
 import static com.xenoage.zong.musiclayout.notator.chord.stem.beam.range.OneMeasureTwoStaves.oneMeasureTwoStaves;
@@ -25,19 +24,13 @@ public class BeamedStemDirector {
 	public StemDirection[] compute(Beam beam, Score score) {
 		//choose appropriate strategy
 		Strategy strategy;
-		if (beam.getHorizontalSpan() == SingleMeasure) {
-			if (beam.getVerticalSpan() == SingleStaff)
-				strategy = oneMeasureOneStaff;
-			else if (beam.getVerticalSpan() == VerticalSpan.TwoAdjacentStaves)
-				strategy = oneMeasureTwoStaves;
-			else
-				//no strategy for more than two or non-adjacent staves
-				return fallback(beam.size());
-		}
-		else {
-			//multi-measure beams are not supported yet
+		if (beam.getVerticalSpan() == SingleStaff)
+			strategy = oneMeasureOneStaff;
+		else if (beam.getVerticalSpan() == VerticalSpan.TwoAdjacentStaves)
+			strategy = oneMeasureTwoStaves;
+		else
+			//no strategy for more than two or non-adjacent staves
 			return fallback(beam.size());
-		}
 		
 		return strategy.compute(beam, score);
 	}

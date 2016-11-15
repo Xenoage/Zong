@@ -86,7 +86,7 @@ public class MusicXmlMassTest {
 	/*
 	@Test public void testSingleFile()
 	{
-		File file = new File(dir + "MusicXML/hausmusik.ch/z/zschille/kantate/jauchzet_dem_herrn/fuerchte_dich_nicht/kan_4.xml");
+		File file = new File(dir + "MusicXML/Vladimir/firsttest/imslp00003/p0003^Smartscore-10.2.1.xml");
 		if (!testFile(file)) Assert.fail();
 	} //*/
 

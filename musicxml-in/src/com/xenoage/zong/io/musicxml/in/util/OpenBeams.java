@@ -1,6 +1,7 @@
 package com.xenoage.zong.io.musicxml.in.util;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static com.xenoage.utils.collections.CollectionUtils.getFirst;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.kernel.Range.rangeReverse;
 
@@ -90,13 +91,20 @@ public class OpenBeams {
 	/**
 	 * Creates a beam for the given beamed chords.
 	 * Chords, that do not exist any more (when their {@link MP} is unknown)
-	 * are removed from the beam. Only beams with two or more notes are created.
+	 * or which are not in the same measure are removed from the beam.
+	 * Only beams with two or more notes are created.
 	 */
 	private void createBeam(Context context, OpenBeam openBeam) {
 		List<Chord> beamedChords = openBeam.getChords();
 		//remove missing chords
 		for (int i : rangeReverse(beamedChords)) {
 			if (beamedChords.get(i).getMP() == null)
+				beamedChords.remove(i);
+		}
+		//remove chords, which are in other measures
+		int measure = getFirst(beamedChords).getMP().measure;
+		for (int i : rangeReverse(beamedChords)) {
+			if (beamedChords.get(i).getMP().measure != measure)
 				beamedChords.remove(i);
 		}
 		//create beam

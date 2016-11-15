@@ -24,6 +24,7 @@ import com.xenoage.zong.musiclayout.spacing.FrameSpacing;
  * Creates the {@link BeamSpacing} for a beam.
  * 
  * TODO (ZONG-93): support and test beams spanning over two staves
+ * TODO: support beams spanning over more than a measure
  * 
  * @author Andreas Wenger
  */

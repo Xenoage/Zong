@@ -1,5 +1,6 @@
 package com.xenoage.zong.core.music.beam;
 
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.collections.CollectionUtils.getFirst;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.MathUtils.min;
@@ -31,12 +32,6 @@ import lombok.Getter;
 public final class Beam
 	implements MPElement {
 
-	/** Spread of this beam within a staff. */
-	public enum HorizontalSpan {
-		SingleMeasure,
-		Other;
-	}
-
 	/** Spread of this beam within a system. */
 	public enum VerticalSpan {
 		SingleStaff,
@@ -48,7 +43,6 @@ public final class Beam
 	@NonNull @Getter private List<BeamWaypoint> waypoints;
 
 	//cache
-	private HorizontalSpan horizontalSpan = null;
 	private VerticalSpan verticalSpan = null;
 	private int upperStaffIndex = -1;
 	private int lowerStaffIndex = -1;
@@ -56,11 +50,9 @@ public final class Beam
 
 	/**
 	 * Creates a new beam consisting of the given waypoints.
+	 * All waypoints must be in the same measure column and must be sorted by beat.
 	 */
 	public static Beam beam(List<BeamWaypoint> waypoints) {
-		if (waypoints.size() < 2) {
-			throw new IllegalArgumentException("At least two chords are needed to create a beam!");
-		}
 		Beam beam = new Beam(waypoints);
 		return beam;
 	}
@@ -70,19 +62,47 @@ public final class Beam
 	 * Creates a new beam consisting of the given chords with no subdivisions.
 	 */
 	public static Beam beamFromChords(List<Chord> chords) {
-		if (chords.size() < 2) {
-			throw new InconsistentScoreException("At least two chords are needed to create a beam!");
-		}
-		List<BeamWaypoint> waypoints = new ArrayList<BeamWaypoint>(chords.size());
+		List<BeamWaypoint> waypoints = alist(chords.size());
 		for (Chord chord : chords) {
 			waypoints.add(new BeamWaypoint(chord, false));
 		}
-		return new Beam(waypoints);
+		Beam ret = new Beam(waypoints);
+		ret.checkWaypoints();
+		return ret;
 	}
-
 
 	private Beam(List<BeamWaypoint> waypoints) {
 		this.waypoints = waypoints;
+		checkWaypoints();
+	}
+
+	/**
+	 * Checks the correctness of the beam:
+	 * It must have at least 2 chords, must exist in a single measure column
+	 * and the chords must be sorted by beat.
+	 */
+	private void checkWaypoints() {
+
+		if (waypoints.size() < 2) {
+			throw new IllegalArgumentException("At least two chords are needed to create a beam!");
+		}
+
+		Fraction lastBeat = null;
+		int measure = getFirst(waypoints).getChord().getMP().measure;
+		for (BeamWaypoint wp : waypoints) {
+			MP mp = wp.getChord().getMP();
+
+			//check, if all chords are in the same measure column
+			if (mp.measure != measure)
+				throw new IllegalArgumentException("A beam may only span over one measure column");
+
+			//check, if chords are sorted by beat
+			if (lastBeat != null) {
+				if (mp.beat.compareTo(lastBeat) <= 0)
+					throw new IllegalArgumentException("Beamed chords must be sorted by beat");
+			}
+			lastBeat = mp.beat;
+		}
 	}
 	
 	
@@ -130,16 +150,6 @@ public final class Beam
 			if (chord == waypoints.get(i).getChord())
 				return i;
 		throw new IllegalArgumentException("Given chord is not part of this beam.");
-	}
-
-
-	/**
-	 * Gets the horizontal spanning of this beam.
-	 */
-	public HorizontalSpan getHorizontalSpan() {
-		if (horizontalSpan == null)
-			computeSpan();
-		return horizontalSpan;
 	}
 
 
@@ -206,38 +216,20 @@ public final class Beam
 
 
 	/**
-	 * Computes the horizontal and vertical span of this beam.
+	 * Computes the vertical span of this beam.
 	 */
 	private void computeSpan() {
-		//find out horizontal and vertical span
-		Chord firstChord = waypoints.get(0).getChord();
-		MP firstMP = MP.getMP(firstChord);
 		int minStaffIndex = Integer.MAX_VALUE;
 		int maxStaffIndex = Integer.MIN_VALUE;
-
-		//check if the beam spans over a single measure (the current one)
-		boolean singleMeasure = true;
-		for (BeamWaypoint waypoint : waypoints) {
-			Chord chord = waypoint.getChord();
-			MP mpChord = MP.getMP(chord);
-			if (mpChord == null) {
-				throw new IllegalArgumentException("Chord is not registered in globals");
-			}
-			minStaffIndex = Math.min(minStaffIndex, mpChord.staff);
-			maxStaffIndex = Math.max(maxStaffIndex, mpChord.staff);
-			int chordMeasure = mpChord.measure;
-			if (chordMeasure != firstMP.measure) {
-				singleMeasure = false;
-				break;
-			}
-		}
-		HorizontalSpan horizontalSpan = (singleMeasure ? HorizontalSpan.SingleMeasure : HorizontalSpan.Other);
 
 		//check if the beam spans over a single staff or two adjacent staves or more
 		Set<Integer> staves = new HashSet<Integer>();
 		for (BeamWaypoint waypoint : waypoints) {
 			Chord chord = waypoint.getChord();
-			staves.add(MP.getMP(chord).staff);
+			MP mpChord = MP.getMP(chord);
+			minStaffIndex = Math.min(minStaffIndex, mpChord.staff);
+			maxStaffIndex = Math.max(maxStaffIndex, mpChord.staff);
+			staves.add(mpChord.staff);
 		}
 		VerticalSpan verticalSpan = VerticalSpan.Other;
 		if (staves.size() == 1) {
@@ -250,7 +242,6 @@ public final class Beam
 			}
 		}
 
-		this.horizontalSpan = horizontalSpan;
 		this.verticalSpan = verticalSpan;
 		this.upperStaffIndex = minStaffIndex;
 		this.lowerStaffIndex = maxStaffIndex;
