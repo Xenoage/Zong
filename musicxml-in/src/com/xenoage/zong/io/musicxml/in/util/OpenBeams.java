@@ -5,9 +5,7 @@ import static com.xenoage.utils.collections.CollectionUtils.getFirst;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.kernel.Range.rangeReverse;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.position.MP;
@@ -92,6 +90,8 @@ public class OpenBeams {
 	 * Creates a beam for the given beamed chords.
 	 * Chords, that do not exist any more (when their {@link MP} is unknown)
 	 * or which are not in the same measure are removed from the beam.
+	 * The chords are sorted by beat. The chords may be mixed up beforehand
+	 * because of wrong backup elements in the MusicXML score.
 	 * Only beams with two or more notes are created.
 	 */
 	private void createBeam(Context context, OpenBeam openBeam) {
@@ -107,6 +107,12 @@ public class OpenBeams {
 			if (beamedChords.get(i).getMP().measure != measure)
 				beamedChords.remove(i);
 		}
+		//sort by beat
+		Collections.sort(beamedChords, new Comparator<Chord>() {
+			@Override public int compare(Chord c1, Chord c2) {
+				return c1.getMP().beat.compareTo(c2.getMP().beat);
+			}
+		});
 		//create beam
 		if (beamedChords.size() > 1)
 			context.writeBeam(beamedChords);
