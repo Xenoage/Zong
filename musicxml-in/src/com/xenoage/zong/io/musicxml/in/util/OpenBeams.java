@@ -96,23 +96,29 @@ public class OpenBeams {
 	 */
 	private void createBeam(Context context, OpenBeam openBeam) {
 		List<Chord> beamedChords = openBeam.getChords();
+
 		//remove missing chords
 		for (int i : rangeReverse(beamedChords)) {
 			if (beamedChords.get(i).getMP() == null)
 				beamedChords.remove(i);
 		}
+
 		//remove chords, which are in other measures
+		if (beamedChords.size() == 0)
+			return;
 		int measure = getFirst(beamedChords).getMP().measure;
 		for (int i : rangeReverse(beamedChords)) {
 			if (beamedChords.get(i).getMP().measure != measure)
 				beamedChords.remove(i);
 		}
+
 		//sort by beat
 		Collections.sort(beamedChords, new Comparator<Chord>() {
 			@Override public int compare(Chord c1, Chord c2) {
 				return c1.getMP().beat.compareTo(c2.getMP().beat);
 			}
 		});
+
 		//create beam
 		if (beamedChords.size() > 1)
 			context.writeBeam(beamedChords);
