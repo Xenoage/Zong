@@ -18,6 +18,7 @@ import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.format.LayoutFormat;
 import com.xenoage.zong.core.format.PageFormat;
 import com.xenoage.zong.documents.ScoreDoc;
+import com.xenoage.zong.io.ScoreDocFactory;
 import com.xenoage.zong.layout.Layout;
 import com.xenoage.zong.layout.LayoutDefaults;
 import com.xenoage.zong.layout.Page;
@@ -32,7 +33,9 @@ import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.musicxml.types.MxlScorePartwise;
 import com.xenoage.zong.symbols.SymbolPool;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.val;
 
 /**
@@ -50,7 +53,7 @@ public class MusicXmlScoreDocFileReader
 
 	private final InputStream stream;
 	private final String filePath;
-	
+
 	
 	@Override public void produce(final AsyncResult<ScoreDoc> result) {
 		val reader = new MusicXmlFileReader(stream, filePath, new AllFilter<String>());
@@ -66,7 +69,15 @@ public class MusicXmlScoreDocFileReader
 					Score score = scores.get(0);
 					ScoreDoc scoreDoc;
 					try {
-						scoreDoc = read(score);
+						scoreDoc = new ScoreDocFactory().read(score);
+
+						//add credit elements - TIDY
+						Object o = score.getMetaData().get("mxldoc");
+						if (o != null && o instanceof MxlScorePartwise) {
+							MxlScorePartwise doc = (MxlScorePartwise) o;
+							CreditsReader.read(doc, scoreDoc.getLayout(), score.getFormat());
+						}
+
 						result.onSuccess(scoreDoc);
 					} catch (Exception ex) {
 						result.onFailure(ex);
@@ -78,70 +89,6 @@ public class MusicXmlScoreDocFileReader
 				result.onFailure(ex);
 			}
 		});
-	}
-	
-	/**
-	 * Creates a {@link ScoreDoc} instance from the given score.
-	 * TIDY: move elsewhere, e.g. in a ScoreDocFactory class
-	 */
-	public static ScoreDoc read(Score score)
-		throws InvalidFormatException, IOException {
-
-		//page format
-		LayoutFormat layoutFormat = defaultLayoutFormat;
-		Object oLayoutFormat = score.getMetaData().get("layoutformat");
-		if (oLayoutFormat instanceof LayoutFormat) {
-			layoutFormat = (LayoutFormat) oLayoutFormat;
-		}
-		LayoutDefaults layoutDefaults = new LayoutDefaults(layoutFormat);
-
-		//create the document
-		ScoreDoc ret = new ScoreDoc(score, layoutDefaults);
-		Layout layout = ret.getLayout();
-
-		//layout basics
-		PageFormat pageFormat = layoutFormat.getPageFormat(0);
-		Size2f frameSize = new Size2f(pageFormat.getUseableWidth(), pageFormat.getUseableHeight());
-		Point2f framePos = new Point2f(pageFormat.getMargins().getLeft() + frameSize.width / 2,
-			pageFormat.getMargins().getTop() + frameSize.height / 2);
-
-		//layout the score to find out the needed space
-		Target target = Target.completeLayoutTarget(new ScoreLayoutArea(frameSize));
-		ScoreLayout scoreLayout = new ScoreLayouter(ret, target).createScoreLayout();
-
-		//create and fill at least one page
-		if (scoreLayout.frames.size() > 1) {
-			//normal layout: one frame per page
-			ScoreFrameChain chain = null;
-			for (int i = 0; i < scoreLayout.frames.size(); i++) {
-				Page page = new Page(pageFormat);
-				layout.addPage(page);
-				ScoreFrame frame = new ScoreFrame();
-				frame.setPosition(framePos);
-				frame.setSize(frameSize);
-				//TEST frame = frame.withHFill(NoHorizontalSystemFillingStrategy.getInstance());
-				page.addFrame(frame);
-				if (chain == null) {
-					chain = new ScoreFrameChain(score);
-					chain.setScoreLayout(scoreLayout);
-				}
-				chain.add(frame);
-			}
-		}
-		else {
-			//no frames: create a single empty page
-			Page page = new Page(pageFormat);
-			layout.addPage(page);
-		}
-
-		//add credit elements - TIDY
-		Object o = score.getMetaData().get("mxldoc");
-		if (o != null && o instanceof MxlScorePartwise) {
-			MxlScorePartwise doc = (MxlScorePartwise) o;
-			CreditsReader.read(doc, layout, score.getFormat());
-		}
-
-		return ret;
 	}
 	
 }

@@ -12,6 +12,7 @@ import com.xenoage.zong.core.format.LayoutFormat;
 import com.xenoage.zong.demos.simplegui.SimpleGuiDemo;
 import com.xenoage.zong.desktop.utils.JseZongPlatformUtils;
 import com.xenoage.zong.documents.ScoreDoc;
+import com.xenoage.zong.io.ScoreDocFactory;
 import com.xenoage.zong.io.musicxml.in.MusicXmlScoreDocFileReader;
 import com.xenoage.zong.layout.LayoutDefaults;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
@@ -38,7 +39,7 @@ public class VisualTester {
 	
 	private static ScoreDoc createScoreDoc(VisualTest test)
 		throws IOException {
-		return MusicXmlScoreDocFileReader.read(test.getScore());
+		return new ScoreDocFactory().read(test.getScore());
 	}
 	
 }

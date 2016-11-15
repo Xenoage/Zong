@@ -10,9 +10,19 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 import com.xenoage.utils.jse.io.JseOutputStream;
+import com.xenoage.utils.jse.log.DesktopLogProcessing;
+import com.xenoage.utils.log.Log;
 import com.xenoage.zong.desktop.io.midi.out.MidiScoreDocFileOutput;
 import com.xenoage.zong.desktop.io.pdf.out.PdfScoreDocFileOutput;
+import com.xenoage.zong.io.ScoreDocFactory;
+import com.xenoage.zong.layout.Layout;
+import com.xenoage.zong.layout.frames.ScoreFrame;
+import com.xenoage.zong.musiclayout.ScoreFrameLayout;
+import com.xenoage.zong.musiclayout.stampings.NoteheadStamping;
+import com.xenoage.zong.musiclayout.stampings.Stamping;
+import lombok.val;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.xenoage.utils.iterators.It;
@@ -22,14 +32,14 @@ import com.xenoage.zong.documents.ScoreDoc;
 
 /**
  * This test tries to load and layout a huge range of MusicXML files.
- * 
+ * <p>
  * If the files do not exist, nothing is tested. This class allows to test
  * a large number of files locally, which can not be uploaded to the
  * public repository because of copyright restrictions.
- * 
+ * <p>
  * This test should be excluded from the normal test suite and
  * should only be started manually.
- * 
+ *
  * @author Andreas Wenger
  */
 public class MusicXmlMassTest {
@@ -37,7 +47,9 @@ public class MusicXmlMassTest {
 	private static final String dir = "../../Zong-Test/";
 	private static final String tempDir = "../../Zong-Test/Temp/";
 
-	//configure the test: just load the MusicXML or try to save it in different formats and load it again?
+	//configure the test: just load the MusicXML or do furter checks, like
+	//layout checking or trying to save it in different formats and load it again?
+	private static boolean checkLayout = true;
 	private static boolean saveAsMxl = false; //not supported yet
 	private static boolean saveAsPdf = true;
 	private static boolean saveAsMid = true;
@@ -66,7 +78,7 @@ public class MusicXmlMassTest {
 				System.out.println("Progress: " + (100 * filesIt.getIndex() / files.size()) + "%");
 		}
 		System.out.println("Could load " + ok + " of " + files.size() + " files (" +
-			new DecimalFormat("#.##").format(100f * ok / files.size()) + "%)");
+				new DecimalFormat("#.##").format(100f * ok / files.size()) + "%)");
 		if (ok < files.size())
 			Assert.fail();
 	}
@@ -82,17 +94,15 @@ public class MusicXmlMassTest {
 		try {
 
 			//Load the file
-			ScoreDoc score = new MusicXmlScoreDocFileInput().read(new JseInputStream(file),
-				file.getAbsolutePath());
+			ScoreDocFactory.setErrorLayoutEnabled(false); //TIDY
+			ScoreDoc score = new MusicXmlScoreDocFileInput().read(
+					new JseInputStream(file), file.getAbsolutePath());
+			ScoreDocFactory.setErrorLayoutEnabled(true); //TIDY
 
-			//Check loaded file
-			System.out.print("OK:   " + file.toString().substring(dir.length()) + " (" +
-					score.getScore().getInfo().getTitle() + ")");
-			@SuppressWarnings("unchecked") List<String> errorMessages =
-					(List<String>) score.getScore().getMetaData().get("mxlerrors");
-			if (errorMessages != null)
-				System.out.print("  ! " + errorMessages.size() + " warning(s)");
-			System.out.println();
+			//Check layout of loaded file
+			if (checkLayout) {
+				checkLayout(score);
+			}
 
 			//Save it as MusicXML
 			File mxlSavedFile = getTempOutputPath(file, "-saved.mxl");
@@ -117,8 +127,17 @@ public class MusicXmlMassTest {
 				//TODO
 			}
 
+			//Success
+			System.out.print("OK:   " + file.toString().substring(dir.length()) + " (" +
+					score.getScore().getInfo().getTitle() + ")");
+			@SuppressWarnings("unchecked") List<String> errorMessages =
+					(List<String>) score.getScore().getMetaData().get("mxlerrors");
+			if (errorMessages != null)
+				System.out.print("  ! " + errorMessages.size() + " warning(s)");
+			System.out.println();
+
 			return true;
-		} catch (Exception ex) {
+		} catch (Throwable ex) {
 			ex.printStackTrace();
 			//fail("Failed to load file: " + file);
 			System.out.println("fail: " + file.toString().substring(dir.length()));
@@ -135,6 +154,30 @@ public class MusicXmlMassTest {
 		File file = new File(tempDir + originalFile.getPath().substring(dir.length()) + ext);
 		file.getParentFile().mkdirs();
 		return file;
+	}
+
+	/**
+	 * Checks that the layout contains at least one score frame with at least
+	 * one {@link NoteheadStamping}. Otherwise an {@link AssertionError} is thrown.
+	 */
+	private void checkLayout(ScoreDoc doc) {
+		Layout layout = doc.getLayout();
+		//at least one score frame?
+		if (layout.getScoreFrames().size() == 0)
+			throw new AssertionError("No score frames in layout");
+		//at least one notehead stamping?
+		boolean noteheadFound = false;
+		noteheadSearch:
+		for (ScoreFrame scoreFrame : layout.getScoreFrames()) {
+			for (Stamping stamping : scoreFrame.getScoreFrameLayout().getMusicalStampings()) {
+				if (stamping instanceof NoteheadStamping) {
+					noteheadFound = true;
+					break noteheadSearch;
+				}
+			}
+		}
+		if (false == noteheadFound)
+			throw new AssertionError("No notehead found in layout");
 	}
 
 }

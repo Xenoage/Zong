@@ -4,6 +4,7 @@ import static com.xenoage.utils.collections.ArrayUtils.getFirst;
 import static com.xenoage.utils.collections.ArrayUtils.getLast;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
 
+import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.musiclayout.notation.chord.AccidentalsNotation;

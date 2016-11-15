@@ -88,11 +88,12 @@ public final class ChordReader {
 		}
 		
 		//write chord or rest
+		boolean isWritten = false;
 		if (chordOrRest != null)
-			context.writeVoiceElement(chordOrRest, staff, staffVoice);
+			isWritten = context.writeVoiceElement(chordOrRest, staff, staffVoice);
 		
 		//more details for chord
-		if (chord != null) {
+		if (isWritten && chord != null) {
 			//check if chord could be written. if not, return
 			if (getMP(chord) == null)
 				return;
@@ -206,9 +207,7 @@ public final class ChordReader {
 				}
 				case End: {
 					//close the beam and create it
-					List<Chord> beamedChords = openBeams.endBeam(chord, mxlVoice, context);
-					if (beamedChords != null)
-						context.writeBeam(beamedChords);
+					openBeams.endBeam(chord, mxlVoice, context);
 				}
 			}
 		}

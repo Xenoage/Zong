@@ -369,9 +369,10 @@ public final class Context {
 
 	/**
 	 * Writes the given {@link VoiceElement} to the current position
-	 * without moving the cursor forward.
+	 * without moving the cursor forward. When the element could be written, true is returned,
+	 * otherwise (e.g. when the measure was full), false is returned.
 	 */
-	public void writeVoiceElement(VoiceElement element, int staffIndexInPart, int voice) {
+	public boolean writeVoiceElement(VoiceElement element, int staffIndexInPart, int voice) {
 		MP mp = this.mp.withStaff(getPartStaffIndices().getStart() + staffIndexInPart).withVoice(voice);
 		try {
 			//create voice if needed
@@ -379,8 +380,10 @@ public final class Context {
 			if (measure.getVoices().size() < voice + 1)
 				execute(new VoiceAdd(measure, voice));
 			execute(new VoiceElementWrite(score.getVoice(mp), mp, element, writeVoicElementOptions));
+			return true;
 		} catch (MeasureFullException ex) {
 			reportError(ex.getMessage());
+			return false;
 		}
 	}
 

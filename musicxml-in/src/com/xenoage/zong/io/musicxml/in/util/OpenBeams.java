@@ -2,12 +2,14 @@ package com.xenoage.zong.io.musicxml.in.util;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.utils.kernel.Range.rangeReverse;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.xenoage.zong.core.music.chord.Chord;
+import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.io.musicxml.in.readers.Context;
 
 /**
@@ -45,8 +47,11 @@ public class OpenBeams {
 	 */
 	public void beginBeam(Chord chord, String voice, Context context) {
 		OpenBeam openBeam = getOpenBeam(voice, chord);
-		if (openBeam != null)
+		if (openBeam != null) {
 			context.reportError("Beginning a new beam, although there is still an open one");
+			//create open beam, as far as it is known
+			createBeam(context, openBeam);
+		}
 		openBeam = new OpenBeam();
 		openBeam.addChord(chord);
 		int category = getCategory(chord);
@@ -68,20 +73,37 @@ public class OpenBeams {
 	}
 	
 	/**
-	 * Ends an existing beam with the given chord and returnes the beamed chords.
-	 * In case of an error, null is returned.
+	 * Ends an existing beam with the given chord and creates the beam.
 	 */
-	public List<Chord> endBeam(Chord chord, String voice, Context context) {
+	public void endBeam(Chord chord, String voice, Context context) {
 		OpenBeam openBeam = getOpenBeamTolerant(voice, chord);
 		if (openBeam == null) {
 			context.reportError("Can not end beam which was not started");
-			return null; //ignore beam
 		}
-		openBeam.addChord(chord);
-		openBeams.get(getCategory(chord)).remove(voice);
-		return openBeam.getChords();
+		else {
+			openBeam.addChord(chord);
+			openBeams.get(getCategory(chord)).remove(voice);
+			createBeam(context, openBeam);
+		}
 	}
-	
+
+	/**
+	 * Creates a beam for the given beamed chords.
+	 * Chords, that do not exist any more (when their {@link MP} is unknown)
+	 * are removed from the beam. Only beams with two or more notes are created.
+	 */
+	private void createBeam(Context context, OpenBeam openBeam) {
+		List<Chord> beamedChords = openBeam.getChords();
+		//remove missing chords
+		for (int i : rangeReverse(beamedChords)) {
+			if (beamedChords.get(i).getMP() == null)
+				beamedChords.remove(i);
+		}
+		//create beam
+		if (beamedChords.size() > 1)
+			context.writeBeam(beamedChords);
+	}
+
 	/**
 	 * Gets the existing {@link OpenBeam} for the given voice and grace/cue status.
 	 * If it does not exist, another open beam with or without grace or cue is searched.
