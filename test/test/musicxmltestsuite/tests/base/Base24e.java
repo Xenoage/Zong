@@ -5,6 +5,7 @@ import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.music.Pitch.pi;
 import static com.xenoage.zong.core.music.beam.Beam.beamFromChords;
+import static com.xenoage.zong.core.music.beam.Beam.beamFromChordsNoCheck;
 import static musicxmltestsuite.tests.utils.Utils.ch;
 import static musicxmltestsuite.tests.utils.Utils.gr;
 
@@ -32,7 +33,7 @@ public interface Base24e
 				gr(fr(1, 16), false, pi('G', 0, 5)),
 				gr(fr(1, 16), false, pi('A', 0, 5))
 			}};
-		new BeamAdd(beamFromChords(alist(ret[0][0], ret[0][1]))).execute();
+		new BeamAdd(beamFromChordsNoCheck(alist(ret[0][0], ret[0][1]))).execute();
 		return ret;
 	}
 	

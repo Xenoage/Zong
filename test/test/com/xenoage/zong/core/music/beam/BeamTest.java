@@ -3,7 +3,7 @@ package com.xenoage.zong.core.music.beam;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.music.Pitch.pi;
-import static com.xenoage.zong.core.music.beam.Beam.beamFromChords;
+import static com.xenoage.zong.core.music.beam.Beam.beamFromChordsNoCheck;
 import static com.xenoage.zong.core.music.chord.ChordFactory.graceChord;
 import static org.junit.Assert.assertEquals;
 
@@ -43,7 +43,7 @@ public class BeamTest {
 		List<Chord> chords = alist();
 		chords.add(graceChord(pi(0, 4), fr(1, 32)));
 		chords.add(graceChord(pi(0, 4), fr(1, 32)));
-		Beam beam = beamFromChords(chords);
+		Beam beam = beamFromChordsNoCheck(chords);
 		assertEquals(3, beam.getMaxLinesCount());
 	}
 

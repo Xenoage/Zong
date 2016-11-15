@@ -54,26 +54,33 @@ public final class Beam
 	 */
 	public static Beam beam(List<BeamWaypoint> waypoints) {
 		Beam beam = new Beam(waypoints);
+		beam.checkWaypoints();
 		return beam;
 	}
-
 
 	/**
 	 * Creates a new beam consisting of the given chords with no subdivisions.
 	 */
 	public static Beam beamFromChords(List<Chord> chords) {
-		List<BeamWaypoint> waypoints = alist(chords.size());
-		for (Chord chord : chords) {
-			waypoints.add(new BeamWaypoint(chord, false));
-		}
-		Beam ret = new Beam(waypoints);
+		Beam ret = beamFromChordsNoCheck(chords);
 		ret.checkWaypoints();
 		return ret;
 	}
 
+	/**
+	 * Creates a new beam consisting of the given chords with no subdivisions.
+	 * For testing: No parameter checks!
+	 */
+	public static Beam beamFromChordsNoCheck(List<Chord> chords) { //TIDY
+		List<BeamWaypoint> waypoints = alist(chords.size());
+		for (Chord chord : chords) {
+			waypoints.add(new BeamWaypoint(chord, false));
+		}
+		return new Beam(waypoints);
+	}
+
 	private Beam(List<BeamWaypoint> waypoints) {
 		this.waypoints = waypoints;
-		checkWaypoints();
 	}
 
 	/**
@@ -88,6 +95,7 @@ public final class Beam
 		}
 
 		Fraction lastBeat = null;
+		boolean wasLastChordGrace = false;
 		int measure = getFirst(waypoints).getChord().getMP().measure;
 		for (BeamWaypoint wp : waypoints) {
 			MP mp = wp.getChord().getMP();
@@ -96,12 +104,16 @@ public final class Beam
 			if (mp.measure != measure)
 				throw new IllegalArgumentException("A beam may only span over one measure column");
 
-			//check, if chords are sorted by beat
+			//check, if chords are sorted by beat.
+			//for grace notes, the same beat is ok.
 			if (lastBeat != null) {
-				if (mp.beat.compareTo(lastBeat) <= 0)
+				int compare = mp.beat.compareTo(lastBeat);
+				if ((false == wasLastChordGrace && compare <= 0) ||
+						(wasLastChordGrace && compare < 0))
 					throw new IllegalArgumentException("Beamed chords must be sorted by beat");
 			}
 			lastBeat = mp.beat;
+			wasLastChordGrace = wp.getChord().isGrace();
 		}
 	}
 	
