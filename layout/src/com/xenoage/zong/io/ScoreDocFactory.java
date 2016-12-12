@@ -32,7 +32,7 @@ public class ScoreDocFactory {
 
     /** If true, an error layout is used when there a problems during layouting the score.
      Otherwise, an exception is thrown.
-     TODO: maybe provide this value over dependency injection */
+     TODO: maybe provide this value over dependency injection DEPENDENCYINJECTION */
     @Getter @Setter private static boolean isErrorLayoutEnabled = true;
 
 
@@ -68,7 +68,7 @@ public class ScoreDocFactory {
                 layouter.createScoreLayout() : layouter.createLayoutWithExceptions();
 
         //create and fill at least one page
-        if (scoreLayout.frames.size() > 1) {
+        if (scoreLayout.frames.size() > 0) {
             //normal layout: one frame per page
             ScoreFrameChain chain = null;
             for (int i = 0; i < scoreLayout.frames.size(); i++) {
