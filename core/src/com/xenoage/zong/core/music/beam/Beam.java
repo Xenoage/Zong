@@ -69,7 +69,7 @@ public final class Beam
 
 	/**
 	 * Creates a new beam consisting of the given chords with no subdivisions.
-	 * For testing: No parameter checks!
+	 * For testing: No parameter checks! TODO: DEPENDENCYINJECTION
 	 */
 	public static Beam beamFromChordsNoCheck(List<Chord> chords) { //TIDY
 		List<BeamWaypoint> waypoints = alist(chords.size());

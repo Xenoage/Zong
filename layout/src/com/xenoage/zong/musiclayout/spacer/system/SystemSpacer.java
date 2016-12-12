@@ -99,9 +99,16 @@ public class SystemSpacer {
 			}
 
 			//try to add this measure to the current system. if there is no space left for
-			//it, don't use it, and we are finished.
+			//it, although it is the only measure in this system, force it into the system
 			if (false == canAppend(column, iMeasure, usableWidthMm, usedWidthMm, scoreHeader, firstMeasure)) {
-				break;
+				if (system.size() > 0) {
+					break; //no more space for another measure
+				}
+				else {
+					//force the single measure in this system
+					usedWidthMm += column.getWidthMm();
+					system.add(column);
+				}
 			}
 			else {
 				usedWidthMm += column.getWidthMm();

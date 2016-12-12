@@ -14,6 +14,7 @@ import com.xenoage.utils.jse.log.DesktopLogProcessing;
 import com.xenoage.utils.log.Log;
 import com.xenoage.zong.desktop.io.midi.out.MidiScoreDocFileOutput;
 import com.xenoage.zong.desktop.io.pdf.out.PdfScoreDocFileOutput;
+import com.xenoage.zong.desktop.utils.JseZongPlatformUtils;
 import com.xenoage.zong.io.ScoreDocFactory;
 import com.xenoage.zong.layout.Layout;
 import com.xenoage.zong.layout.frames.ScoreFrame;
@@ -56,6 +57,13 @@ public class MusicXmlMassTest {
 	private static boolean loadFromSavedMxl = saveAsMxl && true; //not supported yet
 
 
+	@Before public void setUp() {
+		//Logging
+		JseZongPlatformUtils.init(getClass().getSimpleName());
+		Log.init(new DesktopLogProcessing(getClass().getSimpleName()));
+	}
+
+
 	/**
 	 * We check all .xml files in the {@link #dir} directory
 	 * (and its subdirectories recursively).
@@ -83,10 +91,10 @@ public class MusicXmlMassTest {
 			Assert.fail();
 	}
 
-	/*
+	//*
 	@Test public void testSingleFile()
 	{
-		File file = new File(dir + "MusicXML/Vladimir/firsttest/imslp00003/p0003^Smartscore-10.2.1.xml");
+		File file = new File(dir + "MusicXML/Vladimir/firsttest/imslp00512/p0005^Smartscore-10.3.2.xml");
 		if (!testFile(file)) Assert.fail();
 	} //*/
 
