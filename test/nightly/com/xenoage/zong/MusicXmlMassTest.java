@@ -90,7 +90,7 @@ public class MusicXmlMassTest {
 	//*
 	@Test public void testSingleFile()
 	{
-		File file = new File(dir + "MusicXML/musescore.com/von Hand gesammelt/Fantasia.mxl");
+		File file = new File(dir + "MusicXML/musescore.com/Angel_Beats_Crusade_of_Light.mxl");
 		if (!testFile(file)) Assert.fail();
 	} //*/
 
@@ -105,7 +105,7 @@ public class MusicXmlMassTest {
 
 			//Check layout of loaded file
 			if (checkLayout) {
-				checkLayout(score);
+				checkLayout(score, file.getName());
 			}
 
 			//Save it as MusicXML
@@ -164,24 +164,26 @@ public class MusicXmlMassTest {
 	 * Checks that the layout contains at least one score frame with at least
 	 * one {@link NoteheadStamping}. Otherwise an {@link AssertionError} is thrown.
 	 */
-	private void checkLayout(ScoreDoc doc) {
+	private void checkLayout(ScoreDoc doc, String filename) {
 		Layout layout = doc.getLayout();
 		//at least one score frame?
 		if (layout.getScoreFrames().size() == 0)
 			throw new AssertionError("No score frames in layout");
 		//at least one notehead stamping?
-		boolean noteheadFound = false;
-		noteheadSearch:
-		for (ScoreFrame scoreFrame : layout.getScoreFrames()) {
-			for (Stamping stamping : scoreFrame.getScoreFrameLayout().getMusicalStampings()) {
-				if (stamping instanceof NoteheadStamping) {
-					noteheadFound = true;
-					break noteheadSearch;
+		if (false == filename.contains("[no notes]")) {
+			boolean noteheadFound = false;
+			noteheadSearch:
+			for (ScoreFrame scoreFrame : layout.getScoreFrames()) {
+				for (Stamping stamping : scoreFrame.getScoreFrameLayout().getMusicalStampings()) {
+					if (stamping instanceof NoteheadStamping) {
+						noteheadFound = true;
+						break noteheadSearch;
+					}
 				}
 			}
+			if (false == noteheadFound)
+				throw new AssertionError("No notehead found in layout");
 		}
-		if (false == noteheadFound)
-			throw new AssertionError("No notehead found in layout");
 	}
 
 }
