@@ -1,15 +1,10 @@
 package com.xenoage.zong.core.music.util;
 
-import static com.xenoage.utils.math.Fraction.fr;
-import static com.xenoage.zong.core.music.util.DurationInfo.getBaseDuration;
-import static com.xenoage.zong.core.music.util.DurationInfo.getDots;
-import static com.xenoage.zong.core.music.util.DurationInfo.getDuration;
-import static com.xenoage.zong.core.music.util.DurationInfo.getFlagsCount;
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
-import com.xenoage.zong.core.music.util.DurationInfo;
+import static com.xenoage.utils.math.Fraction.fr;
+import static com.xenoage.zong.core.music.util.DurationInfo.*;
+import static org.junit.Assert.assertEquals;
 
 
 /**
@@ -35,7 +30,11 @@ public class DurationInfoTest
     //single dotted eighth note
     assertEquals(1, getFlagsCount(fr(3, 16)));
     //double dotted quarter note
-    assertEquals(0, getFlagsCount(fr(7, 16))); 
+    assertEquals(0, getFlagsCount(fr(7, 16)));
+    //single dotted 32nd note
+    assertEquals(3, getFlagsCount(fr(3, 64)));
+    //double dotted 32nd note
+    assertEquals(3, getFlagsCount(fr(7, 128)));
     //whole note
     assertEquals(0, getFlagsCount(fr(1, 1)));
   }

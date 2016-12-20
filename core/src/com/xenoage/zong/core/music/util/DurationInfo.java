@@ -1,8 +1,8 @@
 package com.xenoage.zong.core.music.util;
 
-import static com.xenoage.utils.math.Fraction.fr;
-
 import com.xenoage.utils.math.Fraction;
+
+import static com.xenoage.utils.math.Fraction.fr;
 
 
 /**
@@ -96,8 +96,8 @@ public final class DurationInfo {
 		}
 		//otherwise: compute the value
 		while (n > 2) {
-			d /= 2;
-			n = n - 1;
+			d /= 2; //one flag less (e.g. from 64th to 32nd)
+			n /= 2; //get rid of the dot (e.g. from 3/64 to 1/32)
 		}
 		if (d >= 256)
 			return 6;
