@@ -1,35 +1,31 @@
 package com.xenoage.zong;
 
-import static com.xenoage.utils.iterators.It.it;
-import static com.xenoage.utils.jse.io.JseFileUtils.listFilesDeep;
-import static com.xenoage.zong.musicxml.util.MusicXMLFilenameFilter.musicXMLFilenameFilter;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.text.DecimalFormat;
-import java.util.List;
-
+import com.xenoage.utils.iterators.It;
+import com.xenoage.utils.jse.io.JseInputStream;
 import com.xenoage.utils.jse.io.JseOutputStream;
 import com.xenoage.utils.jse.log.DesktopLogProcessing;
 import com.xenoage.utils.log.Log;
 import com.xenoage.zong.desktop.io.midi.out.MidiScoreDocFileOutput;
+import com.xenoage.zong.desktop.io.musicxml.in.MusicXmlScoreDocFileInput;
 import com.xenoage.zong.desktop.io.pdf.out.PdfScoreDocFileOutput;
 import com.xenoage.zong.desktop.utils.JseZongPlatformUtils;
+import com.xenoage.zong.documents.ScoreDoc;
 import com.xenoage.zong.io.ScoreDocFactory;
 import com.xenoage.zong.layout.Layout;
 import com.xenoage.zong.layout.frames.ScoreFrame;
-import com.xenoage.zong.musiclayout.ScoreFrameLayout;
 import com.xenoage.zong.musiclayout.stampings.NoteheadStamping;
 import com.xenoage.zong.musiclayout.stampings.Stamping;
-import lombok.val;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.xenoage.utils.iterators.It;
-import com.xenoage.utils.jse.io.JseInputStream;
-import com.xenoage.zong.desktop.io.musicxml.in.MusicXmlScoreDocFileInput;
-import com.xenoage.zong.documents.ScoreDoc;
+import java.io.File;
+import java.text.DecimalFormat;
+import java.util.List;
+
+import static com.xenoage.utils.iterators.It.it;
+import static com.xenoage.utils.jse.io.JseFileUtils.listFilesDeep;
+import static com.xenoage.zong.musicxml.util.MusicXMLFilenameFilter.musicXMLFilenameFilter;
 
 /**
  * This test tries to load and layout a huge range of MusicXML files.
@@ -94,7 +90,7 @@ public class MusicXmlMassTest {
 	//*
 	@Test public void testSingleFile()
 	{
-		File file = new File(dir + "MusicXML/Vladimir/firsttest/imslp00512/p0005^Smartscore-10.3.2.xml");
+		File file = new File(dir + "MusicXML/musescore.com/von Hand gesammelt/John_RUTTER_-_Look_at_the_World.mxl");
 		if (!testFile(file)) Assert.fail();
 	} //*/
 

@@ -48,13 +48,16 @@ public class SystemSpacer {
 	 * @param usableSizeMm   the usable size within the score frame in mm
 	 * @param offsetYMm      the vertical offset of the system in mm
 	 * @param systemIndex    the global system index (over all frames)
+	 * @param isFirst        true, iff this system is the first one in a score frame
+	 * @param isAdditional   true, iff this system is created for an additional frame, which is created
+	 *                       for a complete score layout, but is not part of the defined layout
 	 * @param measureColumnSpacings  a list of all measure column spacings without leading spacings
 	 * @param notations      the notations of the elements, needed when a column has to be recomputed
 	 *                       because of a leading spacing
 	 */
 	public Optional<SystemSpacing> compute(Context context,
-		Size2f usableSizeMm, float offsetYMm, int systemIndex, List<ColumnSpacing> measureColumnSpacings,
-		Notations notations) {
+		Size2f usableSizeMm, float offsetYMm, int systemIndex, boolean isFirst, boolean isAdditional,
+		List<ColumnSpacing> measureColumnSpacings, Notations notations) {
 		
 		int startMeasure = context.mp.measure;
 		
@@ -68,8 +71,9 @@ public class SystemSpacer {
 
 		//enough space?
 		if (offsetYMm + stavesSpacing.getTotalHeightMm() > usableSizeMm.height) {
-			//not enough space
-			return absent();
+			//when the system is the first one in an additional frame, we force it into the frame
+			if (false == (isFirst && isAdditional))
+				return absent(); //not enough space
 		}
 
 		//compute the usable width for the system
@@ -99,15 +103,16 @@ public class SystemSpacer {
 			}
 
 			//try to add this measure to the current system. if there is no space left for
-			//it, although it is the only measure in this system, force it into the system
+			//it, although it is the only measure in this system, force it into the system when
+			//this system is created for a complete score layout
 			if (false == canAppend(column, iMeasure, usableWidthMm, usedWidthMm, scoreHeader, firstMeasure)) {
-				if (system.size() > 0) {
-					break; //no more space for another measure
-				}
-				else {
+				if (system.size() == 0 && isAdditional) {
 					//force the single measure in this system
 					usedWidthMm += column.getWidthMm();
 					system.add(column);
+				}
+				else {
+					break; //no more space for another measure
 				}
 			}
 			else {

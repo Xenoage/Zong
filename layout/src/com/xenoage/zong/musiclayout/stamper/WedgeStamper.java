@@ -1,12 +1,5 @@
 package com.xenoage.zong.musiclayout.stamper;
 
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.zong.core.music.format.Position.asPosition;
-
-import java.util.Iterator;
-import java.util.List;
-
 import com.xenoage.utils.kernel.Range;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.Measure;
@@ -24,6 +17,13 @@ import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.StaffStamping
 import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import com.xenoage.zong.musiclayout.stampings.WedgeStamping;
+
+import java.util.Iterator;
+import java.util.List;
+
+import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.zong.core.music.format.Position.asPosition;
 
 /**
  * Creates a {@link WedgeStamping} for a {@link Wedge}.
@@ -53,7 +53,12 @@ public class WedgeStamper {
 				if (directions != null) {
 					for (BeatE<Direction> dir : directions) {
 						if (dir.element instanceof Wedge) {
-							openWedges.wedges.add(new ContinuedWedge((Wedge) dir.element));
+							Wedge wedge = (Wedge) dir.element;
+							//it should not happen in a consistent score, but it could be possible
+							//that a wedge is missing its end element. we only stamp it,
+							//if the position of the end element is known
+							if (wedge.getWedgeEnd().getMP() != null)
+								openWedges.wedges.add(new ContinuedWedge((Wedge) dir.element));
 						}
 					}
 				}

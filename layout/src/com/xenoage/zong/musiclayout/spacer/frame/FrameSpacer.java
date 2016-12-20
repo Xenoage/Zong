@@ -1,11 +1,5 @@
 package com.xenoage.zong.musiclayout.spacer.frame;
 
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.zong.core.position.MP.atMeasure;
-import static com.xenoage.zong.musiclayout.spacer.system.SystemSpacer.systemSpacer;
-
-import java.util.List;
-
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.format.ScoreFormat;
@@ -17,6 +11,12 @@ import com.xenoage.zong.musiclayout.notation.Notations;
 import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 import com.xenoage.zong.musiclayout.spacing.FrameSpacing;
 import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
+
+import java.util.List;
+
+import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static com.xenoage.zong.core.position.MP.atMeasure;
+import static com.xenoage.zong.musiclayout.spacer.system.SystemSpacer.systemSpacer;
 
 /**
  * Arranges a list of measure columns on a frame by filling it with systems.
@@ -36,16 +36,17 @@ public class FrameSpacer {
 	/**
 	 * Arranges an optimum number of systems in a frame, beginning at the given measure,
 	 * if possible.
-	 * @param context        the context of the layouter, with the {@link MP} set to the start measure
-	 * @param startSystem    the index of the system where to start
-	 * @param usableSizeMm   the usable size within the score frame in mm
-	 * @param systemIndex    the global system index (over all frames)
-	 * @param measureColumnSpacings  a list of all measure column spacings without leading spacings
-	 * @param notations      the notations of the elements, needed when a column has to be recomputed
-	 *                       because of a leading spacing
+	 * @param context         the context of the layouter, with the {@link MP} set to the start measure
+	 * @param startSystem     the index of the system where to start
+	 * @param usableSizeMm    the usable size within the score frame in mm
+	 * @param isAdditional    true, when this frame is created for a complete score layout,
+	 *                         but is not part of the defined layout
+	 * @param columnSpacings  a list of all measure column spacings without leading spacings
+	 * @param notations       the notations of the elements, needed when a column has to be recomputed
+	 *                        because of a leading spacing
 	 */
-	public FrameSpacing compute(Context context, int startSystem,
-		Size2f usableSizeMm, List<ColumnSpacing> columnSpacings, Notations notations) {
+	public FrameSpacing compute(Context context, int startSystem, Size2f usableSizeMm,
+		boolean isAdditional, List<ColumnSpacing> columnSpacings, Notations notations) {
 		
 		context.saveMp();
 		int startMeasure = context.mp.measure;
@@ -66,8 +67,9 @@ public class FrameSpacer {
 		while (measureIndex < measuresCount) {
 			//try to create system on this frame
 			context.mp = atMeasure(measureIndex);
+			boolean isFirst = (systems.size() == 0);
 			SystemSpacing system = systemSpacer.compute(context, usableSizeMm, offsetY, systemIndex,
-				columnSpacings, notations).orNull();
+					isFirst, isAdditional, columnSpacings, notations).orNull();
 
 			//was there enough place for this system?
 			if (system != null) {

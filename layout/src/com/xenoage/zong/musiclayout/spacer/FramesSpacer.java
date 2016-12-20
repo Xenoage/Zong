@@ -68,7 +68,7 @@ public class FramesSpacer {
 				//more measures to layout
 				context.mp = atMeasure(iMeasure);
 				FrameSpacing frame = frameSpacer.compute(context, iSystem, frameSize,
-					columns, notations);
+						additionalFrameIteration, columns, notations);
 				if (frame.getSystems().size() > 0) {
 					//at least one measure in this frame. remember frame
 					frames.add(frame);
