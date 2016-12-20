@@ -1,5 +1,18 @@
 package com.xenoage.zong.musiclayout.spacer.beam;
 
+import com.xenoage.utils.collections.ArrayUtils;
+import com.xenoage.zong.core.music.StaffLines;
+import com.xenoage.zong.core.music.chord.StemDirection;
+import com.xenoage.zong.musiclayout.notation.BeamNotation;
+import com.xenoage.zong.musiclayout.notation.ChordNotation;
+import com.xenoage.zong.musiclayout.notation.chord.StemNotation;
+import com.xenoage.zong.musiclayout.spacing.BeamSpacing;
+import com.xenoage.zong.musiclayout.spacing.ChordSpacing;
+import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
+import com.xenoage.zong.musiclayout.spacing.FrameSpacing;
+
+import java.util.List;
+
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.collections.CollectionUtils.getFirst;
 import static com.xenoage.utils.kernel.Range.range;
@@ -7,18 +20,6 @@ import static com.xenoage.utils.math.MathUtils.interpolateLinear;
 import static com.xenoage.zong.musiclayout.spacer.beam.BeamPlacer.beamPlacer;
 import static com.xenoage.zong.musiclayout.spacer.beam.BeamSlanter.beamSlanter;
 import static java.lang.Math.abs;
-
-import java.util.List;
-
-import com.xenoage.utils.collections.ArrayUtils;
-import com.xenoage.zong.core.music.StaffLines;
-import com.xenoage.zong.core.music.chord.StemDirection;
-import com.xenoage.zong.musiclayout.notation.BeamNotation;
-import com.xenoage.zong.musiclayout.notation.ChordNotation;
-import com.xenoage.zong.musiclayout.spacing.BeamSpacing;
-import com.xenoage.zong.musiclayout.spacing.ChordSpacing;
-import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
-import com.xenoage.zong.musiclayout.spacing.FrameSpacing;
 
 /**
  * Creates the {@link BeamSpacing} for a beam.
@@ -60,7 +61,10 @@ public class BeamSpacer {
 		float[] stemsLengthIs = new float[size];
 		for (int i : range(size)) {
 			ChordNotation chord = beam.chords.get(i);
-			stemsLengthIs[i] = abs(chord.stem.endLp - chord.getStemSideNoteLp()) / 2;
+			if (chord.stem != null)
+				stemsLengthIs[i] = abs(chord.stem.endLp - chord.getStemSideNoteLp()) / 2;
+			else
+				stemsLengthIs[i] = 3; //if there is no stem (should not happen very often)
 		}
 			
 		//compute the ends of the first and last stem
@@ -71,7 +75,9 @@ public class BeamSpacer {
 		for (int i : range(size)) {
 			float lp = interpolateLinear(offset.leftEndLp, offset.rightEndLp,
 				ArrayUtils.getFirst(stemsXIs), ArrayUtils.getLast(stemsXIs), stemsXIs[i]);
-			beam.chords.get(i).stem.endLp = lp;
+			StemNotation stem = beam.chords.get(i).stem;
+			if (stem != null) //it could be possible that there is no stem
+				stem.endLp = lp;
 		}
 		
 		return new BeamSpacing(beam, chords);

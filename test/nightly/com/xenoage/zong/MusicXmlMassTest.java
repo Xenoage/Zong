@@ -90,7 +90,7 @@ public class MusicXmlMassTest {
 	//*
 	@Test public void testSingleFile()
 	{
-		File file = new File(dir + "MusicXML/musescore.com/von Hand gesammelt/John_RUTTER_-_Look_at_the_World.mxl");
+		File file = new File(dir + "MusicXML/musescore.com/von Hand gesammelt/Fantasia.mxl");
 		if (!testFile(file)) Assert.fail();
 	} //*/
 

@@ -1,15 +1,15 @@
 package com.xenoage.zong.musiclayout.spacing;
 
-import static com.xenoage.zong.core.music.format.SP.sp;
-
-import java.util.List;
-
 import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.core.music.format.SP;
 import com.xenoage.zong.musiclayout.notation.BeamNotation;
-
+import com.xenoage.zong.musiclayout.notation.chord.StemNotation;
 import lombok.AllArgsConstructor;
+
+import java.util.List;
+
+import static com.xenoage.zong.core.music.format.SP.sp;
 
 /**
  * Horizontal and vertical spacing of a {@link Beam}.
@@ -37,7 +37,12 @@ public class BeamSpacing {
 	public SP getStemEndSp(int chordIndex) {
 		ChordSpacing chord = chords.get(chordIndex);
 		float xMm = chord.getVoiceXMm() + chord.getStemXIs() * chord.voice.interlineSpace;
-		float lp = notation.chords.get(chordIndex).stem.endLp;
+		StemNotation stem = notation.chords.get(chordIndex).stem;
+		float lp;
+		if (stem != null)
+			lp = stem.endLp;
+		else //it could be possible that there is no stem
+			lp = notation.chords.get(chordIndex).getStemSideNoteLp() + getStemDirection(chordIndex).getSign() * 3 * 2;
 		return sp(xMm, lp);
 	}
 	
