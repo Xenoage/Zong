@@ -412,7 +412,11 @@ public final class Context {
 	 * Creates a beam for the given chords.
 	 */
 	public void writeBeam(List<Chord> chords) {
-		new BeamAdd(Beam.beamFromChords(chords)).execute();
+		try {
+			new BeamAdd(Beam.beamFromChords(chords)).execute();
+		} catch (IllegalArgumentException ex) {
+			reportError(ex.getMessage());
+		}
 	}
 	
 	/**

@@ -90,7 +90,7 @@ public class MusicXmlMassTest {
 	//*
 	@Test public void testSingleFile()
 	{
-		File file = new File(dir + "MusicXML/hausmusik.ch/w/werner/violinkonzert/violinkonzert_3/violinkonzert_3.xml");
+		File file = new File(dir + "MusicXML/hausmusik.ch/b/bach_joh_sebastian(1685-1750)/bwv0248-0249_Oratorien/bwv249_oster-oratorium/bwv249_11_preis_und_dank_chp/bwv249_11_preis_und_dank_chp.xml");
 		if (!testFile(file)) Assert.fail();
 	} //*/
 
