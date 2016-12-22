@@ -1,11 +1,11 @@
 package com.xenoage.zong.io.musicxml.in.util;
 
-import static com.xenoage.utils.collections.CollectionUtils.alist;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 
 /**
  * Reacts on error messages when loading a MusicXML document.
@@ -30,7 +30,7 @@ public class ErrorHandling {
 	/** How to deal with errors when loading MusicXML. */
 	@Getter private final Level level;
 	
-	/** List of error messages collected when using {@link ErrorHandling#LogErrors} */
+	/** List of error messages collected when using {@link Level#LogErrors} */
 	@Getter private List<String> errorMessages = alist();
 	
 	
