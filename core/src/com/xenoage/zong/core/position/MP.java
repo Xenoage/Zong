@@ -222,7 +222,7 @@ import com.xenoage.zong.core.music.Voice;
 	 * It is compared by staff, measure, voice, beat or element index.
 	 * If the beats are known, only those are compared, and if they are unknown,
 	 * only the element indices are compared.
-	 * None of the vother alues should be unknown, otherwise the result is undefined.
+	 * None of the other values should be unknown, otherwise the result is undefined.
 	 */
 	@Override public int compareTo(MP mp) {
 		//staff
@@ -255,6 +255,36 @@ import com.xenoage.zong.core.music.Voice;
 					else
 						return 0;
 				}
+			}
+		}
+	}
+
+
+	/**
+	 * Compares the time of this {@link MP} with the given one.
+	 * It is compared by measure, and then by beat or element index.
+	 * If the beats are known, only those are compared, and if they are unknown,
+	 * only the element indices are compared.
+	 */
+	public int compareTimeTo(MP mp) {
+		//measure
+		if (measure < mp.measure)
+			return -1;
+		else if (measure > mp.measure)
+			return 1;
+		else {
+			if (beat != null && mp.beat != null) {
+				//beat
+				return beat.compareTo(mp.beat);
+			}
+			else {
+				//element index
+				if (element < mp.element)
+					return -1;
+				else if (element > mp.element)
+					return 1;
+				else
+					return 0;
 			}
 		}
 	}

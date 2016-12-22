@@ -1,15 +1,5 @@
 package com.xenoage.zong.io.musicxml.in.readers;
 
-import static com.xenoage.utils.NullUtils.notNull;
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.utils.iterators.It.it;
-import static com.xenoage.utils.math.Fraction._0;
-import static com.xenoage.utils.math.Fraction.fr;
-import static com.xenoage.zong.core.position.MP.getMP;
-import static com.xenoage.zong.io.musicxml.in.readers.OtherReader.readDuration;
-
-import java.util.List;
-
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.music.VoiceElement;
@@ -32,8 +22,17 @@ import com.xenoage.zong.musicxml.types.choice.MxlNoteContent.MxlNoteContentType;
 import com.xenoage.zong.musicxml.types.enums.MxlYesNo;
 import com.xenoage.zong.musicxml.types.groups.MxlEditorialVoice;
 import com.xenoage.zong.musicxml.types.groups.MxlFullNote;
-
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
+import static com.xenoage.utils.NullUtils.notNull;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static com.xenoage.utils.iterators.It.it;
+import static com.xenoage.utils.math.Fraction._0;
+import static com.xenoage.utils.math.Fraction.fr;
+import static com.xenoage.zong.core.position.MP.getMP;
+import static com.xenoage.zong.io.musicxml.in.readers.OtherReader.readDuration;
 
 /**
  * This class reads a {@link Chord} from a given list
@@ -150,9 +149,13 @@ public final class ChordReader {
 		}
 
 		//create new chord or rest
-		if (mxlFNCType == MxlFullNoteContentType.Pitch) {
+		if (mxlFNCType == MxlFullNoteContentType.Pitch || mxlFNCType == MxlFullNoteContentType.Unpitched) {
 			//create a chord
-			Pitch pitch = ((MxlPitch) mxlFirstFullNote.getContent()).getPitch();
+			Pitch pitch;
+			if (mxlFNCType == MxlFullNoteContentType.Pitch)
+				pitch = ((MxlPitch) mxlFirstFullNote.getContent()).getPitch();
+			else
+				pitch = Pitch.pi(0, 4); //TODO (ZONG-96): better support for unpitched notes
 			Grace grace = null;
 			if (mxlFirstGraceNote != null) {
 				//read grace duration from note-type ("eighth", "16th", ...)

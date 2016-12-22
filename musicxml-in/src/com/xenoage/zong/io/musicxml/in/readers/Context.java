@@ -305,7 +305,7 @@ public final class Context {
 	/**
 	 * See {@link #removeUnclosedWedges()}.
 	 */
-	private void removeUnclosedWedge(Wedge wedge) {
+	public void removeUnclosedWedge(Wedge wedge) {
 		Measure measure = score.getMeasure(wedge.getMP());
 		measure.removeMeasureElement(wedge);
 	}

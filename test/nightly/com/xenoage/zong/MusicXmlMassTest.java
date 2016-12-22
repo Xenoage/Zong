@@ -90,7 +90,7 @@ public class MusicXmlMassTest {
 	//*
 	@Test public void testSingleFile()
 	{
-		File file = new File(dir + "MusicXML/musescore.com/Angel_Beats_Crusade_of_Light.mxl");
+		File file = new File(dir + "MusicXML/hausmusik.ch/b/burgmueller/klavierstuecke/25_etueden/19/19.xml");
 		if (!testFile(file)) Assert.fail();
 	} //*/
 

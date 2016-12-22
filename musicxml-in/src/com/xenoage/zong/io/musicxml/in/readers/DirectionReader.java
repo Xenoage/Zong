@@ -1,38 +1,20 @@
 package com.xenoage.zong.io.musicxml.in.readers;
 
-import static com.xenoage.utils.NullUtils.notNull;
-import static com.xenoage.utils.math.Fraction.fr;
-import lombok.RequiredArgsConstructor;
-
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.ColumnElement;
-import com.xenoage.zong.core.music.direction.Coda;
-import com.xenoage.zong.core.music.direction.Direction;
-import com.xenoage.zong.core.music.direction.Dynamics;
-import com.xenoage.zong.core.music.direction.DynamicsType;
-import com.xenoage.zong.core.music.direction.NavigationMarker;
-import com.xenoage.zong.core.music.direction.Pedal;
+import com.xenoage.zong.core.music.direction.*;
 import com.xenoage.zong.core.music.direction.Pedal.Type;
-import com.xenoage.zong.core.music.direction.Segno;
-import com.xenoage.zong.core.music.direction.Tempo;
-import com.xenoage.zong.core.music.direction.Wedge;
-import com.xenoage.zong.core.music.direction.WedgeType;
-import com.xenoage.zong.core.music.direction.Words;
 import com.xenoage.zong.core.music.format.Positioning;
 import com.xenoage.zong.core.music.util.DurationInfo;
 import com.xenoage.zong.io.musicxml.in.util.StaffDetails;
-import com.xenoage.zong.musicxml.types.MxlDirection;
-import com.xenoage.zong.musicxml.types.MxlDirectionType;
-import com.xenoage.zong.musicxml.types.MxlDynamics;
-import com.xenoage.zong.musicxml.types.MxlFormattedText;
-import com.xenoage.zong.musicxml.types.MxlMetronome;
-import com.xenoage.zong.musicxml.types.MxlPedal;
-import com.xenoage.zong.musicxml.types.MxlSound;
-import com.xenoage.zong.musicxml.types.MxlWedge;
-import com.xenoage.zong.musicxml.types.MxlWords;
+import com.xenoage.zong.musicxml.types.*;
 import com.xenoage.zong.musicxml.types.choice.MxlDirectionTypeContent;
 import com.xenoage.zong.musicxml.types.choice.MxlDirectionTypeContent.MxlDirectionTypeContentType;
+import lombok.RequiredArgsConstructor;
+
+import static com.xenoage.utils.NullUtils.notNull;
+import static com.xenoage.utils.math.Fraction.fr;
 
 /**
  * Reads a {@link Direction} from a {@link MxlDirection}.
@@ -194,10 +176,24 @@ public class DirectionReader {
 				break;
 			case Stop:
 				Wedge wedge = context.closeWedge(number);
-				if (wedge == null)
-					context.reportError("Wedge " + (number + 1) + " is not open!");
-				else
+				boolean err = false;
+				if (wedge == null) {
+					err = true;
+					context.reportError("Wedge " + (number + 1) + " is not open");
+				}
+				//the stop must be in the same staff and after the beginning of the wedge
+				else if (staff != wedge.getMP().staff ||
+						context.getMp().compareTimeTo(wedge.getMP()) <= 0) {
+					err = true;
+					context.reportError("Wedge " + (number + 1) + " does not end at a valid MP");
+				}
+				if (err) {
+					//in case of an error, remove the starting element
+					context.removeUnclosedWedge(wedge);
+				}
+				else {
 					context.writeMeasureElement(wedge.getWedgeEnd(), staff);
+				}
 				break;
 		}
 	}
