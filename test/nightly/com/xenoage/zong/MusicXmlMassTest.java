@@ -90,7 +90,7 @@ public class MusicXmlMassTest {
 	//*
 	@Test public void testSingleFile()
 	{
-		File file = new File(dir + "MusicXML/hausmusik.ch/b/burgmueller/klavierstuecke/25_etueden/19/19.xml");
+		File file = new File(dir + "MusicXML/hausmusik.ch/w/werner/violinkonzert/violinkonzert_3/violinkonzert_3.xml");
 		if (!testFile(file)) Assert.fail();
 	} //*/
 

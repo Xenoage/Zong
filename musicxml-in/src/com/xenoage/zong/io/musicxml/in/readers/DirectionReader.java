@@ -189,7 +189,8 @@ public class DirectionReader {
 				}
 				if (err) {
 					//in case of an error, remove the starting element
-					context.removeUnclosedWedge(wedge);
+					if (wedge != null)
+						context.removeUnclosedWedge(wedge);
 				}
 				else {
 					context.writeMeasureElement(wedge.getWedgeEnd(), staff);
