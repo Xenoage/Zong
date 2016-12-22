@@ -14,6 +14,7 @@ import com.xenoage.zong.io.ScoreDocFactory;
 import com.xenoage.zong.layout.Layout;
 import com.xenoage.zong.layout.frames.ScoreFrame;
 import com.xenoage.zong.musiclayout.stampings.NoteheadStamping;
+import com.xenoage.zong.musiclayout.stampings.StaffSymbolStamping;
 import com.xenoage.zong.musiclayout.stampings.Stamping;
 import org.junit.Assert;
 import org.junit.Before;
@@ -87,7 +88,7 @@ public class MusicXmlMassTest {
 			Assert.fail();
 	}
 
-	//*
+	/*
 	@Test public void testSingleFile()
 	{
 		File file = new File(dir + "MusicXML/hausmusik.ch/b/bach_joh_sebastian(1685-1750)/bwv0248-0249_Oratorien/bwv249_oster-oratorium/bwv249_11_preis_und_dank_chp/bwv249_11_preis_und_dank_chp.xml");
@@ -169,20 +170,20 @@ public class MusicXmlMassTest {
 		//at least one score frame?
 		if (layout.getScoreFrames().size() == 0)
 			throw new AssertionError("No score frames in layout");
-		//at least one notehead stamping?
+		//at least one staff symbol stamping?
 		if (false == filename.contains("[no notes]")) {
-			boolean noteheadFound = false;
+			boolean stampingFound = false;
 			noteheadSearch:
 			for (ScoreFrame scoreFrame : layout.getScoreFrames()) {
 				for (Stamping stamping : scoreFrame.getScoreFrameLayout().getMusicalStampings()) {
-					if (stamping instanceof NoteheadStamping) {
-						noteheadFound = true;
+					if (stamping instanceof NoteheadStamping || stamping instanceof StaffSymbolStamping) {
+						stampingFound = true;
 						break noteheadSearch;
 					}
 				}
 			}
-			if (false == noteheadFound)
-				throw new AssertionError("No notehead found in layout");
+			if (false == stampingFound)
+				throw new AssertionError("No staff symbol stamping found in layout");
 		}
 	}
 
