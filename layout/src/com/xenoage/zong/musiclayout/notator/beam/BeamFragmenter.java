@@ -1,20 +1,17 @@
 package com.xenoage.zong.musiclayout.notator.beam;
 
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.utils.kernel.Range.rangeReverse;
-import static com.xenoage.zong.core.music.util.DurationInfo.getFlagsCount;
-import static com.xenoage.zong.musiclayout.notation.beam.Fragment.HookLeft;
-import static com.xenoage.zong.musiclayout.notation.beam.Fragment.HookRight;
-import static com.xenoage.zong.musiclayout.notation.beam.Fragment.Start;
-import static com.xenoage.zong.musiclayout.notation.beam.Fragment.Stop;
-
-import java.util.List;
-
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.musiclayout.notation.beam.Fragments;
+
+import java.util.List;
+
+import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.utils.kernel.Range.rangeReverse;
+import static com.xenoage.zong.core.music.util.DurationInfo.getFlagsCount;
+import static com.xenoage.zong.musiclayout.notation.beam.Fragment.*;
 
 /**
  * Computes the {@link Fragments} of the lines of a {@link Beam}.

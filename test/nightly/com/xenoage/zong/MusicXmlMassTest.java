@@ -91,7 +91,7 @@ public class MusicXmlMassTest {
 	//*
 	@Test public void testSingleFile()
 	{
-		File file = new File(dir + "MusicXML/lusthof-der-muziek.blogspot.de/Hs-Bolhuis-1-transcriptie-Kwakernaat-XML-v3/XML/013-Menuet.xml");
+		File file = new File(dir + "MusicXML/lusthof-der-muziek.blogspot.de/Hs-Bolhuis-1-transcriptie-Kwakernaat-XML-v3/XML/167-Prins Oranje.xml");
 		if (!testFile(file)) Assert.fail();
 	} //*/
 

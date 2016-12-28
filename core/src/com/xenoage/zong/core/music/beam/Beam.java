@@ -1,15 +1,5 @@
 package com.xenoage.zong.core.music.beam;
 
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.utils.collections.CollectionUtils.getFirst;
-import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.utils.math.MathUtils.min;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.MusicElementType;
@@ -19,9 +9,16 @@ import com.xenoage.zong.core.music.util.DurationInfo;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.position.MPContainer;
 import com.xenoage.zong.core.position.MPElement;
-import com.xenoage.zong.core.util.InconsistentScoreException;
-
 import lombok.Getter;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static com.xenoage.utils.collections.CollectionUtils.getFirst;
+import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.utils.math.MathUtils.min;
 
 
 /**
@@ -54,7 +51,7 @@ public final class Beam
 	 */
 	public static Beam beam(List<BeamWaypoint> waypoints) {
 		Beam beam = new Beam(waypoints);
-		beam.checkWaypoints();
+		beam.check();
 		return beam;
 	}
 
@@ -63,7 +60,7 @@ public final class Beam
 	 */
 	public static Beam beamFromChords(List<Chord> chords) {
 		Beam ret = beamFromChordsNoCheck(chords);
-		ret.checkWaypoints();
+		ret.check();
 		return ret;
 	}
 
@@ -85,14 +82,17 @@ public final class Beam
 
 	/**
 	 * Checks the correctness of the beam:
+	 * The beam must have at least one line
 	 * It must have at least 2 chords, must exist in a single measure column
 	 * and the chords must be sorted by beat.
 	 */
-	private void checkWaypoints() {
+	private void check() {
 
-		if (waypoints.size() < 2) {
+		if (getMaxLinesCount() == 0)
+			throw new IllegalArgumentException("A beam must have at least one line");
+
+		if (waypoints.size() < 2)
 			throw new IllegalArgumentException("At least two chords are needed to create a beam!");
-		}
 
 		Fraction lastBeat = null;
 		boolean wasLastChordGrace = false;
