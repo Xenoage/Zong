@@ -1,13 +1,5 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-
-import java.util.List;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
 import com.xenoage.utils.annotations.MaybeEmpty;
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.NonNull;
@@ -15,6 +7,13 @@ import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.choice.MxlPartListContent;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
+
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 
 /**
  * MusicXML score-part.
@@ -75,7 +74,9 @@ public class MxlScorePart
 			reader.closeElement();
 		}
 		if (partName == null)
-			throw reader.dataException("part-name unknown");
+			//DEPENDENCY INJECTION: error or fallback
+			//throw reader.dataException("part-name unknown");
+			partName = "";
 		return new MxlScorePart(identification, partName, partAbbreviation, scoreInstruments,
 			midiInstruments, id);
 	}

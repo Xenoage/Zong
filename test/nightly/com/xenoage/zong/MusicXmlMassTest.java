@@ -73,6 +73,8 @@ public class MusicXmlMassTest {
 		files.removeIf(f -> f.getName().equals("mei.xml"));
 		//remove all files and directories with prefix "__"
 		files.removeIf(f -> f.getAbsolutePath().contains("__"));
+		//sort alphabetically by filepath
+		files.sort((f1, f2) -> f1.getAbsolutePath().compareTo(f2.getAbsolutePath()));
 		System.out.println("Processing " + files.size() + " files...");
 		It<File> filesIt = it(files);
 		for (File file : filesIt) {
@@ -91,7 +93,7 @@ public class MusicXmlMassTest {
 	//*
 	@Test public void testSingleFile()
 	{
-		File file = new File(dir + "MusicXML/lusthof-der-muziek.blogspot.de/Hs-Bolhuis-1-transcriptie-Kwakernaat-XML-v3/XML/167-Prins Oranje.xml");
+		File file = new File(dir + "MusicXML/ponchielli/ConTromba.xml");
 		if (!testFile(file)) Assert.fail();
 	} //*/
 

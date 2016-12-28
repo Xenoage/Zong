@@ -1,9 +1,5 @@
 package com.xenoage.zong.core.music.direction;
 
-import static com.xenoage.utils.CheckUtils.checkArgsNotNull;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.header.ColumnHeader;
@@ -12,6 +8,10 @@ import com.xenoage.zong.core.music.MusicElementType;
 import com.xenoage.zong.core.music.TextElement;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.text.Text;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+import static com.xenoage.utils.CheckUtils.checkArgsNotNull;
 
 
 /**
@@ -40,6 +40,8 @@ public final class Tempo
 
 	public Tempo(Fraction baseBeat, int beatsPerMinute) {
 		checkArgsNotNull(baseBeat);
+		if (beatsPerMinute <= 0)
+			throw new IllegalArgumentException("beatsPerMinute must be > 0");
 		this.baseBeat = baseBeat;
 		this.beatsPerMinute = beatsPerMinute;
 	}

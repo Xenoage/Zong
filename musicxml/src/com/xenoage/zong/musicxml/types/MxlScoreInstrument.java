@@ -41,7 +41,9 @@ public final class MxlScoreInstrument {
 			reader.closeElement();
 		}
 		if (instrumentName == null)
-			throw reader.dataException("instrument-name unknown");
+			//DEPENCENDY INJECTION: error or fallback
+			//throw reader.dataException("instrument-name unknown");
+			instrumentName = "";
 		return new MxlScoreInstrument(instrumentName, instrumentAbbreviation, id);
 	}
 

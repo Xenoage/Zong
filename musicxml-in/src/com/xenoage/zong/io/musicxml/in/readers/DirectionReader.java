@@ -94,7 +94,11 @@ public class DirectionReader {
 			}
 		}
 
-		direction = readSound(direction);
+		try {
+			direction = readSound(direction);
+		} catch (Exception ex) {
+			context.reportError(ex.getMessage());
+		}
 
 		//write direction to score
 		//TODO: find out if measure direction or column direction.

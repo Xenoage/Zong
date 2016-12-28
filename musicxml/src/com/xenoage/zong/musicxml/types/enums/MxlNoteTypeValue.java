@@ -1,11 +1,11 @@
 package com.xenoage.zong.musicxml.types.enums;
 
-import static com.xenoage.utils.math.Fraction.fr;
+import com.xenoage.utils.annotations.NonNull;
+import com.xenoage.utils.math.Fraction;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import com.xenoage.utils.annotations.NonNull;
-import com.xenoage.utils.math.Fraction;
+import static com.xenoage.utils.math.Fraction.fr;
 
 /**
  * MusicXML note-type-value.
@@ -15,6 +15,8 @@ import com.xenoage.utils.math.Fraction;
 @AllArgsConstructor @Getter
 public enum MxlNoteTypeValue {
 
+	_1024th(fr(1, 1024)),
+	_512th(fr(1, 512)),
 	_256th(fr(1, 256)),
 	_128th(fr(1, 128)),
 	_64th(fr(1, 64)),

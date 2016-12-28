@@ -45,7 +45,10 @@ public final class MxlNormalNote
 		fullNote.check(reader);
 		if (duration < 0) {
 			//it should also be not 0, but we accept it
-			throw reader.dataException("duration < 0");
+
+			//DEPENCENDY INJECTION: error or fallback
+			//throw reader.dataException("duration < 0");
+			duration = 0;
 		}
 	}
 
