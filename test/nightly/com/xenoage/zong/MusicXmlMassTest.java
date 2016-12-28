@@ -88,10 +88,10 @@ public class MusicXmlMassTest {
 			Assert.fail();
 	}
 
-	/*
+	//*
 	@Test public void testSingleFile()
 	{
-		File file = new File(dir + "MusicXML/hausmusik.ch/b/bach_joh_sebastian(1685-1750)/bwv0248-0249_Oratorien/bwv249_oster-oratorium/bwv249_11_preis_und_dank_chp/bwv249_11_preis_und_dank_chp.xml");
+		File file = new File(dir + "MusicXML/lusthof-der-muziek.blogspot.de/Hs-Bolhuis-1-transcriptie-Kwakernaat-XML-v3/XML/013-Menuet.xml");
 		if (!testFile(file)) Assert.fail();
 	} //*/
 
