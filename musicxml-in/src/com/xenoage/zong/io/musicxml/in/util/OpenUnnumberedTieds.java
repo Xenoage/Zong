@@ -1,15 +1,16 @@
 package com.xenoage.zong.io.musicxml.in.util;
 
-import static com.xenoage.utils.collections.CollectionUtils.map;
-
-import java.util.Map;
-
 import com.xenoage.utils.math.VSide;
 import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.slur.SlurType;
 import com.xenoage.zong.core.music.slur.SlurWaypoint;
+import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.io.musicxml.in.readers.Context;
+
+import java.util.Map;
+
+import static com.xenoage.utils.collections.CollectionUtils.map;
 
 /**
  * Unclosed unnumbered tied elements, needed during MusicXML import.
@@ -63,9 +64,15 @@ public class OpenUnnumberedTieds {
 			context.reportError("Can not stop non-existing tied");
 			return null;
 		}
+		//does start chord exist? could have been overwritten by backup element
+		MP startMp = openTied.start.wp.getChord().getMP();
+		if (startMp == null) {
+			context.reportError("Tied can not be closed; start chord does not exist");
+			return null;
+		}
 		//is tied closed at the same musical position where it was opened?
 		//then close the earlier open tied instead, if there is one
-		if (openTied.start.wp.getChord().getMP().equals(context.getMp())) {
+		if (startMp.equals(context.getMp())) {
 			openTieds.put(pitch, openTied); //remember last tied
 			openTied = openEarlierTieds.remove(pitch); //use earlier tied instead
 			if (openTied == null) {

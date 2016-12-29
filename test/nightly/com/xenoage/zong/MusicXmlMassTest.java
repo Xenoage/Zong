@@ -93,7 +93,7 @@ public class MusicXmlMassTest {
 	//*
 	@Test public void testSingleFile()
 	{
-		File file = new File(dir + "MusicXML/ponchielli/ConTromba.xml");
+		File file = new File(dir + "MusicXML/ponchielli/VarCarnevaleVenezia.xml");
 		if (!testFile(file)) Assert.fail();
 	} //*/
 
