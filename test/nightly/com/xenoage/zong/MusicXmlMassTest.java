@@ -90,7 +90,7 @@ public class MusicXmlMassTest {
 			Assert.fail();
 	}
 
-	//*
+	/*
 	@Test public void testSingleFile()
 	{
 		File file = new File(dir + "MusicXML/ponchielli/VarCarnevaleVenezia.xml");
