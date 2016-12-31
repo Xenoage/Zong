@@ -6,4 +6,6 @@ To build the project, call `gradlew` in the root folder. To build the Android pa
 
 Have a look at our [website](http://www.zong-music.com/), the [development wiki](https://xenoage.atlassian.net/wiki/display/ZONG/Zong!+Wiki) and our [tracker](https://xenoage.atlassian.net/). You can find videos there, which explain in more detail how to [download](https://xenoage.atlassian.net/wiki/display/ZONG/Download) and [build](https://xenoage.atlassian.net/wiki/display/ZONG/Compile) the project.
 
+The current progress of our MusicXML support and of our layout engine is shown by our [status reports](http://test.xenoage.com/zong/musicxmltestsuite/) and [visual reports](http://test.xenoage.com/zong/musicxmltestsuite/visual.html) based on the [Unofficial MusicXML Test Suite](http://lilypond.org/doc/v2.18/input/regression/musicxml/collated-files.html).
+
 Contact andi@xenoage.com for questions.
