@@ -1,18 +1,21 @@
 package com.xenoage.zong;
 
-import static com.xenoage.utils.collections.ArrayUtils.containsRef;
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-
 import java.io.File;
 import java.util.ArrayList;
+
+import static com.xenoage.utils.collections.ArrayUtils.containsRef;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 
 /**
  * This class contains a method
  * that returns all subclasses of
  * a given class.
+ *
+ * @deprecated use org.reflections:reflections library instead
  * 
  * @author Andreas Wenger
  */
+@Deprecated
 public class SubclassCollector {
 	
 	/**
@@ -115,6 +118,7 @@ public class SubclassCollector {
 					ret.add(cls);
 				}
 			} catch (ClassNotFoundException ex) {
+				ex.printStackTrace();
 			} catch (ExceptionInInitializerError err) {
 			}
 		}

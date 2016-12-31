@@ -1,14 +1,10 @@
 package musicxmltestsuite;
 
-import java.util.Arrays;
-import java.util.Map;
-
-import musicxmltestsuite.report.HtmlReport;
+import musicxmltestsuite.report.StatusHtmlReport;
 import musicxmltestsuite.report.TestStatus;
 import musicxmltestsuite.tests.base.Base;
 import musicxmltestsuite.tests.base.OtherTests;
 import musicxmltestsuite.tests.utils.ToDo;
-
 import org.junit.extensions.cpsuite.ClasspathSuite;
 import org.junit.extensions.cpsuite.ClasspathSuite.BaseTypeFilter;
 import org.junit.runner.Description;
@@ -17,12 +13,16 @@ import org.junit.runner.RunWith;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 
+import java.util.Arrays;
+import java.util.Map;
+
 /**
  * Suite for running the unofficial MusicXML Test Suite tests.
  * 
  * Running this file as a JUnit suite runs all the tests in the suite.
- * Running thus file as a Java application creates a report HTML file
- * (see {@link HtmlReport}).
+ *
+ * Running the {@link #runWithHtmlStatusReport()} method creates report HTML files
+ * (see {@link StatusHtmlReport}).
  * 
  * @author Andreas Wenger
  */
@@ -30,12 +30,11 @@ import org.junit.runner.notification.RunListener;
 @BaseTypeFilter(Base.class)
 public class MusicXmlTestSuite
 	extends RunListener {
-	
+
 	private static JUnitCore runner = null;
-	private static HtmlReport report = new HtmlReport();
-	
-	public static void main(String[] args)
-	{
+	private static StatusHtmlReport report = new StatusHtmlReport();
+
+	public static void runWithHtmlStatusReport() {
 		runner = new JUnitCore();
 		runner.addListener(new MusicXmlTestSuite());
 		runner.run(MusicXmlTestSuite.class);

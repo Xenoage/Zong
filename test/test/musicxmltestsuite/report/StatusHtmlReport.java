@@ -1,13 +1,15 @@
 package musicxmltestsuite.report;
 
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-
-import java.util.List;
-
-import musicxmltestsuite.tests.base.Base;
-
 import com.xenoage.utils.jse.io.JseFileUtils;
 import com.xenoage.utils.jse.io.JseStreamUtils;
+import musicxmltestsuite.tests.base.Base;
+
+import java.time.Instant;
+import java.util.List;
+
+import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static java.util.Comparator.comparing;
+import static musicxmltestsuite.MusicXmlTestSuiteHtmlReport.dirReport;
 
 /**
  * Creates an HTML report of the MusicXML implementation status
@@ -15,10 +17,9 @@ import com.xenoage.utils.jse.io.JseStreamUtils;
  * 
  * @author Andreas Wenger
  */
-public class HtmlReport {
+public class StatusHtmlReport {
 	
 	public static final String[] projects = { "musicxml", "musicxml-in", "layout", "midi-out"};
-	public static final String dirReport = "reports/musicxmltestsuite/";
 	
 	private List<TestRow> rows = alist();
 	
@@ -43,7 +44,7 @@ public class HtmlReport {
 	}
 	
 	public void writeToHtmlFile() {
-		rows.sort((r1, r2) -> r1.getTestName().compareTo(r2.getTestName()));
+		rows.sort(comparing(TestRow::getTestName));
 		String html = createHtmlReport();
 		JseFileUtils.writeFile(html, getHtmlFilePath());
 	}
@@ -54,6 +55,7 @@ public class HtmlReport {
 	
 	private String createHtmlReport() {
 		String html = loadHtmlTemplate("template");
+		html = html.replace("[[date]]", Instant.now().toString());
 		html = html.replace("[[legend]]", createHtmlLegend());
 		html = html.replace("[[rows]]", createHtmlRows());
 		return html;
@@ -61,7 +63,7 @@ public class HtmlReport {
 
 	private String loadHtmlTemplate(String name) {
 		return JseStreamUtils.readToString(
-			getClass().getResourceAsStream("templates/" + name + ".html"));
+			getClass().getResourceAsStream("templates/status/" + name + ".html"));
 	}
 	
 	private String createHtmlLegend() {

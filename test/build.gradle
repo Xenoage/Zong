@@ -5,6 +5,7 @@ dependencies {
 	compile group: 'junit', name: 'junit', version: '4.+'
 	compile project(':demos'), project(':webserver')
 	compile 'com.googlecode.cedar-common:cpsuite:1.2.6'
+	compile 'org.reflections:reflections:0.9.10'
 }
 
 test {

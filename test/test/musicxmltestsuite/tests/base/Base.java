@@ -17,6 +17,8 @@ public interface Base {
 	String getFileName();
 	
 	/** The Zong! subproject which is tested with this test, like "musicxml" or "layout". */
-	String getProjectName();
+	default String getProjectName() {
+		return "";
+	}
 
 }

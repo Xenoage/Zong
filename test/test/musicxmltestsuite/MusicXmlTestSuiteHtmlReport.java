@@ -1,12 +1,20 @@
 package musicxmltestsuite;
 
+import musicxmltestsuite.report.VisualHtmlReport;
 import org.junit.Test;
 
 
 public class MusicXmlTestSuiteHtmlReport {
 
-	@Test public void htmlReport() {
-		MusicXmlTestSuite.main(new String[0]);
+	public static final String dirReport = "reports/musicxmltestsuite/";
+
+	@Test public void statusHtmlReport() {
+		MusicXmlTestSuite.runWithHtmlStatusReport();
+	}
+
+	@Test public void visualHtmlReport()
+			throws Throwable{
+		VisualHtmlReport.run();
 	}
 	
 }

@@ -1,10 +1,8 @@
 package musicxmltestsuite.tests.musicxmlin;
 
-import musicxmltestsuite.tests.base.Base41g;
-
-import org.junit.Test;
-
 import com.xenoage.utils.exceptions.InvalidFormatException;
+import musicxmltestsuite.tests.base.Base41g;
+import org.junit.Test;
 
 /**
  * ID for part is required by MusicXML schema.
