@@ -1,3 +1,4 @@
+#!/bin/bash
 # Convert all MusicXML files to lilypond, then to PNG,
 # crop their bottom part (Lilypond footer) and trim the images
 for file in *.{xml,mxl}
