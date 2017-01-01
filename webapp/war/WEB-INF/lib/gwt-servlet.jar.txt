@@ -1,2 +1,0 @@
-gwt-servlet.jar must be placed in this directory.
-Call the Ant script <zong>/lib/lib.update.xml to download it.

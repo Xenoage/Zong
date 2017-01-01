@@ -1,6 +1,4 @@
-gwt-unitCache
-src-zong
-war/WEB-INF/deploy/
-war/WEB-INF/classes/
-war/webapp/*.cache.html
-war/webapp/webapp.nocache.js
+/gwt-unitCache
+/src-zong
+/www/WEB-INF
+/www/webapp

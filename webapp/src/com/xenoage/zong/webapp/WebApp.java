@@ -1,13 +1,5 @@
 package com.xenoage.zong.webapp;
 
-import static com.xenoage.utils.PlatformUtils.platformUtils;
-import static com.xenoage.utils.log.Log.log;
-import static com.xenoage.utils.log.Report.fatal;
-import static com.xenoage.utils.math.Fraction._0;
-import static com.xenoage.zong.util.ZongPlatformUtils.zongPlatformUtils;
-
-import java.io.IOException;
-
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.core.client.EntryPoint;
@@ -40,13 +32,18 @@ import com.xenoage.zong.renderer.canvas.CanvasDecoration;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
 import com.xenoage.zong.renderer.canvas.CanvasIntegrity;
 import com.xenoage.zong.renderer.stamping.StampingRenderer;
-import com.xenoage.zong.symbols.PathSymbol;
 import com.xenoage.zong.symbols.SymbolPool;
-import com.xenoage.zong.symbols.common.CommonSymbol;
 import com.xenoage.zong.utils.demo.ScoreRevolutionary;
 import com.xenoage.zong.webapp.renderer.gwt.canvas.GwtCanvas;
-import com.xenoage.zong.webapp.renderer.gwt.path.GwtPath;
 import com.xenoage.zong.webapp.utils.GwtZongPlatformUtils;
+
+import java.io.IOException;
+
+import static com.xenoage.utils.PlatformUtils.platformUtils;
+import static com.xenoage.utils.log.Log.log;
+import static com.xenoage.utils.log.Report.fatal;
+import static com.xenoage.utils.math.Fraction._0;
+import static com.xenoage.zong.util.ZongPlatformUtils.zongPlatformUtils;
 
 
 /**
@@ -70,20 +67,20 @@ public class WebApp
 		Log.init(new GwtLogProcessing(Zong.getNameAndVersion(appFirstName)));
 		//init error handler
 		Err.init(new GwtErrorProcessing());
-    
+
 		//init utils
 		GwtZongPlatformUtils.init(new AsyncCallback() {
-			
+
 			@Override public void onSuccess() {
 				step1_setup();
 			}
-			
+
 			@Override public void onFailure(Exception ex) {
 				log(fatal("Could not init platform utils", ex));
 			}
 		});
 	}
-		
+
 	private void step1_setup() {
 		//test core
 		final Score score = ScoreRevolutionary.createScore();
@@ -99,19 +96,19 @@ public class WebApp
 		container.add(new Label(findAClef(score, MP.atBeat(1, 1, 0, _0))));
 		MP mp = MP.atBeat(0, 1, 0, _0);
 		container.add(new Label("Voice at " + mp + ": " + score.getVoice(mp)));
-		
-		
+
+
 		//Test GWT IO
 		try {
 			container.add(new Label("File content:"));
 			final Label lblData = new Label("Loading...");
 			container.add(lblData);
 			platformUtils().openFileAsync("test.txt", new AsyncResult<InputStream>() {
-				
+
 				@Override public void onSuccess(InputStream data) {
 					lblData.setText(((GwtInputStream) data).getData());
 				}
-				
+
 				@Override public void onFailure(Exception ex) {
 					lblData.setText("File error: " + ex.toString());
 				}
@@ -119,14 +116,14 @@ public class WebApp
 		} catch (Exception ex) {
 			container.add(new Label("File error: " + ex.toString()));
 		}
-		
+
 		//test XML reading
 		try {
 			container.add(new Label("XML content:"));
 			final Label lblData = new Label("Loading...");
 			container.add(lblData);
 			platformUtils().openFileAsync("test.xml", new AsyncResult<InputStream>() {
-				
+
 				@Override public void onSuccess(InputStream data) {
 					try {
 						LayoutSettings layoutSettings = LayoutSettingsReader.read(data);
@@ -135,7 +132,7 @@ public class WebApp
 						lblData.setText("XML error: " + ex.toString());
 					}
 				}
-				
+
 				@Override public void onFailure(Exception ex) {
 					lblData.setText("XML error: " + ex.toString());
 				}
@@ -143,7 +140,7 @@ public class WebApp
 		} catch (Exception ex) {
 			container.add(new Label("XML error: " + ex.toString()));
 		}
-		
+
 		//test canvas
 		canvas = Canvas.createIfSupported();
     if (canvas == null) {
@@ -166,7 +163,7 @@ public class WebApp
     context.lineTo(25,40);
     context.closePath();
     context.fill();
-    
+
     //TEST
     context.save();
     context.translate(200, 200);
@@ -175,7 +172,7 @@ public class WebApp
     GwtPath.drawPath(symbol.getPath(), context);
     context.fill();
     context.restore();
-    
+
     //TEST
     context.save();
     context.translate(400, 300);
@@ -184,14 +181,14 @@ public class WebApp
     GwtPath.drawPath(symbol.getPath(), context);
     context.fill();
     context.restore(); */
-    
+
     //test layout
 		container.add(new Label("And here is the layout data:"));
 		final SymbolPool symbolPool = zongPlatformUtils().getSymbolPool();
 		final Label lblLayout = new Label("Loading...");
 		container.add(lblLayout);
 		platformUtils().openFileAsync("test.xml", new AsyncResult<InputStream>() {
-			
+
 			@Override public void onSuccess(InputStream data) {
 				try {
 					LayoutSettings layoutSettings = LayoutSettingsReader.read(data);
@@ -200,7 +197,7 @@ public class WebApp
 					Target target = Target.completeLayoutTarget(new ScoreLayoutArea(areaSize));
 					ScoreLayout layout = new ScoreLayouter(context, target).createLayoutWithExceptions();
 					lblLayout.setText(layout.toString().substring(0, 1000) + "...");
-					
+
 					//draw in canvas
 					gwtCanvas.transformScale(20, 20);
 					Iterable<Stamping> stampings = layout.getScoreFrameLayout(0).getMusicalStampings();
@@ -213,16 +210,16 @@ public class WebApp
 					lblLayout.setText("layout error: " + ex.toString());
 				}
 			}
-			
+
 			@Override public void onFailure(Exception ex) {
 				lblLayout.setText("Layout error: " + ex.toString());
 			}
 		});
 	}
-	
+
 	private String findAClef(Score score, MP mp) {
 		return "Last clef at or before " + mp + ": " +
-			score.getClef(mp, Interval.BeforeOrAt).getType().toString();
+			score.getClef(mp, Interval.BeforeOrAt).toString();
 	}
 	
 }

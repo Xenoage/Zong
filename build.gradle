@@ -1,4 +1,4 @@
-defaultTasks 'build'
+defaultTasks 'build', ':webapp:compileGwt'
 
 allprojects {
 

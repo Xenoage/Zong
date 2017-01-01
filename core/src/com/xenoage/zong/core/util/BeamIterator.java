@@ -1,17 +1,16 @@
 package com.xenoage.zong.core.util;
 
-import static com.xenoage.zong.core.position.MP.mp0;
-
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.position.MP;
-
 import lombok.Getter;
+
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+import static com.xenoage.zong.core.position.MP.mp0;
 
 /**
  * An iterator over all {@link Beam}s in a score.
@@ -67,4 +66,7 @@ public class BeamIterator
 		return this;
 	}
 
+	@Override public void remove() {
+		throw new UnsupportedOperationException();
+	}
 }

@@ -1,0 +1,77 @@
+buildscript {
+	repositories {
+		jcenter()
+	}
+	dependencies {
+		classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.6'
+	}
+}
+
+plugins {
+	id 'io.franzbecker.gradle-lombok' version '1.8'
+}
+
+apply plugin: 'gwt'
+
+
+def delombok_target = "src-zong"
+def delombok_src = [
+		"../core/src",
+		"../layout/src",
+		"../renderer/src",
+		"../utils/utils-base/src/",
+		"../utils/utils-gwt/src/",
+		"../utils/utils-kernel/src/"
+]
+
+task cleanSrcZong(type: Delete) {
+	delete 'src-zong'
+}
+
+import io.franzbecker.gradle.lombok.task.DelombokTask
+
+task delombokSrcZong(type: DelombokTask) {
+	ext.outputDir = file(delombok_target)
+	outputs.dir(outputDir)
+	delombok_src.each {
+		inputs.dir(it)
+		args(it, "-d", outputDir)
+	}
+}
+
+task deletePlatformUtilsBootstrap(type: Delete) {
+	delete 'src-zong/com/xenoage/utils/PlatformUtilsBootstrap.java'
+}
+
+task prepareSrcZong(dependsOn: [cleanSrcZong, delombokSrcZong, deletePlatformUtilsBootstrap]) {
+	delombokSrcZong.mustRunAfter cleanSrcZong
+	deletePlatformUtilsBootstrap.mustRunAfter delombokSrcZong
+}
+
+compileJava.dependsOn prepareSrcZong
+
+
+gwt {
+	gwtVersion = '2.7.0'
+	modules 'com.xenoage.zong.webapp.webapp'
+	compiler { style = 'PRETTY' }
+}
+
+sourceSets {
+	main {
+		java {
+			srcDir 'src'
+			srcDir 'src-zong'
+		}
+		resources {
+			srcDir 'src'
+			srcDir 'src-zong'
+		}
+	}
+}
+
+/* Copy webapp (JS results) and WEB-INF folder from Gradle build folder into www folder. */
+compileGwt.doLast {
+	delete 'www/webapp', 'www/WEB-INF'
+	copy { from 'build/gwt/out/' into "www/" }
+}
