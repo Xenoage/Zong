@@ -4,16 +4,20 @@
 for file in *.{xml,mxl}
 do
 
-	# convert from MusicXML to Lilypond
-	musicxml2ly -o "$file.ly" "$file"
+	if [ ! -f "$file.png" ]; then
 
-	# convert from Lilypond to PNG
-	lilypond -fpng -o "$file" "$file.ly"
+		# convert from MusicXML to Lilypond
+		musicxml2ly -o "$file.ly" "$file"
 
-	# when there are multiple pages, rename the first one to the expected name
-	mv "$file-page1.png" "$file.png"
+		# convert from Lilypond to PNG
+		lilypond -fpng -o "$file" "$file.ly"
 
-	# crop the resulting image and scale it down
-	mogrify -trim -crop +0-80 +repage -trim -scale 70% "$file.png"
+		# when there are multiple pages, rename the first one to the expected name
+		mv "$file-page1.png" "$file.png"
+
+		# crop the resulting image and scale it down
+		mogrify -trim -crop +0-80 +repage -trim -scale 70% "$file.png"
+
+	fi
 
 done
