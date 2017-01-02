@@ -1,7 +1,7 @@
 package com.xenoage.zong.musicxml.types;
 
 import static com.xenoage.zong.core.music.Pitch.pi;
-import static com.xenoage.zong.musicxml.util.InvalidCore.invalidCore;
+import static com.xenoage.zong.musicxml.util.error.InvalidCore.invalidCore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

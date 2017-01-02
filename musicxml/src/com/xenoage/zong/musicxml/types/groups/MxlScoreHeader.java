@@ -1,21 +1,17 @@
 package com.xenoage.zong.musicxml.types.groups;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import lombok.Getter;
-import lombok.Setter;
-
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
-import com.xenoage.zong.musicxml.types.MxlCredit;
-import com.xenoage.zong.musicxml.types.MxlDefaults;
-import com.xenoage.zong.musicxml.types.MxlIdentification;
-import com.xenoage.zong.musicxml.types.MxlPartList;
-import com.xenoage.zong.musicxml.types.MxlWork;
+import com.xenoage.zong.musicxml.types.*;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
+import com.xenoage.zong.musicxml.util.error.handler.ErrorHandler;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * MusicXML score-header.
@@ -35,7 +31,7 @@ public final class MxlScoreHeader {
 	@NonNull private MxlPartList partList;
 
 
-	public void readElement(XmlReader reader) {
+	public void readElement(XmlReader reader, ErrorHandler errorHandler) {
 		String n = reader.getElementName();
 		if (n.equals(MxlCredit.elemName)) {
 			if (credits == null)
@@ -51,7 +47,7 @@ public final class MxlScoreHeader {
 		else if (n.equals("movement-title"))
 			movementTitle = reader.getTextNotNull();
 		else if (n.equals(MxlPartList.elemName))
-			partList = MxlPartList.read(reader);
+			partList = MxlPartList.read(reader, errorHandler);
 		else if (n.equals(MxlWork.elemName))
 			work = MxlWork.read(reader);
 	}

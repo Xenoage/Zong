@@ -1,19 +1,19 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-
-import java.util.List;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
 import com.xenoage.utils.annotations.NonEmpty;
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.choice.MxlPartListContent;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
+import com.xenoage.zong.musicxml.util.error.handler.ErrorHandler;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
+
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 
 /**
  * MusicXML part-list.
@@ -29,7 +29,7 @@ public final class MxlPartList {
 	@NonEmpty private List<MxlPartListContent> content;
 
 
-	@NonNull public static MxlPartList read(XmlReader reader) {
+	@NonNull public static MxlPartList read(XmlReader reader, ErrorHandler errorHandler) {
 		List<MxlPartListContent> content = alist();
 		boolean scorePartFound = false;
 		while (reader.openNextChildElement()) {
@@ -38,7 +38,7 @@ public final class MxlPartList {
 				content.add(MxlPartGroup.read(reader));
 			}
 			else if (n.equals(MxlScorePart.elemName)) {
-				content.add(MxlScorePart.read(reader));
+				content.add(MxlScorePart.read(reader, errorHandler));
 				scorePartFound = true;
 			}
 			reader.closeElement();

@@ -1,5 +1,7 @@
 package com.xenoage.zong.musicxml;
 
+import com.xenoage.zong.musicxml.util.error.handler.ErrorHandler;
+import com.xenoage.zong.musicxml.util.error.handler.TolerantErrorHandler;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,10 +26,11 @@ public final class MusicXMLDocument {
 
 	public static MusicXMLDocument read(XmlReader reader)
 		throws XmlException {
+		ErrorHandler errorHandler = new TolerantErrorHandler(); //try to fix errors in MusicXML files
 		reader.openNextChildElement();
 		String n = reader.getElementName();
 		if (n.equals(MxlScorePartwise.elemName))
-			return new MusicXMLDocument(MxlScorePartwise.read(reader));
+			return new MusicXMLDocument(MxlScorePartwise.read(reader, errorHandler));
 		else if (n.equals("score-timewise"))
 			throw new IllegalArgumentException("Timewise scores are not supported.");
 		throw new IllegalArgumentException("Unknown root element: " + n);

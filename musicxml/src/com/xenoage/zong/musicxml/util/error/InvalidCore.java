@@ -1,4 +1,4 @@
-package com.xenoage.zong.musicxml.util;
+package com.xenoage.zong.musicxml.util.error;
 
 /**
  * Runtime exception for invalid Zong! core data.

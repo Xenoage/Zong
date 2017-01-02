@@ -1,14 +1,5 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.NullUtils.notNull;
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-
-import java.util.List;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
 import com.xenoage.utils.annotations.NonEmpty;
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.XmlReader;
@@ -16,6 +7,15 @@ import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.groups.MxlScoreHeader;
 import com.xenoage.zong.musicxml.types.partwise.MxlPart;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
+import com.xenoage.zong.musicxml.util.error.handler.ErrorHandler;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
+
+import static com.xenoage.utils.NullUtils.notNull;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 
 /**
  * MusicXML score-partwise.
@@ -35,7 +35,7 @@ public final class MxlScorePartwise {
 	private static final String defaultVersion = "1.0";
 
 	
-	@NonNull public static MxlScorePartwise read(XmlReader reader) {
+	@NonNull public static MxlScorePartwise read(XmlReader reader, ErrorHandler errorHandler) {
 		//attributes
 		String version = notNull(reader.getAttribute("version"), defaultVersion);
 		//elements
@@ -45,7 +45,7 @@ public final class MxlScorePartwise {
 			if (reader.getElementName().equals(MxlPart.elemName))
 				parts.add(MxlPart.read(reader));
 			else
-				scoreHeader.readElement(reader);
+				scoreHeader.readElement(reader, errorHandler);
 			reader.closeElement();
 		}
 		scoreHeader.check(reader);
