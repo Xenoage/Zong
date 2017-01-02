@@ -1,4 +1,12 @@
-defaultTasks 'build', ':webapp:compileGwt'
+//Quick overview over targets:
+//
+// - build (default)  compile and test Zong!
+// - buildWebApp      compile webapp project to JavaScript
+//
+// - for building Android, call gradle in the mobile-android folder, since this build
+//   script is not able to handle both Java builds and Android builds
+
+defaultTasks 'build'
 
 allprojects {
 
@@ -43,4 +51,8 @@ task distPlayer(type: Jar) {
 ant.importBuild 'javadoc.build.xml'
 task createDoc {
 	dependsOn antZongJavadoc
+}
+
+//compile webapp project to JavaScript
+task buildWebApp(dependsOn: ':webapp:compileGwt') {
 }

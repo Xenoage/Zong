@@ -1,3 +1,7 @@
+//***************************
+// Buildscript Setup
+//***************************
+
 buildscript {
 	repositories {
 		jcenter()
@@ -13,8 +17,15 @@ plugins {
 
 apply plugin: 'gwt'
 
+import io.franzbecker.gradle.lombok.task.DelombokTask
 
-def delombok_target = "src-zong"
+
+
+//***************************
+// Delombok Zong! sources for GWT
+//***************************
+
+//all source folders of the projects the webapp project depends on
 def delombok_src = [
 		"../core/src",
 		"../layout/src",
@@ -23,14 +34,11 @@ def delombok_src = [
 		"../utils/utils-gwt/src/",
 		"../utils/utils-kernel/src/"
 ]
+//destination folder for delomboked sources
+def delombok_target = "src-zong"
 
-task cleanSrcZong(type: Delete) {
-	delete 'src-zong'
-}
-
-import io.franzbecker.gradle.lombok.task.DelombokTask
-
-task delombokSrcZong(type: DelombokTask) {
+//delombok
+task prepareSrcZong(type: DelombokTask) {
 	ext.outputDir = file(delombok_target)
 	outputs.dir(outputDir)
 	delombok_src.each {
@@ -39,24 +47,35 @@ task delombokSrcZong(type: DelombokTask) {
 	}
 }
 
-task deletePlatformUtilsBootstrap(type: Delete) {
+//clean destination folder before delomboking
+prepareSrcZong.doFirst {
+	delete 'src-zong'
+}
+
+//remove PlatformUtilsBootstrap after delomboking, since
+//this class is implemented differently in the project (no reflection in GWT possible)
+prepareSrcZong.doLast {
 	delete 'src-zong/com/xenoage/utils/PlatformUtilsBootstrap.java'
 }
 
-task prepareSrcZong(dependsOn: [cleanSrcZong, delombokSrcZong, deletePlatformUtilsBootstrap]) {
-	delombokSrcZong.mustRunAfter cleanSrcZong
-	deletePlatformUtilsBootstrap.mustRunAfter delombokSrcZong
-}
 
+
+//***************************
+// GWT compiler
+//***************************
+
+//all sources are needed, and Java compilation is called before
+//(no idea why, but GWT Gradle plugin seems to work this way)
 compileJava.dependsOn prepareSrcZong
 
-
+//GWT compiler config
 gwt {
 	gwtVersion = '2.7.0'
 	modules 'com.xenoage.zong.webapp.webapp'
 	compiler { style = 'PRETTY' }
 }
 
+//where to find the sources
 sourceSets {
 	main {
 		java {
@@ -70,7 +89,7 @@ sourceSets {
 	}
 }
 
-/* Copy webapp (JS results) and WEB-INF folder from Gradle build folder into www folder. */
+//copy webapp (JS results) and WEB-INF folder from Gradle build folder into www folder
 compileGwt.doLast {
 	delete 'www/webapp', 'www/WEB-INF'
 	copy { from 'build/gwt/out/' into "www/" }
