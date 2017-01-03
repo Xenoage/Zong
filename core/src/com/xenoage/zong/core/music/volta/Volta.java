@@ -11,7 +11,7 @@ import com.xenoage.zong.core.music.MusicElementType;
 import com.xenoage.zong.core.position.MP;
 
 /**
- * Class for a volta (also informally called "Haus" in German).
+ * Class for a volta (also called "ending" in MusicMXL, and informally called "Haus" in German).
  * 
  * A volta is never used within a voice, but only in the {@link ColumnHeader}.
  * Voltas span over whole measures, at least one. The number of spanned
@@ -21,6 +21,15 @@ import com.xenoage.zong.core.position.MP;
  * tells in which repetitions it should be entered,
  * and optionally an arbitrary caption.
  * A downward hook on the right side is optional.
+ *
+ * The rules for ordering consecutive voltas (called a volta group) are as follows:
+ * The voltas do not have to be sorted (even this makes sense in most cases), e.g.
+ * the "2nd time" volta may appear before the "1st time" volta. If there are
+ * voltas without a number, called default voltas, the first one of it is played
+ * each time when a volta with the explicit repeat time number is missing. When
+ * the last volta of a group is a default volta, it is always played (the very last time).
+ * When there is a gap (e.g. during the 2nd playback when no "2nd time" and no default
+ * volta exists), the whole repeat is skipped.
  *
  * @author Andreas Wenger
  * @author Uli Teschemacher
@@ -75,6 +84,14 @@ public final class Volta
 	 */
 	public String getCaptionOrNull() {
 		return caption;
+	}
+
+	/**
+	 * Returns true, if this volta is the default case,
+	 * i.e. not for an explicit repeat time like 1st or 2nd time.
+	 */
+	public boolean isDefault() {
+		return numbers == null;
 	}
 
 	@Override public MusicElementType getMusicElementType() {

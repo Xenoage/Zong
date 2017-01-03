@@ -1,5 +1,6 @@
 package com.xenoage.zong.io.midi.out.repetitions;
 
+import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.kernel.Range;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.Score;
@@ -11,81 +12,95 @@ import com.xenoage.zong.core.music.util.BeatE;
 import com.xenoage.zong.core.music.util.BeatEList;
 import com.xenoage.zong.core.music.volta.Volta;
 import com.xenoage.zong.core.position.MP;
-import com.xenoage.zong.io.midi.out.VoltaBlock;
 import com.xenoage.zong.io.midi.out.repetitions.Repetitions.PlayRange;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.val;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static com.xenoage.utils.collections.CollectionUtils.map;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.zong.core.position.MP.atBeat;
+import static com.xenoage.zong.core.position.MP.unknown;
 
 /**
  * Finds the {@link Repetitions} in a score.
  *
  * @author Andreas Wenger
  */
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class RepetitionsFinder {
 
 	/**
-	 * A jump start a given {@link MP} end a given {@link MP}.
+	 * A jump start a given {@link MP} to a given {@link MP}.
 	 */
-	@AllArgsConstructor
+	@Const @Data @AllArgsConstructor
 	public static final class Jump {
-
 		public final MP from, to;
 	}
 
+	private Score score;
+
 
 	/**
-	 * Creates a playlist start the given score.
+	 * Finds the {@link Repetitions} in the given score.
 	 */
-	public static Repetitions createPlaylist(Score score) {
-		ArrayList<PlayRange> ret = alist();
+	public static Repetitions findRepetitions(Score score) {
+		return new RepetitionsFinder(score).find();
+	}
 
-		MP start = atBeat(-1, 0, -1, _0);
+	private Repetitions find() {
+		ArrayList<PlayRange> ranges = alist();
+
+		MP start = atBeat(unknown, 0, unknown, _0);
 		Fraction lastMeasureBeats = score.getMeasureBeats(score.getMeasuresCount() - 1);
-		MP end = atBeat(-1, score.getMeasuresCount() - 1, -1, lastMeasureBeats);
+		MP end = atBeat(unknown, score.getMeasuresCount() - 1, unknown, lastMeasureBeats);
 
-		ArrayList<Jump> jumplist = createJumpList(score);
-		int size = jumplist.size();
+		ArrayList<Jump> jumplist = createJumpList();
 
-		if (size == 0) {
-			ret.add(new PlayRange(start, end));
+		if (jumplist.size() == 0) {
+			//simple case: no jumps
+			ranges.add(new PlayRange(start, end));
 		}
 		else {
-			ret.add(new PlayRange(start, jumplist.get(0).from));
+			//one or more jumps
+			ranges.add(new PlayRange(start, jumplist.get(0).from));
 			for (int i : range(1, jumplist.size() - 1)) {
-				MP pos1 = jumplist.get(i - 1).to;
-				MP pos2 = jumplist.get(i).from;
-				ret.add(new PlayRange(pos1, pos2));
+				MP lastEnd = jumplist.get(i - 1).to;
+				MP currentStart = jumplist.get(i).from;
+				ranges.add(new PlayRange(lastEnd, currentStart));
 			}
-			ret.add(new PlayRange(jumplist.get(size - 1).to, end));
+			ranges.add(new PlayRange(jumplist.get(jumplist.size() - 1).to, end));
 		}
 
-		return new Repetitions(ret);
+		return new Repetitions(ranges);
 	}
 
 	/**
-	 * Creates the list of jumps for the given {@link Score}.
+	 * Creates the list of jumps for this score.
 	 */
-	private static ArrayList<Jump> createJumpList(Score score) {
+	private ArrayList<Jump> createJumpList() {
 		ArrayList<Jump> jumps = alist();
 
-		HashMap<Integer, VoltaBlock> voltaBlocks = createVoltaBlocks(score);
+		val voltaGroups = new VoltaGroupFinder(score).findAllVoltaGroups();
 
-		MP pos = atBeat(1, 0, -1, _0);
+		MP pos = atBeat(unknown, 0, unknown, _0);
 		for (int iMeasure : range(score.getMeasuresCount())) {
-			if (voltaBlocks.containsKey(iMeasure)) {
-				//volta
-				VoltaBlock voltaBlock = voltaBlocks.get(iMeasure);
 
+			if (voltaGroups.containsKey(iMeasure)) {
+
+				//volta group starts at this measure
+				VoltaGroup voltaGroup = voltaGroups.get(iMeasure);
 				int voltatime = 1;
-				while (voltatime <= voltaBlock.getRepeatCount()) {
-					Range range = voltaBlock.getRange(voltatime);
+				while (voltatime <= voltaGroup.getRepeatCount()) {
+					Range range = voltaGroup.getRange(voltatime);
 					if (range == null)
 						range = range(iMeasure, iMeasure); //TODO...
 					MP stopPosition = atBeat(-1, range.getStop(), -1, score.getMeasureBeats(iMeasure));
@@ -94,13 +109,13 @@ public class RepetitionsFinder {
 						MP startPosition = atBeat(-1, range.getStart(), -1, _0);
 						jumps.add(new Jump(currentPosition, startPosition));
 					}
-					if (!voltaBlock.isLastTime(voltatime)) {
+					if (!voltaGroup.isLastTime(voltatime)) {
 						jumps.add(new Jump(stopPosition, pos));
 					}
 					voltatime++;
 				}
 
-				iMeasure += voltaBlock.getBlockLength() - 1;
+				iMeasure += voltaGroup.getMeasuresCount() - 1;
 				pos = atBeat(-1, iMeasure, -1, _0);
 			}
 			else {
@@ -134,39 +149,6 @@ public class RepetitionsFinder {
 		return jumps;
 	}
 
-	/**
-	 * Looks for {@link VoltaBlock}s in the score and creates a list of them.
-	 */
-	private static HashMap<Integer, VoltaBlock> createVoltaBlocks(Score score) {
-		HashMap<Integer, VoltaBlock> map = new HashMap<Integer, VoltaBlock>();
-		ScoreHeader scoreHeader = score.getHeader();
-		for (int i : range(score.getMeasuresCount())) {
-			if (scoreHeader.getColumnHeader(i).getVolta() != null) {
-				VoltaBlock voltaBlock = createVoltaBlock(score, i);
-				map.put(i, voltaBlock);
-				i += voltaBlock.getBlockLength() - 1;
-			}
-		}
-		return map;
-	}
 
-	/**
-	 * Creates a {@link VoltaBlock} starting at the measure with the given index.
-	 */
-	private static VoltaBlock createVoltaBlock(Score score, int startMeasure) {
-		ScoreHeader scoreHeader = score.getHeader();
-		VoltaBlock block = new VoltaBlock();
-		int iMeasure = startMeasure;
-		while (iMeasure < score.getMeasuresCount()) {
-			Volta volta = scoreHeader.getColumnHeader(iMeasure).getVolta();
-			if (volta != null) {
-				block.addVolta(volta, iMeasure);
-				iMeasure += volta.getLength();
-			}
-			else {
-				break;
-			}
-		}
-		return block;
-	}
+
 }

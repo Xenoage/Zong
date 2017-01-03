@@ -102,7 +102,7 @@ public class MidiConverter<T> {
 		//compute mapping of staff indices to channel numbers
 		int[] channelMap = createChannelMap(score);
 		//compute playlist (which contains repetitions and so on)
-		Repetitions repetitions = RepetitionsFinder.createPlaylist(score);
+		Repetitions repetitions = RepetitionsFinder.findRepetitions(score);
 		
 		//one track for each staff and one system track for program changes, tempos and so on,
 		//and maybe another track for the metronome

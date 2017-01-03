@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
 public class RepetitionsFinderTest {
 
 	@Test public void findRepetitionsTest() {
-		val reps = RepetitionsFinder.createPlaylist(getTestScore());
+		val reps = RepetitionsFinder.findRepetitions(getTestScore());
 		assertEquals(getExpectedRepetitions(), reps);
 	}
 
