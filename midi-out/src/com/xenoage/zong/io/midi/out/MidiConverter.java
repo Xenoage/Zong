@@ -1,5 +1,26 @@
 package com.xenoage.zong.io.midi.out;
 
+import com.xenoage.utils.collections.CollectionUtils;
+import com.xenoage.utils.collections.SortedList;
+import com.xenoage.utils.math.Fraction;
+import com.xenoage.zong.core.Score;
+import com.xenoage.zong.core.instrument.Instrument;
+import com.xenoage.zong.core.instrument.PitchedInstrument;
+import com.xenoage.zong.core.music.*;
+import com.xenoage.zong.core.music.chord.Chord;
+import com.xenoage.zong.core.music.chord.Note;
+import com.xenoage.zong.core.music.time.Time;
+import com.xenoage.zong.core.position.MP;
+import com.xenoage.zong.io.midi.out.repetitions.Repetitions;
+import com.xenoage.zong.io.midi.out.repetitions.Repetitions.PlayRange;
+import com.xenoage.zong.io.midi.out.repetitions.RepetitionsFinder;
+import lombok.AllArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Fraction.fr;
@@ -7,30 +28,6 @@ import static com.xenoage.zong.core.position.MP.atBeat;
 import static com.xenoage.zong.core.position.MP.getMP;
 import static com.xenoage.zong.io.midi.out.MidiVelocityConverter.getVelocityAtPosition;
 import static com.xenoage.zong.io.midi.out.MidiVelocityConverter.getVoiceforDynamicsInStaff;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-
-import lombok.AllArgsConstructor;
-
-import com.xenoage.utils.collections.CollectionUtils;
-import com.xenoage.utils.collections.SortedList;
-import com.xenoage.utils.math.Fraction;
-import com.xenoage.zong.core.Score;
-import com.xenoage.zong.core.instrument.Instrument;
-import com.xenoage.zong.core.instrument.PitchedInstrument;
-import com.xenoage.zong.core.music.Measure;
-import com.xenoage.zong.core.music.Part;
-import com.xenoage.zong.core.music.Staff;
-import com.xenoage.zong.core.music.Voice;
-import com.xenoage.zong.core.music.VoiceElement;
-import com.xenoage.zong.core.music.chord.Chord;
-import com.xenoage.zong.core.music.chord.Note;
-import com.xenoage.zong.core.music.time.Time;
-import com.xenoage.zong.core.position.MP;
-import com.xenoage.zong.io.midi.out.Playlist.PlayRange;
 
 /**
  * This class creates a {@link MidiSequence} from a given {@link Score}.
@@ -105,7 +102,7 @@ public class MidiConverter<T> {
 		//compute mapping of staff indices to channel numbers
 		int[] channelMap = createChannelMap(score);
 		//compute playlist (which contains repetitions and so on)
-		Playlist playlist = MidiRepetitionCalculator.createPlaylist(score);
+		Repetitions repetitions = RepetitionsFinder.createPlaylist(score);
 		
 		//one track for each staff and one system track for program changes, tempos and so on,
 		//and maybe another track for the metronome
@@ -166,9 +163,9 @@ public class MidiConverter<T> {
 			int track = iStaff;
 
 			int[] voiceforDynamicsInStaff = getVoiceforDynamicsInStaff(staff);
-			for (PlayRange playRange : playlist.getRanges()) {
+			for (PlayRange playRange : repetitions.getRanges()) {
 				int transposing = 0;
-				for (int iMeasure : range(playRange.from.measure, playRange.to.measure)) {
+				for (int iMeasure : range(playRange.start.measure, playRange.end.measure)) {
 					Measure measure = staff.getMeasure(iMeasure);
 					measureStartTicks.add(currenttickinstaff);
 
@@ -180,8 +177,8 @@ public class MidiConverter<T> {
 					} //*/
 
 					Fraction start, end;
-					start = score.clipToMeasure(iMeasure, playRange.from).beat;
-					end = score.clipToMeasure(iMeasure, playRange.to).beat;
+					start = score.clipToMeasure(iMeasure, playRange.start).beat;
+					end = score.clipToMeasure(iMeasure, playRange.end).beat;
 
 					if (realMeasureColumnBeats[iMeasure].compareTo(end) < 0)
 						end = realMeasureColumnBeats[iMeasure];
@@ -199,12 +196,12 @@ public class MidiConverter<T> {
 		}
 
 		if (addMPEvents) {
-			createControlEventChannel(measureStartTicks, timePool, 0, playlist); //score position events in channel 0
+			createControlEventChannel(measureStartTicks, timePool, 0, repetitions); //score position events in channel 0
 			addPlaybackAtEndControlEvent();
 		}
 
 		if (metronome) {
-			createMetronomeTrack(metronomeTrack, playlist, measureStartTicks);
+			createMetronomeTrack(metronomeTrack, repetitions, measureStartTicks);
 		}
 
 		//Add Tempo Changes
@@ -216,7 +213,7 @@ public class MidiConverter<T> {
 			MidiEvent event = new MidiEvent(midiElement.getMidiMessage(), beat);
 			tempoTrack.add(event);
 		}*/
-		MidiTempoConverter.writeTempoTrack(score, playlist, resolution, writer, systemTrackIndex);
+		MidiTempoConverter.writeTempoTrack(score, repetitions, resolution, writer, systemTrackIndex);
 
 		return writer.finish(metronomeTrack, timePool, measureStartTicks);
 	}
@@ -410,7 +407,7 @@ public class MidiConverter<T> {
 	}
 
 	private void addPlaybackAtEndControlEvent() {
-		writer.writeControlChange(systemTrackIndex, 0, writer.getLength(), MidiEvents.eventPlaybackEnd, 0);
+		writer.writeControlChange(systemTrackIndex, 0, writer.getLength(), MidiEvents.eventPlaybackEnd.code, 0);
 	}
 
 	/**
@@ -418,26 +415,26 @@ public class MidiConverter<T> {
 	 * The control message {@link MidiEvents#eventPlaybackControl} is used because it has no other meaning.
 	 */
 	private void createControlEventChannel(
-		List<Long> measureStartTicks, List<MidiTime> timePoolOpen, int channel, Playlist playlist) {
+		List<Long> measureStartTicks, List<MidiTime> timePoolOpen, int channel, Repetitions repetitions) {
 		List<SortedList<Fraction>> usedBeatsMeasures = CollectionUtils.alist();
 		for (int i : range(score.getMeasuresCount()))
 			usedBeatsMeasures.add(score.getMeasureUsedBeats(i));
 		int imeasure = 0;
-		for (PlayRange playRange : playlist.getRanges()) {
+		for (PlayRange playRange : repetitions.getRanges()) {
 
-			for (int i : range(playRange.from.measure, playRange.to.measure)) {
+			for (int i : range(playRange.start.measure, playRange.end.measure)) {
 				SortedList<Fraction> usedBeats = usedBeatsMeasures.get(i);
 
 				Fraction start, end;
-				start = score.clipToMeasure(playRange.from.measure, playRange.from).beat;
-				end = score.clipToMeasure(playRange.to.measure, playRange.to).beat;
+				start = score.clipToMeasure(playRange.start.measure, playRange.start).beat;
+				end = score.clipToMeasure(playRange.end.measure, playRange.end).beat;
 
 				for (Fraction fraction : usedBeats) {
 					//only add, if beats are between start and end
 					if (fraction.compareTo(start) > -1 && fraction.compareTo(end) < 1) {
 						long tick = measureStartTicks.get(imeasure) +
 							calculateTickFromFraction(fraction.sub(start), resolution);
-						writer.writeControlChange(systemTrackIndex, 0, tick, MidiEvents.eventPlaybackControl, 0);
+						writer.writeControlChange(systemTrackIndex, 0, tick, MidiEvents.eventPlaybackControl.code, 0);
 
 						MP bmp = atBeat(1, i, -1, fraction);
 						long ms = writer.tickToMicrosecond(tick) / 1000;
@@ -452,26 +449,26 @@ public class MidiConverter<T> {
 	/**
 	 * Creates the track in the sequence with the beats of the metronome.
 	 */
-	private void createMetronomeTrack(int track, Playlist playlist, List<Long> measureStartTicks) {
+	private void createMetronomeTrack(int track, Repetitions repetitions, List<Long> measureStartTicks) {
 		// Load Settings
 		int metronomeStrongBeatNote = settings.getMetronomeStrongBeatNote();
 		int metronomeWeakBeatNote = settings.getMetronomeWeakBeatNote();
 
 		int imeasure = 0;
-		for (PlayRange playRange : playlist.getRanges()) {
+		for (PlayRange playRange : repetitions.getRanges()) {
 
-			for (int i : range(playRange.from.measure, playRange.to.measure)) {
+			for (int i : range(playRange.start.measure, playRange.end.measure)) {
 				Time time = score.getHeader().getTimeAtOrBefore(i);
 
 				Fraction start, end;
-				if (playRange.from.measure == i) {
-					start = playRange.from.beat;
+				if (playRange.start.measure == i) {
+					start = playRange.start.beat;
 				}
 				else {
 					start = fr(0, 1);
 				}
-				if (playRange.to.measure == i) {
-					end = playRange.to.beat;
+				if (playRange.end.measure == i) {
+					end = playRange.end.beat;
 				}
 				else {
 					end = score.getMeasureBeats(i);

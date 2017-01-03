@@ -63,8 +63,8 @@ public class MidiScorePlayer
 		SynthManager.removeAllControllerEventListeners();
 
 		//controller events to listen for (see MidiEvents doc)
-		SynthManager.addControllerEventListener(this, new int[]{ MidiEvents.eventPlaybackControl });
-		SynthManager.addControllerEventListener(this, new int[]{ MidiEvents.eventPlaybackEnd } );
+		SynthManager.addControllerEventListener(this, new int[]{ MidiEvents.eventPlaybackControl.code });
+		SynthManager.addControllerEventListener(this, new int[]{ MidiEvents.eventPlaybackEnd.code } );
 	}
 
 	/**
@@ -195,7 +195,7 @@ public class MidiScorePlayer
 	 */
 	@Override public void controlChange(ShortMessage message) {
 		List<MidiTime> timePool = sequence.getTimePool();
-		if (message.getData1() == MidiEvents.eventPlaybackControl) {
+		if (message.getData1() == MidiEvents.eventPlaybackControl.code) {
 			//calls the listener with the most actual tick
 			long currentTick = SynthManager.getSequencer().getTickPosition();
 			//if playback is ahead: return nothing
@@ -211,7 +211,7 @@ public class MidiScorePlayer
 				listener.playbackAtMP(pos, SynthManager.getSequencer().getMicrosecondPosition() / 1000L);
 			}
 		}
-		else if (message.getData1() == MidiEvents.eventPlaybackEnd) {
+		else if (message.getData1() == MidiEvents.eventPlaybackEnd.code) {
 			stop(); //stop to really ensure the end
 			for (PlaybackListener listener : listeners.getAll()) {
 				listener.playbackAtEnd();
