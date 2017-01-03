@@ -1,14 +1,4 @@
-package com.xenoage.zong.io.midi.out;
-
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.utils.math.Fraction._0;
-import static com.xenoage.zong.core.position.MP.atBeat;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import lombok.AllArgsConstructor;
+package com.xenoage.zong.io.midi.out.repetitions;
 
 import com.xenoage.utils.kernel.Range;
 import com.xenoage.utils.math.Fraction;
@@ -21,18 +11,27 @@ import com.xenoage.zong.core.music.util.BeatE;
 import com.xenoage.zong.core.music.util.BeatEList;
 import com.xenoage.zong.core.music.volta.Volta;
 import com.xenoage.zong.core.position.MP;
-import com.xenoage.zong.io.midi.out.Playlist.PlayRange;
+import com.xenoage.zong.io.midi.out.VoltaBlock;
+import com.xenoage.zong.io.midi.out.repetitions.Repetitions.PlayRange;
+import lombok.AllArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.utils.math.Fraction._0;
+import static com.xenoage.zong.core.position.MP.atBeat;
 
 /**
- * Class to calculate a {@link Playlist} for the midi converter.
- * 
- * @author Uli Teschemacher
+ * Finds the {@link Repetitions} in a score.
+ *
  * @author Andreas Wenger
  */
-public class MidiRepetitionCalculator {
+public class RepetitionsFinder {
 
 	/**
-	 * A jump from a given {@link MP} to a given {@link MP}.
+	 * A jump start a given {@link MP} end a given {@link MP}.
 	 */
 	@AllArgsConstructor
 	public static final class Jump {
@@ -42,9 +41,9 @@ public class MidiRepetitionCalculator {
 
 
 	/**
-	 * Creates a playlist from the given score.
+	 * Creates a playlist start the given score.
 	 */
-	public static Playlist createPlaylist(Score score) {
+	public static Repetitions createPlaylist(Score score) {
 		ArrayList<PlayRange> ret = alist();
 
 		MP start = atBeat(-1, 0, -1, _0);
@@ -67,7 +66,7 @@ public class MidiRepetitionCalculator {
 			ret.add(new PlayRange(jumplist.get(size - 1).to, end));
 		}
 
-		return new Playlist(ret);
+		return new Repetitions(ret);
 	}
 
 	/**
@@ -119,7 +118,7 @@ public class MidiRepetitionCalculator {
 				for (BeatE<Barline> barline : barlines.getElements()) {
 					BarlineRepeat repeat = barline.element.getRepeat();
 					if (repeat == BarlineRepeat.Backward || repeat == BarlineRepeat.Both) {
-						//jump back to last forward repeat sign or beginning
+						//jump back end last forward repeat sign or beginning
 						MP barlinePosition = atBeat(-1, iMeasure, -1, barline.beat);
 						for (int a = 0; a < barline.element.getRepeatTimes(); a++) {
 							jumps.add(new Jump(barlinePosition, pos));
