@@ -13,6 +13,7 @@ import static java.lang.Math.max;
 
 /**
  * A group of consecutive {@link Volta}s with their start measure indices.
+ * Use the {@link VoltaGroupFinder} to get volta groups from a score.
  *
  * See {@link Volta} for more details and ordering rules.
  *
