@@ -23,13 +23,12 @@ import com.xenoage.zong.core.position.MP;
  * A downward hook on the right side is optional.
  *
  * The rules for ordering consecutive voltas (called a volta group) are as follows:
- * The voltas do not have to be sorted (even this makes sense in most cases), e.g.
- * the "2nd time" volta may appear before the "1st time" volta. If there are
- * voltas without a number, called default voltas, the first one of it is played
- * each time when a volta with the explicit repeat time number is missing. When
- * the last volta of a group is a default volta, it is always played (the very last time).
- * When there is a gap (e.g. during the 2nd playback when no "2nd time" and no default
- * volta exists), the whole repeat is skipped.
+ * The voltas should sorted (even this is no technical restriction), e.g.
+ * the "2nd time" volta should not appear before the "1st time" volta.
+ * Gaps can be filled with default voltas (= voltas without numbers), e.g. a default
+ * volta between a "1st time" and "4th time" volta is played two times. If a "4th time"
+ * volta follows a "1st time" volta directly, the "1st time" volta is played 3 times.
+ * When the last volta of a group is a default volta, it is always played (the very last time).
  *
  * @author Andreas Wenger
  * @author Uli Teschemacher

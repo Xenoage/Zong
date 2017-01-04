@@ -1,13 +1,16 @@
 package com.xenoage.zong.io.midi.out.repetitions;
 
+import com.xenoage.utils.collections.CList;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.volta.Volta;
+import com.xenoage.zong.io.midi.out.repetitions.VoltaGroup.VoltaStartMeasure;
 import lombok.AllArgsConstructor;
 import lombok.val;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.xenoage.utils.collections.CList.clist;
 import static com.xenoage.utils.collections.CollectionUtils.map;
 
 /**
@@ -49,19 +52,19 @@ public class VoltaGroupFinder {
 	 * into a {@link VoltaGroup}.
 	 */
 	private VoltaGroup findVoltaGroup(int startMeasure) {
-		HashMap<Volta, Integer> voltasMeasures = map();
+		CList<VoltaStartMeasure> voltasMeasures = clist();
 		val scoreHeader = score.getHeader();
 		for (int measure = startMeasure; measure < score.getMeasuresCount();) {
 			Volta volta = scoreHeader.getColumnHeader(measure).getVolta();
 			if (volta != null) {
-				voltasMeasures.put(volta, measure);
+				voltasMeasures.add(new VoltaStartMeasure(volta, measure));
 				measure += volta.getLength();
 			}
 			else {
 				break;
 			}
 		}
-		return new VoltaGroup(voltasMeasures);
+		return new VoltaGroup(voltasMeasures.close());
 	}
 
 }

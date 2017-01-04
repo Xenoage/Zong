@@ -1,16 +1,8 @@
 package com.xenoage.zong.io.midi.out.repetitions;
 
 import com.xenoage.utils.annotations.Const;
-import com.xenoage.utils.kernel.Range;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.Score;
-import com.xenoage.zong.core.header.ColumnHeader;
-import com.xenoage.zong.core.header.ScoreHeader;
-import com.xenoage.zong.core.music.barline.Barline;
-import com.xenoage.zong.core.music.barline.BarlineRepeat;
-import com.xenoage.zong.core.music.util.BeatE;
-import com.xenoage.zong.core.music.util.BeatEList;
-import com.xenoage.zong.core.music.volta.Volta;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.io.midi.out.repetitions.Repetitions.PlayRange;
 import lombok.AccessLevel;
@@ -19,12 +11,8 @@ import lombok.Data;
 import lombok.val;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.utils.collections.CollectionUtils.map;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.zong.core.position.MP.atBeat;
@@ -90,7 +78,7 @@ public class RepetitionsFinder {
 		ArrayList<Jump> jumps = alist();
 
 		val voltaGroups = new VoltaGroupFinder(score).findAllVoltaGroups();
-
+/*
 		MP pos = atBeat(unknown, 0, unknown, _0);
 		for (int iMeasure : range(score.getMeasuresCount())) {
 
@@ -145,7 +133,7 @@ public class RepetitionsFinder {
 				}
 			}
 		}
-
+*/
 		return jumps;
 	}
 
