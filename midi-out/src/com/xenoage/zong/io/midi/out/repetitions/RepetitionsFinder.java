@@ -3,8 +3,11 @@ package com.xenoage.zong.io.midi.out.repetitions;
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.Score;
+import com.xenoage.zong.core.music.direction.Direction;
+import com.xenoage.zong.core.music.direction.NavigationSign;
+import com.xenoage.zong.core.music.direction.Segno;
+import com.xenoage.zong.core.music.util.BeatEList;
 import com.xenoage.zong.core.position.MP;
-import com.xenoage.zong.io.midi.out.repetitions.Repetitions.PlayRange;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -78,65 +81,27 @@ public class RepetitionsFinder {
 		ArrayList<Jump> jumps = alist();
 
 		val voltaGroups = new VoltaGroupFinder(score).findAllVoltaGroups();
-/*
-		MP pos = atBeat(unknown, 0, unknown, _0);
-		for (int iMeasure : range(score.getMeasuresCount())) {
+		Segno lastSegno = null; //if not null, the next segno will jump back to this one
 
-			if (voltaGroups.containsKey(iMeasure)) {
+		for (int iMeasure = 0; iMeasure < score.getMeasuresCount(); iMeasure++) {
 
-				//volta group starts at this measure
-				VoltaGroup voltaGroup = voltaGroups.get(iMeasure);
-				int voltatime = 1;
-				while (voltatime <= voltaGroup.getRepeatCount()) {
-					Range range = voltaGroup.getRange(voltatime);
-					if (range == null)
-						range = range(iMeasure, iMeasure); //TODO...
-					MP stopPosition = atBeat(-1, range.getStop(), -1, score.getMeasureBeats(iMeasure));
-					if (iMeasure != range.getStart()) {
-						MP currentPosition = atBeat(-1, iMeasure, -1, _0);
-						MP startPosition = atBeat(-1, range.getStart(), -1, _0);
-						jumps.add(new Jump(currentPosition, startPosition));
-					}
-					if (!voltaGroup.isLastTime(voltatime)) {
-						jumps.add(new Jump(stopPosition, pos));
-					}
-					voltatime++;
-				}
+			//special signs: segno, coda, dacapo
+			val navSigns = getNavigationSigns(iMeasure);
 
-				iMeasure += voltaGroup.getMeasuresCount() - 1;
-				pos = atBeat(-1, iMeasure, -1, _0);
-			}
-			else {
-				//check for normal barline repetition
-				ColumnHeader columnHeader = score.getHeader().getColumnHeader(iMeasure);
 
-				BeatEList<Barline> barlines = columnHeader.getMiddleBarlines();
-				if (columnHeader.getStartBarline() != null) {
-					barlines.add(columnHeader.getStartBarline(), _0);
-				}
-				if (columnHeader.getEndBarline() != null) {
-					barlines.add(columnHeader.getEndBarline(), score.getMeasureBeats(iMeasure));
-				}
 
-				for (BeatE<Barline> barline : barlines.getElements()) {
-					BarlineRepeat repeat = barline.element.getRepeat();
-					if (repeat == BarlineRepeat.Backward || repeat == BarlineRepeat.Both) {
-						//jump back end last forward repeat sign or beginning
-						MP barlinePosition = atBeat(-1, iMeasure, -1, barline.beat);
-						for (int a = 0; a < barline.element.getRepeatTimes(); a++) {
-							jumps.add(new Jump(barlinePosition, pos));
-						}
-					}
-					if (repeat == BarlineRepeat.Forward || repeat == BarlineRepeat.Both) {
-						pos = atBeat(-1, iMeasure, -1, barline.beat);
-					}
-				}
-			}
 		}
-*/
+
 		return jumps;
 	}
 
-
+	private BeatEList<Direction> getNavigationSigns(int iMeasure) {
+		val ret = new BeatEList<Direction>();
+		for (val direction : score.getColumnHeader(iMeasure).getOtherDirections()) {
+			if (direction.element instanceof NavigationSign)
+				ret.add(direction);
+		}
+		return ret;
+	}
 
 }

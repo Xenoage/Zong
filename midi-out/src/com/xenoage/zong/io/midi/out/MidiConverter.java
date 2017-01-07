@@ -12,7 +12,7 @@ import com.xenoage.zong.core.music.chord.Note;
 import com.xenoage.zong.core.music.time.Time;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.io.midi.out.repetitions.Repetitions;
-import com.xenoage.zong.io.midi.out.repetitions.Repetitions.PlayRange;
+import com.xenoage.zong.io.midi.out.repetitions.PlayRange;
 import com.xenoage.zong.io.midi.out.repetitions.RepetitionsFinder;
 import lombok.AllArgsConstructor;
 

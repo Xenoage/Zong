@@ -135,7 +135,7 @@ public class BeamSlanterTest {
 	private void assertSlantContains(float expectedIs, Slant slant, String testName) {
 		int expectedQs = round(expectedIs * 4);
 		if (false == slant.contains(expectedQs))
-			fail(testName + ": expected slant " + expectedQs + ", but not in range of " + slant);
+			fail(testName + ": expected slant " + expectedQs + ", but not in playRange of " + slant);
 	}
 	
 	@Test public void limitSlantForExtremeNotesTest() {

@@ -12,7 +12,7 @@ import org.junit.Test;
 import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.direction.Direction;
-import com.xenoage.zong.core.music.direction.NavigationMarker;
+import com.xenoage.zong.core.music.direction.NavigationSign;
 import com.xenoage.zong.core.music.direction.Tempo;
 import com.xenoage.zong.core.position.MP;
 
@@ -31,7 +31,7 @@ public class Test31a
 			//in the column header instead, and not in the measure
 			if (item.get2() instanceof Tempo)
 				directions = score.getColumnHeader(mp.measure).getTempos().getAll(mp.beat);
-			else if (item.get2() instanceof NavigationMarker)
+			else if (item.get2() instanceof NavigationSign)
 				directions = score.getColumnHeader(mp.measure).getOtherDirections().getAll(mp.beat);
 			else
 				directions = score.getMeasure(mp).getDirections().getAll(mp.beat);

@@ -18,7 +18,7 @@ import com.xenoage.zong.core.position.MP;
 @Data @EqualsAndHashCode(callSuper=false)
 public final class DaCapo
 	extends Direction
-	implements NavigationMarker {
+	implements NavigationSign {
 
 	@Override public MusicElementType getMusicElementType() {
 		return MusicElementType.DaCapo;

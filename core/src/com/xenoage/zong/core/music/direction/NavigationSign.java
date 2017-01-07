@@ -1,11 +1,11 @@
 package com.xenoage.zong.core.music.direction;
 
 /**
- * Interface for {@link Direction}s with modify the sequence,
+ * Interface for {@link Direction}s with modify the playback sequence,
  * like {@link DaCapo} or {@link Coda}.
  * 
  * @author Andreas Wenger
  */
-public interface NavigationMarker {
+public interface NavigationSign {
 
 }

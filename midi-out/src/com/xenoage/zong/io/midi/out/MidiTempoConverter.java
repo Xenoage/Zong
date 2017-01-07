@@ -7,7 +7,7 @@ import com.xenoage.zong.core.music.direction.Tempo;
 import com.xenoage.zong.core.music.util.BeatE;
 import com.xenoage.zong.core.music.util.BeatEList;
 import com.xenoage.zong.io.midi.out.repetitions.Repetitions;
-import com.xenoage.zong.io.midi.out.repetitions.Repetitions.PlayRange;
+import com.xenoage.zong.io.midi.out.repetitions.PlayRange;
 
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Fraction._0;

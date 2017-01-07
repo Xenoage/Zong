@@ -1,5 +1,18 @@
 package com.xenoage.zong.musiclayout.spacer.beam;
 
+import com.xenoage.zong.core.music.StaffLines;
+import com.xenoage.zong.core.music.chord.StemDirection;
+import com.xenoage.zong.musiclayout.notation.chord.ChordLps;
+import material.ExampleResult;
+import material.ExampleResult.*;
+import material.Examples;
+import material.beam.slant.Example;
+import material.beam.slant.RossBeamSlant;
+import material.beam.stafftouch.TouchExample;
+import org.junit.Test;
+
+import java.util.List;
+
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Delta.df;
@@ -12,28 +25,8 @@ import static com.xenoage.zong.musiclayout.spacer.beam.Anchor.fromLp;
 import static com.xenoage.zong.musiclayout.spacer.beam.BeamPlacer.beamPlacer;
 import static com.xenoage.zong.musiclayout.spacer.beam.BeamSlanter.beamSlanter;
 import static java.lang.Math.abs;
-import static material.ExampleResult.accepted;
-import static material.ExampleResult.failed;
-import static material.ExampleResult.perfect;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.util.List;
-
-import org.junit.Test;
-
-import com.xenoage.zong.core.music.StaffLines;
-import com.xenoage.zong.core.music.chord.StemDirection;
-import com.xenoage.zong.musiclayout.notation.chord.ChordLps;
-
-import material.ExampleResult;
-import material.ExampleResult.Result;
-import material.Examples;
-import material.beam.slant.Example;
-import material.beam.slant.RossBeamSlant;
-import material.beam.stafftouch.TouchExample;
+import static material.ExampleResult.*;
+import static org.junit.Assert.*;
 
 /**
  * Tests for {@link BeamPlacer}.
@@ -245,7 +238,7 @@ public class BeamPlacerTest {
 	 */
 	private boolean isAcceptedBeam(Placement actual, StemDirection stemDir,
 		int intervalLp) {
-		//slant must be in allowed range of interval (or smaller)
+		//slant must be in allowed playRange of interval (or smaller)
 		float absSlantMax;
 		float absSlantActual = abs(actual.leftEndLp - actual.rightEndLp);
 		if (intervalLp < 1) //unison

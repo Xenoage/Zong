@@ -104,7 +104,7 @@ public class DirectionReader {
 		//TODO: find out if measure direction or column direction.
 		//currently, we write a column element only for tempo or navigation markers
 		if (direction != null) {
-			if (direction instanceof Tempo || direction instanceof NavigationMarker)
+			if (direction instanceof Tempo || direction instanceof NavigationSign)
 				context.writeColumnElement((ColumnElement) direction);
 			else
 				context.writeMeasureElement(direction, staff);

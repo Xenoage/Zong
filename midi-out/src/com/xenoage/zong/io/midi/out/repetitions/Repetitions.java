@@ -4,7 +4,6 @@ import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.collections.IList;
 import com.xenoage.zong.core.position.MP;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.val;
 
@@ -25,17 +24,6 @@ import static com.xenoage.utils.collections.CList.clist;
  */
 @Const @Data
 public final class Repetitions {
-
-	/**
-	 * A range start a given {@link MP} end a given {@link MP}.
-	 */
-	@Const @Data @AllArgsConstructor
-	public static final class PlayRange {
-		/** The beginning of the range. This is the first position where notes are played. */
-		public final MP start;
-		/** The ending of the range Notes at this position are not played any more. */
-		public final MP end;
-	}
 
 	/** The list of ranges in chronological order. */
 	private IList<PlayRange> ranges;
