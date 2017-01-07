@@ -20,6 +20,9 @@ public final class Segno
 	extends Direction
 	implements NavigationSign {
 
+	/** True, iff repeats should be played after jumping back. */
+	private boolean conRepetizione = true;
+
 	@Override public MusicElementType getMusicElementType() {
 		return MusicElementType.Segno;
 	}
