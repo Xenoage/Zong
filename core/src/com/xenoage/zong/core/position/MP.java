@@ -9,6 +9,8 @@ import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.core.music.Voice;
 
+import static com.xenoage.utils.math.Fraction._0;
+
 
 /**
  * Musical Position within a score.
@@ -43,9 +45,9 @@ import com.xenoage.zong.core.music.Voice;
 	
 
 	/** Musical position with all values set to 0, including beat and element index. */
-	public static final MP mp0 = new MP(0, 0, 0, Fraction._0, 0);
+	public static final MP mp0 = new MP(0, 0, 0, _0, 0);
 	/** Musical position with all values set to 0, including beat ("b" in name), but element index set to {@link #unknown}. */
-	public static final MP mpb0 = new MP(0, 0, 0, Fraction._0, unknown);
+	public static final MP mpb0 = new MP(0, 0, 0, _0, unknown);
 	/** Musical position with all values set to 0, including element ("e" in name), but beat set to {@link #unknownBeat}. */
 	public static final MP mpe0 = new MP(0, 0, 0, unknownBeat, 0);
 

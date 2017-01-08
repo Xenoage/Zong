@@ -28,9 +28,9 @@ public class VoltaGroupFinderTest {
 	@Test public void findAllVoltaGroupsTest() {
 		Score score = createScore();
 		val found = new VoltaGroupFinder(score).findAllVoltaGroups();
-		assertEquals(voltaGroups.length, found.size());
+		assertEquals(voltaGroups.length, found.voltaGroups.size());
 		for (val expectedGroups : voltaGroups) {
-			val voltaGroup = found.get(expectedGroups[0]);
+			val voltaGroup = found.getVoltaGroupAt(expectedGroups[0]);
 			assertNotNull(voltaGroup);
 			assertEquals(getLast(expectedGroups) - getFirst(expectedGroups), voltaGroup.getMeasuresCount());
 			assertEquals(expectedGroups.length - 1, voltaGroup.voltasStartMeasures.size());

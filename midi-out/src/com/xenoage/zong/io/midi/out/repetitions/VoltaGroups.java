@@ -15,7 +15,7 @@ import static com.xenoage.utils.iterators.ReverseIterator.reverseIt;
 @AllArgsConstructor
 public class VoltaGroups {
 
-	private IList<VoltaGroup> voltaGroups;
+	final IList<VoltaGroup> voltaGroups;
 
 	/**
 	 * Gets information about the volta group over the given measure.

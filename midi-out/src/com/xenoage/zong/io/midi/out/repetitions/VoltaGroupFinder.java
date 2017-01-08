@@ -7,11 +7,7 @@ import com.xenoage.zong.io.midi.out.repetitions.VoltaGroup.VoltaStartMeasure;
 import lombok.AllArgsConstructor;
 import lombok.val;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static com.xenoage.utils.collections.CList.clist;
-import static com.xenoage.utils.collections.CollectionUtils.map;
 
 /**
  * Finds the {@link VoltaGroup}s in a score.
@@ -31,20 +27,20 @@ public class VoltaGroupFinder {
 	 * Finds all {@link VoltaGroup}s in the score.
 	 * The groups are returned in a map with their start measure index as the key.
 	 */
-	public Map<Integer, VoltaGroup> findAllVoltaGroups() {
-		HashMap<Integer, VoltaGroup> map = map();
+	public VoltaGroups findAllVoltaGroups() {
+		CList<VoltaGroup> groups = clist();
 		val scoreHeader = score.getHeader();
 		for (int measure = 0; measure < score.getMeasuresCount();) {
 			if (scoreHeader.getColumnHeader(measure).getVolta() != null) {
 				val voltaGroup = findVoltaGroup(measure);
-				map.put(measure, voltaGroup);
+				groups.add(voltaGroup);
 				measure += voltaGroup.getMeasuresCount();
 			}
 			else {
 				measure ++;
 			}
 		}
-		return map;
+		return new VoltaGroups(groups.close());
 	}
 
 	/**

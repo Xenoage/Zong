@@ -5,6 +5,7 @@ import com.xenoage.utils.collections.IList;
 import com.xenoage.utils.iterators.ReverseIterator;
 import com.xenoage.utils.math.Fraction;
 import lombok.Data;
+import lombok.val;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -13,6 +14,7 @@ import static com.xenoage.utils.collections.CList.clist;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.core.music.util.BeatE.beatE;
+import static com.xenoage.zong.core.music.util.Interval.Result.True;
 
 /**
  * This is a wrapper class to combine a list of objects with
@@ -184,7 +186,7 @@ import static com.xenoage.zong.core.music.util.BeatE.beatE;
 	 */
 	public BeatE<T> getLastBefore(Interval endpoint, Fraction beat) {
 		for (BeatE<T> e : ReverseIterator.reverseIt(elements)) {
-			if (endpoint.isInInterval(e.getBeat(), beat) == Interval.Result.True)
+			if (endpoint.isInInterval(e.getBeat(), beat) == True)
 				return e;
 		}
 		return null;
@@ -216,6 +218,18 @@ import static com.xenoage.zong.core.music.util.BeatE.beatE;
 	 */
 	public Iterable<BeatE<T>> reverseIt() {
 		return ReverseIterator.reverseIt(elements);
+	}
+
+	/**
+	 * Returns a new {@link BeatEList} with only the elements which appear in the
+	 * given interval relative to the given beat.
+	 */
+	public BeatEList<T> filter(Interval interval, Fraction beat) {
+		val ret = new BeatEList<T>();
+		for (val e : elements)
+			if (interval.isInInterval(e.beat, beat) == True)
+				ret.add(e);
+		return ret;
 	}
 
 }

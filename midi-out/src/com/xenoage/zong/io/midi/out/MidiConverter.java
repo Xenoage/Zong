@@ -177,8 +177,8 @@ public class MidiConverter<T> {
 					} //*/
 
 					Fraction start, end;
-					start = score.clipToMeasure(iMeasure, playRange.start).beat;
-					end = score.clipToMeasure(iMeasure, playRange.end).beat;
+					start = null; //GOON score.clipToMeasure(iMeasure, playRange.start).beat;
+					end = null; //GOON score.clipToMeasure(iMeasure, playRange.end).beat;
 
 					if (realMeasureColumnBeats[iMeasure].compareTo(end) < 0)
 						end = realMeasureColumnBeats[iMeasure];
@@ -426,8 +426,8 @@ public class MidiConverter<T> {
 				SortedList<Fraction> usedBeats = usedBeatsMeasures.get(i);
 
 				Fraction start, end;
-				start = score.clipToMeasure(playRange.start.measure, playRange.start).beat;
-				end = score.clipToMeasure(playRange.end.measure, playRange.end).beat;
+				start = null; //GOON: score.clipToMeasure(playRange.start.measure, playRange.start).beat;
+				end = null; //GOON score.clipToMeasure(playRange.end.measure, playRange.end).beat;
 
 				for (Fraction fraction : usedBeats) {
 					//only add, if beats are between start and end

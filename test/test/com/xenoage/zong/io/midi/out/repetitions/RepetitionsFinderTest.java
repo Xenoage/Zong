@@ -12,7 +12,7 @@ import com.xenoage.zong.core.music.direction.DaCapo;
 import com.xenoage.zong.core.music.direction.Direction;
 import com.xenoage.zong.core.music.direction.Segno;
 import com.xenoage.zong.core.music.volta.Volta;
-import com.xenoage.zong.core.position.MP;
+import com.xenoage.zong.core.position.BP;
 import lombok.AllArgsConstructor;
 import lombok.val;
 import org.junit.Test;
@@ -21,8 +21,6 @@ import static com.xenoage.utils.collections.CList.ilist;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Fraction.*;
 import static com.xenoage.zong.core.music.util.BeatE.beatE;
-import static com.xenoage.zong.core.position.MP.atBeat;
-import static com.xenoage.zong.core.position.MP.unknown;
 import static com.xenoage.zong.io.midi.out.repetitions.RepetitionsTest.playRange;
 import static org.junit.Assert.*;
 
@@ -35,36 +33,37 @@ public class RepetitionsFinderTest {
 
 	@AllArgsConstructor
 	class TestCase {
-		String name;
 		Score score;
 		Repetitions expectedRepetitions;
 	}
 
-	TestCase[] testCases = new TestCase[] {
-		getBarlinesTest(),
-		getMiddleBarlinesTest(),
-		getNavigationSignsTest(),
-		//GOON getVoltasTest(),
-		getAdvancedTest()
-	};
-
-
-	@Test public void findRepetitionsTest() {
-		for (val testCase : testCases) {
-			val reps = RepetitionsFinder.findRepetitions(testCase.score);
-			assertEquals("Test: " + testCase.name, testCase.expectedRepetitions, reps);
-		}
-	}
 
 	/**
-	 * Creates a test case with barline repeats, with the following repetitions:
+	 * Test case with no repetitions at all:
+	 *
+	 * measures:   |     |      |      ||
+	 * numbers:    |0    |1     |2     ||
+	 */
+	@Test public void testSimple() {
+
+		score = ScoreFactory.create1Staff();
+		new MeasureAdd(score, 2).execute();
+
+		val expectedRepetitions = new Repetitions(ilist(
+				playRange(0, 3)));
+
+		runTest(new TestCase(score, expectedRepetitions));
+	}
+
+
+	/**
+	 * Test case with barline repeats, with the following repetitions:
 	 *
 	 * repeats:                 2x
 	 * measures:   |    :|:    :|     :|
 	 * numbers:    |0    |1     |2     |
 	 */
-	private TestCase getBarlinesTest() {
-		val name = "barlines test";
+	@Test public void testBarlines() {
 
 		score = ScoreFactory.create1Staff();
 		new MeasureAdd(score, 2).execute();
@@ -77,27 +76,25 @@ public class RepetitionsFinderTest {
 			playRange(0, 1),
 			playRange(0, 2),
 			playRange(1, 2),
-			playRange(1, 2),
 			playRange(1, 3),
 			playRange(1, 2),
 			playRange(1, 2),
 			playRange(1, 3)));
 
-		return new TestCase(name, score, expectedRepetitions);
+		runTest(new TestCase(score, expectedRepetitions));
 	}
 
 	/**
-	 * Creates a test score with barline repeats, also within measures, with the following repetitions:
+	 * Test case with barline repeats, also within measures, with the following repetitions:
 	 *
 	 * repeats:                             2x
 	 * measures:   |     |     /:    :|    :\  |  /:  :\ |
 	 * numbers:    |0    |1           |2       |3        |
 	 */
-	private TestCase getMiddleBarlinesTest() {
-		val name = "middle barlines test";
+	@Test public void testMiddleBarlines() {
 
 		score = ScoreFactory.create1Staff();
-		new MeasureAdd(score, 2).execute();
+		new MeasureAdd(score, 3).execute();
 		writeMiddleForwardRepeat(1, _1$2);
 		writeBackwardRepeat(1, 1);
 		writeMiddleBackwardRepeat(2, _1$2, 2);
@@ -105,27 +102,26 @@ public class RepetitionsFinderTest {
 		writeMiddleBackwardRepeat(3, _3$4, 1);
 
 		val expectedRepetitions = new Repetitions(ilist(
-			new PlayRange(mp(0, _0), mp(2, _0)),
-			new PlayRange(mp(1, _1$2), mp(2, _1$2)),
-			new PlayRange(mp(1, _1$2), mp(2, _0)),
-			new PlayRange(mp(1, _1$2), mp(2, _1$2)),
-			new PlayRange(mp(1, _1$2), mp(2, _0)),
-			new PlayRange(mp(1, _1$2), mp(3, _3$4)),
-			new PlayRange(mp(3, _1$4), mp(4, _0))));
+			new PlayRange(bp(0, _0), bp(2, _0)),
+			new PlayRange(bp(1, _1$2), bp(2, _1$2)),
+			new PlayRange(bp(1, _1$2), bp(2, _0)),
+			new PlayRange(bp(1, _1$2), bp(2, _1$2)),
+			new PlayRange(bp(1, _1$2), bp(2, _0)),
+			new PlayRange(bp(1, _1$2), bp(3, _3$4)),
+			new PlayRange(bp(3, _1$4), bp(4, _0))));
 
-		return new TestCase(name, score, expectedRepetitions);
+		runTest(new TestCase(score, expectedRepetitions));
 	}
 
 	/**
-	 * Creates a test case with coda/segna/dacapo, with the following repetitions:
+	 * Test case with coda/segna/dacapo, with the following repetitions:
 	 *
 	 *                                    senzarep                                conrep                    senzarep
 	 *                    (tocoda)        (dacapo)   (coda)      (segno)          (dalsegno)     (segno2)   (dalsegno2)
 	 * measures:   |    :|          |    |          |       |   |:       :|      |           |  |:        :|          ||
 	 * numbers:    |0    |1         |2   |3         |4      |5  |6        |7     |8          |9 |10        |11        ||
 	 */
-	private TestCase getNavigationSignsTest() {
-		val name = "navigation signs test";
+	@Test public void testNavigationSigns() {
 
 		score = ScoreFactory.create1Staff();
 		new MeasureAdd(score, 11).execute();
@@ -153,18 +149,17 @@ public class RepetitionsFinderTest {
 			playRange(10, 11),
 			playRange(10, 12)));
 
-		return new TestCase(name, score, expectedRepetitions);
+		runTest(new TestCase(score, expectedRepetitions));
 	}
 
 	/**
-	 * Creates a test case with voltas, with the following repetitions:
+	 * Test case with voltas, with the following repetitions:
 	 *                   ___ ___         ___ ____         ___ _____ _____
 	 * voltas:           1   2           1   2            1   2+3   def
 	 * measures:   |    |  :|   |   |   |  :|    |:      |  :|    :|     ||
 	 * numbers:    |0   |1  |2  |3  |4  |5  |6   |7      |8  |9    |10   ||
 	 */
-	private TestCase getVoltasTest() {
-		val name = "voltas test";
+	@Test public void testVoltas() {
 
 		score = ScoreFactory.create1Staff();
 		new MeasureAdd(score, 10).execute();
@@ -195,18 +190,17 @@ public class RepetitionsFinderTest {
 			playRange(9, 10),
 			playRange(10, 11)));
 
-		return new TestCase(name, score, expectedRepetitions);
+		runTest(new TestCase(score, expectedRepetitions));
 	}
 
 	/**
-	 * Creates a more advanced test score with the following repetitions:
+	 * A more advanced test case with the following repetitions:
 	 *                                                                          _____ ________ ________________              ___ ___
 	 * voltas/repeats:                         2x   conrep                      1+2   3        4     senzarep                1   2
 	 * measures:  |   |(segno)    |:  |   |   :|   |(d.c.)  |(tocoda)  |:      |    :|   |   :|   |  (dalsegno)|(coda) |:   |  :|   ||
 	 * numbers:   |0  |1          |2  |3  |4   |5  |6       |7         |8      |9    |10 |11  |12 |13          |14     |15  |16 |17 ||
 	 */
-	private TestCase getAdvancedTest() {
-		val name = "advanced test";
+	@Test public void testAdvanced() {
 
 		score = ScoreFactory.create1Staff();
 		new MeasureAdd(score, 17).execute();
@@ -249,7 +243,12 @@ public class RepetitionsFinderTest {
 			playRange(15, 16),
 			playRange(17, 18)));
 
-		return new TestCase(name, score, expectedRepetitions);
+		runTest(new TestCase(score, expectedRepetitions));
+	}
+
+	private void runTest(TestCase testCase) {
+		val reps = RepetitionsFinder.findRepetitions(testCase.score);
+		assertEquals(testCase.expectedRepetitions, reps);
 	}
 
 	Score score;
@@ -292,8 +291,8 @@ public class RepetitionsFinderTest {
 		return ret;
 	}
 
-	private MP mp(int measure, Fraction beat) {
-		return atBeat(unknown, measure, unknown, beat);
+	private BP bp(int measure, Fraction beat) {
+		return BP.bp(measure, beat);
 	}
 
 }
