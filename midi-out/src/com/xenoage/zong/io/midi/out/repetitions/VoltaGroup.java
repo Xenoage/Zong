@@ -4,7 +4,6 @@ import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.collections.IList;
 import com.xenoage.utils.kernel.Range;
 import com.xenoage.zong.core.music.volta.Volta;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.val;
 
@@ -19,7 +18,6 @@ import static java.lang.Math.max;
  *
  * @author Andreas Wenger
  */
-@AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class VoltaGroup {
 
 	@AllArgsConstructor
@@ -29,8 +27,20 @@ public class VoltaGroup {
 	}
 
 	//the voltas and their start measure indices.
-	IList<VoltaStartMeasure> voltasStartMeasures;
+	final IList<VoltaStartMeasure> voltasStartMeasures;
 
+	//the index of the first measure
+	final int startMeasure;
+
+	//the index of the last measure (inclusive)
+	final int endMeasure;
+
+
+	VoltaGroup(IList<VoltaStartMeasure> voltasStartMeasures) {
+		this.voltasStartMeasures = voltasStartMeasures;
+		startMeasure = voltasStartMeasures.getFirst().startMeasure;
+		endMeasure = startMeasure + getMeasuresCount();
+	}
 
 	/**
 	 * Returns the measure numbers of the measures that

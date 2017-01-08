@@ -19,8 +19,7 @@ import org.junit.Test;
 
 import static com.xenoage.utils.collections.CList.ilist;
 import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.utils.math.Fraction._0;
-import static com.xenoage.utils.math.Fraction._1$2;
+import static com.xenoage.utils.math.Fraction.*;
 import static com.xenoage.zong.core.music.util.BeatE.beatE;
 import static com.xenoage.zong.core.position.MP.atBeat;
 import static com.xenoage.zong.core.position.MP.unknown;
@@ -91,8 +90,8 @@ public class RepetitionsFinderTest {
 	 * Creates a test score with barline repeats, also within measures, with the following repetitions:
 	 *
 	 * repeats:                             2x
-	 * measures:   |     |     /:    :|    :\  |
-	 * numbers:    |0    |1           |2       |
+	 * measures:   |     |     /:    :|    :\  |  /:  :\ |
+	 * numbers:    |0    |1           |2       |3        |
 	 */
 	private TestCase getMiddleBarlinesTest() {
 		val name = "middle barlines test";
@@ -102,6 +101,8 @@ public class RepetitionsFinderTest {
 		writeMiddleForwardRepeat(1, _1$2);
 		writeBackwardRepeat(1, 1);
 		writeMiddleBackwardRepeat(2, _1$2, 2);
+		writeMiddleForwardRepeat(3, _1$4);
+		writeMiddleBackwardRepeat(3, _3$4, 1);
 
 		val expectedRepetitions = new Repetitions(ilist(
 			new PlayRange(mp(0, _0), mp(2, _0)),
@@ -109,7 +110,8 @@ public class RepetitionsFinderTest {
 			new PlayRange(mp(1, _1$2), mp(2, _0)),
 			new PlayRange(mp(1, _1$2), mp(2, _1$2)),
 			new PlayRange(mp(1, _1$2), mp(2, _0)),
-			new PlayRange(mp(1, _1$2), mp(3, _0))));
+			new PlayRange(mp(1, _1$2), mp(3, _3$4)),
+			new PlayRange(mp(3, _1$4), mp(4, _0))));
 
 		return new TestCase(name, score, expectedRepetitions);
 	}
@@ -206,7 +208,7 @@ public class RepetitionsFinderTest {
 	private TestCase getAdvancedTest() {
 		val name = "advanced test";
 
-		val score = ScoreFactory.create1Staff();
+		score = ScoreFactory.create1Staff();
 		new MeasureAdd(score, 17).execute();
 		writeSign(1, new Segno());
 		writeForwardRepeat(2);

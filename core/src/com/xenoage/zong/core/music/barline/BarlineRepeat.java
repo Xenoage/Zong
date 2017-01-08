@@ -15,4 +15,19 @@ public enum BarlineRepeat {
 	Both,
 	/** No repeat. */
 	None;
+
+	/**
+	 * True for backward and both.
+	 */
+	public boolean isBackward() {
+		return this == Backward || this == Both;
+	}
+
+	/**
+	 * True for forward and both.
+	 */
+	public boolean isForward() {
+		return this == Forward || this == Both;
+	}
+
 }

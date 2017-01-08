@@ -1,19 +1,18 @@
 package com.xenoage.zong.core.music.util;
 
-import static com.xenoage.utils.collections.CList.clist;
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.utils.iterators.ReverseIterator.reverseIt;
-import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.zong.core.music.util.BeatE.beatE;
+import com.xenoage.utils.collections.CList;
+import com.xenoage.utils.collections.IList;
+import com.xenoage.utils.iterators.ReverseIterator;
+import com.xenoage.utils.math.Fraction;
+import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import lombok.Data;
-
-import com.xenoage.utils.collections.CList;
-import com.xenoage.utils.collections.IList;
-import com.xenoage.utils.math.Fraction;
+import static com.xenoage.utils.collections.CList.clist;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.zong.core.music.util.BeatE.beatE;
 
 /**
  * This is a wrapper class to combine a list of objects with
@@ -53,7 +52,7 @@ import com.xenoage.utils.math.Fraction;
 	}
 
 	/**
-	 * Gets all elements at the given beat, or an empty list if there are none.
+	 * Gets all elements at the given beat in a new list, or an empty list if there are none.
 	 */
 	public ArrayList<T> getAll(Fraction beat) {
 		ArrayList<T> ret = alist();
@@ -184,7 +183,7 @@ import com.xenoage.utils.math.Fraction;
 	 * If there is none, null is returned.
 	 */
 	public BeatE<T> getLastBefore(Interval endpoint, Fraction beat) {
-		for (BeatE<T> e : reverseIt(elements)) {
+		for (BeatE<T> e : ReverseIterator.reverseIt(elements)) {
 			if (endpoint.isInInterval(e.getBeat(), beat) == Interval.Result.True)
 				return e;
 		}
@@ -210,6 +209,13 @@ import com.xenoage.utils.math.Fraction;
 		for (BeatE<T> element : elements)
 			ret.add(element.getElement());
 		return ret.close();
+	}
+
+	/**
+	 * Gets an {@link Iterable} to iterate in reverse order, from highest to lowest beat.
+	 */
+	public Iterable<BeatE<T>> reverseIt() {
+		return ReverseIterator.reverseIt(elements);
 	}
 
 }
