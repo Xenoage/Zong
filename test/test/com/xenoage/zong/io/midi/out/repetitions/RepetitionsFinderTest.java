@@ -192,6 +192,67 @@ public class RepetitionsFinderTest {
 	}
 
 	/**
+	 * Test case with voltas and repeats, but with a senza repetizione da capo:
+	 *                   ___ ___             ___ ____
+	 * voltas:           1   2               1   2  d.c. senza rep
+	 * measures:   |    |  :|   |:  |  :|:  |  :|   ||
+	 * numbers:    |0   |1  |2  |3  |4  |5  |6  |7  ||
+	 */
+	@Test public void testSenzaRep() {
+		score = ScoreFactory.create1Staff();
+		new MeasureAdd(score, 7).execute();
+		writeVolta(1, 1, range(1, 1));
+		writeBackwardRepeat(1, 1);
+		writeVolta(2, 1, range(2, 2));
+		writeForwardRepeat(3);
+		writeBackwardRepeat(4, 1);
+		writeForwardRepeat(5);
+		writeVolta(6, 1, range(1, 1));
+		writeBackwardRepeat(6, 1);
+		writeVolta(7, 1, range(2, 2));
+		writeNavigationOrigin(7, daCapo(false));
+
+		val expectedRepetitions = new Repetitions(ilist(
+			playRange(0, 2),
+			playRange(0, 1),
+			playRange(2, 5),
+			playRange(3, 7),
+			playRange(5, 6),
+			playRange(7, 8),
+			playRange(0, 1),
+			playRange(2, 6),
+			playRange(7, 8)));
+
+		runTest(new TestCase(score, expectedRepetitions));
+	}
+
+	/**
+	 * Test case with repeats within voltas:
+	 *                   _______________ ___
+	 * voltas:           1               2
+	 * measures:   |    |   |:  |  :|  :|   ||
+	 * numbers:    |0   |1  |2  |3  |4  |5  ||
+	 */
+	@Test public void testRepeatsWithinVoltas() {
+
+		score = ScoreFactory.create1Staff();
+		new MeasureAdd(score, 5).execute();
+		writeVolta(1, 4, range(1, 1));
+		writeForwardRepeat(2);
+		writeBackwardRepeat(3, 1);
+		writeBackwardRepeat(4, 1);
+		writeVolta(5, 1, range(2, 2));
+
+		val expectedRepetitions = new Repetitions(ilist(
+				playRange(0, 4),
+				playRange(2, 5),
+				playRange(0, 1),
+				playRange(5, 6)));
+
+		runTest(new TestCase(score, expectedRepetitions));
+	}
+
+	/**
 	 * A more advanced test case with the following repetitions:
 	 *                                                               ____ ________ ________________              ___ ___
 	 * voltas/repeats:                         2x                    1+2  3        4     senzarep                1   2

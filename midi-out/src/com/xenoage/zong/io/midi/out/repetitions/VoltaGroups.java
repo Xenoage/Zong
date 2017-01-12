@@ -7,8 +7,6 @@ import com.xenoage.zong.io.midi.out.repetitions.VoltaGroup.VoltaStartMeasure;
 import lombok.AllArgsConstructor;
 import lombok.val;
 
-import static com.xenoage.utils.iterators.ReverseIterator.reverseIt;
-
 /**
  * The {@link VoltaGroup}s in a score.
  */
@@ -36,10 +34,12 @@ public class VoltaGroups {
 		val group = getVoltaGroupAt(measure);
 		if (group == null)
 			return null;
-		VoltaStartMeasure volta = group.voltasStartMeasures.getFirst();
-		for (val start : reverseIt(group.voltasStartMeasures))
-			if (start.startMeasure >= measure)
-				volta = start;
+		VoltaStartMeasure volta = null;
+		for (val v : group.voltasStartMeasures) {
+			volta = v;
+			if (measure < v.startMeasure + v.volta.getLength())
+				break;
+		}
 		return volta;
 	}
 

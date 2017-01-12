@@ -2,7 +2,6 @@ package com.xenoage.zong.io.midi.out.repetitions;
 
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.annotations.MaybeNull;
-import com.xenoage.utils.kernel.Range;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.MusicElementType;
@@ -182,8 +181,8 @@ public class RepetitionsFinder {
 		int counter = notNull(barlineRepeatCounter.get(barlineTime), 0);
 		if (counter < barline.getRepeatTimes()) {
 			//repeat. jump back to last forward repeat
-			if (voltaGroups.getVoltaGroupAt(barlineTime.measure) == null)
-				barlineRepeatCounter.put(barlineTime, counter + 1); //remember repeats only for barlines from outside voltas
+			if (false == isVoltaEndAt(barlineTime)) //do not count repeats at volta end
+				barlineRepeatCounter.put(barlineTime, counter + 1);
 			Time to = findLastForwardRepeatTime(barlineTime);
 			addJump(barlineTime, to);
 			return true;
@@ -279,7 +278,15 @@ public class RepetitionsFinder {
 	 */
 	private boolean processVolta() {
 		val voltaGroup = voltaGroups.getVoltaGroupAt(currentMeasureIndex);
-		int nextNumber = notNull(voltaGroupsCounter.get(voltaGroup), 1);
+
+		//find next number to play
+		int nextNumber;
+		//within a senza repetizione passage, jump into the last number
+		if (false == isWithRepeats)
+			nextNumber = voltaGroup.getRepeatCount();
+		else
+			nextNumber = notNull(voltaGroupsCounter.get(voltaGroup), 1);
+
 		val targetVolta = voltaGroup.findVolta(nextNumber);
 		if (targetVolta != null) {
 			//suitable volta found
@@ -337,24 +344,21 @@ public class RepetitionsFinder {
 	 * repeating sequence. When reaching the right backward repeat, the left forward
 	 * repeat should be used, and not the last forward repeat that was visited before
 	 * the segno jump.
+	 * When the backward repeat is at the end of a volta, the first forward repeat before
+	 * the volta group is used.
 	 */
 	private Time findLastForwardRepeatTime(Time from) {
 
-		//if we are within a volta group, find repeat within the current volta
-		//or before the volta group, but not in the previous voltas of this group
-		val startVolta = voltaGroups.getStateAt(from.measure);
-		Range ignoreMeasuresRange = null;
-		if (startVolta != null)
-			ignoreMeasuresRange = range(startVolta.group.startMeasure, startVolta.voltaStartMeasure - 1);
+		//if we are at the end of a volta, find last forward repeat before the volta group
+		if (isVoltaEndAt(from)) {
+			val volta = voltaGroups.getStateAt(from.measure - 1);
+			from = time(volta.group.startMeasure, _0);
+		}
 
 		//iterate through measures in reverse order
 		int fromMeasure = min(from.measure, score.getMeasuresCount() - 1); //from.measure could be 1 measure after score
 		for (int iMeasure : rangeReverse(fromMeasure, 0)) {
 			val measure = score.getColumnHeader(iMeasure);
-
-			//ignore this measure?
-			if (ignoreMeasuresRange != null && ignoreMeasuresRange.isInRange(iMeasure))
-				continue;
 
 			//barline within the measure?
 			val innerBarlines = measure.getMiddleBarlines();
@@ -404,6 +408,14 @@ public class RepetitionsFinder {
 		}
 		//nothing was found
 		return -1;
+	}
+
+	/**
+	 * Returns true, if the given time is the end of a volta.
+	 */
+	private boolean isVoltaEndAt(Time time) {
+		val volta = voltaGroups.getStateAt(time.measure - 1);
+		return volta != null && volta.voltaEndMeasure == time.measure - 1 && time.beat.equals(_0);
 	}
 
 }

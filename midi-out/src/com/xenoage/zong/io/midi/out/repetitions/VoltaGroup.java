@@ -39,7 +39,7 @@ public class VoltaGroup {
 	VoltaGroup(IList<VoltaStartMeasure> voltasStartMeasures) {
 		this.voltasStartMeasures = voltasStartMeasures;
 		startMeasure = voltasStartMeasures.getFirst().startMeasure;
-		endMeasure = startMeasure + getMeasuresCount();
+		endMeasure = startMeasure + getMeasuresCount() - 1;
 	}
 
 	/**
