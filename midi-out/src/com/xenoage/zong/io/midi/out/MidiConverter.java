@@ -6,13 +6,16 @@ import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.instrument.Instrument;
 import com.xenoage.zong.core.instrument.PitchedInstrument;
-import com.xenoage.zong.core.music.*;
+import com.xenoage.zong.core.music.Part;
+import com.xenoage.zong.core.music.Staff;
+import com.xenoage.zong.core.music.Voice;
+import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.Note;
 import com.xenoage.zong.core.music.time.Time;
 import com.xenoage.zong.core.position.MP;
-import com.xenoage.zong.io.midi.out.repetitions.Repetitions;
 import com.xenoage.zong.io.midi.out.repetitions.PlayRange;
+import com.xenoage.zong.io.midi.out.repetitions.Repetitions;
 import com.xenoage.zong.io.midi.out.repetitions.RepetitionsFinder;
 import lombok.AllArgsConstructor;
 
@@ -27,7 +30,6 @@ import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.position.MP.atBeat;
 import static com.xenoage.zong.core.position.MP.getMP;
 import static com.xenoage.zong.io.midi.out.MidiVelocityConverter.getVelocityAtPosition;
-import static com.xenoage.zong.io.midi.out.MidiVelocityConverter.getVoiceforDynamicsInStaff;
 
 /**
  * This class creates a {@link MidiSequence} from a given {@link Score}.
@@ -95,6 +97,7 @@ public class MidiConverter<T> {
 	}
 	
 	private MidiSequence<T> convertToSequence() {
+
 		ArrayList<Long> measureStartTicks = alist();
 		ArrayList<MidiTime> timePool = alist();
 		int stavesCount = score.getStavesCount();
@@ -162,6 +165,7 @@ public class MidiConverter<T> {
 
 			int track = iStaff;
 
+			/* GOON
 			int[] voiceforDynamicsInStaff = getVoiceforDynamicsInStaff(staff);
 			for (PlayRange playRange : repetitions.getRanges()) {
 				int transposing = 0;
@@ -169,12 +173,12 @@ public class MidiConverter<T> {
 					Measure measure = staff.getMeasure(iMeasure);
 					measureStartTicks.add(currenttickinstaff);
 
-					/*/TODO: transposition changes can happen everywhere in the measure
+					//*TODO: transposition changes can happen everywhere in the measure
 					Transpose t = measure.getInstrumentChanges()...
 					if (t != null)
 					{
 						transposing = t.chromatic;
-					} //*/
+					} //* /
 
 					Fraction start, end;
 					start = null; //GOON score.clipToMeasure(iMeasure, playRange.start).beat;
@@ -192,7 +196,7 @@ public class MidiConverter<T> {
 					Fraction measureduration = end.sub(start);
 					currenttickinstaff += calculateTickFromFraction(measureduration, resolution);
 				}
-			}
+			} */
 		}
 
 		if (addMPEvents) {
@@ -415,7 +419,7 @@ public class MidiConverter<T> {
 	 * The control message {@link MidiEvents#eventPlaybackControl} is used because it has no other meaning.
 	 */
 	private void createControlEventChannel(
-		List<Long> measureStartTicks, List<MidiTime> timePoolOpen, int channel, Repetitions repetitions) {
+			List<Long> measureStartTicks, List<MidiTime> timePoolOpen, int channel, Repetitions repetitions) {
 		List<SortedList<Fraction>> usedBeatsMeasures = CollectionUtils.alist();
 		for (int i : range(score.getMeasuresCount()))
 			usedBeatsMeasures.add(score.getMeasureUsedBeats(i));

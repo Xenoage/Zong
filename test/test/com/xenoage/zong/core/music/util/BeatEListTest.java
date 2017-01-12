@@ -46,7 +46,7 @@ public class BeatEListTest {
 		list.set(32, fr(3));
 		list.set(80, fr(8));
 		list.set(60, fr(6));
-		assertEquals(60, list.getElements().size());
+		assertEquals(6, list.getElements().size());
 		assertEquals(20, (int) list.getElements().get(0).element);
 		assertEquals(32, (int) list.getElements().get(1).element);
 		assertEquals(40, (int) list.getElements().get(2).element);
@@ -64,20 +64,20 @@ public class BeatEListTest {
 		list.add(40, fr(4));
 		//before
 		BeatEList<Integer> expected = new BeatEList<Integer>();
-		list.add(10, fr(1));
-		list.add(20, fr(2));
+		expected.add(10, fr(1));
+		expected.add(20, fr(2));
 		BeatEList<Integer> actual = list.filter(Interval.Before, fr(3));
 		assertEquals(expected, actual);
 		//at or after
 		expected = new BeatEList<Integer>();
-		list.add(30, fr(3));
-		list.add(31, fr(3));
-		list.add(40, fr(4));
+		expected.add(30, fr(3));
+		expected.add(31, fr(3));
+		expected.add(40, fr(4));
 		actual = list.filter(Interval.AtOrAfter, fr(3));
 		assertEquals(expected, actual);
 		//after
 		expected = new BeatEList<Integer>();
-		list.add(40, fr(4));
+		expected.add(40, fr(4));
 		actual = list.filter(Interval.After, fr(3));
 		assertEquals(expected, actual);
 	}

@@ -303,38 +303,51 @@ public final class ColumnHeader
 	 */
 	@Untested public ColumnElement setColumnElement(ColumnElement element, @MaybeNull Fraction beat,
 		@MaybeNull MeasureSide side) {
-		if (element instanceof Barline) {
-			Barline barline = (Barline) element;
-			//left or right barline
-			if (side == MeasureSide.Left)
-				return setStartBarline(barline);
-			else if (side == MeasureSide.Right)
-				return setEndBarline(barline);
-			//middle barline
-			checkNotNull(beat);
-			return setMiddleBarline(barline, beat);
+		switch (element.getMusicElementType()) {
+			case Barline: {
+				Barline barline = (Barline) element;
+				//left or right barline
+				if (side == MeasureSide.Left)
+					return setStartBarline(barline);
+				else if (side == MeasureSide.Right)
+					return setEndBarline(barline);
+				//middle barline
+				checkNotNull(beat);
+				return setMiddleBarline(barline, beat);
+			}
+			case Break: {
+				return setBreak((Break) element);
+			}
+			case TraditionalKey: {
+				checkNotNull(beat);
+				return setKey((Key) element, beat);
+			}
+			case Tempo: {
+				checkNotNull(beat);
+				return setTempo((Tempo) element, beat);
+			}
+			case Time: {
+				return setTime((Time) element);
+			}
+			case Volta: {
+				return setVolta((Volta) element);
+			}
+			case Coda: case DaCapo: case Segno: {
+				//write at beginning of measure (jump target), when beat is 0,
+				//otherwise write to end of measure (jump origin)
+				if (beat.is0())
+					return setNavigationTarget((NavigationSign) element);
+				else
+					return setNavigationOrigin((NavigationSign) element);
+			}
+			default: {
+				if (element instanceof Direction) {
+					addOtherDirection((Direction) element, beat);
+					return null;
+				}
+			}
 		}
-		else if (element instanceof Break) {
-			return setBreak((Break) element);
-		}
-		else if (element instanceof Key) {
-			checkNotNull(beat);
-			return setKey((Key) element, beat);
-		}
-		else if (element instanceof Tempo) {
-			checkNotNull(beat);
-			return setTempo((Tempo) element, beat);
-		}
-		else if (element instanceof Time)
-			return setTime((Time) element);
-		else if (element instanceof Volta)
-			return setVolta((Volta) element);
-		else if (element instanceof Direction) {
-			addOtherDirection((Direction) element, beat);
-			return null;
-		}
-		else
-			throw new UnsupportedClassException(element);
+		throw new UnsupportedClassException(element);
 	}
 
 	/**

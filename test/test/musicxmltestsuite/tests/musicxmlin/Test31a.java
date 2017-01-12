@@ -1,20 +1,19 @@
 package musicxmltestsuite.tests.musicxmlin;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.List;
-
-import musicxmltestsuite.tests.base.Base31a;
-import musicxmltestsuite.tests.utils.ToDo;
-
-import org.junit.Test;
-
 import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.zong.core.Score;
+import com.xenoage.zong.core.music.MusicElementType;
 import com.xenoage.zong.core.music.direction.Direction;
 import com.xenoage.zong.core.music.direction.NavigationSign;
 import com.xenoage.zong.core.music.direction.Tempo;
 import com.xenoage.zong.core.position.MP;
+import musicxmltestsuite.tests.base.Base31a;
+import musicxmltestsuite.tests.utils.ToDo;
+import org.junit.Test;
+
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 
 public class Test31a
@@ -24,6 +23,8 @@ public class Test31a
 	
 	@Test public void test() {
 		Score score = getScore();
+
+		//test directions
 		for (Tuple2<MP, ?> item : expectedDirections) {
 			MP mp = item.get1();
 			List<?> directions = null;
@@ -50,6 +51,12 @@ public class Test31a
 				//	assertEquals(""+mp+"["+i+"]", l.get(i).getClass(), directions.get(i).getClass());
 			}
 		}
+
+		//segno and coda
+		assertEquals(MusicElementType.Segno,
+				score.getColumnHeader(1).getNavigationTarget().getMusicElementType());
+		assertEquals(MusicElementType.Coda,
+				score.getColumnHeader(1).getNavigationOrigin().getMusicElementType());
 	}
 
 }

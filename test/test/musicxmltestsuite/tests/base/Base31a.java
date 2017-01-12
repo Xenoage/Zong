@@ -1,28 +1,18 @@
 package musicxmltestsuite.tests.base;
 
+import com.xenoage.utils.kernel.Tuple2;
+import com.xenoage.zong.core.music.direction.*;
+import com.xenoage.zong.core.music.direction.Pedal.Type;
+import com.xenoage.zong.core.position.MP;
+import com.xenoage.zong.core.text.UnformattedText;
+import musicxmltestsuite.tests.utils.ToDo;
+
+import java.util.List;
+
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Tuple2.t;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.position.MP.atBeat;
-
-import java.util.List;
-
-import musicxmltestsuite.tests.utils.ToDo;
-
-import com.xenoage.utils.kernel.Tuple2;
-import com.xenoage.zong.core.music.direction.Coda;
-import com.xenoage.zong.core.music.direction.Dynamics;
-import com.xenoage.zong.core.music.direction.DynamicsType;
-import com.xenoage.zong.core.music.direction.Pedal;
-import com.xenoage.zong.core.music.direction.Pedal.Type;
-import com.xenoage.zong.core.music.direction.Segno;
-import com.xenoage.zong.core.music.direction.Tempo;
-import com.xenoage.zong.core.music.direction.Wedge;
-import com.xenoage.zong.core.music.direction.WedgeEnd;
-import com.xenoage.zong.core.music.direction.WedgeType;
-import com.xenoage.zong.core.music.direction.Words;
-import com.xenoage.zong.core.position.MP;
-import com.xenoage.zong.core.text.UnformattedText;
 
 
 @ToDo("several yet unsupported direction elements")
@@ -40,8 +30,8 @@ public interface Base31a
 		Wedge w1, w2;
 		return alist(
 			//TODO: 4 rehearsal marks
-			t(atBeat(0, 1, 0, fr(0, 4)), new Segno()),
-			t(atBeat(0, 1, 0, fr(1, 4)), new Coda()),
+			//t(atBeat(0, 1, 0, fr(0, 4)), new Segno()), - moved to beginning of measure
+			//t(atBeat(0, 1, 0, fr(1, 4)), new Coda()), - moved to end of measure
 			t(atBeat(0, 1, 0, fr(2, 4)), new Words(new UnformattedText("words"))),
 			//TODO: eyeglasses
 			t(atBeat(0, 2, 0, fr(0, 4)), new Dynamics(DynamicsType.p)),
