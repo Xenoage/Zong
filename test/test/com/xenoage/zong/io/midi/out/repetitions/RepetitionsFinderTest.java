@@ -12,7 +12,7 @@ import com.xenoage.zong.core.music.direction.DaCapo;
 import com.xenoage.zong.core.music.direction.Direction;
 import com.xenoage.zong.core.music.direction.Segno;
 import com.xenoage.zong.core.music.volta.Volta;
-import com.xenoage.zong.core.position.BP;
+import com.xenoage.zong.core.position.Time;
 import lombok.AllArgsConstructor;
 import lombok.val;
 import org.junit.Test;
@@ -291,8 +291,8 @@ public class RepetitionsFinderTest {
 		return ret;
 	}
 
-	private BP bp(int measure, Fraction beat) {
-		return BP.bp(measure, beat);
+	private Time bp(int measure, Fraction beat) {
+		return Time.time(measure, beat);
 	}
 
 }

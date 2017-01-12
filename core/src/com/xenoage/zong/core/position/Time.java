@@ -8,13 +8,13 @@ import lombok.experimental.Wither;
 import static com.xenoage.utils.math.Fraction._0;
 
 /**
- * Beat Position in a score.
+ * Time in a score.
  * Like a {@link MP}, but consists only of measure and beat.
  *
  * @author Andreas Wenger
  */
-@Data @AllArgsConstructor public class BP
-		implements Comparable<BP> {
+@Data @AllArgsConstructor public class Time
+		implements Comparable<Time> {
 
 	/** The measure index. */
 	@Wither public final int measure;
@@ -22,14 +22,14 @@ import static com.xenoage.utils.math.Fraction._0;
 	@Wither public final Fraction beat;
 
 	/** Musical position with all values set to 0. */
-	public static final BP bp0 = new BP(0, _0);
+	public static final Time time0 = new Time(0, _0);
 
 
 	/**
-	 * Creates a new {@link BP} at the given measure and beat.
+	 * Creates a new {@link Time} at the given measure and beat.
 	 */
-	public static BP bp(int measure, Fraction beat) {
-		return new BP(measure, beat);
+	public static Time time(int measure, Fraction beat) {
+		return new Time(measure, beat);
 	}
 
 	@Override public String toString() {
@@ -37,16 +37,16 @@ import static com.xenoage.utils.math.Fraction._0;
 	}
 
 	/**
-	 * Compares this {@link BP} with the given one.
+	 * Compares this {@link Time} with the given one.
 	 */
-	@Override public int compareTo(BP bp) {
+	@Override public int compareTo(Time time) {
 		//measure
-		if (measure < bp.measure)
+		if (measure < time.measure)
 			return -1;
-		else if (measure > bp.measure)
+		else if (measure > time.measure)
 			return 1;
 		else
-			return beat.compareTo(bp.beat);
+			return beat.compareTo(time.beat);
 	}
 
 }

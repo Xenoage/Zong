@@ -6,7 +6,7 @@ import java.util.List;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.math.Fraction._0;
-import static com.xenoage.zong.core.position.BP.bp;
+import static com.xenoage.zong.core.position.Time.time;
 import static org.junit.Assert.*;
 
 /**
@@ -34,7 +34,7 @@ public class RepetitionsTest {
 	}
 
 	public static PlayRange playRange(int startMeasure, int endMeasure) {
-		return new PlayRange(bp(startMeasure, _0), bp(endMeasure, _0));
+		return new PlayRange(time(startMeasure, _0), time(endMeasure, _0));
 	}
 
 }

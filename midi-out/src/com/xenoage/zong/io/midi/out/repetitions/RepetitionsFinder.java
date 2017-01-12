@@ -12,7 +12,7 @@ import com.xenoage.zong.core.music.direction.NavigationSign;
 import com.xenoage.zong.core.music.direction.Segno;
 import com.xenoage.zong.core.music.util.BeatEList;
 import com.xenoage.zong.core.music.util.Interval;
-import com.xenoage.zong.core.position.BP;
+import com.xenoage.zong.core.position.Time;
 import com.xenoage.zong.core.position.MP;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,8 +28,8 @@ import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.kernel.Range.rangeReverse;
 import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.zong.core.music.util.BeatEList.beatEList;
-import static com.xenoage.zong.core.position.BP.bp;
-import static com.xenoage.zong.core.position.BP.bp0;
+import static com.xenoage.zong.core.position.Time.time;
+import static com.xenoage.zong.core.position.Time.time0;
 import static java.lang.Math.min;
 
 /**
@@ -40,16 +40,22 @@ import static java.lang.Math.min;
 public class RepetitionsFinder {
 
 	/**
-	 * A jump start a given {@link MP} to a given {@link MP}.
+	 * A jump from a given {@link Time} to a given {@link Time}.
 	 */
 	@Const @Data @AllArgsConstructor
 	public static final class Jump {
-		public final BP from, to;
+		public final Time from, to;
 	}
 
+	//state
 	private Score score;
 	private VoltaGroups voltaGroups;
-
+	//maps backward repeats (their Time) to the number of already played repeats
+	private Map<Time, Integer> barlineRepeatCounter = map();
+	//loop index: index of the current measure
+	private int currentMeasure;
+	//where to start in the current measure. null = complete measure
+	@MaybeNull private Fraction currentMeasureStartBeat;
 
 	/**
 	 * Finds the {@link Repetitions} in the given score.
@@ -67,8 +73,8 @@ public class RepetitionsFinder {
 
 		this.voltaGroups = new VoltaGroupFinder(score).findAllVoltaGroups();
 
-		BP start = bp(0, _0);
-		BP end = bp(score.getMeasuresCount(), _0);
+		Time start = time(0, _0);
+		Time end = time(score.getMeasuresCount(), _0);
 
 		ArrayList<Jump> jumplist = createJumpList();
 
@@ -80,8 +86,8 @@ public class RepetitionsFinder {
 			//one or more jumps
 			ranges.add(new PlayRange(start, jumplist.get(0).from));
 			for (int i : range(1, jumplist.size() - 1)) {
-				BP lastEnd = jumplist.get(i - 1).to;
-				BP currentStart = jumplist.get(i).from;
+				Time lastEnd = jumplist.get(i - 1).to;
+				Time currentStart = jumplist.get(i).from;
 				ranges.add(new PlayRange(lastEnd, currentStart));
 			}
 			ranges.add(new PlayRange(jumplist.get(jumplist.size() - 1).to, end));
@@ -99,34 +105,24 @@ public class RepetitionsFinder {
 		val voltaGroups = new VoltaGroupFinder(score).findAllVoltaGroups();
 		Segno lastSegno = null; //if not null, the next segno will jump back to this one
 
-		Map<BP, Integer> barlineRepeatCounter = map(); //maps backward repeats (their BP) to the number of already played repeats
-
 		int lastVoltaCounter = 1; //in the next volta group, jump to this repeat number
 
-		Fraction measureStartBeat = null; //null = complete measure
-		nextMeasure: for (int iMeasure = 0; iMeasure < score.getMeasuresCount();) {
+		Fraction measureStartBeat = null;
+		nextMeasure: for (currentMeasure = 0; currentMeasure < score.getMeasuresCount();) {
 
 			//inner barlines and special signs (segno, coda, dacapo)
-			val innerElements = getInnerBarlinesAndNavigationSigns(iMeasure, measureStartBeat);
+			val innerElements = getInnerBarlinesAndNavigationSigns();
 			for (val e : innerElements) {
-				val eBp = bp(iMeasure, e.beat);
+				val eTime = time(currentMeasure, e.beat);
 
 				//inner backward repeat barline
 				if (e.element instanceof Barline) {
 					val innerBarline = (Barline) e.element;
 					if (innerBarline.getRepeat().isBackward()) {
-						int counter = notNull(barlineRepeatCounter.get(eBp), 0);
-						if (counter < innerBarline.getRepeatTimes()) {
-							barlineRepeatCounter.put(eBp, counter + 1);
-							BP to = findLastForwardRepeatBp(eBp);
-							jumps.add(new Jump(eBp, to));
-							iMeasure = to.measure;
-							measureStartBeat = to.beat;
+						val jump = processBackwardRepeat(innerBarline, eTime);
+						if (jump != null) {
+							jumps.add(jump);
 							continue nextMeasure;
-						}
-						else {
-							//finished, delete counter
-							barlineRepeatCounter.remove(eBp);
 						}
 					}
 				}
@@ -137,62 +133,83 @@ public class RepetitionsFinder {
 			//GOON: volta
 
 			//backward repeat at measure end
-			val endBarline = score.getColumnHeader(iMeasure).getEndBarline();
+			val endBarline = score.getColumnHeader(currentMeasure).getEndBarline();
 			if (endBarline != null) {
 				if (endBarline.getRepeat().isBackward()) {
-					BP end = bp(iMeasure + 1, _0);
-					int counter = notNull(barlineRepeatCounter.get(end), 0);
-					if (counter < endBarline.getRepeatTimes()) {
-						barlineRepeatCounter.put(end, counter + 1);
-						BP to = findLastForwardRepeatBp(end);
-						jumps.add(new Jump(end, to));
-						iMeasure = to.measure;
-						measureStartBeat = to.beat;
+					Time end = time(currentMeasure + 1, _0);
+					val jump = processBackwardRepeat(endBarline, end);
+					if (jump != null) {
+						jumps.add(jump);
 						continue nextMeasure;
-					}
-					else {
-						//finished, delete counter
-						barlineRepeatCounter.remove(end);
 					}
 				}
 			}
 
 			//no jump found in this measure, continue
-			iMeasure++;
-			measureStartBeat = null;
+			currentMeasure++;
+			currentMeasureStartBeat = null;
 		}
 
 		return jumps;
 	}
 
 	/**
-	 * Gets the middle {@link Barline}s and {@link NavigationSign}s in the given measure,
+	 * Processes the given backward repeat barline at the given time.
+	 * When another repeat is to be played, a {@link Jump} is returned
+	 * and the current measure and start beat is modified.
+	 * Otherwise null is returned.
+	 */
+	@MaybeNull private Jump processBackwardRepeat(Barline barline, Time barlineTime) {
+		int counter = notNull(barlineRepeatCounter.get(barlineTime), 0);
+		if (counter < barline.getRepeatTimes()) {
+			//repeat. jump back to last forward repeat
+			barlineRepeatCounter.put(barlineTime, counter + 1);
+			Time to = findLastForwardRepeatTime(barlineTime);
+			currentMeasure = to.measure;
+			currentMeasureStartBeat = to.beat;
+			return new Jump(barlineTime, to);
+		}
+		else {
+			//finished, delete counter
+			barlineRepeatCounter.remove(barlineTime);
+			return null;
+		}
+	}
+
+	/**
+	 * Gets the middle {@link Barline}s and {@link NavigationSign}s in the current measure,
 	 * sorted by beat. If a barline is on the same beat as a sign,
 	 * the barline is listed before the sign, since it played first (e.g. first repeat,
 	 * then, the second time, play the coda sign and jump).
-	 * When the afterBeat argument is not null, only elements after (not at) the given beat
+	 * When the current measure start beat is not null, only elements after (not at) that beat
 	 * are returned.
 	 */
-	private BeatEList<ColumnElement> getInnerBarlinesAndNavigationSigns(int iMeasure, @MaybeNull Fraction afterBeat) {
+	private BeatEList<ColumnElement> getInnerBarlinesAndNavigationSigns() {
 		BeatEList<ColumnElement> ret = beatEList();
-		ret.addAll(getInnerBarlines(iMeasure));
-		ret.addAll(getNavigationSigns(iMeasure));
-		if (afterBeat != null)
-			ret = ret.filter(Interval.After, afterBeat);
+		ret.addAll(getInnerBarlines());
+		ret.addAll(getNavigationSigns());
+		if (currentMeasureStartBeat != null)
+			ret = ret.filter(Interval.After, currentMeasureStartBeat);
 		return ret;
 	}
 
-	private BeatEList<Direction> getNavigationSigns(int iMeasure) {
+	/**
+	 * Gets the {@link NavigationSign}s in the current measure.
+	 */
+	private BeatEList<Direction> getNavigationSigns() {
 		val ret = new BeatEList<Direction>();
-		for (val direction : score.getColumnHeader(iMeasure).getOtherDirections()) {
+		for (val direction : score.getColumnHeader(currentMeasure).getOtherDirections()) {
 			if (direction.element instanceof NavigationSign)
 				ret.add(direction);
 		}
 		return ret;
 	}
 
-	private BeatEList<Barline> getInnerBarlines(int iMeasure) {
-		return score.getColumnHeader(iMeasure).getMiddleBarlines();
+	/**
+	 * Gets the inner {@link Barline}s within of the current measure.
+	 */
+	private BeatEList<Barline> getInnerBarlines() {
+		return score.getColumnHeader(currentMeasure).getMiddleBarlines();
 	}
 
 	/**
@@ -206,7 +223,7 @@ public class RepetitionsFinder {
 	 * repeat should be used, and not the last forward repeat that was visited before
 	 * the segno jump.
 	 */
-	private BP findLastForwardRepeatBp(BP from) {
+	private Time findLastForwardRepeatTime(Time from) {
 
 		//if we are within a volta group, find repeat within the current volta
 		//or before the volta group, but not in the previous voltas
@@ -229,7 +246,7 @@ public class RepetitionsFinder {
 			//at the first measure after that volta group
 			val voltaGroup = voltaGroups.getVoltaGroupAt(iMeasure);
 			if (voltaGroup != startVoltaGroup)
-				return bp(iMeasure + 1, _0);
+				return time(iMeasure + 1, _0);
 
 			//forward repeat barline within the measure?
 			val innerBarlines = measure.getMiddleBarlines();
@@ -238,17 +255,17 @@ public class RepetitionsFinder {
 			for (val innerBarline : innerBarlines.reverseIt()) {
 				if ((innerStartBeat == null || innerBarline.beat.compareTo(innerStartBeat) < 0) &&
 						innerBarline.getElement().getRepeat().isForward())
-					return bp(iMeasure, innerBarline.beat);
+					return time(iMeasure, innerBarline.beat);
 			}
 
 			//forward repeat at the beginning of the measure? (but not when we started at beat 0 of this measure)
-			if (false == bp(iMeasure, _0).equals(from))
+			if (false == time(iMeasure, _0).equals(from))
 				if (measure.getStartBarline() != null && measure.getStartBarline().getRepeat().isForward())
-					return bp(iMeasure, _0);
+					return time(iMeasure, _0);
 		}
 
 		//nothing was found, so return the beginning of the score
-		return bp0;
+		return time0;
 	}
 
 }

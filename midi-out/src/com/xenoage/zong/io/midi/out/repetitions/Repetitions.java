@@ -3,7 +3,7 @@ package com.xenoage.zong.io.midi.out.repetitions;
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.collections.IList;
-import com.xenoage.zong.core.position.BP;
+import com.xenoage.zong.core.position.Time;
 import com.xenoage.zong.core.position.MP;
 import lombok.Data;
 import lombok.val;
@@ -37,8 +37,8 @@ public final class Repetitions {
 	static IList<PlayRange> mergeRanges(List<PlayRange> ranges) {
 		CList<PlayRange> merged = clist();
 		//merge consecutive ranges
-		BP start = null;
-		BP end = null;
+		Time start = null;
+		Time end = null;
 		for (val range : ranges) {
 			if (start == null) {
 				//first range
