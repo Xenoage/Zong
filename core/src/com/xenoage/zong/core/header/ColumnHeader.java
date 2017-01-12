@@ -1,12 +1,5 @@
 package com.xenoage.zong.core.header;
 
-import static com.xenoage.utils.CheckUtils.checkArgsNotNull;
-import static com.xenoage.utils.CheckUtils.checkNotNull;
-import static com.xenoage.utils.collections.CList.clist;
-import static com.xenoage.utils.math.Fraction._0;
-import static com.xenoage.zong.core.position.MP.atColumnBeat;
-import lombok.Data;
-
 import com.xenoage.utils.annotations.MaybeEmpty;
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.NonNull;
@@ -19,11 +12,10 @@ import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.format.Break;
 import com.xenoage.zong.core.music.ColumnElement;
 import com.xenoage.zong.core.music.MeasureSide;
+import com.xenoage.zong.core.music.MusicElementType;
 import com.xenoage.zong.core.music.barline.Barline;
 import com.xenoage.zong.core.music.barline.BarlineRepeat;
-import com.xenoage.zong.core.music.direction.Direction;
-import com.xenoage.zong.core.music.direction.DirectionContainer;
-import com.xenoage.zong.core.music.direction.Tempo;
+import com.xenoage.zong.core.music.direction.*;
 import com.xenoage.zong.core.music.key.Key;
 import com.xenoage.zong.core.music.time.Time;
 import com.xenoage.zong.core.music.util.BeatE;
@@ -32,6 +24,15 @@ import com.xenoage.zong.core.music.volta.Volta;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.position.MPContainer;
 import com.xenoage.zong.core.position.MPElement;
+import lombok.Data;
+import lombok.val;
+
+import static com.xenoage.utils.CheckUtils.checkArgsNotNull;
+import static com.xenoage.utils.CheckUtils.checkNotNull;
+import static com.xenoage.utils.collections.ArrayUtils.containsRef;
+import static com.xenoage.utils.collections.CList.clist;
+import static com.xenoage.utils.math.Fraction._0;
+import static com.xenoage.zong.core.position.MP.atColumnBeat;
 
 /**
  * A {@link ColumnHeader} stores information that
@@ -67,6 +68,10 @@ public final class ColumnHeader
 	@NonNull @MaybeEmpty private BeatEList<Tempo> tempos;
 	/** The {@link Break} after this measure, or null. */
 	@MaybeNull private Break measureBreak;
+	/** The {@link NavigationSign} at the beginning of this measure, or null. */
+	@MaybeNull private Direction navigationTarget;
+	/** The {@link NavigationSign} at the end of this measure, or null. */
+	@MaybeNull private Direction navigationOrigin;
 	/** The other {@link Direction}s in this measure */
 	@NonNull @MaybeEmpty private BeatEList<Direction> otherDirections;
 
@@ -212,14 +217,45 @@ public final class ColumnHeader
 	}
 
 	/**
+	 * Sets the {@link NavigationSign} at the beginning of a measure
+	 * into which can be jumped, e.g. a jump indicated by "segno" or "coda".
+	 * If there is already one, it is replaced and returned (otherwise null).
+	 * Setting a "capo" is not possible here.
+	 */
+	public Direction setNavigationTarget(NavigationSign sign) {
+		if (sign instanceof DaCapo)
+			throw new IllegalArgumentException("DaCapo can not be a navigation target");
+		val old = this.navigationTarget;
+		this.navigationTarget = (Direction) sign;
+		return old;
+	}
+
+	/**
+	 * Sets the {@link NavigationSign} to perform after this measure,
+	 * e.g. a jump indicated by "da capo", "dal segno" or "to coda".
+	 * If there is already one, it is replaced and returned (otherwise null).
+	 */
+	public Direction setNavigationOrigin(NavigationSign sign) {
+		val old = this.navigationOrigin;
+		this.navigationOrigin = (Direction) sign;
+		return old;
+	}
+
+	/**
 	 * Adds the given {@link Direction} to this measure.
 	 * For a {@link Tempo}, use {@link #setTempo(Tempo, Fraction)} with a null value instead.
+	 * For a {@link NavigationSign}, use #setNavigationTarget or #setNavigationOrigin instead.
 	 */
 	public void addOtherDirection(Direction direction, Fraction beat) {
 		checkArgsNotNull(direction, beat);
+		if (containsRef(middleNotAllowedDirections, direction.getMusicElementType()))
+			throw new IllegalArgumentException("direction type not allowed at this position");
 		direction.setParent(this);
 		otherDirections.add(direction, beat);
 	}
+	private static MusicElementType[] middleNotAllowedDirections = {
+			MusicElementType.Tempo, MusicElementType.Coda, MusicElementType.DaCapo, MusicElementType.Segno
+	};
 
 	/**
 	 * Removes the given {@link Direction} from this measure.

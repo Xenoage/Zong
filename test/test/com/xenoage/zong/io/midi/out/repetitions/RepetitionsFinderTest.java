@@ -7,10 +7,7 @@ import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.ScoreFactory;
 import com.xenoage.zong.core.music.barline.Barline;
 import com.xenoage.zong.core.music.barline.BarlineStyle;
-import com.xenoage.zong.core.music.direction.Coda;
-import com.xenoage.zong.core.music.direction.DaCapo;
-import com.xenoage.zong.core.music.direction.Direction;
-import com.xenoage.zong.core.music.direction.Segno;
+import com.xenoage.zong.core.music.direction.*;
 import com.xenoage.zong.core.music.volta.Volta;
 import com.xenoage.zong.core.position.Time;
 import lombok.AllArgsConstructor;
@@ -116,27 +113,27 @@ public class RepetitionsFinderTest {
 	/**
 	 * Test case with coda/segna/dacapo, with the following repetitions:
 	 *
-	 *                                    senzarep                                conrep                    senzarep
-	 *                    (tocoda)        (dacapo)   (coda)      (segno)          (dalsegno)     (segno2)   (dalsegno2)
-	 * measures:   |    :|          |    |          |       |   |:       :|      |           |  |:        :|          ||
-	 * numbers:    |0    |1         |2   |3         |4      |5  |6        |7     |8          |9 |10        |11        ||
+	 *                                senzarep                                 conrep                        senzarep
+	 *                (tocoda)        (dacapo)      (coda)      (segno)      (dalsegno)     (segno2)       (dalsegno2)
+	 * measures:   |    :|          |    |          |       |   |:       :|      |          |        |:        :|      ||
+	 * numbers:    |0    |1         |2   |3         |4      |5  |6        |7     |8         |9       |10        |11    ||
 	 */
 	@Test public void testNavigationSigns() {
 
 		score = ScoreFactory.create1Staff();
 		new MeasureAdd(score, 11).execute();
 		writeBackwardRepeat(0, 1);
-		writeSign(1, new Coda());
-		writeSign(3, daCapo(false));
-		writeSign(4, new Coda());
+		writeNavigationOrigin(0, new Coda());
+		writeNavigationOrigin(2, daCapo(false));
+		writeNavigationTarget(4, new Coda());
 		writeForwardRepeat(6);
-		writeSign(6, new Segno());
+		writeNavigationTarget(6, new Segno());
 		writeBackwardRepeat(6, 1);
-		writeSign(8, new Segno());
+		writeNavigationOrigin(7, new Segno());
 		writeForwardRepeat(10);
-		writeSign(10, new Segno());
+		writeNavigationTarget(9, new Segno());
 		writeBackwardRepeat(10, 1);
-		writeSign(10, segno(false));
+		writeNavigationOrigin(10, segno(false));
 
 		val expectedRepetitions = new Repetitions(ilist(
 			playRange(0, 1),
@@ -147,7 +144,7 @@ public class RepetitionsFinderTest {
 			playRange(6, 7),
 			playRange(6, 11),
 			playRange(10, 11),
-			playRange(10, 12)));
+			playRange(9, 12)));
 
 		runTest(new TestCase(score, expectedRepetitions));
 	}
@@ -204,19 +201,19 @@ public class RepetitionsFinderTest {
 
 		score = ScoreFactory.create1Staff();
 		new MeasureAdd(score, 17).execute();
-		writeSign(1, new Segno());
+		writeNavigationTarget(1, new Segno());
 		writeForwardRepeat(2);
 		writeBackwardRepeat(4, 2);
-		writeSign(6, new DaCapo());
-		writeSign(7, new Coda());
+		writeNavigationOrigin(5, new DaCapo());
+		writeNavigationOrigin(6, new Coda());
 		writeForwardRepeat(8);
 		writeVolta(9, 1, range(1, 2));
 		writeBackwardRepeat(9, 1); //repeat times should be 2, but because of the "1.+2." volta the repeat is implicit - TODO: how does Sibelius/MuseScore handle this?
 		writeVolta(10, 2, range(3, 3));
 		writeBackwardRepeat(11, 1);
 		writeVolta(12, 2, range(4, 4));
-		writeSign(14, segno(false));
-		writeSign(14, new Coda());
+		writeNavigationOrigin(13, segno(false));
+		writeNavigationTarget(14, new Coda());
 		writeForwardRepeat(15);
 		writeVolta(16, 1, range(1));
 		writeBackwardRepeat(16, 1);
@@ -271,8 +268,12 @@ public class RepetitionsFinderTest {
 				Barline.barlineBackwardRepeat(BarlineStyle.Dashed, repeatTimes), beat));
 	}
 
-	private void writeSign(int measure, Direction sign) {
-		score.getColumnHeader(measure).addOtherDirection(sign, _0);
+	private void writeNavigationTarget(int measure, NavigationSign sign) {
+		score.getColumnHeader(measure).setNavigationTarget(sign);
+	}
+
+	private void writeNavigationOrigin(int measure, NavigationSign sign) {
+		score.getColumnHeader(measure).setNavigationOrigin(sign);
 	}
 
 	private void writeVolta(int measure, int length, Range range) {
@@ -281,13 +282,13 @@ public class RepetitionsFinderTest {
 
 	private DaCapo daCapo(boolean conRep) {
 		val ret = new DaCapo();
-		ret.setConRepetizione(conRep);
+		ret.setWithRepeats(conRep);
 		return ret;
 	}
 
 	private Segno segno(boolean conRep) {
 		val ret = new Segno();
-		ret.setConRepetizione(conRep);
+		ret.setWithRepeats(conRep);
 		return ret;
 	}
 

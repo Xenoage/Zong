@@ -1,8 +1,8 @@
 package com.xenoage.zong.core.music;
 
-import static com.xenoage.utils.annotations.Optimized.Reason.Performance;
-
 import com.xenoage.utils.annotations.Optimized;
+
+import static com.xenoage.utils.annotations.Optimized.Reason.Performance;
 
 
 /**
@@ -35,5 +35,14 @@ public enum MusicElementType {
 	Volta,
 	Wedge,
 	WedgeEnd,
-	Words
+	Words;
+
+
+	/**
+	 * Returns true, if the given {@link MusicElement} is not null and of this type.
+	 */
+	public boolean is(MusicElement e) {
+		return e != null && e.getMusicElementType() == this;
+	}
+
 }

@@ -5,29 +5,29 @@ import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.kernel.Range;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.Score;
-import com.xenoage.zong.core.music.ColumnElement;
+import com.xenoage.zong.core.music.MusicElementType;
 import com.xenoage.zong.core.music.barline.Barline;
-import com.xenoage.zong.core.music.direction.Direction;
+import com.xenoage.zong.core.music.direction.Coda;
+import com.xenoage.zong.core.music.direction.DaCapo;
 import com.xenoage.zong.core.music.direction.NavigationSign;
 import com.xenoage.zong.core.music.direction.Segno;
 import com.xenoage.zong.core.music.util.BeatEList;
 import com.xenoage.zong.core.music.util.Interval;
 import com.xenoage.zong.core.position.Time;
-import com.xenoage.zong.core.position.MP;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.val;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static com.xenoage.utils.NullUtils.notNull;
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.utils.collections.CollectionUtils.map;
+import static com.xenoage.utils.collections.CollectionUtils.*;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.kernel.Range.rangeReverse;
 import static com.xenoage.utils.math.Fraction._0;
-import static com.xenoage.zong.core.music.util.BeatEList.beatEList;
 import static com.xenoage.zong.core.position.Time.time;
 import static com.xenoage.zong.core.position.Time.time0;
 import static java.lang.Math.min;
@@ -49,13 +49,21 @@ public class RepetitionsFinder {
 
 	//state
 	private Score score;
+	private List<Jump> jumps = alist();
+	//voltas
 	private VoltaGroups voltaGroups;
 	//maps backward repeats (their Time) to the number of already played repeats
 	private Map<Time, Integer> barlineRepeatCounter = map();
+	//list of played navigation signs
+	private Set<NavigationSign> playedNavigationSigns = set();
+	//true after a dacapo or segno jump, before we see the next origin navigation sign
+	private boolean isWithinJumpRepeat = false;
 	//loop index: index of the current measure
-	private int currentMeasure;
+	private int currentMeasureIndex;
 	//where to start in the current measure. null = complete measure
 	@MaybeNull private Fraction currentMeasureStartBeat;
+	//con repetizione (true, play repeats) or senza repetizione (false, ignore repeats)
+	private boolean isWithRepeats = true;
 
 	/**
 	 * Finds the {@link Repetitions} in the given score.
@@ -76,21 +84,21 @@ public class RepetitionsFinder {
 		Time start = time(0, _0);
 		Time end = time(score.getMeasuresCount(), _0);
 
-		ArrayList<Jump> jumplist = createJumpList();
+		collectJumps();
 
-		if (jumplist.size() == 0) {
+		if (jumps.size() == 0) {
 			//simple case: no jumps
 			ranges.add(new PlayRange(start, end));
 		}
 		else {
 			//one or more jumps
-			ranges.add(new PlayRange(start, jumplist.get(0).from));
-			for (int i : range(1, jumplist.size() - 1)) {
-				Time lastEnd = jumplist.get(i - 1).to;
-				Time currentStart = jumplist.get(i).from;
+			ranges.add(new PlayRange(start, jumps.get(0).from));
+			for (int i : range(1, jumps.size() - 1)) {
+				Time lastEnd = jumps.get(i - 1).to;
+				Time currentStart = jumps.get(i).from;
 				ranges.add(new PlayRange(lastEnd, currentStart));
 			}
-			ranges.add(new PlayRange(jumplist.get(jumplist.size() - 1).to, end));
+			ranges.add(new PlayRange(jumps.get(jumps.size() - 1).to, end));
 		}
 
 		return new Repetitions(ranges);
@@ -99,122 +107,188 @@ public class RepetitionsFinder {
 	/**
 	 * Creates the list of jumps for this score.
 	 */
-	private ArrayList<Jump> createJumpList() {
-		ArrayList<Jump> jumps = alist();
-
-		val voltaGroups = new VoltaGroupFinder(score).findAllVoltaGroups();
+	private void collectJumps() {
 		Segno lastSegno = null; //if not null, the next segno will jump back to this one
 
 		int lastVoltaCounter = 1; //in the next volta group, jump to this repeat number
 
 		Fraction measureStartBeat = null;
-		nextMeasure: for (currentMeasure = 0; currentMeasure < score.getMeasuresCount();) {
+		nextMeasure: for (currentMeasureIndex = 0; currentMeasureIndex < score.getMeasuresCount();) {
+			val measure = score.getColumnHeader(currentMeasureIndex);
 
-			//inner barlines and special signs (segno, coda, dacapo)
-			val innerElements = getInnerBarlinesAndNavigationSigns();
-			for (val e : innerElements) {
-				val eTime = time(currentMeasure, e.beat);
-
-				//inner backward repeat barline
-				if (e.element instanceof Barline) {
-					val innerBarline = (Barline) e.element;
-					if (innerBarline.getRepeat().isBackward()) {
-						val jump = processBackwardRepeat(innerBarline, eTime);
-						if (jump != null) {
-							jumps.add(jump);
+			//inner backward repeat barlines
+			if (isWithRepeats) {
+				for (val e : getInnerBarlines()) {
+					val innerBarline = e.element;
+					val eTime = time(currentMeasureIndex, e.beat);
+					if (innerBarline.getRepeat().isBackward())
+						if (processBackwardRepeat(innerBarline, eTime))
 							continue nextMeasure;
-						}
-					}
 				}
-
-				//GOON: coda, segno, dacapo
 			}
 
-			//GOON: volta
-
 			//backward repeat at measure end
-			val endBarline = score.getColumnHeader(currentMeasure).getEndBarline();
-			if (endBarline != null) {
+			val endBarline = measure.getEndBarline();
+			if (isWithRepeats && endBarline != null) {
 				if (endBarline.getRepeat().isBackward()) {
-					Time end = time(currentMeasure + 1, _0);
-					val jump = processBackwardRepeat(endBarline, end);
-					if (jump != null) {
-						jumps.add(jump);
+					Time end = time(currentMeasureIndex + 1, _0);
+					if (processBackwardRepeat(endBarline, end))
 						continue nextMeasure;
-					}
 				}
+			}
+
+			//origin navigation sign
+			//we read them after the backward repeat barlines. e.g. when there is both
+			//a repeat and a "to coda", we first play the repeat and then the "to coda".
+			val sign = measure.getNavigationOrigin();
+			if (sign != null) {
+				//da capo ,
+				if (MusicElementType.DaCapo.is(sign))
+					if (processDaCapo((DaCapo) sign))
+						continue nextMeasure;
+
+				//target segno
+				if (MusicElementType.Segno.is(sign))
+					if (processSegno((Segno) sign))
+						continue nextMeasure;
+
+				//to coda
+				if (MusicElementType.Coda.is(sign))
+					if (processCoda((Coda) sign))
+						continue nextMeasure;
 			}
 
 			//no jump found in this measure, continue
-			currentMeasure++;
+			currentMeasureIndex++;
 			currentMeasureStartBeat = null;
 		}
-
-		return jumps;
 	}
 
 	/**
-	 * Processes the given backward repeat barline at the given time.
-	 * When another repeat is to be played, a {@link Jump} is returned
-	 * and the current measure and start beat is modified.
-	 * Otherwise null is returned.
+	 * Processes the given backward repeat {@link Barline} at the given {@link Time}.
+	 * When another repeat is to be played, a {@link Jump} is added to
+	 * the jump list, the current measure and start beat are modified
+	 * and true is returned.
+	 * Otherwise false is returned.
 	 */
-	@MaybeNull private Jump processBackwardRepeat(Barline barline, Time barlineTime) {
+	private boolean processBackwardRepeat(Barline barline, Time barlineTime) {
 		int counter = notNull(barlineRepeatCounter.get(barlineTime), 0);
 		if (counter < barline.getRepeatTimes()) {
 			//repeat. jump back to last forward repeat
 			barlineRepeatCounter.put(barlineTime, counter + 1);
 			Time to = findLastForwardRepeatTime(barlineTime);
-			currentMeasure = to.measure;
-			currentMeasureStartBeat = to.beat;
-			return new Jump(barlineTime, to);
+			addJump(barlineTime, to);
+			return true;
 		}
 		else {
 			//finished, delete counter
 			barlineRepeatCounter.remove(barlineTime);
-			return null;
+			return false;
 		}
 	}
 
 	/**
-	 * Gets the middle {@link Barline}s and {@link NavigationSign}s in the current measure,
-	 * sorted by beat. If a barline is on the same beat as a sign,
-	 * the barline is listed before the sign, since it played first (e.g. first repeat,
-	 * then, the second time, play the coda sign and jump).
-	 * When the current measure start beat is not null, only elements after (not at) that beat
-	 * are returned.
+	 * Processes the given {@link DaCapo} in the current measure.
+	 * When it was not played yet, a {@link Jump} to the beginning is added to
+	 * the jump list,the con repetizione and jump repeat flags are updated,
+	 * the current measure and start beat are modified and true is returned.
+	 * Otherwise false is returned.
 	 */
-	private BeatEList<ColumnElement> getInnerBarlinesAndNavigationSigns() {
-		BeatEList<ColumnElement> ret = beatEList();
-		ret.addAll(getInnerBarlines());
-		ret.addAll(getNavigationSigns());
-		if (currentMeasureStartBeat != null)
-			ret = ret.filter(Interval.After, currentMeasureStartBeat);
-		return ret;
+	private boolean processDaCapo(DaCapo daCapo) {
+		//each da capo is played only one time to avoid endless repeats
+		if (false == playedNavigationSigns.contains(daCapo)) {
+			//jump back to the beginning
+			playedNavigationSigns.add(daCapo);
+			isWithRepeats = daCapo.isWithRepeats();
+			isWithinJumpRepeat = true;
+			addJump(time(currentMeasureIndex + 1, _0), time0);
+			return true;
+		}
+		else {
+			isWithinJumpRepeat = false;
+			return false;
+		}
 	}
 
 	/**
-	 * Gets the {@link NavigationSign}s in the current measure.
+	 * Processes the given origin {@link Segno} in the current measure.
+	 * When it was not played yet, and there is an earlier target segno,
+	 * a {@link Jump} to that last target segno is added to
+	 * the jump list, the con repetizione and jump repeat flags are updated,
+	 * the current measure and start beat are modified and true is returned.
+	 * Otherwise false is returned.
 	 */
-	private BeatEList<Direction> getNavigationSigns() {
-		val ret = new BeatEList<Direction>();
-		for (val direction : score.getColumnHeader(currentMeasure).getOtherDirections()) {
-			if (direction.element instanceof NavigationSign)
-				ret.add(direction);
+	private boolean processSegno(Segno segno) {
+		//each origin segno is played only one time to avoid endless repeats
+		if (false == playedNavigationSigns.contains(segno)) {
+			//jump back to last target segno
+			playedNavigationSigns.add(segno);
+			isWithRepeats = segno.isWithRepeats();
+			isWithinJumpRepeat = true;
+			addJump(time(currentMeasureIndex + 1, _0), time(findSegnoTargetMeasure(), _0));
+			return true;
 		}
-		return ret;
+		else {
+			isWithinJumpRepeat = false;
+			return false;
+		}
+	}
+
+	/**
+	 * Processes the given origin "to {@link Coda}" at the current measure.
+	 * When we are within a jump repeat and the coda was not played yet,
+	 * and there is a later target coda,
+	 * a {@link Jump} to that target coda is added to
+	 * the jump list, the con repetizione flag set back to true,
+	 * the jump repeat flag set back to false,
+	 * the current measure and start beat are modified and true is returned.
+	 * Otherwise false is returned.
+	 */
+	private boolean processCoda(Coda coda) {
+		//codas are only played when we are within a repeat caused by a dacapo or segno
+		if (isWithinJumpRepeat) {
+			//each origin coda is played only one time to avoid endless repeats
+			if (false == playedNavigationSigns.contains(coda)) {
+				//find next target coda
+				val nextCodaMeasure = findCodaTargetMeasure();
+				if (nextCodaMeasure > 0) {
+					//jump forward to the next coda
+					playedNavigationSigns.add(coda);
+					isWithRepeats = true; //after coda jump, always con repetizione
+					isWithinJumpRepeat = false;
+					addJump(time(currentMeasureIndex + 1, _0), time(nextCodaMeasure, _0));
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Adds a {@link Jump} to the list of jumps and updates the current
+	 * measure index and start beat accordingly.
+	 */
+	private void addJump(Time from, Time to) {
+		jumps.add(new Jump(from, to));
+		currentMeasureIndex = to.measure;
+		currentMeasureStartBeat = to.beat;
 	}
 
 	/**
 	 * Gets the inner {@link Barline}s within of the current measure.
+	 * When the current measure start beat is not null, only barlines after (not at) that beat
+	 * are returned.
 	 */
 	private BeatEList<Barline> getInnerBarlines() {
-		return score.getColumnHeader(currentMeasure).getMiddleBarlines();
+		val ret = score.getColumnHeader(currentMeasureIndex).getMiddleBarlines();
+		if (currentMeasureStartBeat != null)
+			return ret.filter(Interval.After, currentMeasureStartBeat);
+		return ret;
 	}
 
 	/**
-	 * Finds the {@link MP} of the last forward repeat (also within measures),
-	 * starting from the given {@link MP}. If there is none, {@link MP#mp0} is returned.
+	 * Finds the {@link Time} of the last forward repeat (also within measures),
+	 * starting from the given time. If there is none, the beginning of the score is returned.
 	 * If another volta group is found before, the measure after the volta is returned (since voltas
 	 * can not be "nested").
 	 * This value can not be cached during playback, but must be searched each time when
@@ -248,7 +322,7 @@ public class RepetitionsFinder {
 			if (voltaGroup != startVoltaGroup)
 				return time(iMeasure + 1, _0);
 
-			//forward repeat barline within the measure?
+			//segno within the measure?
 			val innerBarlines = measure.getMiddleBarlines();
 			//if starting in this measure, only before the given beat
 			val innerStartBeat = (iMeasure == from.measure ? from.beat : null);
@@ -266,6 +340,36 @@ public class RepetitionsFinder {
 
 		//nothing was found, so return the beginning of the score
 		return time0;
+	}
+
+	/**
+	 * Finds the measure of the last target {@link Segno} starting from the current measure.
+	 * If there is none, the first measure is returned.
+	 */
+	private int findSegnoTargetMeasure() {
+		//iterate through measures in reverse order
+		for (int iMeasure : rangeReverse(currentMeasureIndex, 0)) {
+			val sign = score.getColumnHeader(iMeasure).getNavigationTarget();
+			if (MusicElementType.Segno.is(sign))
+				return iMeasure;
+		}
+		//nothing was found, jump to the beginning of the score
+		return 0;
+	}
+
+	/**
+	 * Finds the measure of the next target {@link Coda} starting from the current measure.
+	 * If there is none, -1 is returned.
+	 */
+	private int findCodaTargetMeasure() {
+		//iterate through measures
+		for (int iMeasure : range(currentMeasureIndex, score.getMeasuresCount() - 1)) {
+			val sign = score.getColumnHeader(iMeasure).getNavigationTarget();
+			if (MusicElementType.Coda.is(sign))
+				return iMeasure;
+		}
+		//nothing was found
+		return -1;
 	}
 
 }
