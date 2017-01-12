@@ -53,4 +53,14 @@ public class VoltaGroups {
 		return null;
 	}
 
+	/**
+	 * Gets the {@link VoltaGroup} starting at the given measure.
+	 */
+	@MaybeNull public VoltaGroup getVoltaGroupStartingAt(int measure) {
+		for (val group : voltaGroups)
+			if (group.startMeasure == measure)
+				return group;
+		return null;
+	}
+
 }

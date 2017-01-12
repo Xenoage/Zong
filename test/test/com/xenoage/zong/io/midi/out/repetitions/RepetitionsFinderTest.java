@@ -165,18 +165,18 @@ public class RepetitionsFinderTest {
 		writeVolta(2, 1, range(2, 2));
 		writeVolta(5, 1, range(1, 1));
 		writeBackwardRepeat(5, 1);
-		writeVolta(6, 1, range(1, 1));
+		writeVolta(6, 1, range(2, 2));
 		writeForwardRepeat(7);
 		writeVolta(8, 1, range(1, 1));
 		writeBackwardRepeat(8, 1);
 		writeVolta(9, 1, range(2, 3));
-		writeBackwardRepeat(9, 1); //implicitly repeats two times because of volta
+		writeBackwardRepeat(9, 1); //should be 2, but 1 is also fine since within a volta we use this repeat sign implicitly
 		writeVolta(10, 1, null);
 
 		val expectedRepetitions = new Repetitions(ilist(
 			playRange(0, 2),
 			playRange(0, 1),
-			playRange(2, 6), //-> back to the very beginning, repeating the 1st volta group
+			playRange(2, 6), //-> back to the very beginning (because of missing forward repeat)
 			playRange(0, 2),
 			playRange(0, 1),
 			playRange(2, 5),
@@ -185,6 +185,7 @@ public class RepetitionsFinderTest {
 			playRange(9, 10),
 			playRange(7, 8),
 			playRange(9, 10),
+			playRange(7, 8),
 			playRange(10, 11)));
 
 		runTest(new TestCase(score, expectedRepetitions));
@@ -192,10 +193,10 @@ public class RepetitionsFinderTest {
 
 	/**
 	 * A more advanced test case with the following repetitions:
-	 *                                                                          _____ ________ ________________              ___ ___
-	 * voltas/repeats:                         2x   conrep                      1+2   3        4     senzarep                1   2
-	 * measures:  |   |(segno)    |:  |   |   :|   |(d.c.)  |(tocoda)  |:      |    :|   |   :|   |  (dalsegno)|(coda) |:   |  :|   ||
-	 * numbers:   |0  |1          |2  |3  |4   |5  |6       |7         |8      |9    |10 |11  |12 |13          |14     |15  |16 |17 ||
+	 *                                                               ____ ________ ________________              ___ ___
+	 * voltas/repeats:                         2x                    1+2  3        4     senzarep                1   2
+	 * measures:  |   |(segno)  |:  |   |   :|   |   |(tocoda)  |:  |   :|   |   :|   |  (dalsegno)|(coda) |:   |  :|   ||
+	 * numbers:   |0  |1        |2  |3  |4   |5  |6  |7         |8  |9   |10 |11  |12 |13          |14     |15  |16 |17 ||
 	 */
 	@Test public void testAdvanced() {
 
@@ -204,32 +205,24 @@ public class RepetitionsFinderTest {
 		writeNavigationTarget(1, new Segno());
 		writeForwardRepeat(2);
 		writeBackwardRepeat(4, 2);
-		writeNavigationOrigin(5, new DaCapo());
 		writeNavigationOrigin(6, new Coda());
 		writeForwardRepeat(8);
 		writeVolta(9, 1, range(1, 2));
-		writeBackwardRepeat(9, 1); //repeat times should be 2, but because of the "1.+2." volta the repeat is implicit - TODO: how does Sibelius/MuseScore handle this?
+		writeBackwardRepeat(9, 2);
 		writeVolta(10, 2, range(3, 3));
 		writeBackwardRepeat(11, 1);
 		writeVolta(12, 2, range(4, 4));
 		writeNavigationOrigin(13, segno(false));
 		writeNavigationTarget(14, new Coda());
 		writeForwardRepeat(15);
-		writeVolta(16, 1, range(1));
+		writeVolta(16, 1, range(1, 1));
 		writeBackwardRepeat(16, 1);
-		writeVolta(17, 1, range(2));
+		writeVolta(17, 1, range(2, 2));
 
 		val expectedRepetitions = new Repetitions(ilist(
-			playRange(0, 2),
+			playRange(0, 5),
 			playRange(2, 5),
-			playRange(2, 5),
-			playRange(2, 5),
-			playRange(5, 6), //-> d.c. con.rep.
-			playRange(0, 2),
-			playRange(2, 5),
-			playRange(2, 5),
-			playRange(2, 5),
-			playRange(5, 10),
+			playRange(2, 10),
 			playRange(8, 10),
 			playRange(8, 9),
 			playRange(10, 12),
@@ -277,7 +270,7 @@ public class RepetitionsFinderTest {
 	}
 
 	private void writeVolta(int measure, int length, Range range) {
-		score.getColumnHeader(measure).setVolta(new Volta(length, range, range.toString(), false));
+		score.getColumnHeader(measure).setVolta(new Volta(length, range, ""+range, false));
 	}
 
 	private DaCapo daCapo(boolean conRep) {

@@ -52,6 +52,8 @@ public class RepetitionsFinder {
 	private List<Jump> jumps = alist();
 	//voltas
 	private VoltaGroups voltaGroups;
+	//repeat counter for all volta groups
+	private Map<VoltaGroup, Integer> voltaGroupsCounter = map();;
 	//maps backward repeats (their Time) to the number of already played repeats
 	private Map<Time, Integer> barlineRepeatCounter = map();
 	//list of played navigation signs
@@ -116,6 +118,11 @@ public class RepetitionsFinder {
 		nextMeasure: for (currentMeasureIndex = 0; currentMeasureIndex < score.getMeasuresCount();) {
 			val measure = score.getColumnHeader(currentMeasureIndex);
 
+			//enter a volta
+			if (voltaGroups.getVoltaGroupStartingAt(currentMeasureIndex) != null)
+				if (processVolta())
+					continue nextMeasure;
+
 			//inner backward repeat barlines
 			if (isWithRepeats) {
 				for (val e : getInnerBarlines()) {
@@ -175,7 +182,8 @@ public class RepetitionsFinder {
 		int counter = notNull(barlineRepeatCounter.get(barlineTime), 0);
 		if (counter < barline.getRepeatTimes()) {
 			//repeat. jump back to last forward repeat
-			barlineRepeatCounter.put(barlineTime, counter + 1);
+			if (voltaGroups.getVoltaGroupAt(barlineTime.measure) == null)
+				barlineRepeatCounter.put(barlineTime, counter + 1); //remember repeats only for barlines from outside voltas
 			Time to = findLastForwardRepeatTime(barlineTime);
 			addJump(barlineTime, to);
 			return true;
@@ -205,7 +213,6 @@ public class RepetitionsFinder {
 			return true;
 		}
 		else {
-			isWithinJumpRepeat = false;
 			return false;
 		}
 	}
@@ -229,7 +236,6 @@ public class RepetitionsFinder {
 			return true;
 		}
 		else {
-			isWithinJumpRepeat = false;
 			return false;
 		}
 	}
@@ -265,6 +271,43 @@ public class RepetitionsFinder {
 	}
 
 	/**
+	 * Processes the volta group at the current measure.
+	 * When playing the first volta is not fine, a {@link Jump} into the right volta
+	 * is created, or if nothing suitable is found, a {@link Jump} into to the first measure
+	 * after the volta group is created.
+	 * True is returned, iff a jump was created.
+	 */
+	private boolean processVolta() {
+		val voltaGroup = voltaGroups.getVoltaGroupAt(currentMeasureIndex);
+		int nextNumber = notNull(voltaGroupsCounter.get(voltaGroup), 1);
+		val targetVolta = voltaGroup.findVolta(nextNumber);
+		if (targetVolta != null) {
+			//suitable volta found
+			//update repeat counter
+			if (voltaGroup.getRepeatCount() == nextNumber)
+				voltaGroupsCounter.remove(voltaGroup); //last repeat; volta group is then finished
+			else
+				voltaGroupsCounter.put(voltaGroup, nextNumber + 1); //next time one number higher
+			//prepare jump
+			if (currentMeasureIndex == targetVolta.startMeasure) {
+				//we are already in the right volta; no jump needed
+				return false;
+			}
+			else {
+				//create jump into right volta
+				addJump(time(currentMeasureIndex, _0), time(targetVolta.startMeasure, _0));
+				return true;
+			}
+		}
+		else {
+			//no suitable volta found
+			voltaGroupsCounter.remove(voltaGroup);
+			addJump(time(currentMeasureIndex, _0), time(voltaGroup.endMeasure + 1, _0));
+			return true;
+		}
+	}
+
+	/**
 	 * Adds a {@link Jump} to the list of jumps and updates the current
 	 * measure index and start beat accordingly.
 	 */
@@ -289,8 +332,6 @@ public class RepetitionsFinder {
 	/**
 	 * Finds the {@link Time} of the last forward repeat (also within measures),
 	 * starting from the given time. If there is none, the beginning of the score is returned.
-	 * If another volta group is found before, the measure after the volta is returned (since voltas
-	 * can not be "nested").
 	 * This value can not be cached during playback, but must be searched each time when
 	 * needed. For example, imagine a score where a segno jumps into the middle of a
 	 * repeating sequence. When reaching the right backward repeat, the left forward
@@ -300,9 +341,8 @@ public class RepetitionsFinder {
 	private Time findLastForwardRepeatTime(Time from) {
 
 		//if we are within a volta group, find repeat within the current volta
-		//or before the volta group, but not in the previous voltas
+		//or before the volta group, but not in the previous voltas of this group
 		val startVolta = voltaGroups.getStateAt(from.measure);
-		val startVoltaGroup = (startVolta != null ? startVolta.group : null);
 		Range ignoreMeasuresRange = null;
 		if (startVolta != null)
 			ignoreMeasuresRange = range(startVolta.group.startMeasure, startVolta.voltaStartMeasure - 1);
@@ -316,13 +356,7 @@ public class RepetitionsFinder {
 			if (ignoreMeasuresRange != null && ignoreMeasuresRange.isInRange(iMeasure))
 				continue;
 
-			//another volta group at this measure? then we use an implicit forward repeat
-			//at the first measure after that volta group
-			val voltaGroup = voltaGroups.getVoltaGroupAt(iMeasure);
-			if (voltaGroup != startVoltaGroup)
-				return time(iMeasure + 1, _0);
-
-			//segno within the measure?
+			//barline within the measure?
 			val innerBarlines = measure.getMiddleBarlines();
 			//if starting in this measure, only before the given beat
 			val innerStartBeat = (iMeasure == from.measure ? from.beat : null);
