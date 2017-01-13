@@ -1,8 +1,5 @@
 package com.xenoage.zong.musiclayout.layouter;
 
-import static com.xenoage.utils.collections.CList.ilist;
-import lombok.AllArgsConstructor;
-
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.collections.IList;
@@ -14,6 +11,9 @@ import com.xenoage.zong.musiclayout.ScoreLayout;
 import com.xenoage.zong.musiclayout.stampings.StaffCursorStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import com.xenoage.zong.musiclayout.stampings.Stamping;
+import lombok.AllArgsConstructor;
+
+import static com.xenoage.utils.collections.CList.ilist;
 
 /**
  * This class modifies a given {@link ScoreLayout}
@@ -54,7 +54,7 @@ import com.xenoage.zong.musiclayout.stampings.Stamping;
 			StaffStamping staff = frame.getStaffStamping(mp.staff, measure);
 			if (staff != null) {
 				frame.setSelectionStampings(ilist(
-					new StaffCursorStamping(frame.getPositionX(mp), -0.5f, staff)));
+					new StaffCursorStamping(frame.getPositionX(mp.getTime()), -0.5f, staff)));
 			}
 		}
 	}

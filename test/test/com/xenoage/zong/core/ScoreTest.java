@@ -18,6 +18,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 import java.util.Map;
 
+import com.xenoage.zong.core.music.time.TimeSignature;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -38,7 +39,6 @@ import com.xenoage.zong.core.music.key.Key;
 import com.xenoage.zong.core.music.key.TraditionalKey;
 import com.xenoage.zong.core.music.key.TraditionalKey.Mode;
 import com.xenoage.zong.core.music.rest.Rest;
-import com.xenoage.zong.core.music.time.Time;
 import com.xenoage.zong.core.music.time.TimeType;
 import com.xenoage.zong.core.position.MP;
 
@@ -56,7 +56,7 @@ public class ScoreTest {
 		//first measure: no time, 1/4 used
 		score.getVoice(atVoice(0, 0, 0)).addElement(new Rest(fr(1, 4)));
 		//second measure: 3/4 time, 2/4 used
-		score.getColumnHeader(1).setTime(new Time(TimeType.time_3_4));
+		score.getColumnHeader(1).setTime(new TimeSignature(TimeType.time_3_4));
 		score.getVoice(atVoice(0, 1, 0)).addElement(new Rest(fr(1, 4)));
 		score.getVoice(atVoice(0, 1, 0)).addElement(new Rest(fr(1, 4)));
 		//third measure: still 3/4 time, 1/4 used
@@ -87,7 +87,7 @@ public class ScoreTest {
 	
 	@Test public void clipToMeasureTest() {
 		Score score = ScoreFactory.create1Staff4Measures();
-		score.getHeader().getColumnHeader(0).setTime(new Time(TimeType.time_3_4));
+		score.getHeader().getColumnHeader(0).setTime(new TimeSignature(TimeType.time_3_4));
 
 		//position before measure
 		MP pos = atBeat(1, 1, 0, fr(2, 4));
@@ -300,7 +300,7 @@ public class ScoreTest {
 		Score score = ScoreFactory.create1Staff4Measures();
 		VoiceElement[] e = new VoiceElement[6];
 		//4/4 measure
-		score.getColumnHeader(0).setTime(new Time(TimeType.time_4_4));
+		score.getColumnHeader(0).setTime(new TimeSignature(TimeType.time_4_4));
 		//first measure (filled only with 7/8)
 		//  voice 0: 1/4, 1/4, 1/4  (1/4 is missing)
 		//  voice 1: 3/4, 1/8       (1/8 is missing)

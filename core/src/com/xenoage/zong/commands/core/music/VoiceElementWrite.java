@@ -15,7 +15,7 @@ import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.core.music.rest.Rest;
-import com.xenoage.zong.core.music.time.Time;
+import com.xenoage.zong.core.music.time.TimeSignature;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.utils.exceptions.MeasureFullException;
 
@@ -122,7 +122,7 @@ public class VoiceElementWrite
 			Score score = voice.getScore();
 			if (score == null)
 				throw new IllegalStateException("parent score is required");
-			Time time = score.getHeader().getTimeAtOrBefore(startMP.getMeasure());
+			TimeSignature time = score.getHeader().getTimeAtOrBefore(startMP.getMeasure());
 			Fraction duration = time.getType().getMeasureBeats();
 			if (duration != null && endBeat.compareTo(duration) > 0) {
 				throw new MeasureFullException(startMP, element.getDuration());

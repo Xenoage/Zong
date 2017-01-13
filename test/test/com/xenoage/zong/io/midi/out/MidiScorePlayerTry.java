@@ -1,14 +1,14 @@
 package com.xenoage.zong.io.midi.out;
 
-import static com.xenoage.zong.desktop.io.midi.out.MidiScorePlayer.midiScorePlayer;
-
-import javax.sound.midi.MidiUnavailableException;
-
 import com.xenoage.zong.core.Score;
-import com.xenoage.zong.core.position.MP;
+import com.xenoage.zong.core.position.Time;
 import com.xenoage.zong.desktop.io.midi.out.MidiScorePlayer;
 import com.xenoage.zong.desktop.io.midi.out.SynthManager;
 import com.xenoage.zong.utils.demo.ScoreRevolutionary;
+
+import javax.sound.midi.MidiUnavailableException;
+
+import static com.xenoage.zong.desktop.io.midi.out.MidiScorePlayer.midiScorePlayer;
 
 /**
  * Tests for {@link MidiScorePlayer}.
@@ -64,8 +64,8 @@ public class MidiScorePlayerTry
 	@Override public void playbackAtEnd() {
 	}
 
-	@Override public void playbackAtMP(MP mp, long ms) {
-		System.out.println(mp.toString());
+	@Override public void playbackAtTime(Time time, long ms) {
+		System.out.println(time);
 	}
 
 	@Override public void playbackAtMs(long ms) {

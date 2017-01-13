@@ -96,7 +96,7 @@ public class WedgeStamper {
 		}
 		else {
 			//begins within staff
-			x1Mm = system.getXMmAt(p1);
+			x1Mm = system.getXMmAt(p1.getTime());
 		}
 		//clip end to staff
 		float x2Mm;
@@ -106,7 +106,7 @@ public class WedgeStamper {
 		}
 		else {
 			//ends within staff
-			x2Mm = system.getXMmAt(p2);
+			x2Mm = system.getXMmAt(p2.getTime());
 		}
 		//spread
 		float d1Is = 0;

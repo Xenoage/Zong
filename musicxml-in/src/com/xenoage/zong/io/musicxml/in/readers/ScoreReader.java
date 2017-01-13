@@ -16,7 +16,7 @@ import com.xenoage.zong.core.music.clef.ClefType;
 import com.xenoage.zong.core.music.group.StavesRange;
 import com.xenoage.zong.core.music.key.TraditionalKey;
 import com.xenoage.zong.core.music.rest.Rest;
-import com.xenoage.zong.core.music.time.Time;
+import com.xenoage.zong.core.music.time.TimeSignature;
 import com.xenoage.zong.core.music.time.TimeType;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.io.musicxml.in.util.ErrorHandling;
@@ -72,7 +72,7 @@ public class ScoreReader {
 		}
 		
 		//write a 4/4 measure and C key signature in the first measure
-		execute(new ColumnElementWrite(new Time(TimeType.time_4_4), score.getColumnHeader(0), _0, null));
+		execute(new ColumnElementWrite(new TimeSignature(TimeType.time_4_4), score.getColumnHeader(0), _0, null));
 		execute(new ColumnElementWrite(new TraditionalKey(0), score.getColumnHeader(0), _0, null));
 			
 		//read the parts
@@ -103,7 +103,7 @@ public class ScoreReader {
 			Staff staff = score.getStaff(atStaff(iStaff));
 			for (int iMeasure : range(staff.getMeasures())) {
 				Measure measure = staff.getMeasure(iMeasure);
-				Time newTime = score.getHeader().getColumnHeader(iMeasure).getTime();
+				TimeSignature newTime = score.getHeader().getColumnHeader(iMeasure).getTime();
 				if (newTime != null) {
 					//time signature has changed
 					measureDuration = newTime.getType().getMeasureBeats();

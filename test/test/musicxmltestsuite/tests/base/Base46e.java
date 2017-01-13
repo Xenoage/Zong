@@ -11,7 +11,7 @@ import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.ScoreFactory;
 import com.xenoage.zong.core.music.Staff;
 import com.xenoage.zong.core.music.rest.Rest;
-import com.xenoage.zong.core.music.time.Time;
+import com.xenoage.zong.core.music.time.TimeSignature;
 import com.xenoage.zong.core.music.time.TimeType;
 import com.xenoage.zong.io.selection.Cursor;
 
@@ -29,7 +29,7 @@ public interface Base46e
 	static Staff getExpectedStaff() {
 		Score score = ScoreFactory.create1Staff();
 		Cursor cursor = new Cursor(score, mp0, true);
-		cursor.write(new Time(TimeType.timeCommon));
+		cursor.write(new TimeSignature(TimeType.timeCommon));
 		//measure 0, voice 0
 		cursor.write(chord(pi('C', 0, 5), fr(1, 4)));
 		//measure 1, voice 0

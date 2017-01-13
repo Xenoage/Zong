@@ -53,7 +53,7 @@ public class RepetitionsFinder {
 	private VoltaGroups voltaGroups;
 	//repeat counter for all volta groups
 	private Map<VoltaGroup, Integer> voltaGroupsCounter = map();;
-	//maps backward repeats (their Time) to the number of already played repeats
+	//maps backward repeats (their TimeSignature) to the number of already played repeats
 	private Map<Time, Integer> barlineRepeatCounter = map();
 	//list of played navigation signs
 	private Set<NavigationSign> playedNavigationSigns = set();

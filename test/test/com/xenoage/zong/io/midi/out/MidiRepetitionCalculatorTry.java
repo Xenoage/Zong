@@ -17,7 +17,7 @@ import com.xenoage.zong.core.music.barline.BarlineStyle;
 import com.xenoage.zong.core.music.clef.Clef;
 import com.xenoage.zong.core.music.clef.ClefType;
 import com.xenoage.zong.core.music.key.TraditionalKey;
-import com.xenoage.zong.core.music.time.Time;
+import com.xenoage.zong.core.music.time.TimeSignature;
 import com.xenoage.zong.core.music.volta.Volta;
 import com.xenoage.zong.io.selection.Cursor;
 
@@ -38,7 +38,7 @@ public class MidiRepetitionCalculatorTry {
 		Cursor cursor = new Cursor(score, mp0, true);
 		cursor.write(new Clef(ClefType.clefTreble));
 		cursor.write((ColumnElement) new TraditionalKey(-3));
-		cursor.write(new Time(timeType(3, 4)));
+		cursor.write(new TimeSignature(timeType(3, 4)));
 
 		cursor.write(chord(pi('C', 0, 4), fr(1, 4)));
 		cursor.write(barlineForwardRepeat(BarlineStyle.HeavyLight));

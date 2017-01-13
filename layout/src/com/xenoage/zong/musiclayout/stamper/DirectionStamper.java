@@ -1,23 +1,8 @@
 package com.xenoage.zong.musiclayout.stamper;
 
-import static com.xenoage.utils.NullUtils.notNull;
-import static com.xenoage.utils.collections.CList.clist;
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.zong.core.music.format.SP.sp;
-import static com.xenoage.zong.core.text.FormattedText.fText;
-import static com.xenoage.zong.core.text.FormattedTextUtils.styleText;
-import static com.xenoage.zong.musiclayout.text.DefaultTexts.getTempoTextNotNull;
-import static java.util.Collections.emptyList;
-
-import java.util.List;
-
 import com.xenoage.utils.collections.CList;
 import com.xenoage.zong.core.music.chord.Chord;
-import com.xenoage.zong.core.music.direction.Direction;
-import com.xenoage.zong.core.music.direction.Dynamics;
-import com.xenoage.zong.core.music.direction.Pedal;
-import com.xenoage.zong.core.music.direction.Tempo;
-import com.xenoage.zong.core.music.direction.Words;
+import com.xenoage.zong.core.music.direction.*;
 import com.xenoage.zong.core.music.format.Placement;
 import com.xenoage.zong.core.music.format.Position;
 import com.xenoage.zong.core.music.format.Positioning;
@@ -25,12 +10,7 @@ import com.xenoage.zong.core.music.format.SP;
 import com.xenoage.zong.core.music.util.BeatE;
 import com.xenoage.zong.core.music.util.BeatEList;
 import com.xenoage.zong.core.position.MP;
-import com.xenoage.zong.core.text.Alignment;
-import com.xenoage.zong.core.text.FormattedText;
-import com.xenoage.zong.core.text.FormattedTextElement;
-import com.xenoage.zong.core.text.FormattedTextParagraph;
-import com.xenoage.zong.core.text.FormattedTextStyle;
-import com.xenoage.zong.core.text.FormattedTextSymbol;
+import com.xenoage.zong.core.text.*;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.ChordStampings;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffSymbolStamping;
@@ -39,6 +19,17 @@ import com.xenoage.zong.musiclayout.stampings.Stamping;
 import com.xenoage.zong.symbols.Symbol;
 import com.xenoage.zong.symbols.SymbolPool;
 import com.xenoage.zong.symbols.common.CommonSymbol;
+
+import java.util.List;
+
+import static com.xenoage.utils.NullUtils.notNull;
+import static com.xenoage.utils.collections.CList.clist;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static com.xenoage.zong.core.music.format.SP.sp;
+import static com.xenoage.zong.core.text.FormattedText.fText;
+import static com.xenoage.zong.core.text.FormattedTextUtils.styleText;
+import static com.xenoage.zong.musiclayout.text.DefaultTexts.getTempoTextNotNull;
+import static java.util.Collections.emptyList;
 
 /**
  * Computes the {@link Stamping}s of {@link Direction}s.
@@ -246,7 +237,7 @@ public class DirectionStamper {
 		float x, lp;
 
 		//default positioning
-		x = notNull(staffStamping.system.getXMmAt(mp), 0f) + staffStamping.positionMm.x;
+		x = notNull(staffStamping.system.getXMmAt(mp.getTime()), 0f) + staffStamping.positionMm.x;
 		lp = defaultLP;
 
 		//custom positioning

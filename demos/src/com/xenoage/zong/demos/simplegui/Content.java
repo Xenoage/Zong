@@ -1,7 +1,5 @@
 package com.xenoage.zong.demos.simplegui;
 
-import java.io.File;
-
 import com.xenoage.utils.document.io.FileOutput;
 import com.xenoage.utils.error.Err;
 import com.xenoage.utils.log.Report;
@@ -9,8 +7,8 @@ import com.xenoage.utils.math.Units;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.MusicElement;
-import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.position.MPElement;
+import com.xenoage.zong.core.position.Time;
 import com.xenoage.zong.desktop.io.DocumentIO;
 import com.xenoage.zong.desktop.io.midi.out.MidiScoreDocFileOutput;
 import com.xenoage.zong.desktop.io.musicxml.in.MusicXmlScoreDocFileInput;
@@ -24,8 +22,9 @@ import com.xenoage.zong.layout.frames.ScoreFrame;
 import com.xenoage.zong.musiclayout.ScoreFrameLayout;
 import com.xenoage.zong.musiclayout.layouter.PlaybackLayouter;
 import com.xenoage.zong.musiclayout.stampings.Stamping;
-
 import lombok.Getter;
+
+import java.io.File;
 
 /**
  * The loaded document, its layout and playback capabilities.
@@ -152,9 +151,9 @@ public class Content
 	 * This method is called by the MIDI playback whenever a new
 	 * musical position is reached.
 	 */
-	@Override public void playbackAtMP(MP mp, long ms) {
+	@Override public void playbackAtTime(Time time, long ms) {
 		//update cursor position and redraw the layout
-		playbackLayouter.setCursorAt(mp);
+		playbackLayouter.setCursorAt(time);
 		mainWindow.renderLayout(layout);
 	}
 

@@ -12,8 +12,7 @@ import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.Note;
-import com.xenoage.zong.core.music.time.Time;
-import com.xenoage.zong.core.position.MP;
+import com.xenoage.zong.core.music.time.TimeSignature;
 import com.xenoage.zong.io.midi.out.repetitions.PlayRange;
 import com.xenoage.zong.io.midi.out.repetitions.Repetitions;
 import com.xenoage.zong.io.midi.out.repetitions.RepetitionsFinder;
@@ -29,6 +28,7 @@ import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.position.MP.atBeat;
 import static com.xenoage.zong.core.position.MP.getMP;
+import static com.xenoage.zong.core.position.Time.time;
 import static com.xenoage.zong.io.midi.out.MidiVelocityConverter.getVelocityAtPosition;
 
 /**
@@ -310,7 +310,7 @@ public class MidiConverter<T> {
 
 
 	/**
-	 * Creates the MetaMessage for a Time Signature
+	 * Creates the MetaMessage for a TimeSignature Signature
 	 * @param t
 	 * @return
 	 * @throws InvalidMidiDataException
@@ -426,23 +426,22 @@ public class MidiConverter<T> {
 		int imeasure = 0;
 		for (PlayRange playRange : repetitions.getRanges()) {
 
-			for (int i : range(playRange.start.measure, playRange.end.measure)) {
-				SortedList<Fraction> usedBeats = usedBeatsMeasures.get(i);
+			for (int iMeasure : range(playRange.start.measure, playRange.end.measure)) {
+				SortedList<Fraction> usedBeats = usedBeatsMeasures.get(iMeasure);
 
 				Fraction start, end;
 				start = null; //GOON: score.clipToMeasure(playRange.start.measure, playRange.start).beat;
 				end = null; //GOON score.clipToMeasure(playRange.end.measure, playRange.end).beat;
 
-				for (Fraction fraction : usedBeats) {
+				for (Fraction beat : usedBeats) {
 					//only add, if beats are between start and end
-					if (fraction.compareTo(start) > -1 && fraction.compareTo(end) < 1) {
+					if (beat.compareTo(start) > -1 && beat.compareTo(end) < 1) {
 						long tick = measureStartTicks.get(imeasure) +
-							calculateTickFromFraction(fraction.sub(start), resolution);
+							calculateTickFromFraction(beat.sub(start), resolution);
 						writer.writeControlChange(systemTrackIndex, 0, tick, MidiEvents.eventPlaybackControl.code, 0);
 
-						MP bmp = atBeat(1, i, -1, fraction);
 						long ms = writer.tickToMicrosecond(tick) / 1000;
-						timePoolOpen.add(new MidiTime(tick, bmp, ms));
+						timePoolOpen.add(new MidiTime(tick, time(iMeasure, beat), ms));
 					}
 				}
 				imeasure++;
@@ -462,7 +461,7 @@ public class MidiConverter<T> {
 		for (PlayRange playRange : repetitions.getRanges()) {
 
 			for (int i : range(playRange.start.measure, playRange.end.measure)) {
-				Time time = score.getHeader().getTimeAtOrBefore(i);
+				TimeSignature time = score.getHeader().getTimeAtOrBefore(i);
 
 				Fraction start, end;
 				if (playRange.start.measure == i) {

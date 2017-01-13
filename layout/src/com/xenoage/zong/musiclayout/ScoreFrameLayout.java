@@ -5,6 +5,7 @@ import static com.xenoage.utils.collections.CollectionUtils.alist;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.xenoage.zong.core.position.Time;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -198,15 +199,14 @@ public final class ScoreFrameLayout {
 	}
 
 	/**
-	 * Gets the horizontal position in mm of the given {@link MP} within the given frame,
+	 * Gets the horizontal position in mm of the given {@link Time} within the given frame,
 	 * or 0 if not found (should not happen).
-	 * Only the measure and the beat of the given {@link MP} are used.
 	 */
-	public float getPositionX(MP mp) {
+	public float getPositionX(Time time) {
 		//search all systems for the given musical position, beginning at the top staff
 		for (SystemSpacing system : frameSpacing.systems)
-			if (system.containsMeasure(mp.measure))
-				return system.getXMmAt(mp);
+			if (system.containsMeasure(time.measure))
+				return system.getXMmAt(time);
 		return 0;
 	}
 	

@@ -17,7 +17,7 @@ import com.xenoage.zong.core.music.barline.Barline;
 import com.xenoage.zong.core.music.barline.BarlineRepeat;
 import com.xenoage.zong.core.music.direction.*;
 import com.xenoage.zong.core.music.key.Key;
-import com.xenoage.zong.core.music.time.Time;
+import com.xenoage.zong.core.music.time.TimeSignature;
 import com.xenoage.zong.core.music.util.BeatE;
 import com.xenoage.zong.core.music.util.BeatEList;
 import com.xenoage.zong.core.music.volta.Volta;
@@ -53,7 +53,7 @@ public final class ColumnHeader
 	implements DirectionContainer, MPContainer {
 
 	/** The time signature at the beginning of this measure. */
-	@MaybeNull private Time time;
+	@MaybeNull private TimeSignature time;
 	/** The barline at the beginning of this measure. */
 	@MaybeNull private Barline startBarline;
 	/** The barline at the end of this measure, or null if unset. */
@@ -99,8 +99,8 @@ public final class ColumnHeader
 	 * Sets the time signature, or null if unset.
 	 * If there is already one, it is replaced and returned (otherwise null).
 	 */
-	public Time setTime(Time time) {
-		Time old = this.time;
+	public TimeSignature setTime(TimeSignature time) {
+		TimeSignature old = this.time;
 		this.time = time;
 		this.time.setParent(this);
 		return old;
@@ -327,7 +327,7 @@ public final class ColumnHeader
 				return setTempo((Tempo) element, beat);
 			}
 			case Time: {
-				return setTime((Time) element);
+				return setTime((TimeSignature) element);
 			}
 			case Volta: {
 				return setVolta((Volta) element);
@@ -373,7 +373,7 @@ public final class ColumnHeader
 		else if (element instanceof Tempo) {
 			tempos.remove((Tempo) element);
 		}
-		else if (element instanceof Time) {
+		else if (element instanceof TimeSignature) {
 			time = null;
 		}
 		else if (element instanceof Volta) {
@@ -430,8 +430,8 @@ public final class ColumnHeader
 			}
 			throw new IllegalArgumentException("Old tempo not part of this column");
 		}
-		else if (newElement instanceof Time) {
-			setTime((Time) newElement);
+		else if (newElement instanceof TimeSignature) {
+			setTime((TimeSignature) newElement);
 		}
 		else if (newElement instanceof Volta) {
 			setVolta((Volta) newElement);

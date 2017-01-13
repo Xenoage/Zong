@@ -5,7 +5,6 @@ import static com.xenoage.utils.collections.CollectionUtils.alistFromLists;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Fraction._1$4;
 import static com.xenoage.zong.core.music.Pitch.pi;
-import static com.xenoage.zong.core.music.clef.ClefType.clefTreble;
 import static com.xenoage.zong.core.position.MP.atElement;
 import static com.xenoage.zong.core.position.MP.mp0;
 import static com.xenoage.zong.core.text.FormattedTextStyle.defaultStyle;
@@ -34,11 +33,10 @@ import com.xenoage.zong.core.music.MeasureElement;
 import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.ChordFactory;
-import com.xenoage.zong.core.music.clef.Clef;
 import com.xenoage.zong.core.music.direction.Words;
 import com.xenoage.zong.core.music.key.TraditionalKey;
 import com.xenoage.zong.core.music.rest.Rest;
-import com.xenoage.zong.core.music.time.Time;
+import com.xenoage.zong.core.music.time.TimeSignature;
 import com.xenoage.zong.core.music.time.TimeType;
 import com.xenoage.zong.core.text.FormattedTextStyle;
 import com.xenoage.zong.io.selection.Cursor;
@@ -137,7 +135,7 @@ public class StrategyTest
 		//one chord in each measure
 		Score score = ScoreFactory.create1Staff();
 		Cursor cursor = new Cursor(score, mp0, true);
-		cursor.write(new Time(TimeType.time_3_4));
+		cursor.write(new TimeSignature(TimeType.time_3_4));
 		for (int i : range(examples)) {
 			Example example = examples.get(i);
 			cursor.setMp(atElement(0, i, 0, 0));

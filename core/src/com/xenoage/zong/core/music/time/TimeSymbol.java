@@ -13,6 +13,6 @@ public enum TimeSymbol {
 	Common,
 	/** Alla breve symbol (also known as "cut" symbol) for a 2/2 time signature. */
 	AllaBreve,
-	/** Time signature shown by numbers, e.g. 3/4 or 7/8. */
+	/** TimeSignature signature shown by numbers, e.g. 3/4 or 7/8. */
 	Fractional;
 }

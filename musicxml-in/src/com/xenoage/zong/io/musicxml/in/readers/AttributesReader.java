@@ -4,6 +4,8 @@ import static com.xenoage.utils.EnumUtils.getEnumValue;
 import static com.xenoage.utils.math.MathUtils.clamp;
 import static com.xenoage.zong.core.music.time.TimeType.timeSenzaMisura;
 import static com.xenoage.zong.core.music.time.TimeType.timeType;
+
+import com.xenoage.zong.core.music.time.TimeSignature;
 import lombok.RequiredArgsConstructor;
 
 import com.xenoage.zong.core.instrument.PitchedInstrument;
@@ -13,7 +15,6 @@ import com.xenoage.zong.core.music.clef.Clef;
 import com.xenoage.zong.core.music.key.Key;
 import com.xenoage.zong.core.music.key.TraditionalKey;
 import com.xenoage.zong.core.music.key.TraditionalKey.Mode;
-import com.xenoage.zong.core.music.time.Time;
 import com.xenoage.zong.core.music.time.TimeType;
 import com.xenoage.zong.musicxml.types.MxlAttributes;
 import com.xenoage.zong.musicxml.types.MxlClef;
@@ -52,7 +53,7 @@ public class AttributesReader {
 			context.writeColumnElement(key);
 
 		//time signature
-		Time time = readTime(mxlAttributes.getTime());
+		TimeSignature time = readTime(mxlAttributes.getTime());
 		if (time != null) //TODO: attribute "number" for single staves
 			context.writeColumnElement(time);
 
@@ -87,25 +88,25 @@ public class AttributesReader {
 		return key;
 	}
 
-	private Time readTime(MxlTime mxlTime) {
+	private TimeSignature readTime(MxlTime mxlTime) {
 		if (mxlTime == null)
 			return null;
-		Time time = null;
+		TimeSignature time = null;
 		MxlTimeContentType type = mxlTime.getContent().getTimeContentType();
 		if (type == MxlTimeContentType.SenzaMisura) {
 			//senza misura
-			time = new Time(timeSenzaMisura);
+			time = new TimeSignature(timeSenzaMisura);
 		}
 		else if (type == MxlTimeContentType.NormalTime) {
 			//normal time
 			MxlNormalTime mxlNormalTime = (MxlNormalTime) mxlTime.getContent();
 			//common, cut or fractional?
 			if (mxlTime.getSymbol() == MxlTimeSymbol.Cut)
-				time = new Time(TimeType.timeAllaBreve);
+				time = new TimeSignature(TimeType.timeAllaBreve);
 			else if (mxlTime.getSymbol() == MxlTimeSymbol.Common)
-				time = new Time(TimeType.timeCommon);
+				time = new TimeSignature(TimeType.timeCommon);
 			else //otherwise, we currently support only normal fractional time signatures
-				time = new Time(timeType(mxlNormalTime.getBeats(), mxlNormalTime.getBeatType()));
+				time = new TimeSignature(timeType(mxlNormalTime.getBeats(), mxlNormalTime.getBeatType()));
 		}
 		return time;
 	}

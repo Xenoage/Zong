@@ -1,21 +1,19 @@
 package com.xenoage.zong.musiclayout.spacing;
 
-import static com.xenoage.utils.annotations.Optimized.Reason.Performance;
-import static com.xenoage.utils.collections.CollectionUtils.getFirst;
-import static com.xenoage.utils.collections.CollectionUtils.getLast;
-import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.zong.core.position.MP.atBeat;
-import static com.xenoage.zong.core.position.MP.unknown;
-import static com.xenoage.zong.core.position.MP.unknownMp;
-
-import java.util.List;
-
 import com.xenoage.utils.annotations.Optimized;
 import com.xenoage.utils.kernel.Range;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.position.MP;
-
+import com.xenoage.zong.core.position.Time;
 import lombok.Getter;
+
+import java.util.List;
+
+import static com.xenoage.utils.annotations.Optimized.Reason.Performance;
+import static com.xenoage.utils.collections.CollectionUtils.getFirst;
+import static com.xenoage.utils.collections.CollectionUtils.getLast;
+import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.zong.core.position.MP.*;
 
 /**
  * The horizontal and vertical spacing of a system.
@@ -180,20 +178,13 @@ public class SystemSpacing {
 	
 	/**
 	 * Gets the horizontal position in mm, relative to the beginning of the staff,
-	 * of the given measure and beat.
+	 * of the given time.
 	 * If the given beat is after the last beat, the offset of the last beat is returned.
 	 */
-	public float getXMmAt(int scoreMeasure, Fraction beat) {
-		float measureXMm = getMeasureStartMm(scoreMeasure);
-		float elementXMm = columns.get(scoreMeasure - getStartMeasureIndex()).getXMmAt(beat);
+	public float getXMmAt(Time time) {
+		float measureXMm = getMeasureStartMm(time.measure);
+		float elementXMm = columns.get(time.measure - getStartMeasureIndex()).getXMmAt(time.beat);
 		return measureXMm + elementXMm;
-	}
-	
-	/**
-	 * See {@link #getXMmAt(int, Fraction)}.
-	 */
-	public float getXMmAt(MP mp) {
-		return getXMmAt(mp.measure, mp.beat);
 	}
 
 	/**

@@ -1,36 +1,5 @@
 package com.xenoage.zong.gui;
 
-import static com.xenoage.utils.NullUtils.notNull;
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.utils.collections.CollectionUtils.map;
-import static com.xenoage.utils.error.Err.handle;
-import static com.xenoage.utils.jse.JsePlatformUtils.io;
-import static com.xenoage.utils.log.Report.fatal;
-import static com.xenoage.zong.desktop.App.app;
-import static com.xenoage.zong.desktop.utils.ImageUtils.imageOrNull;
-import static com.xenoage.zong.player.Player.pApp;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.RadioMenuItem;
-import javafx.scene.control.SeparatorMenuItem;
-import javafx.scene.control.Slider;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-
 import com.xenoage.utils.jse.files.RecentFiles;
 import com.xenoage.utils.jse.javafx.Dialog;
 import com.xenoage.utils.jse.javafx.ResourceUpdater;
@@ -41,11 +10,7 @@ import com.xenoage.utils.jse.lang.LanguageListener;
 import com.xenoage.utils.lang.Lang;
 import com.xenoage.zong.Voc;
 import com.xenoage.zong.Zong;
-import com.xenoage.zong.commands.desktop.app.DocumentOpen;
-import com.xenoage.zong.commands.desktop.app.Exit;
-import com.xenoage.zong.commands.desktop.app.ExternalFileOpen;
-import com.xenoage.zong.commands.desktop.app.LanguageChange;
-import com.xenoage.zong.commands.desktop.app.WebsiteOpen;
+import com.xenoage.zong.commands.desktop.app.*;
 import com.xenoage.zong.commands.desktop.dialog.AudioSettingsDialogShow;
 import com.xenoage.zong.commands.desktop.dialog.FeedbackDialogShow;
 import com.xenoage.zong.commands.desktop.dialog.OpenDocumentDialog;
@@ -58,9 +23,31 @@ import com.xenoage.zong.commands.player.playback.PlaybackPause;
 import com.xenoage.zong.commands.player.playback.PlaybackStart;
 import com.xenoage.zong.commands.player.playback.PlaybackStop;
 import com.xenoage.zong.core.Score;
-import com.xenoage.zong.core.position.MP;
+import com.xenoage.zong.core.position.Time;
 import com.xenoage.zong.desktop.io.midi.out.MidiScorePlayer;
 import com.xenoage.zong.io.midi.out.PlaybackListener;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+
+import static com.xenoage.utils.NullUtils.notNull;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static com.xenoage.utils.collections.CollectionUtils.map;
+import static com.xenoage.utils.error.Err.handle;
+import static com.xenoage.utils.jse.JsePlatformUtils.io;
+import static com.xenoage.utils.log.Report.fatal;
+import static com.xenoage.zong.desktop.App.app;
+import static com.xenoage.zong.desktop.utils.ImageUtils.imageOrNull;
+import static com.xenoage.zong.player.Player.pApp;
 
 public class PlayerFrame
 	extends Dialog
@@ -227,7 +214,7 @@ public class PlayerFrame
 		lblTitle.setText(title);
 	}
 
-	@Override public void playbackAtMP(MP mp, long ms) {
+	@Override public void playbackAtTime(Time time, long ms) {
 	}
 
 	@Override public void playbackAtMs(long ms) {

@@ -17,7 +17,7 @@ import com.xenoage.zong.core.music.MeasureElement;
 import com.xenoage.zong.core.music.clef.Clef;
 import com.xenoage.zong.core.music.key.Key;
 import com.xenoage.zong.core.music.key.TraditionalKey;
-import com.xenoage.zong.core.music.time.Time;
+import com.xenoage.zong.core.music.time.TimeSignature;
 import com.xenoage.zong.core.music.util.BeatE;
 import com.xenoage.zong.core.music.util.BeatEList;
 import com.xenoage.zong.musiclayout.layouter.Context;
@@ -62,8 +62,8 @@ public class MeasureElementsSpacer {
 	}
 
 	List<ElementSpacing> compute(BeatEList<Clef> clefs,
-		@MaybeEmpty BeatEList<Key> keys, @MaybeNull Time time, boolean existsLeadingSpacing,
-		List<VoiceSpacing> voiceSpacings, int staff, Notations notations, LayoutSettings layoutSettings) {
+															 @MaybeEmpty BeatEList<Key> keys, @MaybeNull TimeSignature time, boolean existsLeadingSpacing,
+															 List<VoiceSpacing> voiceSpacings, int staff, Notations notations, LayoutSettings layoutSettings) {
 		
 		Key key0 = null;
 		if (keys.size() > 0 && keys.getFirst().beat.equals(_0))

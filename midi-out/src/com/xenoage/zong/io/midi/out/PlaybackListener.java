@@ -1,6 +1,6 @@
 package com.xenoage.zong.io.midi.out;
 
-import com.xenoage.zong.core.position.MP;
+import com.xenoage.zong.core.position.Time;
 
 /**
  * This listener reports the progress of a Midi playback.
@@ -15,11 +15,11 @@ public interface PlaybackListener {
 
 	/**
 	 * This method is called whenever the playback reaches a new
-	 * known {@link MP} (e.g. where a musical element starts or ends).
-	 * @param mp  the {@link MP} musical position where the playback stopped
-	 * @param ms  the position in milliseconds
+	 * known {@link Time} (e.g. where a musical element starts or ends).
+	 * @param time  the {@link Time} where the playback stopped
+	 * @param ms    the position in milliseconds
 	 */
-	public void playbackAtMP(MP mp, long ms);
+	public void playbackAtTime(Time time, long ms);
 
 	/**
 	 * This method is called about {@value #timerRate} times a second during playback.

@@ -10,6 +10,7 @@ import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.core.music.Voice;
 
 import static com.xenoage.utils.math.Fraction._0;
+import static com.xenoage.zong.core.position.Time.time;
 
 
 /**
@@ -208,6 +209,13 @@ import static com.xenoage.utils.math.Fraction._0;
 			return getMP((MPElement) element);
 		else
 			return null;
+	}
+
+	/**
+	 * Returns the measure and beat of this {@link MP} as a {@link Time}.
+	 */
+	public Time getTime() {
+		return time(measure, beat);
 	}
 
 

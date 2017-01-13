@@ -1,14 +1,5 @@
 package com.xenoage.zong.webserver.io;
 
-import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.utils.math.Fraction.fr;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-
-import javax.sound.midi.Sequence;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.xenoage.utils.math.Fraction;
@@ -27,6 +18,14 @@ import com.xenoage.zong.layout.frames.ScoreFrame;
 import com.xenoage.zong.musiclayout.ScoreFrameLayout;
 import com.xenoage.zong.musiclayout.spacing.BeatOffset;
 import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
+
+import javax.sound.midi.Sequence;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+
+import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.utils.math.Fraction.fr;
 
 /**
  * This class creates a JSON object which contains a mapping from time
@@ -88,8 +87,8 @@ public class CursorOutput {
 		JsonArray jsonMPs = new JsonArray();
 		for (MidiTime time : seq.getTimePool()) {
 			JsonObject jsonMP = new JsonObject();
-			jsonMP.addProperty("measure", time.mp.measure);
-			jsonMP.addProperty("beat", "" + time.mp.beat);
+			jsonMP.addProperty("measure", time.time.measure);
+			jsonMP.addProperty("beat", "" + time.time.beat);
 			jsonMP.addProperty("ms", time.ms);
 			jsonMPs.add(jsonMP);
 		}
@@ -187,11 +186,11 @@ public class CursorOutput {
 		for (MidiTime time : seq.getTimePool()) {
 			JsonObject jsonTC = new JsonObject();
 			jsonTC.addProperty("time", time.ms);
-			Measure measure = measures.get(time.mp.measure);
+			Measure measure = measures.get(time.time.measure);
 			System system = systems.get(measure.system);
 			jsonTC.addProperty("page", system.page);
 			jsonTC.addProperty("top", system.top);
-			jsonTC.addProperty("left", measure.beats.get(time.mp.beat));
+			jsonTC.addProperty("left", measure.beats.get(time.time.beat));
 			jsonTC.addProperty("bottom", system.bottom);
 			jsonTCs.add(jsonTC);
 		}

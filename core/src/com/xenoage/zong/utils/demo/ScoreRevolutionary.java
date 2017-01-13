@@ -58,7 +58,7 @@ import com.xenoage.zong.core.music.rest.Rest;
 import com.xenoage.zong.core.music.slur.Slur;
 import com.xenoage.zong.core.music.slur.SlurType;
 import com.xenoage.zong.core.music.slur.SlurWaypoint;
-import com.xenoage.zong.core.music.time.Time;
+import com.xenoage.zong.core.music.time.TimeSignature;
 import com.xenoage.zong.core.music.time.TimeType;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.io.selection.Cursor;
@@ -104,7 +104,7 @@ public class ScoreRevolutionary {
 
 		//C minor, C (4/4) time
 		cursor.write((ColumnElement) new TraditionalKey(-3, Mode.Minor));
-		cursor.write(new Time(TimeType.timeCommon));
+		cursor.write(new TimeSignature(TimeType.timeCommon));
 
 		//first staff: g-clef and some notes
 		cursor.write(new Clef(ClefType.clefTreble));

@@ -1,13 +1,5 @@
 package com.xenoage.zong.musiclayout;
 
-import static com.xenoage.utils.kernel.Range.range;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
-import lombok.ToString;
-
 import com.xenoage.utils.annotations.MaybeEmpty;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.zong.core.Score;
@@ -19,6 +11,13 @@ import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import com.xenoage.zong.musiclayout.stampings.Stamping;
 import com.xenoage.zong.symbols.SymbolPool;
+import lombok.ToString;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import static com.xenoage.utils.kernel.Range.range;
 
 /**
  * A {@link ScoreLayout} stores the layout of a score,
@@ -93,7 +92,7 @@ public class ScoreLayout {
 			for (StaffStamping s : frame.getStaffStampings()) {
 				if (s.getStaffIndex() == mp.staff && s.system.containsMeasure(mp.measure)) {
 					//we found it. return staff and position
-					float posX = s.system.getXMmAt(mp);
+					float posX = s.system.getXMmAt(mp.getTime());
 					return new StaffStampingPosition(s, iFrame, posX);
 				}
 			}
@@ -189,17 +188,17 @@ public class ScoreLayout {
 	 * Computes the {@link ScoreLP} of the given {@link MP} at the given line position.
 	 * If not found, null is returned.
 	 */
-	public ScoreLP getScoreLP(MP bmp, float lp) {
-		int iFrame = getFrameIndexOf(bmp.measure);
+	public ScoreLP getScoreLP(MP mp, float lp) {
+		int iFrame = getFrameIndexOf(mp.measure);
 		if (iFrame > -1) {
 			ScoreFrameLayout sfl = frames.get(iFrame);
 			StaffStamping ss;
-			if (bmp.staff != MP.unknown)
-				ss = sfl.getStaffStamping(bmp.staff, bmp.measure);
+			if (mp.staff != MP.unknown)
+				ss = sfl.getStaffStamping(mp.staff, mp.measure);
 			else
-				ss = sfl.getStaffStamping(0, bmp.measure);
+				ss = sfl.getStaffStamping(0, mp.measure);
 			if (ss != null) {
-				float x = ss.positionMm.x + ss.system.getXMmAt(bmp);
+				float x = ss.positionMm.x + ss.system.getXMmAt(mp.getTime());
 				float y = ss.computeYMm(lp);
 				return new ScoreLP(iFrame, new Point2f(x, y));
 			}

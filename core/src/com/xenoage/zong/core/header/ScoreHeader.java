@@ -15,7 +15,7 @@ import com.xenoage.zong.core.format.Break;
 import com.xenoage.zong.core.format.StaffLayout;
 import com.xenoage.zong.core.format.SystemLayout;
 import com.xenoage.zong.core.music.layout.SystemBreak;
-import com.xenoage.zong.core.music.time.Time;
+import com.xenoage.zong.core.music.time.TimeSignature;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.utils.exceptions.IllegalMPException;
 
@@ -130,10 +130,10 @@ import com.xenoage.zong.utils.exceptions.IllegalMPException;
 	
 	
 	/**
-	 * Gets the last {@link Time} that is defined at or before the measure
-	 * with the given index. If there is none, {@link Time#implicitSenzaMisura} returned.
+	 * Gets the last {@link TimeSignature} that is defined at or before the measure
+	 * with the given index. If there is none, {@link TimeSignature#implicitSenzaMisura} returned.
 	 */
-	public Time getTimeAtOrBefore(int measureIndex) {
+	public TimeSignature getTimeAtOrBefore(int measureIndex) {
 		//search for last time
 		for (int iMeasure : rangeReverse(measureIndex, 0)) {
 			ColumnHeader column = columnHeaders.get(iMeasure);
@@ -141,7 +141,7 @@ import com.xenoage.zong.utils.exceptions.IllegalMPException;
 				return column.getTime();
 		}
 		//no key found. return default time.
-		return Time.implicitSenzaMisura;
+		return TimeSignature.implicitSenzaMisura;
 	}
 
 

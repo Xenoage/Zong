@@ -1,12 +1,5 @@
 package musicxmltestsuite.tests.base;
 
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.utils.math.Fraction.fr;
-import static com.xenoage.zong.core.music.Pitch.pi;
-import static com.xenoage.zong.core.music.chord.ChordFactory.chord;
-import static com.xenoage.zong.core.position.MP.atElement;
-import static com.xenoage.zong.core.position.MP.mp0;
-
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.ScoreFactory;
 import com.xenoage.zong.core.music.Staff;
@@ -14,10 +7,17 @@ import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.lyric.Lyric;
 import com.xenoage.zong.core.music.lyric.SyllableType;
 import com.xenoage.zong.core.music.rest.Rest;
-import com.xenoage.zong.core.music.time.Time;
+import com.xenoage.zong.core.music.time.TimeSignature;
 import com.xenoage.zong.core.music.time.TimeType;
 import com.xenoage.zong.core.text.UnformattedText;
 import com.xenoage.zong.io.selection.Cursor;
+
+import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static com.xenoage.utils.math.Fraction.fr;
+import static com.xenoage.zong.core.music.Pitch.pi;
+import static com.xenoage.zong.core.music.chord.ChordFactory.chord;
+import static com.xenoage.zong.core.position.MP.atElement;
+import static com.xenoage.zong.core.position.MP.mp0;
 
 
 public interface Base42a
@@ -35,7 +35,7 @@ public interface Base42a
 	static Staff getExpectedStaff() {
 		Score score = ScoreFactory.create1Staff();
 		Cursor cursor = new Cursor(score, mp0, true);
-		cursor.write(new Time(TimeType.time_4_4));
+		cursor.write(new TimeSignature(TimeType.time_4_4));
 		//measure 0, voice 0
 		cursor.write(addLyric(chord(pi('E', 0, 5), fr(1, 2)), "This"));
 		cursor.write(addLyric(chord(pi('D', 0, 5), fr(1, 4)), "is"));

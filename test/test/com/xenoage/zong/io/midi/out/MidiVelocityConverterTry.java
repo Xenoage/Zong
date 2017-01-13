@@ -22,7 +22,7 @@ import com.xenoage.zong.core.music.clef.ClefType;
 import com.xenoage.zong.core.music.direction.Dynamics;
 import com.xenoage.zong.core.music.direction.DynamicsType;
 import com.xenoage.zong.core.music.key.TraditionalKey;
-import com.xenoage.zong.core.music.time.Time;
+import com.xenoage.zong.core.music.time.TimeSignature;
 import com.xenoage.zong.desktop.io.midi.out.MidiScorePlayer;
 import com.xenoage.zong.desktop.io.midi.out.SynthManager;
 import com.xenoage.zong.io.selection.Cursor;
@@ -103,7 +103,7 @@ public class MidiVelocityConverterTry {
 		Cursor cursor = new Cursor(ret, mp0, true);
 
 		cursor.write((ColumnElement) new TraditionalKey(-3));
-		cursor.write((ColumnElement) new Time(timeType(3, 4)));
+		cursor.write((ColumnElement) new TimeSignature(timeType(3, 4)));
 
 		cursor.write(new Clef(ClefType.clefTreble));
 

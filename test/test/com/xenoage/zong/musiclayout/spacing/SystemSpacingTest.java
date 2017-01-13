@@ -1,21 +1,19 @@
 package com.xenoage.zong.musiclayout.spacing;
 
+import com.xenoage.zong.core.position.MP;
+import org.junit.Test;
+
+import java.util.List;
+
 import static com.xenoage.utils.collections.CList.ilist;
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.utils.collections.CollectionUtils.getFirst;
-import static com.xenoage.utils.collections.CollectionUtils.getLast;
+import static com.xenoage.utils.collections.CollectionUtils.*;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Delta.df;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.position.MP.unknown;
+import static com.xenoage.zong.core.position.Time.time;
 import static com.xenoage.zong.musiclayout.spacing.BeatOffset.bo;
-import static org.junit.Assert.assertEquals;
-
-import java.util.List;
-
-import org.junit.Test;
-
-import com.xenoage.zong.core.position.MP;
+import static org.junit.Assert.*;
 
 /**
  * Tests for {@link SystemSpacing}.
@@ -96,18 +94,18 @@ public class SystemSpacingTest {
 		int lastMeasure = system.getEndMeasureIndex();
 		//beat before first beat in measure 0 must return first beat
 		bo = getFirst(system.getColumn(0).beatOffsets);
-		xMm = system.getXMmAt(0, bo.beat.sub(fr(1, 4)));
+		xMm = system.getXMmAt(time(0, bo.beat.sub(fr(1, 4))));
 		expectedXMm = system.getMeasureStartMm(0) + bo.offsetMm;
 		assertEquals(expectedXMm, xMm, df);
 		//beat after last beat in last measure must return last beat
 		bo = getLast(system.getColumn(lastMeasure).beatOffsets);
-		xMm = system.getXMmAt(lastMeasure, bo.beat.add(fr(1, 4)));
+		xMm = system.getXMmAt(time(lastMeasure, bo.beat.add(fr(1, 4))));
 		expectedXMm = system.getMeasureStartMm(lastMeasure) + bo.offsetMm;
 		assertEquals(expectedXMm, xMm, df);
 		//i-th beat must return coordinate at i-th x-position
 		for (int iMeasure : range(lastMeasure + 1)) {
 			for (BeatOffset bo2 : system.getColumn(iMeasure).beatOffsets) {
-				xMm = system.getXMmAt(iMeasure, bo2.beat);
+				xMm = system.getXMmAt(time(iMeasure, bo2.beat));
 				expectedXMm = system.getMeasureStartMm(iMeasure) + bo2.offsetMm;
 				assertEquals(expectedXMm, xMm, df);
 			}

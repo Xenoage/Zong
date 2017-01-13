@@ -15,6 +15,7 @@ import static org.junit.Assert.fail;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.xenoage.zong.core.music.time.TimeSignature;
 import org.junit.Test;
 
 import com.xenoage.utils.document.command.CommandPerformer;
@@ -26,7 +27,6 @@ import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.Grace;
 import com.xenoage.zong.core.music.chord.Note;
 import com.xenoage.zong.core.music.rest.Rest;
-import com.xenoage.zong.core.music.time.Time;
 import com.xenoage.zong.core.music.time.TimeType;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.utils.exceptions.MeasureFullException;
@@ -380,7 +380,7 @@ public class VoiceElementWriteTest {
 	 */
 	@Test public void testTimeAware() {
 		Score score = ScoreFactory.create1Staff4Measures();
-		score.getHeader().getColumnHeaders().get(1).setTime(new Time(TimeType.time_3_4));
+		score.getHeader().getColumnHeaders().get(1).setTime(new TimeSignature(TimeType.time_3_4));
 		//create options
 		VoiceElementWrite.Options options = new VoiceElementWrite.Options();
 		options.checkTimeSignature = true;

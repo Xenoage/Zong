@@ -15,13 +15,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import com.xenoage.zong.core.music.time.TimeSignature;
 import org.junit.Test;
 
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.header.ColumnHeader;
 import com.xenoage.zong.core.music.ColumnElement;
 import com.xenoage.zong.core.music.barline.Barline;
-import com.xenoage.zong.core.music.time.Time;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.io.selection.Cursor;
 
@@ -45,7 +45,7 @@ public class ColumnElementIteratorTest {
 			assertTrue(it.hasNext());
 			e = it.next();
 			assertEquals(atMeasure(unknown, measure), it.getMp());
-			assertEquals(time_4_4, ((Time) e).getType());
+			assertEquals(time_4_4, ((TimeSignature) e).getType());
 			//end barline
 			assertTrue(it.hasNext());
 			e = it.next();
@@ -64,7 +64,7 @@ public class ColumnElementIteratorTest {
 		Cursor cursor = new Cursor(score, MP.mp0, true);
 		for (int measure : new int[]{1, 3}) {
 			cursor.setMp(mp(unknown, measure, 0, _0, 0));
-			cursor.write(new Time(time_4_4));
+			cursor.write(new TimeSignature(time_4_4));
 			cursor.setMp(mp(unknown, measure, unknown, fr(1, 4), 0));
 			cursor.write(barlineRegular());
 			ColumnHeader column = score.getColumnHeader(measure);
