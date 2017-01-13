@@ -1,10 +1,10 @@
 package com.xenoage.zong.io.midi.out;
 
 import com.xenoage.utils.annotations.Const;
-import com.xenoage.utils.collections.CollectionUtils;
 import com.xenoage.utils.collections.SortedList;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.Score;
+import com.xenoage.zong.core.instrument.PitchedInstrument;
 import com.xenoage.zong.core.music.Staff;
 import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.VoiceElement;
@@ -13,18 +13,24 @@ import com.xenoage.zong.core.music.chord.Note;
 import com.xenoage.zong.core.music.time.TimeSignature;
 import com.xenoage.zong.io.midi.out.repetitions.PlayRange;
 import com.xenoage.zong.io.midi.out.repetitions.Repetitions;
+import com.xenoage.zong.io.midi.out.repetitions.RepetitionsFinder;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.val;
 
+import java.util.Arrays;
 import java.util.List;
 
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.position.MP.getMP;
 import static com.xenoage.zong.core.position.Time.time;
 import static com.xenoage.zong.io.midi.out.MidiSettings.defaultMidiSettings;
 import static com.xenoage.zong.io.midi.out.MidiVelocityConverter.getVelocityAtPosition;
+import static com.xenoage.zong.io.midi.out.channels.ChannelMap.unused;
+import static com.xenoage.zong.io.midi.out.channels.ChannelMapper.createChannelMap;
 
 /**
  * This class creates a {@link MidiSequence} from a given {@link Score}.
@@ -82,76 +88,67 @@ public class MidiConverter<T> {
 	
 	private MidiSequence<T> convertToSequence() {
 
-		/*
-		ArrayList<Long> measureStartTicks = alist();
-		ArrayList<MidiTime> timePool = alist();
-		int stavesCount = score.getStavesCount();
-		
+		//ArrayList<Long> measureStartTicks = alist();
+		//ArrayList<MidiTime> timePool = alist();
+
 		//compute mapping of staff indices to channel numbers
-		int[] channelMap = createChannelMap(score);
-		//compute playlist (which contains repetitions and so on)
-		Repetitions repetitions = RepetitionsFinder.findRepetitions(score);
+		val channelMap = createChannelMap(score);
+
+		//compute repititions (repeats, segnos, ...)
+		val repetitions = RepetitionsFinder.findRepetitions(score);
 		
 		//one track for each staff and one system track for program changes, tempos and so on,
-		//and maybe another track for the metronome
+		//and another track for the metronome
+		int stavesCount = score.getStavesCount();
 		int tracksCount = stavesCount + 1;
 		Integer metronomeTrack = null;
-		if (metronome) {
+		if (options.metronome) {
 			metronomeTrack = tracksCount;
 			tracksCount++;
 		}
+
 		//resolution in ticks per quarter
-		resolution = score.getDivisions() * midiSettings.getResolutionFactor();
+		resolution = score.getDivisions() * options.midiSettings.getResolutionFactor();
+
 		//init writer
 		writer.init(tracksCount, resolution);
 		
-		//activate MIDI programs
-		int partFirstStaff = 0;
-		for (Part part : score.getStavesList().getParts()) {
-			Instrument instrument = part.getFirstInstrument();
-			if (instrument instanceof PitchedInstrument) {
-				PitchedInstrument pitchedInstrument = (PitchedInstrument) instrument;
-				int channel = channelMap[partFirstStaff];
-				//program change
-				if (channel > -1) {
+		//set MIDI programs and init volume and pan
+		for (val part : score.getStavesList().getParts()) {
+			val instrument = part.getFirstInstrument();
+			int partFirstStaff = score.getStavesList().getPartStaffIndices(part).getStart();
+			int channel = channelMap.getChannel(partFirstStaff);
+			if (channel != unused) {
+				if (instrument instanceof PitchedInstrument) {
+					val pitchedInstrument = (PitchedInstrument) instrument;
 					writer.writeProgramChange(systemTrackIndex, channel, 0, (pitchedInstrument).getMidiProgram());
 				}
-				//general volume for this instrument
-				if (instrument.getVolume() != null) {
-					writer.writeVolumeChange(systemTrackIndex, channel, 0, instrument.getVolume());
-				}
-				//general panning for this instrument
-				if (instrument.getPan() != null) {
-					writer.writePanChange(systemTrackIndex, channel, 0, instrument.getPan());
-				}
+				writer.writeVolumeChange(systemTrackIndex, channel, 0, instrument.getVolume());
+				writer.writePanChange(systemTrackIndex, channel, 0, instrument.getPan());
 			}
-			partFirstStaff += part.getStavesCount();
 		}
 
-		//used beats in each measure column
+		//find used beats in each measure column - GOON: use getMeasureUsedBeats ?
 		Fraction[] realMeasureColumnBeats = new Fraction[score.getMeasuresCount()];
-		for (int i : range(score.getMeasuresCount())) {
+		for (int i : range(score.getMeasuresCount()))
 			realMeasureColumnBeats[i] = score.getMeasureFilledBeats(i);
-		}
 
 		//fill tracks
 		for (int iStaff : range(stavesCount)) {
-			int channel = channelMap[iStaff];
-			if (channel == -1) {
+			int channel = channelMap.getChannel(iStaff);
+			if (channel == unused)
 				continue; //no MIDI channel left for this staff
-			}
 
 			long currenttickinstaff = 0;
 			Staff staff = score.getStaff(iStaff);
-
 			int voicesCount = staff.getVoicesCount();
 			int voicesVelocity[] = new int[voicesCount];
-			Arrays.fill(voicesVelocity, 90);  
+			Arrays.fill(voicesVelocity, 90);
 
 			int track = iStaff;
-
-			/* GOON
+/*
 			int[] voiceforDynamicsInStaff = getVoiceforDynamicsInStaff(staff);
+
 			for (PlayRange playRange : repetitions.getRanges()) {
 				int transposing = 0;
 				for (int iMeasure : range(playRange.start.measure, playRange.end.measure)) {
@@ -181,9 +178,10 @@ public class MidiConverter<T> {
 					Fraction measureduration = end.sub(start);
 					currenttickinstaff += calculateTickFromFraction(measureduration, resolution);
 				}
-			} * /
+			} */
 		}
 
+		/*
 		if (addTimeEvents) {
 			createControlEventChannel(measureStartTicks, timePool, 0, repetitions); //score position events in channel 0
 			addPlaybackAtEndControlEvent();
@@ -274,86 +272,6 @@ public class MidiConverter<T> {
 		return currentVelocity;
 	}
 
-	/* UNUSED
-	private static MetaMessage createMidiEvent(Key k, int tracknumber)
-		throws InvalidMidiDataException
-	{
-		MetaMessage m = new MetaMessage();
-		int type = 0x59;
-		byte mm = (byte) tracknumber;
-		byte sf = 0;
-		for (int a : k.getAlterations())
-		{
-			if (a != 0)
-			{
-				sf++;
-			}
-		}
-		byte mi = 0;
-		byte[] data = { mm, sf, mi };
-		m.setMessage(type, data, data.length);
-		return null;
-	}
-
-
-	/**
-	 * Creates the MetaMessage for a TimeSignature Signature
-	 * @param t
-	 * @return
-	 * @throws InvalidMidiDataException
-	 *-/
-	private static MetaMessage createMidiEvent(NormalTime t, int resolution, int tracknumber)
-		throws InvalidMidiDataException
-	{
-		MetaMessage m = new MetaMessage();
-		int type = 0x58;
-		byte mm = (byte) tracknumber;
-		byte nn = (byte) t.getNumerator();
-		byte dd = (byte) t.getDenominator();
-		byte cc = (byte) (resolution * 4 / dd);
-		byte bb = (byte) (32 / dd);
-		byte[] data = { mm, nn, dd, cc, bb };
-		m.setMessage(type, data, data.length);
-		return m;
-	}
-
-
-	/**
-	 * Creates the MetaMessage for a {@link Clef}
-	 * @param clef
-	 * @return
-	 * @throws InvalidMidiDataException
-	 *-/
-	private static MetaMessage createMidiEvent(Clef clef, int tracknumber)
-		throws InvalidMidiDataException
-	{
-		MetaMessage m = new MetaMessage();
-		int type = 0x57; // TODO ????
-		byte mm = (byte) tracknumber;
-		byte cl = -1; // clef type
-		byte li = -1; // clef position on staff (line position)
-		byte oc = 0; // octave transposition
-		if (clef.getType() == ClefType.G)
-		{
-			cl = 1;
-			li = (byte) (clef.getType().getLine() + 1);
-			oc = (byte) clef.getType().getOctaveChange();
-		}
-		else if (clef.getType() == ClefType.F)
-		{
-			cl = 2;
-			li = (byte) (clef.getType().getLine() + 1);
-			oc = (byte) clef.getType().getOctaveChange();
-		}
-		if (cl != -1)
-		{
-			byte[] data = { mm, cl, li, oc };
-			m.setMessage(type, data, data.length);
-		}
-		return m;
-	}
-	*/
-
 	private static boolean isInRange(Fraction startBeat, Fraction duration, Fraction start,
 		Fraction end) {
 		Fraction endBeat = startBeat.add(duration);
@@ -407,7 +325,7 @@ public class MidiConverter<T> {
 	 */
 	private void createControlEventChannel(
 			List<Long> measureStartTicks, List<MidiTime> timePoolOpen, int channel, Repetitions repetitions) {
-		List<SortedList<Fraction>> usedBeatsMeasures = CollectionUtils.alist();
+		List<SortedList<Fraction>> usedBeatsMeasures = alist();
 		for (int i : range(score.getMeasuresCount()))
 			usedBeatsMeasures.add(score.getMeasureUsedBeats(i));
 		int imeasure = 0;

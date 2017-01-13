@@ -1,7 +1,14 @@
-include ":converter", ":core", ":demos", ":desktop", ":layout", ":midi-out", ":musicxml", ":musicxml-in", ":musicxml-layout", ":player", ":renderer", ":renderer-awt", ":renderer-javafx", ":test", ":tools", ":webapp", ":webserver"
-include "utils-base", "utils-gwt", "utils-kernel", "utils-jse", "utils-jse8"
+include ":converter", ":core", ":demos", ":desktop", ":layout", ":midi-out", ":musicxml", ":musicxml-in", ":musicxml-layout", ":player", ":renderer", ":renderer-awt", ":renderer-javafx", ":test", ":tools", ":webserver"
+//include ":webapp"
+
+include "utils-base", "utils-gwt", "utils-kernel", "utils-jse", "utils-jse8", "utils-test"
+include "utils-pdlib", "utils-serialize"  //TIDY: only needed for utils-test
+
 project(':utils-base').projectDir = new File('utils/utils-base')
 project(':utils-gwt').projectDir = new File('utils/utils-gwt')
 project(':utils-kernel').projectDir = new File('utils/utils-kernel')
 project(':utils-jse').projectDir = new File('utils/utils-jse')
 project(':utils-jse8').projectDir = new File('utils/utils-jse8')
+project(':utils-pdlib').projectDir = new File('utils/utils-pdlib') //TIDY: only needed for utils-test
+project(':utils-serialize').projectDir = new File('utils/utils-serialize') //TIDY: only needed for utils-test
+project(':utils-test').projectDir = new File('utils/utils-test')

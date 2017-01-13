@@ -1,16 +1,16 @@
 package com.xenoage.zong.core.music.key;
 
-import static com.xenoage.utils.NullUtils.notNull;
-import static com.xenoage.zong.core.music.Pitch.pi;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-
 import com.xenoage.utils.math.MathUtils;
 import com.xenoage.zong.core.music.MusicElementType;
 import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.position.MPContainer;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
+import static com.xenoage.utils.NullUtils.notNull;
+import static com.xenoage.zong.core.music.Pitch.pi;
 
 /**
  * Traditional key signature in the circle of fifth and a mode (like major or
@@ -70,9 +70,6 @@ public final class TraditionalKey
 		this.fifths = fifth;
 	}
 
-	/**
-	 * Returns the alterations from the notes from C (0) to B (6).
-	 */
 	@Override public int[] getAlterations() {
 		return alterations[fifths + 7];
 	}

@@ -20,26 +20,26 @@ public interface Key
 	extends MeasureElement, ColumnElement {
 
 	/**
-	 * Returns the alterations from the notes from A (0) to G (6).
+	 * Returns the alterations from the notes from C (0) to B (6) (see {@link Pitch} constants).
 	 */
-	public int[] getAlterations();
+	int[] getAlterations();
 
 
 	/**
 	 * Returns the nearest higher {@link Pitch} in the current key.
 	 */
-	public Pitch getNearestHigherPitch(Pitch pitch);
+	Pitch getNearestHigherPitch(Pitch pitch);
 
 
 	/**
 	 * Returns the nearest lower {@link Pitch} in the current key.
 	 */
-	public Pitch getNearestLowerPitch(Pitch pitch);
+	Pitch getNearestLowerPitch(Pitch pitch);
 	
 	
 	/**
 	 * Back reference: the parent element, or null, if not part of a score.
 	 */
-	public void setParent(MPContainer parent);
+	void setParent(MPContainer parent);
 
 }

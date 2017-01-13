@@ -1,8 +1,17 @@
 package com.xenoage.zong.io.midi.out;
 
+import com.xenoage.zong.core.music.MusicElementType;
+import com.xenoage.zong.core.music.clef.ClefType;
+import com.xenoage.zong.core.music.key.Key;
+import com.xenoage.zong.core.music.key.TraditionalKey;
+import com.xenoage.zong.core.music.time.TimeType;
 import com.xenoage.zong.core.position.MP;
+import lombok.val;
 
 import java.util.List;
+
+import static com.xenoage.utils.math.MathUtils.clamp;
+import static com.xenoage.utils.math.MathUtils.log2;
 
 
 /**
@@ -28,7 +37,9 @@ public abstract class MidiSequenceWriter<T> {
 	
 	//meta message types
 	protected static final int typeTempo            = 0x51; //81
-	
+	protected static final int typeClef             = 0x57; //87 TODO: really? no docs found!
+	protected static final int typeTime             = 0x58; //88
+	protected static final int typeKey              = 0x59; //89
 
 
 	/**
@@ -106,6 +117,68 @@ public abstract class MidiSequenceWriter<T> {
 		byte[] data = toByteArray(getMicrosecondsPerBeat(bpm));
 		writeMetaMessage(track, tick, typeTempo, data);
 	}
+
+	/**
+	 * Writes a MIDI key signature. Only {@link TraditionalKey} is supported.
+	 * @param track     the index of the track where to write the event
+	 * @param tick      the time of the event
+	 * @param key       The {@link Key} to write
+	 */
+	public void writeKey(int track, long tick, Key key) {
+		if (key.getMusicElementType() == MusicElementType.TraditionalKey) {
+			val tradKey = (TraditionalKey) key;
+			byte fifths = (byte) tradKey.getFifths();
+			byte mode = (byte) (tradKey.getMode() == TraditionalKey.Mode.Minor ? 1 : 0); //minor, or (everything else) major
+			byte[] data = { fifths, mode };
+			writeMetaMessage(track, tick, typeKey, data);
+		}
+	}
+
+	/**
+	 * Writes a MIDI time signature.
+	 * @param track       the index of the track where to write the event
+	 * @param tick        the time of the event
+	 * @param time        the {@link TimeType} to write
+	 * @param resolution  the resolution in ticks per quarter note
+	 */
+	public void writeTimeSignature(int track, long tick, TimeType time, int resolution) {
+		if (time.getDenominator() > 0) {
+			byte nom = (byte) time.getNumerator();
+			byte den = getDenominatorExponent(time.getDenominator());
+			byte res1 = (byte) (resolution * 4 / time.getDenominator()); //1 beat per quarter note
+			byte res2 = (byte) 8; //32nd notes per beat: 8, since we defined 1 beat = 1 quarter note
+			byte[] data = {nom, den, res1, res2};
+			writeMetaMessage(track, tick, typeTime, data);
+		}
+	}
+
+	/**
+	 * Writes a MIDI clef, when possible.
+	 * TODO: Found only documentation in the "Beyond MIDI" book, but without event type id.
+	 * @param track       the index of the track where to write the event
+	 * @param tick        the time of the event
+	 * @param clef        the {@link ClefType} to write
+	 */
+	public void writeClef(int track, long tick, ClefType clef) {
+		//clef type
+		byte cl = -1;
+		switch (clef.getSymbol()) {
+			case C:
+				cl = 0; break;
+			case G:
+				cl = 1; break;
+			case F:
+				cl = 2; break;
+			case PercTwoRects: case PercEmptyRect:
+				cl = 3; break;
+		}
+		if (cl != -1) {
+			byte li = (byte) clamp(clef.getLp() * 2 + 1, 1, 5); //line number from bottom
+			byte oc = (byte) clef.getSymbol().octaveChange;
+			byte[] data = {cl, li, oc};
+			writeMetaMessage(track, tick, typeClef, data);
+		}
+	}
 		
 	/**
 	 * Writes a MIDI short message with the given data.
@@ -171,6 +244,15 @@ public abstract class MidiSequenceWriter<T> {
 	public MidiSequence<T> finish(Integer metronomeTrack, List<MidiTime> timePool,
 		List<Long> measureStartTicks) {
 		return new MidiSequence<T>(getSequence(), metronomeTrack, timePool, measureStartTicks);
+	}
+
+	/**
+	 * MIDI saves the denominator of a time signature as the exponent of the power of 2.
+	 * For example, 8 = 2 ^ 3, thus, the denomiator for a x/8 time would be 3.
+	 * 0 means x/1 time, 1 means x/2 time, 2 means x/4 time, and so on.
+	 */
+	private byte getDenominatorExponent(int denominator) {
+		return (byte) log2(denominator);
 	}
 
 }

@@ -33,23 +33,23 @@ import static java.util.Collections.emptyList;
 	/** The groups in which the instrument is listed (e.g. woodwinds,
 	 * percussion etc.), or empty if undefined. The empty list may be immutable. */
 	@NonNull private List<InstrumentGroup> groups = emptyList();
-	/** The volume between 0 (silent) and 1 (full), or null for default. */
-	@MaybeNull private Float volume;
-	/** The panning between -1 (left) and 1 (right), or null for default */
-	@MaybeNull private Float pan;
+	/** The volume between 0 (silent) and 1 (full). */
+	private float volume = 1;
+	/** The panning between -1 (left) and 1 (right). */
+	private float pan = 0;
 
 	/** Default instrument: piano. */
 	public static final Instrument defaultInstrument = createDefaultInstrument();
 
 	
-	public void setVolume(Float volume) {
-		if (volume != null && (volume < 0 || volume > 1))
+	public void setVolume(float volume) {
+		if (volume < 0 || volume > 1)
 			throw new IllegalArgumentException("Illegal volume value: " + volume);
 		this.volume = volume;
 	}
 	
-	public void setPan(Float pan) {
-		if (pan != null && (pan < -1 || pan > 1))
+	public void setPan(float pan) {
+		if (pan < -1 || pan > 1)
 			throw new IllegalArgumentException("Illegal pan value: " + pan);
 		this.pan = pan;
 	}

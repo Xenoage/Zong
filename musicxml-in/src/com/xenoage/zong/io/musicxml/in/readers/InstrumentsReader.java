@@ -208,8 +208,10 @@ public class InstrumentsReader {
 		}
 		instrument.setName(info.name);
 		instrument.setAbbreviation(info.abbreviation);
-		instrument.setVolume(info.volume);
-		instrument.setPan(info.pan);
+		if (info.volume != null)
+			instrument.setVolume(info.volume);
+		if (info.pan != null)
+			instrument.setPan(info.pan);
 		return instrument;
 	}
 
