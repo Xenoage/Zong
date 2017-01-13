@@ -182,7 +182,7 @@ public class InstrumentsReader {
 		//when no instrument was created, but a transposition was found, create
 		//a default instrument with this transposition
 		if (ret.size() == 0 && partTranspose != Transpose.noTranspose) {
-			PitchedInstrument instrument = new PitchedInstrument(mxlPart.getId());
+			PitchedInstrument instrument = new PitchedInstrument(mxlPart.getId(), 0);
 			instrument.setTranspose(partTranspose);
 			ret.add(instrument);
 		}
@@ -197,12 +197,13 @@ public class InstrumentsReader {
 		}
 		else {
 			//pitched instrument
-			PitchedInstrument pitchedInstrument;
-			instrument = pitchedInstrument = new PitchedInstrument(info.id);
+
 			//midi-program is 1-based in MusicXML but 0-based in MIDI
 			int midiProgram = notNull(info.midiProgram, 1) - 1; //TODO: find value that matches instrument name
 			midiProgram = MathUtils.clamp(midiProgram, 0, 127);
-			pitchedInstrument.setMidiProgram(midiProgram);
+
+			PitchedInstrument pitchedInstrument;
+			instrument = pitchedInstrument = new PitchedInstrument(info.id, midiProgram);
 			pitchedInstrument.setTranspose(info.transpose);
 		}
 		instrument.setName(info.name);

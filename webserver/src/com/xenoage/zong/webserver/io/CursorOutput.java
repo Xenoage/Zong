@@ -9,7 +9,6 @@ import com.xenoage.zong.core.Score;
 import com.xenoage.zong.desktop.io.midi.out.JseMidiSequenceWriter;
 import com.xenoage.zong.documents.ScoreDoc;
 import com.xenoage.zong.io.midi.out.MidiConverter;
-import com.xenoage.zong.io.midi.out.MidiSequence;
 import com.xenoage.zong.io.midi.out.MidiTime;
 import com.xenoage.zong.layout.Layout;
 import com.xenoage.zong.layout.Page;
@@ -18,14 +17,14 @@ import com.xenoage.zong.layout.frames.ScoreFrame;
 import com.xenoage.zong.musiclayout.ScoreFrameLayout;
 import com.xenoage.zong.musiclayout.spacing.BeatOffset;
 import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
+import lombok.val;
 
-import javax.sound.midi.Sequence;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
 import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.utils.math.Fraction.fr;
+import static com.xenoage.zong.io.midi.out.MidiConverter.Options.options;
 
 /**
  * This class creates a JSON object which contains a mapping from time
@@ -80,8 +79,8 @@ public class CursorOutput {
 
 		//create midi sequence and mp mappings
 		Score score = doc.getScore();
-		MidiSequence<Sequence> seq = MidiConverter.convertToSequence(score, true, false,
-			fr(1, 1), new JseMidiSequenceWriter());
+		val options = options().addTimeEvents(false).metronome(false).build();
+		val seq = MidiConverter.convertToSequence(score, options, new JseMidiSequenceWriter());
 
 		//save mp mappings
 		JsonArray jsonMPs = new JsonArray();

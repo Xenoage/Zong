@@ -1,22 +1,21 @@
 package com.xenoage.zong.desktop.io.wav.out;
 
-import static com.xenoage.utils.log.Log.log;
-import static com.xenoage.utils.log.Report.warning;
-import static com.xenoage.utils.math.Fraction.fr;
-
-import java.io.IOException;
-
-import javax.sound.midi.Sequence;
-
 import com.xenoage.utils.document.io.FileOutput;
 import com.xenoage.utils.io.OutputStream;
 import com.xenoage.utils.jse.io.JseOutputStream;
-import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.desktop.io.midi.out.JseMidiSequenceWriter;
 import com.xenoage.zong.desktop.io.midi.out.SynthManager;
 import com.xenoage.zong.io.midi.out.MidiConverter;
 import com.xenoage.zong.io.midi.out.MidiSequence;
+import lombok.val;
+
+import javax.sound.midi.Sequence;
+import java.io.IOException;
+
+import static com.xenoage.utils.log.Log.log;
+import static com.xenoage.utils.log.Report.warning;
+import static com.xenoage.zong.io.midi.out.MidiConverter.Options.options;
 
 /**
  * This class writes a Waveform Audio File Format (WAVE) file from a given {@link Score}.
@@ -38,10 +37,10 @@ public class WavScoreFileOutput
 		throws IOException {
 		//save WAVE file
 		try {
-			Fraction noteLength = fr(100, 100); //each note 100% length
 			//create midi sequence
+			val options = options().addTimeEvents(false).metronome(false).build();
 			MidiSequence<Sequence> sequence = MidiConverter.convertToSequence(
-				score, false, false, noteLength, new JseMidiSequenceWriter());
+				score, options, new JseMidiSequenceWriter());
 			//for all instruments
 			MidiToWaveRenderer.render(SynthManager.getSoundbank(), sequence.getSequence(), null,
 				new JseOutputStream(stream));

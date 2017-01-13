@@ -28,8 +28,9 @@ public class PitchedInstrument
 	/** The number of notes that can be played at the same time with this instrument, or 0 if there is no limit. */
 	private int polyphonic = 0;
 
-	public PitchedInstrument(String id) {
+	public PitchedInstrument(String id, int midiProgram) {
 		super(id);
+		setMidiProgram(midiProgram);
 	}
 	
 	public void setMidiProgram(int midiProgram) {

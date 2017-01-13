@@ -1,12 +1,10 @@
 package com.xenoage.zong.io.midi.out;
 
+import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.collections.CollectionUtils;
 import com.xenoage.utils.collections.SortedList;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.Score;
-import com.xenoage.zong.core.instrument.Instrument;
-import com.xenoage.zong.core.instrument.PitchedInstrument;
-import com.xenoage.zong.core.music.Part;
 import com.xenoage.zong.core.music.Staff;
 import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.VoiceElement;
@@ -15,89 +13,76 @@ import com.xenoage.zong.core.music.chord.Note;
 import com.xenoage.zong.core.music.time.TimeSignature;
 import com.xenoage.zong.io.midi.out.repetitions.PlayRange;
 import com.xenoage.zong.io.midi.out.repetitions.Repetitions;
-import com.xenoage.zong.io.midi.out.repetitions.RepetitionsFinder;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
-import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Fraction.fr;
-import static com.xenoage.zong.core.position.MP.atBeat;
 import static com.xenoage.zong.core.position.MP.getMP;
 import static com.xenoage.zong.core.position.Time.time;
+import static com.xenoage.zong.io.midi.out.MidiSettings.defaultMidiSettings;
 import static com.xenoage.zong.io.midi.out.MidiVelocityConverter.getVelocityAtPosition;
 
 /**
  * This class creates a {@link MidiSequence} from a given {@link Score}.
  * 
  * @param <T> the platform-specific sequence class
- * 
- * TIDY
- * 
- * @author Uli Teschemacher
+ *
  * @author Andreas Wenger
  */
 @AllArgsConstructor
 public class MidiConverter<T> {
 
-	public static final int channel10 = 9; //channel 10 has index 9 (0-based)
+	/** Settings for the conversion. */
+	@Const @Data @AllArgsConstructor @Builder(builderMethodName="options")
+	public static class Options {
+		public static final Options defaultOptions = new Options(
+				true, true, defaultMidiSettings);
+
+		/** True, iff controller events containing the current musical position
+		 * should be inserted in the sequence. */
+		public final boolean addTimeEvents;
+		/** True to add metronome ticks, otherwise false. */
+		public final boolean metronome;
+		/** MIDI midiSettings for the conversion. */
+		public final MidiSettings midiSettings;
+	}
+
+	/** Index for channel 10. It is 9, because the index is 0-based. */
+	public static final int channel10 = 9; //
 
 	//in MIDI "Format 1" files, the track for tempo changes and so on is track 0 by convention
 	private static int systemTrackIndex = 0;
 	
 	//state
 	private Score score;
-	private MidiSettings settings;
+	private Options options;
 	private MidiSequenceWriter<T> writer;
-	private boolean addMPEvents;
-	private boolean metronome;
-	private Fraction durationFactor;
 	private int resolution;
 
 
 	/**
 	 * Converts a {@link Score} to a {@link MidiSequence}.
-	 * @param score        the score to convert
-	 * @param addMPEvents  true, if controller events containing the current musical position
-	 *                     should be inserted in the sequence, otherwise false
-	 * @param metronome    true to add metronome ticks, otherwise false
-	 * @param writer          the writer for the midi data
+	 * @param score    the score to convert
+	 * @param options  midiSettings for the conversion
+	 * @param writer   the writer for the midi data
 	 */
-	public static <T> MidiSequence<T> convertToSequence(Score score, boolean addMPEvents,
-		boolean metronome, MidiSequenceWriter<T> writer) {
-		return convertToSequence(score, addMPEvents, metronome, null, writer);
-	}
-
-	/**
-	 * Converts a {@link Score} to a {@link MidiSequence}.
-	 * @param score           the score to convert
-	 * @param addMPEvents     true, if controller events containing the current musical position
-	 *                        should be inserted in the sequence, otherwise false
-	 * @param metronome       true to add metronome ticks, otherwise false
-	 * @param durationFactor  factor to multiply all note durations with, or null
-	 * @param writer          the writer for the midi data
-	 */
-	public static <T> MidiSequence<T> convertToSequence(Score score, boolean addMPEvents,
-		boolean metronome, Fraction durationFactor, MidiSequenceWriter<T> writer) {
-		return new MidiConverter<T>(score, writer, addMPEvents, metronome, durationFactor).convertToSequence();
+	public static <T> MidiSequence<T> convertToSequence(Score score, Options options, MidiSequenceWriter<T> writer) {
+		return new MidiConverter<T>(score, writer, options).convertToSequence();
 	}
 	
-	private MidiConverter(Score score, MidiSequenceWriter<T> writer, boolean addMPEvents,
-		boolean metronome, Fraction durationFactor) {
+	private MidiConverter(Score score, MidiSequenceWriter<T> writer, Options options) {
 		this.score = score;
-		this.settings = new MidiSettings(); //TODO: by parameter
+		this.options = options;
 		this.writer = writer;
-		this.addMPEvents = addMPEvents;
-		this.metronome = metronome;
-		this.durationFactor = durationFactor;
 	}
 	
 	private MidiSequence<T> convertToSequence() {
 
+		/*
 		ArrayList<Long> measureStartTicks = alist();
 		ArrayList<MidiTime> timePool = alist();
 		int stavesCount = score.getStavesCount();
@@ -116,7 +101,7 @@ public class MidiConverter<T> {
 			tracksCount++;
 		}
 		//resolution in ticks per quarter
-		resolution = score.getDivisions() * settings.getResolutionFactor();
+		resolution = score.getDivisions() * midiSettings.getResolutionFactor();
 		//init writer
 		writer.init(tracksCount, resolution);
 		
@@ -196,10 +181,10 @@ public class MidiConverter<T> {
 					Fraction measureduration = end.sub(start);
 					currenttickinstaff += calculateTickFromFraction(measureduration, resolution);
 				}
-			} */
+			} * /
 		}
 
-		if (addMPEvents) {
+		if (addTimeEvents) {
 			createControlEventChannel(measureStartTicks, timePool, 0, repetitions); //score position events in channel 0
 			addPlaybackAtEndControlEvent();
 		}
@@ -216,10 +201,12 @@ public class MidiConverter<T> {
 			long beat = startTick + (long)midiElement.getPosition().toFloat() * resolution;
 			MidiEvent event = new MidiEvent(midiElement.getMidiMessage(), beat);
 			tempoTrack.add(event);
-		}*/
+		}* /
 		MidiTempoConverter.writeTempoTrack(score, repetitions, resolution, writer, systemTrackIndex);
 
 		return writer.finish(metronomeTrack, timePool, measureStartTicks);
+		*/
+		return null;
 	}
 
 	/**
@@ -243,8 +230,8 @@ public class MidiConverter<T> {
 
 			//custom duration factor
 			long stoptick = endtick;
-			if (durationFactor != null) {
-				Fraction stopBeat = startBeat.add(duration.mult(durationFactor));
+			if (options.midiSettings.durationFactor != null) {
+				Fraction stopBeat = startBeat.add(duration.mult(options.midiSettings.durationFactor));
 				stoptick = calculateEndTick(startBeat, stopBeat, start, end, currenttickinvoice, resolution);
 			}
 
@@ -454,8 +441,8 @@ public class MidiConverter<T> {
 	 */
 	private void createMetronomeTrack(int track, Repetitions repetitions, List<Long> measureStartTicks) {
 		// Load Settings
-		int metronomeStrongBeatNote = settings.getMetronomeStrongBeatNote();
-		int metronomeWeakBeatNote = settings.getMetronomeWeakBeatNote();
+		int metronomeStrongBeatNote = options.midiSettings.getMetronomeStrongBeatNote();
+		int metronomeWeakBeatNote = options.midiSettings.getMetronomeWeakBeatNote();
 
 		int imeasure = 0;
 		for (PlayRange playRange : repetitions.getRanges()) {
@@ -509,85 +496,6 @@ public class MidiConverter<T> {
 		return fraction.getNumerator() * 4 * resolution / fraction.getDenominator();
 	}
 
-	/**
-	 * Creates the mapping from staff indices to MIDI channel numbers.
-	 * If possible, each part gets its own channel. If there are too many parts,
-	 * the parts with the same MIDI program share the device. If there are still
-	 * too many parts, the remaining parts are ignored (i.e. they are mapped to
-	 * the device number -1).
-	 * Channel 10 is always reserved for drums/percussion/metronome.
-	 */
-	private static int[] createChannelMap(Score score) {
-		int[] ret = new int[score.getStavesCount()];
-		//get number of parts which have not channel 10
-		int melodicPartsCount = 0;
-		for (Part part : score.getStavesList().getParts()) {
-			if (part.getFirstInstrument() instanceof PitchedInstrument) {
-				melodicPartsCount++;
-			}
-		}
-		//find out if there are enough channels for all parts
-		if (melodicPartsCount <= 15) {
-			//ok, each pitched part can have its own channel.
-			//all unpitched parts get channel 10.
-			int partFirstStave = 0;
-			int iChannel = 0;
-			for (Part part : score.getStavesList().getParts()) {
-				boolean pitched = (part.getFirstInstrument() instanceof PitchedInstrument);
-				int channel = (pitched ? iChannel : channel10);
-				for (int iStaff = partFirstStave; iStaff < partFirstStave + part.getStavesCount(); iStaff++) {
-					ret[iStaff] = channel;
-				}
-				//after pitched part: increment channel number
-				if (pitched) {
-					iChannel = iChannel + 1 + (iChannel + 1 == channel10 ? 1 : 0); //don't use channel 10
-				}
-				partFirstStave += part.getStavesCount();
-			}
-		}
-		else {
-			//too many parts to have a device for each part.
-			//share devices for parts with the same instrument. if none is left, ignore part.
-			//all unpitched parts get device 10.
-			int partFirstStave = 0;
-			int iChannel = 0;
-			HashMap<Integer, Integer> programToDeviceMap = new HashMap<Integer, Integer>();
-			for (Part part : score.getStavesList().getParts()) {
-				boolean pitched = (part.getFirstInstrument() instanceof PitchedInstrument);
-				//find device
-				int channel = -1;
-				int program = 0;
-				boolean isChannelReused = false;
-				if (pitched && iChannel != -1) {
-					PitchedInstrument pitchedInstr = (PitchedInstrument) part.getFirstInstrument();
-					program = pitchedInstr.getMidiProgram();
-					Integer channelReused = programToDeviceMap.get(program);
-					if (channelReused != null) {
-						isChannelReused = true;
-						channel = channelReused;
-					}
-					else {
-						channel = iChannel;
-					}
-				}
-				else if (!pitched) {
-					channel = channel10;
-				}
-				for (int iStaff = partFirstStave; iStaff < partFirstStave + part.getStavesCount(); iStaff++) {
-					ret[iStaff] = channel;
-				}
-				//after pitched part with new device number: increment device number and remember program
-				if (pitched && !isChannelReused && iChannel != -1) {
-					iChannel = iChannel + 1 + (iChannel + 1 == channel10 ? 1 : 0); //don't use channel 10
-					if (iChannel > 15) {
-						iChannel = -1; //no channels left
-					}
-					programToDeviceMap.put(program, channel);
-				}
-				partFirstStave += part.getStavesCount();
-			}
-		}
-		return ret;
-	}
+
 
 }

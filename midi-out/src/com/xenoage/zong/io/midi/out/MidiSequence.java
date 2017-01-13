@@ -1,13 +1,12 @@
 package com.xenoage.zong.io.midi.out;
 
-import java.util.List;
-
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.zong.core.position.Time;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
 
-import com.xenoage.utils.annotations.MaybeNull;
-import com.xenoage.zong.core.position.MP;
+import java.util.List;
 
 /**
  * A MIDI sequence with additional information.
@@ -23,7 +22,7 @@ public class MidiSequence<T> {
 	@NonNull protected T sequence;
 	/** Index of the metronome track, or null if there is no metronome track */
 	@MaybeNull protected Integer metronomeTrack;
-	/** Mappings of MIDI ticks to {@link MP}s and milliseconds. */
+	/** Mappings of MIDI ticks to {@link Time}s and milliseconds. */
 	protected List<MidiTime> timePool;
 	/** The start ticks of each measure (including repetitions). */
 	protected List<Long> measureStartTicks;

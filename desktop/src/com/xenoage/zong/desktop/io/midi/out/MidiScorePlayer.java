@@ -2,7 +2,6 @@ package com.xenoage.zong.desktop.io.midi.out;
 
 import com.xenoage.utils.jse.collections.WeakList;
 import com.xenoage.zong.core.Score;
-import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.position.Time;
 import com.xenoage.zong.io.midi.out.*;
 
@@ -11,6 +10,8 @@ import java.util.List;
 
 import static com.xenoage.utils.log.Log.log;
 import static com.xenoage.utils.log.Report.warning;
+import static com.xenoage.zong.io.midi.out.MidiConverter.Options.defaultOptions;
+import static com.xenoage.zong.io.midi.out.MidiSettings.defaultMidiSettings;
 
 /**
  * This class offers the interface for MIDI playback in
@@ -27,7 +28,7 @@ public class MidiScorePlayer
 	private MidiSequence<Sequence> sequence = null;
 	private WeakList<PlaybackListener> listeners = new WeakList<PlaybackListener>();
 	private boolean metronomeEnabled;
-	private float volume = new MidiSettings().getDefaultVolume(); //TODO
+	private float volume = defaultMidiSettings.getDefaultVolume();
 	private int currentPosition;
 	private TimeThread timeThread = new TimeThread();
 
@@ -62,7 +63,7 @@ public class MidiScorePlayer
 	public void openScore(Score score) {
 		stop();
 		this.sequence = MidiConverter.convertToSequence(
-			score, true, true, new JseMidiSequenceWriter());
+			score, defaultOptions, new JseMidiSequenceWriter());
 		try {
 			SynthManager.getSequencer().setSequence(sequence.getSequence());
 		} catch (InvalidMidiDataException ex) {
@@ -98,11 +99,10 @@ public class MidiScorePlayer
 	}
 
 	/**
-	 * Changes the position of the playback cursor to the given
-	 * {@link BMP}.
+	 * Changes the position of the playback cursor to the given {@link Time}.
 	 */
-	public void setMP(MP bmp) {
-		long tickPosition = calculateTickFromMP(bmp, sequence.getMeasureStartTicks(),
+	public void setTime(Time time) {
+		long tickPosition = calculateTickFromTime(time, sequence.getMeasureStartTicks(),
 			sequence.getSequence().getResolution());
 		SynthManager.getSequencer().setTickPosition(tickPosition);
 		currentPosition = 0; //as we don't know the real position, we set it 0, because the playback will automatically jump to the correct position.
@@ -167,19 +167,17 @@ public class MidiScorePlayer
 			SynthManager.getSequencer().setTrackMute(metronomeTrack, !metronomeEnabled);
 	}
 
-	private long calculateTickFromMP(MP pos, List<Long> measureTicks, int resolution) {
-		if (pos == null) {
+	private long calculateTickFromTime(Time time, List<Long> measureTicks, int resolution) {
+		if (time == null)
 			return 0;
-		}
-		else {
-			return measureTicks.get(pos.measure) +
-				MidiConverter.calculateTickFromFraction(pos.beat, resolution);
-		}
+		else
+			return measureTicks.get(time.measure) +
+				MidiConverter.calculateTickFromFraction(time.beat, resolution);
 	}
 
 	/**
 	 * This method catches the ControllerChangedEvent from the sequencer.
-	 * For BMP-specific events, the method decides, which {@link BMP} is the
+	 * For time-specific events, the method decides, which {@link Time} is the
 	 * right one and notifies the listener.
 	 */
 	@Override public void controlChange(ShortMessage message) {

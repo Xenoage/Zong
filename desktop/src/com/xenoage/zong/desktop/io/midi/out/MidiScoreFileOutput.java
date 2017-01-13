@@ -1,15 +1,17 @@
 package com.xenoage.zong.desktop.io.midi.out;
 
-import java.io.IOException;
-
-import javax.sound.midi.MidiSystem;
-import javax.sound.midi.Sequence;
-
 import com.xenoage.utils.document.io.FileOutput;
 import com.xenoage.utils.io.OutputStream;
 import com.xenoage.utils.jse.io.JseOutputStream;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.io.midi.out.MidiConverter;
+import lombok.val;
+
+import javax.sound.midi.MidiSystem;
+import javax.sound.midi.Sequence;
+import java.io.IOException;
+
+import static com.xenoage.zong.io.midi.out.MidiConverter.Options.options;
 
 
 /**
@@ -36,8 +38,8 @@ public class MidiScoreFileOutput
 	 */
 	public static void writeMidi(Score score, OutputStream stream)
 		throws IOException {
-		Sequence sequence = MidiConverter.convertToSequence(score, false, false,
-			new JseMidiSequenceWriter()).getSequence();
+		val options = options().addTimeEvents(false).metronome(false).build();
+		Sequence sequence = MidiConverter.convertToSequence(score, options, new JseMidiSequenceWriter()).getSequence();
 		int type = MidiScoreFileOutput.getPreferredMidiType(sequence);
 		MidiSystem.write(sequence, type, new JseOutputStream(stream));
 	}

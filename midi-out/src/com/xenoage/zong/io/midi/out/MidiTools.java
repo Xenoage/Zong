@@ -1,8 +1,9 @@
 package com.xenoage.zong.io.midi.out;
 
-import static com.xenoage.zong.core.music.Pitch.pi;
-
 import com.xenoage.zong.core.music.Pitch;
+
+import static com.xenoage.utils.math.MathUtils.clamp;
+import static com.xenoage.zong.core.music.Pitch.pi;
 
 
 /**
@@ -12,11 +13,10 @@ import com.xenoage.zong.core.music.Pitch;
  * @author Andreas Wenger
  */
 public class MidiTools {
-  
-  
+
   /**
    * Converts the given MIDI note number (between 0 and 127)
-   * to an instance of Pitch and returns it.
+   * to a {@link Pitch} and returns it.
    * Only positive values are used for alter.
    */
   public static Pitch getPitchFromNoteNumber(int noteNumber) {
@@ -40,10 +40,9 @@ public class MidiTools {
     }
     return pi(step, alter, octave);
   }
-  
-  
+
   /**
-   * Converts the given instance of Pitch to a MIDI note number
+   * Converts the given {@link Pitch} to a MIDI note number
    * (between 0 and 127) and returns it.
    * If the note number would be outside the range of 0 to 127,
    * 0 or 127 is returned.
@@ -60,10 +59,7 @@ public class MidiTools {
       case 6: ret += 11; break;
     }
     ret += pitch.getAlter();
-    if (ret < 0)
-      ret = 0;
-    else if (ret > 127)
-      ret = 127;
+    ret = clamp(ret, 0, 127);
     return ret;
   }
 

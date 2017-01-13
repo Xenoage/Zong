@@ -1,13 +1,5 @@
 package com.xenoage.zong.io.musicxml.in.readers;
 
-import static com.xenoage.utils.EnumUtils.getEnumValue;
-import static com.xenoage.utils.math.MathUtils.clamp;
-import static com.xenoage.zong.core.music.time.TimeType.timeSenzaMisura;
-import static com.xenoage.zong.core.music.time.TimeType.timeType;
-
-import com.xenoage.zong.core.music.time.TimeSignature;
-import lombok.RequiredArgsConstructor;
-
 import com.xenoage.zong.core.instrument.PitchedInstrument;
 import com.xenoage.zong.core.instrument.Transpose;
 import com.xenoage.zong.core.music.InstrumentChange;
@@ -15,15 +7,17 @@ import com.xenoage.zong.core.music.clef.Clef;
 import com.xenoage.zong.core.music.key.Key;
 import com.xenoage.zong.core.music.key.TraditionalKey;
 import com.xenoage.zong.core.music.key.TraditionalKey.Mode;
+import com.xenoage.zong.core.music.time.TimeSignature;
 import com.xenoage.zong.core.music.time.TimeType;
-import com.xenoage.zong.musicxml.types.MxlAttributes;
-import com.xenoage.zong.musicxml.types.MxlClef;
-import com.xenoage.zong.musicxml.types.MxlKey;
-import com.xenoage.zong.musicxml.types.MxlNormalTime;
-import com.xenoage.zong.musicxml.types.MxlTime;
-import com.xenoage.zong.musicxml.types.MxlTranspose;
+import com.xenoage.zong.musicxml.types.*;
 import com.xenoage.zong.musicxml.types.choice.MxlTimeContent.MxlTimeContentType;
 import com.xenoage.zong.musicxml.types.enums.MxlTimeSymbol;
+import lombok.RequiredArgsConstructor;
+
+import static com.xenoage.utils.EnumUtils.getEnumValue;
+import static com.xenoage.utils.math.MathUtils.clamp;
+import static com.xenoage.zong.core.music.time.TimeType.timeSenzaMisura;
+import static com.xenoage.zong.core.music.time.TimeType.timeType;
 
 /**
  * Reads divisions, key signature, time signature, clefs
@@ -115,7 +109,7 @@ public class AttributesReader {
 		if (mxlTranspose == null)
 			return null;
 		Transpose transpose = new TransposeReader(mxlTranspose).read();
-		PitchedInstrument instrument = new PitchedInstrument("");
+		PitchedInstrument instrument = new PitchedInstrument("", 0);
 		instrument.setTranspose(transpose);
 		return instrument;
 	}

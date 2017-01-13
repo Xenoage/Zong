@@ -1,9 +1,8 @@
 package com.xenoage.zong.io.midi.out;
 
-import java.util.List;
-
 import com.xenoage.zong.core.position.MP;
 
+import java.util.List;
 
 
 /**
