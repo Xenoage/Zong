@@ -1,5 +1,33 @@
 package com.xenoage.zong.core;
 
+import com.xenoage.utils.annotations.Unneeded;
+import com.xenoage.utils.collections.SortedList;
+import com.xenoage.utils.document.Document;
+import com.xenoage.utils.document.command.CommandPerformer;
+import com.xenoage.utils.document.io.SupportedFormats;
+import com.xenoage.utils.math.Fraction;
+import com.xenoage.utils.math.MathUtils;
+import com.xenoage.zong.core.format.ScoreFormat;
+import com.xenoage.zong.core.header.ColumnHeader;
+import com.xenoage.zong.core.header.ScoreHeader;
+import com.xenoage.zong.core.info.ScoreInfo;
+import com.xenoage.zong.core.music.*;
+import com.xenoage.zong.core.music.clef.Clef;
+import com.xenoage.zong.core.music.clef.ClefType;
+import com.xenoage.zong.core.music.key.Key;
+import com.xenoage.zong.core.music.key.TraditionalKey;
+import com.xenoage.zong.core.music.key.TraditionalKey.Mode;
+import com.xenoage.zong.core.music.util.*;
+import com.xenoage.zong.core.position.MP;
+import com.xenoage.zong.utils.exceptions.IllegalMPException;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
+import lombok.val;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.kernel.Range.rangeReverse;
 import static com.xenoage.utils.math.Fraction._0;
@@ -12,44 +40,6 @@ import static com.xenoage.zong.core.music.util.Interval.BeforeOrAt;
 import static com.xenoage.zong.core.music.util.MPE.mpE;
 import static com.xenoage.zong.core.position.MP.atMeasure;
 import static com.xenoage.zong.core.position.MP.mpb0;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import com.xenoage.utils.annotations.Unneeded;
-import com.xenoage.utils.collections.SortedList;
-import com.xenoage.utils.document.Document;
-import com.xenoage.utils.document.command.CommandPerformer;
-import com.xenoage.utils.document.io.SupportedFormats;
-import com.xenoage.utils.math.Fraction;
-import com.xenoage.utils.math.MathUtils;
-import com.xenoage.zong.core.format.ScoreFormat;
-import com.xenoage.zong.core.header.ColumnHeader;
-import com.xenoage.zong.core.header.ScoreHeader;
-import com.xenoage.zong.core.info.ScoreInfo;
-import com.xenoage.zong.core.music.Measure;
-import com.xenoage.zong.core.music.MusicContext;
-import com.xenoage.zong.core.music.Pitch;
-import com.xenoage.zong.core.music.Staff;
-import com.xenoage.zong.core.music.StavesList;
-import com.xenoage.zong.core.music.Voice;
-import com.xenoage.zong.core.music.VoiceElement;
-import com.xenoage.zong.core.music.clef.Clef;
-import com.xenoage.zong.core.music.clef.ClefType;
-import com.xenoage.zong.core.music.key.Key;
-import com.xenoage.zong.core.music.key.TraditionalKey;
-import com.xenoage.zong.core.music.key.TraditionalKey.Mode;
-import com.xenoage.zong.core.music.util.BeatE;
-import com.xenoage.zong.core.music.util.BeatEList;
-import com.xenoage.zong.core.music.util.Column;
-import com.xenoage.zong.core.music.util.Interval;
-import com.xenoage.zong.core.music.util.MPE;
-import com.xenoage.zong.core.position.MP;
-import com.xenoage.zong.utils.exceptions.IllegalMPException;
-
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
 
 
 /**
@@ -212,8 +202,12 @@ public final class Score
 	 * Gets the filled beats for the given measure column, that
 	 * means, the first beat in each column where there is no music
 	 * element following any more.
+	 * The given measure may be one measure after the last measure. There, only beat 0
+	 * exists to mark the ending of the score.
 	 */
 	public Fraction getMeasureFilledBeats(int measureIndex) {
+		if (measureIndex == getMeasuresCount())
+			return _0;
 		Fraction maxBeat = Fraction._0;
 		for (Staff staff : stavesList.getStaves()) {
 			Fraction beat = staff.getMeasures().get(measureIndex).getFilledBeats();
@@ -226,11 +220,27 @@ public final class Score
 	
 	/**
 	 * Gets the used beats within the given measure column.
+	 * The given measure may be one measure after the last measure. There, only beat 0
+	 * exists to mark the ending of the score.
+	 * @param measureIndex                  the index of the measure column
+	 * @param withMeasureAndColumnElements  true, iff also the beats of column elements and
+	 *                                      measure elements should be used
 	 */
-	public SortedList<Fraction> getMeasureUsedBeats(int measureIndex) {
+	public SortedList<Fraction> getMeasureUsedBeats(int measureIndex, boolean withMeasureAndColumnElements) {
+		//last measure?
+		if (measureIndex == getMeasuresCount())
+			return new SortedList<Fraction>(new Fraction[]{_0}, false);
+		//add measure beats
 		SortedList<Fraction> columnBeats = new SortedList<Fraction>(false);
 		for (int iStaff : range(getStavesCount())) {
-			columnBeats = columnBeats.merge(getMeasure(atMeasure(iStaff, measureIndex)).getUsedBeats(), false);
+			val measure = getMeasure(atMeasure(iStaff, measureIndex));
+			val beats = measure.getUsedBeats(withMeasureAndColumnElements);
+			columnBeats = columnBeats.merge(beats, false);
+		}
+		//add column beats
+		if (withMeasureAndColumnElements) {
+			for (val beatE : getColumnHeader(measureIndex).getColumnElementsWithBeats())
+				columnBeats.add(beatE.beat);
 		}
 		return columnBeats;
 	}

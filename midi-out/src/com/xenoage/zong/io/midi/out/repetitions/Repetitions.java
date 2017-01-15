@@ -27,7 +27,7 @@ import static com.xenoage.utils.collections.CList.clist;
 public final class Repetitions {
 
 	/** The list of ranges in chronological order. */
-	private IList<PlayRange> ranges;
+	private final IList<PlayRange> ranges;
 
 
 	public Repetitions(List<PlayRange> ranges) {

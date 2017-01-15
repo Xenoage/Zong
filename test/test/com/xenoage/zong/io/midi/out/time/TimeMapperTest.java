@@ -18,6 +18,7 @@ import lombok.val;
 import org.junit.Test;
 
 import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.utils.math.Fraction._1;
 import static com.xenoage.utils.math.Fraction._1$2;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.music.barline.Barline.barlineBackwardRepeat;
@@ -25,7 +26,7 @@ import static com.xenoage.zong.core.music.barline.Barline.barlineForwardRepeat;
 import static com.xenoage.zong.core.music.barline.BarlineStyle.Regular;
 import static com.xenoage.zong.core.position.MP.*;
 import static com.xenoage.zong.core.position.Time.time;
-import static com.xenoage.zong.io.midi.out.time.TimeMapper.createTimeMap;
+import static com.xenoage.zong.io.midi.out.repetitions.RepetitionsFinder.findRepetitions;
 import static junit.framework.TestCase.assertEquals;
 
 /**
@@ -42,7 +43,7 @@ public class TimeMapperTest {
 	@Test public void createTimeMapTest() {
 		val score = getScore();
 		val expectedTimeMap = getTimeMap();
-		assertEquals(expectedTimeMap, createTimeMap(score));
+		assertEquals(expectedTimeMap, new TimeMapper(score, findRepetitions(score),8).createTimeMap());
 	}
 
 	/**
@@ -109,7 +110,7 @@ public class TimeMapperTest {
 		cursor.write(e(1));
 		cursor.write(e(2));
 		cursor.write(e(2));
-		cursor.setMp(atElement(2, 3, 0, 0));
+		cursor.setMp(atElement(2, 4, 0, 0));
 		cursor.write(e(2));
 		cursor.write(e(2));
 		return score;
@@ -121,40 +122,60 @@ public class TimeMapperTest {
 	 */
 	private TimeMap getTimeMap() {
 		val timeMap = new TimeMapBuilder(5);
+		//range 0
 		addTick(timeMap, 0, 0, 0);
 		addTick(timeMap, 0, 0, 2);
 		addTick(timeMap, 0, 0, 3);
-		addTick(timeMap, 0, 1, 0);
+		addTick(timeMap, 0, 1, 0, true);
 		addTick(timeMap, 0, 1, 1);
 		addTick(timeMap, 0, 1, 2);
-		addTick(timeMap, 0, 2, 0);
+		addTick(timeMap, 0, 2, 0, true);
 		addTick(timeMap, 0, 2, 1);
 		addTick(timeMap, 0, 2, 2);
 		addTick(timeMap, 0, 2, 3);
+		addTick(timeMap, 0, 3, 0, true);
+		//range 1
 		addTick(timeMap, 1, 1, 0);
 		addTick(timeMap, 1, 1, 1);
 		addTick(timeMap, 1, 1, 2);
+		addTick(timeMap, 1, 2, 0, true);
+		//range 2
 		addTick(timeMap, 2, 3, 0);
 		addTick(timeMap, 2, 3, 2);
-		addTick(timeMap, 2, 4, 0);
+		addTick(timeMap, 2, 4, 0, true);
 		addTick(timeMap, 2, 4, 2);
+		addTick(timeMap, 2, 5, 0, true);
+		//range 3
 		addTick(timeMap, 3, 0, 0);
 		addTick(timeMap, 3, 0, 2);
 		addTick(timeMap, 3, 0, 3);
-		addTick(timeMap, 3, 1, 0);
+		addTick(timeMap, 3, 1, 0, true);
 		addTick(timeMap, 3, 1, 1);
 		addTick(timeMap, 3, 1, 2);
+		addTick(timeMap, 3, 2, 0, true);
+		//range 4
 		addTick(timeMap, 4, 3, 0);
 		addTick(timeMap, 4, 3, 2);
-		addTick(timeMap, 4, 4, 0);
+		addTick(timeMap, 4, 4, 0, true);
 		addTick(timeMap, 4, 4, 2);
+		addTick(timeMap, 4, 5, 0, true);
 		return timeMap.build();
 	}
 
 	private void addTick(TimeMapBuilder timeMap, int playRange, int measure, int quarterBeat) {
-		int playRangeMeasureOffset = new int[]{0, 3, 4, 6, 8, 10}[playRange];
-		timeMap.addTick(resolution * ((playRangeMeasureOffset + measure) * 4 + quarterBeat),
-			time(measure, fr(quarterBeat, 4)), playRange);
+		addTick(timeMap, playRange, measure, quarterBeat, false);
+	}
+
+	private void addTick(TimeMapBuilder timeMap, int playRange, int measure, int quarterBeat,
+											 boolean isAlsoLastBeatInPreviosMeasure) {
+		int playRangeMeasureOffset = new int[]{0, 3, 4, 6, 8}[playRange];
+		int playRangeStartMeasure = new int[]{0, 1, 3, 0, 3}[playRange];
+		int internalMeasure = measure - playRangeStartMeasure;
+		if (isAlsoLastBeatInPreviosMeasure)
+			timeMap.addTick(resolution * ((playRangeMeasureOffset + internalMeasure - 1) * 4 + 4),
+					time(measure - 1, _1), playRange);
+		timeMap.addTick(resolution * ((playRangeMeasureOffset + internalMeasure) * 4 + quarterBeat),
+				time(measure, fr(quarterBeat, 4)), playRange);
 	}
 
 	/**

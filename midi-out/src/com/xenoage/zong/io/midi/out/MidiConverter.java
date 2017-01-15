@@ -15,6 +15,7 @@ import com.xenoage.zong.io.midi.out.repetitions.PlayRange;
 import com.xenoage.zong.io.midi.out.repetitions.Repetitions;
 import com.xenoage.zong.io.midi.out.repetitions.RepetitionsFinder;
 import com.xenoage.zong.io.midi.out.time.TimeMap;
+import com.xenoage.zong.io.midi.out.time.TimeMapper;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,7 +33,7 @@ import static com.xenoage.zong.io.midi.out.MidiSettings.defaultMidiSettings;
 import static com.xenoage.zong.io.midi.out.MidiVelocityConverter.getVelocityAtPosition;
 import static com.xenoage.zong.io.midi.out.channels.ChannelMap.unused;
 import static com.xenoage.zong.io.midi.out.channels.ChannelMapper.createChannelMap;
-import static com.xenoage.zong.io.midi.out.time.TimeMapper.createTimeMap;
+
 
 /**
  * This class creates a {@link MidiSequence} from a given {@link Score}.
@@ -100,7 +101,7 @@ public class MidiConverter<T> {
 		//compute repetitions (repeats, segnos, ...)
 		repetitions = RepetitionsFinder.findRepetitions(score);
 		//compute the mappings from application time to MIDI time
-		timeMap = createTimeMap(score);
+		timeMap = new TimeMapper(score, repetitions, options.midiSettings.resolutionFactor).createTimeMap();
 		
 		//one track for each staff and one system track for program changes, tempos and so on,
 		//and another track for the metronome
@@ -339,7 +340,7 @@ public class MidiConverter<T> {
 			List<Long> measureStartTicks, List<MidiTime> timePoolOpen, int channel, Repetitions repetitions) {
 		List<SortedList<Fraction>> usedBeatsMeasures = alist();
 		for (int i : range(score.getMeasuresCount()))
-			usedBeatsMeasures.add(score.getMeasureUsedBeats(i));
+			usedBeatsMeasures.add(score.getMeasureUsedBeats(i, true));
 		int imeasure = 0;
 		for (PlayRange playRange : repetitions.getRanges()) {
 

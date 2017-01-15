@@ -22,7 +22,8 @@ public class MidiSettings {
 	/** Default volume. */
 	public final float defaultVolume;
 
-	/** Tick resolution factor. Even the shortest note should have at least 8 ticks by default.
+	/** Number of ticks for the shortest possible note.
+	 * Even the shortest note should have at least 8 ticks by default.
 	 * This allows staccato playback for example. */
 	public final int resolutionFactor;
 	
