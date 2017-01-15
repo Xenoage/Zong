@@ -124,7 +124,7 @@ public class RepetitionsFinderTest {
 		new MeasureAdd(score, 11).execute();
 		writeBackwardRepeat(0, 1);
 		writeNavigationOrigin(0, new Coda());
-		writeNavigationOrigin(2, daCapo(false));
+		writeNavigationOrigin(2, new DaCapo(false));
 		writeNavigationTarget(4, new Coda());
 		writeForwardRepeat(6);
 		writeNavigationTarget(6, new Segno());
@@ -210,7 +210,7 @@ public class RepetitionsFinderTest {
 		writeVolta(6, 1, range(1, 1));
 		writeBackwardRepeat(6, 1);
 		writeVolta(7, 1, range(2, 2));
-		writeNavigationOrigin(7, daCapo(false));
+		writeNavigationOrigin(7, new DaCapo(false));
 
 		val expectedRepetitions = new Repetitions(ilist(
 			playRange(0, 2),
@@ -332,12 +332,6 @@ public class RepetitionsFinderTest {
 
 	private void writeVolta(int measure, int length, Range range) {
 		score.getColumnHeader(measure).setVolta(new Volta(length, range, ""+range, false));
-	}
-
-	private DaCapo daCapo(boolean conRep) {
-		val ret = new DaCapo();
-		ret.setWithRepeats(conRep);
-		return ret;
 	}
 
 	private Segno segno(boolean conRep) {

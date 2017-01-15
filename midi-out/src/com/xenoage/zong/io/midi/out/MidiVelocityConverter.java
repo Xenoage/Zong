@@ -79,8 +79,7 @@ public final class MidiVelocityConverter {
 	public static int[] getVoiceforDynamicsInStaff(Staff staff) {
 		boolean[] voicesInStaffHaveDynamics = voicesInStaffHaveDynamics(staff);
 		int[] dynamicVoices = new int[voicesInStaffHaveDynamics.length];
-		// If there are no dynamics in any voice, every voice can use its own
-		// "dynamics"
+		// If there are no dynamics in any voice, every voice can use its own "dynamics"
 		if (!staffHasDynamics(voicesInStaffHaveDynamics)) {
 			for (int i = 0; i < voicesInStaffHaveDynamics.length; i++) {
 				dynamicVoices[i] = i;

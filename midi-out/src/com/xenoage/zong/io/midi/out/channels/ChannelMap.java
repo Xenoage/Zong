@@ -4,7 +4,7 @@ import com.xenoage.utils.annotations.Const;
 import lombok.Data;
 
 /**
- * Map from staff index to channel number.
+ * Provides a MIDI channel number for each staff index.
  *
  * @author Andreas Wenger
  */

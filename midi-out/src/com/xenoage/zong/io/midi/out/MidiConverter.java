@@ -7,13 +7,14 @@ import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.instrument.PitchedInstrument;
 import com.xenoage.zong.core.music.Staff;
 import com.xenoage.zong.core.music.Voice;
-import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.Note;
 import com.xenoage.zong.core.music.time.TimeSignature;
+import com.xenoage.zong.io.midi.out.channels.ChannelMap;
 import com.xenoage.zong.io.midi.out.repetitions.PlayRange;
 import com.xenoage.zong.io.midi.out.repetitions.Repetitions;
 import com.xenoage.zong.io.midi.out.repetitions.RepetitionsFinder;
+import com.xenoage.zong.io.midi.out.time.TimeMap;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,6 +32,7 @@ import static com.xenoage.zong.io.midi.out.MidiSettings.defaultMidiSettings;
 import static com.xenoage.zong.io.midi.out.MidiVelocityConverter.getVelocityAtPosition;
 import static com.xenoage.zong.io.midi.out.channels.ChannelMap.unused;
 import static com.xenoage.zong.io.midi.out.channels.ChannelMapper.createChannelMap;
+import static com.xenoage.zong.io.midi.out.time.TimeMapper.createTimeMap;
 
 /**
  * This class creates a {@link MidiSequence} from a given {@link Score}.
@@ -68,6 +70,9 @@ public class MidiConverter<T> {
 	private Options options;
 	private MidiSequenceWriter<T> writer;
 	private int resolution;
+	private ChannelMap channelMap;
+	private Repetitions repetitions;
+	private TimeMap timeMap;
 
 
 	/**
@@ -88,14 +93,14 @@ public class MidiConverter<T> {
 	
 	private MidiSequence<T> convertToSequence() {
 
-		//ArrayList<Long> measureStartTicks = alist();
 		//ArrayList<MidiTime> timePool = alist();
 
 		//compute mapping of staff indices to channel numbers
-		val channelMap = createChannelMap(score);
-
-		//compute repititions (repeats, segnos, ...)
-		val repetitions = RepetitionsFinder.findRepetitions(score);
+		channelMap = createChannelMap(score);
+		//compute repetitions (repeats, segnos, ...)
+		repetitions = RepetitionsFinder.findRepetitions(score);
+		//compute the mappings from application time to MIDI time
+		timeMap = createTimeMap(score);
 		
 		//one track for each staff and one system track for program changes, tempos and so on,
 		//and another track for the metronome
@@ -134,28 +139,32 @@ public class MidiConverter<T> {
 			realMeasureColumnBeats[i] = score.getMeasureFilledBeats(i);
 
 		//fill tracks
+		List<Long> measureStartTicks = alist();
 		for (int iStaff : range(stavesCount)) {
 			int channel = channelMap.getChannel(iStaff);
 			if (channel == unused)
 				continue; //no MIDI channel left for this staff
 
-			long currenttickinstaff = 0;
+			long currentTick = 0;
 			Staff staff = score.getStaff(iStaff);
 			int voicesCount = staff.getVoicesCount();
 			int voicesVelocity[] = new int[voicesCount];
 			Arrays.fill(voicesVelocity, 90);
 
 			int track = iStaff;
-/*
-			int[] voiceforDynamicsInStaff = getVoiceforDynamicsInStaff(staff);
 
+			//GOON int[] voiceforDynamicsInStaff = getVoiceforDynamicsInStaff(staff);
+			/*
 			for (PlayRange playRange : repetitions.getRanges()) {
+
 				int transposing = 0;
 				for (int iMeasure : range(playRange.start.measure, playRange.end.measure)) {
-					Measure measure = staff.getMeasure(iMeasure);
-					measureStartTicks.add(currenttickinstaff);
 
-					//*TODO: transposition changes can happen everywhere in the measure
+					Measure measure = staff.getMeasure(iMeasure);
+					if (iStaff == 0)
+						measureStartTicks.add(currentTick);
+
+					/* GOON: transposition changes can happen everywhere in the measure
 					Transpose t = measure.getInstrumentChanges()...
 					if (t != null)
 					{
@@ -163,7 +172,7 @@ public class MidiConverter<T> {
 					} //* /
 
 					Fraction start, end;
-					start = null; //GOON score.clipToMeasure(iMeasure, playRange.start).beat;
+					start = score.clipToMeasure(iMeasure, playRange.start).beat;
 					end = null; //GOON score.clipToMeasure(iMeasure, playRange.end).beat;
 
 					if (realMeasureColumnBeats[iMeasure].compareTo(end) < 0)
@@ -176,9 +185,11 @@ public class MidiConverter<T> {
 							track, currentVelocity, iVoice, voice, start, end, transposing);
 					}
 					Fraction measureduration = end.sub(start);
-					currenttickinstaff += calculateTickFromFraction(measureduration, resolution);
+					currentTick += calculateTickFromFraction(measureduration, resolution);
 				}
+
 			} */
+
 		}
 
 		/*
@@ -208,29 +219,30 @@ public class MidiConverter<T> {
 	}
 
 	/**
-	 * Generates the MIDI data for the given voice.
-	 * Returns the velocity at the end position.
+	 * Writes the given {@link Voice} into the MIDI sequence.
+	 * GOON: no! -> Returns the velocity at the end position.
 	 */
-	private int generateMidiForVoice(int resolution, int channel, long currenttickinstaff,
-		Staff staff, int track, int currentVelocity, int iVoice, Voice voice, Fraction start,
-		Fraction end, int transposing) {
-		long currenttickinvoice = currenttickinstaff;
+	private int writeVoice(int channel, Fraction voiceStartBeat,
+		Fraction voiceEndBeat, int transposing) { //GOON
+/*
 		for (VoiceElement element : voice.getElements()) {
+
 			Fraction duration = element.getDuration();
-			Fraction elementBeat = voice.getBeat(element);
-			if (!isInRange(elementBeat, duration, start, end))
+			val startBeat = voice.getBeat(element);
+			val endBeat = startBeat.add(duration);
+
+			if (startBeat.compareTo(voiceStartBeat) < 0 || endBeat.compareTo(voiceEndBeat) > 0)
 				continue;
-			Fraction startBeat = elementBeat;
-			Fraction endBeat = startBeat.add(duration);
-			long starttick = currenttickinvoice;
-			long endtick = calculateEndTick(startBeat, endBeat, start, end, currenttickinvoice,
-				resolution);
+
+			long startTick = timeMap.getTick();
+			long endTick = calculateEndTick(startBeat, endBeat, start, end, currentTick,
+				resolution); //GOON NOW
 
 			//custom duration factor
 			long stoptick = endtick;
 			if (options.midiSettings.durationFactor != null) {
 				Fraction stopBeat = startBeat.add(duration.mult(options.midiSettings.durationFactor));
-				stoptick = calculateEndTick(startBeat, stopBeat, start, end, currenttickinvoice, resolution);
+				stoptick = calculateEndTick(startBeat, stopBeat, start, end, currentTick, resolution);
 			}
 
 			if (starttick != stoptick && element instanceof Chord) {
@@ -266,10 +278,10 @@ public class MidiConverter<T> {
 			{
 				MidiEvent event = new MidiEvent(m, starttick);
 				track.add(event);
-			}*/
+			}*-/
 			currenttickinvoice = endtick;
-		}
-		return currentVelocity;
+		}*/
+		return 0; //currentVelocity;
 	}
 
 	private static boolean isInRange(Fraction startBeat, Fraction duration, Fraction start,

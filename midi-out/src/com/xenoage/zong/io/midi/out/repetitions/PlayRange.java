@@ -15,7 +15,7 @@ public final class PlayRange {
 
 	/** The beginning of the range. This is the first position where notes are played. */
 	public final Time start;
-	/** The ending of the range Notes at this position are not played any more. */
+	/** The ending of the range. Notes at this position are not played any more. */
 	public final Time end;
 
 	@Override public String toString() {
