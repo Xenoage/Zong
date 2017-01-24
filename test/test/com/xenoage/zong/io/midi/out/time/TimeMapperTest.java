@@ -162,20 +162,20 @@ public class TimeMapperTest {
 		return timeMap.build();
 	}
 
-	private void addTick(TimeMapBuilder timeMap, int playRange, int measure, int quarterBeat) {
-		addTick(timeMap, playRange, measure, quarterBeat, false);
+	private void addTick(TimeMapBuilder timeMap, int repetition, int measure, int quarterBeat) {
+		addTick(timeMap, repetition, measure, quarterBeat, false);
 	}
 
-	private void addTick(TimeMapBuilder timeMap, int playRange, int measure, int quarterBeat,
+	private void addTick(TimeMapBuilder timeMap, int repetition, int measure, int quarterBeat,
 											 boolean isAlsoLastBeatInPreviosMeasure) {
-		int playRangeMeasureOffset = new int[]{0, 3, 4, 6, 8}[playRange];
-		int playRangeStartMeasure = new int[]{0, 1, 3, 0, 3}[playRange];
+		int playRangeMeasureOffset = new int[]{0, 3, 4, 6, 8}[repetition];
+		int playRangeStartMeasure = new int[]{0, 1, 3, 0, 3}[repetition];
 		int internalMeasure = measure - playRangeStartMeasure;
 		if (isAlsoLastBeatInPreviosMeasure)
 			timeMap.addTick(resolution * ((playRangeMeasureOffset + internalMeasure - 1) * 4 + 4),
-					time(measure - 1, _1), playRange);
+					time(measure - 1, _1), repetition);
 		timeMap.addTick(resolution * ((playRangeMeasureOffset + internalMeasure) * 4 + quarterBeat),
-				time(measure, fr(quarterBeat, 4)), playRange);
+				time(measure, fr(quarterBeat, 4)), repetition);
 	}
 
 	/**

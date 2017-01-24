@@ -1,17 +1,14 @@
 package com.xenoage.zong.io.midi.out;
 
 import com.xenoage.utils.annotations.Const;
-import com.xenoage.utils.collections.SortedList;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.instrument.PitchedInstrument;
+import com.xenoage.zong.core.music.Measure;
 import com.xenoage.zong.core.music.Staff;
 import com.xenoage.zong.core.music.Voice;
-import com.xenoage.zong.core.music.chord.Chord;
-import com.xenoage.zong.core.music.chord.Note;
-import com.xenoage.zong.core.music.time.TimeSignature;
 import com.xenoage.zong.io.midi.out.channels.ChannelMap;
-import com.xenoage.zong.io.midi.out.repetitions.PlayRange;
+import com.xenoage.zong.io.midi.out.repetitions.Repetition;
 import com.xenoage.zong.io.midi.out.repetitions.Repetitions;
 import com.xenoage.zong.io.midi.out.repetitions.RepetitionsFinder;
 import com.xenoage.zong.io.midi.out.time.TimeMap;
@@ -21,16 +18,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.val;
 
-import java.util.Arrays;
-import java.util.List;
-
-import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.utils.math.Fraction.fr;
-import static com.xenoage.zong.core.position.MP.getMP;
-import static com.xenoage.zong.core.position.Time.time;
+import static com.xenoage.utils.math.Fraction._0;
 import static com.xenoage.zong.io.midi.out.MidiSettings.defaultMidiSettings;
-import static com.xenoage.zong.io.midi.out.MidiVelocityConverter.getVelocityAtPosition;
 import static com.xenoage.zong.io.midi.out.channels.ChannelMap.unused;
 import static com.xenoage.zong.io.midi.out.channels.ChannelMapper.createChannelMap;
 
@@ -94,11 +84,9 @@ public class MidiConverter<T> {
 	
 	private MidiSequence<T> convertToSequence() {
 
-		//ArrayList<MidiTime> timePool = alist();
-
 		//compute mapping of staff indices to channel numbers
 		channelMap = createChannelMap(score);
-		//compute repetitions (repeats, segnos, ...)
+		//compute repetitions (repeat barlines, segnos, ...)
 		repetitions = RepetitionsFinder.findRepetitions(score);
 		//compute the mappings from application time to MIDI time
 		timeMap = new TimeMapper(score, repetitions, options.midiSettings.resolutionFactor).createTimeMap();
@@ -134,62 +122,43 @@ public class MidiConverter<T> {
 			}
 		}
 
-		//find used beats in each measure column - GOON: use getMeasureUsedBeats ?
-		Fraction[] realMeasureColumnBeats = new Fraction[score.getMeasuresCount()];
-		for (int i : range(score.getMeasuresCount()))
-			realMeasureColumnBeats[i] = score.getMeasureFilledBeats(i);
-
 		//fill tracks
-		List<Long> measureStartTicks = alist();
 		for (int iStaff : range(stavesCount)) {
 			int channel = channelMap.getChannel(iStaff);
 			if (channel == unused)
 				continue; //no MIDI channel left for this staff
 
-			long currentTick = 0;
 			Staff staff = score.getStaff(iStaff);
 			int voicesCount = staff.getVoicesCount();
-			int voicesVelocity[] = new int[voicesCount];
-			Arrays.fill(voicesVelocity, 90);
+			int track = iStaff + 1; //first track is reserved; see declaration of tracksCount
 
-			int track = iStaff;
-
-			//GOON int[] voiceforDynamicsInStaff = getVoiceforDynamicsInStaff(staff);
-			/*
-			for (PlayRange playRange : repetitions.getRanges()) {
+			for (Repetition playRange : repetitions.getRanges()) {
 
 				int transposing = 0;
 				for (int iMeasure : range(playRange.start.measure, playRange.end.measure)) {
 
 					Measure measure = staff.getMeasure(iMeasure);
-					if (iStaff == 0)
-						measureStartTicks.add(currentTick);
 
 					/* GOON: transposition changes can happen everywhere in the measure
 					Transpose t = measure.getInstrumentChanges()...
 					if (t != null)
 					{
 						transposing = t.chromatic;
-					} //* /
+					} //*/
 
 					Fraction start, end;
-					start = score.clipToMeasure(iMeasure, playRange.start).beat;
-					end = null; //GOON score.clipToMeasure(iMeasure, playRange.end).beat;
-
-					if (realMeasureColumnBeats[iMeasure].compareTo(end) < 0)
-						end = realMeasureColumnBeats[iMeasure];
+					start = (iMeasure == playRange.start.measure ? playRange.start.beat : _0);
+					end = (iMeasure == playRange.end.measure ? playRange.end.beat : _0);
 
 					for (int iVoice : range(measure.getVoices())) {
 						Voice voice = measure.getVoice(iVoice);
-						int currentVelocity = voicesVelocity[voiceforDynamicsInStaff[iVoice]];
-						voicesVelocity[iVoice] = generateMidiForVoice(resolution, channel, currenttickinstaff, staff,
-							track, currentVelocity, iVoice, voice, start, end, transposing);
+						int currentVelocity = 90; //GOON voicesVelocity[voiceforDynamicsInStaff[iVoice]];
+						//GOON generateMidiForVoice(resolution, channel, currenttickinstaff, staff,
+						//	track, currentVelocity, iVoice, voice, start, end, transposing);
 					}
-					Fraction measureduration = end.sub(start);
-					currentTick += calculateTickFromFraction(measureduration, resolution);
 				}
 
-			} */
+			}
 
 		}
 
@@ -285,6 +254,7 @@ public class MidiConverter<T> {
 		return 0; //currentVelocity;
 	}
 
+	/*
 	private static boolean isInRange(Fraction startBeat, Fraction duration, Fraction start,
 		Fraction end) {
 		Fraction endBeat = startBeat.add(duration);
@@ -316,9 +286,9 @@ public class MidiConverter<T> {
 
 	/**
 	 * Adds the given note to the given track.
-	 */
+	 * /
 	private int addNoteToTrack(int channel, Staff staff, int track, int currentVelocity,
-		int iVoice, long starttick, long endtick, Chord chord, Note note, int transposing) {
+														 int iVoice, long starttick, long endtick, Chord chord, Note note, int transposing) {
 		int[] velocityAtPosition = getVelocityAtPosition(staff, iVoice, getMP(chord),
 			currentVelocity, score);
 		int midiNote = MidiTools.getNoteNumberFromPitch(note.getPitch()) + transposing;
@@ -335,7 +305,7 @@ public class MidiConverter<T> {
 	/**
 	 * Creates the control events for the playback cursor.
 	 * The control message {@link MidiEvents#eventPlaybackControl} is used because it has no other meaning.
-	 */
+	 * /
 	private void createControlEventChannel(
 			List<Long> measureStartTicks, List<MidiTime> timePoolOpen, int channel, Repetitions repetitions) {
 		List<SortedList<Fraction>> usedBeatsMeasures = alist();
@@ -369,7 +339,7 @@ public class MidiConverter<T> {
 
 	/**
 	 * Creates the track in the sequence with the beats of the metronome.
-	 */
+	 * /
 	private void createMetronomeTrack(int track, Repetitions repetitions, List<Long> measureStartTicks) {
 		// Load Settings
 		int metronomeStrongBeatNote = options.midiSettings.getMetronomeStrongBeatNote();
@@ -422,11 +392,11 @@ public class MidiConverter<T> {
 	 * This method calculates the tick of a {@link Fraction}. This is necessary
 	 * to get the current beat in a measure or to get the duration of a
 	 * {@link Fraction} in midi ticks.
-	 */
+	 * /
 	public static int calculateTickFromFraction(Fraction fraction, int resolution) {
 		return fraction.getNumerator() * 4 * resolution / fraction.getDenominator();
 	}
-
+*/
 
 
 }

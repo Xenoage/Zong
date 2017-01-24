@@ -78,7 +78,7 @@ public class RepetitionsFinder {
 	}
 
 	private Repetitions find() {
-		ArrayList<PlayRange> ranges = alist();
+		ArrayList<Repetition> ranges = alist();
 
 		this.voltaGroups = new VoltaGroupFinder(score).findAllVoltaGroups();
 
@@ -89,17 +89,17 @@ public class RepetitionsFinder {
 
 		if (jumps.size() == 0) {
 			//simple case: no jumps
-			ranges.add(new PlayRange(start, end));
+			ranges.add(new Repetition(start, end));
 		}
 		else {
 			//one or more jumps
-			ranges.add(new PlayRange(start, jumps.get(0).from));
+			ranges.add(new Repetition(start, jumps.get(0).from));
 			for (int i : range(1, jumps.size() - 1)) {
 				Time lastEnd = jumps.get(i - 1).to;
 				Time currentStart = jumps.get(i).from;
-				ranges.add(new PlayRange(lastEnd, currentStart));
+				ranges.add(new Repetition(lastEnd, currentStart));
 			}
-			ranges.add(new PlayRange(jumps.get(jumps.size() - 1).to, end));
+			ranges.add(new Repetition(jumps.get(jumps.size() - 1).to, end));
 		}
 
 		return new Repetitions(ranges);

@@ -18,7 +18,7 @@ import static com.xenoage.utils.collections.CList.ilist;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Fraction.*;
 import static com.xenoage.zong.core.music.util.BeatE.beatE;
-import static com.xenoage.zong.io.midi.out.repetitions.RepetitionsTest.playRange;
+import static com.xenoage.zong.io.midi.out.repetitions.RepetitionsTest.repetition;
 import static org.junit.Assert.*;
 
 /**
@@ -36,7 +36,7 @@ public class RepetitionsFinderTest {
 
 
 	/**
-	 * Test case with no repetitions at all:
+	 * Test case with no repeats at all:
 	 *
 	 * measures:   |     |      |      ||
 	 * numbers:    |0    |1     |2     ||
@@ -47,7 +47,7 @@ public class RepetitionsFinderTest {
 		new MeasureAdd(score, 2).execute();
 
 		val expectedRepetitions = new Repetitions(ilist(
-				playRange(0, 3)));
+				repetition(0, 3)));
 
 		runTest(new TestCase(score, expectedRepetitions));
 	}
@@ -70,13 +70,13 @@ public class RepetitionsFinderTest {
 		writeBackwardRepeat(2, 1);
 
 		val expectedRepetitions = new Repetitions(ilist(
-			playRange(0, 1),
-			playRange(0, 2),
-			playRange(1, 2),
-			playRange(1, 3),
-			playRange(1, 2),
-			playRange(1, 2),
-			playRange(1, 3)));
+			repetition(0, 1),
+			repetition(0, 2),
+			repetition(1, 2),
+			repetition(1, 3),
+			repetition(1, 2),
+			repetition(1, 2),
+			repetition(1, 3)));
 
 		runTest(new TestCase(score, expectedRepetitions));
 	}
@@ -99,13 +99,13 @@ public class RepetitionsFinderTest {
 		writeMiddleBackwardRepeat(3, _3$4, 1);
 
 		val expectedRepetitions = new Repetitions(ilist(
-			new PlayRange(bp(0, _0), bp(2, _0)),
-			new PlayRange(bp(1, _1$2), bp(2, _1$2)),
-			new PlayRange(bp(1, _1$2), bp(2, _0)),
-			new PlayRange(bp(1, _1$2), bp(2, _1$2)),
-			new PlayRange(bp(1, _1$2), bp(2, _0)),
-			new PlayRange(bp(1, _1$2), bp(3, _3$4)),
-			new PlayRange(bp(3, _1$4), bp(4, _0))));
+			new Repetition(bp(0, _0), bp(2, _0)),
+			new Repetition(bp(1, _1$2), bp(2, _1$2)),
+			new Repetition(bp(1, _1$2), bp(2, _0)),
+			new Repetition(bp(1, _1$2), bp(2, _1$2)),
+			new Repetition(bp(1, _1$2), bp(2, _0)),
+			new Repetition(bp(1, _1$2), bp(3, _3$4)),
+			new Repetition(bp(3, _1$4), bp(4, _0))));
 
 		runTest(new TestCase(score, expectedRepetitions));
 	}
@@ -136,15 +136,15 @@ public class RepetitionsFinderTest {
 		writeNavigationOrigin(10, segno(false));
 
 		val expectedRepetitions = new Repetitions(ilist(
-			playRange(0, 1),
-			playRange(0, 3),
-			playRange(0, 1),
-			playRange(4, 7),
-			playRange(6, 8),
-			playRange(6, 7),
-			playRange(6, 11),
-			playRange(10, 11),
-			playRange(9, 12)));
+			repetition(0, 1),
+			repetition(0, 3),
+			repetition(0, 1),
+			repetition(4, 7),
+			repetition(6, 8),
+			repetition(6, 7),
+			repetition(6, 11),
+			repetition(10, 11),
+			repetition(9, 12)));
 
 		runTest(new TestCase(score, expectedRepetitions));
 	}
@@ -174,19 +174,19 @@ public class RepetitionsFinderTest {
 		writeVolta(10, 1, null);
 
 		val expectedRepetitions = new Repetitions(ilist(
-			playRange(0, 2),
-			playRange(0, 1),
-			playRange(2, 6), //-> back to the very beginning (because of missing forward repeat)
-			playRange(0, 2),
-			playRange(0, 1),
-			playRange(2, 5),
-			playRange(6, 9),
-			playRange(7, 8),
-			playRange(9, 10),
-			playRange(7, 8),
-			playRange(9, 10),
-			playRange(7, 8),
-			playRange(10, 11)));
+			repetition(0, 2),
+			repetition(0, 1),
+			repetition(2, 6), //-> back to the very beginning (because of missing forward repeat)
+			repetition(0, 2),
+			repetition(0, 1),
+			repetition(2, 5),
+			repetition(6, 9),
+			repetition(7, 8),
+			repetition(9, 10),
+			repetition(7, 8),
+			repetition(9, 10),
+			repetition(7, 8),
+			repetition(10, 11)));
 
 		runTest(new TestCase(score, expectedRepetitions));
 	}
@@ -213,15 +213,15 @@ public class RepetitionsFinderTest {
 		writeNavigationOrigin(7, new DaCapo(false));
 
 		val expectedRepetitions = new Repetitions(ilist(
-			playRange(0, 2),
-			playRange(0, 1),
-			playRange(2, 5),
-			playRange(3, 7),
-			playRange(5, 6),
-			playRange(7, 8),
-			playRange(0, 1),
-			playRange(2, 6),
-			playRange(7, 8)));
+			repetition(0, 2),
+			repetition(0, 1),
+			repetition(2, 5),
+			repetition(3, 7),
+			repetition(5, 6),
+			repetition(7, 8),
+			repetition(0, 1),
+			repetition(2, 6),
+			repetition(7, 8)));
 
 		runTest(new TestCase(score, expectedRepetitions));
 	}
@@ -244,10 +244,10 @@ public class RepetitionsFinderTest {
 		writeVolta(5, 1, range(2, 2));
 
 		val expectedRepetitions = new Repetitions(ilist(
-				playRange(0, 4),
-				playRange(2, 5),
-				playRange(0, 1),
-				playRange(5, 6)));
+				repetition(0, 4),
+				repetition(2, 5),
+				repetition(0, 1),
+				repetition(5, 6)));
 
 		runTest(new TestCase(score, expectedRepetitions));
 	}
@@ -281,18 +281,18 @@ public class RepetitionsFinderTest {
 		writeVolta(17, 1, range(2, 2));
 
 		val expectedRepetitions = new Repetitions(ilist(
-			playRange(0, 5),
-			playRange(2, 5),
-			playRange(2, 10),
-			playRange(8, 10),
-			playRange(8, 9),
-			playRange(10, 12),
-			playRange(8, 9),
-			playRange(12, 14), //-> dal segno senza rep
-			playRange(1, 7),
-			playRange(14, 17),
-			playRange(15, 16),
-			playRange(17, 18)));
+			repetition(0, 5),
+			repetition(2, 5),
+			repetition(2, 10),
+			repetition(8, 10),
+			repetition(8, 9),
+			repetition(10, 12),
+			repetition(8, 9),
+			repetition(12, 14), //-> dal segno senza rep
+			repetition(1, 7),
+			repetition(14, 17),
+			repetition(15, 16),
+			repetition(17, 18)));
 
 		runTest(new TestCase(score, expectedRepetitions));
 	}

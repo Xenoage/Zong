@@ -17,7 +17,7 @@ import static com.xenoage.utils.collections.CList.clist;
  * remembering the sequential ranges which have end be played,
  * defined by start and end {@link MP}s.
  *
- * Consecutive {@link PlayRange}s are merged, e.g.
+ * Consecutive {@link Repetition}s are merged, e.g.
  * "measure 1 to measure 3" and "measure 3 to measure 4"
  * are merged to "measure 1 to measure 4".
  * 
@@ -26,39 +26,39 @@ import static com.xenoage.utils.collections.CList.clist;
 @Const @Data
 public final class Repetitions {
 
-	/** The list of ranges in chronological order. */
-	private final IList<PlayRange> ranges;
+	/** The list of repetitions in chronological order. */
+	private final IList<Repetition> ranges;
 
 
-	public Repetitions(List<PlayRange> ranges) {
-		this.ranges = mergeRanges(ranges);
+	public Repetitions(List<Repetition> repetitions) {
+		this.ranges = mergeRepetitions(repetitions);
 	}
 
-	static IList<PlayRange> mergeRanges(List<PlayRange> ranges) {
-		CList<PlayRange> merged = clist();
+	static IList<Repetition> mergeRepetitions(List<Repetition> repetitions) {
+		CList<Repetition> merged = clist();
 		//merge consecutive ranges
 		Time start = null;
 		Time end = null;
-		for (val range : ranges) {
+		for (val repetition : repetitions) {
 			if (start == null) {
-				//first range
-				start = range.start;
-				end = range.end;
+				//first repetition
+				start = repetition.start;
+				end = repetition.end;
 			}
-			else if (range.start.equals(end)) {
-				//this range begins at the ending of the last one; continue it
-				end = range.end;
+			else if (repetition.start.equals(end)) {
+				//this repetition begins at the ending of the last one; continue it
+				end = repetition.end;
 			}
 			else {
-				//new range found. remember old one and start new one
-				merged.add(new PlayRange(start, end));
-				start = range.start;
-				end = range.end;
+				//new repetition found. remember old one and start new one
+				merged.add(new Repetition(start, end));
+				start = repetition.start;
+				end = repetition.end;
 			}
 		}
 		if (start != null) {
-			//close last range
-			merged.add(new PlayRange(start, end));
+			//close last repetition
+			merged.add(new Repetition(start, end));
 		}
 		return merged.close();
 	}

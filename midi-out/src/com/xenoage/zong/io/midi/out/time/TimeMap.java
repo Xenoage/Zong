@@ -4,7 +4,7 @@ import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.collections.IList;
 import com.xenoage.utils.collections.IMap;
 import com.xenoage.zong.core.position.Time;
-import com.xenoage.zong.io.midi.out.repetitions.PlayRange;
+import com.xenoage.zong.io.midi.out.repetitions.Repetition;
 import lombok.Data;
 import lombok.val;
 
@@ -16,20 +16,20 @@ import static com.xenoage.utils.kernel.Range.range;
 
 /**
  * Provides a MIDI tick position for each used {@link Time}
- * in each {@link PlayRange} in the score.
+ * in each {@link Repetition} in the score.
  *
  * @author Andreas Wenger
  */
 @Const @Data
 public class TimeMap {
 
-	private final IList<IMap<Time, Long>> ranges;
+	private final IList<IMap<Time, Long>> repetitions;
 
-	public long getTick(Time time, int playRangeIndex) {
-		val range = ranges.get(playRangeIndex);
-		Long ret = range.get(time);
+	public long getTick(Time time, int repetitionIndex) {
+		val repetition = repetitions.get(repetitionIndex);
+		Long ret = repetition.get(time);
 		if (ret == null)
-			throw new IllegalArgumentException("Unknown time " + time + " in range " + playRangeIndex);
+			throw new IllegalArgumentException("Unknown time " + time + " in range " + repetitionIndex);
 		return ret;
 	}
 
@@ -38,10 +38,10 @@ public class TimeMap {
 	 * by ranges and time.
 	 */
 	@Override public String toString() {
-		String s = "TimeMap ( rangesCount = " + ranges.size() + ", ranges = [\n";
-		for (int iRange : range(ranges)) {
-			val range = ranges.get(iRange);
-			s += "range " + iRange + " = [";
+		String s = "TimeMap ( repetitionsCount = " + repetitions.size() + ", repetitions = [\n";
+		for (int iRepetition : range(repetitions)) {
+			val range = repetitions.get(iRepetition);
+			s += "repetition " + iRepetition + " = [";
 			List<Time> times = alist(range.keySet());
 			Collections.sort(times);
 			for (val time : times)

@@ -1,22 +1,19 @@
 package com.xenoage.zong.musiclayout.spacer.beam;
 
+import material.Examples;
+import material.Suite;
+import material.beam.slant.ChlapikBeamSlant;
+import material.beam.slant.Example;
+import material.beam.slant.RossBeamSlant;
+import org.junit.Test;
+
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.math.Delta.df;
 import static com.xenoage.zong.core.music.chord.StemDirection.Down;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
 import static com.xenoage.zong.musiclayout.spacer.beam.BeamSlanter.beamSlanter;
 import static java.lang.Math.round;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import material.Examples;
-import material.Suite;
-import material.beam.slant.ChlapikBeamSlant;
-import material.beam.slant.Example;
-import material.beam.slant.RossBeamSlant;
-
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  * Tests for {@link BeamSlanter}.
@@ -135,7 +132,7 @@ public class BeamSlanterTest {
 	private void assertSlantContains(float expectedIs, Slant slant, String testName) {
 		int expectedQs = round(expectedIs * 4);
 		if (false == slant.contains(expectedQs))
-			fail(testName + ": expected slant " + expectedQs + ", but not in playRange of " + slant);
+			fail(testName + ": expected slant " + expectedQs + ", but not in repetition of " + slant);
 	}
 	
 	@Test public void limitSlantForExtremeNotesTest() {

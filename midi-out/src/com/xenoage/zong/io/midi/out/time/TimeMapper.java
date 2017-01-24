@@ -3,7 +3,7 @@ package com.xenoage.zong.io.midi.out.time;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.io.midi.out.MidiSettings;
-import com.xenoage.zong.io.midi.out.repetitions.PlayRange;
+import com.xenoage.zong.io.midi.out.repetitions.Repetition;
 import com.xenoage.zong.io.midi.out.repetitions.Repetitions;
 import lombok.AllArgsConstructor;
 import lombok.val;
@@ -62,7 +62,7 @@ public class TimeMapper {
 	 * When the given play range ends in this measure, only beats at or before the end beat
 	 * of the given range are returned.
 	 */
-	private List<Fraction> getUsedBeats(int iMeasure, PlayRange range) {
+	private List<Fraction> getUsedBeats(int iMeasure, Repetition range) {
 		val usedBeats = score.getMeasureUsedBeats(iMeasure, true); //beats where something begins
 		usedBeats.add(score.getMeasureFilledBeats(iMeasure)); //last beat (where last elements ends)
 		List<Fraction> ret = alist(usedBeats.getSize());

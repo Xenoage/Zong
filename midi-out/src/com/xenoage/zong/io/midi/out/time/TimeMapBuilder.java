@@ -18,14 +18,14 @@ public class TimeMapBuilder {
 
 	private CList<IMap<Time, Long>> ranges;
 
-	public TimeMapBuilder(int playRangesCount) {
-		ranges = clist(playRangesCount);
-		for (int i : range(playRangesCount))
+	public TimeMapBuilder(int repetitionsCount) {
+		ranges = clist(repetitionsCount);
+		for (int i : range(repetitionsCount))
 			ranges.add(new CMap<Time, Long>());
 	}
 
-	public void addTick(long tick, Time time, int playRangeIndex) {
-		val range = ranges.get(playRangeIndex);
+	public void addTick(long tick, Time time, int repetitionIndex) {
+		val range = ranges.get(repetitionIndex);
 		((CMap) range).put(time, tick);
 	}
 

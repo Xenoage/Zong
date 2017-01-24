@@ -1,17 +1,6 @@
 package com.xenoage.zong.io.midi.out;
 
-import com.xenoage.utils.math.Fraction;
-import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.header.ColumnHeader;
-import com.xenoage.zong.core.music.direction.Tempo;
-import com.xenoage.zong.core.music.util.BeatE;
-import com.xenoage.zong.core.music.util.BeatEList;
-import com.xenoage.zong.io.midi.out.repetitions.Repetitions;
-import com.xenoage.zong.io.midi.out.repetitions.PlayRange;
-
-import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.utils.math.Fraction._0;
-import static com.xenoage.zong.io.midi.out.MidiConverter.calculateTickFromFraction;
 
 /**
  * This class calculates the tempo changes for the {@link MidiConverter}.
@@ -24,7 +13,7 @@ public class MidiTempoConverter {
 	/**
 	 * Writes tempo changes into the given tempo track.
 	 * Only tempos found in the {@link ColumnHeader}s are used.
-	 */
+	 * /
 	public static void writeTempoTrack(Score score, Repetitions repetitions, int resolution,
 																		 MidiSequenceWriter<?> writer, int track) {
 		long measurestarttick = 0;
@@ -47,6 +36,6 @@ public class MidiTempoConverter {
 				measurestarttick += MidiConverter.calculateTickFromFraction(measureDuration, resolution);
 			}
 		}
-	}
+	} //*/
 
 }

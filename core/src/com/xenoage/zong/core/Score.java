@@ -247,33 +247,9 @@ public final class Score
 	
 	
 	/**
-	 * Clips a {@link MP} to a measure. If the {@link MP} is before or at the
-	 * beginning of the measure with measureIndex, the first beat is returned.
-	 * If it is after the measure, the last beat is returned.
-	 * If the {@link BP} is in the measure, this position is returned.
-	 * @param measureIndex	the index of the measure that to which the position is clipped
-	 * @param mp	          the position which is clipped
-	 */
-	@Unneeded public MP clipToMeasure(int measureIndex, MP mp) {
-		Fraction beat = null;
-		if (mp.measure < measureIndex) {
-			beat = Fraction._0;
-		}
-		else if (measureIndex == mp.measure) {
-			Fraction endBeat = getMeasureBeats(measureIndex);
-			beat = (endBeat.compareTo(mp.beat) < 0 ? endBeat : mp.beat);
-		}
-		else {
-			beat = getMeasureBeats(measureIndex);
-		}
-		return mp.withMeasure(measureIndex).withBeat(beat);
-	}
-	
-	
-	/**
 	 * Gets the last {@link Key} that is defined before (or at,
 	 * dependent on the given {@link Interval}) the given
-	 * {@link BMP}, also over measure boundaries. If there is
+	 * {@link MP}, also over measure boundaries. If there is
 	 * none, a default C major time signature is returned.
 	 * Private keys (in measure) override public keys (in measure column header). 
 	 */
