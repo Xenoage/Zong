@@ -12,7 +12,7 @@ import lombok.Data;
  */
 @Const @Data
 public class FixedDynamics
-	implements Dynamics {
+	implements DynamicsVolume {
 
 	public final DynamicsType dynamics;
 

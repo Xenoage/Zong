@@ -2,7 +2,7 @@ package com.xenoage.zong.io.midi.out.dynamics;
 
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.position.Time;
-import com.xenoage.zong.io.midi.out.dynamics.type.Dynamics;
+import com.xenoage.zong.io.midi.out.dynamics.type.DynamicsVolume;
 import com.xenoage.zong.io.midi.out.score.MeasureBeats;
 import lombok.Data;
 import lombok.val;
@@ -25,7 +25,7 @@ public class DynamicsPeriod {
 	/** End time (exclusive). */
 	public final Time endTime;
 	/** The fixed or gradient dynamics. */
-	public final Dynamics dynamics;
+	public final DynamicsVolume dynamics;
 
 	/**
 	 * Returns true, iff the given time is within this period.

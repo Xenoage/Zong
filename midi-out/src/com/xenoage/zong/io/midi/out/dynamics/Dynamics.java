@@ -14,7 +14,7 @@ import lombok.val;
  * @author Andreas Wenger
  */
 @Const @Data
-public class DynamicsSequence {
+public class Dynamics {
 
 	public static final DynamicsType defaultDynamics = DynamicsType.mf;
 

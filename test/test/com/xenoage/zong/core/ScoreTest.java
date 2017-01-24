@@ -1,5 +1,23 @@
 package com.xenoage.zong.core;
 
+import com.xenoage.utils.kernel.Tuple3;
+import com.xenoage.zong.commands.core.music.*;
+import com.xenoage.zong.core.music.*;
+import com.xenoage.zong.core.music.clef.Clef;
+import com.xenoage.zong.core.music.clef.ClefType;
+import com.xenoage.zong.core.music.key.Key;
+import com.xenoage.zong.core.music.key.TraditionalKey;
+import com.xenoage.zong.core.music.key.TraditionalKey.Mode;
+import com.xenoage.zong.core.music.rest.Rest;
+import com.xenoage.zong.core.music.time.TimeSignature;
+import com.xenoage.zong.core.music.time.TimeType;
+import com.xenoage.zong.core.position.MP;
+import org.junit.Assert;
+import org.junit.Test;
+
+import java.util.List;
+import java.util.Map;
+
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Tuple3.t3;
 import static com.xenoage.utils.math.Fraction._0;
@@ -8,39 +26,8 @@ import static com.xenoage.zong.core.music.Pitch.pi;
 import static com.xenoage.zong.core.music.chord.ChordFactory.chord;
 import static com.xenoage.zong.core.music.util.Interval.Before;
 import static com.xenoage.zong.core.music.util.Interval.BeforeOrAt;
-import static com.xenoage.zong.core.position.MP.atBeat;
-import static com.xenoage.zong.core.position.MP.atElement;
-import static com.xenoage.zong.core.position.MP.atMeasure;
-import static com.xenoage.zong.core.position.MP.atVoice;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.util.List;
-import java.util.Map;
-
-import com.xenoage.zong.core.music.time.TimeSignature;
-import org.junit.Assert;
-import org.junit.Test;
-
-import com.xenoage.utils.kernel.Tuple3;
-import com.xenoage.zong.commands.core.music.ColumnElementWrite;
-import com.xenoage.zong.commands.core.music.MeasureAdd;
-import com.xenoage.zong.commands.core.music.MeasureElementWrite;
-import com.xenoage.zong.commands.core.music.VoiceAdd;
-import com.xenoage.zong.commands.core.music.VoiceElementWrite;
-import com.xenoage.zong.core.music.Measure;
-import com.xenoage.zong.core.music.MusicContext;
-import com.xenoage.zong.core.music.Pitch;
-import com.xenoage.zong.core.music.Voice;
-import com.xenoage.zong.core.music.VoiceElement;
-import com.xenoage.zong.core.music.clef.Clef;
-import com.xenoage.zong.core.music.clef.ClefType;
-import com.xenoage.zong.core.music.key.Key;
-import com.xenoage.zong.core.music.key.TraditionalKey;
-import com.xenoage.zong.core.music.key.TraditionalKey.Mode;
-import com.xenoage.zong.core.music.rest.Rest;
-import com.xenoage.zong.core.music.time.TimeType;
-import com.xenoage.zong.core.position.MP;
+import static com.xenoage.zong.core.position.MP.*;
+import static org.junit.Assert.*;
 
 
 /**
@@ -83,49 +70,6 @@ public class ScoreTest {
 		assertEquals(fr(0, 4), score.getMeasureFilledBeats(2));
 		assertEquals(fr(3, 4), score.getMeasureFilledBeats(3));
 	}
-	
-	
-	@Test public void clipToMeasureTest() {
-		Score score = ScoreFactory.create1Staff4Measures();
-		score.getHeader().getColumnHeader(0).setTime(new TimeSignature(TimeType.time_3_4));
-
-		//position before measure
-		MP pos = atBeat(1, 1, 0, fr(2, 4));
-		MP clippedPos = score.clipToMeasure(2, pos);
-		assertEquals(clippedPos.measure, 2);
-		assertTrue(clippedPos.beat.equals(_0));
-
-		//position at the beginning of the measure
-		pos = atBeat(1, 2, 0, _0);
-		clippedPos = score.clipToMeasure(2, pos);
-		assertEquals(clippedPos.measure, 2);
-		assertTrue(clippedPos.beat.equals(_0));
-
-		//position in the measure
-		pos = atBeat(1, 2, 0, fr(2, 4));
-		clippedPos = score.clipToMeasure(2, pos);
-		assertEquals(clippedPos.measure, 2);
-		assertTrue(clippedPos.beat.equals(fr(2, 4)));
-
-		//position at the end of the measure
-		pos = atBeat(1, 2, 0, fr(3, 4));
-		clippedPos = score.clipToMeasure(2, pos);
-		assertEquals(clippedPos.measure, 2);
-		assertTrue(clippedPos.beat.equals(fr(3, 4)));
-
-		//position after the end of the measure
-		pos = atBeat(1, 2, 0, fr(4, 4));
-		clippedPos = score.clipToMeasure(2, pos);
-		assertEquals(clippedPos.measure, 2);
-		assertTrue(clippedPos.beat.equals(fr(3, 4)));
-
-		//position after the measure
-		pos = atBeat(1, 3, 0, fr(2, 4));
-		clippedPos = score.clipToMeasure(2, pos);
-		assertEquals(clippedPos.measure, 2);
-		assertTrue(clippedPos.beat.equals(fr(3, 4)));
-	}
-	
 	
 	@Test public void getKeyTest() {
 		Tuple3<Score, List<ClefType>, List<Key>> testData = createTestScoreClefsKeys();

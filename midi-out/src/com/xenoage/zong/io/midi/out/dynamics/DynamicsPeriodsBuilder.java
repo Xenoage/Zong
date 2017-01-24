@@ -27,8 +27,8 @@ public class DynamicsPeriodsBuilder {
 	 */
 	public DynamicsPeriodsBuilder addPeriodToStaff(
 			DynamicsPeriod period, int staff, int repetition) {
-		//GOON
-		return this;
+		throw new UnsupportedOperationException(); //GOON
+		//return this;
 	}
 
 	/**
@@ -37,8 +37,8 @@ public class DynamicsPeriodsBuilder {
 	 */
 	public DynamicsPeriodsBuilder addPeriodToVoice(
 			DynamicsPeriod period, int staff, int voice, int repetition) {
-		//GOON
-		return this;
+		throw new UnsupportedOperationException(); //GOON
+		//return this;
 	}
 
 	public DynamicsPeriods build() {

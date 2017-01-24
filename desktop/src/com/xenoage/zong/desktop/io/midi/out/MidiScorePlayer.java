@@ -172,7 +172,7 @@ public class MidiScorePlayer
 			return 0;
 		else
 			return measureTicks.get(time.measure) +
-				MidiConverter.calculateTickFromFraction(time.beat, resolution);
+				0; //GOON MidiConverter.calculateTickFromFraction(time.beat, resolution);
 	}
 
 	/**

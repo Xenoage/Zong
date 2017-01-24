@@ -12,7 +12,7 @@ import lombok.Data;
  */
 @Const @Data
 public class GradientDynamics
-	implements Dynamics {
+	implements DynamicsVolume {
 
 	/** The beginning dynamics of the gradient. */
 	public final DynamicsType start;

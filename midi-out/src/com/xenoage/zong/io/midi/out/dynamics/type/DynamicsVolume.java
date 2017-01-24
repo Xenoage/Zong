@@ -7,7 +7,7 @@ import com.xenoage.zong.io.midi.out.dynamics.DynamicsInterpretation;
  *
  * @author Andreas Wenger
  */
-public interface Dynamics {
+public interface DynamicsVolume {
 
 	/**
 	 * Gets the volume at the given time (0 = start of period; 1 = end of period)
