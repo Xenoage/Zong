@@ -11,6 +11,8 @@ import com.xenoage.zong.io.midi.out.repetitions.Repetition;
 import lombok.Data;
 import lombok.val;
 
+import static com.xenoage.zong.io.midi.out.dynamics.DynamicsPeriods.StaffRepetition.noVoice;
+
 /**
  * All {@link DynamicsPeriod}s in a score.
  *
@@ -19,20 +21,24 @@ import lombok.val;
 @Const @Data
 public class DynamicsPeriods {
 
-	public static final int noVoice = -1;
-
 	/** A staff, any optionally a voice, within a {@link Repetition}. */
 	@Const @Data
-	public static class StaffPlayRange {
+	public static class StaffRepetition {
+		public static final int noVoice = -1;
+
 		/** The staff index. */
 		public final int staff;
 		/** The voice index within the staff, or {@link #noVoice} for the whole staff. */
 		public final int voice;
 		/** The repetition index. */
 		public final int repetition;
+
+		@Override public String toString() {
+			return "[staff=" + staff + (voice != noVoice ? ", voice=" + voice : "") + ", rep=" + repetition + "]";
+		}
 	}
 
-	private final IMap<StaffPlayRange, IList<DynamicsPeriod>> periods;
+	private final IMap<StaffRepetition, IList<DynamicsPeriod>> periods;
 
 
 	/**
@@ -47,7 +53,7 @@ public class DynamicsPeriods {
 	@MaybeNull public DynamicsPeriod get(MP mp, int repetition, Range partStaves) {
 		val time = mp.getTime();
 		//first, find voice dynamics
-		val voicePeriods = periods.get(new StaffPlayRange(mp.staff, mp.voice, repetition));
+		val voicePeriods = periods.get(new StaffRepetition(mp.staff, mp.voice, repetition));
 		val voicePeriod = getPeriod(voicePeriods, time);
 		if (voicePeriod != null)
 			return voicePeriod;
@@ -56,7 +62,7 @@ public class DynamicsPeriods {
 		Time maxStartTime = time;
 		DynamicsPeriod bestMatch = null;
 		for (int iStaff : partStaves) {
-			val staffPeriods = periods.get(new StaffPlayRange(mp.staff, noVoice, repetition));
+			val staffPeriods = periods.get(new StaffRepetition(mp.staff, noVoice, repetition));
 			val staffPeriod = getPeriod(staffPeriods, time);
 			int compare = staffPeriod.startTime.compareTo(maxStartTime);
 			if (staffPeriod != null && compare > 0 || (compare >= 0 && iStaff == mp.staff)) {

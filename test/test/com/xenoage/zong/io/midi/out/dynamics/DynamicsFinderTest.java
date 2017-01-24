@@ -77,7 +77,7 @@ public class DynamicsFinderTest {
 		d.addPeriodToStaff(new DynamicsPeriod(
 				time(3, _1$2), time(3, _3$4), new FixedDynamics(f)), 0, 1);
 		d.addPeriodToStaff(new DynamicsPeriod(
-				time(3, _3$4), time(4, _1$4), new GradientDynamics(f, ff)), 1, 0); //ff: implicit target after f-cresc
+				time(3, _3$4), time(4, _1$4), new GradientDynamics(f, ff)), 0, 1); //ff: implicit target after f-cresc
 		d.addPeriodToStaff(new DynamicsPeriod(
 				time(4, _1$4), time(4, _1$2), new FixedDynamics(ff)), 0, 1);
 		d.addPeriodToStaff(new DynamicsPeriod(
