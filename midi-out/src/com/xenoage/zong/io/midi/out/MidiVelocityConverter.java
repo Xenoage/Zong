@@ -185,12 +185,10 @@ public final class MidiVelocityConverter {
 		}
 		//then look in measure directions
 		Tuple2<DynamicValue, Fraction> inMeasure = null;
-		if (measure.getDirections() != null) {
-			for (BeatE<Direction> direction : measure.getDirections()) {
-				if (direction.beat.compareTo(position.beat) < 1) {
-					if (direction.element instanceof Dynamic) {
-						inMeasure = t(((Dynamic) direction.element).getValue(), direction.beat);
-					}
+		for (BeatE<Direction> direction : measure.getDirections()) {
+			if (direction.beat.compareTo(position.beat) < 1) {
+				if (direction.element instanceof Dynamic) {
+					inMeasure = t(((Dynamic) direction.element).getValue(), direction.beat);
 				}
 			}
 		}
@@ -222,11 +220,9 @@ public final class MidiVelocityConverter {
 		}
 		//then look in measure directions
 		Tuple2<DynamicValue, Fraction> inMeasure = null;
-		if (measure.getDirections() != null) {
-			for (BeatE<Direction> direction : measure.getDirections()) {
-				if (direction.element instanceof Dynamic) {
-					inMeasure = t(((Dynamic) direction.element).getValue(), direction.beat);
-				}
+		for (BeatE<Direction> direction : measure.getDirections()) {
+			if (direction.element instanceof Dynamic) {
+				inMeasure = t(((Dynamic) direction.element).getValue(), direction.beat);
 			}
 		}
 		if (attached != null && inMeasure != null)

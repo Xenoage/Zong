@@ -4,6 +4,8 @@ import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.collections.IList;
 import com.xenoage.utils.iterators.ReverseIterator;
 import com.xenoage.utils.math.Fraction;
+import com.xenoage.zong.core.music.MusicElement;
+import com.xenoage.zong.core.music.MusicElementType;
 import lombok.Data;
 import lombok.val;
 
@@ -12,6 +14,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import static com.xenoage.utils.collections.CList.clist;
+import static com.xenoage.utils.collections.CList.ilist;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.core.music.util.BeatE.beatE;
@@ -26,16 +29,32 @@ import static com.xenoage.zong.core.music.util.Interval.Result.True;
 @Data public final class BeatEList<T>
 	implements Iterable<BeatE<T>> {
 
+
 	/** The list of elements, sorted in ascending beat order. */
-	private ArrayList<BeatE<T>> elements;
+	private List<BeatE<T>> elements;
+
+	private static BeatEList<?> emptyList = null;
 
 
+	/**
+	 * Returns a new, empty and mutable {@link BeatEList}.
+	 */
 	public static <T> BeatEList<T> beatEList() {
-		return new BeatEList<T>();
+		val ret = new BeatEList<T>();
+		ret.elements = new ArrayList<BeatE<T>>(0); //start with a capacity of 0 to save memory
+		return ret;
 	}
 
-	public BeatEList() {
-		this.elements = new ArrayList<BeatE<T>>(0); //start with a capacity of 0 to save memory
+	/** Returns a shared empty, immutable list, that can be used instead of returning a new empty list or null. */
+	public static <T> BeatEList<T> emptyBeatEList() {
+		if (emptyList == null) {
+			emptyList = new BeatEList<MusicElement>();
+			emptyList.elements = ilist(); //immutable
+		}
+		return (BeatEList<T>) emptyList;
+	}
+
+	private BeatEList() {
 	}
 
 	private void checkNotNull(BeatE<? extends T> element) {
@@ -49,6 +68,18 @@ import static com.xenoage.zong.core.music.util.Interval.Result.True;
 	public T get(Fraction beat) {
 		for (BeatE<T> e : elements) {
 			if (e.getBeat().equals(beat))
+				return e.getElement();
+		}
+		return null;
+	}
+
+	/**
+	 * Gets the first element at the given beat with the given type, or null if there is none.
+	 * Works only for {@link MusicElement} items.
+	 */
+	public T get(Fraction beat, MusicElementType type) {
+		for (BeatE<T> e : elements) {
+			if (e.getBeat().equals(beat) && type.is((MusicElement) e.getElement()))
 				return e.getElement();
 		}
 		return null;
@@ -241,10 +272,19 @@ import static com.xenoage.zong.core.music.util.Interval.Result.True;
 	 * given interval relative to the given beat.
 	 */
 	public BeatEList<T> filter(Interval interval, Fraction beat) {
-		val ret = new BeatEList<T>();
+		BeatEList<T> ret = beatEList();
 		for (val e : elements)
 			if (interval.isInInterval(e.beat, beat) == True)
 				ret.add(e);
+		return ret;
+	}
+
+	/**
+	 * Creates a mutable copy of this list, that can be further modified.
+	 */
+	public BeatEList<T> clone() {
+		val ret = new BeatEList<T>();
+		ret.elements = alist(elements);
 		return ret;
 	}
 

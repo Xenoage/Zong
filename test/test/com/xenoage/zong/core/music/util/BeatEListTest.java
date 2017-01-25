@@ -1,9 +1,9 @@
 package com.xenoage.zong.core.music.util;
 
-import lombok.val;
 import org.junit.Test;
 
 import static com.xenoage.utils.math.Fraction.fr;
+import static com.xenoage.zong.core.music.util.BeatEList.beatEList;
 import static org.junit.Assert.*;
 
 
@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
 public class BeatEListTest {
 
 	@Test public void addTest() {
-		val list = new BeatEList<Integer>();
+		BeatEList<Integer> list = beatEList();
 		list.add(50, fr(5));
 		list.add(30, fr(3));
 		list.add(20, fr(2));
@@ -37,7 +37,7 @@ public class BeatEListTest {
 
 
 	@Test public void setTest() {
-		val list = new BeatEList<Integer>();
+		BeatEList<Integer> list = beatEList();
 		list.set(50, fr(5));
 		list.set(30, fr(3));
 		list.set(20, fr(2));
@@ -56,27 +56,27 @@ public class BeatEListTest {
 	}
 
 	@Test public void filterTest() {
-		val list = new BeatEList<Integer>();
+		BeatEList<Integer> list = beatEList();
 		list.add(10, fr(1));
 		list.add(20, fr(2));
 		list.add(30, fr(3));
 		list.add(31, fr(3));
 		list.add(40, fr(4));
 		//before
-		BeatEList<Integer> expected = new BeatEList<Integer>();
+		BeatEList<Integer> expected = beatEList();
 		expected.add(10, fr(1));
 		expected.add(20, fr(2));
 		BeatEList<Integer> actual = list.filter(Interval.Before, fr(3));
 		assertEquals(expected, actual);
 		//at or after
-		expected = new BeatEList<Integer>();
+		expected = beatEList();
 		expected.add(30, fr(3));
 		expected.add(31, fr(3));
 		expected.add(40, fr(4));
 		actual = list.filter(Interval.AtOrAfter, fr(3));
 		assertEquals(expected, actual);
 		//after
-		expected = new BeatEList<Integer>();
+		expected = beatEList();
 		expected.add(40, fr(4));
 		actual = list.filter(Interval.After, fr(3));
 		assertEquals(expected, actual);

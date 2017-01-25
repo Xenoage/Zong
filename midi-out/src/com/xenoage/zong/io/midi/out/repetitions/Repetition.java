@@ -24,6 +24,22 @@ public final class Repetition {
 	public final Time end;
 
 
+	/**
+	 * Returns true, if the given {@link Time} is at or after the start time of
+	 * this {@link Repetition} and before its end time.
+	 */
+	public boolean contains(Time time) {
+		if (time.measure > start.measure && time.measure < end.measure)
+			return true; //somewhere in the middle
+		else if (time.measure == start.measure && time.beat.compareTo(start.beat) >= 0)
+			return true; //in the first measure, at or after the start beat
+		else if (time.measure == end.measure && time.beat.compareTo(end.beat) < 0)
+			return true; //in the last measure, before the start beat
+		else
+			return false; //outside the range
+	}
+
+
 	@Override public String toString() {
 		return String.format("[%d;%s to %d;%s]", start.measure, start.beat, end.measure, end.beat);
 	}

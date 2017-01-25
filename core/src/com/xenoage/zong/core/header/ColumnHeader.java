@@ -32,6 +32,7 @@ import static com.xenoage.utils.CheckUtils.checkNotNull;
 import static com.xenoage.utils.collections.ArrayUtils.containsRef;
 import static com.xenoage.utils.collections.CList.clist;
 import static com.xenoage.utils.math.Fraction._0;
+import static com.xenoage.zong.core.music.util.BeatEList.beatEList;
 import static com.xenoage.zong.core.position.MP.atColumnBeat;
 
 /**
@@ -85,12 +86,12 @@ public final class ColumnHeader
 		this.time = null;
 		this.startBarline = null;
 		this.endBarline = null;
-		this.middleBarlines = new BeatEList<Barline>();
+		this.middleBarlines = beatEList();
 		this.volta = null;
-		this.keys = new BeatEList<Key>();
-		this.tempos = new BeatEList<Tempo>();
+		this.keys = beatEList();
+		this.tempos = beatEList();
 		this.measureBreak = null;
-		this.otherDirections = new BeatEList<Direction>();
+		this.otherDirections = beatEList();
 		this.parentScore = parentScore;
 		this.parentMeasureIndex = parentMeasureIndex;
 	}
@@ -446,7 +447,7 @@ public final class ColumnHeader
 	 * are assigned to a beat (middle barlines, keys and tempos).
 	 */
 	public BeatEList<ColumnElement> getColumnElementsWithBeats() {
-		BeatEList<ColumnElement> ret = new BeatEList<ColumnElement>();
+		BeatEList<ColumnElement> ret = beatEList();
 		ret.addAll(middleBarlines);
 		ret.addAll(keys);
 		ret.addAll(tempos);

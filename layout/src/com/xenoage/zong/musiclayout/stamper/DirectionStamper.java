@@ -1,6 +1,7 @@
 package com.xenoage.zong.musiclayout.stamper;
 
 import com.xenoage.utils.collections.CList;
+import com.xenoage.zong.core.music.MusicElementType;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.direction.*;
 import com.xenoage.zong.core.music.format.Placement;
@@ -8,7 +9,6 @@ import com.xenoage.zong.core.music.format.Position;
 import com.xenoage.zong.core.music.format.Positioning;
 import com.xenoage.zong.core.music.format.SP;
 import com.xenoage.zong.core.music.util.BeatE;
-import com.xenoage.zong.core.music.util.BeatEList;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.text.*;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.ChordStampings;
@@ -19,6 +19,7 @@ import com.xenoage.zong.musiclayout.stampings.Stamping;
 import com.xenoage.zong.symbols.Symbol;
 import com.xenoage.zong.symbols.SymbolPool;
 import com.xenoage.zong.symbols.common.CommonSymbol;
+import lombok.val;
 
 import java.util.List;
 
@@ -50,33 +51,27 @@ public class DirectionStamper {
 	public List<Stamping> stamp(StamperContext context) {
 		
 		List<Stamping> ret = alist();
-		BeatEList<Direction> directionsWithBeats = context.layouter.score.getMeasure(
-			context.getMp()).getDirections();
-		
-		if (directionsWithBeats != null) {
-			//over first staff, also add tempo directions for the whole column
-			if (context.getMp().staff == 0) {
-				directionsWithBeats.addAll(context.layouter.score.getColumnHeader(
-					context.getMp().measure).getTempos());
-			}
-			for (BeatE<Direction> elementWithBeat : directionsWithBeats) {
-				Direction element = elementWithBeat.element;
-				Stamping stamping = null;
-				if (element instanceof Tempo) {
-					stamping = directionStamper.createTempo((Tempo) element, context);
-				}
-				else if (element instanceof Dynamic) {
-					stamping = directionStamper.createDynamics((Dynamic) element, context);
-				}
-				else if (element instanceof Pedal) {
-					stamping = directionStamper.createPedal((Pedal) element, context);
-				}
-				else if (element instanceof Words) {
-					stamping = directionStamper.createWords((Words) element, context);
-				}
-				if (stamping != null)
-					ret.add(stamping);
-			}
+		val directionsWithBeats = context.layouter.score.getMeasure(
+			context.getMp()).getDirections().clone();
+
+		//over first staff, also add tempo directions for the whole column
+		if (context.getMp().staff == 0) {
+			directionsWithBeats.addAll(context.layouter.score.getColumnHeader(
+				context.getMp().measure).getTempos());
+		}
+		for (BeatE<Direction> elementWithBeat : directionsWithBeats) {
+			Direction element = elementWithBeat.element;
+			Stamping stamping = null;
+			if (MusicElementType.Tempo.is(element))
+				stamping = directionStamper.createTempo((Tempo) element, context);
+			else if (MusicElementType.Dynamic.is(element))
+				stamping = directionStamper.createDynamics((Dynamic) element, context);
+			else if (MusicElementType.Pedal.is(element))
+				stamping = directionStamper.createPedal((Pedal) element, context);
+			else if (MusicElementType.Words.is(element))
+				stamping = directionStamper.createWords((Words) element, context);
+			if (stamping != null)
+				ret.add(stamping);
 		}
 		
 		return ret;

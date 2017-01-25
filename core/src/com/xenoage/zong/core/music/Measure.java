@@ -30,6 +30,7 @@ import static com.xenoage.utils.CheckUtils.checkArgsNotNull;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.zong.core.music.Voice.voice;
 import static com.xenoage.zong.core.music.util.BeatEList.beatEList;
+import static com.xenoage.zong.core.music.util.BeatEList.emptyBeatEList;
 import static com.xenoage.zong.core.music.util.Interval.*;
 import static com.xenoage.zong.core.position.MP.atVoice;
 
@@ -52,8 +53,8 @@ public class Measure
 	@Getter private BeatEList<Clef> clefs;
 	/** The list of staff-intern key signature changes, or null. */
 	@Getter private BeatEList<Key> privateKeys;
-	/** The list of directions, or null. */
-	@Getter private BeatEList<Direction> directions;
+	/** The list of directions, or null. Use {@link #getDirections()} to get a non-null value. */
+	private BeatEList<Direction> directions;
 	/** The list of instrument changes, or null. */
 	@Getter private BeatEList<InstrumentChange> instrumentChanges;
 
@@ -93,7 +94,7 @@ public class Measure
 			//add clef to list. create list if needed
 			clef.setParent(this);
 			if (clefs == null)
-				clefs = new BeatEList<Clef>();
+				clefs = beatEList();
 			return clefs.set(clef, beat);
 		}
 		else if (clefs != null) {
@@ -116,7 +117,7 @@ public class Measure
 			//add key to list. create list if needed
 			key.setParent(this);
 			if (privateKeys == null)
-				privateKeys = new BeatEList<Key>();
+				privateKeys = beatEList();
 			return privateKeys.set(key, beat);
 		}
 		else if (privateKeys != null) {
@@ -137,7 +138,7 @@ public class Measure
 	@Untested public void addDirection(Direction direction, Fraction beat) {
 		direction.setParent(this);
 		if (directions == null)
-			directions = new BeatEList<Direction>();
+			directions = beatEList();
 		directions.add(direction, beat);
 	}
 
@@ -151,7 +152,7 @@ public class Measure
 			//add instrumentChange to list. create list if needed
 			instrumentChange.setParent(this);
 			if (instrumentChanges == null)
-				instrumentChanges = new BeatEList<InstrumentChange>();
+				instrumentChanges = beatEList();
 			return instrumentChanges.set(instrumentChange, beat);
 		}
 		else if (instrumentChanges != null) {
@@ -439,6 +440,15 @@ public class Measure
 	 */
 	public Score getScore() {
 		return (parent != null ? parent.getScore() : null);
+	}
+
+	/**
+	 * The list of directions, maybe empty and immutable.
+	 */
+	public BeatEList<Direction> getDirections() {
+		if (directions == null)
+			return emptyBeatEList();
+		return directions;
 	}
 	
 

@@ -9,7 +9,6 @@ import com.xenoage.zong.core.music.direction.Wedge;
 import com.xenoage.zong.core.music.direction.WedgeType;
 import com.xenoage.zong.core.music.format.Position;
 import com.xenoage.zong.core.music.util.BeatE;
-import com.xenoage.zong.core.music.util.BeatEList;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.musiclayout.continued.ContinuedWedge;
 import com.xenoage.zong.musiclayout.continued.OpenWedges;
@@ -49,17 +48,14 @@ public class WedgeStamper {
 			Staff staff = score.getStaff(iStaff);
 			for (int iMeasure : system.getMeasureIndices()) {
 				Measure measure = staff.getMeasure(iMeasure);
-				BeatEList<Direction> directions = measure.getDirections();
-				if (directions != null) {
-					for (BeatE<Direction> dir : directions) {
-						if (dir.element instanceof Wedge) {
-							Wedge wedge = (Wedge) dir.element;
-							//it should not happen in a consistent score, but it could be possible
-							//that a wedge is missing its end element. we only stamp it,
-							//if the position of the end element is known
-							if (wedge.getWedgeEnd().getMP() != null)
-								openWedges.wedges.add(new ContinuedWedge((Wedge) dir.element));
-						}
+				for (BeatE<Direction> dir : measure.getDirections()) {
+					if (dir.element instanceof Wedge) {
+						Wedge wedge = (Wedge) dir.element;
+						//it should not happen in a consistent score, but it could be possible
+						//that a wedge is missing its end element. we only stamp it,
+						//if the position of the end element is known
+						if (wedge.getWedgeEnd().getMP() != null)
+							openWedges.wedges.add(new ContinuedWedge((Wedge) dir.element));
 					}
 				}
 			}

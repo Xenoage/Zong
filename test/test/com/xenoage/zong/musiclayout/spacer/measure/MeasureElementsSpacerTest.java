@@ -1,24 +1,9 @@
 package com.xenoage.zong.musiclayout.spacer.measure;
 
-import static com.xenoage.utils.collections.CList.ilist;
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.utils.math.Delta.df;
-import static com.xenoage.utils.math.Fraction.fr;
-import static com.xenoage.zong.core.music.util.BeatE.beatE;
-import static com.xenoage.zong.musiclayout.settings.LayoutSettings.defaultLayoutSettings;
-import static com.xenoage.zong.musiclayout.spacer.measure.MeasureElementsSpacer.measureElementsSpacer;
-import static org.junit.Assert.assertEquals;
-
-import java.util.List;
-
-import org.junit.Test;
-
 import com.xenoage.utils.math.Delta;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.clef.Clef;
 import com.xenoage.zong.core.music.clef.ClefType;
-import com.xenoage.zong.core.music.key.Key;
 import com.xenoage.zong.core.music.rest.Rest;
 import com.xenoage.zong.core.music.util.BeatEList;
 import com.xenoage.zong.musiclayout.notation.ClefNotation;
@@ -29,6 +14,20 @@ import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
 import com.xenoage.zong.musiclayout.spacing.ElementWidth;
 import com.xenoage.zong.musiclayout.spacing.SimpleSpacing;
 import com.xenoage.zong.musiclayout.spacing.VoiceSpacing;
+import org.junit.Test;
+
+import java.util.List;
+
+import static com.xenoage.utils.collections.CList.ilist;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.utils.math.Delta.df;
+import static com.xenoage.utils.math.Fraction.fr;
+import static com.xenoage.zong.core.music.util.BeatE.beatE;
+import static com.xenoage.zong.core.music.util.BeatEList.beatEList;
+import static com.xenoage.zong.musiclayout.settings.LayoutSettings.defaultLayoutSettings;
+import static com.xenoage.zong.musiclayout.spacer.measure.MeasureElementsSpacer.measureElementsSpacer;
+import static org.junit.Assert.*;
 
 /**
  * Tests for the {@link MeasureElementsSpacer}.
@@ -69,10 +68,10 @@ public class MeasureElementsSpacerTest {
 			new VoiceSpacing(null, 1, alist(spacing(ve[2], fr(1), 5), spacing(ve[3], fr(17, 2), 20))));
 		List<VoiceSpacing> vs = alist(originalVs);
 		Clef innerClef = new Clef(ClefType.clefTreble);
-		BeatEList<Clef> innerClefs = new BeatEList<Clef>();
+		BeatEList<Clef> innerClefs = beatEList();
 		innerClefs.add(beatE(innerClef, fr(6)));
 		List<ElementSpacing> res = testee.compute(
-			innerClefs, new BeatEList<Key>(), null, false, vs, 0, notations(ve, innerClef), ls);
+			innerClefs, beatEList(), null, false, vs, 0, notations(ve, innerClef), ls);
 		//clef must be at offset 15 - padding - clefwidth/2
 		ElementSpacing[] mes = res.toArray(new ElementSpacing[0]);
 		assertEquals(1, mes.length);
@@ -108,10 +107,10 @@ public class MeasureElementsSpacerTest {
 			new VoiceSpacing(null, 1, alist(spacing(ve[0], fr(1, 2), 4), spacing(ve[1], fr(4), 11))),
 			new VoiceSpacing(null, 1, alist(spacing(ve[2], fr(1), 5), spacing(ve[3], fr(13, 2), 16))));
 		Clef innerClef = new Clef(ClefType.clefTreble);
-		BeatEList<Clef> innerClefs = new BeatEList<Clef>();
+		BeatEList<Clef> innerClefs = beatEList();
 		innerClefs.add(beatE(innerClef, fr(4)));
 		List<ElementSpacing> mes = testee.compute(
-			innerClefs, new BeatEList<Key>(), null, false, vs, 0, notations(ve, innerClef), ls);
+			innerClefs, beatEList(), null, false, vs, 0, notations(ve, innerClef), ls);
 		//voice spacings
 		assertEquals(2, vs.size());
 		assertEqualsSpacings(ilist(spacing(ve[0], fr(1, 2), 4), spacing(ve[1], fr(4), 13)),
