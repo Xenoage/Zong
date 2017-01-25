@@ -14,8 +14,8 @@ import com.xenoage.zong.core.music.clef.Clef;
 import com.xenoage.zong.core.music.clef.ClefSymbol;
 import com.xenoage.zong.core.music.clef.ClefType;
 import com.xenoage.zong.core.music.direction.Direction;
-import com.xenoage.zong.core.music.direction.Dynamics;
-import com.xenoage.zong.core.music.direction.DynamicsType;
+import com.xenoage.zong.core.music.direction.Dynamic;
+import com.xenoage.zong.core.music.direction.DynamicValue;
 import com.xenoage.zong.core.music.direction.Wedge;
 import com.xenoage.zong.core.music.direction.WedgeType;
 import com.xenoage.zong.core.music.key.Key;
@@ -45,8 +45,8 @@ public interface Base43e
 	static List<Tuple2<MP, Direction>> getExpectedDirections() {
 		Wedge wedge;
 		List<Tuple2<MP, Direction>> directions = alist();
-		directions.add(t(atBeat(0, 0, unknown, _0), new Dynamics(DynamicsType.ffff)));
-		directions.add(t(atBeat(0, 0, unknown, fr(3, 4)), new Dynamics(DynamicsType.p)));
+		directions.add(t(atBeat(0, 0, unknown, _0), new Dynamic(DynamicValue.ffff)));
+		directions.add(t(atBeat(0, 0, unknown, fr(3, 4)), new Dynamic(DynamicValue.p)));
 		directions.add(t(atBeat(1, 0, unknown, _0), wedge = new Wedge(WedgeType.Crescendo)));
 		directions.add(t(atBeat(1, 0, unknown, fr(2, 4)), wedge.getWedgeEnd()));
 		return directions;

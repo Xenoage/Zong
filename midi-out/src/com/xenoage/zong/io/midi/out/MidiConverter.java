@@ -132,7 +132,7 @@ public class MidiConverter<T> {
 			int voicesCount = staff.getVoicesCount();
 			int track = iStaff + 1; //first track is reserved; see declaration of tracksCount
 
-			for (Repetition playRange : repetitions.getRanges()) {
+			for (Repetition playRange : repetitions.getRepetitions()) {
 
 				int transposing = 0;
 				for (int iMeasure : range(playRange.start.measure, playRange.end.measure)) {
@@ -312,7 +312,7 @@ public class MidiConverter<T> {
 		for (int i : range(score.getMeasuresCount()))
 			usedBeatsMeasures.add(score.getMeasureUsedBeats(i, true));
 		int imeasure = 0;
-		for (PlayRange playRange : repetitions.getRanges()) {
+		for (PlayRange playRange : repetitions.getRepetitions()) {
 
 			for (int iMeasure : range(playRange.start.measure, playRange.end.measure)) {
 				SortedList<Fraction> usedBeats = usedBeatsMeasures.get(iMeasure);
@@ -346,7 +346,7 @@ public class MidiConverter<T> {
 		int metronomeWeakBeatNote = options.midiSettings.getMetronomeWeakBeatNote();
 
 		int imeasure = 0;
-		for (PlayRange playRange : repetitions.getRanges()) {
+		for (PlayRange playRange : repetitions.getRepetitions()) {
 
 			for (int i : range(playRange.start.measure, playRange.end.measure)) {
 				TimeSignature time = score.getHeader().getTimeAtOrBefore(i);

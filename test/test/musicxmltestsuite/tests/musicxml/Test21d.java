@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.zong.core.music.direction.Direction;
-import com.xenoage.zong.core.music.direction.DynamicsType;
+import com.xenoage.zong.core.music.direction.DynamicValue;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.musicxml.types.MxlDirection;
 import com.xenoage.zong.musicxml.types.MxlDynamics;
@@ -45,16 +45,16 @@ public class Test21d
 						assertEquals("Largo", ((MxlWords) content).getFormattedText().getValue());
 					}
 					else if (iDirection == 1) {
-						//Dynamics "fp"
+						//Dynamic "fp"
 						assertEquals(0, iMeasure);
 						assertEquals(MxlDirectionTypeContentType.Dynamics, content.getDirectionTypeContentType());
-						assertEquals(DynamicsType.fp, ((MxlDynamics) content).getElement());
+						assertEquals(DynamicValue.fp, ((MxlDynamics) content).getElement());
 					}
 					else if (iDirection == 2) {
-						//Dynamics "p"
+						//Dynamic "p"
 						assertEquals(1, iMeasure);
 						assertEquals(MxlDirectionTypeContentType.Dynamics, content.getDirectionTypeContentType());
-						assertEquals(DynamicsType.p, ((MxlDynamics) content).getElement());
+						assertEquals(DynamicValue.p, ((MxlDynamics) content).getElement());
 					}
 					iDirection++;
 				}

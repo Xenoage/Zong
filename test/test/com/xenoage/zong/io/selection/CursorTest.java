@@ -18,8 +18,8 @@ import com.xenoage.zong.core.music.clef.Clef;
 import com.xenoage.zong.core.music.clef.ClefType;
 import com.xenoage.zong.core.music.direction.Coda;
 import com.xenoage.zong.core.music.direction.Direction;
-import com.xenoage.zong.core.music.direction.Dynamics;
-import com.xenoage.zong.core.music.direction.DynamicsType;
+import com.xenoage.zong.core.music.direction.Dynamic;
+import com.xenoage.zong.core.music.direction.DynamicValue;
 import com.xenoage.zong.core.music.key.Key;
 import com.xenoage.zong.core.music.key.TraditionalKey;
 import com.xenoage.zong.core.music.key.TraditionalKey.Mode;
@@ -80,7 +80,7 @@ public class CursorTest {
 		assertEquals(2, score.getMeasure(atMeasure(0, 0)).getClefs().size()); //clefs must still be there
 		assertEquals(1, score.getMeasure(atMeasure(0, 0)).getPrivateKeys().size());
 		//write direction at 1/4
-		Direction direction1 = new Dynamics(DynamicsType.ff);
+		Direction direction1 = new Dynamic(DynamicValue.ff);
 		cursor.setMp(atElement(0, 0, 0, 1));
 		cursor.write((MeasureElement) direction1);
 		assertEquals(2, score.getMeasure(atMeasure(0, 0)).getClefs().size()); //clefs must still be there

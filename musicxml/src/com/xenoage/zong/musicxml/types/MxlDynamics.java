@@ -8,7 +8,7 @@ import lombok.Setter;
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
-import com.xenoage.zong.core.music.direction.DynamicsType;
+import com.xenoage.zong.core.music.direction.DynamicValue;
 import com.xenoage.zong.musicxml.types.attributes.MxlPrintStyle;
 import com.xenoage.zong.musicxml.types.choice.MxlDirectionTypeContent;
 import com.xenoage.zong.musicxml.types.choice.MxlNotationsContent;
@@ -32,7 +32,7 @@ public final class MxlDynamics
 
 	public static final String elemName = "dynamics";
 
-	private DynamicsType element;
+	private DynamicValue element;
 	private MxlPrintStyle printStyle;
 	private MxlPlacement placement;
 
@@ -58,7 +58,7 @@ public final class MxlDynamics
 			return null; //dynamics element may be empty according to schema
 		String childText = reader.getElementName();
 		reader.closeElement();
-		DynamicsType element = getEnumValue(childText, DynamicsType.values());
+		DynamicValue element = getEnumValue(childText, DynamicValue.values());
 		if (element != null)
 			return new MxlDynamics(element, printStyle, placement);
 		else

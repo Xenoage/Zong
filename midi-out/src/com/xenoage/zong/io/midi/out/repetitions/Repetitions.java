@@ -14,7 +14,7 @@ import static com.xenoage.utils.collections.CList.clist;
 
 /**
  * This class stores the repetitions in a score by
- * remembering the sequential ranges which have end be played,
+ * remembering the sequential repetitions which have end be played,
  * defined by start and end {@link MP}s.
  *
  * Consecutive {@link Repetition}s are merged, e.g.
@@ -27,16 +27,16 @@ import static com.xenoage.utils.collections.CList.clist;
 public final class Repetitions {
 
 	/** The list of repetitions in chronological order. */
-	private final IList<Repetition> ranges;
+	private final IList<Repetition> repetitions;
 
 
 	public Repetitions(List<Repetition> repetitions) {
-		this.ranges = mergeRepetitions(repetitions);
+		this.repetitions = mergeRepetitions(repetitions);
 	}
 
 	static IList<Repetition> mergeRepetitions(List<Repetition> repetitions) {
 		CList<Repetition> merged = clist();
-		//merge consecutive ranges
+		//merge consecutive repetitions
 		Time start = null;
 		Time end = null;
 		for (val repetition : repetitions) {

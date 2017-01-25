@@ -54,7 +54,7 @@ public class DirectionReader {
 				}
 				
 				case Dynamics: {
-					Dynamics dynamics = readDynamics();
+					Dynamic dynamics = readDynamics();
 					context.writeMeasureElement(dynamics, staff);
 					break;
 				}
@@ -117,10 +117,10 @@ public class DirectionReader {
 		return coda;
 	}
 	
-	private Dynamics readDynamics() {
+	private Dynamic readDynamics() {
 		MxlDynamics mxlDynamics = (MxlDynamics) currentMxlDirType;
-		DynamicsType type = mxlDynamics.getElement();
-		Dynamics dynamics = new Dynamics(type);
+		DynamicValue type = mxlDynamics.getElement();
+		Dynamic dynamics = new Dynamic(type);
 		dynamics.setPositioning(readPositioning());
 		return dynamics;
 	}

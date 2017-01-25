@@ -1,5 +1,6 @@
 package com.xenoage.zong.io.midi.out.dynamics.type;
 
+import com.xenoage.zong.core.music.direction.DynamicValue;
 import com.xenoage.zong.io.midi.out.dynamics.DynamicsInterpretation;
 
 /**
@@ -7,7 +8,12 @@ import com.xenoage.zong.io.midi.out.dynamics.DynamicsInterpretation;
  *
  * @author Andreas Wenger
  */
-public interface DynamicsVolume {
+public interface DynamicsType {
+
+	/**
+	 * Gets the dynamic at the end of the time in which it is played.
+	 */
+	DynamicValue getEndValue();
 
 	/**
 	 * Gets the volume at the given time (0 = start of period; 1 = end of period)

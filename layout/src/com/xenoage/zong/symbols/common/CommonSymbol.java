@@ -1,13 +1,13 @@
 package com.xenoage.zong.symbols.common;
 
-import java.util.ArrayList;
-
 import com.xenoage.zong.core.music.annotation.ArticulationType;
 import com.xenoage.zong.core.music.chord.Accidental;
 import com.xenoage.zong.core.music.clef.ClefSymbol;
-import com.xenoage.zong.core.music.direction.DynamicsType;
+import com.xenoage.zong.core.music.direction.DynamicValue;
 import com.xenoage.zong.core.music.direction.Pedal;
 import com.xenoage.zong.symbols.SymbolPool;
+
+import java.util.ArrayList;
 
 /**
  * Enumeration of commonly used symbols, that
@@ -168,12 +168,12 @@ public enum CommonSymbol {
 	}
 
 	/**
-	 * Gets the symbols for the given {@link DynamicsType}.
+	 * Gets the symbols for the given {@link DynamicValue}.
 	 * TODO: memoize (one-time-computation)
 	 */
-	public static ArrayList<CommonSymbol> getDynamics(DynamicsType dynamicsType) {
+	public static ArrayList<CommonSymbol> getDynamics(DynamicValue value) {
 		//collect symbols from the name, e.g. "p" is DynamicsP.
-		String name = dynamicsType.name();
+		String name = value.name();
 		ArrayList<CommonSymbol> ret = new ArrayList<CommonSymbol>(name.length());
 		for (int i = 0; i < name.length(); i++) {
 			//TODO: symbol for "r"

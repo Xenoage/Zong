@@ -1,11 +1,11 @@
 package com.xenoage.zong.io.midi.out.dynamics;
 
-import com.xenoage.zong.core.music.direction.DynamicsType;
+import com.xenoage.zong.core.music.direction.DynamicValue;
 
-import static com.xenoage.zong.core.music.direction.DynamicsType.*;
+import static com.xenoage.zong.core.music.direction.DynamicValue.*;
 
 /**
- * Map {@link DynamicsType} to concrete volume values.
+ * Map {@link DynamicValue} to concrete volume values.
  *
  * These values are currently predefined. Later, we could load them
  * from used-defined settings.
@@ -15,10 +15,10 @@ import static com.xenoage.zong.core.music.direction.DynamicsType.*;
 public class DynamicsInterpretation {
 
 	/**
-	 * Gets the concrete loudness of the given {@link DynamicsType}
+	 * Gets the concrete loudness of the given {@link DynamicValue}
 	 * at its beginning. This is a value between 0 (silence) and 1 (maximum loudness).
 	 */
-	public float getVolume(DynamicsType dynamics) {
+	public float getVolume(DynamicValue dynamics) {
 		switch (dynamics) {
 			case pppppp: return 0.02f;
 			case ppppp: return 0.04f;

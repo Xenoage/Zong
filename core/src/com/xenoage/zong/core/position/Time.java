@@ -32,10 +32,6 @@ import static com.xenoage.utils.math.Fraction._0;
 		return new Time(measure, beat);
 	}
 
-	@Override public String toString() {
-		return "[Measure = " + measure + ", Beat = " + beat.getNumerator() + "/" + beat.getDenominator() + "]";
-	}
-
 	/**
 	 * Compares this {@link Time} with the given one.
 	 */
@@ -47,6 +43,14 @@ import static com.xenoage.utils.math.Fraction._0;
 			return 1;
 		else
 			return beat.compareTo(time.beat);
+	}
+
+	@Override public String toString() {
+		return "[Measure = " + measure + ", Beat = " + beat.getNumerator() + "/" + beat.getDenominator() + "]";
+	}
+
+	public String toStringCompact() {
+		return "m" + measure + ",b" + beat.getNumerator() + "/" + beat.getDenominator();
 	}
 
 }

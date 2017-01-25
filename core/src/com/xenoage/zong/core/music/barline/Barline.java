@@ -1,15 +1,15 @@
 package com.xenoage.zong.core.music.barline;
 
-import static com.xenoage.utils.CheckUtils.checkArgsNotNull;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.zong.core.header.ColumnHeader;
 import com.xenoage.zong.core.music.ColumnElement;
 import com.xenoage.zong.core.music.Measure;
 import com.xenoage.zong.core.music.MusicElementType;
 import com.xenoage.zong.core.position.MP;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+import static com.xenoage.utils.CheckUtils.checkArgsNotNull;
 
 /**
  * Class for a barline.
@@ -63,7 +63,7 @@ public final class Barline
 	/**
 	 * Creates a barline with backward repeat.
 	 * @param style        the style of the line(s)
-	 * @param repeatTimes  the number of repeats
+	 * @param repeatTimes  the number of repeats. n means: jump n times back.
 	 */
 	public static Barline barlineBackwardRepeat(BarlineStyle style, int repeatTimes) {
 		return new Barline(style, BarlineRepeat.Backward, repeatTimes);

@@ -4,8 +4,8 @@ import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.direction.Direction;
-import com.xenoage.zong.core.music.direction.Dynamics;
-import com.xenoage.zong.core.music.direction.DynamicsType;
+import com.xenoage.zong.core.music.direction.Dynamic;
+import com.xenoage.zong.core.music.direction.DynamicValue;
 import com.xenoage.zong.core.music.direction.Segno;
 import com.xenoage.zong.core.music.rest.Rest;
 import musicxmltestsuite.tests.base.Base21f;
@@ -34,9 +34,9 @@ public class Test21f
 		Direction segno = (Segno) score.getColumnHeader(0).getNavigationOrigin();
 		assertNotNull(segno);
 		//dynamics p at beat 1/4 in measure
-		Dynamics dynamics = (Dynamics) score.getMeasure(mp0).getDirections().get(fr(1, 4));
+		Dynamic dynamics = (Dynamic) score.getMeasure(mp0).getDirections().get(fr(1, 4));
 		assertNotNull(dynamics);
-		assertEquals(DynamicsType.p, dynamics.getType());
+		assertEquals(DynamicValue.p, dynamics.getValue());
 	}
 
 }

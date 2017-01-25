@@ -1,30 +1,26 @@
 package musicxmltestsuite.tests.musicxmlin;
 
-import static com.xenoage.utils.math.Fraction._0;
-import static com.xenoage.utils.math.Fraction._1;
-import static com.xenoage.utils.math.Fraction.fr;
-import static com.xenoage.zong.core.music.Pitch.pi;
-import static com.xenoage.zong.core.position.MP.mp0;
-import static musicxmltestsuite.tests.utils.Utils.articulation;
-import static musicxmltestsuite.tests.utils.Utils.fermata;
-import static org.junit.Assert.assertEquals;
-
-import java.util.List;
-
-import musicxmltestsuite.tests.base.Base21d;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.MeasureElement;
 import com.xenoage.zong.core.music.annotation.ArticulationType;
 import com.xenoage.zong.core.music.chord.Chord;
-import com.xenoage.zong.core.music.direction.Dynamics;
-import com.xenoage.zong.core.music.direction.DynamicsType;
+import com.xenoage.zong.core.music.direction.Dynamic;
+import com.xenoage.zong.core.music.direction.DynamicValue;
 import com.xenoage.zong.core.music.direction.Words;
 import com.xenoage.zong.core.music.format.Placement;
 import com.xenoage.zong.core.position.MP;
+import musicxmltestsuite.tests.base.Base21d;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.List;
+
+import static com.xenoage.utils.math.Fraction.*;
+import static com.xenoage.zong.core.music.Pitch.pi;
+import static com.xenoage.zong.core.position.MP.mp0;
+import static musicxmltestsuite.tests.utils.Utils.articulation;
+import static musicxmltestsuite.tests.utils.Utils.fermata;
+import static org.junit.Assert.*;
 
 public class Test21d
 	implements Base21d, MusicXmlInTest {
@@ -52,8 +48,8 @@ public class Test21d
 		assertEquals("Largo", words.getText().toString());
 		assertEquals(Placement.Above, words.getPositioning());
 		//dynamics "fp"
-		Dynamics dynamics = (Dynamics) directions.get(2);
-		assertEquals(DynamicsType.fp, dynamics.getType());
+		Dynamic dynamics = (Dynamic) directions.get(2);
+		assertEquals(DynamicValue.fp, dynamics.getValue());
 		assertEquals(Placement.Below, dynamics.getPositioning());
 	}
 	
@@ -81,8 +77,8 @@ public class Test21d
 		assertEquals(pi('B', -1, 4), chord.getNotes().get(1).getPitch());
 		assertEquals(fr(1, 4), chord.getDuration());
 		//dynamics "p"
-		Dynamics dynamics = (Dynamics) score.getMeasure(m2).getMeasureElements().get(_0);
-		assertEquals(DynamicsType.p, dynamics.getType());
+		Dynamic dynamics = (Dynamic) score.getMeasure(m2).getMeasureElements().get(_0);
+		assertEquals(DynamicValue.p, dynamics.getValue());
 		assertEquals(Placement.Below, dynamics.getPositioning());
 	}
 

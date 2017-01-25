@@ -11,7 +11,7 @@ import com.xenoage.zong.commands.core.music.direction.DirectionAdd;
 import com.xenoage.zong.core.music.annotation.Annotation;
 import com.xenoage.zong.core.music.annotation.Fermata;
 import com.xenoage.zong.core.music.chord.Chord;
-import com.xenoage.zong.core.music.direction.Dynamics;
+import com.xenoage.zong.core.music.direction.Dynamic;
 import com.xenoage.zong.io.musicxml.in.util.StaffDetails;
 import com.xenoage.zong.musicxml.types.MxlArticulations;
 import com.xenoage.zong.musicxml.types.MxlDynamics;
@@ -47,7 +47,7 @@ public class NotationsReader {
 					}
 	
 					case Dynamics: {
-						Dynamics dynamics = DynamicsReader.read((MxlDynamics) mxlNC, staffDetails);
+						Dynamic dynamics = DynamicsReader.read((MxlDynamics) mxlNC, staffDetails);
 						new DirectionAdd(dynamics, chord).execute();
 						break;
 					}

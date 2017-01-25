@@ -15,8 +15,8 @@ import com.xenoage.zong.core.music.Voice;
 import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.direction.Direction;
-import com.xenoage.zong.core.music.direction.Dynamics;
-import com.xenoage.zong.core.music.direction.DynamicsType;
+import com.xenoage.zong.core.music.direction.Dynamic;
+import com.xenoage.zong.core.music.direction.DynamicValue;
 import com.xenoage.zong.core.music.util.BeatE;
 import com.xenoage.zong.core.position.MP;
 
@@ -38,7 +38,7 @@ public final class MidiVelocityConverter {
 					if (element instanceof Chord) { //TODO: may also be attached to rests?
 						Chord chord = (Chord) element;
 						for (Direction direction : chord.getDirections()) {
-							if (direction instanceof Dynamics) {
+							if (direction instanceof Dynamic) {
 								return true;
 							}
 						}
@@ -109,7 +109,7 @@ public final class MidiVelocityConverter {
 	 */
 	public static int[] getVelocityAtPosition(Staff staff, int voice, MP mp, int currentVelocity,
 		Score score) {
-		Tuple2<DynamicsType, Fraction> latestDynamicsType = getLatestDynamicsType(staff, voice, mp,
+		Tuple2<DynamicValue, Fraction> latestDynamicsType = getLatestDynamicsType(staff, voice, mp,
 			score);
 		if (latestDynamicsType != null) {
 			int vel[] = new int[2];
@@ -152,9 +152,9 @@ public final class MidiVelocityConverter {
 		return MathUtils.clamp(velocity, 0, 127);
 	}
 
-	private static Tuple2<DynamicsType, Fraction> getLatestDynamicsType(Staff staff, int voiceNumber,
-		MP mp, Score score) {
-		Tuple2<DynamicsType, Fraction> latestDynamicsType = getLatestDynamicsBeforePosition(staff,
+	private static Tuple2<DynamicValue, Fraction> getLatestDynamicsType(Staff staff, int voiceNumber,
+																																			MP mp, Score score) {
+		Tuple2<DynamicValue, Fraction> latestDynamicsType = getLatestDynamicsBeforePosition(staff,
 			voiceNumber, mp, score);
 		int iMeasure = mp.measure - 1;
 		while (iMeasure >= 0 && latestDynamicsType == null) {
@@ -164,32 +164,32 @@ public final class MidiVelocityConverter {
 		return latestDynamicsType;
 	}
 
-	private static Tuple2<DynamicsType, Fraction> getLatestDynamicsBeforePosition(Staff staff,
-		int voiceNumber, MP position, Score score) {
+	private static Tuple2<DynamicValue, Fraction> getLatestDynamicsBeforePosition(Staff staff,
+																																								int voiceNumber, MP position, Score score) {
 		Measure measure = staff.getMeasure(position.measure);
 		Voice voice = measure.getVoice(voiceNumber);
 		//first look in attached elements
-		Tuple2<DynamicsType, Fraction> attached = null;
+		Tuple2<DynamicValue, Fraction> attached = null;
 		for (VoiceElement element : voice.getElements()) {
 			Fraction elementBeat = voice.getBeat(element);
 			if (elementBeat.compareTo(position.beat) < 1) {
 				if (element instanceof Chord) { //TODO: can dynamics also be attached to rests?
 					Chord chord = (Chord) element;
 					for (Direction direction : chord.getDirections()) {
-						if (direction instanceof Dynamics) {
-							attached = t(((Dynamics) direction).getType(), elementBeat);
+						if (direction instanceof Dynamic) {
+							attached = t(((Dynamic) direction).getValue(), elementBeat);
 						}
 					}
 				}
 			}
 		}
 		//then look in measure directions
-		Tuple2<DynamicsType, Fraction> inMeasure = null;
+		Tuple2<DynamicValue, Fraction> inMeasure = null;
 		if (measure.getDirections() != null) {
 			for (BeatE<Direction> direction : measure.getDirections()) {
 				if (direction.beat.compareTo(position.beat) < 1) {
-					if (direction.element instanceof Dynamics) {
-						inMeasure = t(((Dynamics) direction.element).getType(), direction.beat);
+					if (direction.element instanceof Dynamic) {
+						inMeasure = t(((Dynamic) direction.element).getValue(), direction.beat);
 					}
 				}
 			}
@@ -202,30 +202,30 @@ public final class MidiVelocityConverter {
 			return inMeasure;
 	}
 
-	private static Tuple2<DynamicsType, Fraction> getLatestDynamicsInMeasure(Staff staff,
-		int voiceNumber, int measureNumber, Score score) {
+	private static Tuple2<DynamicValue, Fraction> getLatestDynamicsInMeasure(Staff staff,
+																																					 int voiceNumber, int measureNumber, Score score) {
 		Measure measure = staff.getMeasure(measureNumber);
 		//first look for attached dynamics
-		Tuple2<DynamicsType, Fraction> attached = null;
+		Tuple2<DynamicValue, Fraction> attached = null;
 		if (voiceNumber < measure.getVoices().size()) {
 			Voice voice = measure.getVoices().get(voiceNumber);
 			for (VoiceElement element : reverseIt(voice.getElements())) {
 				if (element instanceof Chord) { //TODO: can dynamics also be attached to rests?
 					Chord chord = (Chord) element;
 					for (Direction direction : chord.getDirections()) {
-						if (direction instanceof Dynamics) {
-							attached = t(((Dynamics) direction).getType(), voice.getBeat(chord));
+						if (direction instanceof Dynamic) {
+							attached = t(((Dynamic) direction).getValue(), voice.getBeat(chord));
 						}
 					}
 				}
 			}
 		}
 		//then look in measure directions
-		Tuple2<DynamicsType, Fraction> inMeasure = null;
+		Tuple2<DynamicValue, Fraction> inMeasure = null;
 		if (measure.getDirections() != null) {
 			for (BeatE<Direction> direction : measure.getDirections()) {
-				if (direction.element instanceof Dynamics) {
-					inMeasure = t(((Dynamics) direction.element).getType(), direction.beat);
+				if (direction.element instanceof Dynamic) {
+					inMeasure = t(((Dynamic) direction.element).getValue(), direction.beat);
 				}
 			}
 		}

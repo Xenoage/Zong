@@ -7,8 +7,8 @@ import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.Part;
 import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.core.music.direction.DaCapo;
-import com.xenoage.zong.core.music.direction.Dynamics;
-import com.xenoage.zong.core.music.direction.DynamicsType;
+import com.xenoage.zong.core.music.direction.Dynamic;
+import com.xenoage.zong.core.music.direction.DynamicValue;
 import com.xenoage.zong.core.music.rest.Rest;
 import com.xenoage.zong.core.music.time.TimeSignature;
 import com.xenoage.zong.core.music.time.TimeType;
@@ -93,7 +93,7 @@ public class TimeMapperTest {
 		cursor.write(e(4));
 		cursor.write(e(1));
 		cursor.write(e(1));
-		new MeasureElementWrite(new Dynamics(DynamicsType.f),
+		new MeasureElementWrite(new Dynamic(DynamicValue.f),
 				score.getMeasure(atMeasure(0, 3)), _1$2).execute();
 		//staff 1, voice 0
 		cursor.setMp(atElement(1, 0, 0, 0));

@@ -65,8 +65,8 @@ public class DirectionStamper {
 				if (element instanceof Tempo) {
 					stamping = directionStamper.createTempo((Tempo) element, context);
 				}
-				else if (element instanceof Dynamics) {
-					stamping = directionStamper.createDynamics((Dynamics) element, context);
+				else if (element instanceof Dynamic) {
+					stamping = directionStamper.createDynamics((Dynamic) element, context);
 				}
 				else if (element instanceof Pedal) {
 					stamping = directionStamper.createPedal((Pedal) element, context);
@@ -95,8 +95,8 @@ public class DirectionStamper {
 			return emptyList();
 		List<StaffTextStamping> ret = alist();
 		for (Direction direction : chord.getDirections()) {
-			if (direction instanceof Dynamics) {
-				ret.add(createDynamics((Dynamics) direction, chord, chordStampings, symbolPool));
+			if (direction instanceof Dynamic) {
+				ret.add(createDynamics((Dynamic) direction, chord, chordStampings, symbolPool));
 			}
 			//TODO: support more directions
 		}
@@ -104,11 +104,11 @@ public class DirectionStamper {
 	}
 
 	/**
-	 * Creates a {@link StaffTextStamping} for the given {@link Dynamics}s
+	 * Creates a {@link StaffTextStamping} for the given {@link Dynamic}s
 	 * below the given {@link Chord} and its {@link ChordStampings}.
 	 */
-	public StaffTextStamping createDynamics(Dynamics dynamics, Chord chord,
-		ChordStampings chordStampings, SymbolPool symbolPool) {
+	public StaffTextStamping createDynamics(Dynamic dynamics, Chord chord,
+																					ChordStampings chordStampings, SymbolPool symbolPool) {
 		StaffStamping staff = chordStampings.staff;
 
 		//positioning
@@ -126,7 +126,7 @@ public class DirectionStamper {
 
 		//create text
 		CList<FormattedTextElement> elements = clist();
-		for (CommonSymbol s : CommonSymbol.getDynamics(dynamics.getType())) {
+		for (CommonSymbol s : CommonSymbol.getDynamics(dynamics.getValue())) {
 			Symbol symbol = symbolPool.getSymbol(s);
 			elements.add(new FormattedTextSymbol(symbol, staff.is * FONT_SIZE_IN_IS,
 				FormattedTextStyle.defaultColor));
@@ -139,9 +139,9 @@ public class DirectionStamper {
 	}
 
 	/**
-	 * Creates a {@link StaffTextStamping} for the given {@link Dynamics}s.
+	 * Creates a {@link StaffTextStamping} for the given {@link Dynamic}s.
 	 */
-	public StaffTextStamping createDynamics(Dynamics dynamics, StamperContext context) {
+	public StaffTextStamping createDynamics(Dynamic dynamics, StamperContext context) {
 		//positioning
 		//below (default): 3 IS below the base line, or 2 IS below the lowest note
 		//above: 2 IS above the top line, or 1 IS above the highest note
@@ -152,7 +152,7 @@ public class DirectionStamper {
 
 		//create text
 		CList<FormattedTextElement> elements = clist();
-		for (CommonSymbol s : CommonSymbol.getDynamics(dynamics.getType())) {
+		for (CommonSymbol s : CommonSymbol.getDynamics(dynamics.getValue())) {
 			Symbol symbol = context.getSymbol(s);
 			elements.add(new FormattedTextSymbol(symbol, context.staff.is * FONT_SIZE_IN_IS,
 				FormattedTextStyle.defaultColor));

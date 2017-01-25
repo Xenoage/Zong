@@ -9,6 +9,7 @@ import lombok.val;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import static com.xenoage.utils.collections.CList.clist;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
@@ -56,14 +57,29 @@ import static com.xenoage.zong.core.music.util.Interval.Result.True;
 	/**
 	 * Gets all elements at the given beat in a new list, or an empty list if there are none.
 	 */
-	public ArrayList<T> getAll(Fraction beat) {
-		ArrayList<T> ret = alist();
+	public List<T> getAll(Fraction beat) {
+		List<T> ret = alist();
 		for (BeatE<T> e : elements) {
 			int compare = e.getBeat().compareTo(beat);
 			if (compare == 0)
 				ret.add(e.getElement());
 			else if (compare > 0)
 				break;
+		}
+		return ret;
+	}
+
+	/**
+	 * Gets all used beats (each beat only one time).
+	 */
+	public List<Fraction> getBeats() {
+		List<Fraction> ret = alist(elements.size());
+		Fraction lastBeat = null;
+		for (BeatE<T> e : elements) {
+			if (lastBeat == null || false == lastBeat.equals(e.beat)) {
+				ret.add(e.beat);
+				lastBeat = e.beat;
+			}
 		}
 		return ret;
 	}

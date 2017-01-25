@@ -22,7 +22,7 @@ public enum MusicElementType {
 	Clef,
 	Coda,
 	DaCapo,
-	Dynamics,
+	Dynamic,
 	InstrumentChange,
 	Lyric,
 	Pedal,

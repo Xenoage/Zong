@@ -42,8 +42,8 @@ import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.Note;
 import com.xenoage.zong.core.music.clef.Clef;
 import com.xenoage.zong.core.music.clef.ClefType;
-import com.xenoage.zong.core.music.direction.Dynamics;
-import com.xenoage.zong.core.music.direction.DynamicsType;
+import com.xenoage.zong.core.music.direction.Dynamic;
+import com.xenoage.zong.core.music.direction.DynamicValue;
 import com.xenoage.zong.core.music.direction.Tempo;
 import com.xenoage.zong.core.music.direction.Wedge;
 import com.xenoage.zong.core.music.direction.WedgeType;
@@ -115,7 +115,7 @@ public class ScoreRevolutionary {
 		tempo.setPositioning(new Position(null, 22f, -5f, -5f));
 		cursor.write((ColumnElement) tempo);
 		cursor.write(attachC = chord(f2, accent, pi(B, 4), pi(D, 5), pi(F, 5), pi(G, 5), pi(B, 5)));
-		attachC.setDirections(addOrNew(attachC.getDirections(), new Dynamics(DynamicsType.f)));
+		attachC.setDirections(addOrNew(attachC.getDirections(), new Dynamic(DynamicValue.f)));
 		cursor.write(new Rest(f2));
 
 		//measure 2
@@ -135,7 +135,7 @@ public class ScoreRevolutionary {
 
 		//measure 3
 		cursor.write(attachC = chord(f2, pi(D, 5), pi(F, 5), pi(G, 5), pi(D, 6)));
-		new DirectionAdd(new Dynamics(DynamicsType.f), attachC).execute();
+		new DirectionAdd(new Dynamic(DynamicValue.f), attachC).execute();
 		cursor.write(new Rest(f2));
 
 		//measure 4
@@ -155,7 +155,7 @@ public class ScoreRevolutionary {
 
 		//measure 5
 		cursor.write(attachC = chord(f4, staccato, pi(F, 5), pi(G, 5), pi(D, 6), pi(F, 6)));
-		new DirectionAdd(new Dynamics(DynamicsType.f), attachC).execute();
+		new DirectionAdd(new Dynamic(DynamicValue.f), attachC).execute();
 		cursor.write(new Rest(f4));
 		cursor.write(new Rest(f2));
 

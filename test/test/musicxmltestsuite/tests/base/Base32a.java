@@ -17,8 +17,8 @@ import com.xenoage.zong.core.music.annotation.ArticulationType;
 import com.xenoage.zong.core.music.annotation.Fermata;
 import com.xenoage.zong.core.music.annotation.Ornament;
 import com.xenoage.zong.core.music.annotation.OrnamentType;
-import com.xenoage.zong.core.music.direction.Dynamics;
-import com.xenoage.zong.core.music.direction.DynamicsType;
+import com.xenoage.zong.core.music.direction.Dynamic;
+import com.xenoage.zong.core.music.direction.DynamicValue;
 import com.xenoage.zong.core.music.format.Placement;
 import com.xenoage.zong.core.position.MP;
 
@@ -59,9 +59,9 @@ public interface Base32a
 			t(atBeat(0, 8, 0, fr(0, 4)), new Ornament(OrnamentType.Mordent)),
 			t(atBeat(0, 8, 0, fr(1, 4)), new Ornament(OrnamentType.InvertedMordent)),
 			//TODO: ... more notations ...
-			t(atBeat(0, 21, 0, fr(0, 4)), new Dynamics(DynamicsType.f)),
-			t(atBeat(0, 21, 0, fr(1, 4)), new Dynamics(DynamicsType.ppp)),
-			t(atBeat(0, 21, 0, fr(2, 4)), new Dynamics(DynamicsType.sfp)),
+			t(atBeat(0, 21, 0, fr(0, 4)), new Dynamic(DynamicValue.f)),
+			t(atBeat(0, 21, 0, fr(1, 4)), new Dynamic(DynamicValue.ppp)),
+			t(atBeat(0, 21, 0, fr(2, 4)), new Dynamic(DynamicValue.sfp)),
 			//TODO: other dynamic "sfffz"
 			t(atBeat(0, 22, 0, fr(0, 4)), alist(
 				articulation(ArticulationType.Staccato, Placement.Above),

@@ -8,18 +8,18 @@ import lombok.EqualsAndHashCode;
 
 
 /**
- * Class for a dynamics sign like forte, piano, sforzando and so on.
+ * Class for a dynamic sign like forte, piano, sforzando and so on.
  *
  * @author Andreas Wenger
  */
 @Data @EqualsAndHashCode(callSuper=false)
-public final class Dynamics
+public final class Dynamic
 	extends Direction {
 
-	private final DynamicsType type;
+	private final DynamicValue value;
 
 	@Override public MusicElementType getMusicElementType() {
-		return MusicElementType.Dynamics;
+		return MusicElementType.Dynamic;
 	}
 	
 	@Override public MP getMP() {

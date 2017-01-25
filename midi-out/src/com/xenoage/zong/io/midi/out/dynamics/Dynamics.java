@@ -1,7 +1,7 @@
 package com.xenoage.zong.io.midi.out.dynamics;
 
 import com.xenoage.utils.annotations.Const;
-import com.xenoage.zong.core.music.direction.DynamicsType;
+import com.xenoage.zong.core.music.direction.DynamicValue;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.io.midi.out.score.MeasureBeats;
 import com.xenoage.zong.io.midi.out.score.PartStaves;
@@ -16,7 +16,7 @@ import lombok.val;
 @Const @Data
 public class Dynamics {
 
-	public static final DynamicsType defaultDynamics = DynamicsType.mf;
+	public static final DynamicValue defaultDynamics = DynamicValue.mf;
 
 
 	//dynamics in the score and their interpretations

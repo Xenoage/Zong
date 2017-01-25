@@ -19,8 +19,8 @@ import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.clef.Clef;
 import com.xenoage.zong.core.music.clef.ClefType;
-import com.xenoage.zong.core.music.direction.Dynamics;
-import com.xenoage.zong.core.music.direction.DynamicsType;
+import com.xenoage.zong.core.music.direction.Dynamic;
+import com.xenoage.zong.core.music.direction.DynamicValue;
 import com.xenoage.zong.core.music.key.TraditionalKey;
 import com.xenoage.zong.core.music.time.TimeSignature;
 import com.xenoage.zong.desktop.io.midi.out.MidiScorePlayer;
@@ -111,51 +111,51 @@ public class MidiVelocityConverterTry {
 
 		Chord attachC;
 		cursor.write(attachC = chord(f4, Pitch.pi(Pitch.G, 4)));
-		attachC.addDirection(new Dynamics(DynamicsType.pp));
+		attachC.addDirection(new Dynamic(DynamicValue.pp));
 
 		cursor.write(attachC = chord(f4, Pitch.pi(Pitch.A, 4)));
-		attachC.addDirection(new Dynamics(DynamicsType.ff));
+		attachC.addDirection(new Dynamic(DynamicValue.ff));
 
 		cursor.write(attachC = chord(f4, Pitch.pi(Pitch.G, 4)));
-		attachC.addDirection(new Dynamics(DynamicsType.sfp));
+		attachC.addDirection(new Dynamic(DynamicValue.sfp));
 
 		/*
 		Chord chord;
 		Voice voice = measure.getVoices().get(0);
 		chord = voice.addNote(pi'G', 0, 4), fr(1, 4));
-		chord.addDirection(new Dynamics(DynamicsType.pp));
+		chord.addDirection(new Dynamic(DynamicsType.pp));
 		
 		
 
 		chord = voice.addNote(pi'A', 0, 4), fr(1, 4));
-		chord.addDirection(new Dynamics(DynamicsType.ff));
+		chord.addDirection(new Dynamic(DynamicsType.ff));
 
 		chord = voice.addNote(pi'G', 0, 4), fr(1, 4));
-		chord.addDirection(new Dynamics(DynamicsType.sfp));
+		chord.addDirection(new Dynamic(DynamicsType.sfp));
 		*/
 
 		cursor.setMp(mp0.withVoice(1));
 
 		cursor.write(attachC = chord(f4, Pitch.pi(Pitch.C, 4)));
-		attachC.addDirection(new Dynamics(DynamicsType.fff));
+		attachC.addDirection(new Dynamic(DynamicValue.fff));
 
 		/*
 		voice = measure.addVoice();
 		
 		chord = voice.addNote(pi'C', 0, 4), fr(1, 4));
-		chord.addDirection(new Dynamics(DynamicsType.fff));
+		chord.addDirection(new Dynamic(DynamicsType.fff));
 		*/
 
 		cursor.setMp(mp0.withMeasure(1));
 
 		cursor.write(attachC = chord(f4, Pitch.pi(Pitch.G, 4)));
-		//cursor.withScore(ScoreController.attachElement(cursor.getScore(), attachC, new Dynamics(DynamicsType.pp)));
+		//cursor.withScore(ScoreController.attachElement(cursor.getScore(), attachC, new Dynamic(DynamicsType.pp)));
 
 		cursor.write(attachC = chord(f4, Pitch.pi(Pitch.A, 4)));
-		attachC.addDirection(new Dynamics(DynamicsType.pp));
+		attachC.addDirection(new Dynamic(DynamicValue.pp));
 
 		cursor.write(attachC = chord(f4, Pitch.pi(Pitch.G, 4)));
-		attachC.addDirection(new Dynamics(DynamicsType.pp));
+		attachC.addDirection(new Dynamic(DynamicValue.pp));
 
 		cursor.setMp(cursor.getMP().withElement(0).withVoice(1));
 
@@ -165,13 +165,13 @@ public class MidiVelocityConverterTry {
 
 		voice = measure.getVoices().get(0);
 		chord = voice.addNote(pi'G', 0, 4), fr(1, 4));
-		//chord.addDirection(new Dynamics(DynamicsType.pp));
+		//chord.addDirection(new Dynamic(DynamicsType.pp));
 
 		chord = voice.addNote(pi'A', 0, 4), fr(1, 4));
-		chord.addDirection(new Dynamics(DynamicsType.pp));
+		chord.addDirection(new Dynamic(DynamicsType.pp));
 
 		chord = voice.addNote(pi'G', 0, 4), fr(1, 4));
-		chord.addDirection(new Dynamics(DynamicsType.pp));
+		chord.addDirection(new Dynamic(DynamicsType.pp));
 
 		voice = measure.addVoice();
 		chord = voice.addNote(pi'C', 0, 5), fr(1, 4));
@@ -180,13 +180,13 @@ public class MidiVelocityConverterTry {
 		cursor.setMp(mp0.withMeasure(2));
 
 		cursor.write(attachC = chord(f4, Pitch.pi(Pitch.G, 4)));
-		attachC.addDirection(new Dynamics(DynamicsType.sfz));
+		attachC.addDirection(new Dynamic(DynamicValue.sfz));
 
 		cursor.write(chord(f4, Pitch.pi(Pitch.A, 4)));
-		//cursor = cursor.withScore(ScoreController.attachElement(cursor.getScore(), attachC, new Dynamics(DynamicsType.pp)));
+		//cursor = cursor.withScore(ScoreController.attachElement(cursor.getScore(), attachC, new Dynamic(DynamicsType.pp)));
 
 		cursor.write(chord(f4, Pitch.pi(Pitch.G, 4)));
-		//cursor = cursor.withScore(ScoreController.attachElement(cursor.getScore(), attachC, new Dynamics(DynamicsType.pp)));
+		//cursor = cursor.withScore(ScoreController.attachElement(cursor.getScore(), attachC, new Dynamic(DynamicsType.pp)));
 
 		cursor.setMp(mp0.withMeasure(2).withVoice(2));
 
@@ -197,13 +197,13 @@ public class MidiVelocityConverterTry {
 		
 		voice = measure.getVoices().get(0);
 		chord = voice.addNote(pi'G', 0, 4), fr(1, 4));
-		chord.addDirection(new Dynamics(DynamicsType.sfz));
+		chord.addDirection(new Dynamic(DynamicsType.sfz));
 
 		chord = voice.addNote(pi'A', 0, 4), fr(1, 4));
-		//chord.addDirection(new Dynamics(DynamicsType.pp));
+		//chord.addDirection(new Dynamic(DynamicsType.pp));
 
 		chord = voice.addNote(pi'G', 0, 4), fr(1, 4));
-		//chord.addDirection(new Dynamics(DynamicsType.pp));
+		//chord.addDirection(new Dynamic(DynamicsType.pp));
 		
 		voice = measure.addVoice();
 		voice = measure.addVoice();
