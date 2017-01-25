@@ -50,8 +50,4 @@ public class DynamicsPeriod {
 		return dynamics.getVolumeAt(progress, interpretation);
 	}
 
-	@Override public String toString() {
-		return "[start=" + startTime + ", end=" + endTime + ", dynamics=" + dynamics + "]";
-	}
-
 }

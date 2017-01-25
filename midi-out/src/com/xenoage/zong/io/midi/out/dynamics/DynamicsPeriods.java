@@ -3,42 +3,29 @@ package com.xenoage.zong.io.midi.out.dynamics;
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.collections.IList;
-import com.xenoage.utils.collections.IMap;
 import com.xenoage.utils.kernel.Range;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.position.Time;
 import com.xenoage.zong.io.midi.out.repetitions.Repetition;
-import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-import static com.xenoage.zong.io.midi.out.dynamics.DynamicsPeriods.StaffRepetition.noVoice;
+import static com.xenoage.utils.collections.CollectionUtils.getOrNull;
+import static com.xenoage.utils.kernel.Range.range;
 
 /**
  * All {@link DynamicsPeriod}s in a score.
  *
  * @author Andreas Wenger
  */
-@Const @Data
+@Const @RequiredArgsConstructor
 public class DynamicsPeriods {
 
-	/** A staff, any optionally a voice, within a {@link Repetition}. */
-	@Const @Data
-	public static class StaffRepetition {
-		public static final int noVoice = -1;
-
-		/** The staff index. */
-		public final int staff;
-		/** The voice index within the staff, or {@link #noVoice} for the whole staff. */
-		public final int voice;
-		/** The repetition index. */
-		public final int repetition;
-
-		@Override public String toString() {
-			return "[staff=" + staff + (voice != noVoice ? ", voice=" + voice : "") + ", rep=" + repetition + "]";
-		}
-	}
-
-	private final IMap<StaffRepetition, IList<DynamicsPeriod>> periods;
+	/**
+	 * The periods, sorted by staff, voice and repetition.
+	 * First index: staff. Second index: voice + 1, or 0 = no voice (staff). Third index: repetition.
+	 */
+	private final IList<IList<IList<IList<DynamicsPeriod>>>> periods;
 
 
 	/**
@@ -53,7 +40,7 @@ public class DynamicsPeriods {
 	@MaybeNull public DynamicsPeriod get(MP mp, int repetition, Range partStaves) {
 		val time = mp.getTime();
 		//first, find voice dynamics
-		val voicePeriods = periods.get(new StaffRepetition(mp.staff, mp.voice, repetition));
+		val voicePeriods = getVoicePeriods(mp.staff, mp.voice, repetition);
 		val voicePeriod = getPeriod(voicePeriods, time);
 		if (voicePeriod != null)
 			return voicePeriod;
@@ -62,7 +49,7 @@ public class DynamicsPeriods {
 		Time maxStartTime = time;
 		DynamicsPeriod bestMatch = null;
 		for (int iStaff : partStaves) {
-			val staffPeriods = periods.get(new StaffRepetition(mp.staff, noVoice, repetition));
+			val staffPeriods = getStaffPeriods(mp.staff, repetition);
 			val staffPeriod = getPeriod(staffPeriods, time);
 			int compare = staffPeriod.startTime.compareTo(maxStartTime);
 			if (staffPeriod != null && compare > 0 || (compare >= 0 && iStaff == mp.staff)) {
@@ -85,6 +72,37 @@ public class DynamicsPeriods {
 			if (period.contains(time))
 				return period;
 		return null;
+	}
+
+	@MaybeNull private IList<DynamicsPeriod> getStaffPeriods(int staff, int repetition) {
+		return getOrNull(getOrNull(getOrNull(periods, staff), 0), repetition);
+	}
+
+	@MaybeNull private IList<DynamicsPeriod> getVoicePeriods(int staff, int voice, int repetition) {
+		return getOrNull(getOrNull(getOrNull(periods, staff), voice + 1), repetition);
+	}
+
+	@Override public String toString() {
+		String s = "";
+		for (int iStaff : range(periods)) {
+			val staffList = getOrNull(periods, iStaff);
+			if (staffList != null) {
+				s += "staff " + iStaff + ":\n";
+				for (int iVoice : range(staffList)) {
+					val voiceList = getOrNull(staffList, iVoice);
+					if (voiceList != null) {
+						s += (iVoice == 0 ? "  no voice:" : "  voice " + iVoice + ":") + "\n";
+						for (int iRep : range(voiceList)) {
+							val repList = getOrNull(voiceList, iRep);
+							if (repList != null) {
+								s += "    rep " + iRep + ":     " + repList.toString() + "\n";
+							}
+						}
+					}
+				}
+			}
+		}
+		return s;
 	}
 
 }
