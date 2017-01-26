@@ -31,6 +31,7 @@ import static com.xenoage.zong.core.position.Time.time;
  * are valid until the next voice or staff dynamics appears or when the voice ends,
  * i.e. when the following measure does not contain this voice any more.
  *
+ * TODO (ZONG-100): Playback dynamics in voices
  * TODO (ZONG-98): Also support dynamics/wedges in column header
  * TODO (ZONG-99): Playback sfz, ftp and other dynamic accents
  *
@@ -55,11 +56,19 @@ public class DynamicsFinder {
 	}
 
 	private Dynamics find() {
-		//find dynamics for each staff and repetition
+		//staves: find dynamics for each staff and repetition
 		for (int iStaff : range(score.getStavesCount())) {
 			DynamicValue currentValue = mf;
 			for (int iRep : range(repetitions.getRepetitions())) {
 				currentValue = findStaffDynamics(iStaff, iRep, currentValue);
+			}
+		}
+		//voices: find dynamics for each staff, voice and repetition
+		for (int iStaff : range(score.getStavesCount())) {
+			for (int iVoice : range(score.getStaff(iStaff).getVoicesCount())) {
+				for (int iRep : range(repetitions.getRepetitions())) {
+					//TODO: ZONG-100 findVoiceDynamics(iStaff, iVoice, iRep);
+				}
 			}
 		}
 		return new Dynamics(periods.build(), interpretation, measureBeats, partStaves);
