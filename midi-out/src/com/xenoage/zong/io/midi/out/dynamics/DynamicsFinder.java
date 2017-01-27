@@ -59,14 +59,14 @@ public class DynamicsFinder {
 		//staves: find dynamics for each staff and repetition
 		for (int iStaff : range(score.getStavesCount())) {
 			DynamicValue currentValue = mf;
-			for (int iRep : range(repetitions.getRepetitions())) {
+			for (int iRep : range(repetitions)) {
 				currentValue = findStaffDynamics(iStaff, iRep, currentValue);
 			}
 		}
 		//voices: find dynamics for each staff, voice and repetition
 		for (int iStaff : range(score.getStavesCount())) {
 			for (int iVoice : range(score.getStaff(iStaff).getVoicesCount())) {
-				for (int iRep : range(repetitions.getRepetitions())) {
+				for (int iRep : range(repetitions)) {
 					//TODO: ZONG-100 findVoiceDynamics(iStaff, iVoice, iRep);
 				}
 			}
@@ -80,7 +80,7 @@ public class DynamicsFinder {
 	 * repetition.
 	 */
 	private DynamicValue findStaffDynamics(int staff, int repetition, DynamicValue startDynamics) {
-		val rep = repetitions.getRepetitions().get(repetition);
+		val rep = repetitions.get(repetition);
 
 		//walk through the measures
 		Time currentStartTime = rep.start;

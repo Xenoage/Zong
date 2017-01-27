@@ -47,8 +47,18 @@ public class MidiTools {
    * If the note number would be outside the range of 0 to 127,
    * 0 or 127 is returned.
    */
-  public static int getNoteNumberFromPitch(Pitch pitch) {
-    int ret = (pitch.getOctave() + 1) * 12;
+  public static int getNoteNumber(Pitch pitch) {
+    return getNoteNumber(pitch, 0);
+  }
+
+  /**
+   * Converts the given {@link Pitch} with the given transposition in half steps
+   * to a MIDI note number (between 0 and 127) and returns it.
+   * If the note number would be outside the range of 0 to 127,
+   * 0 or 127 is returned.
+   */
+  public static int getNoteNumber(Pitch pitch, int transpose) {
+    int ret = (pitch.getOctave() + 1) * 12 + transpose;
     switch (pitch.getStep()) {
       case 0: break;
       case 1: ret += 2; break;

@@ -3,11 +3,14 @@ package com.xenoage.zong.io.midi.out.repetitions;
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.collections.IList;
-import com.xenoage.zong.core.position.Time;
+import com.xenoage.utils.kernel.Countable;
 import com.xenoage.zong.core.position.MP;
-import lombok.Data;
+import com.xenoage.zong.core.position.Time;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.val;
 
+import java.util.Iterator;
 import java.util.List;
 
 import static com.xenoage.utils.collections.CList.clist;
@@ -23,8 +26,9 @@ import static com.xenoage.utils.collections.CList.clist;
  * 
  * @author Andreas Wenger
  */
-@Const @Data
-public final class Repetitions {
+@Const @EqualsAndHashCode @ToString
+public final class Repetitions
+	implements Iterable<Repetition>, Countable {
 
 	/** The list of repetitions in chronological order. */
 	private final IList<Repetition> repetitions;
@@ -32,6 +36,14 @@ public final class Repetitions {
 
 	public Repetitions(List<Repetition> repetitions) {
 		this.repetitions = mergeRepetitions(repetitions);
+	}
+
+	public Repetition get(int index) {
+		return repetitions.get(index);
+	}
+
+	@Override public int getCount() {
+		return repetitions.size();
 	}
 
 	static IList<Repetition> mergeRepetitions(List<Repetition> repetitions) {
@@ -63,4 +75,7 @@ public final class Repetitions {
 		return merged.close();
 	}
 
+	@Override public Iterator<Repetition> iterator() {
+		return repetitions.iterator();
+	}
 }

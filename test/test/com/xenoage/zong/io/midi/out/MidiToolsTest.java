@@ -48,7 +48,7 @@ public class MidiToolsTest {
 
 	@Test public void getNoteNumberFromPitchTest() {
 		for (int i : range(midi)) {
-			assertEquals(midi[i], MidiTools.getNoteNumberFromPitch(pitch[i]));
+			assertEquals(midi[i], MidiTools.getNoteNumber(pitch[i]));
 		}
 	}
 

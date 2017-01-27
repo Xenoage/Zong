@@ -4,10 +4,14 @@ import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.instrument.PitchedInstrument;
-import com.xenoage.zong.core.music.Measure;
-import com.xenoage.zong.core.music.Staff;
-import com.xenoage.zong.core.music.Voice;
+import com.xenoage.zong.core.music.*;
+import com.xenoage.zong.core.music.chord.Chord;
+import com.xenoage.zong.core.music.chord.Note;
+import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.io.midi.out.channels.ChannelMap;
+import com.xenoage.zong.io.midi.out.dynamics.Dynamics;
+import com.xenoage.zong.io.midi.out.dynamics.DynamicsFinder;
+import com.xenoage.zong.io.midi.out.dynamics.DynamicsInterpretation;
 import com.xenoage.zong.io.midi.out.repetitions.Repetition;
 import com.xenoage.zong.io.midi.out.repetitions.Repetitions;
 import com.xenoage.zong.io.midi.out.repetitions.RepetitionsFinder;
@@ -19,10 +23,14 @@ import lombok.Data;
 import lombok.val;
 
 import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.utils.math.Fraction._0;
+import static com.xenoage.utils.math.Fraction._1;
+import static com.xenoage.zong.core.position.MP.atVoice;
+import static com.xenoage.zong.core.position.Time.time;
 import static com.xenoage.zong.io.midi.out.MidiSettings.defaultMidiSettings;
+import static com.xenoage.zong.io.midi.out.MidiTools.getNoteNumber;
 import static com.xenoage.zong.io.midi.out.channels.ChannelMap.unused;
 import static com.xenoage.zong.io.midi.out.channels.ChannelMapper.createChannelMap;
+import static java.lang.Math.round;
 
 
 /**
@@ -51,10 +59,11 @@ public class MidiConverter<T> {
 	}
 
 	/** Index for channel 10. It is 9, because the index is 0-based. */
-	public static final int channel10 = 9; //
-
-	//in MIDI "Format 1" files, the track for tempo changes and so on is track 0 by convention
+	public static final int channel10 = 9;
+	/** In MIDI "Format 1" files, the track for tempo changes and so on is track 0 by convention. */
 	private static int systemTrackIndex = 0;
+	/** The maximum value of a MIDI value, 127 ( = 7 bits). */
+	private static int midiMaxValue = 127;
 	
 	//state
 	private Score score;
@@ -64,6 +73,7 @@ public class MidiConverter<T> {
 	private ChannelMap channelMap;
 	private Repetitions repetitions;
 	private TimeMap timeMap;
+	private Dynamics dynamics;
 
 
 	/**
@@ -90,6 +100,8 @@ public class MidiConverter<T> {
 		repetitions = RepetitionsFinder.findRepetitions(score);
 		//compute the mappings from application time to MIDI time
 		timeMap = new TimeMapper(score, repetitions, options.midiSettings.resolutionFactor).createTimeMap();
+		//find all dynamics
+		dynamics = DynamicsFinder.findDynamics(score, new DynamicsInterpretation(), repetitions);
 		
 		//one track for each staff and one system track for program changes, tempos and so on,
 		//and another track for the metronome
@@ -132,10 +144,11 @@ public class MidiConverter<T> {
 			int voicesCount = staff.getVoicesCount();
 			int track = iStaff + 1; //first track is reserved; see declaration of tracksCount
 
-			for (Repetition playRange : repetitions.getRepetitions()) {
+			for (int iRepetition : range(repetitions)) {
 
-				int transposing = 0;
-				for (int iMeasure : range(playRange.start.measure, playRange.end.measure)) {
+				val rep = repetitions.get(iRepetition);
+				int transpose = 0; //TODO
+				for (int iMeasure : range(rep.start.measure, rep.end.measure)) {
 
 					Measure measure = staff.getMeasure(iMeasure);
 
@@ -146,15 +159,8 @@ public class MidiConverter<T> {
 						transposing = t.chromatic;
 					} //*/
 
-					Fraction start, end;
-					start = (iMeasure == playRange.start.measure ? playRange.start.beat : _0);
-					end = (iMeasure == playRange.end.measure ? playRange.end.beat : _0);
-
 					for (int iVoice : range(measure.getVoices())) {
-						Voice voice = measure.getVoice(iVoice);
-						int currentVelocity = 90; //GOON voicesVelocity[voiceforDynamicsInStaff[iVoice]];
-						//GOON generateMidiForVoice(resolution, channel, currenttickinstaff, staff,
-						//	track, currentVelocity, iVoice, voice, start, end, transposing);
+						writeVoice(atVoice(iStaff, iMeasure, iVoice), iRepetition);
 					}
 				}
 
@@ -189,39 +195,49 @@ public class MidiConverter<T> {
 	}
 
 	/**
-	 * Writes the given {@link Voice} into the MIDI sequence.
-	 * GOON: no! -> Returns the velocity at the end position.
+	 * Writes the given voice into the MIDI sequence.
+	 * @param voiceMp         the staff, measure and voice index
+	 * @param repetition      the index of the current {@link Repetition}
 	 */
-	private int writeVoice(int channel, Fraction voiceStartBeat,
-		Fraction voiceEndBeat, int transposing) { //GOON
-/*
+	private void writeVoice(MP voiceMp, int repetition) {
+
+		val voice = score.getVoice(voiceMp);
 		for (VoiceElement element : voice.getElements()) {
 
-			Fraction duration = element.getDuration();
-			val startBeat = voice.getBeat(element);
+			//ignore rests. only chords are played
+			if (false == MusicElementType.Chord.is(element))
+				continue;
+			val chord = (Chord) element;
+
+			//start and end beat of the element
+			Fraction duration = chord.getDuration();
+			val startBeat = voice.getBeat(chord);
 			val endBeat = startBeat.add(duration);
 
-			if (startBeat.compareTo(voiceStartBeat) < 0 || endBeat.compareTo(voiceEndBeat) > 0)
+			//start beat out of range? then ignore element
+			val rep = repetitions.get(repetition);
+			if (false == rep.contains(time(voiceMp.measure, startBeat)))
 				continue;
 
-			long startTick = timeMap.getTick();
-			long endTick = calculateEndTick(startBeat, endBeat, start, end, currentTick,
-				resolution); //GOON NOW
-
-			//custom duration factor
-			long stoptick = endtick;
-			if (options.midiSettings.durationFactor != null) {
-				Fraction stopBeat = startBeat.add(duration.mult(options.midiSettings.durationFactor));
-				stoptick = calculateEndTick(startBeat, stopBeat, start, end, currentTick, resolution);
+			//MIDI ticks
+			long startTick = timeMap.getTick(time(voiceMp.measure, startBeat), repetition);
+			long endTick = timeMap.getTick(time(voiceMp.measure, endBeat), repetition);
+			long stopTick = endTick;
+			if (false == options.midiSettings.durationFactor.equals(_1)) {
+				//custom duration factor
+				stopTick = startTick + round((endTick - startTick) *
+						options.midiSettings.durationFactor.toFloat());
 			}
 
-			if (starttick != stoptick && element instanceof Chord) {
-				Chord chord = (Chord) element;
+			//play note
+			if (startTick < stopTick) {
+				float volume = dynamics.getVolumeAt(voiceMp.withBeat(startBeat), repetition);
+				int midiVelocity = round(midiMaxValue * volume);
 				for (Note note : chord.getNotes()) {
-					currentVelocity = addNoteToTrack(channel, staff, track, currentVelocity, iVoice,
-						starttick, stoptick, chord, note, transposing);
+					addNoteToTrack(note.getPitch(), voiceMp.staff, startTick, stopTick, midiVelocity, 0);
 				}
 			}
+
 			//TODO Timidity doesn't like ithe following midi events
 			/*MetaMessage m = null;
 			if (musicelement instanceof Clef)
@@ -251,7 +267,18 @@ public class MidiConverter<T> {
 			}*-/
 			currenttickinvoice = endtick;
 		}*/
-		return 0; //currentVelocity;
+		}
+	}
+
+	/**
+	 * Adds the given note to the given track.
+	 */
+	private void addNoteToTrack(Pitch pitch, int staff, long startTick, long endTick, int velocity, int transpose) {
+		int midiNote = getNoteNumber(pitch, transpose);
+		int channel = channelMap.getChannel(staff);
+		int track = staff + 1;
+		writer.writeNote(track, channel, startTick, midiNote, true, velocity);
+		writer.writeNote(track, channel, endTick, midiNote, false, 0);
 	}
 
 	/*
@@ -282,20 +309,6 @@ public class MidiConverter<T> {
 		}
 		Fraction duration = finish.sub(begin);
 		return currentTickInVoice + calculateTickFromFraction(duration, resolution);
-	}
-
-	/**
-	 * Adds the given note to the given track.
-	 * /
-	private int addNoteToTrack(int channel, Staff staff, int track, int currentVelocity,
-														 int iVoice, long starttick, long endtick, Chord chord, Note note, int transposing) {
-		int[] velocityAtPosition = getVelocityAtPosition(staff, iVoice, getMP(chord),
-			currentVelocity, score);
-		int midiNote = MidiTools.getNoteNumberFromPitch(note.getPitch()) + transposing;
-		writer.writeNote(track, channel, starttick, midiNote, true, velocityAtPosition[0]);
-		writer.writeNote(track, channel, endtick, midiNote, false, 0);
-		currentVelocity = velocityAtPosition[1];
-		return currentVelocity;
 	}
 
 	private void addPlaybackAtEndControlEvent() {
@@ -397,6 +410,5 @@ public class MidiConverter<T> {
 		return fraction.getNumerator() * 4 * resolution / fraction.getDenominator();
 	}
 */
-
 
 }
