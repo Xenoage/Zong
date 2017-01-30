@@ -1,10 +1,5 @@
 package com.xenoage.zong.io.musicxml.in.readers;
 
-import static com.xenoage.utils.collections.CollectionUtils.addNotNull;
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-
-import java.util.List;
-
 import com.xenoage.zong.core.music.annotation.Articulation;
 import com.xenoage.zong.core.music.annotation.ArticulationType;
 import com.xenoage.zong.io.musicxml.Equivalents;
@@ -12,6 +7,11 @@ import com.xenoage.zong.musicxml.types.MxlArticulations;
 import com.xenoage.zong.musicxml.types.choice.MxlArticulationsContent;
 import com.xenoage.zong.musicxml.types.choice.MxlArticulationsContent.MxlArticulationsContentType;
 import com.xenoage.zong.musicxml.types.enums.MxlPlacement;
+
+import java.util.List;
+
+import static com.xenoage.utils.collections.CollectionUtils.addNotNull;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 
 /**
  * Reads {@link Articulation}s from {@link MxlArticulations}.
@@ -29,7 +29,7 @@ public class ArticulationReader {
 
 	private static Articulation readArticulation(MxlArticulationsContent mxlAC) {
 		MxlArticulationsContentType mxlACType = mxlAC.getArticulationsContentType();
-		ArticulationType type = Equivalents.articulations.get1(mxlACType);
+		ArticulationType type = Equivalents.articulations.getBy2(mxlACType);
 		if (type == null)
 			return null;
 		Articulation articulation = new Articulation(type);

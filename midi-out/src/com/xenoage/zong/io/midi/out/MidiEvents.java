@@ -12,7 +12,8 @@ import lombok.AllArgsConstructor;
 public enum MidiEvents {
 	
 	/** Control message to mark the end of the MIDI file. */
-	eventPlaybackEnd(117),
+	PlaybackEnd(117),
+
 	/** Control message used for mapping ticks to {@link MP}s.
 	 * Java Sound is only able to use listeners for controller events,
 	 * but not for normal note-on events. So we add a control-event on
@@ -20,7 +21,7 @@ public enum MidiEvents {
 	 * because it is undefined in the midi-documentation and so it doesn't
 	 * affect anything.
 	 * See http://www.midi.org/techspecs/midimessages.php */
-	eventPlaybackControl(119);
+	PlaybackControl(119);
 
 	/** MIDI code of the event.*/
 	public final int code;

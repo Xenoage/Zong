@@ -5,10 +5,8 @@ import com.xenoage.zong.core.music.clef.ClefType;
 import com.xenoage.zong.core.music.key.Key;
 import com.xenoage.zong.core.music.key.TraditionalKey;
 import com.xenoage.zong.core.music.time.TimeType;
-import com.xenoage.zong.core.position.MP;
+import com.xenoage.zong.io.midi.out.time.TimeMap;
 import lombok.val;
-
-import java.util.List;
 
 import static com.xenoage.utils.math.MathUtils.clamp;
 import static com.xenoage.utils.math.MathUtils.log2;
@@ -237,13 +235,11 @@ public abstract class MidiSequenceWriter<T> {
 	
 	/**
 	 * Returns a {@link MidiSequence} with the written data.
-	 * @param metronomeTrack     the number of the metronome track, or null if no metronome track was created
-	 * @param timePool           the mappings from MIDI ticks to {@link MP}s and milliseconds
-	 * @param measureStartTicks  the ticks of the beginnings of each measure (including repetitions)
+	 * @param metronomeTrack  the number of the metronome track, or null if no metronome track was created
+	 * @param timeMap         the mapping between MIDI and score time.
 	 */
-	public MidiSequence<T> finish(Integer metronomeTrack, List<MidiTime> timePool,
-		List<Long> measureStartTicks) {
-		return new MidiSequence<T>(getSequence(), metronomeTrack, timePool, measureStartTicks);
+	public MidiSequence<T> finish(Integer metronomeTrack, TimeMap timeMap) {
+		return new MidiSequence<T>(getSequence(), metronomeTrack, timeMap);
 	}
 
 	/**

@@ -1,15 +1,5 @@
 package com.xenoage.zong.io.musicxml.in.readers;
 
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.utils.collections.CollectionUtils.map;
-import static com.xenoage.utils.iterators.MultiListIt.multiListIt;
-import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.zong.io.musicxml.Equivalents.bracketGroupStyles;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.xenoage.zong.core.music.Part;
 import com.xenoage.zong.core.music.Staff;
 import com.xenoage.zong.core.music.StavesList;
@@ -17,13 +7,7 @@ import com.xenoage.zong.core.music.group.BarlineGroup;
 import com.xenoage.zong.core.music.group.BracketGroup;
 import com.xenoage.zong.core.music.group.StavesRange;
 import com.xenoage.zong.io.musicxml.in.util.ErrorHandling;
-import com.xenoage.zong.musicxml.types.MxlAttributes;
-import com.xenoage.zong.musicxml.types.MxlGroupBarline;
-import com.xenoage.zong.musicxml.types.MxlGroupSymbol;
-import com.xenoage.zong.musicxml.types.MxlPartGroup;
-import com.xenoage.zong.musicxml.types.MxlPartList;
-import com.xenoage.zong.musicxml.types.MxlScorePart;
-import com.xenoage.zong.musicxml.types.MxlScorePartwise;
+import com.xenoage.zong.musicxml.types.*;
 import com.xenoage.zong.musicxml.types.choice.MxlMusicDataContent;
 import com.xenoage.zong.musicxml.types.choice.MxlMusicDataContent.MxlMusicDataContentType;
 import com.xenoage.zong.musicxml.types.choice.MxlPartListContent;
@@ -31,9 +15,18 @@ import com.xenoage.zong.musicxml.types.choice.MxlPartListContent.PartListContent
 import com.xenoage.zong.musicxml.types.enums.MxlStartStop;
 import com.xenoage.zong.musicxml.types.partwise.MxlMeasure;
 import com.xenoage.zong.musicxml.types.partwise.MxlPart;
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static com.xenoage.utils.collections.CollectionUtils.map;
+import static com.xenoage.utils.iterators.MultiListIt.multiListIt;
+import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.zong.io.musicxml.Equivalents.bracketGroupStyles;
 
 /**
  * This reads an empty {@link StavesList} from the
@@ -292,7 +285,7 @@ public class StavesListReader {
 	private BracketGroup.Style readBracketGroupStyle(MxlGroupSymbol mxlGroupSymbol) {
 		if (mxlGroupSymbol == null)
 			return BracketGroup.Style.None;
-		return bracketGroupStyles.get1(mxlGroupSymbol.getValue());
+		return bracketGroupStyles.getBy2(mxlGroupSymbol.getValue());
 	}
 
 	private BarlineGroup.Style readBarlineGroupStyle(MxlGroupBarline mxlGroupBarline) {

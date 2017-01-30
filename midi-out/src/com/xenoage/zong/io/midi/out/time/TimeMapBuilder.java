@@ -1,13 +1,10 @@
 package com.xenoage.zong.io.midi.out.time;
 
-import com.xenoage.utils.collections.CList;
-import com.xenoage.utils.collections.CMap;
-import com.xenoage.utils.collections.IMap;
+import com.xenoage.utils.collections.TriMap;
 import com.xenoage.zong.core.position.Time;
-import lombok.val;
+import com.xenoage.zong.io.midi.out.repetitions.Repetition;
 
-import static com.xenoage.utils.collections.CList.clist;
-import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.utils.collections.TriMap.triMap;
 
 /**
  * Builder for a {@link TimeMap}.
@@ -16,24 +13,29 @@ import static com.xenoage.utils.kernel.Range.range;
  */
 public class TimeMapBuilder {
 
-	private CList<IMap<Time, Long>> ranges;
+	private TriMap<Long, RepTime, Long> timeMap = triMap();
 
-	public TimeMapBuilder(int repetitionsCount) {
-		ranges = clist(repetitionsCount);
-		for (int i : range(repetitionsCount))
-			ranges.add(new CMap<Time, Long>());
+	/**
+	 * Adds the given time.
+	 * @param tick     the MIDI tick
+	 * @param repTime  the {@link Repetition} index and {@link Time}
+	 * @param ms       the MIDI time in milliseconds, or null if still unknown.
+	 *                 In this case ms = tick is used.
+	 */
+	public void addTime(long tick, RepTime repTime, long ms) {
+		timeMap.put(tick, repTime, ms);
 	}
 
-	public void addTick(long tick, Time time, int repetitionIndex) {
-		val range = ranges.get(repetitionIndex);
-		((CMap) range).put(time, tick);
+	/**
+	 * Adds the given time, when the millisecond is still unknown.
+	 * In this case ms = tick is used.
+	 */
+	public void addTimeNoMs(long tick, RepTime repTime) {
+		addTime(tick, repTime, tick);
 	}
 
 	public TimeMap build() {
-		ranges.close();
-		for (val range : ranges)
-			((CMap) range).close();
-		return new TimeMap(ranges);
+		return new TimeMap(timeMap);
 	}
 
 }

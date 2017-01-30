@@ -36,7 +36,7 @@ public class ClefReader {
 	}
 	
 	private ClefType readType() {
-		symbol = Equivalents.clefSymbols.get1(mxlClef.getSign());
+		symbol = Equivalents.clefSymbols.getBy2(mxlClef.getSign());
 		if (symbol == null)
 			return null;
 		readOctaveShift();

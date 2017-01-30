@@ -9,7 +9,6 @@ import com.xenoage.zong.core.Score;
 import com.xenoage.zong.desktop.io.midi.out.JseMidiSequenceWriter;
 import com.xenoage.zong.documents.ScoreDoc;
 import com.xenoage.zong.io.midi.out.MidiConverter;
-import com.xenoage.zong.io.midi.out.MidiTime;
 import com.xenoage.zong.layout.Layout;
 import com.xenoage.zong.layout.Page;
 import com.xenoage.zong.layout.frames.Frame;
@@ -23,8 +22,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.zong.io.midi.out.MidiConverter.Options.options;
+import static com.xenoage.zong.io.midi.out.MidiConverter.Options.optionsForFileExport;
 
 /**
  * This class creates a JSON object which contains a mapping from time
@@ -79,16 +79,19 @@ public class CursorOutput {
 
 		//create midi sequence and mp mappings
 		Score score = doc.getScore();
-		val options = options().addTimeEvents(false).metronome(false).build();
-		val seq = MidiConverter.convertToSequence(score, options, new JseMidiSequenceWriter());
+		val seq = MidiConverter.convertToSequence(score, optionsForFileExport,
+				new JseMidiSequenceWriter());
 
-		//save mp mappings
+		//save time map
 		JsonArray jsonMPs = new JsonArray();
-		for (MidiTime time : seq.getTimePool()) {
+		val repTimeList = alist(seq.getTimeMap().getRepTimes());
+		Collections.sort(repTimeList);
+		for (val repTime : repTimeList) {
+			val midiTime = seq.getTimeMap().getByRepTime(repTime);
 			JsonObject jsonMP = new JsonObject();
-			jsonMP.addProperty("measure", time.time.measure);
-			jsonMP.addProperty("beat", "" + time.time.beat);
-			jsonMP.addProperty("ms", time.ms);
+			jsonMP.addProperty("measure", repTime.time.measure);
+			jsonMP.addProperty("beat", "" + repTime.time.beat);
+			jsonMP.addProperty("ms", midiTime.ms);
 			jsonMPs.add(jsonMP);
 		}
 		ret.add("mps", jsonMPs);
@@ -182,14 +185,15 @@ public class CursorOutput {
 
 		//save time cursors
 		JsonArray jsonTCs = new JsonArray();
-		for (MidiTime time : seq.getTimePool()) {
+		for (val repTime : repTimeList) {
 			JsonObject jsonTC = new JsonObject();
-			jsonTC.addProperty("time", time.ms);
-			Measure measure = measures.get(time.time.measure);
+			val midiTime = seq.getTimeMap().getByRepTime(repTime);
+			jsonTC.addProperty("time", midiTime.ms);
+			Measure measure = measures.get(repTime.time.measure);
 			System system = systems.get(measure.system);
 			jsonTC.addProperty("page", system.page);
 			jsonTC.addProperty("top", system.top);
-			jsonTC.addProperty("left", measure.beats.get(time.time.beat));
+			jsonTC.addProperty("left", measure.beats.get(repTime.time.beat));
 			jsonTC.addProperty("bottom", system.bottom);
 			jsonTCs.add(jsonTC);
 		}

@@ -1,7 +1,5 @@
 package com.xenoage.zong.io.musicxml;
 
-import static com.xenoage.utils.collections.BiMap.biMap;
-
 import com.xenoage.utils.collections.BiMap;
 import com.xenoage.zong.core.music.annotation.ArticulationType;
 import com.xenoage.zong.core.music.annotation.OrnamentType;
@@ -15,6 +13,8 @@ import com.xenoage.zong.musicxml.types.enums.MxlBarStyle;
 import com.xenoage.zong.musicxml.types.enums.MxlClefSign;
 import com.xenoage.zong.musicxml.types.enums.MxlGroupSymbolValue;
 import com.xenoage.zong.musicxml.types.enums.MxlLeftCenterRight;
+
+import static com.xenoage.utils.collections.BiMap.biMap;
 
 /**
  * Some types are very similar in Zong! and in MusicXML.
@@ -37,7 +37,7 @@ public class Equivalents {
 		ret.put(Alignment.Left, MxlLeftCenterRight.Left);
 		ret.put(Alignment.Center, MxlLeftCenterRight.Center);
 		ret.put(Alignment.Right, MxlLeftCenterRight.Right);
-		ret.setDefaultValue1(Alignment.Left);
+		ret.setDefaultValue(Alignment.Left, MxlLeftCenterRight.Left);
 		return ret;
 	}
 	
@@ -58,7 +58,7 @@ public class Equivalents {
 		ret.put(BracketGroup.Style.Bracket, MxlGroupSymbolValue.Bracket);
 		ret.put(BracketGroup.Style.Line, MxlGroupSymbolValue.Line);
 		ret.put(BracketGroup.Style.Square, MxlGroupSymbolValue.Square);
-		ret.setDefaultValue1(BracketGroup.Style.None);
+		ret.setDefaultValue(BracketGroup.Style.None, MxlGroupSymbolValue.None);
 		return ret;
 	}
 	

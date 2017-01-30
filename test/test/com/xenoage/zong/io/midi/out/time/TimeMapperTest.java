@@ -121,7 +121,7 @@ public class TimeMapperTest {
 	 * We use 8 ticks per quarter note.
 	 */
 	private TimeMap getTimeMap() {
-		val timeMap = new TimeMapBuilder(5);
+		val timeMap = new TimeMapBuilder();
 		//range 0
 		addTick(timeMap, 0, 0, 0);
 		addTick(timeMap, 0, 0, 2);
@@ -172,10 +172,10 @@ public class TimeMapperTest {
 		int playRangeStartMeasure = new int[]{0, 1, 3, 0, 3}[repetition];
 		int internalMeasure = measure - playRangeStartMeasure;
 		if (isAlsoLastBeatInPreviosMeasure)
-			timeMap.addTick(resolution * ((playRangeMeasureOffset + internalMeasure - 1) * 4 + 4),
-					time(measure - 1, _1), repetition);
-		timeMap.addTick(resolution * ((playRangeMeasureOffset + internalMeasure) * 4 + quarterBeat),
-				time(measure, fr(quarterBeat, 4)), repetition);
+			timeMap.addTimeNoMs(resolution * ((playRangeMeasureOffset + internalMeasure - 1) * 4 + 4),
+					new RepTime(repetition, time(measure - 1, _1)));
+		timeMap.addTimeNoMs(resolution * ((playRangeMeasureOffset + internalMeasure) * 4 + quarterBeat),
+				new RepTime(repetition, time(measure, fr(quarterBeat, 4))));
 	}
 
 	/**

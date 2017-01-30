@@ -1,22 +1,21 @@
 package com.xenoage.zong.core.music;
 
-import static com.xenoage.utils.kernel.Range.rangeReverse;
-import static com.xenoage.zong.core.music.Measure.measure;
-import static com.xenoage.zong.core.music.util.MPE.mpE;
-import static com.xenoage.zong.core.position.MP.atMeasure;
-import static java.lang.Math.max;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import lombok.Getter;
-import lombok.Setter;
-
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.util.MPE;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.utils.exceptions.IllegalMPException;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.xenoage.utils.kernel.Range.rangeReverse;
+import static com.xenoage.zong.core.music.Measure.measure;
+import static com.xenoage.zong.core.music.util.MPE.mpE;
+import static com.xenoage.zong.core.position.MP.atMeasure;
+import static java.lang.Math.max;
 
 
 /**
@@ -91,7 +90,7 @@ public final class Staff {
 	 * {@link IllegalMPException} if there is none.
 	 */
 	public Measure getMeasure(int index) {
-		if (index >= 0 && index <= measures.size())
+		if (index >= 0 && index < measures.size())
 			return measures.get(index);
 		else
 			throw new IllegalMPException(atMeasure(index));

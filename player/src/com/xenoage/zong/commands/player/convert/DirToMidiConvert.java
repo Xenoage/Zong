@@ -15,7 +15,6 @@ import com.xenoage.zong.io.musicxml.in.FileTypeReader;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
 import lombok.AllArgsConstructor;
-import lombok.val;
 
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequence;
@@ -25,7 +24,7 @@ import java.util.List;
 
 import static com.xenoage.utils.jse.io.JseFileUtils.listFiles;
 import static com.xenoage.zong.desktop.App.app;
-import static com.xenoage.zong.io.midi.out.MidiConverter.Options.options;
+import static com.xenoage.zong.io.midi.out.MidiConverter.Options.optionsForFileExport;
 import static com.xenoage.zong.player.Player.pApp;
 
 /**
@@ -90,9 +89,8 @@ import static com.xenoage.zong.player.Player.pApp;
 						It<Score> scoresIt = new It<Score>(scores);
 
 						for (Score score : scoresIt) {
-							val options = options().addTimeEvents(false).metronome(false).build();
 							Sequence seq = MidiConverter.convertToSequence(
-								score, options, new JseMidiSequenceWriter()).getSequence();
+								score, optionsForFileExport, new JseMidiSequenceWriter()).getSequence();
 							String number = (useNumber ? ("-" + (scoresIt.getIndex() + 1)) : "");
 							String newPath = filePath;
 

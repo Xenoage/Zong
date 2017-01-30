@@ -1,13 +1,5 @@
 package com.xenoage.zong.io.musicxml.in.readers;
 
-import static com.xenoage.utils.NullUtils.notNull;
-import static com.xenoage.zong.core.music.MeasureSide.Left;
-import static com.xenoage.zong.core.music.MeasureSide.Right;
-import static com.xenoage.zong.core.music.barline.Barline.barline;
-import static com.xenoage.zong.core.music.barline.Barline.barlineBackwardRepeat;
-import static com.xenoage.zong.core.music.barline.Barline.barlineForwardRepeat;
-import lombok.RequiredArgsConstructor;
-
 import com.xenoage.zong.core.music.MeasureSide;
 import com.xenoage.zong.core.music.barline.Barline;
 import com.xenoage.zong.core.music.barline.BarlineStyle;
@@ -18,6 +10,12 @@ import com.xenoage.zong.musicxml.types.MxlEnding;
 import com.xenoage.zong.musicxml.types.attributes.MxlRepeat;
 import com.xenoage.zong.musicxml.types.enums.MxlBackwardForward;
 import com.xenoage.zong.musicxml.types.enums.MxlRightLeftMiddle;
+import lombok.RequiredArgsConstructor;
+
+import static com.xenoage.utils.NullUtils.notNull;
+import static com.xenoage.zong.core.music.MeasureSide.Left;
+import static com.xenoage.zong.core.music.MeasureSide.Right;
+import static com.xenoage.zong.core.music.barline.Barline.*;
 
 /**
  * Reads a {@link Barline}, including its {@link Volta},
@@ -50,7 +48,7 @@ public class BarlineReader {
 		MxlRepeat repeat = mxlBarline.getRepeat();
 		BarlineStyle style = null;
 		if (mxlBarline.getBarStyle() != null)
-			style = Equivalents.barlineStyles.get1(mxlBarline.getBarStyle().getBarStyle());
+			style = Equivalents.barlineStyles.getBy2(mxlBarline.getBarStyle().getBarStyle());
 		if (repeat != null) {
 			//repeat barline
 			if (repeat.getDirection() == MxlBackwardForward.Forward) {

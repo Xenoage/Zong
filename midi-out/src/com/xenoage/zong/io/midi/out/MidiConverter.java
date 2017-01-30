@@ -7,6 +7,7 @@ import com.xenoage.zong.core.instrument.PitchedInstrument;
 import com.xenoage.zong.core.music.*;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.Note;
+import com.xenoage.zong.core.music.time.TimeSignature;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.io.midi.out.channels.ChannelMap;
 import com.xenoage.zong.io.midi.out.dynamics.Dynamics;
@@ -15,15 +16,17 @@ import com.xenoage.zong.io.midi.out.dynamics.DynamicsInterpretation;
 import com.xenoage.zong.io.midi.out.repetitions.Repetition;
 import com.xenoage.zong.io.midi.out.repetitions.Repetitions;
 import com.xenoage.zong.io.midi.out.repetitions.RepetitionsFinder;
+import com.xenoage.zong.io.midi.out.time.MidiTime;
 import com.xenoage.zong.io.midi.out.time.TimeMap;
+import com.xenoage.zong.io.midi.out.time.TimeMapBuilder;
 import com.xenoage.zong.io.midi.out.time.TimeMapper;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.experimental.Wither;
 import lombok.val;
 
 import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.utils.math.Fraction._1;
+import static com.xenoage.utils.math.Fraction.*;
 import static com.xenoage.zong.core.position.MP.atVoice;
 import static com.xenoage.zong.core.position.Time.time;
 import static com.xenoage.zong.io.midi.out.MidiSettings.defaultMidiSettings;
@@ -44,18 +47,22 @@ import static java.lang.Math.round;
 public class MidiConverter<T> {
 
 	/** Settings for the conversion. */
-	@Const @Data @AllArgsConstructor @Builder(builderMethodName="options")
+	@Const @Data @AllArgsConstructor
 	public static class Options {
-		public static final Options defaultOptions = new Options(
+
+		public static final Options optionsForPlayback = new Options(
 				true, true, defaultMidiSettings);
+
+		public static final Options optionsForFileExport = new Options(
+				false, false, defaultMidiSettings);
 
 		/** True, iff controller events containing the current musical position
 		 * should be inserted in the sequence. */
-		public final boolean addTimeEvents;
+		@Wither public final boolean addTimeEvents;
 		/** True to add metronome ticks, otherwise false. */
-		public final boolean metronome;
+		@Wither public final boolean metronome;
 		/** MIDI midiSettings for the conversion. */
-		public final MidiSettings midiSettings;
+		@Wither public final MidiSettings midiSettings;
 	}
 
 	/** Index for channel 10. It is 9, because the index is 0-based. */
@@ -150,6 +157,9 @@ public class MidiConverter<T> {
 				int transpose = 0; //TODO
 				for (int iMeasure : range(rep.start.measure, rep.end.measure)) {
 
+					if (iMeasure == score.getMeasuresCount())
+						continue;
+
 					Measure measure = staff.getMeasure(iMeasure);
 
 					/* GOON: transposition changes can happen everywhere in the measure
@@ -168,16 +178,6 @@ public class MidiConverter<T> {
 
 		}
 
-		/*
-		if (addTimeEvents) {
-			createControlEventChannel(measureStartTicks, timePool, 0, repetitions); //score position events in channel 0
-			addPlaybackAtEndControlEvent();
-		}
-
-		if (metronome) {
-			createMetronomeTrack(metronomeTrack, repetitions, measureStartTicks);
-		}
-
 		//Add Tempo Changes
 		/*ArrayList<MidiElement> tempo = MidiTempoConverter.getTempo(score, playList);
 		for (MidiElement midiElement : tempo)
@@ -191,7 +191,16 @@ public class MidiConverter<T> {
 
 		return writer.finish(metronomeTrack, timePool, measureStartTicks);
 		*/
-		return null;
+
+		//write events for time mapping between the MIDI sequence and the score
+		if (options.addTimeEvents)
+			writePlaybackControlEvents();
+
+		//write metronome track
+		if (options.metronome)
+			writeMetronomeTrack(metronomeTrack);
+
+		return writer.finish(metronomeTrack, timeMap);
 	}
 
 	/**
@@ -209,19 +218,17 @@ public class MidiConverter<T> {
 				continue;
 			val chord = (Chord) element;
 
-			//start and end beat of the element
+			//start beat of the element
 			Fraction duration = chord.getDuration();
 			val startBeat = voice.getBeat(chord);
-			val endBeat = startBeat.add(duration);
-
-			//start beat out of range? then ignore element
 			val rep = repetitions.get(repetition);
 			if (false == rep.contains(time(voiceMp.measure, startBeat)))
-				continue;
+				continue; //start beat out of range: ignore element
 
 			//MIDI ticks
-			long startTick = timeMap.getTick(time(voiceMp.measure, startBeat), repetition);
-			long endTick = timeMap.getTick(time(voiceMp.measure, endBeat), repetition);
+			val startMidiTime = timeMap.getByRepTime(repetition, time(voiceMp.measure, startBeat));
+			long startTick = startMidiTime.tick;
+			long endTick = startTick + durationToTick(duration, resolution);
 			long stopTick = endTick;
 			if (false == options.midiSettings.durationFactor.equals(_1)) {
 				//custom duration factor
@@ -281,134 +288,74 @@ public class MidiConverter<T> {
 		writer.writeNote(track, channel, endTick, midiNote, false, 0);
 	}
 
-	/*
-	private static boolean isInRange(Fraction startBeat, Fraction duration, Fraction start,
-		Fraction end) {
-		Fraction endBeat = startBeat.add(duration);
-		if (endBeat.compareTo(start) == -1 || startBeat.compareTo(end) == 1) {
-			return false;
+	/**
+	 * Writes the control events for the playback cursor by using the
+	 * control message {@link MidiEvents#PlaybackControl} and updates the
+	 * internal {@link TimeMap} with the MIDI millisecond positions.
+	 * At the end of the sequence, a {@link MidiEvents#PlaybackEnd} control
+	 * event is added.
+	 */
+	private void writePlaybackControlEvents() {
+		//write playback events and collect millisecond timing
+		val newTimeMap = new TimeMapBuilder();
+		for (val repTime : timeMap.getRepTimes()) {
+			MidiTime time = timeMap.getByRepTime(repTime);
+			writer.writeControlChange(systemTrackIndex, 0, time.tick,
+					MidiEvents.PlaybackControl.code, 0);
+			long ms = writer.tickToMicrosecond(time.tick) / 1000;
+			newTimeMap.addTime(time.tick, repTime, ms);
 		}
-		return true;
-	}
-
-	private static long calculateEndTick(Fraction startBeat, Fraction endBeat, Fraction start,
-		Fraction end, long currentTickInVoice, int resolution) {
-		Fraction begin;
-		Fraction finish;
-		if (startBeat.compareTo(start) == -1) {
-			begin = start;
-		}
-		else {
-			begin = startBeat;
-		}
-		if (endBeat.compareTo(end) == 1) {
-			finish = end;
-		}
-		else {
-			finish = endBeat;
-		}
-		Fraction duration = finish.sub(begin);
-		return currentTickInVoice + calculateTickFromFraction(duration, resolution);
-	}
-
-	private void addPlaybackAtEndControlEvent() {
-		writer.writeControlChange(systemTrackIndex, 0, writer.getLength(), MidiEvents.eventPlaybackEnd.code, 0);
+		//update time map
+		timeMap = newTimeMap.build();
+		//write playback end event
+		writer.writeControlChange(systemTrackIndex, 0, writer.getLength(), MidiEvents.PlaybackEnd.code, 0);
 	}
 
 	/**
-	 * Creates the control events for the playback cursor.
-	 * The control message {@link MidiEvents#eventPlaybackControl} is used because it has no other meaning.
-	 * /
-	private void createControlEventChannel(
-			List<Long> measureStartTicks, List<MidiTime> timePoolOpen, int channel, Repetitions repetitions) {
-		List<SortedList<Fraction>> usedBeatsMeasures = alist();
-		for (int i : range(score.getMeasuresCount()))
-			usedBeatsMeasures.add(score.getMeasureUsedBeats(i, true));
-		int imeasure = 0;
-		for (PlayRange playRange : repetitions.getRepetitions()) {
+	 * Writes the metronome beats into the metronome track.
+	 */
+	private void writeMetronomeTrack(int track) {
 
-			for (int iMeasure : range(playRange.start.measure, playRange.end.measure)) {
-				SortedList<Fraction> usedBeats = usedBeatsMeasures.get(iMeasure);
+		int strongBeatNote = options.midiSettings.metronomeStrongBeatNote;
+		int weakBeatNote = options.midiSettings.metronomeWeakBeatNote;
 
-				Fraction start, end;
-				start = null; //GOON: score.clipToMeasure(playRange.start.measure, playRange.start).beat;
-				end = null; //GOON score.clipToMeasure(playRange.end.measure, playRange.end).beat;
+		for (int iRep : range(repetitions)) {
+			val rep = repetitions.get(iRep);
+			for (int iMeasure : range(rep.start.measure, rep.end.measure)) {
+				TimeSignature timeSig = score.getHeader().getTimeAtOrBefore(iMeasure);
 
-				for (Fraction beat : usedBeats) {
-					//only add, if beats are between start and end
-					if (beat.compareTo(start) > -1 && beat.compareTo(end) < 1) {
-						long tick = measureStartTicks.get(imeasure) +
-							calculateTickFromFraction(beat.sub(start), resolution);
-						writer.writeControlChange(systemTrackIndex, 0, tick, MidiEvents.eventPlaybackControl.code, 0);
+				Fraction startBeat = (rep.start.measure == iMeasure ? rep.start.beat : _0);
+				Fraction endBeat = (rep.end.measure == iMeasure ? rep.end.beat : score.getMeasureBeats(iMeasure));
 
-						long ms = writer.tickToMicrosecond(tick) / 1000;
-						timePoolOpen.add(new MidiTime(tick, time(iMeasure, beat), ms));
-					}
-				}
-				imeasure++;
-			}
-		}
-	}
+				if (timeSig != null) {
+					boolean[] accentuation = timeSig.getType().getBeatsAccentuation();
+					int timeDenominator = timeSig.getType().getDenominator();
+					for (int beatNumerator : range(timeSig.getType().getNumerator())) {
 
-	/**
-	 * Creates the track in the sequence with the beats of the metronome.
-	 * /
-	private void createMetronomeTrack(int track, Repetitions repetitions, List<Long> measureStartTicks) {
-		// Load Settings
-		int metronomeStrongBeatNote = options.midiSettings.getMetronomeStrongBeatNote();
-		int metronomeWeakBeatNote = options.midiSettings.getMetronomeWeakBeatNote();
-
-		int imeasure = 0;
-		for (PlayRange playRange : repetitions.getRepetitions()) {
-
-			for (int i : range(playRange.start.measure, playRange.end.measure)) {
-				TimeSignature time = score.getHeader().getTimeAtOrBefore(i);
-
-				Fraction start, end;
-				if (playRange.start.measure == i) {
-					start = playRange.start.beat;
-				}
-				else {
-					start = fr(0, 1);
-				}
-				if (playRange.end.measure == i) {
-					end = playRange.end.beat;
-				}
-				else {
-					end = score.getMeasureBeats(i);
-				}
-
-				if (time != null) {
-					boolean[] accentuation = time.getType().getBeatsAccentuation();
-					int timeDenominator = time.getType().getDenominator();
-					for (int beatNumerator : range(time.getType().getNumerator())) {
-						Fraction beat = fr(beatNumerator, timeDenominator);
-						if (false == isInRange(beat, fr(0), start, end))
+						//compute start and stop tick
+						val beat = fr(beatNumerator, timeDenominator);
+						val time = time(iMeasure, beat);
+						if (false == rep.contains(time))
 							continue;
-						long tickStart = measureStartTicks.get(imeasure) +
-							calculateTickFromFraction(beat.sub(start), resolution);
-						long tickStop = tickStart + calculateTickFromFraction(fr(1, timeDenominator), resolution);
-						
-						int note = (accentuation[beatNumerator] ? metronomeStrongBeatNote : metronomeWeakBeatNote);
+						long tickStart = timeMap.getByRepTime(iRep, time).getTick();
+						long tickStop = tickStart + durationToTick(fr(1, timeDenominator), resolution);
 
-						int velocity = 127;
+						//write metronome note
+						int note = (accentuation[beatNumerator] ? strongBeatNote : weakBeatNote);
+						int velocity = midiMaxValue;
 						writer.writeNote(track, channel10, tickStart, note, true, velocity);
 						writer.writeNote(track, channel10, tickStop, note, false, 0);
 					}
 				}
-				imeasure++;
 			}
 		}
 	}
 
 	/**
-	 * This method calculates the tick of a {@link Fraction}. This is necessary
-	 * to get the current beat in a measure or to get the duration of a
-	 * {@link Fraction} in midi ticks.
-	 * /
-	public static int calculateTickFromFraction(Fraction fraction, int resolution) {
+	 * Returns the number of ticks of the given {@link Fraction}.
+	 */
+	private int durationToTick(Fraction fraction, int resolution) {
 		return fraction.getNumerator() * 4 * resolution / fraction.getDenominator();
 	}
-*/
 
 }

@@ -1,7 +1,5 @@
 package com.xenoage.zong.io.musicxml.in.readers;
 
-import static com.xenoage.utils.NullUtils.notNull;
-
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.color.Color;
 import com.xenoage.utils.font.FontInfo;
@@ -12,6 +10,8 @@ import com.xenoage.zong.core.text.Superscript;
 import com.xenoage.zong.io.musicxml.Equivalents;
 import com.xenoage.zong.musicxml.types.MxlFormattedText;
 import com.xenoage.zong.musicxml.types.attributes.MxlPrintStyle;
+
+import static com.xenoage.utils.NullUtils.notNull;
 
 /**
  * Reads MusicXML elements with formatting information to a {@link FormattedText}.
@@ -40,7 +40,7 @@ public class FormattedTextReader
 	}
 	
 	public Alignment readAlignment(MxlFormattedText mxlText) {
-		return Equivalents.alignments.get1(mxlText.getJustify());
+		return Equivalents.alignments.getBy2(mxlText.getJustify());
 	}
 
 }

@@ -3,14 +3,18 @@ package com.xenoage.zong.desktop.io.midi.out;
 import com.xenoage.utils.jse.collections.WeakList;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.position.Time;
-import com.xenoage.zong.io.midi.out.*;
+import com.xenoage.zong.io.midi.out.MidiConverter;
+import com.xenoage.zong.io.midi.out.MidiEvents;
+import com.xenoage.zong.io.midi.out.MidiSequence;
+import com.xenoage.zong.io.midi.out.PlaybackListener;
+import lombok.val;
 
 import javax.sound.midi.*;
 import java.util.List;
 
 import static com.xenoage.utils.log.Log.log;
 import static com.xenoage.utils.log.Report.warning;
-import static com.xenoage.zong.io.midi.out.MidiConverter.Options.defaultOptions;
+import static com.xenoage.zong.io.midi.out.MidiConverter.Options.optionsForPlayback;
 import static com.xenoage.zong.io.midi.out.MidiSettings.defaultMidiSettings;
 
 /**
@@ -53,8 +57,8 @@ public class MidiScorePlayer
 		SynthManager.removeAllControllerEventListeners();
 
 		//controller events to listen for (see MidiEvents doc)
-		SynthManager.addControllerEventListener(this, new int[]{ MidiEvents.eventPlaybackControl.code });
-		SynthManager.addControllerEventListener(this, new int[]{ MidiEvents.eventPlaybackEnd.code } );
+		SynthManager.addControllerEventListener(this, new int[]{ MidiEvents.PlaybackControl.code });
+		SynthManager.addControllerEventListener(this, new int[]{ MidiEvents.PlaybackEnd.code } );
 	}
 
 	/**
@@ -63,7 +67,7 @@ public class MidiScorePlayer
 	public void openScore(Score score) {
 		stop();
 		this.sequence = MidiConverter.convertToSequence(
-			score, defaultOptions, new JseMidiSequenceWriter());
+			score, optionsForPlayback, new JseMidiSequenceWriter());
 		try {
 			SynthManager.getSequencer().setSequence(sequence.getSequence());
 		} catch (InvalidMidiDataException ex) {
@@ -100,10 +104,10 @@ public class MidiScorePlayer
 
 	/**
 	 * Changes the position of the playback cursor to the given {@link Time}.
+	 * If it is within a repeated section, the first repetition is played.
 	 */
 	public void setTime(Time time) {
-		long tickPosition = calculateTickFromTime(time, sequence.getMeasureStartTicks(),
-			sequence.getSequence().getResolution());
+		long tickPosition = sequence.getTimeMap().getByTime(time).tick;
 		SynthManager.getSequencer().setTickPosition(tickPosition);
 		currentPosition = 0; //as we don't know the real position, we set it 0, because the playback will automatically jump to the correct position.
 	}
@@ -176,29 +180,20 @@ public class MidiScorePlayer
 	}
 
 	/**
-	 * This method catches the ControllerChangedEvent from the sequencer.
-	 * For time-specific events, the method decides, which {@link Time} is the
-	 * right one and notifies the listener.
+	 * This method catches control change events from the sequencer.
+	 * For time-specific events, the method notifies the registered listener.
 	 */
 	@Override public void controlChange(ShortMessage message) {
-		List<MidiTime> timePool = sequence.getTimePool();
-		if (message.getData1() == MidiEvents.eventPlaybackControl.code) {
-			//calls the listener with the most actual tick
+		if (message.getData1() == MidiEvents.PlaybackControl.code) {
 			long currentTick = SynthManager.getSequencer().getTickPosition();
-			//if playback is ahead: return nothing
-			if (timePool.get(0).tick > currentTick) {
-				return;
-			}
-			//if the program hung up but the player continued, there programm would always be to late.
-			//So the algorithm deletes all aruments before the current Element.
-			while (timePool.get(currentPosition + 1).tick <= currentTick)
-				currentPosition++;
-			Time time = timePool.get(currentPosition).time;
-			for (PlaybackListener listener : listeners.getAll()) {
-				listener.playbackAtTime(time, SynthManager.getSequencer().getMicrosecondPosition() / 1000L);
+			val midiTime = sequence.getTimeMap().getByTick(currentTick);
+			if (midiTime != null) {
+				val currentMs = SynthManager.getSequencer().getMicrosecondPosition() / 1000L;
+				for (PlaybackListener listener : listeners.getAll())
+					listener.playbackAtTime(midiTime.repTime.time, currentMs);
 			}
 		}
-		else if (message.getData1() == MidiEvents.eventPlaybackEnd.code) {
+		else if (message.getData1() == MidiEvents.PlaybackEnd.code) {
 			stop(); //stop to really ensure the end
 			for (PlaybackListener listener : listeners.getAll()) {
 				listener.playbackAtEnd();

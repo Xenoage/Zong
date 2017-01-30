@@ -13,7 +13,6 @@ import com.xenoage.zong.io.midi.out.MidiConverter;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import lombok.AllArgsConstructor;
-import lombok.val;
 
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequence;
@@ -26,7 +25,7 @@ import static com.xenoage.utils.log.Log.log;
 import static com.xenoage.utils.log.Report.remark;
 import static com.xenoage.utils.log.Report.warning;
 import static com.xenoage.zong.desktop.App.app;
-import static com.xenoage.zong.io.midi.out.MidiConverter.Options.options;
+import static com.xenoage.zong.io.midi.out.MidiConverter.Options.optionsForFileExport;
 import static com.xenoage.zong.player.Player.pApp;
 
 /**
@@ -68,9 +67,8 @@ import static com.xenoage.zong.player.Player.pApp;
 			It<Score> scoresIt = new It<Score>(scores);
 
 			for (Score score : scoresIt) {
-				val options = options().addTimeEvents(false).metronome(false).build();
 				Sequence seq = MidiConverter.convertToSequence(
-					score, options, new JseMidiSequenceWriter()).getSequence();
+					score, optionsForFileExport, new JseMidiSequenceWriter()).getSequence();
 				String newPath = lastPath;
 				String number = (useNumber ? ("-" + (scoresIt.getIndex() + 1)) : "");
 

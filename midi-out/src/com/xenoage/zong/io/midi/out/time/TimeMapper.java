@@ -35,9 +35,9 @@ public class TimeMapper {
 		int resolution = score.getDivisions() * resolutionFactor;
 		//for each play range compute the used beats in each measure column
 		int tick = 0;
-		val timeMap = new TimeMapBuilder(repetitions.getCount());
-		for (int iRange : range(repetitions)) {
-			val range = repetitions.get(iRange);
+		val timeMap = new TimeMapBuilder();
+		for (int iRep : range(repetitions)) {
+			val range = repetitions.get(iRep);
 			for (int iMeasure : range(range.start.measure, range.end.measure)) {
 				val usedBeats = getUsedBeats(iMeasure, range);
 				Fraction lastBeat = null;
@@ -47,7 +47,7 @@ public class TimeMapper {
 					if (lastBeat != null)
 						tick += beat.sub(lastBeat).mult(resolution * 4).getNumerator();
 					//add time
-					timeMap.addTick(tick, time(iMeasure, beat), iRange);
+					timeMap.addTimeNoMs(tick, new RepTime(iRep, time(iMeasure, beat)));
 					lastBeat = beat;
 				}
 			}

@@ -8,14 +8,13 @@ import com.xenoage.zong.desktop.io.midi.out.JseMidiSequenceWriter;
 import com.xenoage.zong.desktop.io.midi.out.SynthManager;
 import com.xenoage.zong.io.midi.out.MidiConverter;
 import com.xenoage.zong.io.midi.out.MidiSequence;
-import lombok.val;
 
 import javax.sound.midi.Sequence;
 import java.io.IOException;
 
 import static com.xenoage.utils.log.Log.log;
 import static com.xenoage.utils.log.Report.warning;
-import static com.xenoage.zong.io.midi.out.MidiConverter.Options.options;
+import static com.xenoage.zong.io.midi.out.MidiConverter.Options.optionsForFileExport;
 
 /**
  * This class writes a Waveform Audio File Format (WAVE) file from a given {@link Score}.
@@ -38,9 +37,8 @@ public class WavScoreFileOutput
 		//save WAVE file
 		try {
 			//create midi sequence
-			val options = options().addTimeEvents(false).metronome(false).build();
 			MidiSequence<Sequence> sequence = MidiConverter.convertToSequence(
-				score, options, new JseMidiSequenceWriter());
+				score, optionsForFileExport, new JseMidiSequenceWriter());
 			//for all instruments
 			MidiToWaveRenderer.render(SynthManager.getSoundbank(), sequence.getSequence(), null,
 				new JseOutputStream(stream));
