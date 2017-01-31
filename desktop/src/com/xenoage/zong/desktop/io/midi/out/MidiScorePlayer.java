@@ -171,14 +171,6 @@ public class MidiScorePlayer
 			SynthManager.getSequencer().setTrackMute(metronomeTrack, !metronomeEnabled);
 	}
 
-	private long calculateTickFromTime(Time time, List<Long> measureTicks, int resolution) {
-		if (time == null)
-			return 0;
-		else
-			return measureTicks.get(time.measure) +
-				0; //GOON MidiConverter.calculateTickFromFraction(time.beat, resolution);
-	}
-
 	/**
 	 * This method catches control change events from the sequencer.
 	 * For time-specific events, the method notifies the registered listener.

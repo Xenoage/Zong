@@ -9,7 +9,7 @@ import org.junit.Test;
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.io.musiclayout.LayoutSettingsReader;
-import com.xenoage.zong.io.musicxml.in.MusicXMLScoreFileInputTest;
+import com.xenoage.zong.io.musicxml.in.MusicXmlScoreFileInputTest;
 import com.xenoage.zong.io.musicxml.in.MusicXmlScoreFileInput;
 import com.xenoage.zong.io.symbols.SymbolPoolReader;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
@@ -32,7 +32,7 @@ public class ScoreLayouterTest {
 		SymbolPool symbolPool = sync(new SymbolPoolReader("default"));
 		LayoutSettings layoutSettings = LayoutSettingsReader.read(
 			jsePlatformUtils().openFile("data/test/layout/LayoutSettingsTest.xml"));
-		for (String file : MusicXMLScoreFileInputTest.getSampleFiles()) {
+		for (String file : MusicXmlScoreFileInputTest.getSampleFiles()) {
 			try {
 				//System.out.println(file);
 				Score score = new MusicXmlScoreFileInput().read(jsePlatformUtils().openFile(file), file);

@@ -132,8 +132,11 @@ import com.xenoage.zong.utils.exceptions.IllegalMPException;
 	/**
 	 * Gets the last {@link TimeSignature} that is defined at or before the measure
 	 * with the given index. If there is none, {@link TimeSignature#implicitSenzaMisura} returned.
+	 * @param measureIndex  the index of the measure. May also be 1 measure after the last measure.
 	 */
 	public TimeSignature getTimeAtOrBefore(int measureIndex) {
+		if (measureIndex == columnHeaders.size())
+			measureIndex--;
 		//search for last time
 		for (int iMeasure : rangeReverse(measureIndex, 0)) {
 			ColumnHeader column = columnHeaders.get(iMeasure);

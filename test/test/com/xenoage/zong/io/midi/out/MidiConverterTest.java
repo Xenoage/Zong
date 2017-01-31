@@ -1,6 +1,19 @@
 package com.xenoage.zong.io.midi.out;
 
+import com.xenoage.zong.desktop.io.midi.out.JseMidiSequenceWriter;
+import com.xenoage.zong.io.musicxml.in.MusicXmlScoreFileInput;
+import com.xenoage.zong.io.musicxml.in.MusicXmlScoreFileInputTest;
+import lombok.val;
+import org.junit.Assert;
 import org.junit.Test;
+
+import javax.sound.midi.MidiSystem;
+
+import java.io.File;
+
+import static com.xenoage.utils.jse.JsePlatformUtils.jsePlatformUtils;
+import static com.xenoage.zong.io.midi.out.MidiConverter.Options.optionsForPlayback;
+import static org.junit.Assert.fail;
 
 /**
  * Tests for the {@link MidiConverter}.
@@ -10,13 +23,12 @@ import org.junit.Test;
 public class MidiConverterTest {
 	
 	@Test public void testSampleFiles() {
-		/* GOON
-		boolean writeFiles = false;
-		for (String file : MusicXMLScoreFileInputTest.getSampleFiles()) {
+		boolean writeFiles = true;
+		for (String file : MusicXmlScoreFileInputTest.getSampleFiles()) {
 			try {
-				Score score = new MusicXmlScoreFileInput().read(jsePlatformUtils().openFile(file), file);
-				MidiSequence<Sequence> sequence = MidiConverter.convertToSequence(
-					score, true, true, new JseMidiSequenceWriter());
+				val score = new MusicXmlScoreFileInput().read(jsePlatformUtils().openFile(file), file);
+				val sequence = MidiConverter.convertToSequence(
+					score, optionsForPlayback, new JseMidiSequenceWriter());
 				if (writeFiles) {
 					//try: write to file
 					new File("temp").mkdirs();
@@ -27,7 +39,7 @@ public class MidiConverterTest {
 				ex.printStackTrace();
 				fail("Failed to load file: " + file);
 			}
-		} */
+		}
 	}
 
 }

@@ -41,6 +41,11 @@ import static java.lang.Math.round;
  * 
  * @param <T> the platform-specific sequence class
  *
+ * TODO: ZONG-101: Playback transposition changes
+ * TODO: ZONG-102: Play tempo changes
+ * TODO: ZONG-103: Play gradual tempo changes
+ * TODO: ZONG-104: Play grace chords
+ *
  * @author Andreas Wenger
  */
 @AllArgsConstructor
@@ -162,7 +167,7 @@ public class MidiConverter<T> {
 
 					Measure measure = staff.getMeasure(iMeasure);
 
-					/* GOON: transposition changes can happen everywhere in the measure
+					/* transposition changes can happen everywhere in the measure - TODO: ZONG-101: Playback transposition changes
 					Transpose t = measure.getInstrumentChanges()...
 					if (t != null)
 					{
@@ -179,6 +184,8 @@ public class MidiConverter<T> {
 		}
 
 		//Add Tempo Changes
+		//TODO: ZONG-102: Play tempo changes
+		//TODO: ZONG-103: Play gradual tempo changes
 		/*ArrayList<MidiElement> tempo = MidiTempoConverter.getTempo(score, playList);
 		for (MidiElement midiElement : tempo)
 		{
@@ -218,6 +225,10 @@ public class MidiConverter<T> {
 				continue;
 			val chord = (Chord) element;
 
+			//grace chords are not supported yet - TODO: ZONG-104: Play grace chords
+			if (chord.isGrace())
+				continue;
+
 			//start beat of the element
 			Fraction duration = chord.getDuration();
 			val startBeat = voice.getBeat(chord);
@@ -245,7 +256,7 @@ public class MidiConverter<T> {
 				}
 			}
 
-			//TODO Timidity doesn't like ithe following midi events
+			//TODO Timidity doesn't like the following midi events
 			/*MetaMessage m = null;
 			if (musicelement instanceof Clef)
 			{
@@ -328,8 +339,11 @@ public class MidiConverter<T> {
 				Fraction endBeat = (rep.end.measure == iMeasure ? rep.end.beat : score.getMeasureBeats(iMeasure));
 
 				if (timeSig != null) {
+
 					boolean[] accentuation = timeSig.getType().getBeatsAccentuation();
 					int timeDenominator = timeSig.getType().getDenominator();
+					long measureStartTick = timeMap.getByRepTime(iRep, time(iMeasure, _0)).tick;
+
 					for (int beatNumerator : range(timeSig.getType().getNumerator())) {
 
 						//compute start and stop tick
@@ -337,7 +351,8 @@ public class MidiConverter<T> {
 						val time = time(iMeasure, beat);
 						if (false == rep.contains(time))
 							continue;
-						long tickStart = timeMap.getByRepTime(iRep, time).getTick();
+
+						long tickStart = measureStartTick + durationToTick(fr(beatNumerator, timeDenominator), resolution);
 						long tickStop = tickStart + durationToTick(fr(1, timeDenominator), resolution);
 
 						//write metronome note

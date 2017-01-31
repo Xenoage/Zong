@@ -19,7 +19,7 @@ import com.xenoage.zong.core.util.InconsistentScoreException;
  * 
  * @author Andreas Wenger
  */
-public class MusicXMLScoreFileInputTest {
+public class MusicXmlScoreFileInputTest {
 
 	public static final String dir11 = "data/test/scores/musicxml11/";
 	public static final String dir20 = "data/test/scores/musicxml20/";

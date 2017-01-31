@@ -36,7 +36,7 @@ import com.xenoage.zong.core.music.clef.ClefType;
 import com.xenoage.zong.core.music.key.TraditionalKey;
 import com.xenoage.zong.core.music.time.TimeSignature;
 import com.xenoage.zong.core.music.time.TimeType;
-import com.xenoage.zong.io.musicxml.in.MusicXMLScoreFileInputTest;
+import com.xenoage.zong.io.musicxml.in.MusicXmlScoreFileInputTest;
 import com.xenoage.zong.io.selection.Cursor;
 import com.xenoage.zong.musiclayout.notation.ChordNotation;
 import com.xenoage.zong.musiclayout.spacing.BeatOffset;
@@ -221,7 +221,7 @@ public class VoicesBeatOffsetterTest {
 	 * Test file "BeatOffsetsStrategyTest-1.xml".
 	 */
 	@Test public void computeBeatOffsets_File1() {
-		Score score = MusicXMLScoreFileInputTest.loadXMLTestScore("VoicesBeatOffsetterTest-1.xml");
+		Score score = MusicXmlScoreFileInputTest.loadXMLTestScore("VoicesBeatOffsetterTest-1.xml");
 
 		LinkedList<VoiceSpacing> voiceSpacings = createVoiceSpacings(score);
 		BeatOffset[] beatOffsets = testee.compute(voiceSpacings,
@@ -247,7 +247,7 @@ public class VoicesBeatOffsetterTest {
 	 * Test file "BeatOffsetsStrategyTest-2.xml".
 	 */
 	@Test public void computeBeatOffsets_File2() {
-		Score score = MusicXMLScoreFileInputTest.loadXMLTestScore("VoicesBeatOffsetterTest-2.xml");
+		Score score = MusicXmlScoreFileInputTest.loadXMLTestScore("VoicesBeatOffsetterTest-2.xml");
 
 		LinkedList<VoiceSpacing> voiceSpacings = createVoiceSpacings(score);
 		BeatOffset[] beatOffsets = testee.compute(voiceSpacings,
@@ -275,7 +275,7 @@ public class VoicesBeatOffsetterTest {
 	 * Test file "BeatOffsetsStrategyTest-3.xml".
 	 */
 	@Test public void computeBeatOffsets_File3() {
-		Score score = MusicXMLScoreFileInputTest.loadXMLTestScore("VoicesBeatOffsetterTest-3.xml");
+		Score score = MusicXmlScoreFileInputTest.loadXMLTestScore("VoicesBeatOffsetterTest-3.xml");
 
 		LinkedList<VoiceSpacing> voiceSpacings = createVoiceSpacings(score);
 		BeatOffset[] beatOffsets = testee.compute(voiceSpacings,
@@ -308,7 +308,7 @@ public class VoicesBeatOffsetterTest {
 	 * Test file "BeatOffsetsStrategyTest-4.xml".
 	 */
 	@Test public void computeBeatOffsets_File4() {
-		Score score = MusicXMLScoreFileInputTest.loadXMLTestScore("VoicesBeatOffsetterTest-4.xml");
+		Score score = MusicXmlScoreFileInputTest.loadXMLTestScore("VoicesBeatOffsetterTest-4.xml");
 
 		LinkedList<VoiceSpacing> voiceSpacings = createVoiceSpacings(score);
 		BeatOffset[] beatOffsets = testee.compute(voiceSpacings,

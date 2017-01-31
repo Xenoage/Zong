@@ -13,7 +13,7 @@ import com.xenoage.zong.core.music.InstrumentChange;
 import com.xenoage.zong.core.music.Measure;
 import com.xenoage.zong.core.music.Part;
 import com.xenoage.zong.core.music.util.BeatE;
-import com.xenoage.zong.io.musicxml.in.MusicXMLScoreFileInputTest;
+import com.xenoage.zong.io.musicxml.in.MusicXmlScoreFileInputTest;
 
 /**
  * Test cases for the {@link InstrumentsReader}.
@@ -29,7 +29,7 @@ public class InstrumentsReaderTest {
 	 * changes happen at the right positions.
 	 */
 	@Test public void testInstrumentChanges() {
-		Score score = MusicXMLScoreFileInputTest.loadXMLTestScore("InstrumentChanges.xml");
+		Score score = MusicXmlScoreFileInputTest.loadXMLTestScore("InstrumentChanges.xml");
 		Part part = score.getStavesList().getParts().get(0);
 		assertEquals(3, part.getInstruments().size());
 

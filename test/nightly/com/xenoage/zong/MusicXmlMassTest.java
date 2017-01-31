@@ -90,9 +90,9 @@ public class MusicXmlMassTest {
 			Assert.fail();
 	}
 
-	/*
+	//*
 	@Test public void testSingleFile() {
-		File file = new File(dir + "MusicXML/ponchielli/VarCarnevaleVenezia.xml");
+		File file = new File(dir + "MusicXML/MusicXML-TestSuite-0.1/45d-Repeats-Nested-Alternatives.xm");
 		if (!testFile(file)) Assert.fail();
 	} //*/
 
