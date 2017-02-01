@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.io.midi.out.MidiConverter.Options.optionsForFileExport;
 
@@ -84,15 +83,16 @@ public class CursorOutput {
 
 		//save time map
 		JsonArray jsonMPs = new JsonArray();
-		val repTimeList = alist(seq.getTimeMap().getRepTimes());
-		Collections.sort(repTimeList);
-		for (val repTime : repTimeList) {
-			val midiTime = seq.getTimeMap().getByRepTime(repTime);
-			JsonObject jsonMP = new JsonObject();
-			jsonMP.addProperty("measure", repTime.time.measure);
-			jsonMP.addProperty("beat", "" + repTime.time.beat);
-			jsonMP.addProperty("ms", midiTime.ms);
-			jsonMPs.add(jsonMP);
+		val timeMap = seq.getTimeMap();
+		for (int iRep : range(timeMap.getRepetitionsCount())) {
+			for (val time : timeMap.getTimesSorted(iRep)) {
+				val midiTime = timeMap.getByRepTime(iRep, time);
+				JsonObject jsonMP = new JsonObject();
+				jsonMP.addProperty("measure", time.measure);
+				jsonMP.addProperty("beat", "" + time.beat);
+				jsonMP.addProperty("ms", midiTime.ms);
+				jsonMPs.add(jsonMP);
+			}
 		}
 		ret.add("mps", jsonMPs);
 
@@ -185,17 +185,19 @@ public class CursorOutput {
 
 		//save time cursors
 		JsonArray jsonTCs = new JsonArray();
-		for (val repTime : repTimeList) {
-			JsonObject jsonTC = new JsonObject();
-			val midiTime = seq.getTimeMap().getByRepTime(repTime);
-			jsonTC.addProperty("time", midiTime.ms);
-			Measure measure = measures.get(repTime.time.measure);
-			System system = systems.get(measure.system);
-			jsonTC.addProperty("page", system.page);
-			jsonTC.addProperty("top", system.top);
-			jsonTC.addProperty("left", measure.beats.get(repTime.time.beat));
-			jsonTC.addProperty("bottom", system.bottom);
-			jsonTCs.add(jsonTC);
+		for (int iRep : range(timeMap.getRepetitionsCount())) {
+			for (val time : timeMap.getTimesSorted(iRep)) {
+				val midiTime = timeMap.getByRepTime(iRep, time);
+				JsonObject jsonTC = new JsonObject();
+				jsonTC.addProperty("time", midiTime.ms);
+				Measure measure = measures.get(time.measure);
+				System system = systems.get(measure.system);
+				jsonTC.addProperty("page", system.page);
+				jsonTC.addProperty("top", system.top);
+				jsonTC.addProperty("left", measure.beats.get(time.beat));
+				jsonTC.addProperty("bottom", system.bottom);
+				jsonTCs.add(jsonTC);
+			}
 		}
 		ret.add("timecursors", jsonTCs);
 

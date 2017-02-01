@@ -8,7 +8,7 @@ import lombok.experimental.Wither;
 import static com.xenoage.utils.math.Fraction._0;
 
 /**
- * TimeSignature in a score.
+ * Time in a score.
  * Like a {@link MP}, but consists only of measure and beat.
  *
  * @author Andreas Wenger

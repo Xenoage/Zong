@@ -16,7 +16,7 @@ import com.xenoage.zong.io.midi.out.dynamics.DynamicsInterpretation;
 import com.xenoage.zong.io.midi.out.repetitions.Repetition;
 import com.xenoage.zong.io.midi.out.repetitions.Repetitions;
 import com.xenoage.zong.io.midi.out.repetitions.RepetitionsFinder;
-import com.xenoage.zong.io.midi.out.time.MidiTime;
+import com.xenoage.zong.io.midi.out.time.RepTime;
 import com.xenoage.zong.io.midi.out.time.TimeMap;
 import com.xenoage.zong.io.midi.out.time.TimeMapBuilder;
 import com.xenoage.zong.io.midi.out.time.TimeMapper;
@@ -309,15 +309,17 @@ public class MidiConverter<T> {
 	private void writePlaybackControlEvents() {
 		//write playback events and collect millisecond timing
 		val newTimeMap = new TimeMapBuilder();
-		for (val repTime : timeMap.getRepTimes()) {
-			MidiTime time = timeMap.getByRepTime(repTime);
-			writer.writeControlChange(systemTrackIndex, 0, time.tick,
-					MidiEvents.PlaybackControl.code, 0);
-			long ms = writer.tickToMicrosecond(time.tick) / 1000;
-			newTimeMap.addTime(time.tick, repTime, ms);
+		for (int iRep : range(timeMap.getRepetitionsCount())) {
+			for (val time : timeMap.getTimesSorted(iRep)) {
+				val midiTime = timeMap.getByRepTime(iRep, time);
+				writer.writeControlChange(systemTrackIndex, 0, midiTime.tick,
+						MidiEvents.PlaybackControl.code, 0);
+				long ms = writer.tickToMicrosecond(midiTime.tick) / 1000;
+				newTimeMap.addTime(midiTime.tick, new RepTime(iRep, time), ms);
+			}
 		}
 		//update time map
-		timeMap = newTimeMap.build();
+		//timeMap = newTimeMap.build();
 		//write playback end event
 		writer.writeControlChange(systemTrackIndex, 0, writer.getLength(), MidiEvents.PlaybackEnd.code, 0);
 	}

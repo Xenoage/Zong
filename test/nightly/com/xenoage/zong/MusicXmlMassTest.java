@@ -92,7 +92,7 @@ public class MusicXmlMassTest {
 
 	//*
 	@Test public void testSingleFile() {
-		File file = new File(dir + "MusicXML/MusicXML-TestSuite-0.1/45d-Repeats-Nested-Alternatives.xm");
+		File file = new File(dir + "MusicXML/MusicXML-TestSuite-0.1/45d-Repeats-Nested-Alternatives.xml");
 		if (!testFile(file)) Assert.fail();
 	} //*/
 

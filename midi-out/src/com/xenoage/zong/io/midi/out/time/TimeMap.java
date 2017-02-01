@@ -1,18 +1,15 @@
 package com.xenoage.zong.io.midi.out.time;
 
 import com.xenoage.utils.annotations.Const;
-import com.xenoage.utils.collections.TriMap;
-import com.xenoage.utils.kernel.Tuple3;
+import com.xenoage.utils.collections.IList;
 import com.xenoage.zong.core.position.Time;
+import com.xenoage.zong.io.midi.out.repetitions.Repetition;
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-import java.util.Collections;
-
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.utils.iterators.It.it;
 import static com.xenoage.utils.kernel.Range.range;
-import static java.lang.Math.max;
 
 /**
  * Constant-time lookup of {@link MidiTime}s by providing one of
@@ -20,41 +17,45 @@ import static java.lang.Math.max;
  *
  * @author Andreas Wenger
  */
-@Const @EqualsAndHashCode
+@Const @RequiredArgsConstructor(access = AccessLevel.PACKAGE) @EqualsAndHashCode
 public class TimeMap {
 
-	private final TriMap<Long, RepTime, Long> timeMap;
-	private final int repetitionCount;
+	/** The {@link RepTime}s for each repetition. */
+	private final IList<RepTimes> repTimes;
 
 
-	TimeMap(TriMap<Long, RepTime, Long> timeMap) {
-		this.timeMap = timeMap;
-		//find max repetition index
-		int maxRep = 0;
-		for (val repTime : timeMap.getKeys2())
-			maxRep = max(maxRep, repTime.repetition);
-		this.repetitionCount = maxRep;
+	/**
+	 * Gets the number of {@link Repetition}s.
+	 */
+	public int getRepetitionsCount() {
+		return repTimes.size();
 	}
 
 	/**
 	 * Returns the {@link MidiTime} at the given MIDI tick, or null.
 	 */
 	public MidiTime getByTick(long tick) {
-		return get(timeMap.getBy1(tick));
+		for (val repTime : repTimes)
+			if (repTime.containsTick(tick))
+				return repTime.getByTick(tick);
+		return null;
 	}
 
 	/**
 	 * Returns the {@link MidiTime} at the given {@link RepTime}, or null.
 	 */
 	public MidiTime getByRepTime(RepTime repTime) {
-		return get(timeMap.getBy2(repTime));
+		return getByRepTime(repTime.repetition, repTime.time);
 	}
 
 	/**
 	 * Returns the {@link MidiTime} at the given repetition index and {@link Time}, or null.
 	 */
 	public MidiTime getByRepTime(int repetition, Time time) {
-		return get(timeMap.getBy2(new RepTime(repetition, time)));
+		val repTime = repTimes.get(repetition);
+		if (repTime.containsTime(time))
+			return repTime.getByTime(time);
+		return null;
 	}
 
 	/**
@@ -62,31 +63,27 @@ public class TimeMap {
 	 * The first repetition using this time is returned.
 	 */
 	public MidiTime getByTime(Time time) {
-		MidiTime ret;
-		for (int iRep : range(repetitionCount))
-			if ((ret = get(timeMap.getBy2(new RepTime(iRep, time)))) != null)
-				return ret;
+		for (val repTime : repTimes)
+			if (repTime.containsTime(time))
+				return repTime.getByTime(time);
 		return null;
 	}
 
 	/**
 	 * Returns the {@link MidiTime} at the given MIDI millisecond, or null.
 	 */
-	public MidiTime getTimeByMs(long ms) {
-		return get(timeMap.getBy3(ms));
-	}
-
-	private MidiTime get(Tuple3<Long, RepTime, Long> value) {
-		if (value == null)
-			return null;
-		return new MidiTime(value.get1(), value.get2(), value.get3());
+	public MidiTime getByMs(long ms) {
+		for (val repTime : repTimes)
+			if (repTime.containsMs(ms))
+				return repTime.getByMs(ms);
+		return null;
 	}
 
 	/**
-	 * Gets the registered {@link RepTime}s (unsorted).
+	 * Gets the sorted {@link Time}s of the given {@link Repetition}.
 	 */
-	public Iterable<RepTime> getRepTimes() {
-		return it(timeMap.getKeys2());
+	public IList<Time> getTimesSorted(int repetition) {
+		return repTimes.get(repetition).timesSorted;
 	}
 
 	/**
@@ -95,20 +92,14 @@ public class TimeMap {
 	 */
 	@Override public String toString() {
 		String s = "TimeMap ( repetitions = [\n";
-		val repTimes = alist(timeMap.getKeys2());
-		Collections.sort(repTimes);
-		if (repTimes.size() > 0) {
-			int repsCount = repTimes.get(repTimes.size() - 1).repetition;
-			for (int iRep : range(repsCount)) {
-				s += "repetition " + iRep + " = [";
-				for (val repTime : repTimes)
-					if (repTime.repetition == iRep) {
-						val time = getByRepTime(repTime);
-						s += "{" + repTime.time.measure + "," + repTime.time.beat + " -> " +
-								time.getTick() + "}, ";
-					}
-				s += "]\n";
+		for (int iRep : range(repTimes)) {
+			s += "repetition " + iRep + " = [";
+			val rep = repTimes.get(iRep);
+			for (val time : rep.timesSorted) {
+				val midiTime = rep.getByTime(time);
+				s += "{" + time.measure + "," + time.beat + " -> " + midiTime.tick + "}, ";
 			}
+			s += "]\n";
 		}
 		s += "])";
 		return s;

@@ -4,16 +4,14 @@ import com.xenoage.zong.desktop.io.midi.out.JseMidiSequenceWriter;
 import com.xenoage.zong.io.musicxml.in.MusicXmlScoreFileInput;
 import com.xenoage.zong.io.musicxml.in.MusicXmlScoreFileInputTest;
 import lombok.val;
-import org.junit.Assert;
 import org.junit.Test;
 
 import javax.sound.midi.MidiSystem;
-
 import java.io.File;
 
 import static com.xenoage.utils.jse.JsePlatformUtils.jsePlatformUtils;
 import static com.xenoage.zong.io.midi.out.MidiConverter.Options.optionsForPlayback;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  * Tests for the {@link MidiConverter}.

@@ -1,10 +1,15 @@
 package com.xenoage.zong.io.midi.out.time;
 
+import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.collections.TriMap;
 import com.xenoage.zong.core.position.Time;
 import com.xenoage.zong.io.midi.out.repetitions.Repetition;
 
-import static com.xenoage.utils.collections.TriMap.triMap;
+import java.util.List;
+
+import static com.xenoage.utils.collections.CList.clist;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static com.xenoage.utils.kernel.Range.range;
 
 /**
  * Builder for a {@link TimeMap}.
@@ -13,7 +18,7 @@ import static com.xenoage.utils.collections.TriMap.triMap;
  */
 public class TimeMapBuilder {
 
-	private TriMap<Long, RepTime, Long> timeMap = triMap();
+	private List<TriMap<Long, Time, Long>> repTimes = alist();
 
 	/**
 	 * Adds the given time.
@@ -23,7 +28,9 @@ public class TimeMapBuilder {
 	 *                 In this case ms = tick is used.
 	 */
 	public void addTime(long tick, RepTime repTime, long ms) {
-		timeMap.put(tick, repTime, ms);
+		while (repTimes.size() <= repTime.repetition)
+			repTimes.add(new TriMap<Long, Time, Long>());
+		repTimes.get(repTime.repetition).put(tick, repTime.time, ms);
 	}
 
 	/**
@@ -35,7 +42,10 @@ public class TimeMapBuilder {
 	}
 
 	public TimeMap build() {
-		return new TimeMap(timeMap);
+		CList<RepTimes> repTimes = clist();
+		for (int iRep : range(this.repTimes))
+			repTimes.add(new RepTimes(iRep, this.repTimes.get(iRep)));
+		return new TimeMap(repTimes.close());
 	}
 
 }

@@ -115,8 +115,10 @@ public class VoltaGroup {
 				break;
 			last = v;
 		}
-		//return first one
-		return voltasStartMeasures.getFirst();
+		if (last != null)
+			return last;
+		//none found
+		return null;
 	}
 
 	/**

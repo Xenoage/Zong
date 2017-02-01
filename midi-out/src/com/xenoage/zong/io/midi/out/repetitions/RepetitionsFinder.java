@@ -38,6 +38,9 @@ import static java.lang.Math.min;
  */
 public class RepetitionsFinder {
 
+	//avoid endless loops: when this number of repetitions is reached, the algorithm stops
+	private static final int maxJumps = 100;
+
 	/**
 	 * A jump from a given {@link Time} to a given {@link Time}.
 	 */
@@ -117,6 +120,12 @@ public class RepetitionsFinder {
 		nextMeasure: for (currentMeasureIndex = 0; currentMeasureIndex < score.getMeasuresCount();) {
 			val measure = score.getColumnHeader(currentMeasureIndex);
 
+			//are we stuck within an endless loop? then do not jump at all.
+			if (jumps.size() > maxJumps) {
+				jumps.clear();
+				return;
+			}
+
 			//enter a volta
 			if (voltaGroups.getVoltaGroupStartingAt(currentMeasureIndex) != null)
 				if (processVolta())
@@ -134,11 +143,12 @@ public class RepetitionsFinder {
 			}
 
 			//backward repeat at measure end
+			//ignore it at the end of the final volta of a volta group, otherwise we are stuck in an endless loop
 			val endBarline = measure.getEndBarline();
-			if (isWithRepeats && endBarline != null) {
+			val endTime = time(currentMeasureIndex + 1, _0);
+			if (isWithRepeats && endBarline != null && false == isFinalVoltaAt(currentMeasureIndex)) {
 				if (endBarline.getRepeat().isBackward()) {
-					Time end = time(currentMeasureIndex + 1, _0);
-					if (processBackwardRepeat(endBarline, end))
+					if (processBackwardRepeat(endBarline, endTime))
 						continue nextMeasure;
 				}
 			}
@@ -307,7 +317,7 @@ public class RepetitionsFinder {
 			}
 		}
 		else {
-			//no suitable volta found
+			//no suitable volta found. jump to the end of the volta group
 			voltaGroupsCounter.remove(voltaGroup);
 			addJump(time(currentMeasureIndex, _0), time(voltaGroup.endMeasure + 1, _0));
 			return true;
@@ -351,14 +361,20 @@ public class RepetitionsFinder {
 
 		//if we are at the end of a volta, find last forward repeat before the volta group
 		if (isVoltaEndAt(from)) {
-			val volta = voltaGroups.getStateAt(from.measure - 1);
-			from = time(volta.group.startMeasure, _0);
+			val voltaState = voltaGroups.getStateAt(from.measure - 1);
+			from = time(voltaState.group.startMeasure, _0);
 		}
 
 		//iterate through measures in reverse order
 		int fromMeasure = min(from.measure, score.getMeasuresCount() - 1); //from.measure could be 1 measure after score
 		for (int iMeasure : rangeReverse(fromMeasure, 0)) {
 			val measure = score.getColumnHeader(iMeasure);
+
+			//different volta group in this measure? then start repeat after this volta
+			/* VoltaGroupState voltaState = voltaGroups.getStateAt(iMeasure);
+			if (voltaState != null && (thisVoltaState == null || thisVoltaState.group != voltaState.group)) {
+				return time(iMeasure + 1, _0);
+			} */
 
 			//barline within the measure?
 			val innerBarlines = measure.getMiddleBarlines();
@@ -416,6 +432,19 @@ public class RepetitionsFinder {
 	private boolean isVoltaEndAt(Time time) {
 		val volta = voltaGroups.getStateAt(time.measure - 1);
 		return volta != null && volta.voltaEndMeasure == time.measure - 1 && time.beat.equals(_0);
+	}
+
+	/**
+	 * Returns true, if the given measure is the last repetition of a volta group.
+	 */
+	private boolean isFinalVoltaAt(int measure) {
+		val voltaState = voltaGroups.getStateAt(measure);
+		if (voltaState != null) {
+			val finalVolta = voltaState.group.findVolta(voltaState.group.getRepeatCount());
+			if (finalVolta.volta == voltaState.volta && voltaState.voltaEndMeasure == measure)
+				return true;
+		}
+		return false;
 	}
 
 }
