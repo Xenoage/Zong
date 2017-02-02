@@ -72,7 +72,10 @@ compileJava.dependsOn prepareSrcZong
 gwt {
 	gwtVersion = '2.8.0'
 	modules 'com.xenoage.zong.webapp.webapp'
-	compiler { style = 'PRETTY' }
+	compiler { style = 'OBF' } //alternative: PRETTY
+	//more memory required, otherwise OutOfMemoryError
+	minHeapSize = "512M";
+	maxHeapSize = "1024M";
 }
 
 //where to find the sources
