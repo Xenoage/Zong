@@ -1,9 +1,5 @@
 package com.xenoage.zong.io.symbols;
 
-import static com.xenoage.utils.PlatformUtils.platformUtils;
-import static com.xenoage.utils.log.Log.log;
-import static com.xenoage.utils.log.Report.remark;
-
 import com.xenoage.utils.async.AsyncProducer;
 import com.xenoage.utils.async.AsyncResult;
 import com.xenoage.utils.io.FileUtils;
@@ -11,6 +7,10 @@ import com.xenoage.utils.io.InputStream;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.zong.symbols.PathSymbol;
 import com.xenoage.zong.symbols.Symbol;
+
+import static com.xenoage.utils.PlatformUtils.platformUtils;
+import static com.xenoage.utils.log.Log.log;
+import static com.xenoage.utils.log.Report.remark;
 
 /**
  * A {@link SvgSymbolReader} creates a {@link Symbol} from a SVG file.
@@ -65,32 +65,33 @@ class SvgSymbolReader
 		//styles: path, styled, rect
 		PathSymbol ret = null;
 		Exception ex = null;
-		if (xmlReader.openNextChildElement()) {
-			String elementId = xmlReader.getAttribute("id");
-			if (elementId == null || elementId.indexOf(':') == -1) {
-				//no format information. use path.
-				ret = SvgPathSymbolReader.read(id, xmlReader);
-			}
-			else {
-				String format = elementId.split(":")[0];
-				if (format.equals("path")) {
+		try {
+			if (xmlReader.openNextChildElement()) {
+				String elementId = xmlReader.getAttribute("id");
+				if (elementId == null || elementId.indexOf(':') == -1) {
+					//no format information. use path.
 					ret = SvgPathSymbolReader.read(id, xmlReader);
-				}
-				else if (format.equals("rect")) {
-					ex = new IllegalStateException("Could not load \"" + svgFilepath + "\": \"" +
-						format + "\" (rect is no longer supported. Convert it into a path)");
-				}
-				else if (format.equals("styled")) {
-					ex = new IllegalStateException("Could not load \"" + svgFilepath + "\": \"" +
-						format + "\" (currently styled symbols are not supported)");
-				}
-				else {
-					ex = new IllegalStateException("Unknown symbol format in \"" + svgFilepath +
-						"\": \"" + format + "\"");
+				} else {
+					String format = elementId.split(":")[0];
+					if (format.equals("path")) {
+						ret = SvgPathSymbolReader.read(id, xmlReader);
+					} else if (format.equals("rect")) {
+						ex = new IllegalStateException("Could not load \"" + svgFilepath + "\": \"" +
+								format + "\" (rect is no longer supported. Convert it into a path)");
+					} else if (format.equals("styled")) {
+						ex = new IllegalStateException("Could not load \"" + svgFilepath + "\": \"" +
+								format + "\" (currently styled symbols are not supported)");
+					} else {
+						ex = new IllegalStateException("Unknown symbol format in \"" + svgFilepath +
+								"\": \"" + format + "\"");
+					}
 				}
 			}
+		} catch (Exception readerEx) {
+			ex = readerEx;
+		} finally {
+			xmlReader.close();
 		}
-		xmlReader.close();
 
 		if (ex != null)
 			result.onFailure(ex);

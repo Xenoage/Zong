@@ -9,6 +9,9 @@ import com.xenoage.zong.symbols.path.Path;
  * A {@link SvgPathSymbolReader} creates a {@link PathSymbol}
  * from a given SVG document.
  *
+ * There are some special attributes used only for Zong!:
+ * zong-baseline, zong-ascent, zong-leftborder, zong-rightborder
+ *
  * @author Andreas Wenger
  */
 final class SvgPathSymbolReader {
@@ -25,20 +28,20 @@ final class SvgPathSymbolReader {
 		//read baseline and ascent, if there
 		Float baseline = null;
 		Float ascent = null;
-		String attr = xmlReader.getAttribute("score:baseline");
+		String attr = xmlReader.getAttribute("zong-baseline");
 		if (attr != null)
 			baseline = Parser.parseFloat(attr) * 0.01f - 10;
-		attr = xmlReader.getAttribute("score:ascent");
+		attr = xmlReader.getAttribute("zong-ascent");
 		if (attr != null)
 			ascent = Parser.parseFloat(attr) * 0.01f;
 
 		//custom left and right border, if there
 		Float leftBorder = null;
 		Float rightBorder = null;
-		attr = xmlReader.getAttribute("score:leftborder");
+		attr = xmlReader.getAttribute("zong-leftborder");
 		if (attr != null)
 			leftBorder = Parser.parseFloat(attr) * 0.01f - 10;
-		attr = xmlReader.getAttribute("score:rightborder");
+		attr = xmlReader.getAttribute("zong-rightborder");
 		if (attr != null)
 			rightBorder = Parser.parseFloat(attr) * 0.01f - 10;
 
