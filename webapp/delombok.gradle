@@ -23,6 +23,9 @@ import io.franzbecker.gradle.lombok.task.DelombokTask
 def delombok_src = [
 		"../core/src",
 		"../layout/src",
+		"../musicxml/src",
+		"../musicxml-in/src",
+		"../musicxml-layout/src",
 		"../renderer/src",
 		"../utils/utils-base/src/",
 		"../utils/utils-gwt/src/",

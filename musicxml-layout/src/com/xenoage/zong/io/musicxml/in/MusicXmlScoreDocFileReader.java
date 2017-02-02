@@ -1,42 +1,17 @@
 package com.xenoage.zong.io.musicxml.in;
 
-import static com.xenoage.zong.core.format.LayoutFormat.defaultLayoutFormat;
-import static com.xenoage.zong.musiclayout.settings.LayoutSettings.defaultLayoutSettings;
-import static com.xenoage.zong.util.ZongPlatformUtils.zongPlatformUtils;
-
-import java.io.IOException;
-import java.util.List;
-
 import com.xenoage.utils.async.AsyncProducer;
 import com.xenoage.utils.async.AsyncResult;
-import com.xenoage.utils.exceptions.InvalidFormatException;
 import com.xenoage.utils.filter.AllFilter;
 import com.xenoage.utils.io.InputStream;
-import com.xenoage.utils.math.geom.Point2f;
-import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.core.Score;
-import com.xenoage.zong.core.format.LayoutFormat;
-import com.xenoage.zong.core.format.PageFormat;
 import com.xenoage.zong.documents.ScoreDoc;
 import com.xenoage.zong.io.ScoreDocFactory;
-import com.xenoage.zong.layout.Layout;
-import com.xenoage.zong.layout.LayoutDefaults;
-import com.xenoage.zong.layout.Page;
-import com.xenoage.zong.layout.frames.ScoreFrame;
-import com.xenoage.zong.layout.frames.ScoreFrameChain;
-import com.xenoage.zong.musiclayout.ScoreLayout;
-import com.xenoage.zong.musiclayout.layouter.Context;
-import com.xenoage.zong.musiclayout.layouter.ScoreLayoutArea;
-import com.xenoage.zong.musiclayout.layouter.ScoreLayouter;
-import com.xenoage.zong.musiclayout.layouter.Target;
-import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.musicxml.types.MxlScorePartwise;
-import com.xenoage.zong.symbols.SymbolPool;
-
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.val;
+
+import java.util.List;
 
 /**
  * Creates a {@link ScoreDoc} instance from the document

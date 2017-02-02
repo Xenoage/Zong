@@ -19,7 +19,9 @@ import com.xenoage.zong.Zong;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.util.Interval;
 import com.xenoage.zong.core.position.MP;
+import com.xenoage.zong.documents.ScoreDoc;
 import com.xenoage.zong.io.musiclayout.LayoutSettingsReader;
+import com.xenoage.zong.io.musicxml.in.MusicXmlScoreDocFileReader;
 import com.xenoage.zong.musiclayout.ScoreLayout;
 import com.xenoage.zong.musiclayout.layouter.Context;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayoutArea;
@@ -187,33 +189,50 @@ public class WebApp
 		final SymbolPool symbolPool = zongPlatformUtils().getSymbolPool();
 		final Label lblLayout = new Label("Loading...");
 		container.add(lblLayout);
-		platformUtils().openFileAsync("test.xml", new AsyncResult<InputStream>() {
+		platformUtils().openFileAsync("data/test/scores/musicxml20/BeetAnGeSample.xml", new AsyncResult<InputStream>() {
 
-			@Override public void onSuccess(InputStream data) {
-				try {
-					LayoutSettings layoutSettings = LayoutSettingsReader.read(data);
-					Size2f areaSize = new Size2f(150, 10000);
-					Context context = new Context(score, symbolPool, layoutSettings);
-					Target target = Target.completeLayoutTarget(new ScoreLayoutArea(areaSize));
-					ScoreLayout layout = new ScoreLayouter(context, target).createLayoutWithExceptions();
-					lblLayout.setText(layout.toString().substring(0, 1000) + "...");
+			@Override public void onSuccess (InputStream scoreData){
+				new MusicXmlScoreDocFileReader(scoreData, null).produce(new AsyncResult<ScoreDoc>() {
+					@Override public void onSuccess(ScoreDoc scoreDoc) {
+						platformUtils().openFileAsync("test.xml",new AsyncResult<InputStream>() {
+							@Override public void onSuccess (InputStream data){
+								try {
+									LayoutSettings layoutSettings = LayoutSettingsReader.read(data);
+									Size2f areaSize = new Size2f(150, 10000);
+									Context context = new Context(scoreDoc.getScore(), symbolPool, layoutSettings);
+									Target target = Target.completeLayoutTarget(new ScoreLayoutArea(areaSize));
+									ScoreLayout layout = new ScoreLayouter(context, target).createLayoutWithExceptions();
+									lblLayout.setText(layout.toString().substring(0, 1000) + "...");
 
-					//draw in canvas
-					gwtCanvas.transformScale(20, 20);
-					Iterable<Stamping> stampings = layout.getScoreFrameLayout(0).getMusicalStampings();
-					//render them
-					RendererArgs args = new RendererArgs(1, 1, new Point2i(0, 0), symbolPool);
-					for (Stamping s : stampings) {
-						StampingRenderer.drawAny(s, gwtCanvas, args);
+									//draw in canvas
+									gwtCanvas.transformScale(20, 20);
+									Iterable<Stamping> stampings = layout.getScoreFrameLayout(0).getMusicalStampings();
+									//render them
+									RendererArgs args = new RendererArgs(1, 1, new Point2i(0, 0), symbolPool);
+									for (Stamping s : stampings) {
+										StampingRenderer.drawAny(s, gwtCanvas, args);
+									}
+								} catch (IOException ex) {
+									lblLayout.setText("layout error: " + ex.toString());
+								}
+							}
+
+							@Override public void onFailure (Exception ex){
+								lblLayout.setText("Layout error: " + ex.toString());
+							}
+						});
 					}
-				} catch (IOException ex) {
-					lblLayout.setText("layout error: " + ex.toString());
-				}
+
+					@Override public void onFailure(Exception ex) {
+						lblLayout.setText("ScoreDoc reading error: " + ex.toString());
+					}
+				});
 			}
 
-			@Override public void onFailure(Exception ex) {
-				lblLayout.setText("Layout error: " + ex.toString());
+			@Override public void onFailure (Exception ex){
+				lblLayout.setText("MusicXML reading error: " + ex.toString());
 			}
+
 		});
 	}
 
