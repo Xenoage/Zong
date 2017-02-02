@@ -23,6 +23,8 @@ import java.util.Map;
  *
  * Running the {@link #runWithHtmlStatusReport()} method creates report HTML files
  * (see {@link StatusHtmlReport}).
+ *
+ * TODO: ZONG-105: Test midi-out with MusicXML Test Suite
  * 
  * @author Andreas Wenger
  */
