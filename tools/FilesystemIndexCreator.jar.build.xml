@@ -9,7 +9,7 @@
                 <attribute name="Main-Class" value="com.xenoage.zong.tools.index.FilesystemIndexCreator"/>
                 <attribute name="Class-Path" value="."/>
             </manifest>
-            <fileset dir="bin"/>
+            <fileset dir="${classes}"/>
             <fileset dir="../utils/utils-base/${classes}"/>
             <fileset dir="../utils/utils-kernel/${classes}"/>
             <fileset dir="../utils/utils-jse/${classes}"/>
