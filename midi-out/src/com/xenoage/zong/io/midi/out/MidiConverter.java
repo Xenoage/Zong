@@ -319,7 +319,7 @@ public class MidiConverter<T> {
 			}
 		}
 		//update time map
-		//timeMap = newTimeMap.build();
+		timeMap = newTimeMap.build();
 		//write playback end event
 		writer.writeControlChange(systemTrackIndex, 0, writer.getLength(), MidiEvents.PlaybackEnd.code, 0);
 	}
