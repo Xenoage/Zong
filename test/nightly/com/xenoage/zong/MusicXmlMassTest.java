@@ -92,7 +92,7 @@ public class MusicXmlMassTest {
 
 	//*
 	@Test public void testSingleFile() {
-		File file = new File(dir + "MusicXML/MusicXML-TestSuite-0.1/45d-Repeats-Nested-Alternatives.xml");
+		File file = new File(dir + "MusicXML/hausmusik.ch/b/badarczewska-Thekla von (1834-1861)/gebet-einer-jungfrau/gebet-einer-jungfrau.xml");
 		if (!testFile(file)) Assert.fail();
 	} //*/
 

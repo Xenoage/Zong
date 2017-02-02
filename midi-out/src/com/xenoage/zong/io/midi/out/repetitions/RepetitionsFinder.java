@@ -143,13 +143,14 @@ public class RepetitionsFinder {
 			}
 
 			//backward repeat at measure end
-			//ignore it at the end of the final volta of a volta group, otherwise we are stuck in an endless loop
 			val endBarline = measure.getEndBarline();
 			val endTime = time(currentMeasureIndex + 1, _0);
-			if (isWithRepeats && endBarline != null && false == isFinalVoltaAt(currentMeasureIndex)) {
+			if (isWithRepeats && endBarline != null) {
 				if (endBarline.getRepeat().isBackward()) {
-					if (processBackwardRepeat(endBarline, endTime))
-						continue nextMeasure;
+					//ignore it at the end of the final volta of a volta group, otherwise we are stuck in an endless loop
+					if (false == isFinalVoltaAt(currentMeasureIndex))
+						if (processBackwardRepeat(endBarline, endTime))
+							continue nextMeasure;
 				}
 			}
 

@@ -78,6 +78,8 @@ public class VoltaGroup {
 		for (val v : voltasStartMeasures) {
 			if (false == v.volta.isDefault())
 				maxRepeatTime = max(maxRepeatTime, v.volta.getNumbers().getStop());
+			else
+				maxRepeatTime = max(maxRepeatTime, 1); //enter default volta at least one time
 		}
 		if (voltasStartMeasures.size() > 1 && //when there is at least one other volta before a final default volta
 				voltasStartMeasures.getLast().volta.isDefault()) {
