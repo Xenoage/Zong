@@ -6,6 +6,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.xenoage.utils.math.MathUtils;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>
@@ -21,7 +22,7 @@ public class WebApp implements EntryPoint {
 
 		button.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				label.setText("Hello Zong!");
+				label.setText(MathUtils.max(200, 100)+"");
 			}
 		});
 

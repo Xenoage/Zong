@@ -5,6 +5,10 @@
 	<source path=''/>
 	<!-- Main class -->
 	<entry-point class='com.xenoage.zong.webapp.WebApp'/>
-	<!-- Dependencies -->
+	<!-- GWT dependencies -->
 	<inherits name='com.google.gwt.user.User'/>
+	<!-- Project dependencies -->
+	<inherits name="com.xenoage.utils.base"/>
+	<inherits name="com.xenoage.utils.gwt"/>
+	<inherits name="com.xenoage.utils.kernel"/>
 </module>
