@@ -70,7 +70,7 @@ compileJava.dependsOn prepareSrcZong
 
 //GWT compiler config
 gwt {
-	gwtVersion = '2.7.0'
+	gwtVersion = '2.8.0'
 	modules 'com.xenoage.zong.webapp.webapp'
 	compiler { style = 'PRETTY' }
 }
