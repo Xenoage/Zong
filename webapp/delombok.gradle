@@ -1,0 +1,53 @@
+//***************************
+// Buildscript Setup
+//***************************
+
+plugins {
+	id 'io.franzbecker.gradle-lombok' version '1.8'
+	id 'java'
+}
+
+repositories {
+	jcenter()
+}
+
+import io.franzbecker.gradle.lombok.task.DelombokTask
+
+
+
+//***************************
+// Delombok Zong! sources for GWT
+//***************************
+
+//all source folders of the projects the webapp project depends on
+def delombok_src = [
+		"../core/src",
+		"../layout/src",
+		"../renderer/src",
+		"../utils/utils-base/src/",
+		"../utils/utils-gwt/src/",
+		"../utils/utils-kernel/src/"
+]
+//destination folder for delomboked sources
+def delombok_target = "src-zong"
+
+//delombok
+task prepareSrcZong(type: DelombokTask) {
+	ext.outputDir = file(delombok_target)
+	outputs.dir(outputDir)
+	delombok_src.each {
+		inputs.dir(it)
+		args(it, "-d", outputDir)
+	}
+}
+
+//clean destination folder before delomboking
+prepareSrcZong.doFirst {
+	delete 'src-zong'
+}
+
+//remove PlatformUtilsBootstrap after delomboking, since
+//this class is implemented differently in the project (no reflection in GWT possible)
+prepareSrcZong.doLast {
+	delete 'src-zong/com/xenoage/utils/PlatformUtilsBootstrap.java'
+}

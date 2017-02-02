@@ -1,21 +1,20 @@
 package com.xenoage.zong.core.music;
 
-import static com.xenoage.utils.collections.CollectionUtils.map;
-import static java.util.Collections.unmodifiableMap;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import com.xenoage.utils.annotations.Const;
+import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.zong.core.music.chord.Accidental;
 import com.xenoage.zong.core.music.clef.ClefType;
 import com.xenoage.zong.core.music.key.Key;
 import com.xenoage.zong.core.music.key.TraditionalKey;
 import com.xenoage.zong.core.music.key.TraditionalKey.Mode;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NonNull;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.xenoage.utils.collections.CollectionUtils.map;
+import static java.util.Collections.unmodifiableMap;
 
 
 /**

@@ -1,7 +1,7 @@
 package com.xenoage.zong.core.music.util;
 
 import lombok.Data;
-import lombok.NonNull;
+import com.xenoage.utils.annotations.NonNull;
 
 import com.xenoage.zong.core.position.MP;
 

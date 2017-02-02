@@ -4,7 +4,7 @@ import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.zong.io.midi.out.time.TimeMap;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NonNull;
+import com.xenoage.utils.annotations.NonNull;
 
 /**
  * A MIDI sequence with additional information.

@@ -8,7 +8,6 @@
 	<!-- GWT dependencies -->
 	<inherits name='com.google.gwt.user.User'/>
 	<!-- Project dependencies -->
-	<inherits name="com.xenoage.utils.base"/>
-	<inherits name="com.xenoage.utils.gwt"/>
-	<inherits name="com.xenoage.utils.kernel"/>
+	<inherits name="com.xenoage.utils.utils"/>
+	<inherits name="com.xenoage.zong.zong"/>
 </module>

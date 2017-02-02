@@ -1,15 +1,15 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.NullUtils.notNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
-
+import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.enums.MxlBeamValue;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+import static com.xenoage.utils.NullUtils.notNull;
 
 /**
  * MusicXML beam.

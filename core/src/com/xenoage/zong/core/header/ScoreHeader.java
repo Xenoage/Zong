@@ -1,15 +1,7 @@
 package com.xenoage.zong.core.header;
 
-import static com.xenoage.utils.collections.CollectionUtils.setExtend;
-import static com.xenoage.utils.kernel.Range.rangeReverse;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import lombok.Data;
-import lombok.NonNull;
-
 import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.format.Break;
 import com.xenoage.zong.core.format.StaffLayout;
@@ -18,6 +10,13 @@ import com.xenoage.zong.core.music.layout.SystemBreak;
 import com.xenoage.zong.core.music.time.TimeSignature;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.utils.exceptions.IllegalMPException;
+import lombok.Data;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.xenoage.utils.collections.CollectionUtils.setExtend;
+import static com.xenoage.utils.kernel.Range.rangeReverse;
 
 
 /**
