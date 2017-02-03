@@ -1,9 +1,11 @@
 package com.xenoage.zong.io.musicxml.in;
 
-import com.xenoage.utils.async.AsyncProducer;
 import com.xenoage.utils.async.AsyncResult;
 import com.xenoage.utils.filter.AllFilter;
 import com.xenoage.utils.io.InputStream;
+import com.xenoage.utils.promise.Executor;
+import com.xenoage.utils.promise.Promise;
+import com.xenoage.utils.promise.Return;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.documents.ScoreDoc;
 import com.xenoage.zong.io.ScoreDocFactory;
@@ -23,45 +25,50 @@ import java.util.List;
  * If no score is opened, null is returned.
  */
 @RequiredArgsConstructor
-public class MusicXmlScoreDocFileReader
-	implements AsyncProducer<ScoreDoc> {
+public class MusicXmlScoreDocFileReader {
 
 	private final InputStream stream;
 	private final String filePath;
 
 	
-	@Override public void produce(final AsyncResult<ScoreDoc> result) {
-		val reader = new MusicXmlFileReader(stream, filePath, new AllFilter<String>());
-		reader.produce(new AsyncResult<List<Score>>() {
+	public Promise<ScoreDoc> read() {
 
-			@Override public void onSuccess(List<Score> scores) {
-				if (scores.size() == 0) {
-					//no score was opened
-					result.onSuccess(null);
-				}
-				else {
-					//open first selected score
-					Score score = scores.get(0);
-					ScoreDoc scoreDoc;
-					try {
-						scoreDoc = new ScoreDocFactory().read(score);
+		return new Promise<ScoreDoc>(new Executor<ScoreDoc>() {
+			@Override public void run(final Return<ScoreDoc> ret) {
 
-						//add credit elements - TIDY
-						Object o = score.getMetaData().get("mxldoc");
-						if (o != null && o instanceof MxlScorePartwise) {
-							MxlScorePartwise doc = (MxlScorePartwise) o;
-							CreditsReader.read(doc, scoreDoc.getLayout(), score.getFormat());
+				val reader = new MusicXmlFileReader(stream, filePath, new AllFilter<String>());
+				reader.produce(new AsyncResult<List<Score>>() {
+
+					@Override public void onSuccess(List<Score> scores) {
+						if (scores.size() == 0) {
+							//no score was opened
+							ret.resolve(null);
 						}
+						else {
+							//open first selected score
+							Score score = scores.get(0);
+							ScoreDoc scoreDoc;
+							try {
+								scoreDoc = new ScoreDocFactory().read(score);
 
-						result.onSuccess(scoreDoc);
-					} catch (Exception ex) {
-						result.onFailure(ex);
+								//add credit elements - TIDY
+								Object o = score.getMetaData().get("mxldoc");
+								if (o != null && o instanceof MxlScorePartwise) {
+									MxlScorePartwise doc = (MxlScorePartwise) o;
+									CreditsReader.read(doc, scoreDoc.getLayout(), score.getFormat());
+								}
+
+								ret.resolve(scoreDoc);
+							} catch (Exception ex) {
+								ret.reject(ex);
+							}
+						}
 					}
-				}
-			}
 
-			@Override public void onFailure(Exception ex) {
-				result.onFailure(ex);
+					@Override public void onFailure(Exception ex) {
+						ret.reject(ex);
+					}
+				});
 			}
 		});
 	}

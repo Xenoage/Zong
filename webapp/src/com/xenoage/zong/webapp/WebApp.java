@@ -59,6 +59,8 @@ public class WebApp
 	private Canvas canvas;
 	private Context2d context;
 	private GwtCanvas gwtCanvas;
+
+	private ScoreDoc scoreDoc;
 	
 
 	/**
@@ -189,51 +191,36 @@ public class WebApp
 		final SymbolPool symbolPool = zongPlatformUtils().getSymbolPool();
 		final Label lblLayout = new Label("Loading...");
 		container.add(lblLayout);
-		platformUtils().openFileAsync("data/test/scores/musicxml20/BeetAnGeSample.xml", new AsyncResult<InputStream>() {
 
-			@Override public void onSuccess (InputStream scoreData){
-				new MusicXmlScoreDocFileReader(scoreData, null).produce(new AsyncResult<ScoreDoc>() {
-					@Override public void onSuccess(ScoreDoc scoreDoc) {
-						platformUtils().openFileAsync("test.xml",new AsyncResult<InputStream>() {
-							@Override public void onSuccess (InputStream data){
-								try {
-									LayoutSettings layoutSettings = LayoutSettingsReader.read(data);
-									Size2f areaSize = new Size2f(150, 10000);
-									Context context = new Context(scoreDoc.getScore(), symbolPool, layoutSettings);
-									Target target = Target.completeLayoutTarget(new ScoreLayoutArea(areaSize));
-									ScoreLayout layout = new ScoreLayouter(context, target).createLayoutWithExceptions();
-									lblLayout.setText(layout.toString().substring(0, 1000) + "...");
+		platformUtils().openFileAsync("data/test/scores/musicxml20/BeetAnGeSample.xml")
+			.thenAsync(scoreStream -> new MusicXmlScoreDocFileReader(scoreStream, null).read())
+			.thenAsync(scoreDoc -> {
+				WebApp.this.scoreDoc = scoreDoc;
+				return platformUtils().openFileAsync("test.xml");
+			})
+			.thenDo(testXmlStream -> {
+				LayoutSettings layoutSettings;
+				try {
+					layoutSettings = LayoutSettingsReader.read(testXmlStream);
+				} catch (IOException ex) {
+					throw new RuntimeException(ex);
+				}
+				Size2f areaSize = new Size2f(150, 10000);
+				Context context = new Context(scoreDoc.getScore(), symbolPool, layoutSettings);
+				Target target = Target.completeLayoutTarget(new ScoreLayoutArea(areaSize));
+				ScoreLayout layout = new ScoreLayouter(context, target).createLayoutWithExceptions();
+				lblLayout.setText(layout.toString().substring(0, 1000) + "...");
 
-									//draw in canvas
-									gwtCanvas.transformScale(20, 20);
-									Iterable<Stamping> stampings = layout.getScoreFrameLayout(0).getMusicalStampings();
-									//render them
-									RendererArgs args = new RendererArgs(1, 1, new Point2i(0, 0), symbolPool);
-									for (Stamping s : stampings) {
-										StampingRenderer.drawAny(s, gwtCanvas, args);
-									}
-								} catch (IOException ex) {
-									lblLayout.setText("layout error: " + ex.toString());
-								}
-							}
-
-							@Override public void onFailure (Exception ex){
-								lblLayout.setText("Layout error: " + ex.toString());
-							}
-						});
-					}
-
-					@Override public void onFailure(Exception ex) {
-						lblLayout.setText("ScoreDoc reading error: " + ex.toString());
-					}
-				});
-			}
-
-			@Override public void onFailure (Exception ex){
-				lblLayout.setText("MusicXML reading error: " + ex.toString());
-			}
-
-		});
+				//draw in canvas
+				gwtCanvas.transformScale(20, 20);
+				Iterable<Stamping> stampings = layout.getScoreFrameLayout(0).getMusicalStampings();
+				//render them
+				RendererArgs args = new RendererArgs(1, 1, new Point2i(0, 0), symbolPool);
+				for (Stamping s : stampings) {
+					StampingRenderer.drawAny(s, gwtCanvas, args);
+				}
+			})
+			.onError(ex -> lblLayout.setText("Error: " + ex.toString()));
 	}
 
 	private String findAClef(Score score, MP mp) {

@@ -1,14 +1,14 @@
 package com.xenoage.zong.desktop.io.musicxml.in;
 
-import static com.xenoage.utils.jse.async.Sync.sync;
-
-import java.io.IOException;
-
 import com.xenoage.utils.document.io.FileInput;
 import com.xenoage.utils.exceptions.InvalidFormatException;
 import com.xenoage.utils.io.InputStream;
 import com.xenoage.zong.documents.ScoreDoc;
 import com.xenoage.zong.io.musicxml.in.MusicXmlScoreDocFileReader;
+
+import java.io.IOException;
+
+import static com.xenoage.utils.jse.promise.Sync.sync;
 
 /**
  * This class reads a MusicXML 2.0 file
@@ -25,7 +25,7 @@ public class MusicXmlScoreDocFileInput
 	@Override public ScoreDoc read(InputStream stream, String filePath)
 		throws InvalidFormatException, IOException {
 		try {
-			return sync(new MusicXmlScoreDocFileReader(stream, filePath));
+			return sync(new MusicXmlScoreDocFileReader(stream, filePath).read());
 		} catch (InvalidFormatException ex) {
 			throw ex; //forward
 		} catch (IOException ex) {
