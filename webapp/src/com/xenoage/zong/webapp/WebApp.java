@@ -11,24 +11,19 @@ import com.xenoage.utils.error.Err;
 import com.xenoage.utils.gwt.error.GwtErrorProcessing;
 import com.xenoage.utils.gwt.log.GwtLogProcessing;
 import com.xenoage.utils.log.Log;
-import com.xenoage.utils.math.geom.Point2i;
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.Zong;
 import com.xenoage.zong.documents.ScoreDoc;
 import com.xenoage.zong.io.musiclayout.LayoutSettingsReader;
 import com.xenoage.zong.io.musicxml.in.MusicXmlScoreDocFileReader;
-import com.xenoage.zong.musiclayout.ScoreLayout;
 import com.xenoage.zong.musiclayout.layouter.Context;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayoutArea;
-import com.xenoage.zong.musiclayout.layouter.ScoreLayouter;
 import com.xenoage.zong.musiclayout.layouter.Target;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
-import com.xenoage.zong.musiclayout.stampings.Stamping;
-import com.xenoage.zong.renderer.RendererArgs;
+import com.xenoage.zong.renderer.LayoutRenderer;
 import com.xenoage.zong.renderer.canvas.CanvasDecoration;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
 import com.xenoage.zong.renderer.canvas.CanvasIntegrity;
-import com.xenoage.zong.renderer.stamping.StampingRenderer;
 import com.xenoage.zong.symbols.SymbolPool;
 import com.xenoage.zong.webapp.renderer.gwt.canvas.GwtCanvas;
 import com.xenoage.zong.webapp.utils.GwtZongPlatformUtils;
@@ -38,6 +33,7 @@ import java.io.IOException;
 import static com.xenoage.utils.PlatformUtils.platformUtils;
 import static com.xenoage.utils.log.Log.log;
 import static com.xenoage.utils.log.Report.fatal;
+import static com.xenoage.utils.math.geom.Point2i.origin;
 import static com.xenoage.zong.util.ZongPlatformUtils.zongPlatformUtils;
 
 
@@ -51,10 +47,8 @@ public class WebApp
 
 	private Canvas canvas;
 	private Context2d context;
-	private GwtCanvas gwtCanvas;
 
 	private ScoreDoc scoreDoc;
-	private ScoreLayout scoreLayout;
 	
 
 	/**
@@ -113,7 +107,6 @@ public class WebApp
 				SymbolPool symbolPool = zongPlatformUtils().getSymbolPool();
 				Context context = new Context(scoreDoc.getScore(), symbolPool, layoutSettings);
 				Target target = Target.completeLayoutTarget(new ScoreLayoutArea(areaSize));
-				scoreLayout = new ScoreLayouter(context, target).createLayoutWithExceptions();
 				paintLayout();
 			})
 			.onError(ex -> consoleLog("Error: " + ex.toString()));
@@ -126,28 +119,19 @@ public class WebApp
 		canvas.setCoordinateSpaceWidth(canvas.getElement().getClientWidth() * 2); //double resolution: smoother
 		canvas.setCoordinateSpaceHeight(canvas.getElement().getClientHeight() * 2); //double resolution: smoother
 		//paint score layout
-		if (scoreLayout != null) {
+		if (scoreDoc != null) {
 			//draw in canvas
 			context = canvas.getContext2d();
-			context.scale(10, 10);
-			setImageSmoothingEnabled(context);
-			gwtCanvas = new GwtCanvas(canvas, CanvasFormat.Raster, CanvasDecoration.None, CanvasIntegrity.Perfect);
-			Iterable<Stamping> stampings = scoreLayout.getScoreFrameLayout(0).getMusicalStampings();
-			//render them
-			SymbolPool symbolPool = zongPlatformUtils().getSymbolPool();
-			RendererArgs args = new RendererArgs(1, 1, new Point2i(0, 0), symbolPool);
-			for (Stamping s : stampings) {
-				StampingRenderer.drawAny(s, gwtCanvas, args);
-			}
+			context.scale(3, 3);
+			//render layout
+			LayoutRenderer.paintToCanvas(scoreDoc.getLayout(), 0, 1, origin,
+					new GwtCanvas(context, CanvasFormat.Raster,
+							CanvasDecoration.Interactive, CanvasIntegrity.Perfect));
 		}
 	}
 
 	public static native void consoleLog(Object message) /*-{ //TIDY: move into GwtPlatformUtils
     console.log(message);
-  }-*/;
-
-	native void setImageSmoothingEnabled(Context2d context) /*-{
-    context.imageSmoothingEnabled = true;
   }-*/;
 
 }

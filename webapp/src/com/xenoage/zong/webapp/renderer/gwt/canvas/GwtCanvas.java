@@ -1,6 +1,5 @@
 package com.xenoage.zong.webapp.renderer.gwt.canvas;
 
-import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.Context2d.LineCap;
 import com.google.gwt.canvas.dom.client.Context2d.LineJoin;
@@ -30,8 +29,7 @@ import com.xenoage.zong.webapp.renderer.gwt.path.GwtPath;
 public class GwtCanvas
 	extends com.xenoage.zong.renderer.canvas.Canvas {
 
-	//the HTML5 canvas and graphics context
-	private Canvas canvas;
+	//the HTML5 graphics context
 	private Context2d context;
 
 
@@ -39,27 +37,17 @@ public class GwtCanvas
 	 * Creates an {@link GwtCanvas} with the given size in mm for the given context,
 	 * format, decoration mode and itegrity.
 	 */
-	public GwtCanvas(Canvas canvas, CanvasFormat format,
+	public GwtCanvas(Context2d context, CanvasFormat format,
 		CanvasDecoration decoration, CanvasIntegrity integrity) {
 		super(new Size2f(10, 10), format, decoration, integrity);
-		this.canvas = canvas;
-		this.context = canvas.getContext2d();
+		this.context = context;
 	}
 
 	/**
 	 * Gets the HTML5 canvas.
 	 */
-	@Override public Canvas getGraphicsContext() {
-		return canvas;
-	}
-
-	/**
-	 * Convenience method: Gets the {@link Canvas} graphics context from
-	 * the given {@link com.xenoage.zong.renderer.canvas.Canvas}. If it is not a {@link Canvas},
-	 * a {@link ClassCastException} is thrown.
-	 */
-	public static Canvas getCanvas(com.xenoage.zong.renderer.canvas.Canvas canvas) {
-		return ((GwtCanvas) canvas).getGraphicsContext();
+	@Override public Context2d getGraphicsContext() {
+		return context;
 	}
 
 	/**
