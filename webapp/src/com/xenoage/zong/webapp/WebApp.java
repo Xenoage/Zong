@@ -120,6 +120,8 @@ public class WebApp
 	}
 
 	private void paintLayout() {
+		//DEBUG
+		//consoleLog("Canvas size: " + canvas.getElement().getClientWidth() + ", " + canvas.getElement().getClientHeight());
 		//update canvas coordinate space
 		canvas.setCoordinateSpaceWidth(canvas.getElement().getClientWidth() * 2); //double resolution: smoother
 		canvas.setCoordinateSpaceHeight(canvas.getElement().getClientHeight() * 2); //double resolution: smoother
