@@ -22,6 +22,7 @@ import com.xenoage.zong.renderer.canvas.CanvasFormat;
 import com.xenoage.zong.renderer.canvas.CanvasIntegrity;
 import com.xenoage.zong.renderer.symbol.SymbolsRenderer;
 import com.xenoage.zong.symbols.path.Path;
+import com.xenoage.zong.webapp.WebApp;
 import com.xenoage.zong.webapp.renderer.gwt.path.GwtPath;
 
 /**
@@ -94,8 +95,10 @@ public class GwtCanvas
 			//draw elements
 			for (FormattedTextElement e : p.getElements()) {
 				if (e instanceof FormattedTextString) {
-					//TODO formatting
 					FormattedTextString t = (FormattedTextString) e;
+					String cssFont = t.getStyle().getFont().getSize() / 3.5 + "pt " + t.getStyle().getFont().getFamilies().get(0);
+					WebApp.consoleLog(cssFont);
+					context.setFont(cssFont);
 					context.fillText(t.getText(), offsetX, offsetY);
 				}
 				else {

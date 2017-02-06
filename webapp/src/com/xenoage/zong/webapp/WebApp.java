@@ -140,7 +140,7 @@ public class WebApp
 		}
 	}
 
-	native void consoleLog(Object message) /*-{
+	public static native void consoleLog(Object message) /*-{
     console.log(message);
   }-*/;
 
