@@ -7,22 +7,18 @@ import com.google.gwt.canvas.dom.client.Context2d.LineJoin;
 import com.xenoage.utils.color.Color;
 import com.xenoage.utils.font.TextMetrics;
 import com.xenoage.utils.gwt.color.GwtColorUtils;
+import com.xenoage.utils.gwt.font.GwtFontUtils;
+import com.xenoage.utils.math.Units;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Rectangle2f;
 import com.xenoage.utils.math.geom.Size2f;
-import com.xenoage.zong.core.text.Alignment;
-import com.xenoage.zong.core.text.FormattedText;
-import com.xenoage.zong.core.text.FormattedTextElement;
-import com.xenoage.zong.core.text.FormattedTextParagraph;
-import com.xenoage.zong.core.text.FormattedTextString;
-import com.xenoage.zong.core.text.FormattedTextSymbol;
+import com.xenoage.zong.core.text.*;
 import com.xenoage.zong.io.selection.text.TextSelection;
 import com.xenoage.zong.renderer.canvas.CanvasDecoration;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
 import com.xenoage.zong.renderer.canvas.CanvasIntegrity;
 import com.xenoage.zong.renderer.symbol.SymbolsRenderer;
 import com.xenoage.zong.symbols.path.Path;
-import com.xenoage.zong.webapp.WebApp;
 import com.xenoage.zong.webapp.renderer.gwt.path.GwtPath;
 
 /**
@@ -96,10 +92,14 @@ public class GwtCanvas
 			for (FormattedTextElement e : p.getElements()) {
 				if (e instanceof FormattedTextString) {
 					FormattedTextString t = (FormattedTextString) e;
-					String cssFont = t.getStyle().getFont().getSize() / 3.5 + "pt " + t.getStyle().getFont().getFamilies().get(0);
-					WebApp.consoleLog(cssFont);
-					context.setFont(cssFont);
-					context.fillText(t.getText(), offsetX, offsetY);
+					context.setFillStyle(GwtColorUtils.createColor(t.getStyle().getColor()));
+					context.save();
+					context.scale(Units.pxToMm_1_1, Units.pxToMm_1_1);
+					context.setFont(GwtFontUtils.getCssFont(t.getStyle().getFont()));
+					context.fillText(t.getText(), offsetX / Units.pxToMm_1_1, offsetY / Units.pxToMm_1_1);
+					//Debug: Paint dot at text offset
+					//context.fillRect(offsetX / Units.pxToMm_1_1, offsetY / Units.pxToMm_1_1, 2, 2);
+					context.restore();
 				}
 				else {
 					//symbol

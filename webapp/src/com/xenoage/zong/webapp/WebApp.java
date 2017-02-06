@@ -140,7 +140,7 @@ public class WebApp
 		}
 	}
 
-	public static native void consoleLog(Object message) /*-{
+	public static native void consoleLog(Object message) /*-{ //TIDY: move into GwtPlatformUtils
     console.log(message);
   }-*/;
 
