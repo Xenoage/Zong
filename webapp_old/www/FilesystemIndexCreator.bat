@@ -1,1 +1,0 @@
-java -jar FilesystemIndexCreator.jar data

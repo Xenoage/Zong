@@ -1,4 +1,4 @@
-package com.xenoage.zong.webapp.renderer.gwt.path;
+package com.xenoage.zong.renderer.gwtcanvas.path;
 
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.xenoage.zong.symbols.path.*;

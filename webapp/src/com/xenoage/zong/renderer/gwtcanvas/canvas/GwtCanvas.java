@@ -1,28 +1,24 @@
-package com.xenoage.zong.webapp.renderer.gwt.canvas;
+package com.xenoage.zong.renderer.gwtcanvas.canvas;
 
-import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.Context2d.LineCap;
 import com.google.gwt.canvas.dom.client.Context2d.LineJoin;
 import com.xenoage.utils.color.Color;
 import com.xenoage.utils.font.TextMetrics;
 import com.xenoage.utils.gwt.color.GwtColorUtils;
+import com.xenoage.utils.gwt.font.GwtFontUtils;
+import com.xenoage.utils.math.Units;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Rectangle2f;
 import com.xenoage.utils.math.geom.Size2f;
-import com.xenoage.zong.core.text.Alignment;
-import com.xenoage.zong.core.text.FormattedText;
-import com.xenoage.zong.core.text.FormattedTextElement;
-import com.xenoage.zong.core.text.FormattedTextParagraph;
-import com.xenoage.zong.core.text.FormattedTextString;
-import com.xenoage.zong.core.text.FormattedTextSymbol;
+import com.xenoage.zong.core.text.*;
 import com.xenoage.zong.io.selection.text.TextSelection;
 import com.xenoage.zong.renderer.canvas.CanvasDecoration;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
 import com.xenoage.zong.renderer.canvas.CanvasIntegrity;
 import com.xenoage.zong.renderer.symbol.SymbolsRenderer;
 import com.xenoage.zong.symbols.path.Path;
-import com.xenoage.zong.webapp.renderer.gwt.path.GwtPath;
+import com.xenoage.zong.renderer.gwtcanvas.path.GwtPath;
 
 /**
  * This class contains methods for painting
@@ -33,8 +29,7 @@ import com.xenoage.zong.webapp.renderer.gwt.path.GwtPath;
 public class GwtCanvas
 	extends com.xenoage.zong.renderer.canvas.Canvas {
 
-	//the HTML5 canvas and graphics context
-	private Canvas canvas;
+	//the HTML5 graphics context
 	private Context2d context;
 
 
@@ -42,27 +37,17 @@ public class GwtCanvas
 	 * Creates an {@link GwtCanvas} with the given size in mm for the given context,
 	 * format, decoration mode and itegrity.
 	 */
-	public GwtCanvas(Canvas canvas, CanvasFormat format,
+	public GwtCanvas(Context2d context, CanvasFormat format,
 		CanvasDecoration decoration, CanvasIntegrity integrity) {
 		super(new Size2f(10, 10), format, decoration, integrity);
-		this.canvas = canvas;
-		this.context = canvas.getContext2d();
+		this.context = context;
 	}
 
 	/**
 	 * Gets the HTML5 canvas.
 	 */
-	@Override public Canvas getGraphicsContext() {
-		return canvas;
-	}
-
-	/**
-	 * Convenience method: Gets the {@link Canvas} graphics context from
-	 * the given {@link com.xenoage.zong.renderer.canvas.Canvas}. If it is not a {@link Canvas},
-	 * a {@link ClassCastException} is thrown.
-	 */
-	public static Canvas getCanvas(com.xenoage.zong.renderer.canvas.Canvas canvas) {
-		return ((GwtCanvas) canvas).getGraphicsContext();
+	@Override public Context2d getGraphicsContext() {
+		return context;
 	}
 
 	/**
@@ -94,9 +79,15 @@ public class GwtCanvas
 			//draw elements
 			for (FormattedTextElement e : p.getElements()) {
 				if (e instanceof FormattedTextString) {
-					//TODO formatting
 					FormattedTextString t = (FormattedTextString) e;
-					context.fillText(t.getText(), offsetX, offsetY);
+					context.setFillStyle(GwtColorUtils.createColor(t.getStyle().getColor()));
+					context.save();
+					context.scale(Units.pxToMm_1_1, Units.pxToMm_1_1);
+					context.setFont(GwtFontUtils.getCssFont(t.getStyle().getFont()));
+					context.fillText(t.getText(), offsetX / Units.pxToMm_1_1, offsetY / Units.pxToMm_1_1);
+					//Debug: Paint dot at text offset
+					//context.fillRect(offsetX / Units.pxToMm_1_1, offsetY / Units.pxToMm_1_1, 2, 2);
+					context.restore();
 				}
 				else {
 					//symbol
