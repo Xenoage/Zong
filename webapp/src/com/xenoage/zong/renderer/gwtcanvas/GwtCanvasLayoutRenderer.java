@@ -4,6 +4,7 @@ import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.dom.client.CanvasElement;
 import com.xenoage.utils.math.Units;
 import com.xenoage.utils.math.geom.Size2f;
+import com.xenoage.utils.math.geom.Size2i;
 import com.xenoage.zong.layout.Layout;
 import com.xenoage.zong.layout.Page;
 import com.xenoage.zong.renderer.LayoutRenderer;
@@ -25,9 +26,10 @@ public class GwtCanvasLayoutRenderer {
 	/**
 	 * Paints the given page of the given {@link Layout} at the given zoom level
 	 * into the given {@link CanvasElement}, which is resized to include the whole page.
+	 * The size in pixel is also returned.
 	 */
-	public static void paintToCanvas(Layout layout, int pageIndex, float zoom,
-																	 com.google.gwt.canvas.client.Canvas canvas) {
+	public static Size2i paintToCanvas(Layout layout, int pageIndex, float zoom,
+																		 com.google.gwt.canvas.client.Canvas canvas) {
 		Context2d context = canvas.getContext2d();
 
 		//compute size
@@ -52,6 +54,8 @@ public class GwtCanvasLayoutRenderer {
 		LayoutRenderer.paintToCanvas(layout, pageIndex, zoom, origin,
 			new GwtCanvas(context, CanvasFormat.Raster,
 				CanvasDecoration.Interactive, CanvasIntegrity.Perfect));
+
+		return new Size2i(width, height);
 	}
 
 }

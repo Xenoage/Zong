@@ -1,12 +1,48 @@
 <html>
 <head>
 	<title>Zong! WebApp</title>
+
+	<!-- include the Zong! WebApp -->
 	<script type="text/javascript" language="javascript" src="webapp/webapp.nocache.js"></script>
+
+	<!-- Bootstrap front-end framework. Only needed for this demo, not a requirement for Zong! -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+	<link rel="stylesheet" href="theme.css"/>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+	<!-- Demo specific style -->
 	<link rel="stylesheet" href="webapp.css"/>
+
 </head>
 <body>
-	<div id="zong-scoreview">
-		<div class="loading">Loading...</div>
+
+	<!-- Toolbar with controls for selecting a score, zooming, ... -->
+	<nav class="navbar navbar-default navbar-fixed-top">
+		<div class="container-fluid">
+			<a href="#" class="navbar-left">
+				<img src="img/header-logo.png">
+			</a>
+			<div class="navbar-header">
+				<span class="navbar-brand">WebApp</span>
+			</div>
+			<ul class="nav navbar-nav">
+				<li><a href="#" onclick="ZongControl.openDemo(1)">Demo-Score 1</a></li>
+				<li><a href="#" onclick="ZongControl.openDemo(2)">Demo-Score 2</a></li>
+				<li><a href="#" onclick="ZongControl.openDemo(3)">Demo-Score 3</a></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="#" onclick="ZongControl.zoomIn()"><span class="glyphicon glyphicon-zoom-in"></span> Zoom in</a></li>
+				<li><a href="#" onclick="ZongControl.zoomOut()"><span class="glyphicon glyphicon-zoom-out"></span> Zoom out</a></li>
+				<li><a href="mailto:support@zong-music.com?subject=WebApp"><span class="glyphicon glyphicon-envelope"></span> Send feedback</a></li>
+			</ul>
+		</div>
+	</nav>
+
+	<!-- This is the container div, in which the score will be rendered -->
+	<div id="ZongView">
+		<div id="ZongLoading">Loading...</div>
 	</div>
+
 </body>
 </html>

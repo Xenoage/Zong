@@ -1,19 +1,21 @@
 body {
-    margin: 20px;
-    background: #E0DAD6;
     /* center score view */
     text-align: center;
+    /** padding needed for toolbar */
+    padding-top: 50px;
 }
 
-#zong-scoreview {
+#ZongView {
     background: white;
+    /* distance to container */
+    margin: 20px;
     /* use size of children */
     display: inline-block;
     /* shadow */
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-.loading {
+#ZongLoading {
     width: 600px;
     height: 800px;
     /* center text (horizontally and vertically) */
