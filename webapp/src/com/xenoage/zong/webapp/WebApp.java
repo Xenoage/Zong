@@ -20,20 +20,16 @@ import com.xenoage.zong.musiclayout.layouter.Context;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayoutArea;
 import com.xenoage.zong.musiclayout.layouter.Target;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
-import com.xenoage.zong.renderer.LayoutRenderer;
-import com.xenoage.zong.renderer.canvas.CanvasDecoration;
-import com.xenoage.zong.renderer.canvas.CanvasFormat;
-import com.xenoage.zong.renderer.canvas.CanvasIntegrity;
+import com.xenoage.zong.renderer.gwtcanvas.GwtCanvasLayoutRenderer;
 import com.xenoage.zong.symbols.SymbolPool;
-import com.xenoage.zong.webapp.renderer.gwt.canvas.GwtCanvas;
 import com.xenoage.zong.webapp.utils.GwtZongPlatformUtils;
 
 import java.io.IOException;
 
 import static com.xenoage.utils.PlatformUtils.platformUtils;
+import static com.xenoage.utils.gwt.GwtPlatformUtils.consoleLog;
 import static com.xenoage.utils.log.Log.log;
 import static com.xenoage.utils.log.Report.fatal;
-import static com.xenoage.utils.math.geom.Point2i.origin;
 import static com.xenoage.zong.util.ZongPlatformUtils.zongPlatformUtils;
 
 
@@ -74,20 +70,21 @@ public class WebApp
 	}
 
 	private void step1_setup() {
-		RootPanel container = RootPanel.get("container");
 
-		//add canvas
+		//find the container
+		RootPanel container = RootPanel.get("zong-scoreview");
+
+		//create canvas
 		canvas = Canvas.createIfSupported();
     if (canvas == null) {
     	container.add(new Label("Error: canvas not supported!"));
       return;
     }
-    canvas.setWidth("100%");
-    canvas.setHeight("100%");
+    canvas.setWidth("100px");
+    canvas.setHeight("100px");
 		Window.addResizeHandler(e -> {
 			paintLayout();
 		});
-    container.add(canvas);
 
     //load and layout MusicXML file
 		platformUtils().openFileAsync("data/test/scores/musicxml20/BeetAnGeSample.xml")
@@ -108,30 +105,17 @@ public class WebApp
 				Context context = new Context(scoreDoc.getScore(), symbolPool, layoutSettings);
 				Target target = Target.completeLayoutTarget(new ScoreLayoutArea(areaSize));
 				paintLayout();
+
+				//remove the loading message and add the canvas
+				container.getElement().setInnerHTML("");
+				container.add(canvas);
 			})
 			.onError(ex -> consoleLog("Error: " + ex.toString()));
 	}
 
 	private void paintLayout() {
-		//DEBUG
-		//consoleLog("Canvas size: " + canvas.getElement().getClientWidth() + ", " + canvas.getElement().getClientHeight());
-		//update canvas coordinate space
-		canvas.setCoordinateSpaceWidth(canvas.getElement().getClientWidth() * 2); //double resolution: smoother
-		canvas.setCoordinateSpaceHeight(canvas.getElement().getClientHeight() * 2); //double resolution: smoother
-		//paint score layout
-		if (scoreDoc != null) {
-			//draw in canvas
-			context = canvas.getContext2d();
-			context.scale(3, 3);
-			//render layout
-			LayoutRenderer.paintToCanvas(scoreDoc.getLayout(), 0, 1, origin,
-					new GwtCanvas(context, CanvasFormat.Raster,
-							CanvasDecoration.Interactive, CanvasIntegrity.Perfect));
-		}
+		if (scoreDoc != null)
+			GwtCanvasLayoutRenderer.paintToCanvas(scoreDoc.getLayout(), 0, 1, canvas);
 	}
-
-	public static native void consoleLog(Object message) /*-{ //TIDY: move into GwtPlatformUtils
-    console.log(message);
-  }-*/;
 
 }

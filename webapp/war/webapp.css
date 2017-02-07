@@ -1,0 +1,23 @@
+body {
+    margin: 20px;
+    background: #E0DAD6;
+    /* center score view */
+    text-align: center;
+}
+
+#zong-scoreview {
+    background: white;
+    /* use size of children */
+    display: inline-block;
+    /* shadow */
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.loading {
+    width: 600px;
+    height: 800px;
+    /* center text (horizontally and vertically) */
+    text-align: center;
+    vertical-align: middle;
+    line-height: 800px;
+}
