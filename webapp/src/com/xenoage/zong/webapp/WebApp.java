@@ -41,7 +41,11 @@ import static com.xenoage.zong.util.ZongPlatformUtils.zongPlatformUtils;
 
 
 /**
- * Entry point classes define <code>onModuleLoad()</code>.
+ * HTML5/JS based version of a Zong! score viewer, based on GWT.
+ *
+ * TODO: ZONG-106: SVG output in webapp
+ *
+ * @author Andreas Wenger
  */
 public class WebApp
 	implements EntryPoint {
@@ -115,7 +119,7 @@ public class WebApp
 			.thenAsync(scoreStream -> new MusicXmlScoreDocFileReader(scoreStream, null).read())
 			.thenAsync(scoreDoc -> {
 				WebApp.this.scoreDoc = scoreDoc;
-				return platformUtils().openFileAsync("test.xml");
+				return platformUtils().openFileAsync("data/layout/default.xml");
 			})
 			.thenDo(testXmlStream -> {
 				LayoutSettings layoutSettings;
