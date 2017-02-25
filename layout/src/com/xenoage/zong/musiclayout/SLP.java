@@ -1,7 +1,6 @@
 package com.xenoage.zong.musiclayout;
 
 import com.xenoage.utils.annotations.Const;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -14,13 +13,18 @@ import lombok.Data;
  *
  * @author Andreas Wenger
  */
-@Const @Data @AllArgsConstructor(staticName = "slp")
+@Const @Data
 public class SLP {
 
 	public static final int unknownStaff = -1;
 
 	public final int staff;
 	public final float lp;
+
+
+	public static SLP slp(int staff, float lp) {
+		return new SLP(staff, lp);
+	}
 
 	/**
 	 * Creates a {@link SLP}, when only the LP is used and the staff is not needed.

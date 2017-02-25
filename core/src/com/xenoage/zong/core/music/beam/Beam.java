@@ -19,6 +19,7 @@ import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.collections.CollectionUtils.getFirst;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.MathUtils.min;
+import static java.lang.Math.max;
 
 
 /**
@@ -240,7 +241,7 @@ public final class Beam
 			Chord chord = waypoint.getChord();
 			MP mpChord = MP.getMP(chord);
 			minStaffIndex = Math.min(minStaffIndex, mpChord.staff);
-			maxStaffIndex = Math.max(maxStaffIndex, mpChord.staff);
+			maxStaffIndex = max(maxStaffIndex, mpChord.staff);
 			staves.add(mpChord.staff);
 		}
 		VerticalSpan verticalSpan = VerticalSpan.Other;
