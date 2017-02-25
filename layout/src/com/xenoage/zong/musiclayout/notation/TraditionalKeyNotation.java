@@ -1,11 +1,11 @@
 package com.xenoage.zong.musiclayout.notation;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.music.key.TraditionalKey;
+import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.musiclayout.spacing.ElementWidth;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * This class contains layout information
@@ -23,5 +23,9 @@ public final class TraditionalKeyNotation
 	public final int c4Lp;
 	/** The minimal line position for a sharp/flat. */
 	public final int minLp;
+
+	@Override public MP getMp() {
+		return element.getMP();
+	}
 
 }

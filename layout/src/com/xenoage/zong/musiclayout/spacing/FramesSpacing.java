@@ -30,7 +30,7 @@ public class FramesSpacing
 	
 	public FrameSpacing getFrame(int measure) {
 		for (FrameSpacing frame : frames) {
-			if (measure <= frame.getEndMeasureIndex())
+			if (measure <= frame.getEndMeasure())
 				return frame;
 		}
 		throw new IllegalMPException(atMeasure(measure));

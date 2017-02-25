@@ -1,18 +1,5 @@
 package com.xenoage.zong.musiclayout.notator;
 
-import static com.xenoage.utils.PlatformUtils.platformUtils;
-import static com.xenoage.zong.core.music.StaffLines.staffLines;
-import static com.xenoage.zong.core.music.util.Interval.Before;
-import static com.xenoage.zong.core.music.util.Interval.BeforeOrAt;
-import static com.xenoage.zong.core.text.FormattedTextUtils.styleText;
-import static com.xenoage.zong.musiclayout.notator.chord.AccidentalsNotator.accidentalsNotator;
-import static com.xenoage.zong.musiclayout.notator.chord.ArticulationsNotator.articulationsNotator;
-import static com.xenoage.zong.musiclayout.notator.chord.NotesNotator.notesNotator;
-import static com.xenoage.zong.musiclayout.notator.chord.stem.StemDirector.stemDirector;
-import static com.xenoage.zong.musiclayout.notator.chord.stem.StemNotator.stemNotator;
-
-import java.util.Map;
-
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.font.FontInfo;
 import com.xenoage.utils.font.TextMeasurer;
@@ -35,6 +22,19 @@ import com.xenoage.zong.musiclayout.notation.chord.StemNotation;
 import com.xenoage.zong.musiclayout.settings.ChordSpacings;
 import com.xenoage.zong.musiclayout.settings.ChordWidths;
 import com.xenoage.zong.musiclayout.spacing.ElementWidth;
+
+import java.util.Map;
+
+import static com.xenoage.utils.PlatformUtils.platformUtils;
+import static com.xenoage.zong.core.music.StaffLines.staffLines;
+import static com.xenoage.zong.core.music.util.Interval.Before;
+import static com.xenoage.zong.core.music.util.Interval.BeforeOrAt;
+import static com.xenoage.zong.core.text.FormattedTextUtils.styleText;
+import static com.xenoage.zong.musiclayout.notator.chord.AccidentalsNotator.accidentalsNotator;
+import static com.xenoage.zong.musiclayout.notator.chord.ArticulationsNotator.articulationsNotator;
+import static com.xenoage.zong.musiclayout.notator.chord.NotesNotator.notesNotator;
+import static com.xenoage.zong.musiclayout.notator.chord.stem.StemDirector.stemDirector;
+import static com.xenoage.zong.musiclayout.notator.chord.stem.StemNotator.stemNotator;
 
 /**
  * Computes a {@link ChordNotation} from a {@link Chord}.
@@ -65,7 +65,7 @@ public class ChordNotator
 
 		//use or compute stem direction
 		StemDirection stemDirection = chord.getStem().getDirection();
-		if (stemDirection == StemDirection.Default) {
+		if (true || stemDirection == StemDirection.Default) { //GOON
 			//if stem direction was not computed yet, compute it now
 			if (notations != null)
 				stemDirection = notations.getChord(chord).stemDirection;
@@ -124,8 +124,8 @@ public class ChordNotator
 		//compute articulations
 		ArticulationsNotation arts = articulationsNotator.compute(chord, stemDirection, notes, mc.getLinesCount());
 
-		return new ChordNotation(chord, new ElementWidth(frontGap, symbolWidth, rearGap, lyricWidth),
-			notes, stemDirection, stem, accs, arts);
+		return new ChordNotation(chord, chord.getMP(), new ElementWidth(frontGap, symbolWidth, rearGap, lyricWidth),
+				context.mp.staff, notes, stemDirection, stem, accs, arts);
 	}
 
 }

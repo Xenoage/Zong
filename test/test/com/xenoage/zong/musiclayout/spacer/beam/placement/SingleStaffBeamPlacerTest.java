@@ -1,8 +1,13 @@
-package com.xenoage.zong.musiclayout.spacer.beam;
+package com.xenoage.zong.musiclayout.spacer.beam.placement;
 
 import com.xenoage.zong.core.music.StaffLines;
 import com.xenoage.zong.core.music.chord.StemDirection;
-import com.xenoage.zong.musiclayout.notation.chord.ChordLps;
+import com.xenoage.zong.musiclayout.spacer.beam.Anchor;
+import com.xenoage.zong.musiclayout.spacer.beam.Slant;
+import com.xenoage.zong.musiclayout.spacer.beam.placement.SingleStaffBeamPlacer.Placement;
+import com.xenoage.zong.musiclayout.spacer.beam.stem.BeamedStem;
+import com.xenoage.zong.musiclayout.spacer.beam.stem.BeamedStems;
+import lombok.val;
 import material.ExampleResult;
 import material.ExampleResult.*;
 import material.Examples;
@@ -13,6 +18,7 @@ import org.junit.Test;
 
 import java.util.List;
 
+import static com.xenoage.utils.collections.CList.ilist;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Delta.df;
@@ -20,22 +26,21 @@ import static com.xenoage.zong.core.music.StaffLines.staff5Lines;
 import static com.xenoage.zong.core.music.chord.StemDirection.Down;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
 import static com.xenoage.zong.musiclayout.notation.BeamNotation.lineHeightIs;
-import static com.xenoage.zong.musiclayout.notator.chord.stem.StemDrawer.stemDrawer;
 import static com.xenoage.zong.musiclayout.spacer.beam.Anchor.fromLp;
-import static com.xenoage.zong.musiclayout.spacer.beam.BeamPlacer.beamPlacer;
-import static com.xenoage.zong.musiclayout.spacer.beam.BeamSlanter.beamSlanter;
+import static com.xenoage.zong.musiclayout.spacer.beam.placement.SingleStaffBeamPlacer.singleStaffBeamPlacer;
+import static com.xenoage.zong.musiclayout.spacer.beam.slant.SingleStaffBeamSlanter.singleStaffBeamSlanter;
 import static java.lang.Math.abs;
 import static material.ExampleResult.*;
 import static org.junit.Assert.*;
 
 /**
- * Tests for {@link BeamPlacer}.
+ * Tests for {@link SingleStaffBeamPlacer}.
  * 
  * @author Andreas Wenger
  */
-public class BeamPlacerTest {
+public class SingleStaffBeamPlacerTest {
 	
-	private BeamPlacer testee = beamPlacer;
+	private SingleStaffBeamPlacer testee = singleStaffBeamPlacer;
 
 	@Test public void getPlacementTest() {
 		//exact result: no rounding required
@@ -60,36 +65,54 @@ public class BeamPlacerTest {
 		});
 	}
 	
-	@Test public void getDictatorStemIndexTest() {
-		float[] endLps = new float[]{10, 11, 13};
-		float[] xs = new float[]{2, 4, 6};
+	@Test public void getDictatorStemIndexTest_HorizontalOrAscending() {
+		val stemsDown = new BeamedStems(ilist(
+				beamedStem(2, 10, Down),
+				beamedStem(4, 11, Down),
+				beamedStem(6, 13, Down)
+		));
+		val stemsUp = new BeamedStems(ilist(
+				beamedStem(2, 10, Up),
+				beamedStem(4, 11, Up),
+				beamedStem(6, 13, Up)
+		));
 		//horizontal line, downstem (find min LP)
-		assertEquals(0, testee.getDictatorStemIndex(endLps, xs, 0, Down));
+		assertEquals(0, testee.getDictatorStemIndex(Down, stemsDown, 0));
 		//horizontal line, upstem (find max LP)
-		assertEquals(2, testee.getDictatorStemIndex(endLps, xs, 0, Up));
+		assertEquals(2, testee.getDictatorStemIndex(Up, stemsUp, 0));
 		//ascending line, downstem (find min LP)
-		assertEquals(0, testee.getDictatorStemIndex(endLps, xs, 0.95f, Down));
-		assertEquals(1, testee.getDictatorStemIndex(endLps, xs, 1.05f, Down));
-		assertEquals(1, testee.getDictatorStemIndex(endLps, xs, 1.95f, Down));
-		assertEquals(2, testee.getDictatorStemIndex(endLps, xs, 2.05f, Down));
+		assertEquals(0, testee.getDictatorStemIndex(Down, stemsDown, 0.95f));
+		assertEquals(1, testee.getDictatorStemIndex(Down, stemsDown, 1.05f));
+		assertEquals(1, testee.getDictatorStemIndex(Down, stemsDown, 1.95f));
+		assertEquals(2, testee.getDictatorStemIndex(Down, stemsDown, 2.05f));
 		//ascending line, upstem (find max LP)
-		assertEquals(2, testee.getDictatorStemIndex(endLps, xs, 0.95f, Up));
-		assertEquals(2, testee.getDictatorStemIndex(endLps, xs, 1.05f, Up));
-		assertEquals(0, testee.getDictatorStemIndex(endLps, xs, 1.95f, Up));
-		assertEquals(0, testee.getDictatorStemIndex(endLps, xs, 2.05f, Up));
-		
-		endLps = new float[]{13, 11, 10};
-		xs = new float[]{2, 4, 6};
+		assertEquals(2, testee.getDictatorStemIndex(Up, stemsUp, 0.95f));
+		assertEquals(2, testee.getDictatorStemIndex(Up, stemsUp, 1.05f));
+		assertEquals(0, testee.getDictatorStemIndex(Up, stemsUp, 1.95f));
+		assertEquals(0, testee.getDictatorStemIndex(Up, stemsUp, 2.05f));
+	}
+
+	@Test public void getDictatorStemIndexTest_Descending() {
+		val stemsDown = new BeamedStems(ilist(
+				beamedStem(2, 13, Down),
+				beamedStem(4, 11, Down),
+				beamedStem(6, 10, Down)
+		));
+		val stemsUp = new BeamedStems(ilist(
+				beamedStem(2, 13, Up),
+				beamedStem(4, 11, Up),
+				beamedStem(6, 10, Up)
+		));
 		//descending line, downstem (find min LP)
-		assertEquals(2, testee.getDictatorStemIndex(endLps, xs, -0.95f, Down));
-		assertEquals(1, testee.getDictatorStemIndex(endLps, xs, -1.05f, Down));
-		assertEquals(1, testee.getDictatorStemIndex(endLps, xs, -1.95f, Down));
-		assertEquals(0, testee.getDictatorStemIndex(endLps, xs, -2.05f, Down));
+		assertEquals(2, testee.getDictatorStemIndex(Down, stemsDown, -0.95f));
+		assertEquals(1, testee.getDictatorStemIndex(Down, stemsDown, -1.05f));
+		assertEquals(1, testee.getDictatorStemIndex(Down, stemsDown, -1.95f));
+		assertEquals(0, testee.getDictatorStemIndex(Down, stemsDown, -2.05f));
 		//descending line, upstem (find max LP)
-		assertEquals(0, testee.getDictatorStemIndex(endLps, xs, -0.95f, Up));
-		assertEquals(0, testee.getDictatorStemIndex(endLps, xs, -1.05f, Up));
-		assertEquals(2, testee.getDictatorStemIndex(endLps, xs, -1.95f, Up));
-		assertEquals(2, testee.getDictatorStemIndex(endLps, xs, -2.05f, Up));
+		assertEquals(0, testee.getDictatorStemIndex(Up, stemsUp, -0.95f));
+		assertEquals(0, testee.getDictatorStemIndex(Up, stemsUp, -1.05f));
+		assertEquals(2, testee.getDictatorStemIndex(Up, stemsUp, -1.95f));
+		assertEquals(2, testee.getDictatorStemIndex(Up, stemsUp, -2.05f));
 	}
 	
 	@Test public void getDistanceToLineIsTest() {
@@ -117,28 +140,33 @@ public class BeamPlacerTest {
 		//the following tests use arbitrary horizontal positions, but normal spacing (not close spacing)
 		//p104 r1 c1: could be 3.5/sit, but is 3.25/straddle
 		Placement old = new Placement(5f, 5f);
-		Placement shortened = testee.shorten(old, Up, new int[]{-2, -2},
-			new float[]{5, 10}, 1, staff5Lines);
+		BeamedStems stems = new BeamedStems(ilist(
+				beamedStem(5, -2, Up), beamedStem(10, -2, Up)));
+		Placement shortened = testee.shorten(old, Up, stems, 1, staff5Lines);
 		assertEquals(new Placement(4.5f, 4.5f), shortened);
 		//p104 r6 c1: could be 3.75/straddle and 3.5/hang, but is 3.5/sit and 3.25/straddle
 		old = new Placement(-2.5f, -3f);
-		shortened = testee.shorten(old, Down, new int[]{5, 4},
-			new float[]{10, 15}, 1, staff5Lines);
+		stems = new BeamedStems(ilist(
+				beamedStem(10, 5, Down), beamedStem(15, 4, Down)));
+		shortened = testee.shorten(old, Down, stems, 1, staff5Lines);
 		assertEquals(new Placement(-2f, -2.5f), shortened);
 		//p104 r7 c1: is not shortened, since then a stem would be shorter than 3 spaces
 		old = new Placement(-1f, -0.5f);
-		shortened = testee.shorten(old, Down, new int[]{5, 6},
-			new float[]{0, 5}, 1, staff5Lines);
+		stems = new BeamedStems(ilist(
+				beamedStem(0, 5, Down), beamedStem(5, 6, Down)));
+		shortened = testee.shorten(old, Down, stems, 1, staff5Lines);
 		assertEquals(old, shortened);
 		//p105 r1 c1: not shortened, because beam line would be within white space
 		old = new Placement(6f, 6f);
-		shortened = testee.shorten(old, Up, new int[]{-1, -1},
-			new float[]{0, 8}, 1, staff5Lines);
+		stems = new BeamedStems(ilist(
+				beamedStem(0, -1, Up), beamedStem(8, -1, Up)));
+		shortened = testee.shorten(old, Up, stems, 1, staff5Lines);
 		assertEquals(old, shortened);
 		//p105 r1 c2: could be 3.5/hang, but is 3.25/staddle
 		old = new Placement(-1f, -1f);
-		shortened = testee.shorten(old, Down, new int[]{6, 6},
-			new float[]{10, 15}, 1, staff5Lines);
+		stems = new BeamedStems(ilist(
+				beamedStem(10, 6, Down), beamedStem(15, 6, Down)));
+		shortened = testee.shorten(old, Down, stems, 1, staff5Lines);
 		assertEquals(new Placement(-0.5f, -0.5f), shortened);
 	}
 	
@@ -151,18 +179,10 @@ public class BeamPlacerTest {
 		List<ExampleResult> results = alist();
 		for (Example example : examples) {
 			//collect data
-			int notesLp[] = example.getNotesLp();
-			StemDirection stemDir = example.getStemDir();
-			float[] stemsXIs = getStemsXIs(example, notesLp.length);
-			Slant slant = beamSlanter.compute(notesLp, stemDir, stemsXIs, 5);
-			float[] stemsLengthIs = new float[notesLp.length];
-			for (int i : range(notesLp)) {
-				stemsLengthIs[i] = stemDrawer.getPreferredStemLengthIs(
-					new ChordLps(notesLp[i]), stemDir, staff5Lines);
-			}
+			BeamedStems stems = example.getStems();
+			Slant slant = singleStaffBeamSlanter.compute(stems, 5);
 			//run test
-			Placement offset = testee.compute(slant, notesLp, stemDir, stemsXIs,
-				stemsLengthIs, 1, StaffLines.staff5Lines);
+			Placement offset = testee.compute(slant, stems, 1, StaffLines.staff5Lines);
 			//check result
 			ExampleResult result = check(offset, example);
 			results.add(result);
@@ -189,7 +209,7 @@ public class BeamPlacerTest {
 				perfect++;
 			}
 		}
-		System.out.println(BeamPlacerTest.class.getSimpleName() + ": " +
+		System.out.println(SingleStaffBeamPlacerTest.class.getSimpleName() + ": " +
 			perfect + " perfect, " + accepted + " accepted, " + failed + " failed");
 		if (failed > 0)
 			fail();
@@ -237,7 +257,7 @@ public class BeamPlacerTest {
 	 * </ul>
 	 */
 	private boolean isAcceptedBeam(Placement actual, StemDirection stemDir,
-		int intervalLp) {
+																 int intervalLp) {
 		//slant must be in allowed playRange of interval (or smaller)
 		float absSlantMax;
 		float absSlantActual = abs(actual.leftEndLp - actual.rightEndLp);
@@ -258,11 +278,11 @@ public class BeamPlacerTest {
 		if (absSlantActual > absSlantMax)
 			return false;
 		//when beam touches staff line, anchors must be correct
-		if (beamPlacer.isTouchingStaff( //method is tested, so we can use it here
+		if (singleStaffBeamPlacer.isTouchingStaff( //method is tested, so we can use it here
 			actual, stemDir, lineHeightIs, staff5Lines)) {
 			Anchor leftAnchor = fromLp(actual.leftEndLp, stemDir);
 			Anchor rightAnchor = fromLp(actual.rightEndLp, stemDir);
-			if (false == beamPlacer.isAnchor8thCorrect( //method is tested, so we can use it here
+			if (false == singleStaffBeamPlacer.isAnchor8thCorrect( //method is tested, so we can use it here
 				leftAnchor, rightAnchor, actual.getDirection()))
 				return false;
 		}
@@ -299,6 +319,10 @@ public class BeamPlacerTest {
 		assertFalse(testee.isBeamOutsideStaff(Down, -3.9f, -3.9f, 5, 2));
 		assertFalse(testee.isBeamOutsideStaff(Down, -3.9f, -5, 5, 2));
 		assertFalse(testee.isBeamOutsideStaff(Down, -5, -3.9f, 5, 2));
+	}
+
+	private BeamedStem beamedStem(float xIs, int endLp, StemDirection stemDir) {
+		return new BeamedStem(xIs, stemDir, endLp, 0);
 	}
 
 }

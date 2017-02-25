@@ -5,6 +5,7 @@ import com.xenoage.utils.kernel.Range;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.position.Time;
+import com.xenoage.zong.musiclayout.SLP;
 import lombok.Getter;
 
 import java.util.List;
@@ -98,24 +99,24 @@ public class SystemSpacing {
 		return usedWidth;
 	}
 	
-	public int getStartMeasureIndex() {
+	public int getStartMeasure() {
 		return getFirst(columns).measureIndex;
 	}
 	
-	public int getEndMeasureIndex() {
+	public int getEndMeasure() {
 		return getLast(columns).measureIndex;
 	}
 	
 	public boolean containsMeasure(int scoreMeasure) {
-		return getStartMeasureIndex() <= scoreMeasure && scoreMeasure <= getEndMeasureIndex();
+		return getStartMeasure() <= scoreMeasure && scoreMeasure <= getEndMeasure();
 	}
 	
-	public Range getMeasureIndices() {
-		return range(getStartMeasureIndex(), getEndMeasureIndex());
+	public Range getMeasures() {
+		return range(getStartMeasure(), getEndMeasure());
 	}
 	
 	public ColumnSpacing getColumn(int scoreMeasure) {
-		return columns.get(scoreMeasure - getStartMeasureIndex());
+		return columns.get(scoreMeasure - getStartMeasure());
 	}
 	
 	public int getSystemIndexInFrame() {
@@ -128,7 +129,7 @@ public class SystemSpacing {
 	 */
 	public float getMeasureStartMm(int scoreMeasure) {
 		float x = 0;
-		for (int iMeasure : range(scoreMeasure - getStartMeasureIndex()))
+		for (int iMeasure : range(scoreMeasure - getStartMeasure()))
 			x += columns.get(iMeasure).getWidthMm();
 		return x;
 	}
@@ -139,7 +140,7 @@ public class SystemSpacing {
 	 * If there is no leading spacing, this value is equal to {@link #getMeasureStartMm(int)}
 	 */
 	public float getMeasureStartAfterLeadingMm(int scoreMeasure) {
-		int systemMeasure = scoreMeasure - getStartMeasureIndex();
+		int systemMeasure = scoreMeasure - getStartMeasure();
 		return getMeasureStartMm(scoreMeasure) + columns.get(systemMeasure).getLeadingWidthMm();
 	}
 	
@@ -148,7 +149,7 @@ public class SystemSpacing {
 	 * relative to the beginning of the system.
 	 */
 	public float getMeasureEndMm(int scoreMeasure) {
-		int systemMeasure = scoreMeasure - getStartMeasureIndex();
+		int systemMeasure = scoreMeasure - getStartMeasure();
 		return getMeasureStartMm(scoreMeasure) + columns.get(systemMeasure).getWidthMm();
 	}
 
@@ -183,7 +184,7 @@ public class SystemSpacing {
 	 */
 	public float getXMmAt(Time time) {
 		float measureXMm = getMeasureStartMm(time.measure);
-		float elementXMm = columns.get(time.measure - getStartMeasureIndex()).getXMmAt(time.beat);
+		float elementXMm = columns.get(time.measure - getStartMeasure()).getXMmAt(time.beat);
 		return measureXMm + elementXMm;
 	}
 
@@ -212,21 +213,18 @@ public class SystemSpacing {
 	
 	/** 
 	 * Computes and returns the y-coordinate in mm in frame space
-	 * of an object on the given line position .
-	 * Also non-integer values (fractions of interline spaces)
-	 * are allowed.
+	 * of an object on the given {@link SLP}.
 	 */
-	public float getYMm(int staff, float lp) {
-		return offsetYMm + staves.getYMm(staff, lp);
+	public float getYMm(SLP slp) {
+		return offsetYMm + staves.getYMm(slp);
 	}
 	
 	/**
 	 * Computes and returns the y-coordinate of an object in the given staff 
 	 * at the given vertical position in mm in frame space as a line position.
-	 * Also non-integer values are allowed.
 	 */
-	public float getYLp(int staff, float mm) {
-		return staves.getYLp(staff, mm - offsetYMm);
+	public float getLp(int staff, float mm) {
+		return staves.getLp(staff, mm - offsetYMm);
 	}
 	
 	/**
@@ -248,6 +246,7 @@ public class SystemSpacing {
 	 * Gets the horizontal offset in mm of the measure with the given global index.
 	 */
 	public float getColumnXMm(int scoreMeasure) {
-		return cacheColumnsXMm[scoreMeasure - getStartMeasureIndex()];
+		return cacheColumnsXMm[scoreMeasure - getStartMeasure()];
 	}
+
 }

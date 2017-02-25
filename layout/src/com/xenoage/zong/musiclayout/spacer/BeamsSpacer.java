@@ -1,10 +1,5 @@
 package com.xenoage.zong.musiclayout.spacer;
 
-import static com.xenoage.utils.collections.CollectionUtils.map;
-import static com.xenoage.zong.musiclayout.spacer.beam.BeamSpacer.beamSpacer;
-
-import java.util.Map;
-
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.position.MP;
@@ -12,8 +7,13 @@ import com.xenoage.zong.core.util.BeamIterator;
 import com.xenoage.zong.musiclayout.notation.BeamNotation;
 import com.xenoage.zong.musiclayout.notation.Notations;
 import com.xenoage.zong.musiclayout.spacing.BeamSpacing;
-import com.xenoage.zong.musiclayout.spacing.FrameSpacing;
 import com.xenoage.zong.musiclayout.spacing.FramesSpacing;
+import lombok.val;
+
+import java.util.Map;
+
+import static com.xenoage.utils.collections.CollectionUtils.map;
+import static com.xenoage.zong.musiclayout.spacer.beam.BeamSpacer.beamSpacer;
 
 /**
  * Computes the {@link BeamSpacing}s for a score.
@@ -31,8 +31,10 @@ public class BeamsSpacer {
 		for (Beam beam : itB) {
 			MP mp = itB.getMp();
 			int staffLinesCount = score.getStaff(mp).getLinesCount();
-			FrameSpacing frame = frames.getFrame(mp.measure);
-			ret.put(beam, beamSpacer.compute((BeamNotation) notations.get(beam), frame, staffLinesCount));
+			val frame = frames.getFrame(mp.measure);
+			val system = frame.getSystem(mp.measure);
+			val beamNotation = (BeamNotation) notations.get(beam);
+			ret.put(beam, beamSpacer.compute(beamNotation, system, score));
 		}
 		return ret;
 	}

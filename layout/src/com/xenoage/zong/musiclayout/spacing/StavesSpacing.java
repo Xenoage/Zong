@@ -1,17 +1,17 @@
 package com.xenoage.zong.musiclayout.spacing;
 
-import static com.xenoage.utils.NullUtils.notNull;
-import static com.xenoage.utils.kernel.Range.range;
-
-import java.util.List;
-
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.annotations.Optimized;
 import com.xenoage.utils.annotations.Optimized.Reason;
 import com.xenoage.zong.core.music.Staff;
+import com.xenoage.zong.musiclayout.SLP;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
+import static com.xenoage.utils.NullUtils.notNull;
+import static com.xenoage.utils.kernel.Range.range;
 
 /**
  * Vertical spacing of the staves in a system.
@@ -82,9 +82,16 @@ public final class StavesSpacing {
 	
 	/** 
 	 * Computes and returns the y-coordinate in mm in system space
-	 * of an object in the given staff on the given line position.
-	 * Also non-integer values (fractions of interline spaces)
-	 * are allowed.
+	 * of an object on the given {@link SLP}.
+	 */
+	public float getYMm(SLP slp) {
+		return getYMm(slp.staff, slp.lp);
+	}
+
+	/**
+	 * Computes and returns the y-coordinate in mm in system space
+	 * of an object on the given {@link SLP}.
+	 * @deprecated use {@link #getYMm(SLP)} instead
 	 */
 	public float getYMm(int staff, float lp) {
 		float staffLp0Mm = getStaffYOffsetMm(staff) + getStaffHeightMm(staff);
@@ -96,9 +103,8 @@ public final class StavesSpacing {
 	/**
 	 * Computes and returns the y-coordinate of an object in the given staff 
 	 * at the given vertical position in mm in system space as a line position.
-	 * Also non-integer values are allowed.
 	 */
-	public float getYLp(int staff, float mm) {
+	public float getLp(int staff, float mm) {
 		float staffLp0Mm = getStaffYOffsetMm(staff) + getStaffHeightMm(staff);
 		float is = notNull(staves.get(staff).getInterlineSpace(), defaultIs);
 		return (staffLp0Mm - mm) * 2 / is;

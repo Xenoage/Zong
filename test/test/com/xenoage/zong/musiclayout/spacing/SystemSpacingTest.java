@@ -43,7 +43,7 @@ public class SystemSpacingTest {
 		MP mp;
 		ColumnSpacing column;
 		float xMm;
-		int lastMeasure = system.getEndMeasureIndex();
+		int lastMeasure = system.getEndMeasure();
 		//coordinate before first measure must return unknown measure
 		mp = system.getMpAt(system.getMeasureStartMm(0) - 0.1f, unknown);
 		assertEquals(unknown, mp.measure);
@@ -57,7 +57,7 @@ public class SystemSpacingTest {
 		mp = system.getMpAt(system.getMeasureEndMm(lastMeasure) + 0.1f, unknown);
 		assertEquals(mp.measure, unknown);
 		//coordinate after last beat in last measure must return last beat
-		column = system.getColumn(system.getEndMeasureIndex());
+		column = system.getColumn(system.getEndMeasure());
 		xMm = system.getMeasureStartMm(lastMeasure) + getLast(column.getBeatOffsets()).offsetMm + 0.1f;
 		mp = system.getMpAt(xMm, unknown);
 		assertEquals(lastMeasure, mp.measure);
@@ -91,7 +91,7 @@ public class SystemSpacingTest {
 		BeatOffset bo;
 		float xMm;
 		float expectedXMm;
-		int lastMeasure = system.getEndMeasureIndex();
+		int lastMeasure = system.getEndMeasure();
 		//beat before first beat in measure 0 must return first beat
 		bo = getFirst(system.getColumn(0).beatOffsets);
 		xMm = system.getXMmAt(time(0, bo.beat.sub(fr(1, 4))));

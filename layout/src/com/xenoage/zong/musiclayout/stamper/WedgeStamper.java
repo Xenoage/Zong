@@ -46,7 +46,7 @@ public class WedgeStamper {
 		//find new wedges beginning in this staff
 		for (int iStaff : range(score.getStavesCount())) {
 			Staff staff = score.getStaff(iStaff);
-			for (int iMeasure : system.getMeasureIndices()) {
+			for (int iMeasure : system.getMeasures()) {
 				Measure measure = staff.getMeasure(iMeasure);
 				for (BeatE<Direction> dir : measure.getDirections()) {
 					if (dir.element instanceof Wedge) {
@@ -65,7 +65,7 @@ public class WedgeStamper {
 			ContinuedWedge wedge = itW.next();
 			ret.add(stamp(wedge.element,
 				staffStampings.get(system.getSystemIndexInFrame(), wedge.element.getMP().staff)));
-			if (MP.getMP(wedge.element.getWedgeEnd()).measure <= system.getEndMeasureIndex()) {
+			if (MP.getMP(wedge.element.getWedgeEnd()).measure <= system.getEndMeasure()) {
 				//wedge is closed
 				itW.remove();
 			}
@@ -80,7 +80,7 @@ public class WedgeStamper {
 	 */
 	public WedgeStamping stamp(Wedge wedge, StaffStamping staffStamping) {
 		SystemSpacing system = staffStamping.system;
-		Range systemMeasures = system.getMeasureIndices();
+		Range systemMeasures = system.getMeasures();
 		//musical positions of wedge
 		MP p1 = MP.getMP(wedge);
 		MP p2 = MP.getMP(wedge.getWedgeEnd());

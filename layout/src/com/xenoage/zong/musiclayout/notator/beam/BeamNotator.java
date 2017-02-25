@@ -35,13 +35,13 @@ public class BeamNotator
 	@MaybeNull public BeamNotation compute(Beam beam, Notations notations) {
 		//compute fragments
 		List<Fragments> fragments = beamFragmenter.compute(beam);
-		//compute stem length and gap
+		//get minimum stem length and gap
 		BeamRules beamRules = BeamRules.getRules(beam);
 		float gapIs = beamRules.getGapIs();
 		//collect chords
 		List<ChordNotation> chords = notations.getBeamChords(beam);
 		//create notation
-		BeamNotation beamNotation = new BeamNotation(beam, fragments, gapIs, chords);
+		BeamNotation beamNotation = new BeamNotation(beam, beam.getMP(), fragments, gapIs, chords);
 		return beamNotation;
 	}
 

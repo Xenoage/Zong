@@ -72,7 +72,7 @@ public class FramesSpacer {
 				if (frame.getSystems().size() > 0) {
 					//at least one measure in this frame. remember frame
 					frames.add(frame);
-					iMeasure = frame.getEndMeasureIndex() + 1;
+					iMeasure = frame.getEndMeasure() + 1;
 					iSystem += frame.getSystems().size();
 				}
 				else {

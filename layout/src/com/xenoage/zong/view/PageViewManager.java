@@ -1,7 +1,7 @@
 package com.xenoage.zong.view;
 
 import static com.xenoage.utils.math.geom.Point2f.p;
-import static com.xenoage.zong.layout.LP.lp;
+import static com.xenoage.zong.layout.LayoutPos.layoutPos;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import com.xenoage.utils.math.geom.Rectangle2f;
 import com.xenoage.utils.math.geom.Rectangle2i;
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.utils.math.geom.Size2i;
-import com.xenoage.zong.layout.LP;
+import com.xenoage.zong.layout.LayoutPos;
 import com.xenoage.zong.layout.Layout;
 import com.xenoage.zong.layout.Page;
 
@@ -138,13 +138,13 @@ public class PageViewManager {
 	 * Computes the page index and the page coordinates at the given position in
 	 * px. If there is no page at the given position, null is returned.
 	 */
-	public LP computeLP(Point2i pPx, ViewState viewState) {
+	public LayoutPos computeLP(Point2i pPx, ViewState viewState) {
 		Point2f pMm = computePositionMm(pPx, viewState);
 		//TODO: performance? binary search?
 		for (int page = pageRects.size() - 1; page >= 0; page--) {
 			if (pageRects.get(page).contains(pMm)) {
 				pMm = pMm.sub(getPageDisplayOffset(page));
-				return lp(layout, page, p(pMm.x, pMm.y));
+				return layoutPos(layout, page, p(pMm.x, pMm.y));
 			}
 		}
 		return null;
@@ -165,7 +165,7 @@ public class PageViewManager {
 	 * Computes the page coordinates at the given position in px, relative to
 	 * the upper left corner of the given page.
 	 */
-	public LP computeLP(Point2i px, Page page, ViewState viewState) {
+	public LayoutPos computeLP(Point2i px, Page page, ViewState viewState) {
 		int pageIndex = layout.getPages().indexOf(page);
 		return computeLP(px, pageIndex, viewState);
 	}
@@ -174,11 +174,11 @@ public class PageViewManager {
 	 * Computes the page coordinates at the given position in px, relative to
 	 * the upper left corner of the given page.
 	 */
-	public LP computeLP(Point2i pPx, int page, ViewState viewState) {
+	public LayoutPos computeLP(Point2i pPx, int page, ViewState viewState) {
 		Point2f pMm = computePositionMm(pPx, viewState);
 		Point2f pageOffset = pageRects.get(page).position;
 		pMm = pMm.sub(pageOffset);
-		return lp(layout, page, p(pMm.x, pMm.y));
+		return layoutPos(layout, page, p(pMm.x, pMm.y));
 	}
 
 	/**
@@ -194,7 +194,7 @@ public class PageViewManager {
 	 * Transforms the given layout coordinates to screen coordinates in px. If
 	 * not possible, null is returned.
 	 */
-	public Point2i computePositionPx(LP p, ViewState viewState) {
+	public Point2i computePositionPx(LayoutPos p, ViewState viewState) {
 		Point2f pos = getPageDisplayOffset(p.pageIndex);
 		pos = pos.add(p.position);
 		pos = pos.sub(viewState.scrollMm);
@@ -211,8 +211,8 @@ public class PageViewManager {
 	public Rectangle2i computeRectangleMm(int page, Rectangle2f rect, ViewState viewState) {
 		Point2f nw = rect.position;
 		Point2f se = nw.add(rect.size);
-		Point2i nwPx = computePositionPx(lp(layout, page, nw), viewState);
-		Point2i sePx = computePositionPx(lp(layout, page, se), viewState);
+		Point2i nwPx = computePositionPx(layoutPos(layout, page, nw), viewState);
+		Point2i sePx = computePositionPx(layoutPos(layout, page, se), viewState);
 		return new Rectangle2i(nwPx, new Size2i(sePx.sub(nwPx)));
 	}
 
@@ -248,10 +248,10 @@ public class PageViewManager {
 	 */
 	public Rectangle2i computePageRect(int pageIndex, ViewState viewState) {
 		//get page coordinates in px
-		Point2i pagePositionUpperLeftPx = computePositionPx(lp(layout, pageIndex, p(0, 0)), viewState);
+		Point2i pagePositionUpperLeftPx = computePositionPx(layoutPos(layout, pageIndex, p(0, 0)), viewState);
 		Size2f size = layout.getPages().get(pageIndex).getFormat().getSize();
 		Point2i pagePositionLowerRightPx = computePositionPx(
-			lp(layout, pageIndex, p(size.width, size.height)), viewState);
+			layoutPos(layout, pageIndex, p(size.width, size.height)), viewState);
 		//create rectangle
 		Rectangle2i ret = new Rectangle2i(pagePositionUpperLeftPx, new Size2i(
 			pagePositionLowerRightPx.x - pagePositionUpperLeftPx.x, pagePositionLowerRightPx.y -

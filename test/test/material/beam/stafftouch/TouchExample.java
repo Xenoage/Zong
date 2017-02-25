@@ -1,17 +1,16 @@
 package material.beam.stafftouch;
 
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.zong.core.music.StaffLines.staff5Lines;
-
-import java.util.List;
-
+import com.xenoage.zong.core.music.StaffLines;
+import com.xenoage.zong.core.music.chord.StemDirection;
+import com.xenoage.zong.musiclayout.spacer.beam.placement.SingleStaffBeamPlacer.Placement;
 import lombok.Getter;
 import material.ExampleBase;
 import material.Suite;
 
-import com.xenoage.zong.core.music.StaffLines;
-import com.xenoage.zong.core.music.chord.StemDirection;
-import com.xenoage.zong.musiclayout.spacer.beam.Placement;
+import java.util.List;
+
+import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static com.xenoage.zong.core.music.StaffLines.staff5Lines;
 
 /**
  * Example of a beams touching the staff.

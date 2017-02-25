@@ -60,7 +60,7 @@ public class ScoreLayout {
 	 * Computes and returns the appropriate musical position
 	 * to the given metric position, or null, if unknown.
 	 */
-	public MP getMP(ScoreLP coordinates) {
+	public MP getMP(ScoreLayoutPos coordinates) {
 		if (coordinates == null)
 			return null;
 		//first test, if there is a staff element.
@@ -109,7 +109,7 @@ public class ScoreLayout {
 		//go through all frames
 		for (int iFrame : range(frames)) {
 			FrameSpacing frameArr = frames.get(iFrame).getFrameSpacing();
-			if (frameArr.getStartMeasureIndex() <= measure && frameArr.getEndMeasureIndex() >= measure)
+			if (frameArr.getStartMeasure() <= measure && frameArr.getEndMeasure() >= measure)
 				return iFrame;
 		}
 		//we found nothing
@@ -178,17 +178,17 @@ public class ScoreLayout {
 	public ScoreFrameLayout getScoreFrameLayout(int measure) {
 		for (ScoreFrameLayout frame : frames) {
 			FrameSpacing spacing = frame.getFrameSpacing();
-			if (measure >= spacing.getStartMeasureIndex() && measure <= spacing.getEndMeasureIndex())
+			if (measure >= spacing.getStartMeasure() && measure <= spacing.getEndMeasure())
 				return frame;
 		}
 		return null;
 	}
 
 	/**
-	 * Computes the {@link ScoreLP} of the given {@link MP} at the given line position.
+	 * Computes the {@link ScoreLayoutPos} of the given {@link MP} at the given line position.
 	 * If not found, null is returned.
 	 */
-	public ScoreLP getScoreLP(MP mp, float lp) {
+	public ScoreLayoutPos getScoreLP(MP mp, float lp) {
 		int iFrame = getFrameIndexOf(mp.measure);
 		if (iFrame > -1) {
 			ScoreFrameLayout sfl = frames.get(iFrame);
@@ -200,7 +200,7 @@ public class ScoreLayout {
 			if (ss != null) {
 				float x = ss.positionMm.x + ss.system.getXMmAt(mp.getTime());
 				float y = ss.computeYMm(lp);
-				return new ScoreLP(iFrame, new Point2f(x, y));
+				return new ScoreLayoutPos(iFrame, new Point2f(x, y));
 			}
 		}
 		return null;

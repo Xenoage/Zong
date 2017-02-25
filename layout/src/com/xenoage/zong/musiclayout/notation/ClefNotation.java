@@ -1,11 +1,11 @@
 package com.xenoage.zong.musiclayout.notation;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.music.clef.Clef;
+import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.musiclayout.spacing.ElementWidth;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * This class contains layout information about a clef, like its width,
@@ -25,6 +25,9 @@ import com.xenoage.zong.musiclayout.spacing.ElementWidth;
 	/** The scaling, which is needed e.g. for cue clefs. */
 	public final float scaling;
 
+	@Override public MP getMp() {
+		return element.getMP();
+	}
 
 	@Override public ElementWidth getWidth() {
 		return width;

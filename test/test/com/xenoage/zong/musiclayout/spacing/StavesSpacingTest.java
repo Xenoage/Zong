@@ -1,12 +1,11 @@
 package com.xenoage.zong.musiclayout.spacing;
 
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.utils.math.Delta.df;
-import static org.junit.Assert.assertEquals;
-
+import com.xenoage.zong.core.music.Staff;
 import org.junit.Test;
 
-import com.xenoage.zong.core.music.Staff;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static com.xenoage.utils.math.Delta.df;
+import static org.junit.Assert.*;
 
 /**
  * Tests for {@link StavesSpacing}.
@@ -62,19 +61,19 @@ public class StavesSpacingTest {
 	
 	@Test public void getYLpTest() {
 		//staff 0
-		assertEquals(0, staves.getYLp(0, 4 * 1), df);
-		assertEquals(4, staves.getYLp(0, 2 * 1), df);
-		assertEquals(8, staves.getYLp(0, 0), df);
+		assertEquals(0, staves.getLp(0, 4 * 1), df);
+		assertEquals(4, staves.getLp(0, 2 * 1), df);
+		assertEquals(8, staves.getLp(0, 0), df);
 		//staff 1
 		float s1y = 4 * 1 + 30;
-		assertEquals(0, staves.getYLp(1, s1y + 3 * 2), df);
-		assertEquals(3, staves.getYLp(1, s1y + 1.5f * 2), df);
-		assertEquals(6, staves.getYLp(1, s1y), df);
+		assertEquals(0, staves.getLp(1, s1y + 3 * 2), df);
+		assertEquals(3, staves.getLp(1, s1y + 1.5f * 2), df);
+		assertEquals(6, staves.getLp(1, s1y), df);
 		//staff 2
 		float s2y = 4 * 1 + 30 + 3 * 2 + 20;
-		assertEquals(0, staves.getYLp(2, s2y + 4 * 3), df);
-		assertEquals(4, staves.getYLp(2, s2y + 2 * 3), df);
-		assertEquals(8, staves.getYLp(2, s2y), df);
+		assertEquals(0, staves.getLp(2, s2y + 4 * 3), df);
+		assertEquals(4, staves.getLp(2, s2y + 2 * 3), df);
+		assertEquals(8, staves.getLp(2, s2y), df);
 	}
 
 }

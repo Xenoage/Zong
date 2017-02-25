@@ -166,7 +166,7 @@ public class ScoreFrameLayouter {
 				float xMm = context.staff.positionMm.x;
 
 				for (int iMeasure : range(system.columns)) {
-					int globalMeasureIndex = system.getStartMeasureIndex() + iMeasure;
+					int globalMeasureIndex = system.getStartMeasure() + iMeasure;
 					layouterContext.mp = layouterContext.mp.withMeasure(globalMeasureIndex);
 					
 					ColumnSpacing measureColumnSpacing = system.columns.get(iMeasure);

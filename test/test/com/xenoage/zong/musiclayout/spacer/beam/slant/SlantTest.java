@@ -1,13 +1,14 @@
-package com.xenoage.zong.musiclayout.spacer.beam;
+package com.xenoage.zong.musiclayout.spacer.beam.slant;
+
+import com.xenoage.zong.musiclayout.spacer.beam.Slant;
+import org.junit.Test;
 
 import static com.xenoage.utils.math.Delta.df;
 import static com.xenoage.zong.musiclayout.spacer.beam.Direction.Ascending;
 import static com.xenoage.zong.musiclayout.spacer.beam.Direction.Descending;
 import static com.xenoage.zong.musiclayout.spacer.beam.Slant.slant;
 import static com.xenoage.zong.musiclayout.spacer.beam.Slant.slantIs;
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  * Tests for {@link Slant}.

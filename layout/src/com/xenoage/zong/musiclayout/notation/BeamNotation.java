@@ -1,13 +1,14 @@
 package com.xenoage.zong.musiclayout.notation;
 
-import java.util.List;
-
+import com.xenoage.utils.annotations.Optimized;
 import com.xenoage.zong.core.music.beam.Beam;
+import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.musiclayout.notation.beam.Fragments;
 import com.xenoage.zong.musiclayout.spacing.ElementWidth;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import java.util.List;
 
 /**
  * Layout information about a beam, like the appearance
@@ -26,7 +27,7 @@ public class BeamNotation
 	public static final float lineHeightIs = 0.5f;
 	/** Default gap between lines in IS. Since three beam lines should
 	 * fit into two IS (see Chlapik, p. 41, rule 1, and Ross, p. 119),
-	 * the default gap between the lines is {@value #gapIs}. */ 
+	 * the default gap between the lines is {@value #normalGapIs}. */
 	public static final float normalGapIs = 0.25f;
 	/** Larger gap between lines in IS. It should be used when a beam
 	 * has more than four lines, to avoid beam lines centered within staff whitespace. */
@@ -44,6 +45,8 @@ public class BeamNotation
 
 	/** The beam element. */
 	@Getter public final Beam element;
+	/** The {@link MP}, stored for performance reasons. */
+	@Getter @Optimized(Optimized.Reason.Performance) public final MP mp;
 	/** The fragments for each secondary line, starting with the 16th line, then 32nd ... .
 	 * The primary 8th line is always continuous, so it is not stored. */
 	public List<Fragments> linesFragments;

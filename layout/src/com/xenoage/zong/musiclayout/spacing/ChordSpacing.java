@@ -15,7 +15,6 @@ public class ChordSpacing
 	extends ElementSpacing {
 	
 	@Getter public ChordNotation notation;
-	public int lp;
 	
 	
 	public ChordSpacing(ChordNotation notation, Fraction beat, float xIs) {

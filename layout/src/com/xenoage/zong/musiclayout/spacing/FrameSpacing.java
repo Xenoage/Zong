@@ -1,17 +1,17 @@
 package com.xenoage.zong.musiclayout.spacing;
 
-import static com.xenoage.utils.collections.CollectionUtils.getFirst;
-import static com.xenoage.utils.collections.CollectionUtils.getLast;
-import static com.xenoage.zong.core.position.MP.atMeasure;
+import com.xenoage.utils.math.geom.Size2f;
+import com.xenoage.zong.layout.frames.ScoreFrame;
+import com.xenoage.zong.utils.exceptions.IllegalMPException;
+import lombok.Getter;
+import lombok.val;
 
 import java.util.Collections;
 import java.util.List;
 
-import com.xenoage.utils.math.geom.Size2f;
-import com.xenoage.zong.layout.frames.ScoreFrame;
-import com.xenoage.zong.utils.exceptions.IllegalMPException;
-
-import lombok.Getter;
+import static com.xenoage.utils.collections.CollectionUtils.getFirst;
+import static com.xenoage.utils.collections.CollectionUtils.getLast;
+import static com.xenoage.zong.core.position.MP.atMeasure;
 
 /**
  * The spacing information of the musical layout of a {@link ScoreFrame}.
@@ -48,27 +48,35 @@ public class FrameSpacing {
 	/**
 	 * Gets the index of the first measure, or -1 if there are no measures.
 	 */
-	public int getStartMeasureIndex() {
+	public int getStartMeasure() {
 		if (systems.size() == 0)
 			return -1;
 		else
-			return getFirst(systems).getStartMeasureIndex();
+			return getFirst(systems).getStartMeasure();
 	}
 
 	/**
 	 * Gets the index of the last measure, or -1 if there are no measures.
 	 */
-	public int getEndMeasureIndex() {
+	public int getEndMeasure() {
 		if (systems.size() == 0)
 			return -1;
 		else
-			return getLast(systems).getEndMeasureIndex();
+			return getLast(systems).getEndMeasure();
 	}
 	
 	public ColumnSpacing getColumn(int scoreMeasure) {
 		for (SystemSpacing system : systems) {
-			if (scoreMeasure <= system.getEndMeasureIndex())
+			if (scoreMeasure <= system.getEndMeasure())
 				return system.getColumn(scoreMeasure);
+		}
+		throw new IllegalMPException(atMeasure(scoreMeasure));
+	}
+
+	public SystemSpacing getSystem(int scoreMeasure) {
+		for (val system : systems) {
+			if (system.containsMeasure(scoreMeasure))
+				return system;
 		}
 		throw new IllegalMPException(atMeasure(scoreMeasure));
 	}

@@ -43,14 +43,14 @@ public class VoltaStamper {
 			ret.add(stamp(openVolta.volta.element, systemFirstStaff, textStyle));
 		}
 		//stamp voltas beginning in this system
-		for (int iMeasure : systemFirstStaff.system.getMeasureIndices()) {
+		for (int iMeasure : systemFirstStaff.system.getMeasures()) {
 			ColumnHeader columnHeader = header.getColumnHeader(iMeasure);
 			if (columnHeader.getVolta() != null) {
 				ret.add(stamp(columnHeader.getVolta(), systemFirstStaff, textStyle));
 			}
 		}
 		//remember open volta
-		int systemEndMeasureIndex = systemFirstStaff.system.getEndMeasureIndex();
+		int systemEndMeasureIndex = systemFirstStaff.system.getEndMeasure();
 		if (ret.size() > 0 && getLast(ret).element.getEndMeasureIndex() > systemEndMeasureIndex) {
 			openVolta.volta = new ContinuedVolta(getLast(ret).element);
 		}
@@ -74,7 +74,7 @@ public class VoltaStamper {
 		boolean rightHook = volta.isRightHook();
 		boolean caption = true;
 		//clip start measure to staff
-		Range systemMeasures = staff.system.getMeasureIndices();
+		Range systemMeasures = staff.system.getMeasures();
 		int start = volta.getMP().measure;
 		if (start < systemMeasures.getStart()) {
 			start = systemMeasures.getStart();

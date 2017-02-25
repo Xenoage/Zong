@@ -1,21 +1,17 @@
 package com.xenoage.zong.musiclayout.spacing;
 
-import static com.xenoage.utils.collections.CollectionUtils.getLast;
-import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.zong.core.position.MP.getMP;
-import static com.xenoage.zong.core.position.MP.unknown;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.math.Fraction;
+import com.xenoage.zong.core.music.VoiceElement;
+import com.xenoage.zong.core.position.MP;
+import com.xenoage.zong.musiclayout.notation.Notation;
+import lombok.Getter;
 
 import java.util.List;
 
-import lombok.Getter;
-
-import com.xenoage.utils.annotations.MaybeNull;
-import com.xenoage.utils.math.Fraction;
-import com.xenoage.zong.core.music.MusicElement;
-import com.xenoage.zong.core.music.VoiceElement;
-import com.xenoage.zong.core.music.chord.Chord;
-import com.xenoage.zong.core.position.MP;
-import com.xenoage.zong.musiclayout.notation.ChordNotation;
+import static com.xenoage.utils.collections.CollectionUtils.getLast;
+import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.zong.core.position.MP.unknown;
 
 /**
  * The horizontal spacing for one measure column.
@@ -112,21 +108,6 @@ public class ColumnSpacing {
 	}
 
 	/**
-	 * Returns the offset of the given {@link MusicElement} in IS, or
-	 * 0 if not found. The index of the staff and voice must also be given.
-	 * @deprecated use {@link #getChord(Chord)}
-	 */
-	public float getOffsetIs(MusicElement element, int staffIndex, int voiceIndex) {
-		MeasureSpacing measure = measures.get(staffIndex);
-		for (ElementSpacing se : measure.voices.get(voiceIndex).elements) {
-			if (se.getElement() == element) {
-				return se.xIs;
-			}
-		}
-		return 0;
-	}
-
-	/**
 	 * Gets the offset in mm of the barline at the given beat, or 0 if unknown.
 	 */
 	public float getBarlineOffsetMm(Fraction beat) {
@@ -143,23 +124,15 @@ public class ColumnSpacing {
 	public VoiceSpacing getVoice(int staff, int voice) {
 		return measures.get(staff).voices.get(voice);
 	}
-	
+
 	/**
 	 * Convenience method to get the {@link ElementSpacing} of the given
-	 * {@link VoiceElement} in this column.
+	 * {@link VoiceElement} {@link Notation} in this column.
 	 */
-	public ElementSpacing getElement(VoiceElement element) {
-		MP mp = getMP(element);
+	public ElementSpacing getElement(Notation notation) {
+		MP mp = notation.getMp();
 		VoiceSpacing voice = getVoice(mp.staff, mp.voice);
-		return voice.getElement(element);
-	}
-	
-	/**
-	 * Convenience method to get the {@link ChordNotation} of the given
-	 * {@link Chord} in this column.
-	 */
-	public ChordNotation getNotation(Chord chord) {
-		return (ChordNotation) getElement(chord).getNotation();
+		return voice.getElement((VoiceElement) notation.getElement());
 	}
 	
 	/**

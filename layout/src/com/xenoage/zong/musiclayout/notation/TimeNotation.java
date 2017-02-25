@@ -1,11 +1,11 @@
 package com.xenoage.zong.musiclayout.notation;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.music.time.TimeSignature;
+import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.musiclayout.spacing.ElementWidth;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * This class contains layout information
@@ -26,5 +26,9 @@ import com.xenoage.zong.musiclayout.spacing.ElementWidth;
 	public final float denominatorOffset;
 	/** The gap between the digits in interline spaces. */
 	public final float digitGap;
+
+	@Override public MP getMp() {
+		return element.getMP();
+	}
 
 }

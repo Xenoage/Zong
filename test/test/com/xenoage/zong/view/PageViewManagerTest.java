@@ -1,7 +1,7 @@
 package com.xenoage.zong.view;
 
 import static com.xenoage.utils.math.geom.Point2f.p;
-import static com.xenoage.zong.layout.LP.lp;
+import static com.xenoage.zong.layout.LayoutPos.layoutPos;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
@@ -119,25 +119,25 @@ public class PageViewManagerTest {
 		Point2f viewScroll = new Point2f(0, 0);
 		ViewState viewState = new ViewState(viewSize, viewScaling, viewScroll);
 		//center point of the page must have screen coordinates 400/300
-		Point2i pos = view.computePositionPx(lp(null, 0, p(50, 100)), viewState);
+		Point2i pos = view.computePositionPx(layoutPos(null, 0, p(50, 100)), viewState);
 		assertEquals(pos.x, 400);
 		assertEquals(pos.y, 300);
 		//set zoom to 200%, must still be 400/300
 		viewScaling = 2;
 		viewState = new ViewState(viewSize, viewScaling, viewScroll);
-		pos = view.computePositionPx(lp(null, 0, p(50, 100)), viewState);
+		pos = view.computePositionPx(layoutPos(null, 0, p(50, 100)), viewState);
 		assertEquals(pos.x, 400);
 		assertEquals(pos.y, 300);
 		//scroll to -5/10
 		//page point 45/110 must be 400/300
 		viewScroll = new Point2f(-5, 10);
 		viewState = new ViewState(viewSize, viewScaling, viewScroll);
-		pos = view.computePositionPx(lp(null, 0, p(45, 110)), viewState);
+		pos = view.computePositionPx(layoutPos(null, 0, p(45, 110)), viewState);
 		assertEquals(pos.x, 400);
 		assertEquals(pos.y, 300);
 		//page center point must be
 		//400-(-5*MmToPx*zoom); 300-(10*MmToPx*zoom)
-		pos = view.computePositionPx(lp(null, 0, p(50, 100)), viewState);
+		pos = view.computePositionPx(layoutPos(null, 0, p(50, 100)), viewState);
 		assertEquals(pos.x, Math.round(400 - Units.mmToPx(-5, viewScaling)));
 		assertEquals(pos.y, Math.round(300 - Units.mmToPx(10, viewScaling)));
 	}

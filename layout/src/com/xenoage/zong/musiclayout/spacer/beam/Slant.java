@@ -1,14 +1,9 @@
 package com.xenoage.zong.musiclayout.spacer.beam;
 
-import static com.xenoage.zong.musiclayout.spacer.beam.Direction.Ascending;
-import static com.xenoage.zong.musiclayout.spacer.beam.Direction.Descending;
-import static com.xenoage.zong.musiclayout.spacer.beam.Direction.Horizontal;
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
-import static java.lang.Math.round;
+import com.xenoage.utils.annotations.Const;
 import lombok.ToString;
 
-import com.xenoage.utils.annotations.Const;
+import static java.lang.Math.*;
 
 /**
  * Possible values for the slant of a beam.
@@ -28,7 +23,7 @@ import com.xenoage.utils.annotations.Const;
 @Const @ToString
 public final class Slant {
 	
-	public static final Slant horizontalSlant = new Slant(0, 0, Horizontal);
+	public static final Slant horizontalSlant = new Slant(0, 0, Direction.Horizontal);
 	
 	/** The smallest ("flattest") possible absolute slant in QS, e.g. 2 for one half-space up or down. */
 	public final int minAbsQs;
@@ -43,7 +38,7 @@ public final class Slant {
 		if (slantAbsQs == 0)
 			return horizontalSlant;
 		else
-			return new Slant(slantAbsQs, slantAbsQs, slantIs > 0 ? Ascending : Descending);
+			return new Slant(slantAbsQs, slantAbsQs, slantIs > 0 ? Direction.Ascending : Direction.Descending);
 	}
 	
 	public static final Slant slantIs(float absIs, Direction direction) {
@@ -77,7 +72,7 @@ public final class Slant {
 	 * Returns true, iff the given slant in QS is within the range of this slant.
 	 */
 	public boolean contains(int slantQs) {
-		if (direction == Descending)
+		if (direction == Direction.Descending)
 			return (-maxAbsQs <= slantQs && slantQs <= -minAbsQs);
 		else
 			return (minAbsQs <= slantQs && slantQs <= maxAbsQs);
@@ -102,14 +97,14 @@ public final class Slant {
 	 * Gets the minimum directed slant value.
 	 */
 	public float getMinIs() {
-		return (direction == Ascending ? minAbsQs : maxAbsQs) * direction.getSign() / 4f;
+		return (direction == Direction.Ascending ? minAbsQs : maxAbsQs) * direction.getSign() / 4f;
 	}
 	
 	/**
 	 * Gets the maximum directed slant value.
 	 */
 	public float getMaxIs() {
-		return (direction == Ascending ? maxAbsQs : minAbsQs) * direction.getSign() / 4f;
+		return (direction == Direction.Ascending ? maxAbsQs : minAbsQs) * direction.getSign() / 4f;
 	}
 	
 }

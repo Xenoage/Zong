@@ -2,7 +2,7 @@ package com.xenoage.zong.layout.frames;
 
 import static com.xenoage.utils.math.geom.Point2f.origin;
 import static com.xenoage.utils.math.geom.Size2f.size0;
-import static com.xenoage.zong.layout.LP.lp;
+import static com.xenoage.zong.layout.LayoutPos.layoutPos;
 import static java.lang.Math.max;
 import lombok.Data;
 
@@ -12,7 +12,7 @@ import com.xenoage.utils.color.Color;
 import com.xenoage.utils.math.MathUtils;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Size2f;
-import com.xenoage.zong.layout.LP;
+import com.xenoage.zong.layout.LayoutPos;
 import com.xenoage.zong.layout.Layout;
 import com.xenoage.zong.layout.LayoutContainer;
 import com.xenoage.zong.layout.Page;
@@ -72,15 +72,15 @@ import com.xenoage.zong.layout.Page;
 	}
 
 	/**
-	 * Gets the {@link LP} of the center of the frame.
+	 * Gets the {@link LayoutPos} of the center of the frame.
 	 * If this frame is not part of a layout, the page index -1 is returned.
 	 */
-	public final LP getCenterLP() {
+	public final LayoutPos getCenterLP() {
 		Point2f pos = getAbsolutePosition();
 		Layout layout = getParentLayout();
 		Page page = getParentPage();
 		int pageIndex = (page != null ? page.getIndex() : -1);
-		return lp(layout, pageIndex, pos);
+		return layoutPos(layout, pageIndex, pos);
 	}
 
 	/**

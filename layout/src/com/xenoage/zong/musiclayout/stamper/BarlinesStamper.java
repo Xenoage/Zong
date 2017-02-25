@@ -55,7 +55,7 @@ public class BarlinesStamper {
 			
 			//measure numbering
 			MeasureNumbering measureNumbering = score.getFormat().getMeasureNumbering();
-			int globalMeasureIndex = system.getStartMeasureIndex() + iMeasure;
+			int globalMeasureIndex = system.getStartMeasure() + iMeasure;
 			boolean showMeasureNumber = false;
 			if (measureNumbering == MeasureNumbering.System) {
 				//measure number at the beginning of each system (except the first one)

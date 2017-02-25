@@ -1,19 +1,24 @@
 package material.beam.slant;
 
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.zong.musiclayout.notator.chord.stem.beam.range.OneMeasureOneStaff.oneMeasureOneStaff;
-
-import java.util.List;
-
+import com.xenoage.utils.collections.ArrayUtils;
+import com.xenoage.utils.collections.CList;
+import com.xenoage.zong.core.music.chord.StemDirection;
+import com.xenoage.zong.musiclayout.notation.chord.ChordLps;
+import com.xenoage.zong.musiclayout.spacer.beam.placement.SingleStaffBeamPlacer.Placement;
+import com.xenoage.zong.musiclayout.spacer.beam.stem.BeamedStem;
+import com.xenoage.zong.musiclayout.spacer.beam.stem.BeamedStems;
 import lombok.Getter;
+import lombok.val;
 import material.ExampleBase;
 import material.Suite;
 
-import com.xenoage.utils.collections.ArrayUtils;
-import com.xenoage.zong.core.music.chord.StemDirection;
-import com.xenoage.zong.musiclayout.notation.chord.ChordLps;
-import com.xenoage.zong.musiclayout.spacer.beam.Placement;
+import java.util.List;
+
+import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.zong.core.music.StaffLines.staff5Lines;
+import static com.xenoage.zong.musiclayout.notator.chord.stem.StemDrawer.stemDrawer;
+import static com.xenoage.zong.musiclayout.notator.chord.stem.beam.range.OneMeasureOneStaff.oneMeasureOneStaff;
 
 /**
  * Beam slant example.
@@ -120,6 +125,25 @@ public class Example
 		for (int i : range(notesLp))
 			chordLps[i] = new ChordLps(notesLp[i]);
 		return oneMeasureOneStaff.compute(chordLps, staffLines)[0];
+	}
+
+	public BeamedStems getStems() {
+		val stems = new CList<BeamedStem>();
+		int[] notesLp = getNotesLp();
+		val stemDir = getStemDir();
+		float distance = getStemsDistanceIs();
+		for (int i : range(notesLp)) {
+			float stemXIs = i * distance;
+			float stemLengthIs;
+			if (i == 0)
+				stemLengthIs = leftStemLengthIs;
+			else if (i == notesLp.length - 1)
+				stemLengthIs = rightStemLengthIs;
+			else
+				stemLengthIs = stemDrawer.getPreferredStemLengthIs(new ChordLps(notesLp[i]), stemDir, staff5Lines);
+			stems.add(new BeamedStem(stemXIs, stemDir, notesLp[i], stemLengthIs));
+		}
+		return new BeamedStems(stems.close());
 	}
 	
 	public Placement getPlacement() {

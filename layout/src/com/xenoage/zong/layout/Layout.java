@@ -3,7 +3,7 @@ package com.xenoage.zong.layout;
 import static com.xenoage.utils.collections.CList.clist;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.zong.layout.LP.lp;
+import static com.xenoage.zong.layout.LayoutPos.layoutPos;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ import com.xenoage.zong.layout.frames.Frame;
 import com.xenoage.zong.layout.frames.GroupFrame;
 import com.xenoage.zong.layout.frames.ScoreFrame;
 import com.xenoage.zong.layout.frames.ScoreFrameChain;
-import com.xenoage.zong.musiclayout.ScoreLP;
+import com.xenoage.zong.musiclayout.ScoreLayoutPos;
 import com.xenoage.zong.musiclayout.ScoreLayout;
 import com.xenoage.zong.musiclayout.layouter.Context;
 import com.xenoage.zong.musiclayout.layouter.ScoreLayoutArea;
@@ -70,10 +70,10 @@ import lombok.Data;
 	}
 
 	/**
-	 * Transforms the given {@link LP} to a {@link FP} of the frame at this position.
+	 * Transforms the given {@link LayoutPos} to a {@link FP} of the frame at this position.
 	 * If there is no frame, null is returned.
 	 */
-	public FP getFP(LP lp) {
+	public FP getFP(LayoutPos lp) {
 		if (lp == null)
 			return null;
 		Page page = pages.get(lp.pageIndex);
@@ -207,14 +207,14 @@ import lombok.Data;
 	}
 
 	/**
-	 * Returns the {@link LP} of the given {@link MP} within the given {@link Score}
+	 * Returns the {@link LayoutPos} of the given {@link MP} within the given {@link Score}
 	 * at the given line position, or null if unknown.
 	 */
-	public LP computeLP(Score score, MP mp, float lp) {
+	public LayoutPos computeLP(Score score, MP mp, float lp) {
 		ScoreFrameChain chain = getScoreFrameChain(score);
 		if (chain != null) {
 			ScoreLayout sl = chain.getScoreLayout();
-			ScoreLP slp = sl.getScoreLP(mp, lp);
+			ScoreLayoutPos slp = sl.getScoreLP(mp, lp);
 			if (slp != null) {
 				ScoreFrame frame = chain.getFrames().get(slp.frameIndex);
 				Page page = frame.getParentPage();
@@ -222,7 +222,7 @@ import lombok.Data;
 					Point2f frameP = slp.pMm.sub(frame.getSize().width / 2, frame.getSize().height / 2);
 					int pageIndex = pages.indexOf(page);
 					Point2f pMm = frame.getPagePosition(frameP);
-					return lp(this, pageIndex, pMm);
+					return layoutPos(this, pageIndex, pMm);
 				}
 			}
 		}
