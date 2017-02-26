@@ -10,6 +10,7 @@ import lombok.Getter;
 
 import java.util.List;
 
+import static com.xenoage.utils.NullUtils.notNull;
 import static com.xenoage.utils.annotations.Optimized.Reason.Performance;
 import static com.xenoage.utils.collections.CollectionUtils.getFirst;
 import static com.xenoage.utils.collections.CollectionUtils.getLast;
@@ -186,6 +187,13 @@ public class SystemSpacing {
 		float measureXMm = getMeasureStartMm(time.measure);
 		float elementXMm = columns.get(time.measure - getStartMeasure()).getXMmAt(time.beat);
 		return measureXMm + elementXMm;
+	}
+
+	/**
+	 * Gets the interline space of the staff with the given index.
+	 */
+	public float getInterlineSpace(int staff) {
+		return notNull(staves.getStaves().get(staff).getInterlineSpace(), staves.getDefaultIs());
 	}
 
 	/**

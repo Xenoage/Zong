@@ -50,25 +50,30 @@ public class TwoStavesBeamPlacer {
 		//GOON: plus the height of the beam lines!!
 		float upperDictatorYMm = system.getYMm(slp(upperStaffIndex, stems.get(upperDictatorStemIndex).getEndLp()));
 		float lowerDictatorYMm = system.getYMm(slp(upperStaffIndex + 1, stems.get(lowerDictatorStemIndex).getEndLp()));
-		//GOON: we must transform xIS to xMm first, since the staff sizes may be different!
-		float middleXIs = (stems.get(upperDictatorStemIndex).xIs + stems.get(lowerDictatorStemIndex).xIs) / 2;
+		float upperDictatorXMm = stems.get(upperDictatorStemIndex).xIs * system.getInterlineSpace(upperStaffIndex);
+		float lowerDictatorXMm = stems.get(lowerDictatorStemIndex).xIs * system.getInterlineSpace(upperStaffIndex + 1);
+		float middleXmm = (upperDictatorXMm + lowerDictatorXMm) / 2;
 		float middleYMm = (upperDictatorYMm + lowerDictatorYMm) / 2;
 
-		//transform the vertical position of the beam relative to the staves
+		//transform the positions in mm into IS/LP
+		float middleXIsFromUpperStaff = middleXmm / system.getInterlineSpace(upperStaffIndex);
+		float middleXIsFromLowerStaff = middleXmm / system.getInterlineSpace(upperStaffIndex + 1);
 		float middleYLpFromUpperStaff = system.getLp(upperStaffIndex, middleYMm);
 		float middleYLpFromLowerStaff = system.getLp(upperStaffIndex + 1, middleYMm);
 
 		//compute the end LPs at each side
 		boolean isLeftUpperStaff = (stems.getFirst().dir == StemDirection.Down);
 		boolean isRightUpperStaff = (stems.getLast().dir == StemDirection.Down);
-		int leftStaffIndex = upperStaffIndex + (isLeftUpperStaff ? 0 : 1);
-		int rightStaffIndex = upperStaffIndex + (isRightUpperStaff ? 0 : 1);
+		float leftMiddleXIs = (isLeftUpperStaff ? middleXIsFromUpperStaff : middleXIsFromLowerStaff);
+		float rightMiddleXIs = (isRightUpperStaff ? middleXIsFromUpperStaff : middleXIsFromLowerStaff);
 		float leftYLp = (isLeftUpperStaff ? middleYLpFromUpperStaff : middleYLpFromLowerStaff);
 		float rightYLp = (isRightUpperStaff ? middleYLpFromUpperStaff : middleYLpFromLowerStaff);
 		float beamWidthIs = stems.rightXIs - stems.leftXIs;
-		float leftLp = singleStaffBeamPlacer.getBeamLpAtXIs(stems.leftXIs, middleXIs, leftYLp, slantIs, beamWidthIs);
-		float rightLp = singleStaffBeamPlacer.getBeamLpAtXIs(stems.rightXIs, middleXIs, rightYLp, slantIs, beamWidthIs);
+		float leftLp = singleStaffBeamPlacer.getBeamLpAtXIs(stems.leftXIs, leftMiddleXIs, leftYLp, slantIs, beamWidthIs);
+		float rightLp = singleStaffBeamPlacer.getBeamLpAtXIs(stems.rightXIs, rightMiddleXIs, rightYLp, slantIs, beamWidthIs);
 
+		int leftStaffIndex = upperStaffIndex + (isLeftUpperStaff ? 0 : 1);
+		int rightStaffIndex = upperStaffIndex + (isRightUpperStaff ? 0 : 1);
 		return new Placement(slp(leftStaffIndex, leftLp), slp(rightStaffIndex, rightLp));
 	}
 	
