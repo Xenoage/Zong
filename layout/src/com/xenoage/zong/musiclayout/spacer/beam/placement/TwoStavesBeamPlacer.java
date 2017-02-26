@@ -41,23 +41,35 @@ public class TwoStavesBeamPlacer {
 	public Placement compute(Slant slant, BeamedStems stems, SystemSpacing system, int upperStaffIndex) {
 
 		//find the dictator stems of the upper and lower staff
-		float slantIs = slant.direction.getSign() * slant.getMaxIs() / 4f;
+		float slantIs = slant.getMaxIs();
 		int upperDictatorStemIndex = singleStaffBeamPlacer.getDictatorStemIndex(StemDirection.Down, stems, slantIs);
 		int lowerDictatorStemIndex = singleStaffBeamPlacer.getDictatorStemIndex(StemDirection.Up, stems, slantIs);
 
 		//compute their vertical position in mm, to make it independent from the staff (may have different sizes and so on),
 		//and place the beam in the middle of these two values
+		//GOON: plus the height of the beam lines!!
 		float upperDictatorYMm = system.getYMm(slp(upperStaffIndex, stems.get(upperDictatorStemIndex).getEndLp()));
 		float lowerDictatorYMm = system.getYMm(slp(upperStaffIndex + 1, stems.get(lowerDictatorStemIndex).getEndLp()));
+		//GOON: we must transform xIS to xMm first, since the staff sizes may be different!
+		float middleXIs = (stems.get(upperDictatorStemIndex).xIs + stems.get(lowerDictatorStemIndex).xIs) / 2;
 		float middleYMm = (upperDictatorYMm + lowerDictatorYMm) / 2;
 
-		//compute the additional length (or negative for shortening) of the dictator stems,
-		//first in mm (same value for both sides) and then transform to IS
-		float additionalLengthMm = (lowerDictatorYMm - middleYMm);
-		float upperDictatorAdditionalLengthIs = system.getLp(upperStaffIndex, additionalLengthMm) / 2;
-		float lowerDictatorAdditionalLengthIs = system.getLp(upperStaffIndex + 1, additionalLengthMm) / 2;
+		//transform the vertical position of the beam relative to the staves
+		float middleYLpFromUpperStaff = system.getLp(upperStaffIndex, middleYMm);
+		float middleYLpFromLowerStaff = system.getLp(upperStaffIndex + 1, middleYMm);
 
-		return new Placement(); //GOON
+		//compute the end LPs at each side
+		boolean isLeftUpperStaff = (stems.getFirst().dir == StemDirection.Down);
+		boolean isRightUpperStaff = (stems.getLast().dir == StemDirection.Down);
+		int leftStaffIndex = upperStaffIndex + (isLeftUpperStaff ? 0 : 1);
+		int rightStaffIndex = upperStaffIndex + (isRightUpperStaff ? 0 : 1);
+		float leftYLp = (isLeftUpperStaff ? middleYLpFromUpperStaff : middleYLpFromLowerStaff);
+		float rightYLp = (isRightUpperStaff ? middleYLpFromUpperStaff : middleYLpFromLowerStaff);
+		float beamWidthIs = stems.rightXIs - stems.leftXIs;
+		float leftLp = singleStaffBeamPlacer.getBeamLpAtXIs(stems.leftXIs, middleXIs, leftYLp, slantIs, beamWidthIs);
+		float rightLp = singleStaffBeamPlacer.getBeamLpAtXIs(stems.rightXIs, middleXIs, rightYLp, slantIs, beamWidthIs);
+
+		return new Placement(slp(leftStaffIndex, leftLp), slp(rightStaffIndex, rightLp));
 	}
 	
 }

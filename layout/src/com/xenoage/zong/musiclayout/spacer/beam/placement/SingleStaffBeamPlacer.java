@@ -141,14 +141,22 @@ public class SingleStaffBeamPlacer {
 	Placement getPlacement(float leftXIs, float rightXIs, float dictatorXIs,
 												 float dictatorStemEndLp, float slantIs) {
 		float widthIs = rightXIs - leftXIs;
-		float slantIsPerIs = slantIs / widthIs;
 		//compute exact end LPs
-		float leftEndLpExact = dictatorStemEndLp + slantIsPerIs * 2 * (leftXIs - dictatorXIs);
-		float rightEndLpExact = dictatorStemEndLp + slantIsPerIs * 2 * (rightXIs - dictatorXIs);
+		float leftEndLpExact = getBeamLpAtXIs(leftXIs, dictatorXIs, dictatorStemEndLp, slantIs, widthIs);
+		float rightEndLpExact = getBeamLpAtXIs(rightXIs, dictatorXIs, dictatorStemEndLp, slantIs, widthIs);
 		//round to quarter spaces (both in the same direction!)
 		float leftEndLp = round(leftEndLpExact * 2) / 2f;
 		float rightEndLp = (int)(rightEndLpExact * 2 + (leftEndLp > leftEndLpExact ? 1 : 0)) / 2f;
 		return new Placement(leftEndLp, rightEndLp);
+	}
+
+	/**
+	 * Given a beam, defined by a point on the beam (stem end), and its slant and width,
+	 * this method computes the LP of the beam (end of the stem) at the given hroizontal position.
+	 */
+	float getBeamLpAtXIs(float atXIs, float beamPointXIs, float beamPointLp, float slantIs, float beamWidthIs) {
+		float slantIsPerIs = slantIs / beamWidthIs;
+		return beamPointLp + slantIsPerIs * 2 * (atXIs - beamPointXIs);
 	}
 
 	/**
