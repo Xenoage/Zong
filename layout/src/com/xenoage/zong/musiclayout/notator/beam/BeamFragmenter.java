@@ -9,7 +9,6 @@ import java.util.List;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.utils.kernel.Range.rangeReverse;
 import static com.xenoage.zong.core.music.util.DurationInfo.getFlagsCount;
 import static com.xenoage.zong.musiclayout.notation.beam.Fragment.*;
 
@@ -31,7 +30,7 @@ public class BeamFragmenter {
 		int linesCount = beam.getMaxLinesCount();
 		List<Fragments> ret = alist(linesCount - 1);
 		Fragments lastFragments = null;
-		for (int line : rangeReverse(linesCount - 1, 1))
+		for (int line : range(1, linesCount - 1))
 			ret.add(lastFragments = compute(beam, line, lastFragments));
 		return ret;
 	}
