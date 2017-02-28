@@ -1,9 +1,5 @@
 package com.xenoage.zong.musiclayout.stamper;
 
-import static com.xenoage.zong.core.music.format.SP.sp;
-
-import java.util.HashMap;
-
 import com.xenoage.zong.core.music.clef.ClefType;
 import com.xenoage.zong.core.music.format.SP;
 import com.xenoage.zong.core.music.time.TimeType;
@@ -20,6 +16,11 @@ import com.xenoage.zong.musiclayout.stampings.Stamping;
 import com.xenoage.zong.symbols.Symbol;
 import com.xenoage.zong.symbols.SymbolPool;
 import com.xenoage.zong.symbols.common.CommonSymbol;
+import lombok.val;
+
+import java.util.HashMap;
+
+import static com.xenoage.zong.core.music.format.SP.sp;
 
 /**
  * Creates the {@link Stamping}s for elements like rests,
@@ -36,19 +37,21 @@ public class ElementStamper {
 	 * Creates a stamping for the given rest.
 	 */
 	public StaffSymbolStamping createRestStamping(RestSpacing rest, float xMm,
-		StamperContext context) {
+			StamperContext context) {
+		val staff = context.getCurrentStaffStamping();
 		Symbol symbol = getRestSymbol(rest.getNotation().duration, context);
 		SP sp = sp(xMm, rest.lp);
-		return new StaffSymbolStamping(rest.notation, context.staff, symbol, null, sp, 1, false);
+		return new StaffSymbolStamping(rest.notation, staff, symbol, null, sp, 1, false);
 	}
 
 	/**
 	 * Creates a stamping for the given clef.
 	 */
 	public StaffSymbolStamping createClefStamping(ClefNotation clef, float xMm,
-		StamperContext context) {
+			StamperContext context) {
+		val staff = context.getCurrentStaffStamping();
 		ClefType clefType = clef.element.getType();
-		return new StaffSymbolStamping(clef, context.staff,
+		return new StaffSymbolStamping(clef, staff,
 			context.getSymbol(CommonSymbol.getClef(clefType.getSymbol())), null,
 			sp(xMm, clefType.getLp()), clef.scaling, false);
 	}
@@ -57,26 +60,28 @@ public class ElementStamper {
 	 * Creates a stamping for the given key signature.
 	 */
 	public KeySignatureStamping createKeyStamping(TraditionalKeyNotation key, float xMm,
-		StamperContext context) {
+			StamperContext context) {
+		val staff = context.getCurrentStaffStamping();
 		boolean useSharps = key.element.getFifths() > 0;
 		Symbol symbol = context.getSymbol(useSharps ? CommonSymbol.AccidentalSharp
 			: CommonSymbol.AccidentalFlat);
 		Spacings spacings = context.getSettings().spacings;
 		float distance = (useSharps ? spacings.widthSharp : spacings.widthFlat);
-		return new KeySignatureStamping(key, xMm, context.staff, symbol, distance);
+		return new KeySignatureStamping(key, xMm, staff, symbol, distance);
 	}
 
 	/**
 	 * Creates a stamping for the given time signature.
 	 */
 	public Stamping createTimeStamping(TimeNotation time, float xMm, StamperContext context) {
+		val staff = context.getCurrentStaffStamping();
 		if (time.element.getType() == TimeType.timeCommon) {
-			return new StaffSymbolStamping(time, context.staff, context.getSymbol(CommonSymbol.TimeCommon),
-				null, sp(xMm, context.staff.linesCount - 1), 1f, false);
+			return new StaffSymbolStamping(time, staff, context.getSymbol(CommonSymbol.TimeCommon),
+				null, sp(xMm, staff.linesCount - 1), 1f, false);
 		}
 		else {
 			return new NormalTimeStamping(time, xMm, time.numeratorOffset,
-				time.denominatorOffset, time.digitGap, context.staff);
+				time.denominatorOffset, time.digitGap, staff);
 		}
 	}
 	

@@ -12,8 +12,8 @@ import lombok.Getter;
  * Stamping of a single beam line.
  * 
  * A beam has a start and end position in mm and two positions for the
- * end points. The two end points can be on different staves or on
- * the same staff.
+ * end points. When it is a cross-staff beam, the beam belongs to
+ * the staff of the first chord.
  * 
  * Dependent on the stem direction, the beam line sits on or hangs
  * from the given vertical position.
@@ -26,15 +26,15 @@ public class BeamStamping
 
 	/** The stamped beam. */
 	public final BeamSpacing beam;
-	/** The {@link StaffStamping} of the start position. */
-	public final StaffStamping staff1;
-	/** The {@link StaffStamping} of the end position. */
-	public final StaffStamping staff2;
+	/** The {@link StaffStamping} of the beam.
+	 * For cross-staff beams, this is the staff of the first chord. */
+	public final StaffStamping staff;
 	/** The start coordinates of the beam. */
 	public final SP sp1;
 	/** The end coordinates of the beam. */
 	public final SP sp2;
-	/** The stem direction. */
+	/** The stem direction.
+	 * For cross-staff beams, this is the stem direction of the first chord. */
 	public final StemDirection stemDir;
 	
 

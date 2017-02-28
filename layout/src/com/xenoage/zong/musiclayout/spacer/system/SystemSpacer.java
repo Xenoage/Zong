@@ -1,13 +1,5 @@
 package com.xenoage.zong.musiclayout.spacer.system;
 
-import static com.xenoage.utils.Optional.absent;
-import static com.xenoage.utils.Optional.of;
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.zong.musiclayout.spacer.measure.ColumnSpacer.columnSpacer;
-import static com.xenoage.zong.musiclayout.spacer.system.StavesSpacer.stavesSpacer;
-
-import java.util.List;
-
 import com.xenoage.utils.Optional;
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.zong.core.Score;
@@ -23,6 +15,14 @@ import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
 import com.xenoage.zong.musiclayout.spacing.LeadingSpacing;
 import com.xenoage.zong.musiclayout.spacing.StavesSpacing;
 import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
+
+import java.util.List;
+
+import static com.xenoage.utils.Optional.absent;
+import static com.xenoage.utils.Optional.of;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static com.xenoage.zong.musiclayout.spacer.measure.ColumnSpacer.columnSpacer;
+import static com.xenoage.zong.musiclayout.spacer.system.StavesSpacer.stavesSpacer;
 
 /**
  * Arranges a list of measure columns into a {@link SystemSpacing}.

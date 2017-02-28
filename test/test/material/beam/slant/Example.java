@@ -17,6 +17,7 @@ import java.util.List;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.core.music.StaffLines.staff5Lines;
+import static com.xenoage.zong.musiclayout.SLP.slp;
 import static com.xenoage.zong.musiclayout.notator.chord.stem.StemDrawer.stemDrawer;
 import static com.xenoage.zong.musiclayout.notator.chord.stem.beam.range.OneMeasureOneStaff.oneMeasureOneStaff;
 
@@ -141,7 +142,8 @@ public class Example
 				stemLengthIs = rightStemLengthIs;
 			else
 				stemLengthIs = stemDrawer.getPreferredStemLengthIs(new ChordLps(notesLp[i]), stemDir, staff5Lines);
-			stems.add(new BeamedStem(stemXIs, stemDir, notesLp[i], stemLengthIs));
+			float stemEndLp = notesLp[i] + stemDir.getSign() * stemLengthIs * 2;
+			stems.add(new BeamedStem(stemXIs, stemDir, slp(0, notesLp[i]), slp(0, stemEndLp)));
 		}
 		return new BeamedStems(stems.close());
 	}

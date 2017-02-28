@@ -116,7 +116,7 @@ public class SingleStaffBeamPlacer {
 			for (int slantAbsQs : rangeReverse(slant.maxAbsQs, slant.minAbsQs)) { //slant in allowed range
 				slantIs = slant.direction.getSign() * slantAbsQs / 4f;
 				dictatorIndex = getDictatorStemIndex(stemDir, stems, slantIs);
-				float dictatorStemEndLp = stems.get(dictatorIndex).getEndLp() + stemDir.getSign() * stemLengthAddQs;
+				float dictatorStemEndLp = stems.get(dictatorIndex).endSlp.lp + stemDir.getSign() * stemLengthAddQs;
 				candidate = getPlacement(stems.leftXIs, stems.rightXIs, stems.get(dictatorIndex).xIs,
 						dictatorStemEndLp, slantIs);
 				if (isPlacementCorrect(candidate, stemDir, beamLinesCount, staffLines)) {
@@ -131,7 +131,7 @@ public class SingleStaffBeamPlacer {
 		slantIs = slant.getFlattestIs();
 		dictatorIndex = getDictatorStemIndex(stemDir, stems, slantIs);
 		return getPlacement(stems.leftXIs, stems.rightXIs, stems.get(dictatorIndex).xIs,
-				stems.get(dictatorIndex).getEndLp(), slantIs);
+				stems.get(dictatorIndex).endSlp.lp, slantIs);
 	}
 
 	/**
@@ -170,7 +170,7 @@ public class SingleStaffBeamPlacer {
 		int extremeIndex = 0;
 		for (int i : range(stems)) {
 			if (stems.get(i).dir == forStemDir) {
-				float distance = getDistanceToLineLp(stems.get(i).getEndLp(), stems.get(i).xIs, slantIs,
+				float distance = getDistanceToLineLp(stems.get(i).endSlp.lp, stems.get(i).xIs, slantIs,
 						stems.leftXIs, stems.rightXIs);
 				if (distance * sign > extremeDistance * sign) {
 					extremeDistance = distance;
@@ -319,7 +319,7 @@ public class SingleStaffBeamPlacer {
 		float slantIs = (shorterCandidate.rightEndLp - shorterCandidate.leftEndLp) / 2;
 		BeamRules beamRules = BeamRules.getRules(beamLinesCount);
 		for (val stem : stems) {
-			float distanceToBeam = abs(getDistanceToLineLp(stem.noteLp, stem.xIs,
+			float distanceToBeam = abs(getDistanceToLineLp(stem.noteSlp.lp, stem.xIs,
 					slantIs, stems.leftXIs, stems.rightXIs) - shorterCandidate.leftEndLp) / 2;
 			if (distanceToBeam < beamRules.getMinimumStemLengthIs())
 				return candidate; //shortening not possible

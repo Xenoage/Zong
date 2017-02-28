@@ -17,6 +17,7 @@ import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.math.Delta.df;
 import static com.xenoage.zong.core.music.chord.StemDirection.Down;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
+import static com.xenoage.zong.musiclayout.SLP.slp;
 import static com.xenoage.zong.musiclayout.spacer.beam.Slant.slant;
 import static com.xenoage.zong.musiclayout.spacer.beam.slant.SingleStaffBeamSlanter.singleStaffBeamSlanter;
 import static java.lang.Math.round;
@@ -170,14 +171,14 @@ public class SingleStaffBeamSlanterTest {
 	private BeamedStems noteLps(int... noteLps) {
 		val stems = new CList<BeamedStem>();
 		for (int noteLp : noteLps)
-			stems.add(new BeamedStem(0, StemDirection.None, noteLp, 0));
+			stems.add(new BeamedStem(0, StemDirection.None, slp(0, noteLp), slp(0, noteLp)));
 		return new BeamedStems(stems.close());
 	}
 
 	private BeamedStems stemXIss(int... stemXIss) {
 		val stems = new CList<BeamedStem>();
 		for (int stemXIs : stemXIss)
-			stems.add(new BeamedStem(stemXIs, StemDirection.None, 0, 0));
+			stems.add(new BeamedStem(stemXIs, StemDirection.None, slp(0, 0), slp(0, 0)));
 		return new BeamedStems(stems.close());
 	}
 

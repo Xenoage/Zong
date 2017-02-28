@@ -1,11 +1,11 @@
 package com.xenoage.zong.musiclayout.notator.chord.stem;
 
-import static com.xenoage.zong.core.music.chord.StemDirection.Down;
-import static com.xenoage.zong.core.music.chord.StemDirection.Up;
-
 import com.xenoage.zong.core.music.StaffLines;
 import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.musiclayout.notation.chord.ChordLps;
+
+import static com.xenoage.zong.core.music.chord.StemDirection.Down;
+import static com.xenoage.zong.core.music.chord.StemDirection.Up;
 
 /**
  * Computes the lenght of a stem for a chord.

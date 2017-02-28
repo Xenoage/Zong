@@ -1,7 +1,5 @@
 package com.xenoage.zong.musiclayout.layouter.scoreframelayout;
 
-import static com.xenoage.zong.core.music.format.SP.sp;
-
 import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.utils.math.MathUtils;
 import com.xenoage.utils.math.VSide;
@@ -13,9 +11,10 @@ import com.xenoage.zong.core.music.slur.SlurWaypoint;
 import com.xenoage.zong.musiclayout.continued.ContinuedSlur;
 import com.xenoage.zong.musiclayout.layouter.cache.util.SlurCache;
 import com.xenoage.zong.musiclayout.notation.ChordNotation;
-import com.xenoage.zong.musiclayout.stampings.NoteheadStamping;
 import com.xenoage.zong.musiclayout.stampings.SlurStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
+
+import static com.xenoage.zong.core.music.format.SP.sp;
 
 /**
  * Creates the {@link SlurStamping}s for {@link Slur}s.
@@ -31,12 +30,8 @@ public class SlurStamper {
 	 * Computes the additional distance of the startpoint or endpoint of a slur
 	 * to the notehead. This value depends on articulations or stems at the same side.
 	 */
-	public float computeAdditionalDistance(ChordNotation chord, VSide slurSide) {
-		float distance = 0;
-		distance += chord.articulations.heightIs;
-		if (chord.stemDirection.equalsSide(slurSide))
-			distance += Math.abs(chord.stem.endLp - chord.stem.startLp) / 2; //LP to IS
-		return distance;
+	public float getAdditionalDistanceIs(ChordNotation chord, VSide slurSide) {
+		return chord.articulations.heightIs;
 	}
 
 	/**
@@ -47,12 +42,10 @@ public class SlurStamper {
 	 * otherwise false.
 	 */
 	public Tuple2<SlurStamping, Boolean> createSlurStampingStart(SlurCache slurCache) {
-		NoteheadStamping n1 = slurCache.getStartNoteheadStamping();
-		NoteheadStamping n2 = slurCache.getStopNoteheadStamping();
 		//is one staff enough?
-		if (n1 != null && n2 != null && n1.parentStaff == n2.parentStaff) {
+		if (slurCache.getStartStaff() == slurCache.getStopStaff()) {
 			//simple case. just create it.
-			SlurStamping cls = createSingle(slurCache);
+			SlurStamping cls = createForSingleSystem(slurCache);
 			return new Tuple2<SlurStamping, Boolean>(cls, false);
 		}
 		else if (n1 != null) {
@@ -63,10 +56,6 @@ public class SlurStamper {
 			//remember this curved line to be continued
 			return new Tuple2<SlurStamping, Boolean>(cls, true);
 		}
-		else {
-			throw new IllegalArgumentException(
-				"A curved line can only be started if the start notehead is known");
-		}
 	}
 
 	/**
@@ -75,67 +64,55 @@ public class SlurStamper {
 	 * 
 	 * The appropriate staff stamping must be given.
 	 */
-	public SlurStamping createSlurStampingMiddle(ContinuedSlur continuedSlur,
-		StaffStamping staffStamping) {
-		return createMiddle(staffStamping, continuedSlur.element, continuedSlur.side);
+	public SlurStamping createSlurStampingMiddle(ContinuedSlur continuedSlur) {
+		return createForMiddleSystem(continuedSlur.staff, continuedSlur.element, continuedSlur.side);
 	}
 
 	/**
 	 * Creates a {@link SlurStamping} for a last part of a slur or tie
 	 * that spans at least two systems.
 	 */
-	public SlurStamping createSlurStampingStop(SlurCache slurCache) {
-		NoteheadStamping n = slurCache.getStopNoteheadStamping();
-		if (n != null) {
-			return createStop(n, slurCache.getStopDistanceIS(), slurCache.getSlur(),
-				slurCache.getSide());
-		}
-		else {
-			throw new IllegalArgumentException(
-				"A curved line can only be stopped if the stop notehead is known");
-		}
+	public SlurStamping createStopForLastSystem(SlurCache slurCache) {
+		return createStopForLastSystem(slurCache.getStopStaff(), slurCache.getDefaultStopSp(),
+				slurCache.getSlur(), slurCache.getSide());
 	}
 
 	/**
 	 * Creates a {@link SlurStamping} for a curved line that
-	 * uses only a single staff.
+	 * uses only a single system. The slur may span over multiple staves.
 	 */
-	SlurStamping createSingle(SlurCache tiedChords) {
-		StaffStamping staff = tiedChords.getStartNoteheadStamping().parentStaff;
-		Slur slur = tiedChords.getSlur();
+	SlurStamping createForSingleSystem(SlurCache slurCache) {
+		Slur slur = slurCache.getSlur();
 		SlurWaypoint wp1 = slur.getStart();
 		SlurWaypoint wp2 = slur.getStop();
 
 		//end points of the bezier curve
-		VSide side = tiedChords.getSide();
-		SP p1 = computeEndPoint(slur, tiedChords.getStartNoteheadStamping(), wp1.getBezierPoint(), side,
-			tiedChords.getStartDistanceIS());
-		SP p2 = computeEndPoint(slur, tiedChords.getStopNoteheadStamping(), wp2.getBezierPoint(), side,
-			tiedChords.getStopDistanceIS());
+		VSide side = slurCache.getSide();
+		SP p1 = computeEndPoint(slur, slurCache.getDefaultStartSp(), wp1.getBezierPoint(), side);
+		SP p2 = computeEndPoint(slur, slurCache.getDefaultStopSp(), wp2.getBezierPoint(), side);
 
 		//control points of the bezier curve
 		BezierPoint b1 = wp1.getBezierPoint();
 		BezierPoint b2 = wp2.getBezierPoint();
 		SP c1 = (b1 != null && b1.getControl() != null ? b1.getControl() : //custom formatting
-			computeLeftControlPoint(slur, p1, p2, side, staff)); //default formatting
+			computeLeftControlPoint(slur, p1, p2, side, slurCache.getStartStaff())); //default formatting
 		SP c2 = (b2 != null && b2.getControl() != null ? b2.getControl() : //custom formatting
-			computeRightControlPoint(slur, p1, p2, side, staff)); //default formatting
+			computeRightControlPoint(slur, p1, p2, side, slurCache.getStopStaff())); //default formatting
 
-		return new SlurStamping(slur, p1, p2, c1, c2, staff);
+		return new SlurStamping(slur, p1, p2, c1, c2, slurCache.getStartStaff(),
+				slurCache.getStopStaff());
 	}
 
 	/**
 	 * Creates a {@link SlurStamping} for a curved line that
 	 * starts at this staff but spans at least one other staff.
 	 */
-	SlurStamping createStart(NoteheadStamping startNotehead, float startAdditionalDistanceIS,
-		Slur slur, VSide side) {
-		StaffStamping staff = startNotehead.parentStaff;
+	SlurStamping createStartForFirstSystem(StaffStamping staff, SP defaultSp,
+																				 Slur slur, VSide side) {
 		SlurWaypoint wp1 = slur.getStart();
 
 		//end points of the bezier curve
-		SP p1 = computeEndPoint(slur, startNotehead, wp1.getBezierPoint(), side,
-			startAdditionalDistanceIS);
+		SP p1 = computeEndPoint(slur, defaultSp, wp1.getBezierPoint(), side);
 		SP p2 = sp(staff.positionMm.x + staff.lengthMm, p1.lp);
 
 		//control points of the bezier curve
@@ -144,7 +121,7 @@ public class SlurStamper {
 			computeLeftControlPoint(slur, p1, p2, side, staff)); //default formatting
 		SP c2 = computeRightControlPoint(slur, p1, p2, side, staff); //default formatting
 
-		return new SlurStamping(slur, p1, p2, c1, c2, staff);
+		return new SlurStamping(slur, p1, p2, c1, c2, staff, staff);
 	}
 
 	/**
@@ -152,7 +129,7 @@ public class SlurStamper {
 	 * starts at an earlier staff and ends at a later staff, but
 	 * spans also the given staff.
 	 */
-	SlurStamping createMiddle(StaffStamping staff, Slur slur, VSide side) {
+	SlurStamping createForMiddleSystem(StaffStamping staff, Slur slur, VSide side) {
 		if (slur.getType() == SlurType.Tie) {
 			//ties can not have middle staves
 			return null;
@@ -162,34 +139,30 @@ public class SlurStamper {
 		float p1x = staff.positionMm.x + staff.system.getMeasureStartAfterLeadingMm(
 			staff.system.getStartMeasure()) - 5; //TODO
 		float p2x = staff.positionMm.x + staff.lengthMm;
-		float yLp;
-		if (side == VSide.Top) {
-			yLp = (staff.linesCount - 1) * 2 + 2; //1 IS over the top staff line
-		}
-		else {
-			yLp = -2; //1 IS below the bottom staff line
-		}
-		SP p1 = sp(p1x, yLp);
-		SP p2 = sp(p2x, yLp);
+		float lp;
+		if (side == VSide.Top)
+			lp = (staff.linesCount - 1) * 2 + 2; //1 IS over the top staff line
+		else
+			lp = -2; //1 IS below the bottom staff line
+		SP p1 = sp(p1x, lp);
+		SP p2 = sp(p2x, lp);
 
 		//control points of the bezier curve
 		SP c1 = computeLeftControlPoint(slur, p1, p2, side, staff); //default formatting
 		SP c2 = computeRightControlPoint(slur, p1, p2, side, staff); //default formatting
 
-		return new SlurStamping(slur, p1, p2, c1, c2, staff);
+		return new SlurStamping(slur, p1, p2, c1, c2, staff, staff);
 	}
 
 	/**
 	 * Creates a {@link SlurStamping} for a last part of a slur or tie
 	 * that spans at least two systems.
 	 */
-	SlurStamping createStop(NoteheadStamping stopNotehead, float stopAdditionalDistanceIS,
-		Slur slur, VSide side) {
-		StaffStamping staff = stopNotehead.parentStaff;
+	SlurStamping createStopForLastSystem(StaffStamping staff, SP defaultSp, Slur slur, VSide side) {
 		SlurWaypoint wp2 = slur.getStop();
 
 		//end points of the bezier curve
-		SP p2 = computeEndPoint(slur, stopNotehead, wp2.getBezierPoint(), side, stopAdditionalDistanceIS);
+		SP p2 = computeEndPoint(slur, defaultSp, wp2.getBezierPoint(), side);
 		SP p1 = sp(staff.positionMm.x + staff.system.getMeasureStartAfterLeadingMm(
 			staff.system.getStartMeasure()) - 5, p2.lp); //TODO
 
@@ -199,27 +172,24 @@ public class SlurStamper {
 		SP c2 = (b2 != null && b2.getControl() != null ? b2.getControl() : //custom formatting
 			computeRightControlPoint(slur, p1, p2, side, staff)); //default formatting
 
-		return new SlurStamping(slur, p1, p2, c1, c2, staff);
+		return new SlurStamping(slur, p1, p2, c1, c2, staff, staff);
 	}
 
 	/**
-	 * Computes the end position of a slur or tie, dependent on its corresponding note
-	 * and the bezier information (may be null for default formatting)
-	 * and the vertical side of placement and the given additional distance in IS.
+	 * Computes the end position of a slur or tie, dependent on its corresponding default position
+	 * and the bezier information (may be null for default formatting) and the vertical side of placement.
 	 */
-	SP computeEndPoint(Slur slur, NoteheadStamping note, BezierPoint bezierPoint, VSide side,
-		float additionalDistanceIS) {
+	SP computeEndPoint(Slur slur, SP defaultSp, BezierPoint bezierPoint, VSide side) {
 		int dir = side.getDir();
 		if (bezierPoint == null || bezierPoint.getPoint() == null) {
 			//default formatting
 			float distanceLP = (slur.getType() == SlurType.Slur ? 2 : 1.5f); //slur is 2 LP away from note center, tie 1.5
-			float yLp = note.position.lp + dir * distanceLP + dir * 2 * additionalDistanceIS;
-			return sp(note.position.xMm, yLp);
+			float lp = defaultSp.lp + dir * distanceLP;
+			return defaultSp.withLp(lp);
 		}
 		else {
 			//custom formatting
-			float yLp = note.position.lp + bezierPoint.getPoint().lp;
-			return sp(note.position.xMm + bezierPoint.getPoint().xMm, yLp);
+			return defaultSp.add(bezierPoint.point);
 		}
 	}
 

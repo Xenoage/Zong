@@ -22,7 +22,7 @@ import static com.xenoage.zong.core.position.MP.*;
  * 
  * It contains the indices of the first and last measure of the system, the widths of all
  * measure columns, the width of the system (which may be longer than the width used
- * by the measures), the distances between the staves and the vertical offset of the system.
+ * by the measures), the distances between the staffStampings and the vertical offset of the system.
  *
  * @author Andreas Wenger
  */

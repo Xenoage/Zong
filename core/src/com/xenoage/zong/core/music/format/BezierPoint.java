@@ -9,11 +9,12 @@ import lombok.Data;
  * 
  * @author Andreas Wenger
  */
-@Data @AllArgsConstructor public final class BezierPoint {
+@Data @AllArgsConstructor
+public final class BezierPoint {
 
 	/** The position of the end point relative to a reference point. */
-	private SP point;
+	public SP point;
 	/** The position of the control point relative to the end point. */
-	private SP control;
+	public SP control;
 
 }

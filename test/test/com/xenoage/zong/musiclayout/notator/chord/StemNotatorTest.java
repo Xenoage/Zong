@@ -1,16 +1,5 @@
 package com.xenoage.zong.musiclayout.notator.chord;
 
-import static com.xenoage.utils.math.Fraction.fr;
-import static com.xenoage.zong.core.music.Pitch.pi;
-import static com.xenoage.zong.core.music.StaffLines.staff5Lines;
-import static com.xenoage.zong.musiclayout.notator.chord.NotesNotator.notesNotator;
-import static com.xenoage.zong.musiclayout.notator.chord.stem.StemNotator.stemNotator;
-import static com.xenoage.zong.musiclayout.notator.chord.stem.single.SingleStemDirector.singleStemDirector;
-import static com.xenoage.zong.musiclayout.settings.ChordWidths.defaultChordWidthsNormal;
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Test;
-
 import com.xenoage.utils.math.Delta;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.MusicContext;
@@ -23,6 +12,16 @@ import com.xenoage.zong.musiclayout.notation.chord.ChordLps;
 import com.xenoage.zong.musiclayout.notation.chord.NotesNotation;
 import com.xenoage.zong.musiclayout.notation.chord.StemNotation;
 import com.xenoage.zong.musiclayout.notator.chord.stem.StemNotator;
+import org.junit.Test;
+
+import static com.xenoage.utils.math.Fraction.fr;
+import static com.xenoage.zong.core.music.Pitch.pi;
+import static com.xenoage.zong.core.music.StaffLines.staff5Lines;
+import static com.xenoage.zong.musiclayout.notator.chord.NotesNotator.notesNotator;
+import static com.xenoage.zong.musiclayout.notator.chord.stem.StemNotator.stemNotator;
+import static com.xenoage.zong.musiclayout.notator.chord.stem.single.SingleStemDirector.singleStemDirector;
+import static com.xenoage.zong.musiclayout.settings.ChordWidths.defaultChordWidthsNormal;
+import static org.junit.Assert.*;
 
 /**
  * Tests for {@link StemNotator}.
@@ -140,9 +139,9 @@ public class StemNotatorTest {
 		chordNotesAlignment = notesNotator.compute(chord, stemDirection,
 			defaultChordWidthsNormal, context);
 		chordStemAlignment = testee.compute(Stem.defaultStem, chordNotesAlignment.getLps(),
-			stemDirection, staff5Lines, 1);
-		assertEquals(start, chordStemAlignment.startLp, Delta.DELTA_FLOAT);
-		assertEquals(end, chordStemAlignment.endLp, Delta.DELTA_FLOAT);
+			stemDirection, 0, staff5Lines, 1);
+		assertEquals(start, chordStemAlignment.startSlp.lp, Delta.DELTA_FLOAT);
+		assertEquals(end, chordStemAlignment.endSlp.lp, Delta.DELTA_FLOAT);
 	}
 
 }

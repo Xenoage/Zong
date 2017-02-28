@@ -1,12 +1,12 @@
 package com.xenoage.zong.musiclayout.layouter.scoreframelayout.util;
 
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.utils.collections.CollectionUtils.alistInit;
+import com.xenoage.zong.musiclayout.ScoreFrameLayout;
+import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 
 import java.util.List;
 
-import com.xenoage.zong.musiclayout.ScoreFrameLayout;
-import com.xenoage.zong.musiclayout.stampings.StaffStamping;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static com.xenoage.utils.collections.CollectionUtils.alistInit;
 
 /**
  * The staff stampings on a {@link ScoreFrameLayout}.
@@ -35,7 +35,7 @@ public class StaffStampings {
 		for (int i = 0; i < systemsCount; i++) {
 			stavesBySystem.add(alistInit((StaffStamping) null, stavesCount));
 		}
-		//fill with staves
+		//fill with staffStampings
 		for (StaffStamping s : allStaves) {
 			int staffIndex = s.getStaffIndex();
 			int systemIndex = s.system.getSystemIndexInFrame();

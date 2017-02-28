@@ -25,6 +25,7 @@ import static com.xenoage.utils.math.Delta.df;
 import static com.xenoage.zong.core.music.StaffLines.staff5Lines;
 import static com.xenoage.zong.core.music.chord.StemDirection.Down;
 import static com.xenoage.zong.core.music.chord.StemDirection.Up;
+import static com.xenoage.zong.musiclayout.SLP.slp;
 import static com.xenoage.zong.musiclayout.notation.BeamNotation.lineHeightIs;
 import static com.xenoage.zong.musiclayout.spacer.beam.Anchor.fromLp;
 import static com.xenoage.zong.musiclayout.spacer.beam.placement.SingleStaffBeamPlacer.singleStaffBeamPlacer;
@@ -322,7 +323,7 @@ public class SingleStaffBeamPlacerTest {
 	}
 
 	private BeamedStem beamedStem(float xIs, int endLp, StemDirection stemDir) {
-		return new BeamedStem(xIs, stemDir, endLp, 0);
+		return new BeamedStem(xIs, stemDir, slp(0, endLp), slp(0, endLp));
 	}
 
 }

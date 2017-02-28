@@ -1,15 +1,14 @@
 package com.xenoage.zong.core.music;
 
-import static com.xenoage.utils.kernel.Range.range;
-import static org.junit.Assert.assertEquals;
+import com.xenoage.zong.core.music.group.BarlineGroup;
+import com.xenoage.zong.core.music.group.StavesRange;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
-
-import com.xenoage.zong.core.music.group.BarlineGroup;
-import com.xenoage.zong.core.music.group.StavesRange;
+import static com.xenoage.utils.kernel.Range.range;
+import static org.junit.Assert.*;
 
 /**
  * Tests for {@link StavesList}.

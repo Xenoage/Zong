@@ -40,7 +40,7 @@ public class BeamSpacing {
 		StemNotation stem = notation.chords.get(chordIndex).stem;
 		float lp;
 		if (stem != null)
-			lp = stem.endLp;
+			lp = stem.endSlp.lp;
 		else //it could be possible that there is no stem
 			lp = notation.chords.get(chordIndex).getStemSideNoteLp() + getStemDirection(chordIndex).getSign() * 3 * 2;
 		return sp(xMm, lp);

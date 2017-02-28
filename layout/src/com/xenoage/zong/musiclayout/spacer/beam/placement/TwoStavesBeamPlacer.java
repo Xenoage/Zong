@@ -12,7 +12,7 @@ import static com.xenoage.zong.musiclayout.SLP.slp;
 import static com.xenoage.zong.musiclayout.spacer.beam.placement.SingleStaffBeamPlacer.singleStaffBeamPlacer;
 
 /**
- * Computes the {@link Placement} of a beam on two adjacent staves, given its {@link Slant}.
+ * Computes the {@link Placement} of a beam on two adjacent staffStampings, given its {@link Slant}.
  * 
  * We find the dictator stem of the upper staff (pointing down) and the dictator stem of
  * the lower staff (pointing up). The beam is centered between these positions.
@@ -45,23 +45,22 @@ public class TwoStavesBeamPlacer {
 		int upperDictatorStemIndex = singleStaffBeamPlacer.getDictatorStemIndex(StemDirection.Down, stems, slantIs);
 		int lowerDictatorStemIndex = singleStaffBeamPlacer.getDictatorStemIndex(StemDirection.Up, stems, slantIs);
 
-		//compute their vertical position in mm, to make it independent from the staff (may have different sizes and so on),
-		//and place the beam in the middle of these two values
-		//GOON: plus the height of the beam lines!!
-		float upperDictatorYMm = system.getYMm(slp(upperStaffIndex, stems.get(upperDictatorStemIndex).getEndLp()));
-		float lowerDictatorYMm = system.getYMm(slp(upperStaffIndex + 1, stems.get(lowerDictatorStemIndex).getEndLp()));
+		//compute their end positions in mm, to make it independent from the staff (may have different sizes),
+		//and place the beam in the middle of these two endpoints
+		float upperDictatorYMm = system.getYMm(slp(upperStaffIndex, stems.get(upperDictatorStemIndex).endSlp.lp));
+		float lowerDictatorYMm = system.getYMm(slp(upperStaffIndex + 1, stems.get(lowerDictatorStemIndex).endSlp.lp));
 		float upperDictatorXMm = stems.get(upperDictatorStemIndex).xIs * system.getInterlineSpace(upperStaffIndex);
 		float lowerDictatorXMm = stems.get(lowerDictatorStemIndex).xIs * system.getInterlineSpace(upperStaffIndex + 1);
 		float middleXmm = (upperDictatorXMm + lowerDictatorXMm) / 2;
 		float middleYMm = (upperDictatorYMm + lowerDictatorYMm) / 2;
 
-		//transform the positions in mm into IS/LP
+		//transform the positions in mm into IS/LP makle them staff-dependent again
 		float middleXIsFromUpperStaff = middleXmm / system.getInterlineSpace(upperStaffIndex);
 		float middleXIsFromLowerStaff = middleXmm / system.getInterlineSpace(upperStaffIndex + 1);
 		float middleYLpFromUpperStaff = system.getLp(upperStaffIndex, middleYMm);
 		float middleYLpFromLowerStaff = system.getLp(upperStaffIndex + 1, middleYMm);
 
-		//compute the end LPs at each side
+		//compute the end LPs at the left and right side
 		boolean isLeftUpperStaff = (stems.getFirst().dir == StemDirection.Down);
 		boolean isRightUpperStaff = (stems.getLast().dir == StemDirection.Down);
 		float leftMiddleXIs = (isLeftUpperStaff ? middleXIsFromUpperStaff : middleXIsFromLowerStaff);

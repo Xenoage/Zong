@@ -10,7 +10,7 @@ import lombok.val;
 import java.util.List;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.zong.core.music.beam.Beam.VerticalSpan.TwoAdjacentStaves;
+import static com.xenoage.zong.core.music.beam.Beam.VerticalSpan.CrossStaff;
 import static com.xenoage.zong.musiclayout.spacer.beam.SingleStaffBeamSpacer.singleStaffBeamSpacer;
 import static com.xenoage.zong.musiclayout.spacer.beam.TwoStavesBeamSpacer.twoStavesBeamSpacer;
 
@@ -29,7 +29,7 @@ public class BeamSpacer {
 	public BeamSpacing compute(BeamNotation beam, SystemSpacing systemSpacing, Score score) {
 		BeamSpacer beamSpacer;
 
-		if (beam.element.getVerticalSpan() == TwoAdjacentStaves) {
+		if (beam.element.getVerticalSpan() == CrossStaff) {
 			//beam spanning over two staves
 			return twoStavesBeamSpacer.compute(beam, systemSpacing);
 		}

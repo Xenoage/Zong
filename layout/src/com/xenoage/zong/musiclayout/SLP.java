@@ -2,6 +2,7 @@ package com.xenoage.zong.musiclayout;
 
 import com.xenoage.utils.annotations.Const;
 import lombok.Data;
+import lombok.experimental.Wither;
 
 /**
  * A staff index and a vertical line position on this staff.
@@ -13,7 +14,7 @@ import lombok.Data;
  *
  * @author Andreas Wenger
  */
-@Const @Data
+@Const @Data @Wither
 public class SLP {
 
 	public static final int unknownStaff = -1;

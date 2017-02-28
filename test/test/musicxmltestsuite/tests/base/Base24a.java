@@ -3,8 +3,7 @@ package musicxmltestsuite.tests.base;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.math.Fraction.fr;
 import static com.xenoage.zong.core.music.Pitch.pi;
-import static com.xenoage.zong.core.music.beam.Beam.beamFromChords;
-import static com.xenoage.zong.core.music.beam.Beam.beamFromChordsNoCheck;
+import static com.xenoage.zong.core.music.beam.Beam.beamFromChordsUnchecked;
 import static musicxmltestsuite.tests.utils.Utils.ch;
 import static musicxmltestsuite.tests.utils.Utils.gr;
 
@@ -56,8 +55,8 @@ public interface Base24a
 			ch(fr(1, 4), pi('C', 0, 5)),
 			ch(fr(1, 4), pi('C', 0, 5))
 		};
-		new BeamAdd(beamFromChordsNoCheck(alist(b1s, b1e))).execute();
-		new BeamAdd(beamFromChordsNoCheck(alist(b2s, b2e))).execute();
+		new BeamAdd(beamFromChordsUnchecked(alist(b1s, b1e))).execute();
+		new BeamAdd(beamFromChordsUnchecked(alist(b2s, b2e))).execute();
 		return expectedChords;
 	}
 

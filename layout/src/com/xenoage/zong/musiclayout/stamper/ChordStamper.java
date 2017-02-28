@@ -1,17 +1,5 @@
 package com.xenoage.zong.musiclayout.stamper;
 
-import static com.xenoage.utils.NullUtils.notNull;
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.zong.core.music.format.SP.sp;
-import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.LyricStamper.lyricStamper;
-import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.SlurStamper.slurStamper;
-import static com.xenoage.zong.musiclayout.stamper.BeamStamper.beamStamper;
-import static com.xenoage.zong.musiclayout.stamper.DirectionStamper.directionStamper;
-import static com.xenoage.zong.musiclayout.stamper.LegerLinesStamper.legerLinesStamper;
-
-import java.util.List;
-
 import com.xenoage.utils.color.Color;
 import com.xenoage.utils.math.VSide;
 import com.xenoage.utils.math.geom.Rectangle2f;
@@ -19,6 +7,7 @@ import com.xenoage.zong.core.music.WaypointPosition;
 import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.StemDirection;
+import com.xenoage.zong.core.music.format.SP;
 import com.xenoage.zong.core.music.lyric.Lyric;
 import com.xenoage.zong.core.music.lyric.SyllableType;
 import com.xenoage.zong.core.music.slur.Slur;
@@ -34,28 +23,26 @@ import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.ChordStamping
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.LastLyrics;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.StaffStampings;
 import com.xenoage.zong.musiclayout.notation.ChordNotation;
-import com.xenoage.zong.musiclayout.notation.chord.AccidentalDisplacement;
-import com.xenoage.zong.musiclayout.notation.chord.AccidentalsNotation;
-import com.xenoage.zong.musiclayout.notation.chord.ArticulationDisplacement;
-import com.xenoage.zong.musiclayout.notation.chord.ArticulationsNotation;
-import com.xenoage.zong.musiclayout.notation.chord.NoteDisplacement;
-import com.xenoage.zong.musiclayout.notation.chord.NotesNotation;
-import com.xenoage.zong.musiclayout.notation.chord.StemNotation;
+import com.xenoage.zong.musiclayout.notation.chord.*;
 import com.xenoage.zong.musiclayout.settings.ChordWidths;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.musiclayout.spacing.BeamSpacing;
-import com.xenoage.zong.musiclayout.stampings.AccidentalStamping;
-import com.xenoage.zong.musiclayout.stampings.ArticulationStamping;
-import com.xenoage.zong.musiclayout.stampings.FlagsStamping;
-import com.xenoage.zong.musiclayout.stampings.LegerLineStamping;
-import com.xenoage.zong.musiclayout.stampings.NoteheadStamping;
-import com.xenoage.zong.musiclayout.stampings.ProlongationDotStamping;
-import com.xenoage.zong.musiclayout.stampings.StaffStamping;
-import com.xenoage.zong.musiclayout.stampings.StaffTextStamping;
-import com.xenoage.zong.musiclayout.stampings.Stamping;
-import com.xenoage.zong.musiclayout.stampings.StemStamping;
+import com.xenoage.zong.musiclayout.stampings.*;
 import com.xenoage.zong.symbols.Symbol;
 import com.xenoage.zong.symbols.common.CommonSymbol;
+import lombok.val;
+
+import java.util.List;
+
+import static com.xenoage.utils.NullUtils.notNull;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.zong.core.music.format.SP.sp;
+import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.LyricStamper.lyricStamper;
+import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.SlurStamper.slurStamper;
+import static com.xenoage.zong.musiclayout.stamper.BeamStamper.beamStamper;
+import static com.xenoage.zong.musiclayout.stamper.DirectionStamper.directionStamper;
+import static com.xenoage.zong.musiclayout.stamper.LegerLinesStamper.legerLinesStamper;
 
 /**
  * Creates the {@link Stamping}s for a chord.
@@ -73,18 +60,18 @@ public class ChordStamper {
 	 * Returns all the stampings for the given {@link Chord}, including beams,
 	 * tuplets, slurs and other attachments.
 	 * 
-	 * The given {@link OpenBeamsCache}, {@link OpenSlursCache},
+	 * The given {@link OpenSlursCache},
 	 * {@link OpenLyricsCache}, {@link LastLyrics} and {@link OpenTupletsCache} may be modified.
 	 */
 	public List<Stamping> stampAll(ChordNotation chord, float xMm,
 		BeamSpacing beam, StaffStampings staffStampings,
 		StamperContext context, FormattedTextStyle defaultLyricStyle,
-		OpenSlursCache openCurvedLinesCache,
+		OpenSlursCache openSlursCache,
 		OpenLyricsCache openLyricsCache, LastLyrics lastLyrics, OpenTupletsCache openTupletsCache) {
 		
 		List<Stamping> ret = alist();
 		Chord element = chord.getElement();
-		int staffIndex = context.getMp().getStaff();
+		int staffIndex = context.staffIndex;
 		int systemIndex = context.systemIndex;
 
 		//noteheads, leger lines, dots, accidentals, stem, flags, articulations
@@ -93,16 +80,12 @@ public class ChordStamper {
 
 		//beam  
 		if (beam != null) {
-			//stamp the whole beam (when we find the end of the beam)
+			//stamp the whole beam (when we find the beginning of the beam)
 			//TIDY: create/store beam stampings elsewhere?
 			Beam beamElement = beam.notation.element;
 			int chordIndex = beamElement.getWaypointIndex(element);
-			if (chordIndex == beamElement.size() - 1) {
-				StaffStamping leftStaff = staffStampings.get(context.systemIndex,
-					beamElement.getStart().getChord().getMP().staff);
-				StaffStamping rightStaff = staffStampings.get(context.systemIndex,
-					beamElement.getStop().getChord().getMP().staff);
-				ret.addAll(beamStamper.stamp(beam, leftStaff, rightStaff));
+			if (chordIndex == 0) {
+				ret.addAll(beamStamper.stamp(beam, context.getCurrentStaffStamping()));
 			}
 			
 		}
@@ -127,24 +110,28 @@ public class ChordStamper {
 				}
 			}
 			//compute position
+			val staff = staffStampings.get(systemIndex, notehead.parentStaff.staffIndex);
 			if (pos == WaypointPosition.Start) {
 				//create start information
-				float distance = slurStamper.computeAdditionalDistance(chord, side);
-				SlurCache tiedChords = SlurCache.createNew(slur, side, staffIndex, notehead, distance,
-					systemIndex);
-				openCurvedLinesCache.add(tiedChords);
+				float distanceIs = slurStamper.getAdditionalDistanceIs(chord, side);
+				SP defaultStartSp = sp(notehead.position.xMm, notehead.position.lp +
+						side.getDir() * distanceIs * 2);
+				SlurCache tiedChords = SlurCache.createNew(slur, side, defaultStartSp,
+						staff, systemIndex);
+				openSlursCache.add(tiedChords);
 			}
 			else {
 				//create stop information
-				SlurCache tiedChords = openCurvedLinesCache.get(slur);
-				if (tiedChords == null) {
+				val slurCache = openSlursCache.get(slur);
+				if (slurCache == null) {
 					//start notehead of this tie is unknown (must be from some preceding frame), which was forgotten
 					//ignore it. TODO: warning
 				}
 				else {
-					float distance = slurStamper.computeAdditionalDistance(chord,
-						tiedChords.getSide());
-					tiedChords.setStop(notehead, distance, systemIndex);
+					float distanceIs = slurStamper.getAdditionalDistanceIs(chord, slurCache.getSide());
+					SP defaultStopSp = sp(notehead.position.xMm, notehead.position.lp +
+							side.getDir() * distanceIs * 2);
+					slurCache.setStop(defaultStopSp, staff, systemIndex);
 				}
 			}
 		}
@@ -173,7 +160,7 @@ public class ChordStamper {
 
 						//create text stamping
 						StaffTextStamping sts = lyricStamper.createSyllableStamping(lyric,
-							defaultLyricStyle, context.staff, chordSt.noteheads[0]/* TODO*/.position.xMm,
+							defaultLyricStyle, context.getCurrentStaffStamping(), chordSt.noteheads[0]/* TODO*/.position.xMm,
 							baseLine);
 						ret.add(sts);
 
@@ -214,6 +201,7 @@ public class ChordStamper {
 	 * articulations and leger lines.
 	 */
 	public ChordStampings stampCore(ChordNotation chord, float chordXMm, StamperContext context) {
+		val staff = context.getCurrentStaffStamping();
 		
 		Chord element = chord.element;
 		boolean grace = element.isGrace();
@@ -221,10 +209,10 @@ public class ChordStamper {
 		float scaling = (grace ? settings.scalingGrace : 1);
 		ChordWidths chordWidths = (grace ? settings.graceChordWidths : settings.chordWidths);
 
-		float leftNoteXMm = getLeftNoteXMm(chordXMm, chord.notes, context.staff.is);
+		float leftNoteXMm = getLeftNoteXMm(chordXMm, chord.notes, staff.is);
 		
 		//stem
-		StemStamping stem = stampStem(chord, leftNoteXMm, context.staff);
+		StemStamping stem = stampStem(chord, leftNoteXMm, context);
 		
 		//type of notehead
 		CommonSymbol noteheadSymbol = CommonSymbol.NoteWhole;
@@ -240,10 +228,10 @@ public class ChordStamper {
 		for (int iNote : range(noteheads)) {
 			NoteDisplacement note = notes.getNote(iNote);
 			Symbol noteSymbol = context.getSymbol(noteheadSymbol);
-			float noteXMm = getNoteheadXMm(leftNoteXMm + note.xIs * context.staff.is,
-				scaling, context.staff, noteSymbol);
+			float noteXMm = getNoteheadXMm(leftNoteXMm + note.xIs * staff.is,
+				scaling, staff, noteSymbol);
 			NoteheadStamping noteSt = new NoteheadStamping(chord,	iNote, noteSymbol,
-				Color.black, context.staff, sp(noteXMm, note.lp), scaling);
+				Color.black, staff, sp(noteXMm, note.lp), scaling);
 			noteheads[iNote] = noteSt;
 		}
 
@@ -256,8 +244,8 @@ public class ChordStamper {
 			FlagsStamping.FlagsDirection flag = (stemDir == StemDirection.Up ?
 				FlagsStamping.FlagsDirection.Down : FlagsStamping.FlagsDirection.Up);
 			Symbol flagSymbol = context.getSymbol(CommonSymbol.NoteFlag);
-			flags = new FlagsStamping(chord, context.staff, flag, flagsCount, flagSymbol, scaling,
-				sp(leftNoteXMm + notes.stemOffsetIs * context.staff.is, chord.stem.endLp));
+			flags = new FlagsStamping(chord, staff, flag, flagsCount, flagSymbol, scaling,
+				sp(leftNoteXMm + notes.stemOffsetIs * staff.is, chord.stem.endSlp.lp));
 		}
 
 		//accidentals
@@ -268,9 +256,9 @@ public class ChordStamper {
 			for (int iAcc : range(accsSt)) {
 				AccidentalDisplacement acc = accs.accidentals[iAcc];
 				AccidentalStamping accSt = new AccidentalStamping(chord, iAcc,
-					context.staff, sp(chordXMm +
+					staff, sp(chordXMm +
 						(acc.xIs - chord.width.frontGap + 0.5f /* 0.5f: half accidental width - TODO */) *
-						context.staff.is, acc.yLp), 1, context.getSymbol(CommonSymbol.getAccidental(acc.accidental)));
+						staff.is, acc.yLp), 1, context.getSymbol(CommonSymbol.getAccidental(acc.accidental)));
 				accsSt[iAcc] = accSt;
 			}
 		}
@@ -282,8 +270,8 @@ public class ChordStamper {
 		Symbol dotSymbol = context.getSymbol(CommonSymbol.NoteDot);
 		for (int iNote : range(dotPositions)) {
 			for (int iDot : range(dotsPerNote)) {
-				ProlongationDotStamping dotSt = new ProlongationDotStamping(chord, context.staff,
-					dotSymbol, sp(leftNoteXMm + notes.getDotsOffsetIs(iDot) * context.staff.is, dotPositions[iNote]));
+				ProlongationDotStamping dotSt = new ProlongationDotStamping(chord, staff,
+					dotSymbol, sp(leftNoteXMm + notes.getDotsOffsetIs(iDot) * staff.is, dotPositions[iNote]));
 				dots[iNote * dotsPerNote + iDot] = dotSt;
 			}
 		}
@@ -297,16 +285,16 @@ public class ChordStamper {
 			for (int iArt : range(artsSt)) {
 				ArticulationDisplacement art = arts.articulations[iArt];
 				ArticulationStamping artSt = new ArticulationStamping(chord, iArt,
-					context.staff, sp(leftNoteXMm + (art.xIs + (noteheadWidth / 2)) * context.staff.is, art.yLp),
+					staff, sp(leftNoteXMm + (art.xIs + (noteheadWidth / 2)) * staff.is, art.yLp),
 					1, context.getSymbol(CommonSymbol.getArticulation(art.articulation)));
 				artsSt[iArt] = artSt;
 			}
 		}
 		
 		//leger lines
-		LegerLineStamping[] legerLines = legerLinesStamper.stamp(chord, chordXMm, context.staff);
+		LegerLineStamping[] legerLines = legerLinesStamper.stamp(chord, chordXMm, staff);
 
-		return new ChordStampings(element, chordXMm, context.staff, noteheads,
+		return new ChordStampings(element, chordXMm, staff, noteheads,
 			dots, accsSt, legerLines, artsSt, flags, stem);
 	}
 	
@@ -318,14 +306,15 @@ public class ChordStamper {
 		return leftNoteXMm;
 	}
 	
-	StemStamping stampStem(ChordNotation chordNotation, float leftNoteXMm,
-		StaffStamping staffStamping) {
+	StemStamping stampStem(ChordNotation chordNotation, float leftNoteXMm, StamperContext context) {
 		StemNotation stem = chordNotation.stem;
 		if (stem == null)
 			return null;
-		float stemXMm = leftNoteXMm + chordNotation.notes.stemOffsetIs * staffStamping.is;
+		val noteStaff = context.getStaffStamping(stem.startSlp.staff);
+		val endStaff = context.getStaffStamping(stem.endSlp.staff);
+		float stemXMm = leftNoteXMm + chordNotation.notes.stemOffsetIs * noteStaff.is;
 		return new StemStamping(chordNotation, stemXMm,
-			stem.startLp, stem.endLp, chordNotation.stemDirection, staffStamping);
+			stem.startSlp.lp, noteStaff, stem.endSlp.lp, endStaff, chordNotation.stemDirection);
 	}
 	
 	//TIDY

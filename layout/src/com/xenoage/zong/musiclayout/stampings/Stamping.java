@@ -1,19 +1,18 @@
 package com.xenoage.zong.musiclayout.stampings;
 
-import static com.xenoage.utils.annotations.Optimized.Reason.Performance;
-import static com.xenoage.utils.math.geom.NoShape.noShape;
-
-import java.util.Collections;
-import java.util.List;
-
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.Optimized;
 import com.xenoage.utils.math.geom.NoShape;
 import com.xenoage.utils.math.geom.Shape;
 import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.musiclayout.notation.Notation;
-
 import lombok.ToString;
+
+import java.util.Collections;
+import java.util.List;
+
+import static com.xenoage.utils.annotations.Optimized.Reason.Performance;
+import static com.xenoage.utils.math.geom.NoShape.noShape;
 
 /**
  * Stampings can be visible objects like notes, clefs, texts, but

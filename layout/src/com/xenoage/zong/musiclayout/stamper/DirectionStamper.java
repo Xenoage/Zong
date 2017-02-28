@@ -51,13 +51,11 @@ public class DirectionStamper {
 	public List<Stamping> stamp(StamperContext context) {
 		
 		List<Stamping> ret = alist();
-		val directionsWithBeats = context.layouter.score.getMeasure(
-			context.getMp()).getDirections().clone();
+		val directionsWithBeats = context.getCurrentMeasure().getDirections().clone();
 
 		//over first staff, also add tempo directions for the whole column
-		if (context.getMp().staff == 0) {
-			directionsWithBeats.addAll(context.layouter.score.getColumnHeader(
-				context.getMp().measure).getTempos());
+		if (context.staffIndex == 0) {
+			directionsWithBeats.addAll(context.getCurrentColumnHeader().getTempos());
 		}
 		for (BeatE<Direction> elementWithBeat : directionsWithBeats) {
 			Direction element = elementWithBeat.element;
@@ -137,51 +135,57 @@ public class DirectionStamper {
 	 * Creates a {@link StaffTextStamping} for the given {@link Dynamic}s.
 	 */
 	public StaffTextStamping createDynamics(Dynamic dynamics, StamperContext context) {
+		val staff = context.getCurrentStaffStamping();
+
 		//positioning
 		//below (default): 3 IS below the base line, or 2 IS below the lowest note
 		//above: 2 IS above the top line, or 1 IS above the highest note
 		float defaultLPBelow = -3f * 2;
-		float defaultLPAbove = (context.staff.linesCount - 1) * 2 + 2 * 2;
-		SP sp = computePosition(dynamics, context.staff, defaultLPBelow, defaultLPAbove,
+		float defaultLPAbove = (context.getCurrentStaffStamping().linesCount - 1) * 2 + 2 * 2;
+		SP sp = computePosition(dynamics, staff, defaultLPBelow, defaultLPAbove,
 			defaultLPBelow);
 
 		//create text
 		CList<FormattedTextElement> elements = clist();
 		for (CommonSymbol s : CommonSymbol.getDynamics(dynamics.getValue())) {
 			Symbol symbol = context.getSymbol(s);
-			elements.add(new FormattedTextSymbol(symbol, context.staff.is * FONT_SIZE_IN_IS,
+			elements.add(new FormattedTextSymbol(symbol, staff.is * FONT_SIZE_IN_IS,
 				FormattedTextStyle.defaultColor));
 		}
 		elements.close();
 		FormattedTextParagraph paragraph = new FormattedTextParagraph(elements, Alignment.Center);
 		FormattedText text = fText(paragraph);
 		//create stamping
-		return new StaffTextStamping(text, sp, context.staff, dynamics);
+		return new StaffTextStamping(text, sp, staff, dynamics);
 	}
 
 	/**
 	 * Creates a {@link StaffTextStamping} for the given {@link Tempo}.
 	 */
 	public StaffTextStamping createTempo(Tempo tempo, StamperContext context) {
+		val staff = context.getCurrentStaffStamping();
+
 		//positioning
 		//below: 3 IS below the base line
 		//above (default): 2 IS above the top line
 		float defaultLPBelow = -3f * 2;
-		float defaultLPAbove = (context.staff.linesCount - 1) * 2 + 2 * 2;
-		SP p = computePosition(tempo, context.staff, defaultLPAbove, defaultLPAbove,
+		float defaultLPAbove = (staff.linesCount - 1) * 2 + 2 * 2;
+		SP p = computePosition(tempo, staff, defaultLPAbove, defaultLPAbove,
 			defaultLPBelow);
 
 		//create text
 		FormattedText text = getTempoTextNotNull(tempo, context.layouter.symbols);
 
 		//create stamping
-		return new StaffTextStamping(text, p, context.staff, tempo);
+		return new StaffTextStamping(text, p, staff, tempo);
 	}
 
 	/**
 	 * Creates a {@link StaffTextStamping} for the given {@link Words}.
 	 */
 	public StaffTextStamping createWords(Words words, StamperContext context) {
+		val staff = context.getCurrentStaffStamping();
+
 		if (words.getText().getLength() == 0)
 			return null;
 
@@ -189,8 +193,8 @@ public class DirectionStamper {
 		//below: 5 IS below the base line
 		//above (default): 4 IS above the top line
 		float defaultLPBelow = -5f * 2;
-		float defaultLPAbove = (context.staff.linesCount - 1) * 2 + 4 * 2;
-		SP p = computePosition(words, context.staff, defaultLPAbove, defaultLPAbove,
+		float defaultLPAbove = (staff.linesCount - 1) * 2 + 4 * 2;
+		SP p = computePosition(words, staff, defaultLPAbove, defaultLPAbove,
 			defaultLPBelow);
 
 		//create text
@@ -198,23 +202,25 @@ public class DirectionStamper {
 		FormattedText text = styleText(words.getText(), style);
 
 		//create stamping
-		return new StaffTextStamping(text, p, context.staff, words);
+		return new StaffTextStamping(text, p, staff, words);
 	}
 
 	/**
 	 * Creates a {@link StaffSymbolStamping} for the given {@link Pedal}.
 	 */
 	public StaffSymbolStamping createPedal(Pedal pedal, StamperContext context) {
+		val staff = context.getCurrentStaffStamping();
+
 		//positioning
 		//below (default): 4 IS below the base line
 		//above: 3 IS above the top line
 		float defaultLPBelow = -4f * 2;
-		float defaultLPAbove = (context.staff.linesCount - 1) * 2 + 3 * 2;
-		SP sp = computePosition(pedal, context.staff, defaultLPBelow, defaultLPAbove,
+		float defaultLPAbove = (staff.linesCount - 1) * 2 + 3 * 2;
+		SP sp = computePosition(pedal, staff, defaultLPBelow, defaultLPAbove,
 			defaultLPBelow);
 		//create stamping
 		Symbol symbol = context.getSymbol(CommonSymbol.getPedal(pedal.getType()));
-		return new StaffSymbolStamping(null, context.staff, symbol, null, sp, 1, false);
+		return new StaffSymbolStamping(null, staff, symbol, null, sp, 1, false);
 	}
 
 	/**

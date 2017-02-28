@@ -43,7 +43,7 @@ public class SingleStaffBeamSpacer {
 					stems.leftXIs, stems.rightXIs, stems.get(i).xIs);
 			val stem = beam.chords.get(i).stem;
 			if (stem != null) //it could be possible that there is no stem
-				stem.endLp = lp;
+				stem.endSlp = stem.endSlp.withLp(lp);
 		}
 
 		return new BeamSpacing(beam, chords);

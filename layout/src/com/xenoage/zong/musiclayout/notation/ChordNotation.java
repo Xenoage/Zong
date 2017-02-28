@@ -84,4 +84,8 @@ public class ChordNotation
 		return (stemDirection == Up ? getLast(element.getNotes()) : getFirst(element.getNotes())).getPitch();
 	}
 
+	public SLP getStemEndSlp() {
+		return stem.endSlp;
+	}
+
 }

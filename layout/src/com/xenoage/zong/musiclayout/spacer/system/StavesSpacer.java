@@ -1,7 +1,5 @@
 package com.xenoage.zong.musiclayout.spacer.system;
 
-import static com.xenoage.utils.kernel.Range.range;
-
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.format.ScoreFormat;
 import com.xenoage.zong.core.format.StaffLayout;

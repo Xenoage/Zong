@@ -1,27 +1,5 @@
 package com.xenoage.zong.musiclayout.layouter.scoreframelayout;
 
-import static com.xenoage.utils.collections.CollectionUtils.addNotNull;
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.utils.collections.CollectionUtils.getFirst;
-import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.LyricStamper.lyricStamper;
-import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.SlurStamper.slurStamper;
-import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.TupletStamper.tupletStamper;
-import static com.xenoage.zong.musiclayout.stamper.BarlinesStamper.barlinesStamper;
-import static com.xenoage.zong.musiclayout.stamper.DirectionStamper.directionStamper;
-import static com.xenoage.zong.musiclayout.stamper.MeasureStamper.measureStamper;
-import static com.xenoage.zong.musiclayout.stamper.PartNameStamper.partNameStamper;
-import static com.xenoage.zong.musiclayout.stamper.StaffStamper.staffStamper;
-import static com.xenoage.zong.musiclayout.stamper.VoiceStamper.voiceStamper;
-import static com.xenoage.zong.musiclayout.stamper.VoltaStamper.voltaStamper;
-import static com.xenoage.zong.musiclayout.stamper.WedgeStamper.wedgeStamper;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
 import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.utils.kernel.Tuple3;
 import com.xenoage.zong.core.Score;
@@ -36,12 +14,7 @@ import com.xenoage.zong.core.text.FormattedTextElement;
 import com.xenoage.zong.core.text.FormattedTextString;
 import com.xenoage.zong.core.text.FormattedTextStyle;
 import com.xenoage.zong.musiclayout.ScoreFrameLayout;
-import com.xenoage.zong.musiclayout.continued.ContinuedElement;
-import com.xenoage.zong.musiclayout.continued.ContinuedSlur;
-import com.xenoage.zong.musiclayout.continued.ContinuedVolta;
-import com.xenoage.zong.musiclayout.continued.ContinuedWedge;
-import com.xenoage.zong.musiclayout.continued.OpenVolta;
-import com.xenoage.zong.musiclayout.continued.OpenWedges;
+import com.xenoage.zong.musiclayout.continued.*;
 import com.xenoage.zong.musiclayout.layouter.Context;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenLyricsCache;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenSlursCache;
@@ -50,20 +23,27 @@ import com.xenoage.zong.musiclayout.layouter.cache.util.SlurCache;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.LastLyrics;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.StaffStampings;
 import com.xenoage.zong.musiclayout.notation.Notations;
-import com.xenoage.zong.musiclayout.spacing.BeamSpacing;
-import com.xenoage.zong.musiclayout.spacing.ColumnSpacing;
-import com.xenoage.zong.musiclayout.spacing.FrameSpacing;
-import com.xenoage.zong.musiclayout.spacing.MeasureSpacing;
-import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
+import com.xenoage.zong.musiclayout.spacing.*;
 import com.xenoage.zong.musiclayout.stamper.PartNameStamper;
 import com.xenoage.zong.musiclayout.stamper.StamperContext;
-import com.xenoage.zong.musiclayout.stampings.BracketStamping;
-import com.xenoage.zong.musiclayout.stampings.NoteheadStamping;
-import com.xenoage.zong.musiclayout.stampings.SlurStamping;
-import com.xenoage.zong.musiclayout.stampings.StaffStamping;
-import com.xenoage.zong.musiclayout.stampings.StaffTextStamping;
-import com.xenoage.zong.musiclayout.stampings.Stamping;
+import com.xenoage.zong.musiclayout.stampings.*;
 import com.xenoage.zong.symbols.SymbolPool;
+
+import java.util.*;
+
+import static com.xenoage.utils.collections.CollectionUtils.*;
+import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.LyricStamper.lyricStamper;
+import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.SlurStamper.slurStamper;
+import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.TupletStamper.tupletStamper;
+import static com.xenoage.zong.musiclayout.stamper.BarlinesStamper.barlinesStamper;
+import static com.xenoage.zong.musiclayout.stamper.DirectionStamper.directionStamper;
+import static com.xenoage.zong.musiclayout.stamper.MeasureStamper.measureStamper;
+import static com.xenoage.zong.musiclayout.stamper.PartNameStamper.partNameStamper;
+import static com.xenoage.zong.musiclayout.stamper.StaffStamper.staffStamper;
+import static com.xenoage.zong.musiclayout.stamper.VoiceStamper.voiceStamper;
+import static com.xenoage.zong.musiclayout.stamper.VoltaStamper.voltaStamper;
+import static com.xenoage.zong.musiclayout.stamper.WedgeStamper.wedgeStamper;
 
 /**
  * This strategy creates the {@link ScoreFrameLayout}
@@ -82,8 +62,8 @@ public class ScoreFrameLayouter {
 	/**
 	 * Creates a {@link ScoreFrameLayout} from the given {@link FrameSpacing}.
 	 * 
-	 * @param continuedElements  unclosed elements from the last frame, like slurs
-	 *                           spanning over more than one frame
+	 * @param unclosedElements  unclosed elements from the last frame, like slurs
+	 *                          spanning over more than one frame
 	 */
 	public ScoreFrameLayout computeScoreFrameLayout(FrameSpacing frame, int frameIndex,
 		Notations notations, List<ContinuedElement> unclosedElements, Context layouterContext,
@@ -131,6 +111,7 @@ public class ScoreFrameLayouter {
 		//create staff stampings
 		StaffStampings staffStampings = staffStamper.createStaffStampings(score, frame);
 		staffStampings.addAllTo(staffStampsPool);
+		context.staffStampings = staffStampings;
 
 		//go through the systems
 		for (int iSystem : range(frame.getSystems())) {
@@ -162,13 +143,14 @@ public class ScoreFrameLayouter {
 			//fill the staves
 			for (int iStaff : range(stavesCount)) {
 				layouterContext.mp = layouterContext.mp.withStaff(iStaff);
-				context.staff = systemStaves.get(iStaff);
-				float xMm = context.staff.positionMm.x;
+				context.staffIndex = iStaff;
+				float xMm = context.getCurrentStaffStamping().positionMm.x;
 
 				for (int iMeasure : range(system.columns)) {
 					int globalMeasureIndex = system.getStartMeasure() + iMeasure;
 					layouterContext.mp = layouterContext.mp.withMeasure(globalMeasureIndex);
-					
+					context.measureIndex = globalMeasureIndex;
+
 					ColumnSpacing measureColumnSpacing = system.columns.get(iMeasure);
 					MeasureSpacing measure = measureColumnSpacing.getMeasures().get(iStaff);
 
@@ -246,22 +228,22 @@ public class ScoreFrameLayouter {
 	private List<SlurStamping> createTiesAndSlurs(OpenSlursCache openCurvedLinesCache,
 		StaffStampings staffStampings, int systemsCount) {
 		LinkedList<SlurStamping> ret = new LinkedList<SlurStamping>();
-		for (Iterator<SlurCache> itCL = openCurvedLinesCache.iterator(); itCL.hasNext();) {
+		for (Iterator<SlurCache> itSlurCache = openCurvedLinesCache.iterator(); itSlurCache.hasNext();) {
 			boolean simpleLine = false; //current curved line simple (within one staff)?
-			SlurCache cl = itCL.next();
+			SlurCache slurCache = itSlurCache.next();
 			int middleSlurStartIndex = 0;
 			//if the start is known, begin (and if possible end) the slur in its staff
-			if (cl.isStartKnown()) {
-				Tuple2<SlurStamping, Boolean> startCLS = slurStamper.createSlurStampingStart(cl);
+			if (slurCache.isStartKnown()) {
+				Tuple2<SlurStamping, Boolean> startCLS = slurStamper.createSlurStampingStart(slurCache);
 				ret.add(startCLS.get1());
 				if (startCLS.get2() == false) {
 					//curved line is finished, remove cache
 					simpleLine = true;
-					itCL.remove();
+					itSlurCache.remove();
 				}
 				else {
 					//curved lines is continued in next system
-					middleSlurStartIndex = cl.getStartSystem() + 1;
+					middleSlurStartIndex = slurCache.getStartSystem() + 1;
 				}
 			}
 			//if not a simple line, compute and stamp middle slurs and end slur
@@ -269,20 +251,19 @@ public class ScoreFrameLayouter {
 				//if the stop notehead is known, compute the system up zo where middle staff slurs (if any)
 				//have to be stamped and stamp them
 				int middleSlurStopIndex = systemsCount - 1;
-				if (cl.isStopKnown()) {
-					middleSlurStopIndex = cl.getStopSystem() - 1;
+				if (slurCache.isStopKnown()) {
+					middleSlurStopIndex = slurCache.getStopSystem() - 1;
 				}
 				for (int iSystem = middleSlurStartIndex; iSystem <= middleSlurStopIndex; iSystem++) {
-					SlurStamping cls = slurStamper.createSlurStampingMiddle(
-						cl.getContinuedCurvedLine(), staffStampings.get(iSystem, cl.getStaffIndex()));
+					SlurStamping cls = slurStamper.createSlurStampingMiddle(slurCache.getContinuedCurvedLine());
 					if (cls != null)
 						ret.add(cls);
 				}
 				//create stop slur (if any)
-				if (!simpleLine && cl.isStopKnown()) {
-					ret.add(slurStamper.createSlurStampingStop(cl));
+				if (!simpleLine && slurCache.isStopKnown()) {
+					ret.add(slurStamper.createStopForLastSystem(slurCache));
 					//curved line is finished, remove cache
-					itCL.remove();
+					itSlurCache.remove();
 				}
 			}
 		}

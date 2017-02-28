@@ -25,4 +25,8 @@ public final class SP {
 		return new SP(xMm, lp);
 	}
 
+	public SP add(SP sp) {
+		return sp(xMm + sp.xMm, lp + sp.lp);
+	}
+
 }

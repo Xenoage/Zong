@@ -3,7 +3,6 @@ package com.xenoage.zong.renderer.stamping;
 import com.xenoage.utils.color.Color;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.zong.musiclayout.stampings.SlurStamping;
-import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import com.xenoage.zong.musiclayout.stampings.Stamping;
 import com.xenoage.zong.musiclayout.stampings.bitmap.BitmapStaff;
 import com.xenoage.zong.renderer.RendererArgs;
@@ -27,7 +26,6 @@ public class SlurStampingRenderer
 		SlurStamping slur = (SlurStamping) stamping;
 
 		float scaling = args.targetScaling;
-		StaffStamping parentStaff = slur.parentStaff;
 
 		//compute absolute coordinates in px
 		float p1xMm = slur.p1.xMm;
@@ -36,20 +34,24 @@ public class SlurStampingRenderer
 		float c2xMm = p2xMm + slur.c2.xMm;
 		float p1yMm = 0, p2yMm = 0, c1yMm = 0, c2yMm = 0;
 		if (canvas.getFormat() == CanvasFormat.Raster) {
-			float staffYPos = parentStaff.positionMm.y;
-			BitmapStaff screenStaff = parentStaff.getBitmapInfo().getBitmapStaff(scaling);
-			float bottomLineMm = staffYPos + screenStaff.lp0Mm;
-			float isMm = screenStaff.interlineSpaceMm;
-			p1yMm = bottomLineMm - isMm * slur.p1.lp / 2;
-			p2yMm = bottomLineMm - isMm * slur.p2.lp / 2;
-			c1yMm = p1yMm - isMm * slur.c1.lp / 2;
-			c2yMm = p2yMm - isMm * slur.c2.lp / 2;
+			float staff1YMm = slur.staff1.positionMm.y;
+			float staff2YMm = slur.staff2.positionMm.y;
+			BitmapStaff screenStaff1 = slur.staff1.getBitmapInfo().getBitmapStaff(scaling);
+			BitmapStaff screenStaff2 = slur.staff2.getBitmapInfo().getBitmapStaff(scaling);
+			float bottomLineMm1 = staff1YMm + screenStaff1.lp0Mm;
+			float bottomLineMm2 = staff2YMm + screenStaff2.lp0Mm;
+			float isMm1 = screenStaff1.interlineSpaceMm;
+			float isMm2 = screenStaff2.interlineSpaceMm;
+			p1yMm = bottomLineMm1 - isMm1 * slur.p1.lp / 2;
+			p2yMm = bottomLineMm2 - isMm2 * slur.p2.lp / 2;
+			c1yMm = p1yMm - isMm1 * slur.c1.lp / 2;
+			c2yMm = p2yMm - isMm2 * slur.c2.lp / 2;
 		}
 		else if (canvas.getFormat() == CanvasFormat.Vector) {
-			p1yMm = parentStaff.computeYMm(slur.p1.lp);
-			p2yMm = parentStaff.computeYMm(slur.p2.lp);
-			c1yMm = parentStaff.computeYMm(slur.p1.lp + slur.c1.lp);
-			c2yMm = parentStaff.computeYMm(slur.p2.lp + slur.c2.lp);
+			p1yMm = slur.staff1.computeYMm(slur.p1.lp);
+			p2yMm = slur.staff2.computeYMm(slur.p2.lp);
+			c1yMm = slur.staff1.computeYMm(slur.p1.lp + slur.c1.lp);
+			c2yMm = slur.staff2.computeYMm(slur.p2.lp + slur.c2.lp);
 		}
 
 		Point2f p1 = new Point2f(p1xMm, p1yMm);
@@ -70,7 +72,7 @@ public class SlurStampingRenderer
 		  lastPoint = p;
 		} */
 
-		SimpleSlurShape slurShape = new SimpleSlurShape(p1, p2, c1, c2, parentStaff.is);
+		SimpleSlurShape slurShape = new SimpleSlurShape(p1, p2, c1, c2, slur.staff1.is);
 		canvas.fillPath(slurShape.getPath(), color);
 	}
 

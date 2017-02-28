@@ -13,6 +13,7 @@ import static com.xenoage.zong.musiclayout.spacer.beam.Direction.Ascending;
 import static com.xenoage.zong.musiclayout.spacer.beam.Direction.Descending;
 import static com.xenoage.zong.musiclayout.spacer.beam.Slant.*;
 import static java.lang.Math.abs;
+import static java.lang.Math.round;
 
 /**
  * Computes the {@link Slant} of a beam within a single staff.
@@ -89,15 +90,15 @@ public class SingleStaffBeamSlanter {
 			return 0;
 		//first note must be like second one, or third like last
 		boolean firstEqual;
-		if (stems.leftNoteLp == stems.get(1).noteLp)
+		if (stems.leftNoteLp == stems.get(1).noteSlp.lp)
 			firstEqual = true;
-		else if (stems.get(2).noteLp == stems.get(3).noteLp)
+		else if (stems.get(2).noteSlp.lp == stems.get(3).noteSlp.lp)
 			firstEqual = false;
 		else
 			return 0;
 		//remaining note must be like its outer neighbor, but 1 LP further out
-		int outerLp = stems.get(firstEqual ? 3 : 0).noteLp;
-		int innerLp = stems.get(firstEqual ? 2 : 1).noteLp;
+		float outerLp = stems.get(firstEqual ? 3 : 0).noteSlp.lp;
+		float innerLp = stems.get(firstEqual ? 2 : 1).noteSlp.lp;
 		if (outerLp == innerLp + 1 * stemDir.getSign())
 			return (stems.leftNoteLp > stems.rightNoteLp ? -1 : 1); //overall direction
 		return 0;
@@ -119,7 +120,7 @@ public class SingleStaffBeamSlanter {
 			boolean foundRun = true;
 			boolean exceptFirst = false;
 			for (int i : range(stems.getCount() - 1)) {
-				if (dir * stems.get(i).noteLp >= dir * stems.get(i + 1).noteLp) {
+				if (dir * stems.get(i).noteSlp.lp >= dir * stems.get(i + 1).noteSlp.lp) {
 					//break in run. allowed between first and second note,
 					//and between second last and last note (but not both!)
 					if (i == 0) {
@@ -159,7 +160,7 @@ public class SingleStaffBeamSlanter {
 	 */
 	Slant computeClose(BeamedStems stems, StemDirection stemDir) {
 		//Ross, p. 112: beams in close spacing slant only 1/4 to 1/2 space
-		int dictatorLp = (stemDir == Up ? stems.getMaxNoteLp() : stems.getMinNoteLp());
+		int dictatorLp = Math.round(stemDir == Up ? stems.getMaxNoteLp() : stems.getMinNoteLp());
 		Direction dir = (stems.rightNoteLp > stems.leftNoteLp ? Ascending : Descending);
 		//if dictator is on a staff line, use slant of 1/4 space
 		if (dictatorLp % 2 == 0 || abs(stems.rightNoteLp - stems.leftNoteLp) <= 1)
@@ -172,9 +173,9 @@ public class SingleStaffBeamSlanter {
 	/**
 	 * Computes the slant for beams with normal horizontal spacing.
 	 */
-	public Slant computeNormal(int firstNoteLp, int lastNoteLp) {
+	public Slant computeNormal(float firstNoteLp, float lastNoteLp) {
 		//Ross, p. 111 (and p. 101)
-		int interval = abs(firstNoteLp - lastNoteLp);
+		int interval = round(abs(firstNoteLp - lastNoteLp));
 		Direction dir = (lastNoteLp > firstNoteLp ? Ascending : Descending);
 		
 		//Ross' rules for 4th are inconsistent p. 101d min=0.5 and p. 111:
@@ -221,15 +222,15 @@ public class SingleStaffBeamSlanter {
 	 */
 	boolean containsMiddleExtremeNote(BeamedStems stems, StemDirection stemDir) {
 		if (stemDir == Up) {
-			int outerMax = Math.max(stems.leftNoteLp, stems.rightNoteLp);
+			float outerMax = Math.max(stems.leftNoteLp, stems.rightNoteLp);
 			for (int i : range(1, stems.getCount() - 2))
-				if (stems.get(i).noteLp >= outerMax)
+				if (stems.get(i).noteSlp.lp >= outerMax)
 					return true;
 		}
 		else if (stemDir == Down) {
-			int outerMin = Math.min(stems.leftNoteLp, stems.rightNoteLp);
+			float outerMin = Math.min(stems.leftNoteLp, stems.rightNoteLp);
 			for (int i : range(1, stems.getCount() - 2))
-				if (stems.get(i).noteLp <= outerMin)
+				if (stems.get(i).noteSlp.lp <= outerMin)
 					return true;
 		}
 		return false;
@@ -241,7 +242,7 @@ public class SingleStaffBeamSlanter {
 	 */
 	boolean is3NotesMiddleEqualsOuter(BeamedStems stems) {
 		return (stems.getCount() == 3 &&
-				(stems.leftNoteLp == stems.get(1).noteLp || stems.get(1).noteLp == stems.rightNoteLp));
+				(stems.leftNoteLp == stems.get(1).noteSlp.lp || stems.get(1).noteSlp.lp == stems.rightNoteLp));
 	}
 	
 }

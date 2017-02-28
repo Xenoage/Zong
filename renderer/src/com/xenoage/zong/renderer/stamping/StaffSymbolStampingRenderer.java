@@ -50,7 +50,7 @@ public class StaffSymbolStampingRenderer
 			int x = Units.mmToPx(positionX, viewScaling);
 			int yOffset = ss.getYOffsetPx();
 			int yTopLine = Units.mmToPx(
-			  parentStaff.getPosition().y + parentStaff.getLineWidth() / 2,
+			  endStaff.getPosition().y + endStaff.getLineWidth() / 2,
 			  viewScaling) + yOffset;
 			for (int i = 0; i < 2; i++)
 			  params.renderTarget.drawLine(

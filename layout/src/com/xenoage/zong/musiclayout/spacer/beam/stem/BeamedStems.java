@@ -5,13 +5,13 @@ import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.collections.CollectionUtils;
 import com.xenoage.utils.collections.IList;
 import com.xenoage.utils.kernel.Countable;
+import com.xenoage.zong.musiclayout.SLP;
 import com.xenoage.zong.musiclayout.spacing.ChordSpacing;
 import lombok.val;
 
 import java.util.Iterator;
 import java.util.List;
 
-import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
@@ -31,22 +31,21 @@ public class BeamedStems
 	/** The horizontal offset in IS of the stem of the last chord. */
 	public final float rightXIs;
 	/** The LP of the outermost stem-side note of the first chord. */
-	public final int leftNoteLp;
+	public final float leftNoteLp;
 	/** The LP of the outermost stem-side note of the last chord. */
-	public final int rightNoteLp;
+	public final float rightNoteLp;
 
 
 	public static BeamedStems fromBeam(List<ChordSpacing> beamChords) {
 		val stems = new CList<BeamedStem>(beamChords.size());
 		for (val chord : beamChords) {
 			//we need a stem for each beamed chord
-			float stemsLengthIs;
-			if (chord.notation.stem != null)
-				stemsLengthIs = abs(chord.notation.stem.endLp - chord.notation.getStemSideNoteLp()) / 2;
-			else
-				stemsLengthIs = 3; //if there is no stem (should not happen very often)
+			if (chord.notation.stem == null)
+				throw new IllegalStateException("TODO! we need a stem for each beamed chord");
+			SLP stemSideNoteSlp = chord.getNotation().getStemSideNoteSlp();
+			SLP stemEndSlp = chord.getNotation().getStemEndSlp();
 			stems.add(new BeamedStem(chord.getStemXIs(), chord.notation.stemDirection,
-					chord.getNotation().getStemSideNoteLp(), stemsLengthIs));
+					stemSideNoteSlp, stemEndSlp));
 		}
 		return new BeamedStems(stems.close());
 	}
@@ -55,8 +54,8 @@ public class BeamedStems
 		this.stems = stems;
 		this.leftXIs = getFirst().xIs;
 		this.rightXIs = getLast().xIs;
-		this.leftNoteLp = getFirst().noteLp;
-		this.rightNoteLp = getLast().noteLp;
+		this.leftNoteLp = getFirst().noteSlp.lp;
+		this.rightNoteLp = getLast().noteSlp.lp;
 	}
 
 	public int getCount() {
@@ -75,17 +74,17 @@ public class BeamedStems
 		return CollectionUtils.getLast(stems);
 	}
 
-	public int getMaxNoteLp() {
-		int max = Integer.MIN_VALUE;
+	public float getMaxNoteLp() {
+		float max = -1 * Float.MAX_VALUE;
 		for (val stem : stems)
-			max = max(max, stem.noteLp);
+			max = max(max, stem.noteSlp.lp);
 		return max;
 	}
 
-	public int getMinNoteLp() {
-		int min = Integer.MAX_VALUE;
+	public float getMinNoteLp() {
+		float min = Float.MAX_VALUE;
 		for (val stem : stems)
-			min = min(min, stem.noteLp);
+			min = min(min, stem.noteSlp.lp);
 		return min;
 	}
 

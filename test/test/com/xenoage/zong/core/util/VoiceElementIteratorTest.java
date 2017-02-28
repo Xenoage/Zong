@@ -1,21 +1,18 @@
 package com.xenoage.zong.core.util;
 
-import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.utils.math.Fraction._0;
-import static com.xenoage.utils.math.Fraction.fr;
-import static com.xenoage.zong.core.position.MP.atElement;
-import static com.xenoage.zong.core.position.MP.mp;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
-
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.VoiceElement;
 import com.xenoage.zong.core.music.rest.Rest;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.io.selection.Cursor;
+import org.junit.Test;
+
+import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.utils.math.Fraction._0;
+import static com.xenoage.utils.math.Fraction.fr;
+import static com.xenoage.zong.core.position.MP.atElement;
+import static com.xenoage.zong.core.position.MP.mp;
+import static org.junit.Assert.*;
 
 /**
  * Tests for {@link VoiceElementIterator}.

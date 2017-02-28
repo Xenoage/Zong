@@ -13,6 +13,10 @@ import lombok.Getter;
  * A stem has a notehead position and an end position
  * and is slightly thinner than a staff line.
  *
+ * The notehead side can be on a different staff than the end of the stem.
+ * This is the case when we have a cross-staff beam, where the end of the
+ * stem is bound to a beam line which belongs to another staff.
+ *
  * @author Andreas Wenger
  */
 @Const @AllArgsConstructor @Getter
@@ -24,14 +28,17 @@ public final class StemStamping
 	/** The horizontal position in mm. */
 	public final float xMm;
 	/** The start line position of the stem. */
-	public final float noteheadLp;
+	public final float noteLp;
+	/** The parent staff or the note side. */
+	public final StaffStamping noteStaff;
 	/** The end line position of the stem.
 	 * Also non-integer values are allowed here. */
 	public final float endLp;
+	/** The parent staff or the stem end side. */
+	public final StaffStamping endStaff;
 	/** Stem direction: If up, the notes are at the bottom, and vice versa. */
 	public final StemDirection direction;
-	/** The parent staff. */
-	public final StaffStamping parentStaff;
+
 
 
 	@Override public StampingType getType() {

@@ -1,5 +1,6 @@
 package com.xenoage.zong.musiclayout.continued;
 
+import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -22,7 +23,7 @@ public final class ContinuedSlur
 	implements ContinuedElement {
 
 	@Getter public final Slur element;
-	@Getter public final int staffIndex;
+	public final StaffStamping staff;
 	public final VSide side;
 	public final int level;
 

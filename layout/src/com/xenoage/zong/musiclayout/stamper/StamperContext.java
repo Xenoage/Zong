@@ -1,16 +1,18 @@
 package com.xenoage.zong.musiclayout.stamper;
 
-import com.xenoage.utils.annotations.Optimized;
-import com.xenoage.utils.annotations.Optimized.Reason;
+import com.xenoage.zong.core.header.ColumnHeader;
+import com.xenoage.zong.core.music.Measure;
 import com.xenoage.zong.core.music.MusicElement;
-import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.musiclayout.layouter.Context;
+import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.StaffStampings;
 import com.xenoage.zong.musiclayout.notation.Notation;
 import com.xenoage.zong.musiclayout.notation.Notations;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import com.xenoage.zong.symbols.Symbol;
 import com.xenoage.zong.symbols.common.CommonSymbol;
+
+import static com.xenoage.zong.core.position.MP.atMeasure;
 
 /**
  * Information stampers generally need.
@@ -21,30 +23,46 @@ public class StamperContext {
 	
 	/** The general layouter context. */
 	public Context layouter;
-	/** The parent staff, where the next element or groups of elements (voice, measure)
-	 * have to be stamped on, or null. */
-	public StaffStamping staff;
 	/** The index of the current system on the frame. */
 	public int systemIndex;
+	/** The current staff index. */
+	public int staffIndex;
+	/** The current measure index. */
+	public int measureIndex;
+
+	/** All the available staff stampings. */
+	public StaffStampings staffStampings;
 	/** All the available notations. */
 	public Notations notations;
-	
-	
+
+
 	/**
-	 * Convenience method to get the current {@link MP}.
-	 * During the stamping process, this {@link MP} may not be precise because of
-	 * performance reasons. But at least the staff and measure should be correct.
+	 * Gets the current measure.
 	 */
-	@Optimized(Reason.Performance)
-	public MP getMp() {
-		return layouter.mp;
+	public Measure getCurrentMeasure() {
+		return layouter.score.getMeasure(atMeasure(staffIndex, measureIndex));
 	}
-	
+
 	/**
-	 * Convenience method to get the current staff index.
+	 * Gets the current measure column header.
 	 */
-	public int getStaffIndex() {
-		return layouter.mp.staff;
+	public ColumnHeader getCurrentColumnHeader() {
+		return layouter.score.getColumnHeader(measureIndex);
+	}
+
+	/**
+	 * Gets the current staff stamping.
+	 */
+	public StaffStamping getCurrentStaffStamping() {
+		return staffStampings.get(systemIndex, staffIndex);
+	}
+
+	/**
+	 * Gets the staff stamping for the staff with the given index within the
+	 * current system.
+	 */
+	public StaffStamping getStaffStamping(int staffIndex) {
+		return staffStampings.get(systemIndex, staffIndex);
 	}
 	
 	/**
@@ -52,7 +70,7 @@ public class StamperContext {
 	 * element on the current staff.
 	 */
 	public Notation getNotation(MusicElement element) {
-		return notations.get(element, getStaffIndex());
+		return notations.get(element, staffIndex);
 	}
 	
 	/**

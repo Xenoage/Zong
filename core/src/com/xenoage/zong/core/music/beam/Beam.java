@@ -11,9 +11,7 @@ import com.xenoage.zong.core.position.MPContainer;
 import com.xenoage.zong.core.position.MPElement;
 import lombok.Getter;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.collections.CollectionUtils.getFirst;
@@ -25,6 +23,10 @@ import static java.lang.Math.max;
 /**
  * Class for a beam that connects two or more chords.
  *
+ * A beam can be placed within a single staff (the common case) or
+ * cross two staves (e.g. in a piano score). When crossing two staves,
+ * the beam belongs to the staff of the first chord.
+ *
  * @author Andreas Wenger
  */
 public final class Beam
@@ -32,8 +34,11 @@ public final class Beam
 
 	/** Spread of this beam within a system. */
 	public enum VerticalSpan {
+		/** Beam within a single staff. */
 		SingleStaff,
-		TwoAdjacentStaves,
+		/** Beam crossing two adjacent staves. */
+		CrossStaff,
+		/** Other span (not supported). */
 		Other;
 	}
 
@@ -60,16 +65,16 @@ public final class Beam
 	 * Creates a new beam consisting of the given chords with no subdivisions.
 	 */
 	public static Beam beamFromChords(List<Chord> chords) {
-		Beam ret = beamFromChordsNoCheck(chords);
+		Beam ret = beamFromChordsUnchecked(chords);
 		ret.check();
 		return ret;
 	}
 
 	/**
 	 * Creates a new beam consisting of the given chords with no subdivisions.
-	 * For testing: No parameter checks! TODO: DEPENDENCYINJECTION
+	 * For testing: No parameter checks!
 	 */
-	public static Beam beamFromChordsNoCheck(List<Chord> chords) { //TIDY
+	public static Beam beamFromChordsUnchecked(List<Chord> chords) {
 		List<BeamWaypoint> waypoints = alist(chords.size());
 		for (Chord chord : chords) {
 			waypoints.add(new BeamWaypoint(chord, false));
@@ -236,24 +241,17 @@ public final class Beam
 		int maxStaffIndex = Integer.MIN_VALUE;
 
 		//check if the beam spans over a single staff or two adjacent staves or more
-		Set<Integer> staves = new HashSet<Integer>();
 		for (BeamWaypoint waypoint : waypoints) {
 			Chord chord = waypoint.getChord();
 			MP mpChord = MP.getMP(chord);
 			minStaffIndex = Math.min(minStaffIndex, mpChord.staff);
 			maxStaffIndex = max(maxStaffIndex, mpChord.staff);
-			staves.add(mpChord.staff);
 		}
 		VerticalSpan verticalSpan = VerticalSpan.Other;
-		if (staves.size() == 1) {
+		if (maxStaffIndex == minStaffIndex)
 			verticalSpan = VerticalSpan.SingleStaff;
-		}
-		else if (staves.size() == 2) {
-			Integer[] twoStaves = staves.toArray(new Integer[0]);
-			if (Math.abs(twoStaves[0] - twoStaves[1]) <= 1) {
-				verticalSpan = VerticalSpan.TwoAdjacentStaves;
-			}
-		}
+		else if (maxStaffIndex - minStaffIndex == 1)
+			verticalSpan = VerticalSpan.CrossStaff;
 
 		this.verticalSpan = verticalSpan;
 		this.upperStaffIndex = minStaffIndex;

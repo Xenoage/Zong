@@ -1,16 +1,16 @@
 package com.xenoage.zong.musiclayout.stamper;
 
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.utils.kernel.Range.range;
-
-import java.util.List;
-
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.StaffStampings;
 import com.xenoage.zong.musiclayout.spacing.FrameSpacing;
 import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
+
+import java.util.List;
+
+import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static com.xenoage.utils.kernel.Range.range;
 
 /**
  * Creates the {@link StaffStampings} for a {@link FrameSpacing}.

@@ -26,7 +26,7 @@ public class BeamedStemDirector {
 		Strategy strategy;
 		if (beam.getVerticalSpan() == SingleStaff)
 			strategy = oneMeasureOneStaff;
-		else if (beam.getVerticalSpan() == VerticalSpan.TwoAdjacentStaves)
+		else if (beam.getVerticalSpan() == VerticalSpan.CrossStaff)
 			strategy = oneMeasureTwoStaves;
 		else
 			//no strategy for more than two or non-adjacent staves

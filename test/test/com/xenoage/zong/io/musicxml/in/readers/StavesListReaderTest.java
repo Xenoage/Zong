@@ -1,22 +1,18 @@
 package com.xenoage.zong.io.musicxml.in.readers;
 
-import static com.xenoage.utils.PlatformUtils.platformUtils;
-import static com.xenoage.utils.jse.JsePlatformUtils.jsePlatformUtils;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
-
-import java.io.FileNotFoundException;
-
-import org.junit.Test;
-
 import com.xenoage.zong.core.music.StavesList;
 import com.xenoage.zong.core.music.group.BarlineGroup;
 import com.xenoage.zong.core.music.group.BracketGroup;
 import com.xenoage.zong.io.musicxml.in.util.ErrorHandling;
 import com.xenoage.zong.io.musicxml.in.util.ErrorHandling.Level;
 import com.xenoage.zong.musicxml.MusicXMLDocument;
+import org.junit.Test;
+
+import java.io.FileNotFoundException;
+
+import static com.xenoage.utils.PlatformUtils.platformUtils;
+import static com.xenoage.utils.jse.JsePlatformUtils.jsePlatformUtils;
+import static org.junit.Assert.*;
 
 /**
  * Test cases for a {@link StavesListReader} class.
@@ -33,7 +29,7 @@ public class StavesListReaderTest {
 		StavesList sl = createStavesList("data/test/scores/musicxml11/BeetAnGeSample.xml");
 		if (sl == null)
 			return;
-		//parts and staves
+		//parts and staffStampings
 		assertEquals(2, sl.getParts().size());
 		assertEquals(3, sl.getStaves().size());
 		assertEquals(0, sl.getPartStaffIndices(sl.getParts().get(0)).getStart());

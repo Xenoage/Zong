@@ -9,6 +9,7 @@ import lombok.val;
 
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.MathUtils.interpolateLinear;
+import static com.xenoage.zong.musiclayout.SLP.slp;
 import static com.xenoage.zong.musiclayout.spacer.beam.BeamSpacer.beamSpacer;
 import static com.xenoage.zong.musiclayout.spacer.beam.placement.TwoStavesBeamPlacer.twoStavesBeamPlacer;
 import static com.xenoage.zong.musiclayout.spacer.beam.slant.TwoStavesBeamSlanter.twoStavesBeamSlanter;
@@ -37,17 +38,17 @@ public class TwoStavesBeamSpacer {
 		int upperStaffIndex = beam.element.getUpperStaffIndex();
 		val placement = twoStavesBeamPlacer.compute(slant, stems, system, upperStaffIndex);
 
-		//adjust the stem lengths by interpolating the other values
-		//we have to transform the coordinates into mm first and then transform them back to
-		//line position, since we may have different staff heights and variable space between the staves
+		//adjust the stem lengths by interpolating
+		//the end LPs of the stems have then to be relative to the beam's staff (the staff of the first chord)
+		int beamStaffIndex = beam.mp.staff;
 		float leftEndYMm = system.getYMm(placement.leftSlp);
 		float rightEndYMm = system.getYMm(placement.rightSlp);
 		for (int i : range(stems)) {
 			float yMm = interpolateLinear(leftEndYMm, rightEndYMm, stems.leftXIs, stems.rightXIs, stems.get(i).xIs);
-			float lp = system.getLp(chords.get(i).notation.staff, yMm);
+			float lp = system.getLp(beamStaffIndex, yMm);
 			StemNotation stem = beam.chords.get(i).stem;
 			if (stem != null) //it could be possible that there is no stem
-				stem.endLp = lp;
+				stem.endSlp = slp(beamStaffIndex, lp); //before, maybe the end LP was relative to another staff
 		}
 		
 		return new BeamSpacing(beam, chords);

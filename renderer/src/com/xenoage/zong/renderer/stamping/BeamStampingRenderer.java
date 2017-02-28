@@ -1,9 +1,5 @@
 package com.xenoage.zong.renderer.stamping;
 
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-
-import java.util.List;
-
 import com.xenoage.utils.color.Color;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.zong.musiclayout.notation.BeamNotation;
@@ -14,11 +10,11 @@ import com.xenoage.zong.musiclayout.stampings.bitmap.BitmapStaff;
 import com.xenoage.zong.renderer.RendererArgs;
 import com.xenoage.zong.renderer.canvas.Canvas;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
-import com.xenoage.zong.symbols.path.ClosePath;
-import com.xenoage.zong.symbols.path.LineTo;
-import com.xenoage.zong.symbols.path.MoveTo;
-import com.xenoage.zong.symbols.path.Path;
-import com.xenoage.zong.symbols.path.PathElement;
+import com.xenoage.zong.symbols.path.*;
+
+import java.util.List;
+
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 
 /**
  * Renderer for a {@link BeamStamping}.
@@ -34,34 +30,30 @@ public class BeamStampingRenderer
 	 */
 	@Override public void draw(Stamping stamping, Canvas canvas, RendererArgs args) {
 		BeamStamping beam = (BeamStamping) stamping;
+		StaffStamping staff = beam.staff;
 		float scaling = args.targetScaling;
 
 		//TODO: stem should be thinner than lineWidth?
-		float stemWidthMm = beam.staff1.getLineWidthMm();
+		float stemWidthMm = staff.getLineWidthMm();
 
-		StaffStamping staff1 = beam.staff1;
-		StaffStamping staff2 = beam.staff2;
-		
-		float x1Mm = staff1.positionMm.x + beam.sp1.xMm - stemWidthMm / 2f;
-		float x2Mm = staff2.positionMm.x + beam.sp2.xMm + stemWidthMm / 2f;
+		float x1Mm = staff.positionMm.x + beam.sp1.xMm - stemWidthMm / 2f;
+		float x2Mm = staff.positionMm.x + beam.sp2.xMm + stemWidthMm / 2f;
 
 		Color color = Color.black;
 
 		float leftYStart, rightYStart, beamHeightMm;
 		if (canvas.getFormat() == CanvasFormat.Raster) {
 			//render on screen
-			float staff1YPos = staff1.positionMm.y;
-			float staff2YPos = staff2.positionMm.y;
-			BitmapStaff screenStaff1 = staff1.getBitmapInfo().getBitmapStaff(scaling);
-			BitmapStaff screenStaff2 = staff2.getBitmapInfo().getBitmapStaff(scaling);
-			leftYStart = staff1YPos + screenStaff1.getYMm(beam.sp1.lp);
-			rightYStart = staff2YPos + screenStaff2.getYMm(beam.sp2.lp);
-			beamHeightMm = BeamNotation.lineHeightIs * screenStaff1.interlineSpaceMm;
+			float staffYPos = staff.positionMm.y;
+			BitmapStaff screenStaff = staff.getBitmapInfo().getBitmapStaff(scaling);
+			leftYStart = staffYPos + screenStaff.getYMm(beam.sp1.lp);
+			rightYStart = staffYPos + screenStaff.getYMm(beam.sp2.lp);
+			beamHeightMm = BeamNotation.lineHeightIs * screenStaff.interlineSpaceMm;
 		}
 		else {
-			leftYStart = staff1.computeYMm(beam.sp1.lp);
-			rightYStart = staff2.computeYMm(beam.sp1.lp);
-			beamHeightMm = BeamNotation.lineHeightIs * staff1.is;
+			leftYStart = staff.computeYMm(beam.sp1.lp);
+			rightYStart = staff.computeYMm(beam.sp2.lp);
+			beamHeightMm = BeamNotation.lineHeightIs * staff.is;
 		}
 
 		//TODO: avoid edges at the stem end points

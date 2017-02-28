@@ -8,6 +8,7 @@ import com.xenoage.zong.musiclayout.notation.chord.ChordLps;
 import com.xenoage.zong.musiclayout.notation.chord.StemNotation;
 
 import static com.xenoage.zong.core.music.chord.StemDirection.*;
+import static com.xenoage.zong.musiclayout.SLP.slp;
 import static com.xenoage.zong.musiclayout.notator.chord.stem.StemDrawer.stemDrawer;
 
 /**
@@ -35,7 +36,7 @@ public class StemNotator {
 	 * @return  the vertical position of the stem, or null if the chord has no stem.
 	 */
 	@MaybeNull public StemNotation compute(Stem stem, ChordLps notesLp, StemDirection stemDir,
-		StaffLines staffLines, float scaling) {
+		int staffIndex, StaffLines staffLines, float scaling) {
 		float startLp = 0, innerLp = 0, endLp;
 
 		//use a stem?
@@ -64,7 +65,7 @@ public class StemNotator {
 		}
 		endLp = innerLp + stemDir.getSign() * stemLengthIs * 2;
 
-		return new StemNotation(startLp, endLp);
+		return new StemNotation(slp(staffIndex, startLp), slp(staffIndex, endLp));
 	}
 
 }
