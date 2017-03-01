@@ -36,8 +36,7 @@ public class TwoStavesBeamSpacer {
 		//compute the ends of the first and last stem
 		val chords = beamSpacer.getBeamChordSpacings(beam, system);
 		val stems = BeamedStems.fromBeam(chords);
-		int upperStaffIndex = beam.element.getUpperStaffIndex();
-		val placement = twoStavesBeamPlacer.compute(slant, stems, beam, system, upperStaffIndex);
+		val placement = twoStavesBeamPlacer.compute(slant, stems, beam, system);
 
 		//adjust the stem lengths by interpolating
 		//the end LPs of the stems have then to be relative to the beam's staff (the staff of the first chord)

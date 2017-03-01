@@ -7,7 +7,6 @@ import com.xenoage.zong.desktop.io.midi.out.SynthManager;
 import com.xenoage.zong.desktop.utils.JseZongPlatformUtils;
 import com.xenoage.zong.desktop.utils.error.GuiErrorProcessing;
 import com.xenoage.zong.documents.ScoreDoc;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -22,7 +21,7 @@ import javafx.stage.Stage;
 public class SimpleGuiDemo
 	extends Application {
 	
-	public static final String appName = "SimpleDemo";
+	public static final String appName = "SimpleGuiDemo";
 	public static final String appVersion = "0.1";
 	
 	public static MainWindow mainWindow;
@@ -69,7 +68,9 @@ public class SimpleGuiDemo
 		Parent root = fxmlLoader.load(getClass().getResource("MainWindow.fxml").openStream());
 		mainWindow = (MainWindow) fxmlLoader.getController();
     stage.setTitle("Simple Demo App based on Zong!");
-    stage.setScene(new Scene(root));
+    Scene scene = new Scene(root);
+    scene.setOnKeyPressed(mainWindow::handleKeyEvent);
+    stage.setScene(scene);
     stage.setOnCloseRequest(e -> exit());
     stage.show();
 	}

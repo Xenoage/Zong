@@ -27,6 +27,8 @@ public class BeamedStems
 
 	private final IList<BeamedStem> stems;
 
+	//cached:
+
 	/** The primary direction of the stems. This is the direction of the first stem. */
 	public final StemDirection primaryStemDir;
 	/* The horizontal offset in IS of the stem of the first chord. */

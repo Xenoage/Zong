@@ -1,12 +1,9 @@
 package com.xenoage.zong.demos.simplegui;
 
-import java.awt.image.BufferedImage;
-
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.zong.layout.Layout;
 import com.xenoage.zong.renderer.awt.AwtLayoutRenderer;
 import com.xenoage.zong.renderer.javafx.JfxLayoutRenderer;
-
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
@@ -16,9 +13,12 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import lombok.Getter;
+
+import java.awt.image.BufferedImage;
 
 
 /**
@@ -137,6 +137,15 @@ public class MainWindow {
 		Alert dialog = dialog();
 		dialog.setContentText(message);
 		dialog.showAndWait();
+	}
+
+	public void handleKeyEvent(KeyEvent keyEvent) {
+		/*
+		if (keyEvent.getCode() == KeyCode.PLUS) {
+			//edit the score
+			//...
+			content.onScoreUpdated();
+		} */
 	}
 	
 	private Alert dialog() {

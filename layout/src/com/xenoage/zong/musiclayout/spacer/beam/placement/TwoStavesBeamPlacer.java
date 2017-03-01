@@ -15,7 +15,7 @@ import static com.xenoage.zong.musiclayout.spacer.beam.placement.SingleStaffBeam
 /**
  * Computes the {@link Placement} of a beam on two adjacent staffStampings, given its {@link Slant}.
  * 
- * We find the dictator stem of the upper staff (pointing down) and the dictator stem of
+ * We look at the dictator stem of the upper staff (pointing down) and the dictator stem of
  * the lower staff (pointing up). The beam is centered between these positions.
  * 
  * @author Andreas Wenger
@@ -39,10 +39,11 @@ public class TwoStavesBeamPlacer {
 	 * Computes the {@link Placement} of a beam on two adjacent staves.
 	 * @param slant          the slant for this beam
 	 */
-	public Placement compute(Slant slant, BeamedStems stems, BeamNotation beam, SystemSpacing system, int upperStaffIndex) {
+	public Placement compute(Slant slant, BeamedStems stems, BeamNotation beam, SystemSpacing system) {
 
 		//find the dictator stems of the upper and lower staff
 		float slantIs = slant.getMaxIs();
+		int upperStaffIndex = beam.element.getUpperStaffIndex();
 		int upperDictatorStemIndex = singleStaffBeamPlacer.getDictatorStemIndex(StemDirection.Down, stems, slantIs);
 		int lowerDictatorStemIndex = singleStaffBeamPlacer.getDictatorStemIndex(StemDirection.Up, stems, slantIs);
 

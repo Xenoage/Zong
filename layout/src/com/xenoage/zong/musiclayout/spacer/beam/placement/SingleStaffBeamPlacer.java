@@ -57,7 +57,7 @@ import static java.lang.Math.round;
  * should not be exceeded (Ross, p. 98). Also, shortening the stems is usually better
  * than lengthening them (Ross, p. 103).
  *
- * TODO (ZONG-92): Support multi-line beams
+ * TODO (ZONG-92): Improve layout of multiline beams
  *
  * @author Andreas Wenger
  */
@@ -104,7 +104,7 @@ public class SingleStaffBeamPlacer {
 	 * @param staffLines     the number of staff lines, e.g. 5
 	 */
 	public Placement compute(Slant slant, BeamedStems stems, int beamLinesCount, StaffLines staffLines) {
-		val stemDir = stems.getFirst().dir; //TODO: different stem directions are possible?
+		val stemDir = stems.primaryStemDir; //TODO: different stem directions are possible?
 		float slantIs;
 		int dictatorIndex;
 		Placement candidate;

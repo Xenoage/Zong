@@ -37,7 +37,7 @@ public class Content
 	private MainWindow mainWindow;
 	
 	private int scoreIndex = 0;
-	private ScoreDoc scoreDoc = null;
+	@Getter private ScoreDoc scoreDoc = null;
 	@Getter private Layout layout = null;
 	private PlaybackLayouter playbackLayouter = null;
 	
@@ -78,6 +78,15 @@ public class Content
 		Playback.stop();
 		//load the score
 		this.scoreDoc = scoreDoc;
+		//update the view and playback
+		onScoreUpdated();
+	}
+
+	/**
+	 * Call this method when the score was modified.
+	 * The layout and playback is recomputed.
+	 */
+	public void onScoreUpdated() {
 		//layout the first page
 		layout = scoreDoc.getLayout();
 		Score score = scoreDoc.getScore();
