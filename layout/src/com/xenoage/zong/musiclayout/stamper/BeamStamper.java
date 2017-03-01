@@ -39,8 +39,8 @@ public class BeamStamper {
 	public List<BeamStamping> stamp(BeamSpacing beam, StaffStamping staff) {
 		
 		int beamSize = beam.notation.element.size();
-		SP leftEndSp = beam.getStemEndSp(0);
-		SP rightEndSp = beam.getStemEndSp(beamSize - 1);
+		SP leftEndSp = beam.getStemEndSp(0).withLp(beam.leftLp);
+		SP rightEndSp = beam.getStemEndSp(beamSize - 1).withLp(beam.rightLp);
 		StemDirection leftDir = beam.getStemDirection(0);
 		StemDirection rightDir = beam.getStemDirection(beamSize - 1);
 		

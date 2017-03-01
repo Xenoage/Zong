@@ -46,7 +46,7 @@ public class SingleStaffBeamSpacer {
 				stem.endSlp = stem.endSlp.withLp(lp);
 		}
 
-		return new BeamSpacing(beam, chords);
+		return new BeamSpacing(beam, placement.leftEndLp, placement.rightEndLp, chords);
 	}
 
 }

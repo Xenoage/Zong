@@ -6,6 +6,8 @@ import com.xenoage.zong.core.format.StaffLayout;
 import com.xenoage.zong.core.header.ScoreHeader;
 import com.xenoage.zong.musiclayout.spacing.StavesSpacing;
 
+import static com.xenoage.utils.kernel.Range.range;
+
 /**
  * Arranges staves vertically within a system into a {@link StavesSpacing}.
  * 

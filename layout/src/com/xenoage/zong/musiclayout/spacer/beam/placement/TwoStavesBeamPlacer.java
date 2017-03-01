@@ -3,6 +3,7 @@ package com.xenoage.zong.musiclayout.spacer.beam.placement;
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.musiclayout.SLP;
+import com.xenoage.zong.musiclayout.notation.BeamNotation;
 import com.xenoage.zong.musiclayout.spacer.beam.Slant;
 import com.xenoage.zong.musiclayout.spacer.beam.stem.BeamedStems;
 import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
@@ -38,7 +39,7 @@ public class TwoStavesBeamPlacer {
 	 * Computes the {@link Placement} of a beam on two adjacent staves.
 	 * @param slant          the slant for this beam
 	 */
-	public Placement compute(Slant slant, BeamedStems stems, SystemSpacing system, int upperStaffIndex) {
+	public Placement compute(Slant slant, BeamedStems stems, BeamNotation beam, SystemSpacing system, int upperStaffIndex) {
 
 		//find the dictator stems of the upper and lower staff
 		float slantIs = slant.getMaxIs();
@@ -53,6 +54,10 @@ public class TwoStavesBeamPlacer {
 		float lowerDictatorXMm = stems.get(lowerDictatorStemIndex).xIs * system.getInterlineSpace(upperStaffIndex + 1);
 		float middleXmm = (upperDictatorXMm + lowerDictatorXMm) / 2;
 		float middleYMm = (upperDictatorYMm + lowerDictatorYMm) / 2;
+
+		//lengthen the stem by the half of the height of the beam lines, to center the whole beam and not its end
+		middleYMm -= stems.primaryStemDir.getSign() * beam.getTotalHeightIs() *
+				system.getInterlineSpace(stems.getFirst().noteSlp.staff) / 2;
 
 		//transform the positions in mm into IS/LP makle them staff-dependent again
 		float middleXIsFromUpperStaff = middleXmm / system.getInterlineSpace(upperStaffIndex);

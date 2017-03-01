@@ -48,11 +48,11 @@ public class SlurStamper {
 			SlurStamping cls = createForSingleSystem(slurCache);
 			return new Tuple2<SlurStamping, Boolean>(cls, false);
 		}
-		else if (n1 != null) {
+		else {
 			//we need at least two staves.
 			//first staff: begin at the notehead, go to the end of the system
-			SlurStamping cls = createStart(n1, slurCache.getStartDistanceIS(),
-				slurCache.getSlur(), slurCache.getSide());
+			SlurStamping cls = createStartForFirstSystem(slurCache.getStartStaff(), slurCache.getDefaultStartSp(),
+					slurCache.getSlur(), slurCache.getSide());
 			//remember this curved line to be continued
 			return new Tuple2<SlurStamping, Boolean>(cls, true);
 		}

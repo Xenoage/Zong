@@ -5,6 +5,7 @@ import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.collections.CollectionUtils;
 import com.xenoage.utils.collections.IList;
 import com.xenoage.utils.kernel.Countable;
+import com.xenoage.zong.core.music.chord.StemDirection;
 import com.xenoage.zong.musiclayout.SLP;
 import com.xenoage.zong.musiclayout.spacing.ChordSpacing;
 import lombok.val;
@@ -26,6 +27,8 @@ public class BeamedStems
 
 	private final IList<BeamedStem> stems;
 
+	/** The primary direction of the stems. This is the direction of the first stem. */
+	public final StemDirection primaryStemDir;
 	/* The horizontal offset in IS of the stem of the first chord. */
 	public final float leftXIs;
 	/** The horizontal offset in IS of the stem of the last chord. */
@@ -52,6 +55,7 @@ public class BeamedStems
 
 	public BeamedStems(IList<BeamedStem> stems) {
 		this.stems = stems;
+		this.primaryStemDir = getFirst().dir;
 		this.leftXIs = getFirst().xIs;
 		this.rightXIs = getLast().xIs;
 		this.leftNoteLp = getFirst().noteSlp.lp;

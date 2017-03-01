@@ -21,6 +21,11 @@ public class BeamSpacing {
 	
 	/** The beam notation. */
 	public BeamNotation notation;
+	/** The LP at the left side of the beam. This is not always the same LP as the end of the first stem,
+	 * especially when we have a cross-staff beam. */
+	public float leftLp;
+	/** The LP at the right side of the beam. See {@link #leftLp}. */
+	public float rightLp;
 	/** The chords of the beam. */
 	public List<ChordSpacing> chords;
 	
