@@ -1,9 +1,5 @@
 package com.xenoage.zong.renderer.stamping;
 
-import static com.xenoage.zong.core.music.format.SP.sp;
-
-import java.util.List;
-
 import com.xenoage.utils.color.Color;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.zong.core.music.barline.BarlineRepeat;
@@ -20,12 +16,16 @@ import com.xenoage.zong.renderer.canvas.CanvasFormat;
 import com.xenoage.zong.symbols.Symbol;
 import com.xenoage.zong.symbols.common.CommonSymbol;
 
+import java.util.List;
+
+import static com.xenoage.zong.core.music.format.SP.sp;
+
 /**
  * Renderer for a {@link BarlineStamping}.
  *
  * @author Andreas Wenger
  */
-public class BarlineStampingRenderer
+public class BarlineRenderer
 	extends StampingRenderer {
 
 	/**
@@ -254,7 +254,7 @@ public class BarlineStampingRenderer
 	private static void paintRepeatDot(Canvas canvas, RendererArgs args, StaffStamping staff,
 		SP position) {
 		Symbol dotSymbol = args.symbolPool.getSymbol(CommonSymbol.NoteDot);
-		StaffSymbolStampingRenderer.drawWith(dotSymbol, Color.black, position, 1, staff, false,
+		StaffSymbolRenderer.drawWith(dotSymbol, Color.black, position, 1, staff, false,
 			canvas, args);
 	}
 

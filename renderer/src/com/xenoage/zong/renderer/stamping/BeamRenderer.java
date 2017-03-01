@@ -21,7 +21,7 @@ import static com.xenoage.utils.collections.CollectionUtils.alist;
  *
  * @author Andreas Wenger
  */
-public class BeamStampingRenderer
+public class BeamRenderer
 	extends StampingRenderer {
 
 	/**

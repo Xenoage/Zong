@@ -13,7 +13,7 @@ import com.xenoage.zong.renderer.canvas.Canvas;
  *
  * @author Andreas Wenger
  */
-public class TextStampingRenderer
+public class TextRenderer
 	extends StampingRenderer {
 
 	public static final boolean yIsBaseline = true;

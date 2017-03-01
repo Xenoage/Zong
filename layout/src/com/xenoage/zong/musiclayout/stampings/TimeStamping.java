@@ -13,7 +13,7 @@ import com.xenoage.zong.musiclayout.notation.TimeNotation;
  * @author Andreas Wenger
  */
 @Const @AllArgsConstructor @Getter
-public final class NormalTimeStamping
+public final class TimeStamping
 	extends Stamping {
 
 	/** The normal time signature. */

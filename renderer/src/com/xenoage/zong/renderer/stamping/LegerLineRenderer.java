@@ -1,7 +1,5 @@
 package com.xenoage.zong.renderer.stamping;
 
-import static com.xenoage.utils.math.geom.Point2f.p;
-
 import com.xenoage.utils.color.Color;
 import com.xenoage.zong.musiclayout.stampings.LegerLineStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
@@ -12,6 +10,8 @@ import com.xenoage.zong.renderer.RendererArgs;
 import com.xenoage.zong.renderer.canvas.Canvas;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
 
+import static com.xenoage.utils.math.geom.Point2f.p;
+
 /**
  * Renderer for a leger line stamping.
  * 
@@ -21,7 +21,7 @@ import com.xenoage.zong.renderer.canvas.CanvasFormat;
  *
  * @author Andreas Wenger
  */
-public class LegerLineStampingRenderer
+public class LegerLineRenderer
 	extends StampingRenderer {
 
 	/**

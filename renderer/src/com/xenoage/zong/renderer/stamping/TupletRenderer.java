@@ -18,7 +18,7 @@ import com.xenoage.zong.renderer.canvas.CanvasFormat;
  *
  * @author Andreas Wenger
  */
-public class TupletStampingRenderer
+public class TupletRenderer
 	extends StampingRenderer {
 
 	/**

@@ -10,7 +10,7 @@ import com.xenoage.zong.musiclayout.notation.TraditionalKeyNotation;
 import com.xenoage.zong.musiclayout.settings.Spacings;
 import com.xenoage.zong.musiclayout.spacing.RestSpacing;
 import com.xenoage.zong.musiclayout.stampings.KeySignatureStamping;
-import com.xenoage.zong.musiclayout.stampings.NormalTimeStamping;
+import com.xenoage.zong.musiclayout.stampings.TimeStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffSymbolStamping;
 import com.xenoage.zong.musiclayout.stampings.Stamping;
 import com.xenoage.zong.symbols.Symbol;
@@ -80,7 +80,7 @@ public class ElementStamper {
 				null, sp(xMm, staff.linesCount - 1), 1f, false);
 		}
 		else {
-			return new NormalTimeStamping(time, xMm, time.numeratorOffset,
+			return new TimeStamping(time, xMm, time.numeratorOffset,
 				time.denominatorOffset, time.digitGap, staff);
 		}
 	}

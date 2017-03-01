@@ -1,7 +1,5 @@
 package com.xenoage.zong.renderer.stamping;
 
-import static com.xenoage.utils.color.Color.color;
-
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import com.xenoage.zong.musiclayout.stampings.Stamping;
@@ -11,13 +9,15 @@ import com.xenoage.zong.renderer.RendererArgs;
 import com.xenoage.zong.renderer.canvas.Canvas;
 import com.xenoage.zong.renderer.canvas.CanvasFormat;
 
+import static com.xenoage.utils.color.Color.color;
+
 /**
  * Renderer for a {@link SystemCursorStamping}.
  *
  * @author Andreas Wenger
  */
-public class SystemCursorStampingRenderer
-	extends StaffCursorStampingRenderer {
+public class SystemCursorRenderer
+	extends StaffCursorRenderer {
 
 	/**
 	 * Draws the given {@link SystemCursorStamping} on the given {@link Canvas},

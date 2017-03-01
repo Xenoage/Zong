@@ -19,7 +19,7 @@ import com.xenoage.zong.symbols.Symbol;
  *
  * @author Andreas Wenger
  */
-public class StaffSymbolStampingRenderer
+public class StaffSymbolRenderer
 	extends StampingRenderer {
 
 	/**

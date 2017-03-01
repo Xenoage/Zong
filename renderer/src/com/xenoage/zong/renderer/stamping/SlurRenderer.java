@@ -15,7 +15,7 @@ import com.xenoage.zong.renderer.slur.SimpleSlurShape;
  *
  * @author Andreas Wenger
  */
-public class SlurStampingRenderer
+public class SlurRenderer
 	extends StampingRenderer {
 
 	/**

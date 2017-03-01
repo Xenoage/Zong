@@ -17,7 +17,7 @@ import com.xenoage.zong.renderer.canvas.CanvasFormat;
  *
  * @author Andreas Wenger
  */
-public class VoltaStampingRenderer
+public class VoltaRenderer
 	extends StampingRenderer {
 
 	/**

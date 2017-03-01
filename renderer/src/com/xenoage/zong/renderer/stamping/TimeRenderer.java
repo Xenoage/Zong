@@ -1,8 +1,6 @@
 package com.xenoage.zong.renderer.stamping;
 
-import static com.xenoage.zong.core.music.format.SP.sp;
-
-import com.xenoage.zong.musiclayout.stampings.NormalTimeStamping;
+import com.xenoage.zong.musiclayout.stampings.TimeStamping;
 import com.xenoage.zong.musiclayout.stampings.Stamping;
 import com.xenoage.zong.renderer.RendererArgs;
 import com.xenoage.zong.renderer.canvas.Canvas;
@@ -10,20 +8,22 @@ import com.xenoage.zong.symbols.Symbol;
 import com.xenoage.zong.symbols.SymbolPool;
 import com.xenoage.zong.symbols.common.CommonSymbol;
 
+import static com.xenoage.zong.core.music.format.SP.sp;
+
 /**
- * Renderer for a {@link NormalTimeStamping}.
+ * Renderer for a {@link TimeStamping}.
  *
  * @author Andreas Wenger
  */
-public class NormalTimeStampingRenderer
+public class TimeRenderer
 	extends StampingRenderer {
 
 	/**
-	 * Draws the given {@link NormalTimeStamping} on the given {@link Canvas},
+	 * Draws the given {@link TimeStamping} on the given {@link Canvas},
 	 * using the given {@link RendererArgs}.
 	 */
 	@Override public void draw(Stamping stamping, Canvas canvas, RendererArgs args) {
-		NormalTimeStamping s = (NormalTimeStamping) stamping;
+		TimeStamping s = (TimeStamping) stamping;
 
 		SymbolPool symbolPool = args.symbolPool;
 		float interlineSpace = s.parentStaff.is;
@@ -37,7 +37,7 @@ public class NormalTimeStampingRenderer
 			Symbol symbol = symbolPool.getSymbol(CommonSymbol.getDigit(d));
 			if (symbol != null) {
 				float symbolWidth = symbol.boundingRect.size.width;
-				StaffSymbolStampingRenderer.drawWith(symbol, null,
+				StaffSymbolRenderer.drawWith(symbol, null,
 					sp(s.xMm + offsetX, linesCount + 1), 1, s.parentStaff, false, canvas, args);
 				offsetX += (symbolWidth + s.digitGapIs) * interlineSpace;
 			}
@@ -51,7 +51,7 @@ public class NormalTimeStampingRenderer
 			Symbol symbol = symbolPool.getSymbol(CommonSymbol.getDigit(d));
 			if (symbol != null) {
 				float symbolWidth = symbol.boundingRect.size.width;
-				StaffSymbolStampingRenderer.drawWith(symbol, null,
+				StaffSymbolRenderer.drawWith(symbol, null,
 					sp(s.xMm + offsetX, linesCount - 3), 1, s.parentStaff, false, canvas, args);
 				offsetX += (symbolWidth + s.digitGapIs) * interlineSpace;
 			}

@@ -1,7 +1,5 @@
 package com.xenoage.zong.renderer.stamping;
 
-import static com.xenoage.zong.core.music.format.SP.sp;
-
 import com.xenoage.zong.core.music.key.TraditionalKey;
 import com.xenoage.zong.musiclayout.stampings.KeySignatureStamping;
 import com.xenoage.zong.musiclayout.stampings.Stamping;
@@ -10,12 +8,14 @@ import com.xenoage.zong.renderer.canvas.Canvas;
 import com.xenoage.zong.symbols.Symbol;
 import com.xenoage.zong.symbols.common.CommonSymbol;
 
+import static com.xenoage.zong.core.music.format.SP.sp;
+
 /**
  * Renderer for a {@link KeySignatureStamping}.
  *
  * @author Andreas Wenger
  */
-public class KeySignatureStampingRenderer
+public class KeySignatureRenderer
 	extends StampingRenderer {
 
 	/**
@@ -38,7 +38,7 @@ public class KeySignatureStampingRenderer
 		for (int i = 0; i < fifths; i++) {
 			int linePosition = TraditionalKey.getLinePosition(i, useSharps, s.key.c4Lp,
 				s.key.minLp);
-			StaffSymbolStampingRenderer.drawWith(symbol, null,
+			StaffSymbolRenderer.drawWith(symbol, null,
 				sp(s.xMm + i * distance * interlineSpace, linePosition), 1, s.parentStaff, false,
 				canvas, args);
 		}

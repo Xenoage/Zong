@@ -1,7 +1,5 @@
 package com.xenoage.zong.renderer.stamping;
 
-import static com.xenoage.utils.math.geom.Point2f.p;
-
 import com.xenoage.utils.color.Color;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.zong.core.music.group.BracketGroup;
@@ -16,6 +14,8 @@ import com.xenoage.zong.renderer.symbol.SymbolsRenderer;
 import com.xenoage.zong.symbols.Symbol;
 import com.xenoage.zong.symbols.common.CommonSymbol;
 
+import static com.xenoage.utils.math.geom.Point2f.p;
+
 /**
  * Renderer for a bracket stamping.
  * 
@@ -24,7 +24,7 @@ import com.xenoage.zong.symbols.common.CommonSymbol;
  *
  * @author Andreas Wenger
  */
-public class BracketStampingRenderer
+public class BracketRenderer
 	extends StampingRenderer {
 
 	/**

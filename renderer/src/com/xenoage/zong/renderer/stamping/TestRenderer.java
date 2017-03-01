@@ -19,7 +19,7 @@ import com.xenoage.zong.renderer.canvas.Canvas;
  * @author Andreas Wenger
  */
 @Demo
-public class TestStampingRenderer
+public class TestRenderer
 	extends StampingRenderer {
 
 	/**
