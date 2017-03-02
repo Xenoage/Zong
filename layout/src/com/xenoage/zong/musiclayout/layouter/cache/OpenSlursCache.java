@@ -1,10 +1,10 @@
 package com.xenoage.zong.musiclayout.layouter.cache;
 
-import java.util.HashMap;
-import java.util.Iterator;
-
 import com.xenoage.zong.core.music.slur.Slur;
 import com.xenoage.zong.musiclayout.layouter.cache.util.SlurCache;
+
+import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * Cache for {@link Slur}s which are still not stamped completely.
@@ -27,10 +27,15 @@ public class OpenSlursCache
 
 	/**
 	 * Gets the {@link SlurCache} instance for the given {@link Slur} instance.
-	 * If not existing, null is returned.
+	 * If not existing, it is created.
 	 */
-	public SlurCache get(Slur slur) {
-		return openCurvedLines.get(slur);
+	public SlurCache getOrCreate(Slur slur) {
+		SlurCache ret = openCurvedLines.get(slur);
+		if (ret == null) {
+			ret = SlurCache.createNew(slur);
+			openCurvedLines.put(slur, ret);
+		}
+		return ret;
 	}
 
 	/**

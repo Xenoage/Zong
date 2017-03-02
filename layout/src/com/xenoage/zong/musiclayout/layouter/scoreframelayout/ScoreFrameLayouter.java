@@ -229,7 +229,7 @@ public class ScoreFrameLayouter {
 		StaffStampings staffStampings, int systemsCount) {
 		LinkedList<SlurStamping> ret = new LinkedList<SlurStamping>();
 		for (Iterator<SlurCache> itSlurCache = openCurvedLinesCache.iterator(); itSlurCache.hasNext();) {
-			boolean simpleLine = false; //current curved line simple (within one staff)?
+			boolean simpleLine = false; //current curved line simple (within one system)?
 			SlurCache slurCache = itSlurCache.next();
 			int middleSlurStartIndex = 0;
 			//if the start is known, begin (and if possible end) the slur in its staff

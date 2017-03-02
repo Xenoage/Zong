@@ -1,12 +1,10 @@
 package com.xenoage.zong.musiclayout.continued;
 
+import com.xenoage.utils.annotations.Const;
+import com.xenoage.zong.core.music.slur.Slur;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import com.xenoage.utils.annotations.Const;
-import com.xenoage.utils.math.VSide;
-import com.xenoage.zong.core.music.slur.Slur;
 
 /**
  * Continued slur or tie.
@@ -24,7 +22,6 @@ public final class ContinuedSlur
 
 	@Getter public final Slur element;
 	public final StaffStamping staff;
-	public final VSide side;
-	public final int level;
+	public final int level; //GOON: currently unused
 
 }

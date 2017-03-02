@@ -18,7 +18,6 @@ import com.xenoage.zong.core.text.FormattedTextStyle;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenLyricsCache;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenSlursCache;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenTupletsCache;
-import com.xenoage.zong.musiclayout.layouter.cache.util.SlurCache;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.ChordStampings;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.LastLyrics;
 import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.StaffStampings;
@@ -97,7 +96,7 @@ public class ChordStamper {
 			int noteIndex = notNull(wp.getNoteIndex(), 0); //TODO: choose top/bottom
 			NoteheadStamping notehead = chordSt.noteheads[noteIndex];
 			//define the placement: above or below (TODO: better strategy)
-			VSide side = VSide.Top;
+			VSide side = VSide.Top; //GOON
 			if (pos == WaypointPosition.Start) {
 				if (slur.getSide() != null) {
 					//use custom side
@@ -111,29 +110,13 @@ public class ChordStamper {
 			}
 			//compute position
 			val staff = staffStampings.get(systemIndex, notehead.parentStaff.staffIndex);
-			if (pos == WaypointPosition.Start) {
-				//create start information
-				float distanceIs = slurStamper.getAdditionalDistanceIs(chord, side);
-				SP defaultStartSp = sp(notehead.position.xMm, notehead.position.lp +
-						side.getDir() * distanceIs * 2);
-				SlurCache tiedChords = SlurCache.createNew(slur, side, defaultStartSp,
-						staff, systemIndex);
-				openSlursCache.add(tiedChords);
-			}
-			else {
-				//create stop information
-				val slurCache = openSlursCache.get(slur);
-				if (slurCache == null) {
-					//start notehead of this tie is unknown (must be from some preceding frame), which was forgotten
-					//ignore it. TODO: warning
-				}
-				else {
-					float distanceIs = slurStamper.getAdditionalDistanceIs(chord, slurCache.getSide());
-					SP defaultStopSp = sp(notehead.position.xMm, notehead.position.lp +
-							side.getDir() * distanceIs * 2);
-					slurCache.setStop(defaultStopSp, staff, systemIndex);
-				}
-			}
+			val slurCache = openSlursCache.getOrCreate(slur);
+			float distanceIs = slurStamper.getAdditionalDistanceIs(chord, slur.getSide());
+			SP defaultSp = sp(notehead.position.xMm, notehead.position.lp + side.getDir() * distanceIs * 2);
+			if (pos == WaypointPosition.Start)
+				slurCache.setStart(defaultSp, staff, systemIndex);
+			else
+				slurCache.setStop(defaultSp, staff, systemIndex);
 		}
 
 		//lyric

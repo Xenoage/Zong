@@ -25,6 +25,7 @@ import com.xenoage.zong.musiclayout.stampings.Stamping;
 import lombok.Getter;
 
 import java.io.File;
+import java.util.Arrays;
 
 /**
  * The loaded document, its layout and playback capabilities.
@@ -53,6 +54,7 @@ public class Content
 	 */
 	public void loadNextScore() {
 		File[] files = new File("scores").listFiles((d, n) -> n.endsWith(".xml"));
+		Arrays.sort(files, (f1, f2) -> (f1.compareTo(f2)));
 		loadScore("scores/" + files[scoreIndex].getName());
 		scoreIndex = (scoreIndex + 1) % files.length;
 	}

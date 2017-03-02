@@ -7,6 +7,7 @@ import com.xenoage.zong.core.music.slur.Slur;
 import com.xenoage.zong.musiclayout.continued.ContinuedSlur;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 /**
  * This class is used by the layouter to save layouting information about
@@ -17,13 +18,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SlurCache {
 
-	//known from the beginning
-	private final ContinuedSlur continuedSlur; //use this class to save information
-	private final SP defaultStartSp;
-	private final StaffStamping startStaff;
-	private final int startSystem;
+	private ContinuedSlur continuedSlur;
 
-	//set when known
+	private Slur slur;
+
+	private SP defaultStartSp;
+	private StaffStamping startStaff;
+	private int startSystem;
+
 	//TODO: ZONG-115: merge SP+StaffStamping+systemIndex into class and cleanup SlurStamper parameters
 	private SP defaultStopSp = null;
 	private StaffStamping stopStaff = null;
@@ -33,24 +35,29 @@ public class SlurCache {
 	/**
 	 * Creates a {@link SlurCache} instance for a new slur.
 	 */
-	public static SlurCache createNew(Slur slur, VSide side, SP defaultStartSp,
-			StaffStamping startStaff, int startSystem) {
-		return new SlurCache(new ContinuedSlur(slur, startStaff, side, 1), //1: TODO
-				defaultStartSp, startStaff, startSystem);
+	public static SlurCache createNew(Slur slur) {
+		val cache = new SlurCache();
+		cache.slur = slur;
+		return cache;
 	}
 
 	/**
 	 * Creates a {@link SlurCache} instance for a continued slur.
 	 */
 	public static SlurCache createContinued(ContinuedSlur continuedSlur) {
-		return new SlurCache(continuedSlur, null, continuedSlur.staff, -1);
+		val cache = new SlurCache();
+		cache.slur = continuedSlur.getElement();
+		cache.continuedSlur = continuedSlur;
+		cache.startStaff = continuedSlur.staff;
+		cache.stopStaff = continuedSlur.staff;
+		return cache;
 	}
 
 	/**
 	 * Gets the {@link Slur} instance this data belongs to.
 	 */
 	public Slur getSlur() {
-		return continuedSlur.element;
+		return slur;
 	}
 
 	/**
@@ -86,6 +93,15 @@ public class SlurCache {
 	}
 
 	/**
+	 * Sets the start position of the slur.
+	 */
+	public void setStart(SP defaultStartSp, StaffStamping startStaff, int startSystem) {
+		this.defaultStartSp = defaultStartSp;
+		this.startStaff = startStaff;
+		this.startSystem = startSystem;
+	}
+
+	/**
 	 * Sets the end position of the slur.
 	 */
 	public void setStop(SP defaultStopSp, StaffStamping stopStaff, int stopSystem) {
@@ -99,7 +115,7 @@ public class SlurCache {
 	 * TODO: add more possibilities like S-curved slurs.
 	 */
 	public VSide getSide() {
-		return continuedSlur.side;
+		return slur.getSide();
 	}
 
 	/**

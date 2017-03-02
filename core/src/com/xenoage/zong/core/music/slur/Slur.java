@@ -1,18 +1,17 @@
 package com.xenoage.zong.core.music.slur;
 
-import static com.xenoage.utils.CheckUtils.checkArgsNotNull;
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.utils.kernel.Range.range;
-
-import java.util.ArrayList;
-
-import lombok.Data;
-
 import com.xenoage.utils.math.VSide;
 import com.xenoage.zong.core.music.MusicElement;
 import com.xenoage.zong.core.music.MusicElementType;
 import com.xenoage.zong.core.music.WaypointPosition;
 import com.xenoage.zong.core.music.chord.Chord;
+import lombok.Data;
+
+import java.util.ArrayList;
+
+import static com.xenoage.utils.CheckUtils.checkArgsNotNull;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static com.xenoage.utils.kernel.Range.range;
 
 
 /**
@@ -115,5 +114,11 @@ import com.xenoage.zong.core.music.chord.Chord;
 
 	@Override public MusicElementType getMusicElementType() {
 		return MusicElementType.Slur;
+	}
+
+	public VSide getSideOrDefault() {
+		if (side != null)
+			return side;
+		return VSide.Top; //GOON
 	}
 }
