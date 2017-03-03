@@ -1,4 +1,4 @@
-package com.xenoage.zong.musiclayout.layouter.scoreframelayout;
+package com.xenoage.zong.musiclayout.stamper;
 
 import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.utils.math.MathUtils;
@@ -14,7 +14,6 @@ import com.xenoage.zong.musiclayout.notation.ChordNotation;
 import com.xenoage.zong.musiclayout.stampings.SlurStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 
-import static com.xenoage.utils.NullUtils.notNull;
 import static com.xenoage.zong.core.music.format.SP.sp;
 
 /**
@@ -33,6 +32,18 @@ public class SlurStamper {
 	 */
 	public float getAdditionalDistanceIs(ChordNotation chord, VSide slurSide) {
 		return chord.articulations.heightIs;
+	}
+
+	/**
+	 * Gets the explicit or default {@link VSide} of the given slur.
+	 * TODO : move into other class use and better algorithm
+	 */
+	public VSide getSide(Slur slur /*, Notations notations */) {
+		if (slur.getSide() != null)
+			return slur.getSide();
+		//val chord = notations.getChord(slur.getStart().getChord());
+		//return chord.stemDirection == StemDirection.Up ? VSide.Bottom : VSide.Top;
+		return VSide.Top;
 	}
 
 	/**
@@ -180,7 +191,7 @@ public class SlurStamper {
 	 * and the bezier information (may be null for default formatting).
 	 */
 	SP computeEndPoint(Slur slur, SP defaultSp, BezierPoint bezierPoint) {
-		int dir = notNull(slur.getSide(), VSide.Top).getDir(); //GOON: use opposite of stem side
+		int dir = getSide(slur).getDir();
 		if (bezierPoint == null || bezierPoint.getPoint() == null) {
 			//default formatting
 			float distanceLP = (slur.getType() == SlurType.Slur ? 2 : 1.5f); //slur is 2 LP away from note center, tie 1.5
@@ -202,8 +213,8 @@ public class SlurStamper {
 	 * @param staff  the staff stamping
 	 */
 	SP computeLeftControlPoint(Slur slur, SP p1, SP p2, StaffStamping staff) {
-		return (slur.getType() == SlurType.Slur ? computeLeftSlurControlPoint(p1, p2, slur.getSideOrDefault(), staff)
-			: computeLeftTieControlPoint(p1, p2, slur.getSideOrDefault(), staff));
+		return (slur.getType() == SlurType.Slur ? computeLeftSlurControlPoint(p1, p2, getSide(slur), staff)
+			: computeLeftTieControlPoint(p1, p2, getSide(slur), staff));
 	}
 
 	/**
@@ -215,8 +226,8 @@ public class SlurStamper {
 	 * @param staff  the staff stamping
 	 */
 	SP computeRightControlPoint(Slur slur, SP p1, SP p2, StaffStamping staff) {
-		return (slur.getType() == SlurType.Slur ? computeRightSlurControlPoint(p1, p2, slur.getSideOrDefault(), staff)
-			: computeRightTieControlPoint(p1, p2, slur.getSideOrDefault(), staff));
+		return (slur.getType() == SlurType.Slur ? computeRightSlurControlPoint(p1, p2, getSide(slur), staff)
+			: computeRightTieControlPoint(p1, p2, getSide(slur), staff));
 	}
 
 	/**

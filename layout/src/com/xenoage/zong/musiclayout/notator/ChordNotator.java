@@ -65,7 +65,7 @@ public class ChordNotator
 
 		//use or compute stem direction
 		StemDirection stemDirection = chord.getStem().getDirection();
-		if (true || stemDirection == StemDirection.Default) { //GOON
+		if (stemDirection == StemDirection.Default) {
 			//if stem direction was not computed yet, compute it now
 			if (notations != null)
 				stemDirection = notations.getChord(chord).stemDirection;

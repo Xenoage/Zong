@@ -34,7 +34,7 @@ import java.util.*;
 import static com.xenoage.utils.collections.CollectionUtils.*;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.LyricStamper.lyricStamper;
-import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.SlurStamper.slurStamper;
+import static com.xenoage.zong.musiclayout.stamper.SlurStamper.slurStamper;
 import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.TupletStamper.tupletStamper;
 import static com.xenoage.zong.musiclayout.stamper.BarlinesStamper.barlinesStamper;
 import static com.xenoage.zong.musiclayout.stamper.DirectionStamper.directionStamper;

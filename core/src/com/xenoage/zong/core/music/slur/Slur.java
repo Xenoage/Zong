@@ -116,9 +116,4 @@ import static com.xenoage.utils.kernel.Range.range;
 		return MusicElementType.Slur;
 	}
 
-	public VSide getSideOrDefault() {
-		if (side != null)
-			return side;
-		return VSide.Top; //GOON
-	}
 }

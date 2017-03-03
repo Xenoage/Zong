@@ -22,6 +22,6 @@ public final class ContinuedSlur
 
 	@Getter public final Slur element;
 	public final StaffStamping staff;
-	public final int level; //GOON: currently unused
+	public final int level; //TODO ZONG-117: currently unused
 
 }

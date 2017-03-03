@@ -24,7 +24,7 @@ public class SlurCache {
 
 	private SP defaultStartSp;
 	private StaffStamping startStaff;
-	private int startSystem;
+	private int startSystem = -1;
 
 	//TODO: ZONG-115: merge SP+StaffStamping+systemIndex into class and cleanup SlurStamper parameters
 	private SP defaultStopSp = null;

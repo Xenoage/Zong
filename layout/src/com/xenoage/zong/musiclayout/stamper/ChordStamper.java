@@ -38,7 +38,7 @@ import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.zong.core.music.format.SP.sp;
 import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.LyricStamper.lyricStamper;
-import static com.xenoage.zong.musiclayout.layouter.scoreframelayout.SlurStamper.slurStamper;
+import static com.xenoage.zong.musiclayout.stamper.SlurStamper.slurStamper;
 import static com.xenoage.zong.musiclayout.stamper.BeamStamper.beamStamper;
 import static com.xenoage.zong.musiclayout.stamper.DirectionStamper.directionStamper;
 import static com.xenoage.zong.musiclayout.stamper.LegerLinesStamper.legerLinesStamper;
@@ -96,18 +96,7 @@ public class ChordStamper {
 			int noteIndex = notNull(wp.getNoteIndex(), 0); //TODO: choose top/bottom
 			NoteheadStamping notehead = chordSt.noteheads[noteIndex];
 			//define the placement: above or below (TODO: better strategy)
-			VSide side = VSide.Top; //GOON
-			if (pos == WaypointPosition.Start) {
-				if (slur.getSide() != null) {
-					//use custom side
-					side = slur.getSide();
-				}
-				else {
-					//use default side:
-					//for all notes over line position 3, use above, else below
-					side = (notehead.position.lp > 3 ? VSide.Top : VSide.Bottom);
-				}
-			}
+			VSide side = slurStamper.getSide(slur);
 			//compute position
 			val staff = staffStampings.get(systemIndex, notehead.parentStaff.staffIndex);
 			val slurCache = openSlursCache.getOrCreate(slur);
