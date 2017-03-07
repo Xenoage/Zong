@@ -8,13 +8,13 @@ package com.xenoage.zong;
 public class Zong {
 
 	//the version of this program as an integer number
-	public static final int projectIteration = 72;
+	public static final int projectIteration = 73;
 
 	//general information on this program
 	public static final String projectFamilyName = "Zong!";
 	public static final String projectVersion = "0.1-a";
 	public static final String projectVersionLong = projectVersion + "." + projectIteration;
-	public static final String projectIterationName = "Bullroarer";
+	public static final String projectIterationName = "Stonehenge";
 
 	//package path
 	public static final String projectPackage = "com.xenoage.zong";
@@ -23,7 +23,7 @@ public class Zong {
 	public static final String filename = "zong";
 
 	//copyright information
-	public static final String copyright = "Copyright © 2006-2014 by Xenoage Software";
+	public static final String copyright = "Copyright © 2006-2017 by Xenoage Software";
 
 	//other information
 	public static final String website = "www.zong-music.com";
