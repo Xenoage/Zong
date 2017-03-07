@@ -2,7 +2,7 @@ package com.xenoage.zong.android;
 
 import static com.xenoage.utils.PlatformUtils.platformUtils;
 import static com.xenoage.utils.android.AndroidPlatformUtils.io;
-import static com.xenoage.utils.jse.async.Sync.sync;
+import static com.xenoage.utils.jse.promise.Sync.sync;
 import static com.xenoage.zong.util.ZongPlatformUtils.zongPlatformUtils;
 
 import java.io.IOException;
@@ -75,7 +75,7 @@ public class App {
 		String filepath = "files/" + filename;
 		InputStream in = io().openFile(filepath);
 		try {
-			return sync(new MusicXmlScoreDocFileReader(in, filepath));
+			return sync(new MusicXmlScoreDocFileReader(in, filepath).read());
 		} catch (Exception ex) {
 			throw new IOException(ex);
 		}

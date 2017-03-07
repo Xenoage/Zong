@@ -20,6 +20,7 @@ import com.xenoage.utils.io.ZipReader;
 import com.xenoage.utils.jse.JsePlatformUtils;
 import com.xenoage.utils.jse.io.JseInputStream;
 import com.xenoage.utils.jse.thread.ThreadUtils;
+import com.xenoage.utils.promise.Promise;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
 
@@ -91,13 +92,24 @@ public class AndroidPlatformUtils
 		return io();
 	}
 
-	@Override public void openFileAsync(String filePath, AsyncResult<InputStream> callback) {
+	@Override public void openFileAsync(String filePath, AsyncResult<InputStream> result) {
 		try {
 			InputStream stream = openFile(filePath);
-			callback.onSuccess(stream);
+			result.onSuccess(stream);
 		} catch (IOException ex) {
-			callback.onFailure(ex);
+			result.onFailure(ex);
 		}
+	}
+
+	@Override public Promise<InputStream> openFileAsync(String filePath) {
+		return new Promise<InputStream>((ret) -> {
+			try {
+				InputStream stream = openFile(filePath);
+				ret.resolve(stream);
+			} catch (IOException ex) {
+				ret.reject(ex);
+			}
+		});
 	}
 
 	/**

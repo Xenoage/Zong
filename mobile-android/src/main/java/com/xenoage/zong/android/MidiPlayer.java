@@ -13,6 +13,8 @@ import com.xenoage.zong.io.midi.out.MidiSequence;
 import java.io.File;
 import java.io.IOException;
 
+import static com.xenoage.zong.io.midi.out.MidiConverter.Options.optionsForPlayback;
+
 /**
  * Midi playback of scores.
  * 
@@ -31,8 +33,8 @@ public class MidiPlayer {
 	public void open(Score score, Context context) {
 		try {
 			File outputFile = File.createTempFile("zong", ".mid", context.getCacheDir());
-			MidiSequence<MidiFile> sequence = MidiConverter.convertToSequence(score, false, false,
-				new AndroidMidiSequenceWriter());
+			MidiSequence<MidiFile> sequence = MidiConverter.convertToSequence(score,
+				optionsForPlayback, new AndroidMidiSequenceWriter());
 			sequence.getSequence().writeToFile(outputFile);
 
 			stop();
