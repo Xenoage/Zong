@@ -50,18 +50,43 @@ android {
 }
 
 dependencies {
-    compile project(':musicxml-in')
-		compile project(':musicxml-layout')
-    compile project(':renderer')
-    compile project(':utils-jse')
-    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.+'
     compile 'com.android.support:appcompat-v7:23.+'
     compile 'com.android.support:support-v4:23.+'
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    provided 'org.projectlombok:lombok:1.16.14'
+		annotationProcessor 'org.projectlombok:lombok:1.16.14'
+    /*
+    //ZONG-120:
+    //Zong! dependencies - currently (2017-03) the src folders of the modules
+    //are linked directly into this project, otherwise the Jack compiler does
+    //not recognize the lambda functions. If this changes later, add the projects
+    //back, since this looks cleaner in the IDE.
+    compile project(':musicxml-in')
+    compile project(':musicxml-layout')
+    compile project(':renderer')
+    compile project(':utils-jse')
     compile project(':midi-out')
     compile project(':core')
     compile project(':layout')
     compile project(':musicxml')
     compile project(':utils-base')
     compile project(':utils-kernel')
+    */
+}
+
+//ZONG-120: see dependencies above
+android {
+    sourceSets.main.java {
+        srcDirs += '../core/src'
+        srcDirs += '../layout/src'
+        srcDirs += '../midi-out/src'
+        srcDirs += '../musicxml/src'
+        srcDirs += '../musicxml-in/src'
+        srcDirs += '../musicxml-layout/src'
+        srcDirs += '../renderer/src'
+        srcDirs += '../utils/utils-base/src'
+        srcDirs += '../utils/utils-jse/src'
+        srcDirs += '../utils/utils-kernel/src'
+    }
 }
