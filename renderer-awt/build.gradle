@@ -4,6 +4,7 @@ sourceCompatibility = 8
 dependencies {
 	compile project(':renderer')
 	compile project(':utils-jse')
+	compile project(':utils-jsebase')
 }
 
 sourceSets {

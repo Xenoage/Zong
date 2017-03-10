@@ -5,7 +5,6 @@ import android.content.res.Resources;
 import com.xenoage.utils.PlatformUtils;
 import com.xenoage.utils.android.AndroidPlatformUtils;
 import com.xenoage.utils.error.Err;
-import com.xenoage.utils.jse.JsePlatformUtils;
 import com.xenoage.utils.log.Report;
 import com.xenoage.zong.Voc;
 import com.xenoage.zong.io.symbols.SvgPathReader;
@@ -32,7 +31,7 @@ public class AndroidZongPlatformUtils
 	
 	/**
 	 * Initializes the {@link AndroidZongPlatformUtils} as the {@link ZongPlatformUtils} instance
-	 * and {@link JsePlatformUtils} as the {@link PlatformUtils} instance with the given {@link Resources}.
+	 * with the given {@link Resources}.
 	 */
 	public static void init(Resources resources) {
 		AndroidPlatformUtils.init(resources);

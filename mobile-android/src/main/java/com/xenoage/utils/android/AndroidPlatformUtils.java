@@ -17,7 +17,6 @@ import com.xenoage.utils.io.FilesystemInput;
 import com.xenoage.utils.io.InputStream;
 import com.xenoage.utils.io.OutputStream;
 import com.xenoage.utils.io.ZipReader;
-import com.xenoage.utils.jse.JsePlatformUtils;
 import com.xenoage.utils.jse.io.JseInputStream;
 import com.xenoage.utils.jse.thread.ThreadUtils;
 import com.xenoage.utils.promise.Promise;
