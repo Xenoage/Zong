@@ -3,9 +3,11 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.Zong;
-import com.xenoage.zong.android.R;
-import com.xenoage.zong.android.util.Supplier;
+import com.xenoage.utils.kernel.functional.Supplier;
+
+import static com.xenoage.utils.math.Fraction.fr;
 
 
 public class InfoActivity
@@ -28,7 +30,7 @@ public class InfoActivity
 	}
 
 	private String run(Supplier<String> p) {
-		return p.run();
+		return p.get() + Fraction.comparator.compare(fr(2, 4), fr(1, 4));
 	}
 	
 }

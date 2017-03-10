@@ -113,48 +113,36 @@ public class ScoreActivity
 	private void registerListeners() {
 		//page switcher
 		final HorizontalPager pager = (HorizontalPager) findViewById(R.id.score_pager);
-		pager.setOnScreenSwitchListener(new HorizontalPager.OnScreenSwitchListener() {
-
-			@Override public void onScreenSwitched(int screen) {
-				int activePageIndex = screen;
-				bitmaps.setActivePageIndex(activePageIndex);
-				updatePager();
-			}
+		pager.setOnScreenSwitchListener(screen -> {
+			int activePageIndex = screen;
+			bitmaps.setActivePageIndex(activePageIndex);
+			updatePager();
 		});
 		//zoom buttons
 		final ZoomControls zoomControls = (ZoomControls) findViewById(R.id.score_zoom);
-		zoomControls.setOnZoomInClickListener(new OnClickListener() {
-
-			@Override public void onClick(View v) {
-				if (currentScalingIndex + 1 < scalings.length) {
-					currentScalingIndex++;
-					updateBitmaps();
-					//enable/disable buttons
-					zoomControls.setIsZoomInEnabled(currentScalingIndex + 1 < scalings.length);
-					zoomControls.setIsZoomOutEnabled(true);
-				}
+		zoomControls.setOnZoomInClickListener(view -> {
+			if (currentScalingIndex + 1 < scalings.length) {
+				currentScalingIndex++;
+				updateBitmaps();
+				//enable/disable buttons
+				zoomControls.setIsZoomInEnabled(currentScalingIndex + 1 < scalings.length);
+				zoomControls.setIsZoomOutEnabled(true);
 			}
 		});
-		zoomControls.setOnZoomOutClickListener(new OnClickListener() {
-
-			@Override public void onClick(View v) {
-				if (currentScalingIndex > 0) {
-					currentScalingIndex--;
-					updateBitmaps();
-					//enable/disable buttons
-					zoomControls.setIsZoomInEnabled(true);
-					zoomControls.setIsZoomOutEnabled(currentScalingIndex > 0);
-				}
+		zoomControls.setOnZoomOutClickListener(view -> {
+			if (currentScalingIndex > 0) {
+				currentScalingIndex--;
+				updateBitmaps();
+				//enable/disable buttons
+				zoomControls.setIsZoomInEnabled(true);
+				zoomControls.setIsZoomOutEnabled(currentScalingIndex > 0);
 			}
 		});
 		//play button
 		final Button playbackButton = (Button) findViewById(R.id.score_playback);
-		playbackButton.setOnClickListener(new OnClickListener() {
-
-			@Override public void onClick(View v) {
-				playback();
-				playbackButton.setText(playing ? "Stop" : "Play");
-			}
+		playbackButton.setOnClickListener(view -> {
+			playback();
+			playbackButton.setText(playing ? "Stop" : "Play");
 		});
 	}
 
@@ -203,12 +191,7 @@ public class ScoreActivity
 		//show error in text view
 		final TextView tv = new TextView(ScoreActivity.this);
 		tv.setText(text);
-		runOnUiThread(new Runnable() {
-
-			@Override public void run() {
-				setContentView(tv);
-			}
-		});
+		runOnUiThread(() -> setContentView(tv));
 	}
 
 	@Override protected void onStop() {

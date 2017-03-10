@@ -113,6 +113,7 @@ public class OpenBeams {
 		}
 
 		//sort by beat
+		//ZONG-120: replace by lambda later
 		Collections.sort(beamedChords, new Comparator<Chord>() {
 			@Override public int compare(Chord c1, Chord c2) {
 				return c1.getMP().beat.compareTo(c2.getMP().beat);

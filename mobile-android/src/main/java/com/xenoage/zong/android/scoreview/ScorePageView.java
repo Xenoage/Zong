@@ -81,26 +81,23 @@ public class ScorePageView
 		} catch (IOException ex) {
 		}
 		//register touch listener for scrolling
-		setOnTouchListener(new View.OnTouchListener() {
-
-			@Override public boolean onTouch(View view, MotionEvent event) {
-				Point2f currentPx = new Point2f(event.getX(), event.getY());
-				switch (event.getAction()) {
-					case MotionEvent.ACTION_DOWN:
-						scrollLastPx = new Point2f(event.getX(), event.getY());
-						break;
-					case MotionEvent.ACTION_MOVE:
-					case MotionEvent.ACTION_UP:
-						Point2f distancePx = scrollLastPx.sub(currentPx);
-						Point2f distanceMm = new Point2f(Units.pxToMm(distancePx.x, scaling), Units.pxToMm(
-							distancePx.y, scaling));
-						scrollMm = scrollMm.add(distanceMm);
-						scrollLastPx = currentPx;
-						view.postInvalidate();
-						break;
-				}
-				return true;
+		setOnTouchListener((view, event) -> {
+			Point2f currentPx = new Point2f(event.getX(), event.getY());
+			switch (event.getAction()) {
+				case MotionEvent.ACTION_DOWN:
+					scrollLastPx = new Point2f(event.getX(), event.getY());
+					break;
+				case MotionEvent.ACTION_MOVE:
+				case MotionEvent.ACTION_UP:
+					Point2f distancePx = scrollLastPx.sub(currentPx);
+					Point2f distanceMm = new Point2f(Units.pxToMm(distancePx.x, scaling), Units.pxToMm(
+						distancePx.y, scaling));
+					scrollMm = scrollMm.add(distanceMm);
+					scrollLastPx = currentPx;
+					view.postInvalidate();
+					break;
 			}
+			return true;
 		});
 	}
 

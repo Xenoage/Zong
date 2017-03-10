@@ -66,13 +66,7 @@ public class MidiProcessor
             return;
 
         mRunning = true;
-        new Thread(new Runnable()
-        {
-            public void run()
-            {
-                process();
-            }
-        }).start();
+        new Thread(this::process).start();
     }
 
     public void stop()

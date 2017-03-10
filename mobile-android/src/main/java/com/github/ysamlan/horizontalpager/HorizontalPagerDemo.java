@@ -54,15 +54,12 @@ public class HorizontalPagerDemo extends Activity {
     }
 
     private final HorizontalPager.OnScreenSwitchListener onScreenSwitchListener =
-            new HorizontalPager.OnScreenSwitchListener() {
-                @Override
-                public void onScreenSwitched(final int screen) {
-                    /*
-                     * this method is executed if a screen has been activated, i.e. the screen is
-                     * completely visible and the animation has stopped (might be useful for
-                     * removing / adding new views)
-                     */
-                    Log.d("HorizontalPager", "switched to screen: " + screen);
-                }
-            };
+        screen -> {
+            /*
+             * this method is executed if a screen has been activated, i.e. the screen is
+             * completely visible and the animation has stopped (might be useful for
+             * removing / adding new views)
+             */
+            Log.d("HorizontalPager", "switched to screen: " + screen);
+        };
 }

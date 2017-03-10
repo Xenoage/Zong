@@ -33,28 +33,22 @@ public class DecoratedScorePageView
 		//zooming
 		final ZoomControls zoomControls = new ZoomControls(context);
 		//zoomControls.setVisibility(View.GONE); //Hide
-		zoomControls.setOnZoomInClickListener(new OnClickListener() {
-
-			@Override public void onClick(View v) {
-				if (currentScalingIndex + 1 < scalings.length) {
-					currentScalingIndex++;
-					scoreView.setScaling(scalings[currentScalingIndex]);
-					//enable/disable buttons
-					zoomControls.setIsZoomInEnabled(currentScalingIndex + 1 < scalings.length);
-					zoomControls.setIsZoomOutEnabled(true);
-				}
+		zoomControls.setOnZoomInClickListener(view -> {
+			if (currentScalingIndex + 1 < scalings.length) {
+				currentScalingIndex++;
+				scoreView.setScaling(scalings[currentScalingIndex]);
+				//enable/disable buttons
+				zoomControls.setIsZoomInEnabled(currentScalingIndex + 1 < scalings.length);
+				zoomControls.setIsZoomOutEnabled(true);
 			}
 		});
-		zoomControls.setOnZoomOutClickListener(new OnClickListener() {
-
-			@Override public void onClick(View v) {
-				if (currentScalingIndex > 0) {
-					currentScalingIndex--;
-					scoreView.setScaling(scalings[currentScalingIndex]);
-					//enable/disable buttons
-					zoomControls.setIsZoomInEnabled(true);
-					zoomControls.setIsZoomOutEnabled(currentScalingIndex > 0);
-				}
+		zoomControls.setOnZoomOutClickListener(view -> {
+			if (currentScalingIndex > 0) {
+				currentScalingIndex--;
+				scoreView.setScaling(scalings[currentScalingIndex]);
+				//enable/disable buttons
+				zoomControls.setIsZoomInEnabled(true);
+				zoomControls.setIsZoomOutEnabled(currentScalingIndex > 0);
 			}
 		});
 		RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(

@@ -33,6 +33,7 @@ public class MusicXmlScoreDocFileReader {
 	
 	public Promise<ScoreDoc> read() {
 
+		//ZONG-120: replace by lambda later
 		return new Promise<ScoreDoc>(new Executor<ScoreDoc>() {
 			@Override public void run(final Return<ScoreDoc> ret) {
 

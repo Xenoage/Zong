@@ -35,12 +35,9 @@ public class HomeActivity
 		list.setOnItemClickListener(this);
 
 		//listener
-		findViewById(R.id.home_info).setOnClickListener(new View.OnClickListener() {
-
-			@Override public void onClick(View v) {
-				Intent intent = new Intent(HomeActivity.this, InfoActivity.class);
-				startActivity(intent);
-			}
+		findViewById(R.id.home_info).setOnClickListener(view -> {
+			Intent intent = new Intent(HomeActivity.this, InfoActivity.class);
+			startActivity(intent);
 		});
 
 		//init app
