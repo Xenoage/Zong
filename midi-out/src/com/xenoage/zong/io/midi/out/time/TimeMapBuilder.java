@@ -29,7 +29,7 @@ public class TimeMapBuilder {
 	 */
 	public void addTime(long tick, RepTime repTime, long ms) {
 		while (repTimes.size() <= repTime.repetition)
-			repTimes.add(new TriMap<Long, Time, Long>());
+			repTimes.add(new TriMap<>());
 		repTimes.get(repTime.repetition).put(tick, repTime.time, ms);
 	}
 

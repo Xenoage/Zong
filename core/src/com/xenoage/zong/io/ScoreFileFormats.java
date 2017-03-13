@@ -11,13 +11,13 @@ import com.xenoage.zong.core.Score;
  */
 public enum ScoreFileFormats {
 
-	Midi(new FileFormat<Score>("Midi", "Midi", ".mid")),
-	MP3(new FileFormat<Score>("MP3", "MPEG Audio Layer III", ".mp3")),
-	MusicXML(new FileFormat<Score>("MusicXML", "MusicXML", ".mxl", ".xml")),
-	OGG(new FileFormat<Score>("OGG", "Ogg Vorbis", ".ogg")),
-	PDF(new FileFormat<Score>("PDF", "PDF", ".pdf")),
-	PNG(new FileFormat<Score>("PNG", "PNG", ".png")),
-	WAV(new FileFormat<Score>("WAV", "Waveform Audio", ".wav"));
+	Midi(new FileFormat<>("Midi", "Midi", ".mid")),
+	MP3(new FileFormat<>("MP3", "MPEG Audio Layer III", ".mp3")),
+	MusicXML(new FileFormat<>("MusicXML", "MusicXML", ".mxl", ".xml")),
+	OGG(new FileFormat<>("OGG", "Ogg Vorbis", ".ogg")),
+	PDF(new FileFormat<>("PDF", "PDF", ".pdf")),
+	PNG(new FileFormat<>("PNG", "PNG", ".png")),
+	WAV(new FileFormat<>("WAV", "Waveform Audio", ".wav"));
 
 
 	public final FileFormat<Score> format;

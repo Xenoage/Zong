@@ -21,7 +21,7 @@ import com.xenoage.zong.core.position.MP;
 
 	
 	public static <T> MPE<T> mpE(T element, MP mp) {
-		return new MPE<T>(element, mp);
+		return new MPE<>(element, mp);
 	}
 
 	@Override public String toString() {

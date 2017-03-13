@@ -1,20 +1,16 @@
 package com.xenoage.zong.musiclayout;
 
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
-
-import org.junit.Test;
-
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Rectangle2f;
-import com.xenoage.zong.musiclayout.continued.ContinuedElement;
-import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import com.xenoage.zong.musiclayout.stampings.Stamping;
 import com.xenoage.zong.musiclayout.stampings.Stamping.Level;
 import com.xenoage.zong.musiclayout.stampings.StampingMock;
+import org.junit.Test;
+
+import java.util.ArrayList;
+
+import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static org.junit.Assert.*;
 
 /**
  * Test cases for a ScoreFrameLayout.
@@ -46,8 +42,8 @@ public class ScoreFrameLayoutTest {
 		StampingMock s3 = new StampingMock(Level.EmptySpace, new Rectangle2f(4, 4, 19, 4));
 		stampings[2] = s3;
 
-		ScoreFrameLayout layout = new ScoreFrameLayout(null, new ArrayList<StaffStamping>(),
-			alist(stampings), new ArrayList<ContinuedElement>());
+		ScoreFrameLayout layout = new ScoreFrameLayout(null, new ArrayList<>(),
+			alist(stampings), new ArrayList<>());
 
 		//no hit (but empty space)
 		assertTrue(isNot(layout.getStampingAt(new Point2f(0, 0)), s1, s2, s3));

@@ -24,7 +24,7 @@ public final class BeatE<T> {
 	
 	
 	public static <T> BeatE<T> beatE(T element, Fraction beat) {
-		return new BeatE<T>(element, beat);
+		return new BeatE<>(element, beat);
 	}
 
 

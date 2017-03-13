@@ -68,7 +68,7 @@ public class Utils {
 		return ret;
 	}
 	
-	public static void checkDurations(Staff staff, Fraction[] expectedDurations) {
+	public static void checkDurations(Staff staff, Fraction... expectedDurations) {
 		int iDuration = 0;
 		for (int iM = 0; iM < staff.getMeasures().size(); iM++) {
 			Voice voice = staff.getMeasure(iM).getVoice(0);
@@ -80,7 +80,7 @@ public class Utils {
 		assertEquals("not all element found", expectedDurations.length, iDuration);
 	}
 	
-	public static void checkGraceChords(Staff staff, Chord[] expectedChords) {
+	public static void checkGraceChords(Staff staff, Chord... expectedChords) {
 		checkGraceChords(staff, expectedChords, false);
 	}
 	

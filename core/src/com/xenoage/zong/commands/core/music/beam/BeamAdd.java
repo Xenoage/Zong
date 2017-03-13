@@ -1,14 +1,14 @@
 package com.xenoage.zong.commands.core.music.beam;
 
-import static com.xenoage.utils.iterators.ReverseIterator.reverseIt;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import com.xenoage.utils.document.command.Command;
 import com.xenoage.utils.document.command.Undoability;
 import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.music.beam.BeamWaypoint;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.xenoage.utils.iterators.ReverseIterator.reverseIt;
 
 
 /**
@@ -64,7 +64,7 @@ public class BeamAdd
 	
 	private void executeAndRemember(Command cmd) {
 		if (backupCmds == null)
-			backupCmds = new ArrayList<Command>();
+			backupCmds = new ArrayList<>();
 		cmd.execute();
 		backupCmds.add(cmd);
 	}

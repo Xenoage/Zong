@@ -1,15 +1,15 @@
 package com.xenoage.zong.musiclayout.layouter;
 
-import static com.xenoage.zong.core.position.MP.mp0;
-
-import java.util.Stack;
-
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.MusicContext;
 import com.xenoage.zong.core.music.util.Interval;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.musiclayout.settings.LayoutSettings;
 import com.xenoage.zong.symbols.SymbolPool;
+
+import java.util.Stack;
+
+import static com.xenoage.zong.core.position.MP.mp0;
 
 /**
  * Context within the layouting process.
@@ -31,7 +31,7 @@ public class Context {
 	 * changes this value, it must restore it when the method is finished. */
 	public MP mp = mp0;
 	
-	private Stack<MP> mpStack = new Stack<MP>();
+	private Stack<MP> mpStack = new Stack<>();
 	
 	
 	public Context(Score score, SymbolPool symbols, LayoutSettings settings) {

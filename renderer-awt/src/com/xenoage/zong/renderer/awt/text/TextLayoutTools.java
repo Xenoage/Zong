@@ -1,12 +1,13 @@
 package com.xenoage.zong.renderer.awt.text;
 
-import static com.xenoage.utils.NullUtils.notNull;
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.utils.jse.color.AwtColorUtils.toAwtColor;
-import static com.xenoage.utils.jse.font.AwtFontUtils.toAwtFont;
-import static com.xenoage.utils.math.geom.Point2f.p;
+import com.xenoage.utils.font.FontInfo;
+import com.xenoage.utils.font.FontStyle;
+import com.xenoage.zong.core.text.*;
+import com.xenoage.zong.renderer.awt.symbol.PathSymbolGraphicAttribute;
+import com.xenoage.zong.symbols.PathSymbol;
+import com.xenoage.zong.symbols.Symbol;
 
-import java.awt.Font;
+import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.font.TextAttribute;
 import java.awt.font.TextLayout;
@@ -15,18 +16,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.xenoage.utils.font.FontInfo;
-import com.xenoage.utils.font.FontStyle;
-import com.xenoage.zong.core.text.Alignment;
-import com.xenoage.zong.core.text.FormattedText;
-import com.xenoage.zong.core.text.FormattedTextElement;
-import com.xenoage.zong.core.text.FormattedTextParagraph;
-import com.xenoage.zong.core.text.FormattedTextString;
-import com.xenoage.zong.core.text.FormattedTextStyle;
-import com.xenoage.zong.core.text.FormattedTextSymbol;
-import com.xenoage.zong.renderer.awt.symbol.PathSymbolGraphicAttribute;
-import com.xenoage.zong.symbols.PathSymbol;
-import com.xenoage.zong.symbols.Symbol;
+import static com.xenoage.utils.NullUtils.notNull;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static com.xenoage.utils.jse.color.AwtColorUtils.toAwtColor;
+import static com.xenoage.utils.jse.font.AwtFontUtils.toAwtFont;
+import static com.xenoage.utils.math.geom.Point2f.p;
 
 /**
  * Creates {@link TextLayout}s from {@link FormattedText} elements.
@@ -118,7 +112,7 @@ public class TextLayoutTools {
 	 * the given style for an AttibutedString.
 	 */
 	private static Map<TextAttribute, Object> createAttributesMap(FormattedTextStyle style) {
-		Map<TextAttribute, Object> ret = new HashMap<TextAttribute, Object>();
+		Map<TextAttribute, Object> ret = new HashMap<>();
 		FontInfo fontInfo = notNull(style.getFont(), FontInfo.defaultValue);
 		//font name
 		Font font = toAwtFont(fontInfo);

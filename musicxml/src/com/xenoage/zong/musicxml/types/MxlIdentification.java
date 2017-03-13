@@ -1,16 +1,15 @@
 package com.xenoage.zong.musicxml.types;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * MusicXML identification.
@@ -34,12 +33,12 @@ public final class MxlIdentification {
 			String n = reader.getElementName();
 			if (n.equals("creator")) {
 				if (creators == null)
-					creators = new ArrayList<MxlTypedText>();
+					creators = new ArrayList<>();
 				creators.add(MxlTypedText.read(reader));
 			}
 			else if (n.equals("rights")) {
 				if (rights == null)
-					rights = new ArrayList<MxlTypedText>();
+					rights = new ArrayList<>();
 				rights.add(MxlTypedText.read(reader));
 			}
 			reader.closeElement();

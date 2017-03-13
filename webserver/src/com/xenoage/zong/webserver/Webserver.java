@@ -1,28 +1,5 @@
 package com.xenoage.zong.webserver;
 
-import static com.xenoage.utils.error.Err.handle;
-import static com.xenoage.utils.log.Log.log;
-import static com.xenoage.utils.log.Report.fatal;
-import static com.xenoage.utils.log.Report.remark;
-
-import java.io.File;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.ServletException;
-import javax.sound.midi.MidiUnavailableException;
-
-import org.eclipse.jetty.server.Handler;
-import org.eclipse.jetty.server.handler.ContextHandler;
-import org.eclipse.jetty.server.handler.DefaultHandler;
-import org.eclipse.jetty.server.handler.HandlerList;
-import org.eclipse.jetty.server.handler.ResourceHandler;
-import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHolder;
-
 import com.google.gson.Gson;
 import com.xenoage.utils.Parser;
 import com.xenoage.utils.error.BasicErrorProcessing;
@@ -35,6 +12,27 @@ import com.xenoage.zong.desktop.io.midi.out.SynthManager;
 import com.xenoage.zong.desktop.utils.JseZongPlatformUtils;
 import com.xenoage.zong.webserver.init.DBInit;
 import com.xenoage.zong.webserver.servlet.ActionServlet;
+import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.handler.ContextHandler;
+import org.eclipse.jetty.server.handler.DefaultHandler;
+import org.eclipse.jetty.server.handler.HandlerList;
+import org.eclipse.jetty.server.handler.ResourceHandler;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
+
+import javax.servlet.ServletException;
+import javax.sound.midi.MidiUnavailableException;
+import java.io.File;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.xenoage.utils.error.Err.handle;
+import static com.xenoage.utils.log.Log.log;
+import static com.xenoage.utils.log.Report.fatal;
+import static com.xenoage.utils.log.Report.remark;
 
 /**
  * Main class of the Webviewer server.
@@ -51,7 +49,7 @@ public class Webserver {
 	public static int port = 8080;
 
 	private org.eclipse.jetty.server.Server server;
-	private List<Handler> handlers = new ArrayList<Handler>();
+	private List<Handler> handlers = new ArrayList<>();
 	private Connection dbConnection = null;
 	private Gson gson = null;
 

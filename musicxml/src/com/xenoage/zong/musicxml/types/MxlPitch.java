@@ -1,16 +1,16 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.zong.core.music.Pitch.pi;
-import static com.xenoage.zong.musicxml.util.error.InvalidCore.invalidCore;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.musicxml.types.choice.MxlFullNoteContent;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+import static com.xenoage.zong.core.music.Pitch.pi;
+import static com.xenoage.zong.musicxml.util.error.InvalidCore.invalidCore;
 
 /**
  * MusicXML pitch.
@@ -34,12 +34,17 @@ public final class MxlPitch
 		int step = 0, alter = 0, octave = 0;
 		while (reader.openNextChildElement()) {
 			String n = reader.getElementName();
-			if (n.equals("alter"))
-				alter = Math.round(reader.getTextFloatNotNull()); //microtones are not supported
-			else if (n.equals("octave"))
-				octave = reader.getTextIntNotNull();
-			else if (n.equals("step"))
-				step = readStep(reader);
+			switch (n) {
+				case "alter":
+					alter = Math.round(reader.getTextFloatNotNull()); //microtones are not supported
+					break;
+				case "octave":
+					octave = reader.getTextIntNotNull();
+					break;
+				case "step":
+					step = readStep(reader);
+					break;
+			}
 			reader.closeElement();
 		}
 		return new MxlPitch(pi(step, alter, octave));

@@ -1,16 +1,15 @@
 package musicxmltestsuite.tests.utils;
 
-import static com.xenoage.utils.kernel.Range.range;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import java.util.List;
-import java.util.function.Function;
-
 import com.xenoage.zong.core.music.Part;
 import com.xenoage.zong.core.music.StavesList;
 import com.xenoage.zong.core.music.group.BarlineGroup;
 import com.xenoage.zong.core.music.group.BracketGroup;
+
+import java.util.List;
+import java.util.function.Function;
+
+import static com.xenoage.utils.kernel.Range.range;
+import static org.junit.Assert.*;
 
 
 /**
@@ -20,12 +19,12 @@ import com.xenoage.zong.core.music.group.BracketGroup;
  */
 public class StavesListTest {
 	
-	public static void checkPartNames(StavesList stavesList, String[] expectedPartNames) {
-		checkPartProperty(stavesList, expectedPartNames, (Part p) -> p.getName());
+	public static void checkPartNames(StavesList stavesList, String... expectedPartNames) {
+		checkPartProperty(stavesList, expectedPartNames, Part::getName);
 	}
 	
-	public static void checkPartAbbreviations(StavesList stavesList, String[] expectedPartAbbreviations) {
-		checkPartProperty(stavesList, expectedPartAbbreviations, (Part p) -> p.getAbbreviation());
+	public static void checkPartAbbreviations(StavesList stavesList, String... expectedPartAbbreviations) {
+		checkPartProperty(stavesList, expectedPartAbbreviations, Part::getAbbreviation);
 	}
 	
 	private static void checkPartProperty(StavesList stavesList, String[] expectedValues,
@@ -37,14 +36,14 @@ public class StavesListTest {
 		}
 	}
 	
-	public static void checkBracketGroups(StavesList stavesList, BracketGroup[] expectedBracketGroups) {
+	public static void checkBracketGroups(StavesList stavesList, BracketGroup... expectedBracketGroups) {
 		List<BracketGroup> groups = stavesList.getBracketGroups();
 		for (BracketGroup expectedGroup : expectedBracketGroups)
 			assertContains(groups, expectedGroup);
 		assertEquals(expectedBracketGroups.length, groups.size());
 	}
 	
-	public static void checkBarlineGroups(StavesList stavesList, BarlineGroup[] expectedBarlineGroups) {
+	public static void checkBarlineGroups(StavesList stavesList, BarlineGroup... expectedBarlineGroups) {
 		List<BarlineGroup> groups = stavesList.getBarlineGroups();
 		for (BarlineGroup expectedGroup : expectedBarlineGroups)
 			assertContains(groups, expectedGroup);

@@ -196,7 +196,7 @@ public abstract class MidiSequenceWriter<T> {
 	 * @param type   the type of the event
 	 * @param data   the data bytes
 	 */
-	public abstract void writeMetaMessage(int track, long tick, int type, byte[] data);
+	public abstract void writeMetaMessage(int track, long tick, int type, byte... data);
 	
 	/**
 	 * Gets the current length of the sequence in ticks.
@@ -239,7 +239,7 @@ public abstract class MidiSequenceWriter<T> {
 	 * @param timeMap         the mapping between MIDI and score time.
 	 */
 	public MidiSequence<T> finish(Integer metronomeTrack, TimeMap timeMap) {
-		return new MidiSequence<T>(getSequence(), metronomeTrack, timeMap);
+		return new MidiSequence<>(getSequence(), metronomeTrack, timeMap);
 	}
 
 	/**

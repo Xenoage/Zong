@@ -1,13 +1,5 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-
-import java.util.List;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
 import com.xenoage.utils.annotations.MaybeEmpty;
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.xml.XmlReader;
@@ -15,6 +7,13 @@ import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.choice.MxlArticulationsContent;
 import com.xenoage.zong.musicxml.types.choice.MxlNotationsContent;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
+
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 
 /**
  * MusicXML articulations.
@@ -40,16 +39,23 @@ public final class MxlArticulations
 		List<MxlArticulationsContent> content = alist();
 		while (reader.openNextChildElement()) {
 			String n = reader.getElementName();
-			if (n.equals(MxlAccent.elemName))
-				content.add(MxlAccent.read(reader));
-			else if (n.equals(MxlStrongAccent.elemName))
-				content.add(MxlStrongAccent.read(reader));
-			else if (n.equals(MxlStaccato.elemName))
-				content.add(MxlStaccato.read(reader));
-			else if (n.equals(MxlStaccatissimo.elemName))
-				content.add(MxlStaccatissimo.read(reader));
-			else if (n.equals(MxlTenuto.elemName))
-				content.add(MxlTenuto.read(reader));
+			switch (n) {
+				case MxlAccent.elemName:
+					content.add(MxlAccent.read(reader));
+					break;
+				case MxlStrongAccent.elemName:
+					content.add(MxlStrongAccent.read(reader));
+					break;
+				case MxlStaccato.elemName:
+					content.add(MxlStaccato.read(reader));
+					break;
+				case MxlStaccatissimo.elemName:
+					content.add(MxlStaccatissimo.read(reader));
+					break;
+				case MxlTenuto.elemName:
+					content.add(MxlTenuto.read(reader));
+					break;
+			}
 			reader.closeElement();
 		}
 		if (content.size() == 0)

@@ -47,7 +47,7 @@ import static com.xenoage.utils.kernel.Range.rangeReverse;
 	 * Creates an empty {@link ScoreHeader}.
 	 */
 	public static ScoreHeader scoreHeader(Score parent) {
-		return new ScoreHeader(parent, new ArrayList<SystemLayout>(), new ArrayList<ColumnHeader>());
+		return new ScoreHeader(parent, new ArrayList<>(), new ArrayList<>());
 	}
 
 

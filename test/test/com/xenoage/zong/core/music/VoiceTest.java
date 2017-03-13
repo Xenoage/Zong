@@ -88,7 +88,7 @@ public class VoiceTest {
 
 
 	private void assertGetElement(Voice voice, VoiceElement[] elementsPool, FirstOrLast side, StartOrStop border, Interval in,
-		VoiceElement[] expected) {
+																VoiceElement... expected) {
 		for (int i : range(voice.getElements().size() + 1)) {
 			//DEBUG
 			/*

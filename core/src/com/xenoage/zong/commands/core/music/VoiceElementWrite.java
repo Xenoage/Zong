@@ -1,13 +1,5 @@
 package com.xenoage.zong.commands.core.music;
 
-import static com.xenoage.utils.NullUtils.notNull;
-import static com.xenoage.utils.iterators.ReverseIterator.reverseIt;
-import static com.xenoage.utils.kernel.Range.rangeReverse;
-import static com.xenoage.zong.core.position.MP.atElement;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import com.xenoage.utils.document.command.Command;
 import com.xenoage.utils.document.command.Undoability;
 import com.xenoage.utils.math.Fraction;
@@ -18,6 +10,14 @@ import com.xenoage.zong.core.music.rest.Rest;
 import com.xenoage.zong.core.music.time.TimeSignature;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.utils.exceptions.MeasureFullException;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.xenoage.utils.NullUtils.notNull;
+import static com.xenoage.utils.iterators.ReverseIterator.reverseIt;
+import static com.xenoage.utils.kernel.Range.rangeReverse;
+import static com.xenoage.zong.core.position.MP.atElement;
 
 /**
  * Replaces the {@link VoiceElement}s between the given {@link MP}
@@ -161,7 +161,7 @@ public class VoiceElementWrite
 
 	private void executeAndRemember(Command cmd) {
 		if (backupCmds == null)
-			backupCmds = new ArrayList<Command>();
+			backupCmds = new ArrayList<>();
 		cmd.execute();
 		backupCmds.add(cmd);
 	}

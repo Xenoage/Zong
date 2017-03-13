@@ -1,13 +1,15 @@
 package com.xenoage.zong.musiclayout.layouter.cache;
 
-import static com.xenoage.utils.collections.CollectionUtils.map;
+import com.xenoage.zong.core.music.chord.Chord;
+import com.xenoage.zong.core.music.tuplet.Tuplet;
+import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.ChordStampings;
+import lombok.val;
 
 import java.util.HashMap;
 import java.util.Iterator;
 
-import com.xenoage.zong.core.music.chord.Chord;
-import com.xenoage.zong.core.music.tuplet.Tuplet;
-import com.xenoage.zong.musiclayout.layouter.scoreframelayout.util.ChordStampings;
+import static com.xenoage.utils.backports.HashMapBackports.computeIfAbsent;
+import static com.xenoage.utils.collections.CollectionUtils.map;
 
 /**
  * Cache for tuplets which still have to be created.
@@ -26,11 +28,7 @@ public class OpenTupletsCache
 	 * with the given {@link Tuplet} to the cache.
 	 */
 	public void addChord(Chord chord, Tuplet tuplet, ChordStampings chordStampings) {
-		HashMap<Chord, ChordStampings> tupletData = openChords.get(tuplet);
-		if (tupletData == null) {
-			tupletData = new HashMap<Chord, ChordStampings>();
-			openChords.put(tuplet, tupletData);
-		}
+		val tupletData = computeIfAbsent(openChords, tuplet, k -> new HashMap<>());
 		tupletData.put(chord, chordStampings);
 	}
 

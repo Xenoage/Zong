@@ -1,17 +1,17 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.NullUtils.notNull;
-import static com.xenoage.utils.Parser.parseIntegerNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.enums.MxlClefSign;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+import static com.xenoage.utils.NullUtils.notNull;
+import static com.xenoage.utils.Parser.parseIntegerNull;
 
 /**
  * MusicXML clef.
@@ -40,12 +40,17 @@ public final class MxlClef {
 		int clefOctaveChange = defaultClefOctaveChange;
 		while (reader.openNextChildElement()) {
 			String n = reader.getElementName();
-			if (n.equals(MxlClefSign.elemName))
-				sign = MxlClefSign.read(reader);
-			else if (n.equals("line"))
-				line = parseIntegerNull(reader.getText());
-			else if (n.equals("clef-octave-change"))
-				clefOctaveChange = parseIntegerNull(reader.getText());
+			switch (n) {
+				case MxlClefSign.elemName:
+					sign = MxlClefSign.read(reader);
+					break;
+				case "line":
+					line = parseIntegerNull(reader.getText());
+					break;
+				case "clef-octave-change":
+					clefOctaveChange = parseIntegerNull(reader.getText());
+					break;
+			}
 			reader.closeElement();
 		}
 		if (sign == null)

@@ -38,14 +38,20 @@ public final class MxlMidiInstrument {
 		Float pan = null;
 		while (reader.openNextChildElement()) {
 			String n = reader.getElementName();
-			if (n.equals("midi-channel"))
-				midiChannel = reader.getTextIntNotNull();
-			else if (n.equals("midi-program"))
-				midiProgram = reader.getTextIntNotNull();
-			else if (n.equals("volume"))
-				volume = reader.getTextFloatNotNull();
-			else if (n.equals("pan"))
-				pan = reader.getTextFloatNotNull();
+			switch (n) {
+				case "midi-channel":
+					midiChannel = reader.getTextIntNotNull();
+					break;
+				case "midi-program":
+					midiProgram = reader.getTextIntNotNull();
+					break;
+				case "volume":
+					volume = reader.getTextFloatNotNull();
+					break;
+				case "pan":
+					pan = reader.getTextFloatNotNull();
+					break;
+			}
 			reader.closeElement();
 		}
 		return new MxlMidiInstrument(midiChannel, midiProgram, volume, pan, id);

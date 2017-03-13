@@ -57,7 +57,7 @@ public class BarlineReader {
 			}
 			else if (repeat.getDirection() == MxlBackwardForward.Backward) {
 				style = notNull(style, BarlineStyle.LightHeavy);
-				int times = notNull(repeat.getTimes(), 1).intValue();
+				int times = notNull(repeat.getTimes(), 1);
 				barline = barlineBackwardRepeat(style, times);
 			}
 		}

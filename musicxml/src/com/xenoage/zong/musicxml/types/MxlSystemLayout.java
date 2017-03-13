@@ -1,14 +1,14 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.Parser.parseFloatNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+import static com.xenoage.utils.Parser.parseFloatNull;
 
 
 /**
@@ -32,12 +32,17 @@ public final class MxlSystemLayout {
 		Float topSystemDistance = null;
 		while (reader.openNextChildElement()) {
 			String n = reader.getElementName();
-			if (n.equals(MxlSystemMargins.elemName))
-				systemMargins = MxlSystemMargins.read(reader);
-			else if (n.equals("system-distance"))
-				systemDistance = parseFloatNull(reader.getText());
-			else if (n.equals("top-system-distance"))
-				topSystemDistance = parseFloatNull(reader.getText());
+			switch (n) {
+				case MxlSystemMargins.elemName:
+					systemMargins = MxlSystemMargins.read(reader);
+					break;
+				case "system-distance":
+					systemDistance = parseFloatNull(reader.getText());
+					break;
+				case "top-system-distance":
+					topSystemDistance = parseFloatNull(reader.getText());
+					break;
+			}
 			reader.closeElement();
 		}
 		return new MxlSystemLayout(systemMargins, systemDistance, topSystemDistance);

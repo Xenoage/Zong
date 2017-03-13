@@ -1,15 +1,14 @@
 package com.xenoage.zong.webserver.model.requests;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.HashMap;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletResponse;
-
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.xenoage.zong.webserver.Webserver;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.HashMap;
 
 /**
  * A request to the server.
@@ -18,7 +17,7 @@ import com.xenoage.zong.webserver.Webserver;
  */
 public abstract class Request {
 
-	private static HashMap<String, Class<? extends Request>> classes = new HashMap<String, Class<? extends Request>>();
+	private static HashMap<String, Class<? extends Request>> classes = new HashMap<>();
 
 	static {
 		classes.put("audio", AudioRequest.class);

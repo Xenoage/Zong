@@ -49,7 +49,7 @@ public class JseMidiSequenceWriter
 		}
 	}
 	
-	@Override public void writeMetaMessage(int track, long tick, int type, byte[] data) {
+	@Override public void writeMetaMessage(int track, long tick, int type, byte... data) {
 		try {
 			MetaMessage message = new MetaMessage();
 			message.setMessage(type, data, data.length);

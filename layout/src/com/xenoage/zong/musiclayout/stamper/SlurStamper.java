@@ -14,6 +14,7 @@ import com.xenoage.zong.musiclayout.notation.ChordNotation;
 import com.xenoage.zong.musiclayout.stampings.SlurStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 
+import static com.xenoage.utils.kernel.Tuple2.t;
 import static com.xenoage.zong.core.music.format.SP.sp;
 
 /**
@@ -58,7 +59,7 @@ public class SlurStamper {
 		if (slurCache.getStartSystem() == slurCache.getStopSystem()) {
 			//simple case. just create it.
 			SlurStamping cls = createForSingleSystem(slurCache);
-			return new Tuple2<SlurStamping, Boolean>(cls, false);
+			return t(cls, false);
 		}
 		else {
 			//we need at least two staves.
@@ -66,7 +67,7 @@ public class SlurStamper {
 			SlurStamping cls = createStartForFirstSystem(slurCache.getStartStaff(), slurCache.getDefaultStartSp(),
 					slurCache.getSlur());
 			//remember this curved line to be continued
-			return new Tuple2<SlurStamping, Boolean>(cls, true);
+			return t(cls, true);
 		}
 	}
 

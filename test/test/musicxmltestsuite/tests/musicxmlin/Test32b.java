@@ -1,14 +1,5 @@
 package musicxmltestsuite.tests.musicxmlin;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.util.List;
-
-import musicxmltestsuite.tests.base.Base32b;
-
-import org.junit.Test;
-
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.music.direction.Direction;
 import com.xenoage.zong.core.music.direction.Words;
@@ -16,6 +7,13 @@ import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.text.FormattedText;
 import com.xenoage.zong.core.text.FormattedTextElement;
 import com.xenoage.zong.core.text.FormattedTextParagraph;
+import lombok.val;
+import musicxmltestsuite.tests.base.Base32b;
+import org.junit.Test;
+
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 
 public class Test32b
@@ -57,9 +55,9 @@ public class Test32b
 			MP mp = expectedTexts.get(i).get1();
 			List<Direction> directions = score.getMeasure(mp).getDirections().getAll(mp.beat);
 			assertTrue(""+mp, directions.size() > 0);
-			for (int d = 0; d < directions.size(); d++) {
-				assertTrue(""+mp, directions.get(d) instanceof Words);
-				check((Words) directions.get(d), expectedTexts.get(i).get2(), mp);
+			for (val direction : directions) {
+				assertTrue("" + mp, direction instanceof Words);
+				check((Words) direction, expectedTexts.get(i).get2(), mp);
 				i++;
 			}
 		}

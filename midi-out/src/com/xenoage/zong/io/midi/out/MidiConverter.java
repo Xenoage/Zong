@@ -95,7 +95,7 @@ public class MidiConverter<T> {
 	 * @param writer   the writer for the midi data
 	 */
 	public static <T> MidiSequence<T> convertToSequence(Score score, Options options, MidiSequenceWriter<T> writer) {
-		return new MidiConverter<T>(score, writer, options).convertToSequence();
+		return new MidiConverter<>(score, writer, options).convertToSequence();
 	}
 	
 	private MidiConverter(Score score, MidiSequenceWriter<T> writer, Options options) {

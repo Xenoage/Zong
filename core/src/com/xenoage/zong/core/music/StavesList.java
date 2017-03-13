@@ -31,13 +31,13 @@ public final class StavesList {
 	/** The parent score. */
 	private Score score = null;
 	/** The list of all staves. */
-	private List<Staff> staves = new ArrayList<Staff>();
+	private List<Staff> staves = new ArrayList<>();
 	/** The list of all parts. */
-	private List<Part> parts = new ArrayList<Part>();
+	private List<Part> parts = new ArrayList<>();
 	/** The groups of the staves with barlines. */
-	private List<BarlineGroup> barlineGroups = new ArrayList<BarlineGroup>();
+	private List<BarlineGroup> barlineGroups = new ArrayList<>();
 	/** The groups of the staves with brackets. */
-	private List<BracketGroup> bracketGroups = new ArrayList<BracketGroup>();
+	private List<BracketGroup> bracketGroups = new ArrayList<>();
 
 
 	/**

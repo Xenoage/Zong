@@ -60,7 +60,7 @@ public final class Score
 	/** Additional meta information. This other application-dependend meta-information
 	 * can be used for example to store page layout information, which is not part
 	 * of the musical score in this project. */
-	@Getter private Map<String, Object> metaData = new HashMap<String, Object>();
+	@Getter private Map<String, Object> metaData = new HashMap<>();
 	
 	/** Performs commands on this score and supports undo. */
 	@Getter private CommandPerformer commandPerformer = new CommandPerformer(this);
@@ -228,9 +228,9 @@ public final class Score
 	public SortedList<Fraction> getMeasureUsedBeats(int measureIndex, boolean withMeasureAndColumnElements) {
 		//last measure?
 		if (measureIndex == getMeasuresCount())
-			return new SortedList<Fraction>(new Fraction[]{_0}, false);
+			return new SortedList<>(new Fraction[]{_0}, false);
 		//add measure beats
-		SortedList<Fraction> columnBeats = new SortedList<Fraction>(false);
+		SortedList<Fraction> columnBeats = new SortedList<>(false);
 		for (int iStaff : range(getStavesCount())) {
 			val measure = getMeasure(atMeasure(iStaff, measureIndex));
 			val beats = measure.getUsedBeats(withMeasureAndColumnElements);

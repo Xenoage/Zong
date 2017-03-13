@@ -14,7 +14,7 @@ public class Utils {
 	 * If the value is null or can not be parsed, an {@link XmlDataException} is thrown,
 	 * which contains the given name and value.
 	 */
-	public static <T> T read(String name, String value, T[] values) {
+	public static <T> T read(String name, String value, T... values) {
 		T ret = getEnumValue(value, values);
 		if (ret == null)
 			throw new XmlDataException(name + " = " + value);
@@ -42,7 +42,7 @@ public class Utils {
 	 * which contains the given name and value.
 	 */
 	public static <T extends EnumWithXmlNames> T read(
-		String name, String value, T[] values) {
+			String name, String value, T... values) {
 		T ret = getEnumValueNamed(value, values);
 		if (ret == null)
 			throw new XmlDataException(name + " = " + value);

@@ -1,19 +1,19 @@
 package com.xenoage.zong.io.musiclayout;
 
+import com.xenoage.utils.io.InputStream;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.zong.musiclayout.settings.ChordWidths;
+import com.xenoage.zong.musiclayout.settings.LayoutSettings;
+import com.xenoage.zong.musiclayout.settings.Spacings;
+
+import java.io.IOException;
+
 import static com.xenoage.utils.PlatformUtils.platformUtils;
 import static com.xenoage.utils.log.Log.log;
 import static com.xenoage.utils.log.Report.error;
 import static com.xenoage.zong.io.musiclayout.ChordWidthsReader.readChordWidths;
 import static com.xenoage.zong.io.musiclayout.SpacingsReader.readSpacings;
 import static java.lang.Float.parseFloat;
-
-import java.io.IOException;
-
-import com.xenoage.utils.io.InputStream;
-import com.xenoage.utils.xml.XmlReader;
-import com.xenoage.zong.musiclayout.settings.ChordWidths;
-import com.xenoage.zong.musiclayout.settings.LayoutSettings;
-import com.xenoage.zong.musiclayout.settings.Spacings;
 
 /**
  * Reader for {@link LayoutSettings}. 
@@ -39,35 +39,37 @@ public final class LayoutSettingsReader {
 			r.openNextChildElement();
 			while (r.openNextChildElement()) {
 				String n = r.getElementName();
-				if (n.equals("chordwidths")) {
-					//load the chord layout settings
-					chordWidths = readChordWidths(r);
-				}
-				else if (n.equals("spacings")) {
-					//load the space settings
-					spacings = readSpacings(r);
-				}
-				else if (n.equals("scaling")) {
-					//load scalings
-					while (r.openNextChildElement()) {
-						String n2 = r.getElementName();
-						if (n2.equals("clef"))
-							scalingClefInner = parseFloat(r.getAttributeNotNull("inner"));
-						else if (n2.equals("grace"))
-							scalingGrace = parseFloat(r.getAttributeNotNull("scaling"));
-						r.closeElement();
-					}
-				}
-				else if (n.equals("offset")) {
-					//load offsets
-					while (r.openNextChildElement()) {
-						String n2 = r.getElementName();
-						if (n2.equals("measure"))
-							offsetMeasureStart = parseFloat(r.getAttributeNotNull("start"));
-						else if (n2.equals("beats"))
-							offsetBeatsMinimal = parseFloat(r.getAttributeNotNull("minimal"));
-						r.closeElement();
-					}
+				switch (n) {
+					case "chordwidths":
+						//load the chord layout settings
+						chordWidths = readChordWidths(r);
+						break;
+					case "spacings":
+						//load the space settings
+						spacings = readSpacings(r);
+						break;
+					case "scaling":
+						//load scalings
+						while (r.openNextChildElement()) {
+							String n2 = r.getElementName();
+							if (n2.equals("clef"))
+								scalingClefInner = parseFloat(r.getAttributeNotNull("inner"));
+							else if (n2.equals("grace"))
+								scalingGrace = parseFloat(r.getAttributeNotNull("scaling"));
+							r.closeElement();
+						}
+						break;
+					case "offset":
+						//load offsets
+						while (r.openNextChildElement()) {
+							String n2 = r.getElementName();
+							if (n2.equals("measure"))
+								offsetMeasureStart = parseFloat(r.getAttributeNotNull("start"));
+							else if (n2.equals("beats"))
+								offsetBeatsMinimal = parseFloat(r.getAttributeNotNull("minimal"));
+							r.closeElement();
+						}
+						break;
 				}
 				r.closeElement();
 			}

@@ -1,11 +1,5 @@
 package com.xenoage.zong.commands.core.music;
 
-import static com.xenoage.utils.iterators.ReverseIterator.reverseIt;
-import static com.xenoage.utils.kernel.Range.rangeReverse;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import com.xenoage.utils.annotations.Untested;
 import com.xenoage.utils.document.command.Command;
 import com.xenoage.utils.document.command.Undoability;
@@ -18,6 +12,12 @@ import com.xenoage.zong.core.music.beam.Beam;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.slur.Slur;
 import com.xenoage.zong.core.music.tuplet.Tuplet;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.xenoage.utils.iterators.ReverseIterator.reverseIt;
+import static com.xenoage.utils.kernel.Range.rangeReverse;
 
 
 /**
@@ -86,7 +86,7 @@ import com.xenoage.zong.core.music.tuplet.Tuplet;
 	
 	private void executeAndRemember(Command cmd) {
 		if (backupCmds == null)
-			backupCmds = new ArrayList<Command>();
+			backupCmds = new ArrayList<>();
 		cmd.execute();
 		backupCmds.add(cmd);
 	}

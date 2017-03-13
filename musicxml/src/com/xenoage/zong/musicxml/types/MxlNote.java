@@ -1,24 +1,19 @@
 package com.xenoage.zong.musicxml.types;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
-import com.xenoage.zong.musicxml.types.choice.MxlCueNote;
-import com.xenoage.zong.musicxml.types.choice.MxlGraceNote;
-import com.xenoage.zong.musicxml.types.choice.MxlMusicDataContent;
-import com.xenoage.zong.musicxml.types.choice.MxlNormalNote;
-import com.xenoage.zong.musicxml.types.choice.MxlNoteContent;
+import com.xenoage.zong.musicxml.types.choice.*;
 import com.xenoage.zong.musicxml.types.enums.MxlNoteTypeValue;
 import com.xenoage.zong.musicxml.types.groups.MxlEditorialVoice;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * MusicXML note.
@@ -81,35 +76,42 @@ public final class MxlNote
 				content = MxlNormalNote.read();
 			}
 			//read content of child elements
-			if (n.equals(MxlStem.elemName))
-				stem = MxlStem.read(reader);
-			else if (n.equals("staff"))
-				staff = reader.getTextIntNotNull();
-			else if (n.equals(MxlBeam.elemName)) {
-				if (beams == null)
-					beams = new ArrayList<MxlBeam>();
-				beams.add(MxlBeam.read(reader));
-			}
-			else if (n.equals(MxlInstrument.elemName))
-				instrument = MxlInstrument.read(reader);
-			else if (n.equals(MxlNotations.elemName)) {
-				if (notations == null)
-					notations = new ArrayList<MxlNotations>();
-				notations.add(MxlNotations.read(reader));
-			}
-			else if (n.equals(MxlLyric.elemName)) {
-				if (lyrics == null)
-					lyrics = new ArrayList<MxlLyric>();
-				lyrics.add(MxlLyric.read(reader));
-			}
-			else if (n.equals("type"))
-				noteType = MxlNoteTypeValue.read(reader.getText());
-			else if (n.equals("dot"))
-				dots++;
-			else {
-				boolean read = content.readElement(reader);
-				if (!read)
-					editorialVoice.readElement(reader);
+			switch (n) {
+				case MxlStem.elemName:
+					stem = MxlStem.read(reader);
+					break;
+				case "staff":
+					staff = reader.getTextIntNotNull();
+					break;
+				case MxlBeam.elemName:
+					if (beams == null)
+						beams = new ArrayList<>();
+					beams.add(MxlBeam.read(reader));
+					break;
+				case MxlInstrument.elemName:
+					instrument = MxlInstrument.read(reader);
+					break;
+				case MxlNotations.elemName:
+					if (notations == null)
+						notations = new ArrayList<>();
+					notations.add(MxlNotations.read(reader));
+					break;
+				case MxlLyric.elemName:
+					if (lyrics == null)
+						lyrics = new ArrayList<>();
+					lyrics.add(MxlLyric.read(reader));
+					break;
+				case "type":
+					noteType = MxlNoteTypeValue.read(reader.getText());
+					break;
+				case "dot":
+					dots++;
+					break;
+				default:
+					boolean read = content.readElement(reader);
+					if (!read)
+						editorialVoice.readElement(reader);
+					break;
 			}
 			reader.closeElement();
 		}

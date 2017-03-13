@@ -91,7 +91,7 @@ import java.util.Map;
 	}
 	
 	private static Map<ClefSymbol, ClefType> createCommonClefs() {
-		HashMap<ClefSymbol, ClefType> ret = new HashMap<ClefSymbol, ClefType>();
+		HashMap<ClefSymbol, ClefType> ret = new HashMap<>();
 		for (ClefType clef : new ClefType[]{ clefTreble, clefTreble15vb, clefTreble8vb, clefTreble8va,
 			clefTreble15va, clefBass, clefBass15vb, clefBass8vb, clefBass8va, clefBass15va,
 			clefAlto, clefTenor, clefTab, clefTabSmall, clefPercTwoRects, clefPercEmptyRect, clefNone}) {

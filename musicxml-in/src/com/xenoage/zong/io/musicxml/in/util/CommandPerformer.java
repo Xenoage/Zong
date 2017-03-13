@@ -20,11 +20,7 @@ public class CommandPerformer {
 		try {
 			command.execute();
 		}
-		catch (CancelledException ex) {
-		}
-		catch (PropertyAlreadySetException ex) {
-		}
-		catch (UselessException ex) {
+		catch (CancelledException | PropertyAlreadySetException | UselessException ex) {
 		}
 	}
 

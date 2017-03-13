@@ -1,17 +1,17 @@
 package com.xenoage.zong.commands.core.music.group;
 
-import static com.xenoage.utils.iterators.ReverseIterator.reverseIt;
-import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.utils.kernel.Range.rangeReverse;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import com.xenoage.utils.document.command.Command;
 import com.xenoage.utils.document.command.Undoability;
 import com.xenoage.utils.document.exceptions.UselessException;
 import com.xenoage.zong.core.music.StavesList;
 import com.xenoage.zong.core.music.group.BarlineGroup;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.xenoage.utils.iterators.ReverseIterator.reverseIt;
+import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.utils.kernel.Range.rangeReverse;
 
 
 /**
@@ -89,7 +89,7 @@ public class BarlineGroupAdd
 
 	private void executeAndRemember(Command cmd) {
 		if (backupCmds == null)
-			backupCmds = new ArrayList<Command>();
+			backupCmds = new ArrayList<>();
 		cmd.execute();
 		backupCmds.add(cmd);
 	}

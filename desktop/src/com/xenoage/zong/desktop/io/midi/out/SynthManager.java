@@ -1,35 +1,17 @@
 package com.xenoage.zong.desktop.io.midi.out;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.sound.midi.ControllerEventListener;
-import javax.sound.midi.InvalidMidiDataException;
-import javax.sound.midi.MidiDevice;
-import javax.sound.midi.MidiDevice.Info;
-import javax.sound.midi.MidiSystem;
-import javax.sound.midi.MidiUnavailableException;
-import javax.sound.midi.Sequence;
-import javax.sound.midi.Sequencer;
-import javax.sound.midi.Soundbank;
-import javax.sound.midi.Synthesizer;
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.DataLine;
-import javax.sound.sampled.Line;
-import javax.sound.sampled.Mixer;
-import javax.sound.sampled.SourceDataLine;
-
 import com.sun.media.sound.AudioSynthesizer;
 import com.xenoage.utils.exceptions.InvalidFormatException;
 import com.xenoage.utils.jse.settings.Settings;
+import lombok.val;
+
+import javax.sound.midi.*;
+import javax.sound.midi.MidiDevice.Info;
+import javax.sound.sampled.*;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.*;
 
 /**
  * This class shares a {@link Synthesizer}, {@link Sequencer}
@@ -58,7 +40,7 @@ public class SynthManager {
 	private SourceDataLine line = null;
 	private AudioFormat format = null;
 
-	private Set<ControllerEventListener> controllerEventListeners = new HashSet<ControllerEventListener>();
+	private Set<ControllerEventListener> controllerEventListeners = new HashSet<>();
 
 
 	/**
@@ -118,7 +100,7 @@ public class SynthManager {
 	 * Call this method instead, because this class will remember the registered
 	 * listeners so you can call removeAllControllerEventListeners.
 	 */
-	public static void addControllerEventListener(ControllerEventListener listener, int[] controllers) {
+	public static void addControllerEventListener(ControllerEventListener listener, int... controllers) {
 		SynthManager instance = getInstance();
 		instance.controllerEventListeners.add(listener);
 		instance.sequencer.addControllerEventListener(listener, controllers);
@@ -177,12 +159,9 @@ public class SynthManager {
 	public void loadSoundbank(File file)
 		throws InvalidFormatException {
 		try {
-			FileInputStream fis = new FileInputStream(file);
 			Soundbank newSB;
-			try {
+			try (FileInputStream fis = new FileInputStream(file)) {
 				newSB = MidiSystem.getSoundbank(new BufferedInputStream(fis));
-			} finally {
-				fis.close();
 			}
 			if (soundbank != null)
 				synthesizer.unloadAllInstruments(soundbank);
@@ -259,7 +238,7 @@ public class SynthManager {
 			}
 		}
 
-		Map<String, Object> ainfo = new HashMap<String, Object>();
+		Map<String, Object> ainfo = new HashMap<>();
 		ainfo.put("format", format);
 		ainfo.put("max polyphony", polyphony);
 		ainfo.put("latency", latency * 1000L);
@@ -307,8 +286,8 @@ public class SynthManager {
 
 		//if default synthesizer is not AudioSynthesizer, check others.
 		Info[] infos = MidiSystem.getMidiDeviceInfo();
-		for (int i = 0; i < infos.length; i++) {
-			MidiDevice dev = MidiSystem.getMidiDevice(infos[i]);
+		for (val info : infos) {
+			MidiDevice dev = MidiSystem.getMidiDevice(info);
 			if (dev instanceof AudioSynthesizer)
 				return (AudioSynthesizer) dev;
 		}
@@ -323,7 +302,7 @@ public class SynthManager {
 	 * their indices can be used to identify them.
 	 */
 	public static List<String> getAudioMixers() {
-		ArrayList<String> mixerNames = new ArrayList<String>();
+		ArrayList<String> mixerNames = new ArrayList<>();
 		for (Mixer.Info info : AudioSystem.getMixerInfo()) {
 			Mixer mixer = AudioSystem.getMixer(info);
 			boolean hassrcline = false;

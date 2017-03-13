@@ -45,7 +45,7 @@ public class Converter {
 	private static ConverterSupportedFormats supportedFormats = new ConverterSupportedFormats();
 
 
-	public static void main(String[] args)
+	public static void main(String... args)
 		throws IOException {
 		JseZongPlatformUtils.init(filename);
 		
@@ -88,7 +88,7 @@ public class Converter {
 		}
 	}
 
-	public static void convert(String[] args)
+	public static void convert(String... args)
 		throws IOException {
 		//exception for wrong format
 		if (args.length < 4 || !args[0].equals("--convert")) {

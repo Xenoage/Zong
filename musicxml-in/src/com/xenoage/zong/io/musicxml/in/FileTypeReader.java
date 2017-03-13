@@ -1,15 +1,15 @@
 package com.xenoage.zong.io.musicxml.in;
 
-import static com.xenoage.utils.PlatformUtils.platformUtils;
-
-import java.io.IOException;
-
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.io.BufferedInputStream;
 import com.xenoage.utils.io.InputStream;
 import com.xenoage.utils.xml.XmlException;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.zong.io.musicxml.FileType;
+
+import java.io.IOException;
+
+import static com.xenoage.utils.PlatformUtils.platformUtils;
 
 /**
  * This class returns the {@link FileType} of MusicXML data
@@ -37,12 +37,14 @@ public class FileTypeReader {
 			XmlReader reader = platformUtils().createXmlReader(bis);
 			if (reader.openNextChildElement()) {
 				String n = reader.getElementName();
-				if (n.equals("score-partwise"))
-					return FileType.XMLScorePartwise;
-				else if (n.equals("score-timewise"))
-					return FileType.XMLScoreTimewise;
-				else if (n.equals("opus"))
-					return FileType.XMLOpus;
+				switch (n) {
+					case "score-partwise":
+						return FileType.XMLScorePartwise;
+					case "score-timewise":
+						return FileType.XMLScoreTimewise;
+					case "opus":
+						return FileType.XMLOpus;
+				}
 				reader.closeElement();
 			}
 		} catch (XmlException ex) {

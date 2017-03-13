@@ -23,7 +23,7 @@ import com.xenoage.utils.annotations.NonNull;
 
 	
 	public static <T> IndexE<T> indexE(T element, int index) {
-		return new IndexE<T>(element, index);
+		return new IndexE<>(element, index);
 	}
 
 	@Override public String toString() {

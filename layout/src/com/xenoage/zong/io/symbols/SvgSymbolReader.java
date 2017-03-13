@@ -73,17 +73,22 @@ class SvgSymbolReader
 					ret = SvgPathSymbolReader.read(id, xmlReader);
 				} else {
 					String format = elementId.split(":")[0];
-					if (format.equals("path")) {
-						ret = SvgPathSymbolReader.read(id, xmlReader);
-					} else if (format.equals("rect")) {
-						ex = new IllegalStateException("Could not load \"" + svgFilepath + "\": \"" +
-								format + "\" (rect is no longer supported. Convert it into a path)");
-					} else if (format.equals("styled")) {
-						ex = new IllegalStateException("Could not load \"" + svgFilepath + "\": \"" +
-								format + "\" (currently styled symbols are not supported)");
-					} else {
-						ex = new IllegalStateException("Unknown symbol format in \"" + svgFilepath +
-								"\": \"" + format + "\"");
+					switch (format) {
+						case "path":
+							ret = SvgPathSymbolReader.read(id, xmlReader);
+							break;
+						case "rect":
+							ex = new IllegalStateException("Could not load \"" + svgFilepath + "\": \"" +
+									format + "\" (rect is no longer supported. Convert it into a path)");
+							break;
+						case "styled":
+							ex = new IllegalStateException("Could not load \"" + svgFilepath + "\": \"" +
+									format + "\" (currently styled symbols are not supported)");
+							break;
+						default:
+							ex = new IllegalStateException("Unknown symbol format in \"" + svgFilepath +
+									"\": \"" + format + "\"");
+							break;
 					}
 				}
 			}

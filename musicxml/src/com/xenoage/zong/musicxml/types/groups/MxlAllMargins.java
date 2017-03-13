@@ -1,13 +1,13 @@
 package com.xenoage.zong.musicxml.types.groups;
 
-import static com.xenoage.utils.Parser.parseFloat;
+import com.xenoage.utils.annotations.MaybeNull;
+import com.xenoage.utils.xml.XmlReader;
+import com.xenoage.utils.xml.XmlWriter;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import com.xenoage.utils.annotations.MaybeNull;
-import com.xenoage.utils.xml.XmlReader;
-import com.xenoage.utils.xml.XmlWriter;
+import static com.xenoage.utils.Parser.parseFloat;
 
 /**
  * MusicXML all-margins, including the left-right-margins group.
@@ -30,14 +30,20 @@ public final class MxlAllMargins {
 		float bottomMargin = 0;
 		while (reader.openNextChildElement()) {
 			String eName = reader.getElementName();
-			if (eName.equals("left-margin"))
-				leftMargin = parseFloat(reader.getText());
-			else if (eName.equals("right-margin"))
-				rightMargin = parseFloat(reader.getText());
-			else if (eName.equals("top-margin"))
-				topMargin = parseFloat(reader.getText());
-			else if (eName.equals("bottom-margin"))
-				bottomMargin = parseFloat(reader.getText());
+			switch (eName) {
+				case "left-margin":
+					leftMargin = parseFloat(reader.getText());
+					break;
+				case "right-margin":
+					rightMargin = parseFloat(reader.getText());
+					break;
+				case "top-margin":
+					topMargin = parseFloat(reader.getText());
+					break;
+				case "bottom-margin":
+					bottomMargin = parseFloat(reader.getText());
+					break;
+			}
 			reader.closeElement();
 		}
 		if (leftMargin != 0 || rightMargin != 0 || topMargin != 0 || bottomMargin != 0)

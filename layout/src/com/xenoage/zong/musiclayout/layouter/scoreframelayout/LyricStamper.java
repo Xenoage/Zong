@@ -1,12 +1,5 @@
 package com.xenoage.zong.musiclayout.layouter.scoreframelayout;
 
-import static com.xenoage.utils.collections.CList.clist;
-import static com.xenoage.zong.core.music.format.SP.sp;
-import static com.xenoage.zong.core.text.FormattedText.fText;
-import static com.xenoage.zong.core.text.FormattedTextUtils.styleText;
-
-import java.util.List;
-
 import com.xenoage.utils.StringUtils;
 import com.xenoage.utils.collections.CList;
 import com.xenoage.utils.collections.IList;
@@ -20,6 +13,13 @@ import com.xenoage.zong.musiclayout.stampings.NoteheadStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import com.xenoage.zong.musiclayout.stampings.StaffTextStamping;
 import com.xenoage.zong.musiclayout.stampings.Stamping;
+
+import java.util.List;
+
+import static com.xenoage.utils.collections.CList.clist;
+import static com.xenoage.zong.core.music.format.SP.sp;
+import static com.xenoage.zong.core.text.FormattedText.fText;
+import static com.xenoage.zong.core.text.FormattedTextUtils.styleText;
 
 /**
  * Creates the {@link Stamping}s of a lyric.
@@ -110,7 +110,7 @@ public class LyricStamper {
 				syllableLeft.parentStaff, element));
 		}
 		else {
-			It<StaffStamping> staves = new It<StaffStamping>(staffStampings);
+			It<StaffStamping> staves = new It<>(staffStampings);
 			StaffStamping currentStaff = null;
 			boolean firstStaffFound = false; //only true, when start stamping is found
 			boolean lastStaffFound = false; //only true, when stop stamping is found
@@ -126,7 +126,7 @@ public class LyricStamper {
 			}
 			//if not found, begin at the very beginning
 			if (!firstStaffFound) {
-				staves = new It<StaffStamping>(staffStampings);
+				staves = new It<>(staffStampings);
 			}
 
 			//first staff (if any): begin at the stamping, go to the end of the system

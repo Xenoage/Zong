@@ -160,7 +160,7 @@ public final class Context {
 		this.mp = atBeat(score.getStavesList().getPartStaffIndices(part).getStart(), 0, 0, _0);
 		List<List<String>> voiceMappings = alist();
 		for (int i = 0; i < part.getStavesCount(); i++)
-			voiceMappings.add(new ArrayList<String>());
+			voiceMappings.add(new ArrayList<>());
 		this.voiceMappings = voiceMappings;
 		//reset instrument to null
 		this.instrumentID = null;

@@ -1,23 +1,5 @@
 package com.xenoage.zong.core.music;
 
-import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.utils.math.Fraction.fr;
-import static com.xenoage.zong.core.music.util.FirstOrLast.First;
-import static com.xenoage.zong.core.music.util.FirstOrLast.Last;
-import static com.xenoage.zong.core.music.util.IndexE.indexE;
-import static com.xenoage.zong.core.music.util.Interval.Result.FalseHigh;
-import static com.xenoage.zong.core.music.util.Interval.Result.True;
-import static com.xenoage.zong.core.music.util.StartOrStop.Start;
-import static com.xenoage.zong.core.music.util.StartOrStop.Stop;
-import static com.xenoage.zong.core.position.MP.atVoice;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
-import lombok.Getter;
-import lombok.Setter;
-
 import com.xenoage.utils.annotations.MaybeEmpty;
 import com.xenoage.utils.collections.SortedList;
 import com.xenoage.utils.math.Fraction;
@@ -30,6 +12,23 @@ import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.core.position.MPContainer;
 import com.xenoage.zong.core.position.MPElement;
 import com.xenoage.zong.utils.exceptions.IllegalMPException;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.utils.math.Fraction.fr;
+import static com.xenoage.zong.core.music.util.FirstOrLast.First;
+import static com.xenoage.zong.core.music.util.FirstOrLast.Last;
+import static com.xenoage.zong.core.music.util.IndexE.indexE;
+import static com.xenoage.zong.core.music.util.Interval.Result.FalseHigh;
+import static com.xenoage.zong.core.music.util.Interval.Result.True;
+import static com.xenoage.zong.core.music.util.StartOrStop.Start;
+import static com.xenoage.zong.core.music.util.StartOrStop.Stop;
+import static com.xenoage.zong.core.position.MP.atVoice;
 
 
 /**
@@ -65,7 +64,7 @@ public final class Voice
 	 * Creates an empty voice.
 	 */
 	public static Voice voice() {
-		return new Voice(new ArrayList<VoiceElement>(0));
+		return new Voice(new ArrayList<>(0));
 	}
 	
 	
@@ -300,7 +299,7 @@ public final class Voice
 	 * Beat 0 is always used.
 	 */
 	public SortedList<Fraction> getUsedBeats() {
-		SortedList<Fraction> ret = new SortedList<Fraction>(false);
+		SortedList<Fraction> ret = new SortedList<>(false);
 		Fraction currentBeat = Fraction._0;
 		ret.add(currentBeat);
 		for (VoiceElement e : elements) {
@@ -320,7 +319,7 @@ public final class Voice
 	 * the given start beat and before the given end beat.
 	 */
 	public LinkedList<VoiceElement> getElementsInRange(Fraction startBeat, Fraction endBeat) {
-		LinkedList<VoiceElement> ret = new LinkedList<VoiceElement>();
+		LinkedList<VoiceElement> ret = new LinkedList<>();
 		//collect elements
 		Fraction beat = Fraction._0;
 		for (VoiceElement e : elements) {

@@ -1,14 +1,5 @@
 package musicxmltestsuite.tests.utils;
 
-import static com.xenoage.utils.kernel.Range.range;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
-import java.util.List;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-
 import com.xenoage.utils.kernel.Tuple2;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.Score;
@@ -20,6 +11,13 @@ import com.xenoage.zong.core.music.direction.Direction;
 import com.xenoage.zong.core.music.key.Key;
 import com.xenoage.zong.core.music.volta.Volta;
 import com.xenoage.zong.core.position.MP;
+
+import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
+import static com.xenoage.utils.kernel.Range.range;
+import static org.junit.Assert.*;
 
 
 
@@ -64,15 +62,15 @@ public class ScoreTest {
 	}
 	
 	public static void assertEqualsStartBarlines(Barline[] expectedStartBarlines, Score score) {
-		testColumnElements(expectedStartBarlines, score, column -> column.getStartBarline());
+		testColumnElements(expectedStartBarlines, score, ColumnHeader::getStartBarline);
 	}
 	
 	public static void assertEqualsEndBarlines(Barline[] expectedEndBarlines, Score score) {
-		testColumnElements(expectedEndBarlines, score, column -> column.getEndBarline());
+		testColumnElements(expectedEndBarlines, score, ColumnHeader::getEndBarline);
 	}
 	
 	public static void assertEqualsVoltas(Volta[] expectedVoltas, Score score) {
-		testColumnElements(expectedVoltas, score, column -> column.getVolta());
+		testColumnElements(expectedVoltas, score, ColumnHeader::getVolta);
 	}
 	
 	private static <T> void testColumnElements(T[] expectedElements, Score score,

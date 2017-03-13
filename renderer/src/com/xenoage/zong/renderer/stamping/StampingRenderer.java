@@ -24,7 +24,7 @@ public abstract class StampingRenderer {
 
 
 	private static void init() {
-		renderers = new HashMap<StampingType, StampingRenderer>();
+		renderers = new HashMap<>();
 		renderers.put(StampingType.BarlineStamping, new BarlineRenderer());
 		renderers.put(StampingType.BeamStamping, new BeamRenderer());
 		renderers.put(StampingType.BracketStamping, new BracketRenderer());

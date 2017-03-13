@@ -1,14 +1,14 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.Parser.parseInt;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+import static com.xenoage.utils.Parser.parseInt;
 
 
 /**
@@ -34,14 +34,20 @@ public final class MxlTranspose {
 		boolean doubleValue = false;
 		while (reader.openNextChildElement()) {
 			String eName = reader.getElementName();
-			if (eName.equals("diatonic"))
-				diatonic = parseInt(reader.getText());
-			else if (eName.equals("chromatic"))
-				chromatic = parseInt(reader.getText());
-			else if (eName.equals("octave-change"))
-				octaveChange = parseInt(reader.getText());
-			else if (eName.equals("double"))
-				doubleValue = true;
+			switch (eName) {
+				case "diatonic":
+					diatonic = parseInt(reader.getText());
+					break;
+				case "chromatic":
+					chromatic = parseInt(reader.getText());
+					break;
+				case "octave-change":
+					octaveChange = parseInt(reader.getText());
+					break;
+				case "double":
+					doubleValue = true;
+					break;
+			}
 			reader.closeElement();
 		}
 		if (chromatic == null)

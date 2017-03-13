@@ -30,21 +30,19 @@ public final class MxlFullNote {
 	 */
 	public boolean readElement(XmlReader reader) {
 		String n = reader.getElementName();
-		if (n.equals("chord")) {
-			chord = true;
-			return true;
-		}
-		else if (n.equals(MxlPitch.elemName)) {
-			content = MxlPitch.read(reader);
-			return true;
-		}
-		else if (n.equals(MxlUnpitched.elemName)) {
-			content = MxlUnpitched.read();
-			return true;
-		}
-		else if (n.equals(MxlRest.elemName)) {
-			content = MxlRest.read();
-			return true;
+		switch (n) {
+			case "chord":
+				chord = true;
+				return true;
+			case MxlPitch.elemName:
+				content = MxlPitch.read(reader);
+				return true;
+			case MxlUnpitched.elemName:
+				content = MxlUnpitched.read();
+				return true;
+			case MxlRest.elemName:
+				content = MxlRest.read();
+				return true;
 		}
 		return false;
 	}

@@ -33,23 +33,31 @@ public final class MxlScoreHeader {
 
 	public void readElement(XmlReader reader, ErrorHandler errorHandler) {
 		String n = reader.getElementName();
-		if (n.equals(MxlCredit.elemName)) {
-			if (credits == null)
-				credits = new ArrayList<MxlCredit>();
-			credits.add(MxlCredit.read(reader));
+		switch (n) {
+			case MxlCredit.elemName:
+				if (credits == null)
+					credits = new ArrayList<>();
+				credits.add(MxlCredit.read(reader));
+				break;
+			case MxlDefaults.elemName:
+				defaults = MxlDefaults.read(reader);
+				break;
+			case MxlIdentification.elemName:
+				identification = MxlIdentification.read(reader);
+				break;
+			case "movement-number":
+				movementNumber = reader.getTextNotNull();
+				break;
+			case "movement-title":
+				movementTitle = reader.getTextNotNull();
+				break;
+			case MxlPartList.elemName:
+				partList = MxlPartList.read(reader, errorHandler);
+				break;
+			case MxlWork.elemName:
+				work = MxlWork.read(reader);
+				break;
 		}
-		else if (n.equals(MxlDefaults.elemName))
-			defaults = MxlDefaults.read(reader);
-		else if (n.equals(MxlIdentification.elemName))
-			identification = MxlIdentification.read(reader);
-		else if (n.equals("movement-number"))
-			movementNumber = reader.getTextNotNull();
-		else if (n.equals("movement-title"))
-			movementTitle = reader.getTextNotNull();
-		else if (n.equals(MxlPartList.elemName))
-			partList = MxlPartList.read(reader, errorHandler);
-		else if (n.equals(MxlWork.elemName))
-			work = MxlWork.read(reader);
 	}
 	
 	public void check(XmlReader reader) {

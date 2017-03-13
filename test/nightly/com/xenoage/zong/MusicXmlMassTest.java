@@ -27,6 +27,7 @@ import java.util.List;
 import static com.xenoage.utils.iterators.It.it;
 import static com.xenoage.utils.jse.io.JseFileUtils.listFilesDeep;
 import static com.xenoage.zong.musicxml.util.MusicXMLFilenameFilter.musicXMLFilenameFilter;
+import static java.util.Comparator.comparing;
 
 /**
  * This test tries to load and layout a huge range of MusicXML files.
@@ -74,7 +75,7 @@ public class MusicXmlMassTest {
 		//remove all files and directories with prefix "__"
 		files.removeIf(f -> f.getAbsolutePath().contains("__"));
 		//sort alphabetically by filepath
-		files.sort((f1, f2) -> f1.getAbsolutePath().compareTo(f2.getAbsolutePath()));
+		files.sort(comparing(File::getAbsolutePath));
 		System.out.println("Processing " + files.size() + " files...");
 		It<File> filesIt = it(files);
 		for (File file : filesIt) {

@@ -49,7 +49,7 @@ public class SystemLayoutReader {
 		topSystemDistance = null;
 		Float mxlTopSystemDistance = mxlSystemLayout.getTopSystemDistance();
 		if (mxlTopSystemDistance != null)
-			topSystemDistance = tenthMm * mxlTopSystemDistance.floatValue();
+			topSystemDistance = tenthMm * mxlTopSystemDistance;
 	}
 
 }

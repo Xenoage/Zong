@@ -1,15 +1,18 @@
 package com.xenoage.zong.io.musicxml.in.util;
 
+import com.xenoage.zong.core.music.chord.Chord;
+import com.xenoage.zong.core.position.MP;
+import com.xenoage.zong.io.musicxml.in.readers.Context;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.xenoage.utils.backports.ListBackports.sort;
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.collections.CollectionUtils.getFirst;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.kernel.Range.rangeReverse;
-
-import java.util.*;
-
-import com.xenoage.zong.core.music.chord.Chord;
-import com.xenoage.zong.core.position.MP;
-import com.xenoage.zong.io.musicxml.in.readers.Context;
 
 /**
  * Unclosed beams, needed during MusicXML import.
@@ -37,7 +40,7 @@ public class OpenBeams {
 	public OpenBeams() {
 		openBeams = alist(catsCount);
 		for (int i = 0; i < catsCount; i++)
-			openBeams.add(new HashMap<String, OpenBeam>());
+			openBeams.add(new HashMap<>());
 	}
 	
 	/**
@@ -113,12 +116,7 @@ public class OpenBeams {
 		}
 
 		//sort by beat
-		//ZONG-120: replace by lambda later
-		Collections.sort(beamedChords, new Comparator<Chord>() {
-			@Override public int compare(Chord c1, Chord c2) {
-				return c1.getMP().beat.compareTo(c2.getMP().beat);
-			}
-		});
+		sort(beamedChords, c -> c.getMP().getBeat());
 
 		//create beam
 		if (beamedChords.size() > 1)

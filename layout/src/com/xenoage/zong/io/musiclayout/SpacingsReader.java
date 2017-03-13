@@ -1,13 +1,13 @@
 package com.xenoage.zong.io.musiclayout;
 
-import static com.xenoage.zong.io.musiclayout.ChordSpacingsReader.readChordSpacings;
-import static java.lang.Float.parseFloat;
-
-import java.io.IOException;
-
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.zong.musiclayout.settings.ChordSpacings;
 import com.xenoage.zong.musiclayout.settings.Spacings;
+
+import java.io.IOException;
+
+import static com.xenoage.zong.io.musiclayout.ChordSpacingsReader.readChordSpacings;
+import static java.lang.Float.parseFloat;
 
 /**
  * Desktop reader for {@link Spacings}.
@@ -26,39 +26,41 @@ public class SpacingsReader {
 
 		while (r.openNextChildElement()) {
 			String n = r.getElementName();
-			if (n.equals("chords")) {
-				//chord spacings
-				while (r.openNextChildElement()) {
-					String n2 = r.getElementName();
-					if (n2.equals("normal"))
-						normalChordSpacings = readChordSpacings(r);
-					else if (n2.equals("grace"))
-						graceChordSpacings = readChordSpacings(r);
-					r.closeElement();
-				}
-			}
-			else if (n.equals("clef")) {
-				//clef 
-				widthClef = parseFloat(r.getAttributeNotNull("width"));
-			}
-			else if (n.equals("key")) {
-				//keys
-				while (r.openNextChildElement()) {
-					String n2 = r.getElementName();
-					if (n2.equals("sharp"))
-						widthSharp = parseFloat(r.getAttributeNotNull("width"));
-					else if (n2.equals("flat"))
-						widthFlat = parseFloat(r.getAttributeNotNull("width"));
-					r.closeElement();
-				}
-			}
-			else if (n.equals("measure")) {
-				//measure
-				widthMeasureEmpty = parseFloat(r.getAttributeNotNull("empty"));
-			}
-			else if (n.equals("distance")) {
-				//distance
-				widthDistanceMin = parseFloat(r.getAttributeNotNull("minimal"));
+			switch (n) {
+				case "chords":
+					//chord spacings
+					while (r.openNextChildElement()) {
+						String n2 = r.getElementName();
+						if (n2.equals("normal"))
+							normalChordSpacings = readChordSpacings(r);
+						else if (n2.equals("grace"))
+							graceChordSpacings = readChordSpacings(r);
+						r.closeElement();
+					}
+					break;
+				case "clef":
+					//clef
+					widthClef = parseFloat(r.getAttributeNotNull("width"));
+					break;
+				case "key":
+					//keys
+					while (r.openNextChildElement()) {
+						String n2 = r.getElementName();
+						if (n2.equals("sharp"))
+							widthSharp = parseFloat(r.getAttributeNotNull("width"));
+						else if (n2.equals("flat"))
+							widthFlat = parseFloat(r.getAttributeNotNull("width"));
+						r.closeElement();
+					}
+					break;
+				case "measure":
+					//measure
+					widthMeasureEmpty = parseFloat(r.getAttributeNotNull("empty"));
+					break;
+				case "distance":
+					//distance
+					widthDistanceMin = parseFloat(r.getAttributeNotNull("minimal"));
+					break;
 			}
 			r.closeElement();
 		}

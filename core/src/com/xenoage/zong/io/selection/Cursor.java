@@ -169,7 +169,7 @@ public final class Cursor
 	 * Adds the given pitches to the chord before the cursor. If there is no
 	 * chord, nothing is done.
 	 */
-	private void addPitchesToPrecedingChord(Pitch[] pitches) {
+	private void addPitchesToPrecedingChord(Pitch... pitches) {
 		//find the last voice element starting before the current position
 		MPE<VoiceElement> ive = score.getStaff(mp.staff).getVoiceElementBefore(mp, false);
 
@@ -266,7 +266,7 @@ public final class Cursor
 	public void openBeam() {
 		if (openBeamWaypoints != null)
 			throw new IllegalStateException("Beam is already open");
-		openBeamWaypoints = new ArrayList<BeamWaypoint>();
+		openBeamWaypoints = new ArrayList<>();
 	}
 
 
@@ -290,7 +290,7 @@ public final class Cursor
 		if (openSlurWaypoints != null)
 			throw new IllegalStateException("Slur is already open");
 		checkArgsNotNull(type);
-		openSlurWaypoints = new ArrayList<SlurWaypoint>();
+		openSlurWaypoints = new ArrayList<>();
 		openSlurType = type;
 	}
 

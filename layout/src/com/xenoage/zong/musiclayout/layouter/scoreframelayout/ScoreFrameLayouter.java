@@ -227,7 +227,7 @@ public class ScoreFrameLayouter {
 	 */
 	private List<SlurStamping> createTiesAndSlurs(OpenSlursCache openCurvedLinesCache,
 		StaffStampings staffStampings, int systemsCount) {
-		LinkedList<SlurStamping> ret = new LinkedList<SlurStamping>();
+		LinkedList<SlurStamping> ret = new LinkedList<>();
 		for (Iterator<SlurCache> itSlurCache = openCurvedLinesCache.iterator(); itSlurCache.hasNext();) {
 			boolean simpleLine = false; //current curved line simple (within one system)?
 			SlurCache slurCache = itSlurCache.next();

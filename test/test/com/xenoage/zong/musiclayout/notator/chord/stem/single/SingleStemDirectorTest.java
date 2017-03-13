@@ -185,7 +185,7 @@ public class SingleStemDirectorTest {
 		assertEquals(Up, testee.compute(clp(lps), linesCount));
 	}
 
-	private ChordLps clp(int[] lps) {
+	private ChordLps clp(int... lps) {
 		return new ChordLps(lps);
 	}
 

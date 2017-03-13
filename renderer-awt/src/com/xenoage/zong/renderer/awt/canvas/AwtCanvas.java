@@ -1,17 +1,5 @@
 package com.xenoage.zong.renderer.awt.canvas;
 
-import static com.xenoage.utils.jse.color.AwtColorUtils.toAwtColor;
-import static com.xenoage.utils.kernel.Range.range;
-
-import java.awt.BasicStroke;
-import java.awt.Graphics2D;
-import java.awt.Shape;
-import java.awt.font.FontRenderContext;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Line2D;
-import java.awt.geom.Rectangle2D;
-import java.util.Stack;
-
 import com.xenoage.utils.color.Color;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Rectangle2f;
@@ -28,6 +16,16 @@ import com.xenoage.zong.renderer.canvas.CanvasFormat;
 import com.xenoage.zong.renderer.canvas.CanvasIntegrity;
 import com.xenoage.zong.symbols.path.Path;
 
+import java.awt.*;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
+import java.util.Stack;
+
+import static com.xenoage.utils.jse.color.AwtColorUtils.toAwtColor;
+import static com.xenoage.utils.kernel.Range.range;
+
 /**
  * AWT implementation of a {@link Canvas}
  *
@@ -40,7 +38,7 @@ public class AwtCanvas
 	private final Graphics2D g2d;
 	
 	//stack for stored transformation states
-	private Stack<AffineTransform> transformStack = new Stack<AffineTransform>();
+	private Stack<AffineTransform> transformStack = new Stack<>();
 
 
 	/**

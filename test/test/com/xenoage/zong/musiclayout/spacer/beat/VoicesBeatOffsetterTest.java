@@ -1,28 +1,5 @@
 package com.xenoage.zong.musiclayout.spacer.beat;
 
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.utils.math.Delta.df;
-import static com.xenoage.utils.math.Fraction._0;
-import static com.xenoage.utils.math.Fraction.fr;
-import static com.xenoage.zong.core.music.Pitch.pi;
-import static com.xenoage.zong.core.music.chord.ChordFactory.chord;
-import static com.xenoage.zong.core.music.chord.ChordFactory.graceChord;
-import static com.xenoage.zong.core.music.time.TimeType.time_4_4;
-import static com.xenoage.zong.core.position.MP.atElement;
-import static com.xenoage.zong.core.position.MP.atMeasure;
-import static com.xenoage.zong.core.position.MP.mp0;
-import static com.xenoage.zong.musiclayout.spacer.beat.VoicesBeatOffsetter.voicesBeatOffsetter;
-import static com.xenoage.zong.musiclayout.spacing.TestSpacing.spacing;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
-import org.junit.Test;
-
 import com.xenoage.utils.math.Delta;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.Score;
@@ -39,11 +16,26 @@ import com.xenoage.zong.core.music.time.TimeType;
 import com.xenoage.zong.io.musicxml.in.MusicXmlScoreFileInputTest;
 import com.xenoage.zong.io.selection.Cursor;
 import com.xenoage.zong.musiclayout.notation.ChordNotation;
-import com.xenoage.zong.musiclayout.spacing.BeatOffset;
-import com.xenoage.zong.musiclayout.spacing.BorderSpacing;
-import com.xenoage.zong.musiclayout.spacing.ChordSpacing;
-import com.xenoage.zong.musiclayout.spacing.ElementSpacing;
-import com.xenoage.zong.musiclayout.spacing.VoiceSpacing;
+import com.xenoage.zong.musiclayout.spacing.*;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import static com.xenoage.utils.collections.CollectionUtils.alist;
+import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.utils.math.Delta.df;
+import static com.xenoage.utils.math.Fraction._0;
+import static com.xenoage.utils.math.Fraction.fr;
+import static com.xenoage.zong.core.music.Pitch.pi;
+import static com.xenoage.zong.core.music.chord.ChordFactory.chord;
+import static com.xenoage.zong.core.music.chord.ChordFactory.graceChord;
+import static com.xenoage.zong.core.music.time.TimeType.time_4_4;
+import static com.xenoage.zong.core.position.MP.*;
+import static com.xenoage.zong.musiclayout.spacer.beat.VoicesBeatOffsetter.voicesBeatOffsetter;
+import static com.xenoage.zong.musiclayout.spacing.TestSpacing.spacing;
+import static org.junit.Assert.*;
 
 /**
  * Tests for a {@link VoicesBeatOffsetter}.
@@ -87,7 +79,7 @@ public class VoicesBeatOffsetterTest {
 	@Test public void computeDistanceTest() {
 		Voice voice = createTestScore1Voice().getVoice(mp0);
 		List<ElementSpacing> spacings = createTestElementSpacings1Voice();
-		LinkedList<BeatOffset> emptyList = new LinkedList<BeatOffset>();
+		LinkedList<BeatOffset> emptyList = new LinkedList<>();
 		//distance: the offsets of the notes and rests are interesting,
 		//not the ones of the clefs, key signatures and time signatures,
 		//so the method has to use the last occurrence of a beat.
@@ -468,7 +460,7 @@ public class VoicesBeatOffsetterTest {
 	 * of the given {@link Score}.
 	 */
 	private LinkedList<VoiceSpacing> createVoiceSpacings(Score score) {
-		LinkedList<VoiceSpacing> ret = new LinkedList<VoiceSpacing>();
+		LinkedList<VoiceSpacing> ret = new LinkedList<>();
 		for (int iStaff : range(0, score.getStavesCount() - 1)) {
 			Measure measure = score.getMeasure(atMeasure(iStaff, 0));
 			for (Voice voice : measure.getVoices()) {

@@ -45,7 +45,7 @@ public class TwoStavesBeamSlanter {
 	/**
 	 * This method contains a subset of the rules defined in {@link SingleStaffBeamSlanter}.
 	 */
-	public Slant compute(int[] singleStaffLps) {
+	public Slant compute(int... singleStaffLps) {
 		int leftLp = getFirst(singleStaffLps);
 		int rightLp = getLast(singleStaffLps);
 		//Ross, p. 115, row 1: use horizontal beam, if first and last note is on the same LP

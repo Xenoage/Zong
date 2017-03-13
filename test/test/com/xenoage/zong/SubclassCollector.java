@@ -24,7 +24,7 @@ public class SubclassCollector {
 	 */
 	public static ArrayList<Class<?>> getClassesImplementing(Class<?> interfaceClass) {
 		//get class files
-		ArrayList<String> classFiles = new ArrayList<String>();
+		ArrayList<String> classFiles = new ArrayList<>();
 		getClassFiles(new File(".."), classFiles, "");
 		/* TEST
 		for (String classFile : classFiles)
@@ -41,18 +41,10 @@ public class SubclassCollector {
 			classID = classID.replace('/', '.');
 			try {
 				Class<?> cls = Class.forName(classID);
-				//TEST
-				//System.out.println("Found:     " + cls);
 				if (containsRef(cls.getInterfaces(), interfaceClass)) {
 					ret.add(cls);
 				}
-			} catch (ClassNotFoundException ex) {
-				//TEST
-				//System.out.println("Not found: " + classID);
-			} catch (ExceptionInInitializerError err) {
-				//TEST
-				//err.printStackTrace();
-			} catch (NoClassDefFoundError err) {
+			} catch (Throwable ex) {
 			}
 		}
 		return ret;
@@ -63,7 +55,7 @@ public class SubclassCollector {
 	 */
 	public static ArrayList<Class<?>> getSubclasses(Class<?> superClass) {
 		//get class files
-		ArrayList<String> classFiles = new ArrayList<String>();
+		ArrayList<String> classFiles = new ArrayList<>();
 		getClassFiles(new File(".."), classFiles, "");
 		/* TEST
 		for (String classFile : classFiles)
@@ -102,7 +94,7 @@ public class SubclassCollector {
 	 */
 	public static ArrayList<Class<?>> getSubinterfaces(File dir, Class<?> superInterface) {
 		//get class files
-		ArrayList<String> classFiles = new ArrayList<String>();
+		ArrayList<String> classFiles = new ArrayList<>();
 		getClassFiles(dir, classFiles, "");
 		//get interfaces with given superinterfaces
 		ArrayList<Class<?>> ret = alist();

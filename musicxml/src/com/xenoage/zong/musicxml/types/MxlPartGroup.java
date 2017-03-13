@@ -1,10 +1,5 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.NullUtils.notNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.XmlReader;
@@ -12,6 +7,11 @@ import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.choice.MxlPartListContent;
 import com.xenoage.zong.musicxml.types.enums.MxlStartStop;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+import static com.xenoage.utils.NullUtils.notNull;
 
 /**
  * MusicXML part-group.
@@ -51,14 +51,20 @@ public final class MxlPartGroup
 		MxlGroupBarline groupBarline = null;
 		while (reader.openNextChildElement()) {
 			String n = reader.getElementName();
-			if (n.equals("group-name"))
-				groupName = reader.getTextNotNull();
-			else if (n.equals("group-abbreviation"))
-				groupAbbreviation = reader.getTextNotNull();
-			else if (n.equals("group-symbol"))
-				groupSymbol = MxlGroupSymbol.read(reader);
-			else if (n.equals("group-barline"))
-				groupBarline = MxlGroupBarline.read(reader);
+			switch (n) {
+				case "group-name":
+					groupName = reader.getTextNotNull();
+					break;
+				case "group-abbreviation":
+					groupAbbreviation = reader.getTextNotNull();
+					break;
+				case "group-symbol":
+					groupSymbol = MxlGroupSymbol.read(reader);
+					break;
+				case "group-barline":
+					groupBarline = MxlGroupBarline.read(reader);
+					break;
+			}
 			reader.closeElement();
 		}
 		return new MxlPartGroup(groupName, groupAbbreviation, groupSymbol, groupBarline, type, number);

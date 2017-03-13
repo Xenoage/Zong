@@ -1,9 +1,5 @@
 package com.xenoage.zong.musiclayout.spacing;
 
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-
-import java.util.List;
-
 import com.xenoage.utils.annotations.MaybeEmpty;
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.NonEmpty;
@@ -12,6 +8,10 @@ import com.xenoage.utils.collections.SortedList;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.layout.frames.ScoreFrame;
+
+import java.util.List;
+
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 
 /**
  * The spacing information of the musical layout in a {@link ScoreFrame}.
@@ -48,7 +48,7 @@ public final class MeasureSpacing {
 		this.leading = leading;
 
 		//compute the list of all used beats
-		SortedList<Fraction> usedBeats = new SortedList<Fraction>(false);
+		SortedList<Fraction> usedBeats = new SortedList<>(false);
 		for (VoiceSpacing vs : voices) {
 			for (ElementSpacing se : vs.elements) {
 				usedBeats.add(se.beat);

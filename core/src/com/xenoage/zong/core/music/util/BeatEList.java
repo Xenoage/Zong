@@ -41,7 +41,7 @@ import static com.xenoage.zong.core.music.util.Interval.Result.True;
 	 */
 	public static <T> BeatEList<T> beatEList() {
 		val ret = new BeatEList<T>();
-		ret.elements = new ArrayList<BeatE<T>>(0); //start with a capacity of 0 to save memory
+		ret.elements = new ArrayList<>(0); //start with a capacity of 0 to save memory
 		return ret;
 	}
 

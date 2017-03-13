@@ -1,10 +1,5 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.Parser.parseIntegerNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
@@ -13,6 +8,11 @@ import com.xenoage.zong.musicxml.types.choice.MxlDirectionTypeContent;
 import com.xenoage.zong.musicxml.types.enums.MxlNoteTypeValue;
 import com.xenoage.zong.musicxml.types.util.MxlPrintStyleContent;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+import static com.xenoage.utils.Parser.parseIntegerNull;
 
 /**
  * MusicXML metronome.
@@ -54,12 +54,17 @@ public final class MxlMetronome
 		Integer perMinute = null;
 		while (reader.openNextChildElement()) {
 			String n = reader.getElementName();
-			if (n.equals("beat-unit"))
-				sBeatUnit = reader.getText();
-			else if (n.equals("beat-unit-dot"))
-				dotsCount++;
-			else if (n.equals("per-minute"))
-				perMinute = parseIntegerNull(reader.getText());
+			switch (n) {
+				case "beat-unit":
+					sBeatUnit = reader.getText();
+					break;
+				case "beat-unit-dot":
+					dotsCount++;
+					break;
+				case "per-minute":
+					perMinute = parseIntegerNull(reader.getText());
+					break;
+			}
 			reader.closeElement();
 		}
 		if (sBeatUnit != null && perMinute != null) {

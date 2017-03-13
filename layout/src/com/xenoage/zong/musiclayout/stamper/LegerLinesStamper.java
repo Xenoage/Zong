@@ -62,7 +62,7 @@ public class LegerLinesStamper {
 		return leftNoteXMm;
 	}
 	
-	NoteSuspension getBottomSuspension(NoteDisplacement[] notes) {
+	NoteSuspension getBottomSuspension(NoteDisplacement... notes) {
 		//find a suspended note which needs a leger line on the bottom side
 		for (NoteDisplacement note : notes)
 			if (note.suspension != None && note.lp <= -2)

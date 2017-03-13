@@ -86,8 +86,7 @@ public class ElementStamper {
 	}
 	
 	
-	private static HashMap<DurationInfo.Type, CommonSymbol> durationSymbolMapping =
-		new HashMap<DurationInfo.Type, CommonSymbol>();
+	private static HashMap<DurationInfo.Type, CommonSymbol> durationSymbolMapping = new HashMap<>();
 
 	static {
 		durationSymbolMapping.put(DurationInfo.Type.Whole, CommonSymbol.RestWhole);

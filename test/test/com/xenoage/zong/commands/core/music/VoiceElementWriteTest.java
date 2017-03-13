@@ -1,23 +1,5 @@
 package com.xenoage.zong.commands.core.music;
 
-import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.utils.math.Fraction.fr;
-import static com.xenoage.zong.core.music.Pitch.pi;
-import static com.xenoage.zong.core.music.beam.Beam.beamFromChords;
-import static com.xenoage.zong.core.position.MP.atBeat;
-import static com.xenoage.zong.core.position.MP.atElement;
-import static com.xenoage.zong.core.position.MP.atMeasure;
-import static com.xenoage.zong.core.position.MP.atVoice;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import com.xenoage.zong.core.music.time.TimeSignature;
-import org.junit.Test;
-
 import com.xenoage.utils.document.command.CommandPerformer;
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.Score;
@@ -27,9 +9,21 @@ import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.Grace;
 import com.xenoage.zong.core.music.chord.Note;
 import com.xenoage.zong.core.music.rest.Rest;
+import com.xenoage.zong.core.music.time.TimeSignature;
 import com.xenoage.zong.core.music.time.TimeType;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.utils.exceptions.MeasureFullException;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.utils.math.Fraction.fr;
+import static com.xenoage.zong.core.music.Pitch.pi;
+import static com.xenoage.zong.core.music.beam.Beam.beamFromChords;
+import static com.xenoage.zong.core.position.MP.*;
+import static org.junit.Assert.*;
 
 
 /**
@@ -408,7 +402,7 @@ public class VoiceElementWriteTest {
 		new VoiceAdd(score.getMeasure(atMeasure(0, 0)), 1).execute();
 		for (int iVoice : range(2)) {
 			Voice voice = score.getVoice(atVoice(0, 0, iVoice));
-			List<Chord> beamChords = new ArrayList<Chord>();
+			List<Chord> beamChords = new ArrayList<>();
 			for (int i = 0; i < 8; i++) {
 				Chord chord = new Chord(new Note(pi(0, 0, 4)), fr(1, 8));
 				//add elements by hand, since the corresonding command is tested itself in this class
@@ -426,7 +420,7 @@ public class VoiceElementWriteTest {
 	
 	
 	/**
-	 * Asserts that the score created by {@link #createTestScore1()} is in its original
+	 * Asserts that the score created by {@link #createTestScoreEighths()} is in its original
 	 * state again. Useful after undo.
 	 */
 	private void assertTestScoreEighthsOriginalState(Score score) {

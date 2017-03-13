@@ -1,21 +1,17 @@
 package com.xenoage.zong.view;
 
-import static com.xenoage.utils.math.geom.Point2f.p;
-import static com.xenoage.zong.layout.LayoutPos.layoutPos;
+import com.xenoage.utils.math.Units;
+import com.xenoage.utils.math.geom.*;
+import com.xenoage.zong.layout.Layout;
+import com.xenoage.zong.layout.LayoutPos;
+import com.xenoage.zong.layout.Page;
+import lombok.val;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.xenoage.utils.math.Units;
-import com.xenoage.utils.math.geom.Point2f;
-import com.xenoage.utils.math.geom.Point2i;
-import com.xenoage.utils.math.geom.Rectangle2f;
-import com.xenoage.utils.math.geom.Rectangle2i;
-import com.xenoage.utils.math.geom.Size2f;
-import com.xenoage.utils.math.geom.Size2i;
-import com.xenoage.zong.layout.LayoutPos;
-import com.xenoage.zong.layout.Layout;
-import com.xenoage.zong.layout.Page;
+import static com.xenoage.utils.math.geom.Point2f.p;
+import static com.xenoage.zong.layout.LayoutPos.layoutPos;
 
 /**
  * This class manages a page view of a {@link Layout}.
@@ -110,13 +106,13 @@ public class PageViewManager {
 		float offsetX = 0; // horizontal center of the current page
 		float offsetY = 0; // vertical center of the current page
 		List<Page> pages = layout.getPages();
-		ArrayList<Rectangle2f> ret = new ArrayList<Rectangle2f>(pages.size());
+		ArrayList<Rectangle2f> ret = new ArrayList<>(pages.size());
 		if (pages.size() > 0) {
 			// compute offsets for all pages
 			float firstPageOffsetX = -pages.get(0).getFormat().getSize().width / 2;
 			float firstPageOffsetY = -pages.get(0).getFormat().getSize().height / 2;
-			for (int i = 0; i < pages.size(); i++) {
-				Size2f pageSize = pages.get(i).getFormat().getSize();
+			for (val page : pages) {
+				Size2f pageSize = page.getFormat().getSize();
 				Point2f offset = null;
 				switch (pageDisplayAlignment) {
 					case Horizontal:

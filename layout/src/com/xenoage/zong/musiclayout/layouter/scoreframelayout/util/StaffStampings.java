@@ -2,6 +2,7 @@ package com.xenoage.zong.musiclayout.layouter.scoreframelayout.util;
 
 import com.xenoage.zong.musiclayout.ScoreFrameLayout;
 import com.xenoage.zong.musiclayout.stampings.StaffStamping;
+import lombok.val;
 
 import java.util.List;
 
@@ -70,8 +71,8 @@ public class StaffStampings {
 	 * Adds all staves to the given list, system by system.
 	 */
 	public void addAllTo(List<StaffStamping> list) {
-		for (int i = 0; i < stavesBySystem.size(); i++)
-			list.addAll(stavesBySystem.get(i));
+		for (val s : stavesBySystem)
+			list.addAll(s);
 	}
 
 }

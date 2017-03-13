@@ -139,10 +139,10 @@ public class ScoreLayout {
 	 */
 	public void updateSelections(ScoreSelection selection) {
 		//selections
-		ArrayList<LinkedList<Stamping>> selections = new ArrayList<LinkedList<Stamping>>(
-			this.frames.size());
+		ArrayList<LinkedList<Stamping>> selections = new ArrayList<>(
+				this.frames.size());
 		for (int i = 0; i < this.frames.size(); i++) {
-			selections.add(new LinkedList<Stamping>());
+			selections.add(new LinkedList<>());
 		}
 		/* TODO if (selection != null && selection instanceof Cursor)
 		{
@@ -168,7 +168,7 @@ public class ScoreLayout {
 	 * Currently, the error layout is completely empty..
 	 */
 	public static ScoreLayout createErrorLayout(Score score, SymbolPool symbolPool) {
-		return new ScoreLayout(score, new ArrayList<ScoreFrameLayout>(), symbolPool, null);
+		return new ScoreLayout(score, new ArrayList<>(), symbolPool, null);
 	}
 
 	/**

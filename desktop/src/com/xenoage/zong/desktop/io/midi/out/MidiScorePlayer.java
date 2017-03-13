@@ -10,7 +10,6 @@ import com.xenoage.zong.io.midi.out.PlaybackListener;
 import lombok.val;
 
 import javax.sound.midi.*;
-import java.util.List;
 
 import static com.xenoage.utils.log.Log.log;
 import static com.xenoage.utils.log.Report.warning;
@@ -30,7 +29,7 @@ public class MidiScorePlayer
 	private static MidiScorePlayer instance = null;
 
 	private MidiSequence<Sequence> sequence = null;
-	private WeakList<PlaybackListener> listeners = new WeakList<PlaybackListener>();
+	private WeakList<PlaybackListener> listeners = new WeakList<>();
 	private boolean metronomeEnabled;
 	private float volume = defaultMidiSettings.getDefaultVolume();
 	private int currentPosition;
@@ -57,8 +56,8 @@ public class MidiScorePlayer
 		SynthManager.removeAllControllerEventListeners();
 
 		//controller events to listen for (see MidiEvents doc)
-		SynthManager.addControllerEventListener(this, new int[]{ MidiEvents.PlaybackControl.code });
-		SynthManager.addControllerEventListener(this, new int[]{ MidiEvents.PlaybackEnd.code } );
+		SynthManager.addControllerEventListener(this, MidiEvents.PlaybackControl.code);
+		SynthManager.addControllerEventListener(this, MidiEvents.PlaybackEnd.code);
 	}
 
 	/**
@@ -212,8 +211,8 @@ public class MidiScorePlayer
 	private void applyVolume() {
 		MidiChannel[] channels = SynthManager.getSynthesizer().getChannels();
 		int max = 127; //according to MIDI standard
-		for (int i = 0; i < channels.length; i++) {
-			channels[i].controlChange(7, Math.round(volume * max));
+		for (val channel : channels) {
+			channel.controlChange(7, Math.round(volume * max));
 		}
 	}
 

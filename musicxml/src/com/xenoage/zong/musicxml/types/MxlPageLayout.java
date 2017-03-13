@@ -1,13 +1,5 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-
-import java.util.List;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
 import com.xenoage.utils.Parser;
 import com.xenoage.utils.annotations.MaybeNull;
 import com.xenoage.utils.annotations.NonNull;
@@ -15,6 +7,13 @@ import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
+
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 
 /**
  * MusicXML page-layout.
@@ -38,12 +37,17 @@ public final class MxlPageLayout {
 		List<MxlPageMargins> pageMargins = alist();
 		while (reader.openNextChildElement()) {
 			String n = reader.getElementName();
-			if (n.equals("page-width"))
-				pageWidth = Parser.parseFloatNull(reader.getText());
-			else if (n.equals("page-height"))
-				pageHeight = Parser.parseFloatNull(reader.getText());
-			else if (n.equals("page-margins"))
-				pageMargins.add(MxlPageMargins.read(reader));
+			switch (n) {
+				case "page-width":
+					pageWidth = Parser.parseFloatNull(reader.getText());
+					break;
+				case "page-height":
+					pageHeight = Parser.parseFloatNull(reader.getText());
+					break;
+				case "page-margins":
+					pageMargins.add(MxlPageMargins.read(reader));
+					break;
+			}
 			reader.closeElement();
 		}
 		Size2f pageSize = (pageWidth == null && pageHeight == null ? null : new Size2f(pageWidth, pageHeight));

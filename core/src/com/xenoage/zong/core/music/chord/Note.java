@@ -1,12 +1,12 @@
 package com.xenoage.zong.core.music.chord;
 
-import java.util.ArrayList;
-
-import lombok.Data;
-
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.zong.core.music.Pitch;
+import lombok.Data;
+import lombok.val;
+
+import java.util.ArrayList;
 
 
 /**
@@ -24,10 +24,9 @@ import com.xenoage.zong.core.music.Pitch;
 	 * Returns a list of {@link Note}s from the given {@link Pitch}es.
 	 */
 	public static ArrayList<Note> notes(Pitch... pitches) {
-		ArrayList<Note> ret = new ArrayList<Note>(pitches.length);
-		for (int i = 0; i < pitches.length; i++) {
-			ret.add(new Note(pitches[i]));
-		}
+		ArrayList<Note> ret = new ArrayList<>(pitches.length);
+		for (val p : pitches)
+			ret.add(new Note(p));
 		return ret;
 	}
 

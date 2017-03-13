@@ -1,13 +1,13 @@
 package com.xenoage.zong.desktop.io.midi.out;
 
-import static com.xenoage.utils.math.Fraction.fr;
-import static com.xenoage.zong.core.music.Pitch.pi;
-
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.instrument.Instrument;
 import com.xenoage.zong.core.music.Pitch;
 import com.xenoage.zong.core.music.chord.Chord;
 import com.xenoage.zong.core.music.chord.Note;
+
+import static com.xenoage.utils.math.Fraction.fr;
+import static com.xenoage.zong.core.music.Pitch.pi;
 
 /**
  * Tests for {@link MidiChordPlayer}.
@@ -16,7 +16,7 @@ import com.xenoage.zong.core.music.chord.Note;
  */
 public class MidiChordPlayerTry {
 
-	public static void main(String args[])
+	public static void main(String... args)
 		throws Exception {
 		SynthManager.init(false);
 

@@ -78,7 +78,7 @@ import static com.xenoage.zong.player.Player.pApp;
 
 					if (fileType != null) {
 						String filePath = file.getAbsolutePath();
-						List<Score> scores = pApp().loadMxlScores(filePath, new AllFilter<String>());
+						List<Score> scores = pApp().loadMxlScores(filePath, new AllFilter<>());
 
 						if ((scores.size() == 0) /* TODO && chkCancel.isSelected() */) {
 							countFailed++;
@@ -86,7 +86,7 @@ import static com.xenoage.zong.player.Player.pApp;
 						}
 
 						boolean useNumber = scores.size() > 1;
-						It<Score> scoresIt = new It<Score>(scores);
+						It<Score> scoresIt = new It<>(scores);
 
 						for (Score score : scoresIt) {
 							Sequence seq = MidiConverter.convertToSequence(

@@ -21,16 +21,10 @@ public class InfoActivity
 		setContentView(R.layout.info);
 		((TextView) findViewById(R.id.info_menu_version)).setText("Prototype " + Zong.projectVersion + "." +
 			Zong.projectIteration);
-		//test lambdas TEST
-		String s = run(() -> { return " with Lambda!"; });
-		//information
-		((TextView) findViewById(R.id.info_title)).setText(Zong.getName(App.projectFirstName) + s);
+		//informationgit
+		((TextView) findViewById(R.id.info_title)).setText(Zong.getName(App.projectFirstName));
 		((TextView) findViewById(R.id.info_version)).setText(Zong.projectVersion + "." +
 			Zong.projectIteration);
-	}
-
-	private String run(Supplier<String> p) {
-		return p.get() + Fraction.comparator.compare(fr(2, 4), fr(1, 4));
 	}
 	
 }

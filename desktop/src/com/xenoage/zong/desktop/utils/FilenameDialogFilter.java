@@ -1,14 +1,13 @@
 package com.xenoage.zong.desktop.utils;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-
 import com.xenoage.utils.filter.Filter;
 import com.xenoage.utils.lang.Lang;
 import com.xenoage.zong.Voc;
-
 import javafx.scene.control.ChoiceDialog;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Filter dialog which allows selecting a single filename.
@@ -21,7 +20,7 @@ public class FilenameDialogFilter
 	implements Filter<String> {
 
 	@Override public List<String> filter(List<String> values) {
-		List<String> ret = new LinkedList<String>();
+		List<String> ret = new LinkedList<>();
 		//when there is only one file, select it. when there is no file, also don't
 		//show a dialog.
 		if (values.size() < 2) {
@@ -32,9 +31,7 @@ public class FilenameDialogFilter
 			dialog.setContentText(Lang.getLabel(Voc.SelectDocument));
 			Optional<String> selectedFile = dialog.showAndWait();
 			//open file
-			if (selectedFile.isPresent()) {
-				ret.add(selectedFile.get());
-			}
+			selectedFile.ifPresent(ret::add);
 		}
 		return ret;
 	}

@@ -48,6 +48,7 @@ import static com.xenoage.utils.log.Report.fatal;
 import static com.xenoage.zong.desktop.App.app;
 import static com.xenoage.zong.desktop.utils.ImageUtils.imageOrNull;
 import static com.xenoage.zong.player.Player.pApp;
+import static java.util.Comparator.naturalOrder;
 
 public class PlayerFrame
 	extends Dialog
@@ -111,7 +112,7 @@ public class PlayerFrame
 		sliderVolume.setValue(70);
 		imgVolume.setImage(volumeIcons.get("medium"));
 		//recent files list
-		RecentFiles.addListener(() -> updateRecentFiles());
+		RecentFiles.addListener(this::updateRecentFiles);
 		updateRecentFiles();
 		//demo files list
 		updateDemoFiles();
@@ -165,7 +166,7 @@ public class PlayerFrame
 		//add menu items
 		final String dir = "data/demo/scores/";
 		List<String> files = io().listFiles(dir);
-		files.sort((n1, n2) -> n1.compareTo(n2));
+		files.sort(naturalOrder());
 		for (String file : files) {
 			MenuItem mnu = new MenuItem(file);
 			mnu.setOnAction(e -> app().execute(new DocumentOpen(dir + file)));

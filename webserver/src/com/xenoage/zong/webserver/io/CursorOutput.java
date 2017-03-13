@@ -69,7 +69,7 @@ public class CursorOutput {
 		int system = 0;
 		float left = 0;
 		float right = 0;
-		HashMap<Fraction, Float> beats = new HashMap<Fraction, Float>();
+		HashMap<Fraction, Float> beats = new HashMap<>();
 	}
 
 
@@ -98,8 +98,8 @@ public class CursorOutput {
 
 		//collect data
 		int measuresCount = score.getMeasuresCount();
-		ArrayList<System> systems = new ArrayList<System>();
-		ArrayList<Measure> measures = new ArrayList<Measure>();
+		ArrayList<System> systems = new ArrayList<>();
+		ArrayList<Measure> measures = new ArrayList<>();
 		for (int i = 0; i < measuresCount; i++) {
 			measures.add(new Measure());
 		}
@@ -170,7 +170,7 @@ public class CursorOutput {
 			jsonMeasure.addProperty("right", measure.right);
 			//beats
 			JsonArray jsonBeats = new JsonArray();
-			ArrayList<Fraction> sortedBeats = new ArrayList<Fraction>(measure.beats.keySet());
+			ArrayList<Fraction> sortedBeats = new ArrayList<>(measure.beats.keySet());
 			Collections.sort(sortedBeats);
 			for (Fraction beat : sortedBeats) {
 				JsonObject jsonBeat = new JsonObject();

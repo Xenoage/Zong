@@ -6,6 +6,8 @@ import com.xenoage.zong.musiclayout.layouter.cache.util.SlurCache;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import static com.xenoage.utils.backports.HashMapBackports.computeIfAbsent;
+
 /**
  * Cache for {@link Slur}s which are still not stamped completely.
  * 
@@ -15,7 +17,7 @@ public class OpenSlursCache
 	implements Iterable<SlurCache> {
 
 	//slurs and ties, which are not stamped completely yet
-	private HashMap<Slur, SlurCache> openCurvedLines = new HashMap<Slur, SlurCache>();
+	private HashMap<Slur, SlurCache> openCurvedLines = new HashMap<>();
 
 
 	/**
@@ -30,12 +32,7 @@ public class OpenSlursCache
 	 * If not existing, it is created.
 	 */
 	public SlurCache getOrCreate(Slur slur) {
-		SlurCache ret = openCurvedLines.get(slur);
-		if (ret == null) {
-			ret = SlurCache.createNew(slur);
-			openCurvedLines.put(slur, ret);
-		}
-		return ret;
+		return computeIfAbsent(openCurvedLines, slur, k -> SlurCache.createNew(slur));
 	}
 
 	/**

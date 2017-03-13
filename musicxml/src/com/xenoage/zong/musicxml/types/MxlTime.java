@@ -35,14 +35,18 @@ public final class MxlTime {
 		MxlTimeContent content = null;
 		if (reader.openNextChildElement()) {
 			String n = reader.getElementName();
-			if (n.equals("beats"))
-				content = MxlNormalTime.read(reader);
-			else if (n.equals("senza-misura")) {
-				content = MxlSenzaMisura.read();
-				reader.closeElement();
+			switch (n) {
+				case "beats":
+					content = MxlNormalTime.read(reader);
+					break;
+				case "senza-misura":
+					content = MxlSenzaMisura.read();
+					reader.closeElement();
+					break;
+				default:
+					reader.closeElement();
+					break;
 			}
-			else
-				reader.closeElement();
 		}
 		if (content != null)
 			return new MxlTime(content, symbol);

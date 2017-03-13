@@ -1,14 +1,15 @@
 package com.xenoage.zong.util.math;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
+import com.xenoage.utils.collections.ArrayUtils;
 import com.xenoage.utils.math.Gauss;
 import com.xenoage.utils.math.QuadraticCurve;
 import com.xenoage.utils.math.VSide;
 import com.xenoage.utils.math.geom.ConvexHull;
 import com.xenoage.utils.math.geom.Point2f;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This class computes quadratic curves using the given
@@ -32,7 +33,7 @@ public class QuadraticCurvesTools {
 	 */
 	public static List<QuadraticCurve> computeOverConvexHull(ConvexHull convexHull, float leftArea,
 		float rightArea) {
-		LinkedList<QuadraticCurve> ret = new LinkedList<QuadraticCurve>();
+		LinkedList<QuadraticCurve> ret = new LinkedList<>();
 		ArrayList<Point2f> points = convexHull.getPoints();
 		VSide side = convexHull.getSide();
 		int sideDir = side.getDir();
@@ -66,14 +67,12 @@ public class QuadraticCurvesTools {
 		//there are ((m+4) choose 3) possible SLEs, but we have to ignore those where eq[0] AND eq[1]
 		//are used and those where eq[2] AND eq[3] are used.
 		int[][] subsets = getAllCombinationsOf3(m + 4);
-		for (int i = 0; i < subsets.length; i++) {
-			int[] eqIndices = subsets[i];
+		for (int[] eqIndices : subsets) {
 			//not useable: {0,1,?}, {2,3,?} and {?,2,3}
 			if (eqIndices[0] == 0 && eqIndices[1] == 1 || eqIndices[0] == 2 && eqIndices[1] == 3 ||
-				eqIndices[1] == 2 && eqIndices[2] == 3) {
+					eqIndices[1] == 2 && eqIndices[2] == 3) {
 				//ignore
-			}
-			else {
+			} else {
 				//usable. solve SLE
 				double[][] A = new double[3][3];
 				double b[] = new double[3];
@@ -139,11 +138,11 @@ public class QuadraticCurvesTools {
 		//(dirty)
 		//use array with 0 or 1 for each slot. count from 00...0 to 11...1
 		//for all "numbers" with a sum of 3, remember the corresponding subset.
-		ArrayList<int[]> ret = new ArrayList<int[]>();
+		ArrayList<int[]> ret = new ArrayList<>();
 		int[] subsetIndices = new int[slotsCount];
 		int max = pow(2, slotsCount);
 		for (int i = 0; i < max; i++) {
-			if (sum(subsetIndices) == 3) {
+			if (ArrayUtils.sum(subsetIndices) == 3) {
 				ret.add(getIndicesWith1(subsetIndices));
 			}
 			increment(subsetIndices);
@@ -160,7 +159,7 @@ public class QuadraticCurvesTools {
 		return ret;
 	}
 
-	private static void increment(int[] binaryNumber) {
+	private static void increment(int... binaryNumber) {
 		int digit = binaryNumber.length - 1;
 		do {
 			binaryNumber[digit] = 1 - binaryNumber[digit];
@@ -170,15 +169,7 @@ public class QuadraticCurvesTools {
 		while (binaryNumber[digit + 1] == 0 && digit >= 0);
 	}
 
-	private static int sum(int[] number) {
-		int ret = 0;
-		for (int i = 0; i < number.length; i++) {
-			ret += number[i];
-		}
-		return ret;
-	}
-
-	private static int[] getIndicesWith1(int[] binaryNumber) {
+	private static int[] getIndicesWith1(int... binaryNumber) {
 		int[] ret = new int[3];
 		int index = 0;
 		for (int i = 0; i < binaryNumber.length && index < 3; i++) {
@@ -195,7 +186,7 @@ public class QuadraticCurvesTools {
 	 * @param x       x
 	 * @param params  {a, b, c}
 	 */
-	private static float getY(float x, double[] params) {
+	private static float getY(float x, double... params) {
 		return (float) (params[0] * x * x + params[1] * x + params[2]);
 	}
 

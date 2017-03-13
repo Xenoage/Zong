@@ -59,7 +59,7 @@ public final class Staff {
 	 * Creates a new {@link Staff}.
 	 */
 	public static Staff staff(int linesCount, Float interlineSpace) {
-		ArrayList<Measure> measures = new ArrayList<Measure>();
+		@SuppressWarnings("Convert2Diamond") ArrayList<Measure> measures = new ArrayList<>();
 		return new Staff(measures, linesCount, interlineSpace);
 	}
 

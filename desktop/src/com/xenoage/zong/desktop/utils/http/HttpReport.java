@@ -1,17 +1,14 @@
 package com.xenoage.zong.desktop.utils.http;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import com.xenoage.utils.jse.io.JseStreamUtils;
+import com.xenoage.utils.kernel.Tuple2;
+
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import com.xenoage.utils.jse.io.JseStreamUtils;
-import com.xenoage.utils.kernel.Tuple2;
+import static com.xenoage.utils.kernel.Tuple2.t;
 
 /**
  * This class sends an report by HTTP POST
@@ -46,7 +43,7 @@ public class HttpReport {
 	public void registerData(String filename, String data) {
 		if (filename.length() == 0)
 			throw new IllegalArgumentException("filename may not be empty");
-		files.add(new Tuple2<String, byte[]>(filename, data.getBytes()));
+		files.add(t(filename, data.getBytes()));
 	}
 
 	/**
@@ -57,7 +54,7 @@ public class HttpReport {
 		if (filename.length() == 0)
 			throw new IllegalArgumentException("filename may not be empty");
 		byte[] data = JseStreamUtils.readToByteArray(in);
-		files.add(new Tuple2<String, byte[]>(filename, data));
+		files.add(t(filename, data));
 	}
 
 	/**
@@ -76,7 +73,8 @@ public class HttpReport {
 		}
 
 		//commands for filenames
-		ArrayList<String> dataCommands = new ArrayList<String>();
+		//noinspection Convert2Diamond
+		ArrayList<String> dataCommands = new ArrayList<>();
 		int totalDataCommandLength = 0;
 		int fileIndex = 0;
 		for (Tuple2<String, byte[]> b : files) {

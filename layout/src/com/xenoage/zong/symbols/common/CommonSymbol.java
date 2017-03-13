@@ -174,7 +174,7 @@ public enum CommonSymbol {
 	public static ArrayList<CommonSymbol> getDynamics(DynamicValue value) {
 		//collect symbols from the name, e.g. "p" is DynamicsP.
 		String name = value.name();
-		ArrayList<CommonSymbol> ret = new ArrayList<CommonSymbol>(name.length());
+		ArrayList<CommonSymbol> ret = new ArrayList<>(name.length());
 		for (int i = 0; i < name.length(); i++) {
 			//TODO: symbol for "r"
 			switch (name.charAt(i)) {

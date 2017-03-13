@@ -28,20 +28,17 @@ public class ScaledEditorKit
 		@Override public View create(Element elem) {
 			String kind = elem.getName();
 			if (kind != null) {
-				if (kind.equals(AbstractDocument.ContentElementName)) {
-					return new LabelView(elem);
-				}
-				else if (kind.equals(AbstractDocument.ParagraphElementName)) {
-					return new ParagraphView(elem);
-				}
-				else if (kind.equals(AbstractDocument.SectionElementName)) {
-					return new ScaledView(elem, View.Y_AXIS);
-				}
-				else if (kind.equals(StyleConstants.ComponentElementName)) {
-					return new ComponentView(elem);
-				}
-				else if (kind.equals(StyleConstants.IconElementName)) {
-					return new IconView(elem);
+				switch (kind) {
+					case AbstractDocument.ContentElementName:
+						return new LabelView(elem);
+					case AbstractDocument.ParagraphElementName:
+						return new ParagraphView(elem);
+					case AbstractDocument.SectionElementName:
+						return new ScaledView(elem, View.Y_AXIS);
+					case StyleConstants.ComponentElementName:
+						return new ComponentView(elem);
+					case StyleConstants.IconElementName:
+						return new IconView(elem);
 				}
 			}
 

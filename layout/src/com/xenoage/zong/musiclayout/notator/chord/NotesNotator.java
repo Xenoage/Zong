@@ -184,7 +184,7 @@ public class NotesNotator {
 		return ArrayUtils.toIntArray(dotsLp);
 	}
 	
-	private boolean isLeftSuspended(NoteDisplacement[] notes) {
+	private boolean isLeftSuspended(NoteDisplacement... notes) {
 		for (NoteDisplacement note : notes)
 			if (note.suspension == NoteSuspension.Left)
 				return true;

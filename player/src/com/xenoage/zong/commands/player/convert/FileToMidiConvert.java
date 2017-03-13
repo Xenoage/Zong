@@ -62,9 +62,9 @@ import static com.xenoage.zong.player.Player.pApp;
 			FileSettings.rememberDir(file);
 			//convert - TODO: show progress
 			String lastPath = file.getAbsolutePath();
-			List<Score> scores = pApp().loadMxlScores(lastPath, new AllFilter<String>());
+			List<Score> scores = pApp().loadMxlScores(lastPath, new AllFilter<>());
 			boolean useNumber = scores.size() > 1;
-			It<Score> scoresIt = new It<Score>(scores);
+			It<Score> scoresIt = new It<>(scores);
 
 			for (Score score : scoresIt) {
 				Sequence seq = MidiConverter.convertToSequence(

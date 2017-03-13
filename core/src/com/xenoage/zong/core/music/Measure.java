@@ -244,8 +244,8 @@ public class Measure
 		if (interval == At) {
 			interval = BeforeOrAt;
 		}
-		Map<Pitch, Integer> ret = new HashMap<Pitch, Integer>();
-		Map<Pitch, Fraction> retBeats = new HashMap<Pitch, Fraction>();
+		Map<Pitch, Integer> ret = new HashMap<>();
+		Map<Pitch, Fraction> retBeats = new HashMap<>();
 		for (Voice voice : voices) {
 			Fraction pos = startBeat;
 			for (VoiceElement e : voice.getElements()) {
@@ -299,7 +299,7 @@ public class Measure
 	 * @param withMeasureElements  true, iff also the beats of the measure elements should be used
 	 */
 	public SortedList<Fraction> getUsedBeats(boolean withMeasureElements) {
-		SortedList<Fraction> ret = new SortedList<Fraction>(false);
+		SortedList<Fraction> ret = new SortedList<>(false);
 		//voice element beats
 		for (Voice voice : voices) {
 			SortedList<Fraction> voiceBeats = voice.getUsedBeats();

@@ -26,11 +26,10 @@ public class MusicXmlScoreDocFileInput
 		throws InvalidFormatException, IOException {
 		try {
 			return sync(new MusicXmlScoreDocFileReader(stream, filePath).read());
-		} catch (InvalidFormatException ex) {
-			throw ex; //forward
 		} catch (IOException ex) {
 			throw ex; //forward
-		} catch (Exception ex) {
+		}
+		catch (Exception ex) {
 			throw new IOException(ex);
 		}
 	}

@@ -19,7 +19,7 @@ import static com.xenoage.zong.desktop.io.midi.out.MidiScorePlayer.midiScorePlay
 public class MidiScorePlayerTry
 	implements PlaybackListener {
 
-	public static void main(String args[])
+	public static void main(String... args)
 		throws MidiUnavailableException {
 		int timeFactor = 1000;
 		Score score = ScoreRevolutionary.createScore();

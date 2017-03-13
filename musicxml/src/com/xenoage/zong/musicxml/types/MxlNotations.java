@@ -1,18 +1,17 @@
 package com.xenoage.zong.musicxml.types;
 
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-
-import java.util.List;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
 import com.xenoage.utils.annotations.NonNull;
 import com.xenoage.utils.xml.XmlReader;
 import com.xenoage.utils.xml.XmlWriter;
 import com.xenoage.zong.musicxml.types.choice.MxlNotationsContent;
 import com.xenoage.zong.musicxml.util.IncompleteMusicXML;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
+
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 
 /**
  * MusicXML notations.
@@ -37,21 +36,23 @@ public final class MxlNotations {
 			if (childName.equals(MxlAccidentalMark.elemName)) {
 				element = MxlAccidentalMark.read(reader);
 			}
-			if (childName.equals(MxlArticulations.elemName)) {
-				element = MxlArticulations.read(reader);
-			}
-			else if (childName.equals(MxlDynamics.elemName)) {
-				element = MxlDynamics.read(reader);
-			}
-			else if (childName.equals(MxlFermata.elemName)) {
-				element = MxlFermata.read(reader);
-			}
-			else if (childName.equals(MxlOrnaments.elemName)) {
-				element = MxlOrnaments.read(reader);
-			}
-			else if (childName.equals(MxlSlurOrTied.elemNameSlur) ||
-				childName.equals(MxlSlurOrTied.elemNameTied)) {
-				element = MxlSlurOrTied.read(reader);
+			switch (childName) {
+				case MxlArticulations.elemName:
+					element = MxlArticulations.read(reader);
+					break;
+				case MxlDynamics.elemName:
+					element = MxlDynamics.read(reader);
+					break;
+				case MxlFermata.elemName:
+					element = MxlFermata.read(reader);
+					break;
+				case MxlOrnaments.elemName:
+					element = MxlOrnaments.read(reader);
+					break;
+				case MxlSlurOrTied.elemNameSlur:
+				case MxlSlurOrTied.elemNameTied:
+					element = MxlSlurOrTied.read(reader);
+					break;
 			}
 			reader.closeElement();
 			if (element != null)

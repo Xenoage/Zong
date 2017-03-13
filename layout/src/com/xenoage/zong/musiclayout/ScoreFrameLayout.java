@@ -1,21 +1,12 @@
 package com.xenoage.zong.musiclayout;
 
-import static com.xenoage.utils.collections.CollectionUtils.alist;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import com.xenoage.zong.core.position.Time;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-
 import com.xenoage.utils.annotations.Optimized;
 import com.xenoage.utils.annotations.Optimized.Reason;
 import com.xenoage.utils.iterators.MultiListIt;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Rectangle2f;
 import com.xenoage.zong.core.position.MP;
+import com.xenoage.zong.core.position.Time;
 import com.xenoage.zong.musiclayout.continued.ContinuedElement;
 import com.xenoage.zong.musiclayout.spacing.FrameSpacing;
 import com.xenoage.zong.musiclayout.spacing.SystemSpacing;
@@ -23,6 +14,14 @@ import com.xenoage.zong.musiclayout.stampings.StaffStamping;
 import com.xenoage.zong.musiclayout.stampings.Stamping;
 import com.xenoage.zong.musiclayout.stampings.StampingType;
 import com.xenoage.zong.musiclayout.stampings.TextStamping;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 
 /**
  * A score frame layout contains the musical layout of a
@@ -76,7 +75,7 @@ public final class ScoreFrameLayout {
 	 */
 	@SuppressWarnings("unchecked")
 	public Iterable<Stamping> getMusicalStampings() {
-		return new MultiListIt<Stamping>(staffStampings, otherStampings);
+		return new MultiListIt<>(staffStampings, otherStampings);
 	}
 
 	/**
@@ -85,8 +84,8 @@ public final class ScoreFrameLayout {
 	 */
 	@SuppressWarnings("unchecked")
 	public Iterable<Stamping> getAllStampings() {
-		return new MultiListIt<Stamping>(staffStampings, otherStampings, selectionStampings,
-			playbackStampings);
+		return new MultiListIt<>(staffStampings, otherStampings, selectionStampings,
+				playbackStampings);
 	}
 
 	/**

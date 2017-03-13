@@ -40,7 +40,7 @@ public class Player
 	@Getter @Setter private PlayerFrame playerController = null;
 
 
-	public static void main(String[] args) {
+	public static void main(String... args) {
 		CommandLine.setArgs(args);
 		
 		try {

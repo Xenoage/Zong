@@ -60,7 +60,7 @@ public class ChannelMapperTest {
 		assertEquals(new ChannelMap(expectedChannels), ChannelMapper.createChannelMap(score));
 	}
 
-	private Score createScore(int[] midiPrograms, int[] partStavesCount) {
+	private Score createScore(int[] midiPrograms, int... partStavesCount) {
 		val score = new Score();
 		for (int iPart : range(partStavesCount)) {
 			Instrument instrument;

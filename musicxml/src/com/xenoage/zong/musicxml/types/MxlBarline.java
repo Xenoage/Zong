@@ -47,12 +47,17 @@ public final class MxlBarline
 		MxlRepeat repeat = null;
 		while (reader.openNextChildElement()) {
 			String n = reader.getElementName();
-			if (n.equals(MxlBarStyleColor.elemName))
-				barStyle = MxlBarStyleColor.read(reader);
-			else if (n.equals(MxlEnding.elemName))
-				ending = MxlEnding.read(reader);
-			else if (n.equals(MxlRepeat.elemName))
-				repeat = MxlRepeat.read(reader);
+			switch (n) {
+				case MxlBarStyleColor.elemName:
+					barStyle = MxlBarStyleColor.read(reader);
+					break;
+				case MxlEnding.elemName:
+					ending = MxlEnding.read(reader);
+					break;
+				case MxlRepeat.elemName:
+					repeat = MxlRepeat.read(reader);
+					break;
+			}
 			reader.closeElement();
 		}
 		return new MxlBarline(barStyle, ending, repeat, location);

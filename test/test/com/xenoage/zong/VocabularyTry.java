@@ -1,20 +1,5 @@
 package com.xenoage.zong;
 
-import static com.xenoage.utils.collections.CollectionUtils.llist;
-import static com.xenoage.utils.io.FileFilters.javaFilter;
-import static com.xenoage.utils.jse.io.JseFileUtils.getFilter;
-import static com.xenoage.utils.jse.io.JseFileUtils.listFilesDeep;
-import static com.xenoage.utils.lang.VocByString.voc;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedList;
-
 import com.xenoage.utils.document.command.Command;
 import com.xenoage.utils.jse.io.JseFileUtils;
 import com.xenoage.utils.jse.lang.LangManager;
@@ -22,6 +7,20 @@ import com.xenoage.utils.jse.lang.LanguageReader;
 import com.xenoage.utils.lang.Language;
 import com.xenoage.utils.lang.VocID;
 import com.xenoage.zong.desktop.utils.JseZongPlatformUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
+
+import static com.xenoage.utils.collections.CollectionUtils.llist;
+import static com.xenoage.utils.io.FileFilters.javaFilter;
+import static com.xenoage.utils.jse.io.JseFileUtils.getFilter;
+import static com.xenoage.utils.jse.io.JseFileUtils.listFilesDeep;
+import static com.xenoage.utils.lang.VocByString.voc;
 
 /**
  * This class contains tests for the language packages.
@@ -104,11 +103,7 @@ public class VocabularyTry {
 		Collection<File> files = listFilesDeep(new File(".."), getFilter(javaFilter));
 		for (File file : files) {
 			String fileContent = JseFileUtils.readFile(file);
-			for (Iterator<VocID> vocIt = remaining.iterator(); vocIt.hasNext();) {
-				VocID voc = vocIt.next();
-				if (fileContent.contains("Voc." + voc.getID()))
-					vocIt.remove();
-			}
+			remaining.removeIf(voc -> fileContent.contains("Voc." + voc.getID()));
 		}
 		//print all remaining elements
 		if (remaining.size() > 0) {
@@ -157,7 +152,7 @@ public class VocabularyTry {
 			if (pack.getID().equals(referencePackage.getID()))
 				continue;
 			//check other language
-			LinkedList<String> unknown = new LinkedList<String>();
+			LinkedList<String> unknown = new LinkedList<>();
 			for (String key : referencePackage.getAllKeys()) {
 				if (pack.getWithNull(key) == null)
 					unknown.add(key);
@@ -183,7 +178,7 @@ public class VocabularyTry {
 			if (pack.getID().equals(referencePackage.getID()))
 				continue;
 			//check other language
-			LinkedList<String> unused = new LinkedList<String>();
+			LinkedList<String> unused = new LinkedList<>();
 			for (String key : pack.getAllKeys()) {
 				//look for a reference language item with the same name
 				if (!referencePackage.getAllKeys().contains(key)) {
