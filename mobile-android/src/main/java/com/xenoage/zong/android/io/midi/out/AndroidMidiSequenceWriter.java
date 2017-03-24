@@ -84,7 +84,7 @@ public class AndroidMidiSequenceWriter
 	}
 	
 	@Override public long tickToMicrosecond(long tick) {
-		return 0; //unsupported
+		return tick * 1000; //unsupported
 	}
 
 	@Override protected MidiFile getSequence() {

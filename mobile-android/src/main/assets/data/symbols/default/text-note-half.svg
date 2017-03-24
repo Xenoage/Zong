@@ -7,10 +7,10 @@
    width="2000"
    height="2000"
    id="svg2"
-   score:ascent="200"
-   score:baseline="950"
-   score:leftborder="900"
-   score:rightborder="1100">
+   zong-ascent="200"
+   zong-baseline="950"
+   zong-leftborder="900"
+   zong-rightborder="1100">
   <defs
      id="defs4" />
   <g
