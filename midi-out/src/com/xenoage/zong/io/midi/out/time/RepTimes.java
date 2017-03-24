@@ -47,12 +47,12 @@ public final class RepTimes {
 
 		//compute list of times and find minimum and maximum values
 		CList<Time> times = clist(timeMap.size());
-		long minTick = MIN_VALUE;
-		long maxTick = MAX_VALUE;
-		Time minTime = time(-1, _0);
-		Time maxTime = time(Integer.MAX_VALUE, _0);
-		long minMs = MIN_VALUE;
-		long maxMs = MAX_VALUE;
+		long minTick = MAX_VALUE;
+		long maxTick = MIN_VALUE;
+		Time minTime = time(Integer.MAX_VALUE, _0);
+		Time maxTime = time(-1, _0);
+		long minMs = MAX_VALUE;
+		long maxMs = MIN_VALUE;
 		for (val tick : timeMap.getKeys1()) {
 			val time = timeMap.getBy1(tick);
 			times.add(time.get2());
