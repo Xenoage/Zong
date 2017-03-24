@@ -19,7 +19,7 @@ allprojects {
 
 android {
     compileSdkVersion 23
-    buildToolsVersion '25.0.0'
+    buildToolsVersion '25.0.2'
 
     defaultConfig {
         applicationId "com.xenoage.zong.mobile"

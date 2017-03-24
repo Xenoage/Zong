@@ -173,7 +173,7 @@ public class ScreenViewBitmaps {
 	 */
 	public void setActivePageIndex(int activePageIndex) {
 		for (int iPage : range(layout.getPages())) {
-			if (iPage < activePageIndex - 2 || iPage > activePageIndex + 1) {
+			if (iPage < activePageIndex - 1 || iPage > activePageIndex + 1) {
 				pageBitmaps[iPage] = null;
 			}
 			else if (pageBitmaps[iPage] == null) {

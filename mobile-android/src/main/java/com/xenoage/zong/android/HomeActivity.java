@@ -12,9 +12,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.xenoage.zong.Zong;
+import com.xenoage.zong.android.activities.score.ScoreActivity;
 import com.xenoage.zong.android.model.Document;
 import com.xenoage.zong.android.scoreslist.ScoresListAdapter;
-import com.xenoage.zong.android.R;
 
 public class HomeActivity
 	extends Activity
