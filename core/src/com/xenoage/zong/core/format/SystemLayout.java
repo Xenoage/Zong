@@ -16,16 +16,20 @@ import com.xenoage.utils.annotations.MaybeNull;
 @Data
 public final class SystemLayout {
 
+	public static final float defaultDistance = 30f;
+	public static final float defaultMarginLeft = 5f;
+	public static final float defaultMarginRight = 5f;
+
 	/** The distance between the bottom line
 	 * of the previous system to the top line of this system in mm.
 	 * If this is the first system of a frame, this is the distance
 	 * to the top margin of the frame (attention: this is different
 	 * in MusicXML, where a special top-system-distance is used). */
-	private float distance = 30f;
+	private float distance = defaultDistance;
 	/** The distance between the left side of the staves and the left page margin. */
-	private float marginLeft = 5f;
+	private float marginLeft = defaultMarginLeft;
 	/** The distance between the right side of the staves and the left page margin. */
-	private float marginRight = 5f;
+	private float marginRight = defaultMarginRight;
 	/** The layouts of the staves of the system (may also be or contain null). */
 	@MaybeNull public List<StaffLayout> staffLayouts = null;
 

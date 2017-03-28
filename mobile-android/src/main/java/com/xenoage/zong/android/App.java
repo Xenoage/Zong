@@ -45,7 +45,7 @@ public class App {
 		throws IOException {
 		
 		//init platform utils and logging
-		AndroidZongPlatformUtils.init(context.getResources());
+		AndroidZongPlatformUtils.init(context);
 		Log.init(new AndroidLogProcessing(Zong.getNameAndVersion(projectFirstName)));
 
 		//load symbol pool

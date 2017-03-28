@@ -1,21 +1,19 @@
-package com.xenoage.zong.android.scoreview;
+package com.xenoage.zong.android.view.provider;
 
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 
-import com.xenoage.utils.math.Units;
 import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.utils.math.geom.Size2i;
 import com.xenoage.zong.android.App;
 import com.xenoage.zong.android.R;
 import com.xenoage.zong.android.renderer.canvas.AndroidCanvas;
+import com.xenoage.zong.android.view.PageView;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.format.PageFormat;
 import com.xenoage.zong.core.format.PageMargins;
@@ -39,78 +37,69 @@ import com.xenoage.zong.renderer.canvas.CanvasIntegrity;
 
 import static com.xenoage.utils.NullUtils.notNull;
 import static com.xenoage.utils.kernel.Range.range;
+import static com.xenoage.utils.math.Units.pxToMm;
 import static com.xenoage.zong.android.renderer.AndroidLayoutRenderer.androidLayoutRenderer;
 
 /**
- * This class manages the bitmaps of a given {@link ScoreDoc}
- * and scaling.
- * 
- * When the document or the scaling is changed, a new instance
- * of this class is required.
- * 
+ * {@link ScoreViewProvider} for {@link ScoreDoc} documents.
+ *
  * @author Andreas Wenger
  */
-public class ScreenViewBitmaps {
+public class ScoreDocScoreViewProvider
+	extends ScoreViewProvider {
 
-	//constants
 	private final static int marginPx = 32;
 
-	//layout
-	private final String title;
-	private final Layout layout;
+	private ScoreDoc doc;
+	private Size2i screenSizePx;
+	private float scaling;
+	private String title;
+	private Layout layout;
 
-	//view
-	private final Size2i screenSize;
-	private final float scaling;
-	private final float titleTextHeightPx;
-
-	//bitmaps and resources
-	private final Bitmap[] pageBitmaps;
-	private final Resources resources;
+	//GOON
+	private float titleTextHeightPx;
 
 
-	public ScreenViewBitmaps(ScoreDoc doc, Size2i screenSize, float scaling, Resources res) {
-		this.screenSize = screenSize;
+	/**
+	 * Creates a provider for page views for the given document, using
+	 * the given screen size in px and the given scaling factor.
+	 */
+	public ScoreDocScoreViewProvider(ScoreDoc doc, Size2i screenSizePx, float scaling) {
+		this.doc = doc;
+		this.screenSizePx = screenSizePx;
 		this.scaling = scaling;
-		this.resources = res;
 		this.title = notNull(doc.getScore().getInfo().getTitle(), "Untitled Score");
 
 		//recompute the layout, so that each page fits into the available screen space
-		int pageWidthPx = screenSize.width;
-		int pageHeightPx = screenSize.height;
-		float pageWidthMm = Units.pxToMm(pageWidthPx, scaling);
-		float pageHeightMm = Units.pxToMm(pageHeightPx, scaling);
-		Size2f pageSizeMm = new Size2f(pageWidthMm, pageHeightMm);
-		float marginMm = Units.pxToMm(marginPx, scaling);
-		PageFormat pageFormat = new PageFormat(pageSizeMm, new PageMargins(marginMm, marginMm,
-			marginMm, marginMm));
+		Size2f pageSizeMm = pxToMm(screenSizePx, scaling);
+		float marginMm = pxToMm(marginPx, scaling);
+		PageFormat pageFormat = new PageFormat(pageSizeMm,
+			new PageMargins(marginMm, marginMm, marginMm, marginMm));
 		Size2f frameSizeMm = new Size2f(pageFormat.getUseableWidth(), pageFormat.getUseableHeight());
+
 		//first page needs space for title text
-		titleTextHeightPx = screenSize.height / 20;
-		float firstFrameOffsetY = Units.pxToMm(titleTextHeightPx, scaling);
+		titleTextHeightPx = screenSizePx.height / 20f;
+		float firstFrameOffsetY = pxToMm(titleTextHeightPx, scaling);
 		Size2f firstFrameSizeMm = new Size2f(frameSizeMm.width, frameSizeMm.height - firstFrameOffsetY);
 
-		//delete unnecessary layout information, like system distances
-		//or system breaks
+		//delete unnecessary layout information, like system distances or system breaks
 		Score score = doc.getScore();
 		score.setFormat(new ScoreFormat());
 		ScoreHeader header = score.getHeader();
 		for (int i : range(header.getSystemLayouts())) {
 			SystemLayout sl = header.getSystemLayout(i);
-			if (sl != null) {
-				sl.setDistance(new SystemLayout().getDistance());
-			}
+			if (sl != null)
+				sl.setDistance(SystemLayout.defaultDistance);
 		}
 		for (int i : range(header.getColumnHeaders())) {
 			ColumnHeader ch = header.getColumnHeader(i);
-			if (ch.getMeasureBreak() != null) {
+			if (ch.getMeasureBreak() != null)
 				ch.setBreak(null);
-			}
 		}
 
 		//layout the score to find out the needed space
 		Context context = new Context(score, App.getSymbolPool(),
-				doc.getLayout().getDefaults().getLayoutSettings());
+			doc.getLayout().getDefaults().getLayoutSettings());
 		Target target = Target.completeLayoutTarget(new ScoreLayoutArea(frameSizeMm));
 		ScoreLayouter layouter = new ScoreLayouter(context, target);
 		ScoreLayout scoreLayout = layouter.createScoreLayout();
@@ -143,63 +132,33 @@ public class ScreenViewBitmaps {
 			}
 			chain.add(frame);
 		}
-
-		//create a bitmap array with one element for each page
-		pageBitmaps = new Bitmap[layout.getPages().size()];
-
 		this.layout = layout;
 	}
 
-	/**
-	 * Gets the number of pages.
-	 */
-	public int getPagesCount() {
+	@Override public int getPagesCount() {
 		return layout.getPages().size();
 	}
 
-	/**
-	 * Gets the bitmap for the page with the given index.
-	 * If not loaded, it is created.
-	 */
-	public Bitmap getPageBitmap(int pageIndex) {
-		if (pageBitmaps[pageIndex] == null)
-			pageBitmaps[pageIndex] = renderPage(pageIndex);
-		return pageBitmaps[pageIndex];
+	@Override public PageView createPageView(int pageIndex) {
+		return new PageView(renderPage(pageIndex));
 	}
 
-	/**
-	 * Sets the active page index. This ensures that the active, the previous and
-	 * the next page are loaded. The other pages are removed from memory.
-	 */
-	public void setActivePageIndex(int activePageIndex) {
-		for (int iPage : range(layout.getPages())) {
-			if (iPage < activePageIndex - 1 || iPage > activePageIndex + 1) {
-				pageBitmaps[iPage] = null;
-			}
-			else if (pageBitmaps[iPage] == null) {
-				pageBitmaps[iPage] = renderPage(iPage);
-			}
-		}
-	}
+	private Bitmap renderPage(int pageIndex) {
 
-	private Bitmap renderPage(int page) {
-		Bitmap ret = Bitmap.createBitmap(screenSize.width, screenSize.height, Config.ARGB_8888);
+		//prepare bitmap
+		Bitmap ret = Bitmap.createBitmap(screenSizePx.width, screenSizePx.height, Bitmap.Config.ARGB_8888);
 		Canvas canvas = new Canvas(ret);
-		int background = R.drawable.paper_middle;
-		int pagesCount = layout.getPages().size();
-		if (pagesCount == 1)
-			background = R.drawable.paper_single;
-		else if (page == 0)
-			background = R.drawable.paper_first;
-		else if (page == pagesCount - 1)
-			background = R.drawable.paper_last;
-		Bitmap bmp = BitmapFactory.decodeResource(resources, background);
-		canvas.drawBitmap(bmp, null, canvas.getClipBounds(), null);
-		AndroidCanvas context = new AndroidCanvas(canvas, layout.getPages().get(page).getFormat().getSize(),
+		AndroidCanvas androidCanvas = new AndroidCanvas(canvas, layout.getPages().get(pageIndex).getFormat().getSize(),
 			CanvasFormat.Raster, CanvasDecoration.None, CanvasIntegrity.Perfect);
-		androidLayoutRenderer.paint(layout, page, context, scaling);
+
+		//background
+		canvas.drawBitmap(getBackgroundImage(pageIndex), null, canvas.getClipBounds(), null);
+
+		//paint score
+		androidLayoutRenderer.paint(layout, pageIndex, androidCanvas, scaling);
+
 		//first page: draw title
-		if (page == 0) {
+		if (pageIndex == 0) {
 			Paint paint = new Paint();
 			paint.setColor(Color.BLACK);
 			paint.setStyle(Paint.Style.FILL);
@@ -207,9 +166,11 @@ public class ScreenViewBitmaps {
 			paint.setTypeface(Typeface.SERIF);
 			paint.setTextSize(titleTextHeightPx * 0.6f);
 			float width = paint.measureText(title);
-			canvas.drawText(title, screenSize.width / 2 - width / 2, marginPx + titleTextHeightPx, paint);
+			canvas.drawText(title, screenSizePx.width / 2 - width / 2, marginPx + titleTextHeightPx, paint);
 		}
 		return ret;
 	}
+
+
 
 }

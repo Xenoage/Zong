@@ -1,5 +1,6 @@
 package com.xenoage.zong.android.util;
 
+import android.content.Context;
 import android.content.res.Resources;
 
 import com.xenoage.utils.PlatformUtils;
@@ -31,10 +32,10 @@ public class AndroidZongPlatformUtils
 	
 	/**
 	 * Initializes the {@link AndroidZongPlatformUtils} as the {@link ZongPlatformUtils} instance
-	 * with the given {@link Resources}.
+	 * with the given {@link Context}.
 	 */
-	public static void init(Resources resources) {
-		AndroidPlatformUtils.init(resources);
+	public static void init(Context context) {
+		AndroidPlatformUtils.init(context);
 		ZongPlatformUtils.init(instance);
 		//load default symbol pool
 		try {

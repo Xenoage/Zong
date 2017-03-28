@@ -3,6 +3,7 @@ package com.xenoage.utils.android;
 import java.io.IOException;
 import java.util.List;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 
@@ -36,9 +37,11 @@ public class AndroidPlatformUtils
 	private AndroidIO androidIO = null;
 	private AndroidTextMeasurer textMeasurer = new AndroidTextMeasurer();
 
+	private Context context;
+
 	/**
 	 * Gets the {@link AndroidPlatformUtils} instance.
-	 * {@link #init(Resources)} has to be called before.
+	 * {@link #init(Context)} has to be called before.
 	 */
 	public static AndroidPlatformUtils androidPlatformUtils() {
 		assertInitialized();
@@ -48,11 +51,12 @@ public class AndroidPlatformUtils
 	/**
 	 * Initializes the {@link PlatformUtils} class for usage within an
 	 * Android environment (using an instance of {@link AndroidPlatformUtils}),
-	 * using the given {@link Resources}.
+	 * using the given {@link Context}.
 	 */
-	public static void init(Resources res) {
+	public static void init(Context context) {
 		instance = new AndroidPlatformUtils();
-		instance.androidIO = new AndroidIO(res);
+		instance.context = context;
+		instance.androidIO = new AndroidIO(context.getResources());
 		PlatformUtils.init(instance);
 	}
 
@@ -64,11 +68,25 @@ public class AndroidPlatformUtils
 
 	/**
 	 * Gets the {@link AndroidIO} instance.
-	 * {@link #init(Resources)} has to be called before.
+	 * {@link #init(Context)} has to be called before.
 	 */
 	public static AndroidIO io() {
 		assertInitialized();
 		return instance.androidIO;
+	}
+
+	/**
+	 * Gets a global {@link Context} instance.
+	 */
+	public Context getContext() {
+		return context;
+	}
+
+	/**
+	 * Gets the app's resources.
+	 */
+	public Resources getResources() {
+		return context.getResources();
 	}
 
 	@Override public List<StackTraceElement> getCurrentStackTrace() {
