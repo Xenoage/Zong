@@ -36,6 +36,7 @@ import com.xenoage.zong.renderer.canvas.CanvasFormat;
 import com.xenoage.zong.renderer.canvas.CanvasIntegrity;
 
 import static com.xenoage.utils.NullUtils.notNull;
+import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.Units.pxToMm;
 import static com.xenoage.zong.android.renderer.AndroidLayoutRenderer.androidLayoutRenderer;
@@ -100,7 +101,8 @@ public class ScoreDocScoreViewProvider
 		//layout the score to find out the needed space
 		Context context = new Context(score, App.getSymbolPool(),
 			doc.getLayout().getDefaults().getLayoutSettings());
-		Target target = Target.completeLayoutTarget(new ScoreLayoutArea(frameSizeMm));
+		Target target = new Target(alist(new ScoreLayoutArea(firstFrameSizeMm)),
+			new ScoreLayoutArea(frameSizeMm), true);
 		ScoreLayouter layouter = new ScoreLayouter(context, target);
 		ScoreLayout scoreLayout = layouter.createScoreLayout();
 
