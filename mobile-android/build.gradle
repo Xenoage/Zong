@@ -21,10 +21,14 @@ android {
     compileSdkVersion 23
     buildToolsVersion '25.0.2'
 
+    aaptOptions {
+        noCompress "pdf" //do not compress PDF, otherwise we can not read it with PdfRenderer
+    }
+
     defaultConfig {
         applicationId "com.xenoage.zong.mobile"
-        minSdkVersion 15
-        targetSdkVersion 15
+        minSdkVersion 21
+        targetSdkVersion 21
         versionCode 1
         versionName "1.0"
         jackOptions {
