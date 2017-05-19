@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Display;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ZoomControls;
@@ -14,8 +15,9 @@ import android.widget.ZoomControls;
 import com.xenoage.utils.math.geom.Size2i;
 import com.xenoage.zong.android.App;
 import com.xenoage.zong.android.R;
+import com.xenoage.zong.android.view.PdfScoreView;
+import com.xenoage.zong.android.view.ScoreDocScoreView;
 import com.xenoage.zong.android.view.ScoreView;
-import com.xenoage.zong.android.view.provider.ScoreDocScoreViewProvider;
 import com.xenoage.zong.documents.ScoreDoc;
 
 import java.io.IOException;
@@ -25,8 +27,9 @@ import static com.xenoage.utils.log.Log.log;
 import static com.xenoage.utils.log.Report.error;
 
 /**
- * This activity displays a given score.
- * 
+ * This activity displays a given score, either in MusicXML
+ * or in PDF format.
+ *
  * @author Andreas Wenger
  */
 public class ScoreActivity
@@ -57,9 +60,19 @@ public class ScoreActivity
 
 		//load score
 		try {
-			scoreDoc = App.load(getIntent().getStringExtra("filename"));
-			App.getMidiPlayer().open(scoreDoc.getScore(), ScoreActivity.this);
-			updateScoreView();
+			String filename = getIntent().getStringExtra("filename");
+			if (filename.toLowerCase().endsWith(".pdf")) {
+				//PDF score
+				scoreView = new PdfScoreView(filename, getScreenSize(), scalings[currentScalingIndex]);
+				//hide Playback button
+				findViewById(R.id.score_playback).setVisibility(View.INVISIBLE);
+			}
+			else {
+				//MusicXML score
+				scoreDoc = App.load(filename);
+				scoreView = new ScoreDocScoreView(scoreDoc, getScreenSize(), scalings[currentScalingIndex]);
+				App.getMidiPlayer().open(scoreDoc.getScore(), ScoreActivity.this);
+			}
 		} catch (OutOfMemoryError ex) {
 			showError("Not enough memory to load this score.");
 		} catch (IOException ex) {
@@ -149,10 +162,8 @@ public class ScoreActivity
 	}
 
 	private void updateScoreView() {
-		scoreView = new ScoreView(new ScoreDocScoreViewProvider(
-			scoreDoc, getScreenSize(), scalings[currentScalingIndex]));
-		if (pagerAdapter != null)
-			pagerAdapter.notifyDataSetChanged();
+		scoreView.updateScreen(getScreenSize(), scalings[currentScalingIndex]);
+		pagerAdapter.notifyDataSetChanged();
 	}
 
 	private void playback() {

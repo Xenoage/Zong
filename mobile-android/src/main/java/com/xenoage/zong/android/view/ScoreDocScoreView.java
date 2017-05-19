@@ -1,7 +1,6 @@
-package com.xenoage.zong.android.view.provider;
+package com.xenoage.zong.android.view;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -11,9 +10,7 @@ import com.xenoage.utils.math.geom.Point2f;
 import com.xenoage.utils.math.geom.Size2f;
 import com.xenoage.utils.math.geom.Size2i;
 import com.xenoage.zong.android.App;
-import com.xenoage.zong.android.R;
 import com.xenoage.zong.android.renderer.canvas.AndroidCanvas;
-import com.xenoage.zong.android.view.PageView;
 import com.xenoage.zong.core.Score;
 import com.xenoage.zong.core.format.PageFormat;
 import com.xenoage.zong.core.format.PageMargins;
@@ -42,45 +39,44 @@ import static com.xenoage.utils.math.Units.pxToMm;
 import static com.xenoage.zong.android.renderer.AndroidLayoutRenderer.androidLayoutRenderer;
 
 /**
- * {@link ScoreViewProvider} for {@link ScoreDoc} documents.
+ * {@link ScoreView} for {@link ScoreDoc} documents.
  *
  * @author Andreas Wenger
  */
-public class ScoreDocScoreViewProvider
-	extends ScoreViewProvider {
+public class ScoreDocScoreView
+		extends ScoreView {
 
 	private final static int marginPx = 32;
 
 	private ScoreDoc doc;
 	private Size2i screenSizePx;
-	private float scaling;
+	private float zoom;
 	private String title;
 	private Layout layout;
 
-	//GOON
 	private float titleTextHeightPx;
 
 
-	/**
-	 * Creates a provider for page views for the given document, using
-	 * the given screen size in px and the given scaling factor.
-	 */
-	public ScoreDocScoreViewProvider(ScoreDoc doc, Size2i screenSizePx, float scaling) {
+	public ScoreDocScoreView(ScoreDoc doc, Size2i screenSizePx, float zoom) {
 		this.doc = doc;
-		this.screenSizePx = screenSizePx;
-		this.scaling = scaling;
 		this.title = notNull(doc.getScore().getInfo().getTitle(), "Untitled Score");
+		updateScreen(screenSizePx, zoom);
+	}
+
+	@Override public void updateScreen(Size2i screenSizePx, float zoom) {
+		this.screenSizePx = screenSizePx;
+		this.zoom = zoom;
 
 		//recompute the layout, so that each page fits into the available screen space
-		Size2f pageSizeMm = pxToMm(screenSizePx, scaling);
-		float marginMm = pxToMm(marginPx, scaling);
+		Size2f pageSizeMm = pxToMm(screenSizePx, zoom);
+		float marginMm = pxToMm(marginPx, zoom);
 		PageFormat pageFormat = new PageFormat(pageSizeMm,
-			new PageMargins(marginMm, marginMm, marginMm, marginMm));
+				new PageMargins(marginMm, marginMm, marginMm, marginMm));
 		Size2f frameSizeMm = new Size2f(pageFormat.getUseableWidth(), pageFormat.getUseableHeight());
 
 		//first page needs space for title text
 		titleTextHeightPx = screenSizePx.height / 20f;
-		float firstFrameOffsetY = pxToMm(titleTextHeightPx, scaling);
+		float firstFrameOffsetY = pxToMm(titleTextHeightPx, zoom);
 		Size2f firstFrameSizeMm = new Size2f(frameSizeMm.width, frameSizeMm.height - firstFrameOffsetY);
 
 		//delete unnecessary layout information, like system distances or system breaks
@@ -100,9 +96,9 @@ public class ScoreDocScoreViewProvider
 
 		//layout the score to find out the needed space
 		Context context = new Context(score, App.getSymbolPool(),
-			doc.getLayout().getDefaults().getLayoutSettings());
+				doc.getLayout().getDefaults().getLayoutSettings());
 		Target target = new Target(alist(new ScoreLayoutArea(firstFrameSizeMm)),
-			new ScoreLayoutArea(frameSizeMm), true);
+				new ScoreLayoutArea(frameSizeMm), true);
 		ScoreLayouter layouter = new ScoreLayouter(context, target);
 		ScoreLayout scoreLayout = layouter.createScoreLayout();
 
@@ -117,8 +113,7 @@ public class ScoreDocScoreViewProvider
 				//first page
 				position = new Point2f(pageSizeMm.width / 2, pageSizeMm.height / 2 + firstFrameOffsetY);
 				size = firstFrameSizeMm;
-			}
-			else {
+			} else {
 				//other pages
 				position = new Point2f(pageSizeMm.width / 2, pageSizeMm.height / 2);
 				size = frameSizeMm;
@@ -141,7 +136,7 @@ public class ScoreDocScoreViewProvider
 		return layout.getPages().size();
 	}
 
-	@Override public PageView createPageView(int pageIndex) {
+	@Override public PageView getPage(int pageIndex) {
 		return new PageView(renderPage(pageIndex));
 	}
 
@@ -151,13 +146,13 @@ public class ScoreDocScoreViewProvider
 		Bitmap ret = Bitmap.createBitmap(screenSizePx.width, screenSizePx.height, Bitmap.Config.ARGB_8888);
 		Canvas canvas = new Canvas(ret);
 		AndroidCanvas androidCanvas = new AndroidCanvas(canvas, layout.getPages().get(pageIndex).getFormat().getSize(),
-			CanvasFormat.Raster, CanvasDecoration.None, CanvasIntegrity.Perfect);
+				CanvasFormat.Raster, CanvasDecoration.None, CanvasIntegrity.Perfect);
 
 		//background
 		canvas.drawBitmap(getBackgroundImage(pageIndex), null, canvas.getClipBounds(), null);
 
 		//paint score
-		androidLayoutRenderer.paint(layout, pageIndex, androidCanvas, scaling);
+		androidLayoutRenderer.paint(layout, pageIndex, androidCanvas, zoom);
 
 		//first page: draw title
 		if (pageIndex == 0) {
@@ -172,7 +167,4 @@ public class ScoreDocScoreViewProvider
 		}
 		return ret;
 	}
-
-
-
 }
