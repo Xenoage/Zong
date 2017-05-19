@@ -5,31 +5,22 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Display;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ZoomControls;
 
 import com.xenoage.utils.math.geom.Size2i;
 import com.xenoage.zong.android.App;
 import com.xenoage.zong.android.R;
-import com.xenoage.zong.android.scoreview.ScreenViewBitmaps;
 import com.xenoage.zong.android.view.ScoreView;
 import com.xenoage.zong.android.view.provider.ScoreDocScoreViewProvider;
 import com.xenoage.zong.documents.ScoreDoc;
 
 import java.io.IOException;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.val;
-
 import static com.xenoage.utils.PlatformUtils.platformUtils;
-import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.log.Log.log;
 import static com.xenoage.utils.log.Report.error;
 
@@ -52,6 +43,7 @@ public class ScoreActivity
 	private int currentScalingIndex = 4;
 
 	private ViewPager pager;
+	private ScorePagerAdapter pagerAdapter;
 
 
 	@Override public void onCreate(Bundle savedInstanceState) {
@@ -123,18 +115,11 @@ public class ScoreActivity
 
 		//create and link pager components
 		pager = (ViewPager) findViewById(R.id.pager);
-		ScorePagerAdapter pagerAdapter = new ScorePagerAdapter(getSupportFragmentManager());
+		pagerAdapter = new ScorePagerAdapter(getSupportFragmentManager());
 		pager.setAdapter(pagerAdapter);
 	}
 
 	private void registerListeners() {
-		//page switcher
-		/* final HorizontalPager pager = (HorizontalPager) findViewById(R.id.score_pager);
-		pager.setOnScreenSwitchListener(screen -> {
-			int activePageIndex = screen;
-			bitmaps.setActivePageIndex(activePageIndex);
-			updatePager();
-		}); */
 		//zoom buttons
 		final ZoomControls zoomControls = (ZoomControls) findViewById(R.id.score_zoom);
 		zoomControls.setOnZoomInClickListener(view -> {
@@ -166,6 +151,8 @@ public class ScoreActivity
 	private void updateScoreView() {
 		scoreView = new ScoreView(new ScoreDocScoreViewProvider(
 			scoreDoc, getScreenSize(), scalings[currentScalingIndex]));
+		if (pagerAdapter != null)
+			pagerAdapter.notifyDataSetChanged();
 	}
 
 	private void playback() {
@@ -213,6 +200,14 @@ public class ScoreActivity
 			args.putInt("pageIndex", position);
 			page.setArguments(args);
 			return page;
+		}
+
+		/**
+		 * Without this workaround, the pager would not update.
+		 * See http://stackoverflow.com/a/7287121/518491
+		 */
+		@Override public int getItemPosition(Object object) {
+			return POSITION_NONE;
 		}
 	};
 

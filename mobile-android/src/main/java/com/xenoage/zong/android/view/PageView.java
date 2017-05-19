@@ -3,7 +3,7 @@ package com.xenoage.zong.android.view;
 import android.graphics.Bitmap;
 
 /**
- * View of a page of a score..
+ * View of a page of a score.
  * It consists of a bitmap.
  *
  * @author Andreas Wenger
