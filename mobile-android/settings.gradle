@@ -1,6 +1,4 @@
-/*
-//ZONG-120: see dependencies in build.xml
-include "core", "layout", "midi-out", "musicxml", "musicxml-in", "musicxml-layout", "renderer", "utils-base", "utils-jse", "utils-kernel"
+include "core", "layout", "midi-out", "musicxml", "musicxml-in", "musicxml-layout", "renderer", "utils-base", "utils-jse", "utils-jsebase", "utils-kernel"
 project(":core").projectDir = new File("../core")
 project(":layout").projectDir = new File("../layout")
 project(":midi-out").projectDir = new File("../midi-out")
@@ -10,5 +8,5 @@ project(":musicxml-layout").projectDir = new File("../musicxml-layout")
 project(":renderer").projectDir = new File("../renderer")
 project(":utils-base").projectDir = new File("../utils/utils-base")
 project(":utils-jse").projectDir = new File("../utils/utils-jse")
+project(":utils-jsebase").projectDir = new File("../utils/utils-jsebase")
 project(":utils-kernel").projectDir = new File("../utils/utils-kernel")
-*/
