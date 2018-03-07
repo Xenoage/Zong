@@ -1,8 +1,13 @@
+plugins {
+	id "org.jetbrains.kotlin.jvm" version "1.2.30"
+}
+
 apply plugin: 'java'
+apply plugin: "kotlin"
 sourceCompatibility = 8
 
 dependencies {
-	compile project(':utils-base')
+	compile project(':utils-jvm')
 	compile/*compileOnly - use as soon as Buildship (Gradle in Eclipse) supports it*/ 'org.projectlombok:lombok:1.16.6'
 }
 

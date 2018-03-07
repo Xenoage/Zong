@@ -11,3 +11,8 @@ project(':utils-jsebase').projectDir = new File('utils/utils-jsebase')
 project(':utils-pdlib').projectDir = new File('utils/utils-pdlib') //TIDY: only needed for utils-test
 project(':utils-serialize').projectDir = new File('utils/utils-serialize') //TIDY: only needed for utils-test
 project(':utils-test').projectDir = new File('utils/utils-test')
+
+//new Kotlin modules
+include 'utils-common'
+include 'utils-jvm'
+
