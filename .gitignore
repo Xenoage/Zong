@@ -11,10 +11,10 @@ Thumbs.db
 .metadata*
 .recommenders
 .gradle
-bin
-build
-/doc
-/out
+bin/
+build/
+doc/
+out/
 
 # Libraries #
 /lib

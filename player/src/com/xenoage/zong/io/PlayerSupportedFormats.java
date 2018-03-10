@@ -28,7 +28,7 @@ public class PlayerSupportedFormats
 
 
 	private PlayerSupportedFormats() {
-		this.formats = getSupportedFormats();
+		this.setFormats(getSupportedFormats());
 	}
 
 	static List<FileFormat<Score>> getSupportedFormats() {
