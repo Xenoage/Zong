@@ -186,7 +186,7 @@ public class PlayerFrame
 		try {
 			langs = LanguageInfo.getAvailableLanguages(LangManager.defaultLangPath);
 		} catch (Exception ex) {
-			handle(fatal(ex));
+			handle(Companion.fatal(ex));
 		}
 		ToggleGroup toggleGroup = new ToggleGroup();
 		for (final LanguageInfo lang : langs) {

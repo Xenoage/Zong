@@ -107,7 +107,7 @@ public class MidiVelocityConverterTry {
 
 		cursor.write(new Clef(ClefType.clefTreble));
 
-		Fraction f4 = fr(1, 4);
+		Fraction f4 = Companion.fr(1, 4);
 
 		Chord attachC;
 		cursor.write(attachC = chord(f4, Pitch.pi(Pitch.G, 4)));

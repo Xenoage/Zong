@@ -25,18 +25,18 @@ public class SystemSpacingTest {
 	private SystemSpacing system = createSystemSpacing(
 		alist(
 			//measure 0 barline beats
-			alist(bo(fr(0, 4), 0), bo(fr(4, 4), 25)),
+			alist(bo(Companion.fr(0, 4), 0), bo(Companion.fr(4, 4), 25)),
 			//measure 1 barline beats
-			alist(bo(fr(0, 4), 0), bo(fr(4, 4), 20)),
+			alist(bo(Companion.fr(0, 4), 0), bo(Companion.fr(4, 4), 20)),
 			//measure 2 barline beats
-			alist(bo(fr(0, 4), 0), bo(fr(4, 4), 20))),
+			alist(bo(Companion.fr(0, 4), 0), bo(Companion.fr(4, 4), 20))),
 		alist(
 			//measure 0 internal beats
-			ilist(bo(fr(0, 4), 5), bo(fr(1, 4), 20)),
+			ilist(bo(Companion.fr(0, 4), 5), bo(Companion.fr(1, 4), 20)),
 			//measure 1 internal beats
-			ilist(bo(fr(0, 4), 5), bo(fr(1, 4), 15)),
+			ilist(bo(Companion.fr(0, 4), 5), bo(Companion.fr(1, 4), 15)),
 			//measure 2 internal beats
-			ilist(bo(fr(0, 4), 5), bo(fr(3, 4), 15))));
+			ilist(bo(Companion.fr(0, 4), 5), bo(Companion.fr(3, 4), 15))));
 
 
 	@Test public void getMpAtTest() {
@@ -74,8 +74,8 @@ public class SystemSpacingTest {
 		}
 		//coordinate between beat 0 and 3 (but nearer to beat 0) in measure 2 must return beat 0
 		column = system.getColumn(2);
-		BeatOffset m2bo0 = column.getBeatOffset(fr(0, 4));
-		BeatOffset m2bo3 = column.getBeatOffset(fr(3, 4));
+		BeatOffset m2bo0 = column.getBeatOffset(Companion.fr(0, 4));
+		BeatOffset m2bo3 = column.getBeatOffset(Companion.fr(3, 4));
 		xMm = system.getMeasureStartMm(2) + m2bo0.offsetMm + (m2bo3.offsetMm - m2bo0.offsetMm) * 0.4f;
 		mp = system.getMpAt(xMm, unknown);
 		assertEquals(2, mp.measure);
@@ -94,12 +94,12 @@ public class SystemSpacingTest {
 		int lastMeasure = system.getEndMeasure();
 		//beat before first beat in measure 0 must return first beat
 		bo = getFirst(system.getColumn(0).beatOffsets);
-		xMm = system.getXMmAt(time(0, bo.beat.sub(fr(1, 4))));
+		xMm = system.getXMmAt(time(0, bo.beat.sub(Companion.fr(1, 4))));
 		expectedXMm = system.getMeasureStartMm(0) + bo.offsetMm;
 		assertEquals(expectedXMm, xMm, df);
 		//beat after last beat in last measure must return last beat
 		bo = getLast(system.getColumn(lastMeasure).beatOffsets);
-		xMm = system.getXMmAt(time(lastMeasure, bo.beat.add(fr(1, 4))));
+		xMm = system.getXMmAt(time(lastMeasure, bo.beat.add(Companion.fr(1, 4))));
 		expectedXMm = system.getMeasureStartMm(lastMeasure) + bo.offsetMm;
 		assertEquals(expectedXMm, xMm, df);
 		//i-th beat must return coordinate at i-th x-position

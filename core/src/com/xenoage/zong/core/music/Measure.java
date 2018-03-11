@@ -320,7 +320,7 @@ public class Measure
 	 * element following any more.
 	 */
 	public Fraction getFilledBeats() {
-		Fraction maxBeat = Fraction._0;
+		Fraction maxBeat = Fraction.Companion.get_0();
 		for (Voice voice : voices) {
 			Fraction beat = voice.getFilledBeats();
 			if (beat.compareTo(maxBeat) > 0)

@@ -58,7 +58,7 @@ public class ScoreInputOptions {
 	 */
 	public ScoreInputOptions() {
 		//default duration are quarter notes
-		duration = fr(1, 4);
+		duration = Companion.fr(1, 4);
 		//default octave is 4
 		octave = 4;
 	}

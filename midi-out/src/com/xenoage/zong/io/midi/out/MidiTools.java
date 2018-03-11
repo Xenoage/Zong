@@ -69,7 +69,7 @@ public class MidiTools {
       case 6: ret += 11; break;
     }
     ret += pitch.getAlter();
-    ret = clamp(ret, 0, 127);
+    ret = INSTANCE.clamp(ret, 0, 127);
     return ret;
   }
 

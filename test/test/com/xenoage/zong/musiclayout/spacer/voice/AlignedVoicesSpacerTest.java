@@ -221,10 +221,10 @@ public class AlignedVoicesSpacerTest {
 	}
 
 	private Fraction beat(int quarters) {
-		return fr(quarters, 4);
+		return Companion.fr(quarters, 4);
 	}
 
 	private ElementSpacing graceSpacing(Fraction beat, float offsetIs) {
-		return new RestSpacing(new RestNotation(new Rest(_0), null, null), beat, offsetIs, 4);
+		return new RestSpacing(new RestNotation(new Rest(Companion.get_0()), null, null), beat, offsetIs, 4);
 	}
 }

@@ -17,7 +17,7 @@ import static com.xenoage.utils.math.Fraction._1;
 @Const @Data @Builder(builderClassName = "midiSettings")
 public class MidiSettings {
 	public static final MidiSettings defaultMidiSettings = new MidiSettings(
-			0.7f, 8, 36, 50, _1);
+			0.7f, 8, 36, 50, Companion.get_1());
 	
 	/** Default volume. */
 	public final float defaultVolume;

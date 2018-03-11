@@ -58,7 +58,7 @@ public class VoicesBeatOffsetter {
 
 		//compute the offset of beat 0
 		float offsetMm = getOffsetBeat0InMm(voiceSpacings);
-		Fraction lastBeat = _0;
+		Fraction lastBeat = Companion.get_0();
 		ret.add(new BeatOffset(lastBeat, offsetMm));
 
 		//if there is only one voice, it's easy to compute the offsets.
@@ -123,7 +123,7 @@ public class VoicesBeatOffsetter {
 		SortedList<Fraction> beats = sortedListNoDuplicates();
 		Fraction beat;
 		for (VoiceSpacing voiceSpacing : voiceSpacings) {
-			beat = Fraction._0;
+			beat = Fraction.Companion.get_0();
 			for (ElementSpacing spacingElement : voiceSpacing.elements) {
 				MusicElement element = spacingElement.getElement();
 				if (element instanceof VoiceElement) {
@@ -143,7 +143,7 @@ public class VoicesBeatOffsetter {
 	 * Returns the last beat of the given voice spacings.
 	 */
 	Fraction computeLastBeat(List<VoiceSpacing> voiceSpacings) {
-		Fraction ret = _0;
+		Fraction ret = Companion.get_0();
 		for (VoiceSpacing voiceSpacing : voiceSpacings) {
 			Fraction lastBeat = voiceSpacing.getLast().beat;
 			if (lastBeat.compareTo(ret) > 0)
@@ -270,7 +270,7 @@ public class VoicesBeatOffsetter {
 	private float getOffsetBeat0InMm(List<VoiceSpacing> voiceSpacings) {
 		float maxOffset = 0;
 		for (VoiceSpacing voiceSpacing : voiceSpacings) {
-			float offset = getLastOffset(voiceSpacing.elements, _0) * voiceSpacing.interlineSpace;
+			float offset = getLastOffset(voiceSpacing.elements, Companion.get_0()) * voiceSpacing.interlineSpace;
 			if (offset > maxOffset)
 				maxOffset = offset;
 		}

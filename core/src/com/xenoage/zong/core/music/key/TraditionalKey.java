@@ -149,7 +149,7 @@ public final class TraditionalKey
 		int linePositionMin) {
 		int ret = linePositionC4 + 2 +
 			(sharp ? getSharpLinePositionGKey(index) : getFlatLinePositionGKey(index));
-		ret = MathUtils.modMin(ret, 7, linePositionMin);
+		ret = MathUtils.INSTANCE.modMin(ret, 7, linePositionMin);
 		return ret;
 	}
 

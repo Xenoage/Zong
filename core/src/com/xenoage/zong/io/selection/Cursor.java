@@ -89,7 +89,7 @@ public final class Cursor
 	public Cursor(Score score, MP mp, boolean moving) {
 		this.score = score;
 		this.mp = mp;
-		if (this.mp.beat == MP.unknownBeat)
+		if (this.mp.getBeat() == MP.Companion.getUnknownBeat())
 			this.mp = this.mp.getWithBeat(score);
 		this.moving = moving;
 	}
@@ -115,14 +115,14 @@ public final class Cursor
 	 * Sets the position of the cursor. The {@link MP#element} field must be set.
 	 */
 	public void setMp(MP mp) {
-		if (mp.element == MP.unknown)
+		if (mp.getElement() == MP.Companion.getUnknown())
 			throw new IllegalArgumentException("unknown element");
-		if (mp.beat == MP.unknownBeat) {
+		if (mp.getBeat() == MP.Companion.getUnknownBeat()) {
 			//beat is unknown. compute it or use 0 for nonexisting MPs.
 			if (score.isMPExisting(mp))
 				mp = mp.getWithBeat(score);
 			else
-				mp = mp.withBeat(_0);
+				mp = mp.withBeat(Companion.get_0());
 		}
 		this.mp = mp;
 	}
@@ -134,7 +134,7 @@ public final class Cursor
 	 */
 	@Override public void write(ColumnElement element) {
 		ensureMeasureExists(mp);
-		new ColumnElementWrite(element, score.getColumnHeader(mp.measure), mp.beat, null).execute();
+		new ColumnElementWrite(element, score.getColumnHeader(mp.getMeasure()), mp.getBeat(), null).execute();
 	}
 
 
@@ -171,7 +171,7 @@ public final class Cursor
 	 */
 	private void addPitchesToPrecedingChord(Pitch... pitches) {
 		//find the last voice element starting before the current position
-		MPE<VoiceElement> ive = score.getStaff(mp.staff).getVoiceElementBefore(mp, false);
+		MPE<VoiceElement> ive = score.getStaff(mp.getStaff()).getVoiceElementBefore(mp, false);
 
 		//if the target element is a chord, add the given pitches to it - TODO: use command
 		if (ive != null && ive.element instanceof Chord) {
@@ -216,16 +216,16 @@ public final class Cursor
 
 		//if move flag is set, move cursor forward, also over measure boundaries
 		if (moving) {
-			Fraction newBeat = mp.beat.add(element.getDuration());
+			Fraction newBeat = mp.getBeat().add(element.getDuration());
 			//if this beat is behind the end of the measure, jump into the next measure
-			Fraction measureBeats = score.getHeader().getTimeAtOrBefore(mp.measure).getType().getMeasureBeats();
+			Fraction measureBeats = score.getHeader().getTimeAtOrBefore(mp.getMeasure()).getType().getMeasureBeats();
 			if (measureBeats != null && newBeat.compareTo(measureBeats) >= 0) {
 				//begin new measure
-				mp = mp(mp.staff, mp.measure + 1, mp.voice, _0, 0);
+				mp = Companion.mp(mp.getStaff(), mp.getMeasure() + 1, mp.getVoice(), Companion.get_0(), 0);
 			}
 			else {
 				//stay in the current measure
-				mp = mp(mp.staff, mp.measure, mp.voice, newBeat, mp.element + 1);
+				mp = Companion.mp(mp.getStaff(), mp.getMeasure(), mp.getVoice(), newBeat, mp.getElement() + 1);
 			}
 		}
 	}
@@ -248,7 +248,7 @@ public final class Cursor
 		//create the measure, if needed
 		ensureMeasureExists(mp);
 		//write the element
-		new MeasureElementWrite(element, score.getMeasure(mp), mp.beat).execute();
+		new MeasureElementWrite(element, score.getMeasure(mp), mp.getBeat()).execute();
 	}
 
 
@@ -314,8 +314,8 @@ public final class Cursor
 	 */
 	private void ensureStaffExists(MP mp) {
 		//create staves if needed
-		if (score.getStavesCount() <= mp.staff)
-			new StaffAdd(score, mp.staff - score.getStavesCount() + 1).execute();
+		if (score.getStavesCount() <= mp.getStaff())
+			new StaffAdd(score, mp.getStaff() - score.getStavesCount() + 1).execute();
 	}
 	
 	
@@ -327,8 +327,8 @@ public final class Cursor
 		//create staves if needed
 		ensureStaffExists(mp);
 		//create measures if needed
-		if (score.getMeasuresCount() <= mp.measure)
-			new MeasureAdd(score, mp.measure - score.getMeasuresCount() + 1).execute();
+		if (score.getMeasuresCount() <= mp.getMeasure())
+			new MeasureAdd(score, mp.getMeasure() - score.getMeasuresCount() + 1).execute();
 	}
 	
 	
@@ -341,8 +341,8 @@ public final class Cursor
 		ensureMeasureExists(mp);
 		//create voice if needed
 		Measure measure = score.getMeasure(mp);
-		if (measure.getVoices().size() <= mp.voice)
-			new VoiceAdd(measure, mp.voice).execute();
+		if (measure.getVoices().size() <= mp.getVoice())
+			new VoiceAdd(measure, mp.getVoice()).execute();
 	}
 
 

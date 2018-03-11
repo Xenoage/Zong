@@ -20,10 +20,10 @@ public interface Base24c
 	
 	default Chord[] getExpectedChords() {
 		Chord[] ret = {
-			ch(fr(2, 4), pi('E', 0, 5)),
-			ch(fr(2, 4), pi('E', 0, 5)),
-			gr(fr(1, 16), false, pi('G', 0, 5)),
-			gr(fr(1, 16), false, pi('A', 0, 5))};
+			ch(Companion.fr(2, 4), pi('E', 0, 5)),
+			ch(Companion.fr(2, 4), pi('E', 0, 5)),
+			gr(Companion.fr(1, 16), false, pi('G', 0, 5)),
+			gr(Companion.fr(1, 16), false, pi('A', 0, 5))};
 		new BeamAdd(beamFromChordsUnchecked(alist(ret[2], ret[3]))).execute();
 		return ret;
 	}

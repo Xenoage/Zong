@@ -40,7 +40,7 @@ public class DynamicsPeriods {
 	@MaybeNull public DynamicsPeriod get(MP mp, int repetition, Range partStaves) {
 		val time = mp.getTime();
 		//first, find voice dynamics
-		val voicePeriods = getVoicePeriods(mp.staff, mp.voice, repetition);
+		val voicePeriods = getVoicePeriods(mp.getStaff(), mp.getVoice(), repetition);
 		val voicePeriod = getPeriod(voicePeriods, time);
 		if (voicePeriod != null)
 			return voicePeriod;
@@ -49,10 +49,10 @@ public class DynamicsPeriods {
 		Time maxStartTime = time;
 		DynamicsPeriod bestMatch = null;
 		for (int iStaff : partStaves) {
-			val staffPeriods = getStaffPeriods(mp.staff, repetition);
+			val staffPeriods = getStaffPeriods(mp.getStaff(), repetition);
 			val staffPeriod = getPeriod(staffPeriods, time);
 			int compare = staffPeriod.startTime.compareTo(maxStartTime);
-			if (staffPeriod != null && compare > 0 || (compare >= 0 && iStaff == mp.staff)) {
+			if (staffPeriod != null && compare > 0 || (compare >= 0 && iStaff == mp.getStaff())) {
 				//new best match
 				maxStartTime = staffPeriod.startTime;
 				bestMatch = null;

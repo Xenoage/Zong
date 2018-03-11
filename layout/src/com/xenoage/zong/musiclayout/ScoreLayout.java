@@ -90,7 +90,7 @@ public class ScoreLayout {
 		for (int iFrame = 0; iFrame < frames.size(); iFrame++) {
 			ScoreFrameLayout frame = frames.get(iFrame);
 			for (StaffStamping s : frame.getStaffStampings()) {
-				if (s.getStaffIndex() == mp.staff && s.system.containsMeasure(mp.measure)) {
+				if (s.getStaffIndex() == mp.getStaff() && s.system.containsMeasure(mp.getMeasure())) {
 					//we found it. return staff and position
 					float posX = s.system.getXMmAt(mp.getTime());
 					return new StaffStampingPosition(s, iFrame, posX);
@@ -189,14 +189,14 @@ public class ScoreLayout {
 	 * If not found, null is returned.
 	 */
 	public ScoreLayoutPos getScoreLP(MP mp, float lp) {
-		int iFrame = getFrameIndexOf(mp.measure);
+		int iFrame = getFrameIndexOf(mp.getMeasure());
 		if (iFrame > -1) {
 			ScoreFrameLayout sfl = frames.get(iFrame);
 			StaffStamping ss;
-			if (mp.staff != MP.unknown)
-				ss = sfl.getStaffStamping(mp.staff, mp.measure);
+			if (mp.getStaff() != MP.Companion.getUnknown())
+				ss = sfl.getStaffStamping(mp.getStaff(), mp.getMeasure());
 			else
-				ss = sfl.getStaffStamping(0, mp.measure);
+				ss = sfl.getStaffStamping(0, mp.getMeasure());
 			if (ss != null) {
 				float x = ss.positionMm.x + ss.system.getXMmAt(mp.getTime());
 				float y = ss.computeYMm(lp);

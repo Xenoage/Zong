@@ -24,18 +24,18 @@ public class GuiErrorProcessing
 
 	@Override protected void handleError(Report report) {
 		//if it is a fatal error, error or warning, show a dialog
-		if (report.level != Level.Remark) {
+		if (report.getLevel() != Level.Remark) {
 			//create message
-			String message = (report.message != null ? report.message : "");
-			if (report.messageID != null)
-				message = Lang.get(report.messageID);
+			String message = (report.getMessage() != null ? report.getMessage() : "");
+			if (report.getMessageID() != null)
+				message = Lang.get(report.getMessageID());
 			//file
 			String filePath = null;
-			if (report.filePaths != null && report.filePaths.size() > 0)
-				filePath = report.filePaths.get(0);
+			if (report.getFilePaths() != null && report.getFilePaths().size() > 0)
+				filePath = report.getFilePaths().get(0);
 			//create dialog - TODO: level and filepath - TODO: enhance with error report via HTTP
 			Alert dialog = app().dialog();
-			dialog.setContentText(message + "\n\n" + report.error);
+			dialog.setContentText(message + "\n\n" + report.getError());
 			/* TODO if (report.error != null)
 				dialog.showException(report.error);
 			else
@@ -43,9 +43,9 @@ public class GuiErrorProcessing
 			dialog.showAndWait();
 		}
 		//if it is a fatal error, close application
-		if (report.level == Level.Fatal) {
-			app().showMessageDialog(platformUtils().getStackTraceString(report.error));
-			platformUtils().exit(report.error);
+		if (report.getLevel() == Level.Fatal) {
+			app().showMessageDialog(platformUtils().getStackTraceString(report.getError()));
+			platformUtils().exit(report.getError());
 		}
 	}
 

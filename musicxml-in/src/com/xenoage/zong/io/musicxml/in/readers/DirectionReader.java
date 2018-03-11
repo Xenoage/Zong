@@ -186,7 +186,7 @@ public class DirectionReader {
 					context.reportError("Wedge " + (number + 1) + " is not open");
 				}
 				//the stop must be in the same staff and after the beginning of the wedge
-				else if (staff != wedge.getMP().staff ||
+				else if (staff != wedge.getMP().getStaff() ||
 						context.getMp().compareTimeTo(wedge.getMP()) <= 0) {
 					err = true;
 					context.reportError("Wedge " + (number + 1) + " does not end at a valid MP");
@@ -227,7 +227,7 @@ public class DirectionReader {
 			//always expressed in quarter notes per minute
 			int quarterNotesPerMinute = mxlSound.getTempo().intValue();
 			//convert words into a tempo direction
-			direction = new Tempo(fr(1, 4), quarterNotesPerMinute); //TODO: words.getText()
+			direction = new Tempo(Companion.fr(1, 4), quarterNotesPerMinute); //TODO: words.getText()
 			//direction.setFontInfo(words.getFontInfo()); //TODO
 			direction.setPositioning(words.getPositioning());
 		}

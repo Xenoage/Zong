@@ -67,13 +67,13 @@ public class ScoreReader {
 			StavesRange stavesRange = score.getStavesList().getPartStaffIndices(part);
 			for (int staff : stavesRange.getRange()) {
 				execute(new MeasureElementWrite(new Clef(ClefType.clefTreble),
-					score.getMeasure(MP.atMeasure(staff, 0)), _0));
+					score.getMeasure(MP.atMeasure(staff, 0)), Companion.get_0()));
 			}
 		}
 		
 		//write a 4/4 measure and C key signature in the first measure
-		execute(new ColumnElementWrite(new TimeSignature(TimeType.time_4_4), score.getColumnHeader(0), _0, null));
-		execute(new ColumnElementWrite(new TraditionalKey(0), score.getColumnHeader(0), _0, null));
+		execute(new ColumnElementWrite(new TimeSignature(TimeType.time_4_4), score.getColumnHeader(0), Companion.get_0(), null));
+		execute(new ColumnElementWrite(new TraditionalKey(0), score.getColumnHeader(0), Companion.get_0(), null));
 			
 		//read the parts
 		mxlParts = it(doc.getParts());
@@ -98,7 +98,7 @@ public class ScoreReader {
 
 		//go through the whole score, and fill empty measures (that means, measures where
 		//voice 0 has no single VoiceElement) with rests
-		Fraction measureDuration = fr(1, 4);
+		Fraction measureDuration = Companion.fr(1, 4);
 		for (int iStaff = 0; iStaff < score.getStavesCount(); iStaff++) {
 			Staff staff = score.getStaff(atStaff(iStaff));
 			for (int iMeasure : range(staff.getMeasures())) {
@@ -109,7 +109,7 @@ public class ScoreReader {
 					measureDuration = newTime.getType().getMeasureBeats();
 				}
 				if (measureDuration == null) { //senza misura
-					measureDuration = fr(4, 4); //use whole rest
+					measureDuration = Companion.fr(4, 4); //use whole rest
 				}
 				Voice voice0 = measure.getVoice(0);
 				if (voice0.isEmpty()) {

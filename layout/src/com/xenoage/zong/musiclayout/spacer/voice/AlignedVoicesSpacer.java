@@ -103,7 +103,7 @@ public class AlignedVoicesSpacer {
 	public List<BeatOffset> computeSharedBeats(List<ElementSpacing> spacingElements, List<BeatOffset> beatOffsets) {
 		ArrayList<BeatOffset> ret = alist(Math.min(spacingElements.size(), beatOffsets.size()));
 		int iElement = 0, iBeat = 0;
-		Fraction lastAddedBeat = fr(-1);
+		Fraction lastAddedBeat = Companion.fr(-1);
 		while (iElement < spacingElements.size() && iBeat < beatOffsets.size()) {
 			Fraction elementBeat = spacingElements.get(iElement).beat;
 			BeatOffset beatOffset = beatOffsets.get(iBeat);

@@ -24,9 +24,9 @@ public class Test21b
 			Chord chord = (Chord) score.getVoice(mp).getElementAt(mp.beat);
 			assertEquals(expectedChord.getNotes(), chord.getNotes());
 			assertEquals(expectedChord.getDuration(), chord.getDuration());
-			mp = mp.withBeat(mp.beat.add(fr(1, 4)));
-			if (mp.beat.compareTo(_1) >= 0) {
-				mp = mp.withMeasure(mp.measure + 1).withBeat(_0);
+			mp = mp.withBeat(mp.beat.add(Companion.fr(1, 4)));
+			if (mp.beat.compareTo(Companion.get_1()) >= 0) {
+				mp = mp.withMeasure(mp.measure + 1).withBeat(Companion.get_0());
 			}
 		}
 	}

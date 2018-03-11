@@ -165,14 +165,14 @@ public final class Score
 	 */
 	public boolean isMPExisting(MP mp) {
 		try {
-			if (mp.staff < 0 || mp.staff >= getStavesCount() || mp.measure < 0 || mp.measure >= getMeasuresCount() ||
-				mp.voice < 0 || mp.voice >= getMeasure(mp).getVoices().size())
+			if (mp.getStaff() < 0 || mp.getStaff() >= getStavesCount() || mp.getMeasure() < 0 || mp.getMeasure() >= getMeasuresCount() ||
+				mp.getVoice() < 0 || mp.getVoice() >= getMeasure(mp).getVoices().size())
 				return false;
 			Voice voice = getVoice(mp);
-			if (mp.element != MP.unknown && voice.getElements().size() <= mp.element)
+			if (mp.getElement() != MP.Companion.getUnknown() && voice.getElements().size() <= mp.getElement())
 				return false;
-			if (mp.beat != MP.unknownBeat && (mp.beat.compareTo(_0) < 0 ||
-				mp.beat.compareTo(voice.getParent().getFilledBeats()) > 0))
+			if (mp.getBeat() != MP.Companion.getUnknownBeat() && (mp.getBeat().compareTo(Companion.get_0()) < 0 ||
+				mp.getBeat().compareTo(voice.getParent().getFilledBeats()) > 0))
 				return false;
 			return true;
 		} catch (IllegalMPException ex) {
@@ -206,8 +206,8 @@ public final class Score
 	 */
 	public Fraction getMeasureFilledBeats(int measureIndex) {
 		if (measureIndex == getMeasuresCount())
-			return _0;
-		Fraction maxBeat = Fraction._0;
+			return Companion.get_0();
+		Fraction maxBeat = Fraction.Companion.get_0();
 		for (Staff staff : stavesList.getStaves()) {
 			Fraction beat = staff.getMeasures().get(measureIndex).getFilledBeats();
 			if (beat.compareTo(maxBeat) > 0)
@@ -228,11 +228,11 @@ public final class Score
 	public SortedList<Fraction> getMeasureUsedBeats(int measureIndex, boolean withMeasureAndColumnElements) {
 		//last measure?
 		if (measureIndex == getMeasuresCount())
-			return new SortedList<>(new Fraction[]{_0}, false);
+			return new SortedList<>(new Fraction[]{Companion.get_0()}, false);
 		//add measure beats
 		SortedList<Fraction> columnBeats = new SortedList<>(false);
 		for (int iStaff : range(getStavesCount())) {
-			val measure = getMeasure(atMeasure(iStaff, measureIndex));
+			val measure = getMeasure(Companion.atMeasure(iStaff, measureIndex));
 			val beats = measure.getUsedBeats(withMeasureAndColumnElements);
 			columnBeats = columnBeats.merge(beats, false);
 		}
@@ -258,18 +258,18 @@ public final class Score
 			throw new IllegalArgumentException("Illegal interval for this method");
 		}
 		//begin with the given measure. if there is one, return it.
-		BeatE<Key> columnKey = header.getColumnHeader(mp.measure).getKeys().getLastBefore(interval, mp.beat);
+		BeatE<Key> columnKey = header.getColumnHeader(mp.getMeasure()).getKeys().getLastBefore(interval, mp.getBeat());
 		BeatE<Key> measureKey = null;
 		if (getMeasure(mp).getPrivateKeys() != null)
-			measureKey = getMeasure(mp).getPrivateKeys().getLastBefore(interval, mp.beat);
+			measureKey = getMeasure(mp).getPrivateKeys().getLastBefore(interval, mp.getBeat());
 		BeatE<Key> ret = selectLatest(columnKey, measureKey);
 		if (ret != null)
 			return mpE(ret.element, mp.withBeat(ret.beat));
 		if (interval != At) {
 			//search in the preceding measures
-			for (int iMeasure = mp.measure - 1; iMeasure >= 0; iMeasure--) {
+			for (int iMeasure = mp.getMeasure() - 1; iMeasure >= 0; iMeasure--) {
 				columnKey = header.getColumnHeader(iMeasure).getKeys().getLast();
-				BeatEList<Key> privateKeys = getMeasure(atMeasure(mp.staff, iMeasure)).getPrivateKeys();
+				BeatEList<Key> privateKeys = getMeasure(Companion.atMeasure(mp.getStaff(), iMeasure)).getPrivateKeys();
 				measureKey = (privateKeys != null ? privateKeys.getLast() : null);
 				ret = selectLatest(columnKey, measureKey);
 				if (ret != null)
@@ -277,7 +277,7 @@ public final class Score
 			}
 		}
 		//no key found. return default key.
-		return mpE(new TraditionalKey(0, Mode.Major), mpb0);
+		return mpE(new TraditionalKey(0, Mode.Major), Companion.getMpb0());
 	}
 	
 	
@@ -287,14 +287,14 @@ public final class Score
 	 * looking at all voices. The beat in the {@link MP} is required.
 	 */
 	public Map<Pitch, Integer> getAccidentals(MP mp, Interval interval) {
-		if (mp.beat == MP.unknownBeat)
+		if (mp.getBeat() == MP.Companion.getUnknownBeat())
 			throw new IllegalArgumentException("beat is required");
 		//start key of the measure always counts
 		MPE<? extends Key> key = getKey(mp, BeforeOrAt);
 		//if key change is in same measure, start at that beat. otherwise start at beat 0.
-		Fraction keyBeat = (key.mp.measure == mp.measure ? key.mp.beat : _0);
+		Fraction keyBeat = (key.mp.getMeasure() == mp.getMeasure() ? key.mp.getBeat() : Companion.get_0());
 		Measure measure = getMeasure(mp);
-		return measure.getAccidentals(mp.beat, interval, keyBeat, key.element);
+		return measure.getAccidentals(mp.getBeat(), interval, keyBeat, key.element);
 	}
 	
 	
@@ -307,20 +307,20 @@ public final class Score
 	public ClefType getClef(MP mp, Interval interval) {
 		if (!interval.isPrecedingOrAt())
 			throw new IllegalArgumentException("Illegal interval for this method");
-		if (mp.beat == MP.unknownBeat)
+		if (mp.getBeat() == MP.Companion.getUnknownBeat())
 			throw new IllegalArgumentException("beat is required");
 		//begin with the given measure. if there is one, return it.
 		Measure measure = getMeasure(mp);
 		BeatE<Clef> ret = null;
 		if (measure.getClefs() != null) {
-			ret = measure.getClefs().getLastBefore(interval, mp.beat);
+			ret = measure.getClefs().getLastBefore(interval, mp.getBeat());
 			if (ret != null)
 				return ret.element.getType();
 		}
 		if (interval != At) {
 			//search in the preceding measures
-			for (int iMeasure : rangeReverse(mp.measure - 1, 0)) {
-				measure = getMeasure(atMeasure(mp.staff, iMeasure));
+			for (int iMeasure : rangeReverse(mp.getMeasure() - 1, 0)) {
+				measure = getMeasure(Companion.atMeasure(mp.getStaff(), iMeasure));
 				if (measure.getClefs() != null) {
 					ret = measure.getClefs().getLast();
 					if (ret != null)
@@ -373,7 +373,7 @@ public final class Score
 			for (Measure measure : staff.getMeasures()) {
 				for (Voice voice : measure.getVoices()) {
 					for (VoiceElement e : voice.getElements()) {
-						actualdivision = MathUtils.lcm(actualdivision, e.getDuration().getDenominator());
+						actualdivision = MathUtils.INSTANCE.lcm(actualdivision, e.getDuration().getDenominator());
 					}
 				}
 			}
@@ -399,7 +399,7 @@ public final class Score
    * If unspecified, the default value of the score is returned.
    */
 	public float getInterlineSpace(MP mp) {
-		int staffIndex = mp.staff;
+		int staffIndex = mp.getStaff();
 		if (staffIndex >= 0 && staffIndex < getStavesCount()) {
 			Float custom = getStaff(staffIndex).getInterlineSpace();
 			if (custom != null) {
@@ -415,26 +415,26 @@ public final class Score
 	 * the musical position of one of the elements is unknown, null is returned.
 	 */
 	public Fraction getGapBetween(VoiceElement left, VoiceElement right) {
-		MP mpLeft = MP.getMP(left);
+		MP mpLeft = MP.Companion.getMP(left);
 		if (mpLeft == null)
 			return null;
-		mpLeft = mpLeft.withBeat(mpLeft.beat.add(left.getDuration()));
-		MP mpRight = MP.getMP(right);
+		mpLeft = mpLeft.withBeat(mpLeft.getBeat().add(left.getDuration()));
+		MP mpRight = MP.Companion.getMP(right);
 		if (mpRight == null)
 			return null;
-		if (mpRight.measure == mpLeft.measure) {
+		if (mpRight.getMeasure() == mpLeft.getMeasure()) {
 			//simple case: same measure. just subtract beats
-			return mpRight.beat.sub(mpLeft.beat);
+			return mpRight.getBeat().sub(mpLeft.getBeat());
 		}
-		else if (mpRight.measure > mpLeft.measure) {
+		else if (mpRight.getMeasure() > mpLeft.getMeasure()) {
 			//right element is in a following measure. add the following:
 			//- beats between end of left element and its measure end
 			//- beats in the following measures (until the measure which contains the right element)
 			//- start beat of the right element in its measure
-			Fraction gap = getMeasureFilledBeats(mpLeft.measure).sub(mpLeft.beat);
-			for (int iMeasure : range(mpLeft.measure + 1, mpRight.measure - 1))
+			Fraction gap = getMeasureFilledBeats(mpLeft.getMeasure()).sub(mpLeft.getBeat());
+			for (int iMeasure : range(mpLeft.getMeasure() + 1, mpRight.getMeasure() - 1))
 				gap = gap.add(getMeasureFilledBeats(iMeasure));
-			gap = gap.add(mpRight.beat);
+			gap = gap.add(mpRight.getBeat());
 			return gap;
 		}
 		else {
@@ -443,11 +443,11 @@ public final class Score
 			//- betweens between the start of the right element and the end of its measure
 			//- beats in the following measures (until the measure which contains the left element)
 			//- end beat of the left element in its measure
-			Fraction gap = getMeasureFilledBeats(mpRight.measure).sub(mpRight.beat);
-			for (int iMeasure : range(mpRight.measure + 1, mpLeft.measure - 1))
+			Fraction gap = getMeasureFilledBeats(mpRight.getMeasure()).sub(mpRight.getBeat());
+			for (int iMeasure : range(mpRight.getMeasure() + 1, mpLeft.getMeasure() - 1))
 				gap = gap.add(getMeasureFilledBeats(iMeasure));
-			gap = gap.add(mpLeft.beat);
-			gap = gap.mult(fr(-1));
+			gap = gap.add(mpLeft.getBeat());
+			gap = gap.mult(Companion.fr(-1));
 			return gap;
 		}
 	}

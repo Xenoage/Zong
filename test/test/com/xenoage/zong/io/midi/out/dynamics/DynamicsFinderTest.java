@@ -75,34 +75,34 @@ public class DynamicsFinderTest {
 		new ColumnElementWrite(barlineBackwardRepeat(Regular, 1),
 				score.getColumnHeader(2), null, MeasureSide.Right).execute();
 		//staff 0
-		new MeasureElementWrite(new Dynamic(mp), score.getMeasure(atMeasure(0, 0)), _0).execute();
-		new MeasureElementWrite(new Dynamic(pp), score.getMeasure(atMeasure(0, 2)), _0).execute();
-		new MeasureElementWrite(new Dynamic(f), score.getMeasure(atMeasure(0, 3)), _1$2).execute();
-		new MeasureElementWrite(w = new Wedge(Crescendo), score.getMeasure(atMeasure(0, 3)), _3$4).execute();
-		new MeasureElementWrite(new WedgeEnd(w), score.getMeasure(atMeasure(0, 4)), _1$4).execute();
-		new MeasureElementWrite(new Dynamic(pp), score.getMeasure(atMeasure(0, 4)), _1$2).execute();
+		new MeasureElementWrite(new Dynamic(mp), score.getMeasure(atMeasure(0, 0)), Companion.get_0()).execute();
+		new MeasureElementWrite(new Dynamic(pp), score.getMeasure(atMeasure(0, 2)), Companion.get_0()).execute();
+		new MeasureElementWrite(new Dynamic(f), score.getMeasure(atMeasure(0, 3)), Companion.get_1$2()).execute();
+		new MeasureElementWrite(w = new Wedge(Crescendo), score.getMeasure(atMeasure(0, 3)), Companion.get_3$4()).execute();
+		new MeasureElementWrite(new WedgeEnd(w), score.getMeasure(atMeasure(0, 4)), Companion.get_1$4()).execute();
+		new MeasureElementWrite(new Dynamic(pp), score.getMeasure(atMeasure(0, 4)), Companion.get_1$2()).execute();
 		//voice 0
 		val cursor = new Cursor(score, mp0, true);
-		cursor.write(new Rest(_1));
-		cursor.write(new Rest(_1));
-		cursor.write(new Rest(_1));
-		cursor.write(new Rest(_1));
+		cursor.write(new Rest(Companion.get_1()));
+		cursor.write(new Rest(Companion.get_1()));
+		cursor.write(new Rest(Companion.get_1()));
+		cursor.write(new Rest(Companion.get_1()));
 		//voice 1
 		cursor.setMp(atElement(0, 0, 1, 0));
-		cursor.write(new Rest(_1$2));
-		val chord = chord(pi(0, 4), _1$2);
+		cursor.write(new Rest(Companion.get_1$2()));
+		val chord = chord(pi(0, 4), Companion.get_1$2());
 		chord.addDirection(new Dynamic(mf));
 		cursor.write(chord);
-		cursor.write(new Rest(_1));
-		cursor.write(new Rest(_1));
+		cursor.write(new Rest(Companion.get_1()));
+		cursor.write(new Rest(Companion.get_1()));
 		cursor.setMp(atElement(0, 4, 1, 0));
-		cursor.write(new Rest(_1));
+		cursor.write(new Rest(Companion.get_1()));
 		//staff 1
-		new MeasureElementWrite(new Dynamic(ff), score.getMeasure(atMeasure(1, 0)), _0).execute();
-		new MeasureElementWrite(w = new Wedge(Diminuendo), score.getMeasure(atMeasure(1, 0)), _0).execute();
-		new MeasureElementWrite(new WedgeEnd(w), score.getMeasure(atMeasure(1, 2)), _0).execute();
-		new MeasureElementWrite(new Dynamic(mp), score.getMeasure(atMeasure(1, 2)), _0).execute();
-		new MeasureElementWrite(new Dynamic(p), score.getMeasure(atMeasure(1, 3)), _0).execute();
+		new MeasureElementWrite(new Dynamic(ff), score.getMeasure(atMeasure(1, 0)), Companion.get_0()).execute();
+		new MeasureElementWrite(w = new Wedge(Diminuendo), score.getMeasure(atMeasure(1, 0)), Companion.get_0()).execute();
+		new MeasureElementWrite(new WedgeEnd(w), score.getMeasure(atMeasure(1, 2)), Companion.get_0()).execute();
+		new MeasureElementWrite(new Dynamic(mp), score.getMeasure(atMeasure(1, 2)), Companion.get_0()).execute();
+		new MeasureElementWrite(new Dynamic(p), score.getMeasure(atMeasure(1, 3)), Companion.get_0()).execute();
 		return score;
 	}
 
@@ -113,32 +113,32 @@ public class DynamicsFinderTest {
 		val d = new DynamicsPeriodsBuilder();
 		//staff 0
 		d.addPeriodToStaff(new DynamicsPeriod(
-				time(0, _0), time(2, _0), new FixedDynamics(mp)), 0, 0);
+				time(0, Companion.get_0()), time(2, Companion.get_0()), new FixedDynamics(mp)), 0, 0);
 		d.addPeriodToStaff(new DynamicsPeriod(
-				time(2, _0), time(3, _0), new FixedDynamics(pp)), 0, 0);
+				time(2, Companion.get_0()), time(3, Companion.get_0()), new FixedDynamics(pp)), 0, 0);
 		d.addPeriodToStaff(new DynamicsPeriod(
-				time(1, _0), time(3, _1$2), new FixedDynamics(pp)), 0, 1);
+				time(1, Companion.get_0()), time(3, Companion.get_1$2()), new FixedDynamics(pp)), 0, 1);
 		d.addPeriodToStaff(new DynamicsPeriod(
-				time(3, _1$2), time(3, _3$4), new FixedDynamics(f)), 0, 1);
+				time(3, Companion.get_1$2()), time(3, Companion.get_3$4()), new FixedDynamics(f)), 0, 1);
 		d.addPeriodToStaff(new DynamicsPeriod(
-				time(3, _3$4), time(4, _1$4), new GradientDynamics(f, ff)), 0, 1); //ff: implicit target after f-cresc
+				time(3, Companion.get_3$4()), time(4, Companion.get_1$4()), new GradientDynamics(f, ff)), 0, 1); //ff: implicit target after f-cresc
 		d.addPeriodToStaff(new DynamicsPeriod(
-				time(4, _1$4), time(4, _1$2), new FixedDynamics(ff)), 0, 1);
+				time(4, Companion.get_1$4()), time(4, Companion.get_1$2()), new FixedDynamics(ff)), 0, 1);
 		d.addPeriodToStaff(new DynamicsPeriod(
-				time(4, _1$2), time(5, _0), new FixedDynamics(pp)), 0, 1);
+				time(4, Companion.get_1$2()), time(5, Companion.get_0()), new FixedDynamics(pp)), 0, 1);
 		/* TODO: ZONG-100
 		//voice 1 in staff 0
 		d.addPeriodToVoice(new DynamicsPeriod(
 				time(0, _1$2), time(3, _0), new FixedDynamics(mf)), 0, 1, 0); */ //only 1st time; we do not see the mf again
 		//staff 1
 		d.addPeriodToStaff(new DynamicsPeriod(
-				time(0, _0), time(2, _0), new GradientDynamics(ff, mp)), 1, 0);
+				time(0, Companion.get_0()), time(2, Companion.get_0()), new GradientDynamics(ff, mp)), 1, 0);
 		d.addPeriodToStaff(new DynamicsPeriod(
-				time(2, _0), time(3, _0), new FixedDynamics(mp)), 1, 0);
+				time(2, Companion.get_0()), time(3, Companion.get_0()), new FixedDynamics(mp)), 1, 0);
 		d.addPeriodToStaff(new DynamicsPeriod( // f remains, we do not jump in the middle of a cresc
-				time(1, _0), time(3, _0), new FixedDynamics(mp)), 1, 1);
+				time(1, Companion.get_0()), time(3, Companion.get_0()), new FixedDynamics(mp)), 1, 1);
 		d.addPeriodToStaff(new DynamicsPeriod(
-				time(3, _0), time(5, _0), new FixedDynamics(p)), 1, 1);
+				time(3, Companion.get_0()), time(5, Companion.get_0()), new FixedDynamics(p)), 1, 1);
 		return d.build();
 	}
 

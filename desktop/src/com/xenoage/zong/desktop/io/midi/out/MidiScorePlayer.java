@@ -70,7 +70,7 @@ public class MidiScorePlayer
 		try {
 			SynthManager.getSequencer().setSequence(sequence.getSequence());
 		} catch (InvalidMidiDataException ex) {
-			log(warning(ex));
+			INSTANCE.log(Companion.warning(ex));
 		}
 		applyVolume();
 	}

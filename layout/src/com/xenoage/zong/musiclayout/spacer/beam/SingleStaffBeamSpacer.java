@@ -39,7 +39,7 @@ public class SingleStaffBeamSpacer {
 
 		//adjust the stem lengths by interpolating the other values
 		for (int i : range(size)) {
-			float lp = interpolateLinear(placement.leftEndLp, placement.rightEndLp,
+			float lp = INSTANCE.interpolateLinear(placement.leftEndLp, placement.rightEndLp,
 					stems.leftXIs, stems.rightXIs, stems.get(i).xIs);
 			val stem = beam.chords.get(i).stem;
 			if (stem != null) //it could be possible that there is no stem

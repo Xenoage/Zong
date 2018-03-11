@@ -43,7 +43,7 @@ public class BarlinesBeatOffsetter {
 		ArrayList<BeatOffset> retBarlines = alist();
 		
 		//start barline
-		retBarlines.add(new BeatOffset(Fraction._0, 0));
+		retBarlines.add(new BeatOffset(Fraction.Companion.get_0(), 0));
 		Barline startBarline = columnHeader.getStartBarline();
 		if (startBarline != null && startBarline.getRepeat() == BarlineRepeat.Forward) {
 			//forward repeat: move all beats REPEAT_SPACE IS backward

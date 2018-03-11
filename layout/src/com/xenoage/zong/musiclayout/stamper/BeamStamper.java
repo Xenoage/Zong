@@ -70,8 +70,8 @@ public class BeamStamper {
 				else if (fragment == Stop) {
 					//end the beam line and stem it
 					float stopXMm = stemXMm;
-					SP leftSp = sp(startXMm, interpolateLinear(beamLinePoints, startXMm));
-					SP rightSp = sp(stopXMm, interpolateLinear(beamLinePoints, stopXMm));
+					SP leftSp = sp(startXMm, INSTANCE.interpolateLinear(beamLinePoints, startXMm));
+					SP rightSp = sp(stopXMm, INSTANCE.interpolateLinear(beamLinePoints, stopXMm));
 					val stamping = new BeamStamping(beam, staff, leftSp, rightSp, primaryStemDir);
 					ret.add(stamping);
 				}
@@ -80,8 +80,8 @@ public class BeamStamper {
 					float lengthMm = hookLengthIs * staff.is;
 					float x1Mm = (fragment == HookLeft ? stemXMm - lengthMm : stemXMm);
 					float x2Mm = (fragment == HookLeft ? stemXMm : stemXMm + lengthMm);
-					SP leftSp = sp(x1Mm, interpolateLinear(beamLinePoints, x1Mm));
-					SP rightSp = sp(x2Mm, interpolateLinear(beamLinePoints, x2Mm));
+					SP leftSp = sp(x1Mm, INSTANCE.interpolateLinear(beamLinePoints, x1Mm));
+					SP rightSp = sp(x2Mm, INSTANCE.interpolateLinear(beamLinePoints, x2Mm));
 					val stamping = new BeamStamping(beam, staff, leftSp, rightSp, primaryStemDir);
 					ret.add(stamping);
 				}

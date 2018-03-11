@@ -35,7 +35,7 @@ public class MeasureElementIteratorTest {
 					assertTrue(it.hasNext());
 					assertEquals("staff " + staff + ", measure " + measure + ", element " + element,
 						((Words) it.next()).getText().toString());
-					assertEquals(atBeat(staff, measure, unknown, fr(element + 1, 4)), it.getMp());
+					assertEquals(atBeat(staff, measure, unknown, Companion.fr(element + 1, 4)), it.getMp());
 				}
 			} 
 		}
@@ -53,7 +53,7 @@ public class MeasureElementIteratorTest {
 			for (int measure : new int[]{1, 3}) {
 				cursor.setMp(atElement(staff, measure, 0, 0));
 				for (int element : range(2)) {
-					cursor.write(new Rest(fr(1, 4)));
+					cursor.write(new Rest(Companion.fr(1, 4)));
 					cursor.write((MeasureElement) new Words(new UnformattedText(
 						"staff " + staff + ", measure " + measure + ", element " + element)));
 				}

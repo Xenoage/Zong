@@ -26,13 +26,13 @@ public class ColumnElementRemoveTest {
 		ColumnHeader column2 = score.getColumnHeader(2);
 		//write middle barline
 		Barline b = Barline.barline(BarlineStyle.LightHeavy);
-		cmd.execute(new ColumnElementWrite(b, column2, fr(1, 4), null));
+		cmd.execute(new ColumnElementWrite(b, column2, Companion.fr(1, 4), null));
 		//remove it
 		cmd.execute(new ColumnElementRemove(column2, b));
 		assertEquals(0, column2.getMiddleBarlines().size());
 		//undo. should be here again
 		cmd.undo();
-		assertEquals(b, column2.getMiddleBarlines().get(fr(1, 4)));
+		assertEquals(b, column2.getMiddleBarlines().get(Companion.fr(1, 4)));
 	}
 
 }

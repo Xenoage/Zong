@@ -26,15 +26,15 @@ public class Test21f
 		List<VoiceElement> e = score.getVoice(mp0).getElements();
 		Chord chord = (Chord) e.get(0);
 		assertEquals(3, chord.getNotes().size());
-		assertEquals(fr(1, 4), chord.getDuration());
+		assertEquals(Companion.fr(1, 4), chord.getDuration());
 		//followed by 2 rests, 1/4 and 2/4
-		assertEquals(fr(1, 4), ((Rest) e.get(1)).getDuration());
-		assertEquals(fr(2, 4), ((Rest) e.get(2)).getDuration());
+		assertEquals(Companion.fr(1, 4), ((Rest) e.get(1)).getDuration());
+		assertEquals(Companion.fr(2, 4), ((Rest) e.get(2)).getDuration());
 		//segno at beat 1/4 in column (moved to the end of the measure, since we accept no mid-measure segnos)
 		Direction segno = (Segno) score.getColumnHeader(0).getNavigationOrigin();
 		assertNotNull(segno);
 		//dynamics p at beat 1/4 in measure
-		Dynamic dynamics = (Dynamic) score.getMeasure(mp0).getDirections().get(fr(1, 4));
+		Dynamic dynamics = (Dynamic) score.getMeasure(mp0).getDirections().get(Companion.fr(1, 4));
 		assertNotNull(dynamics);
 		assertEquals(DynamicValue.p, dynamics.getValue());
 	}

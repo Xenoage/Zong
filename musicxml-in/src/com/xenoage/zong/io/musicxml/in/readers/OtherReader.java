@@ -69,7 +69,7 @@ public final class OtherReader {
 	 * Returns the duration as a {@link Fraction} from the given duration in divisions.
 	 */
 	public static Fraction readDuration(int duration, int divisionsPerQuarter) {
-		Fraction ret = fr(duration, 4 * divisionsPerQuarter);
+		Fraction ret = Companion.fr(duration, 4 * divisionsPerQuarter);
 		return ret;
 	}
 
@@ -84,7 +84,7 @@ public final class OtherReader {
 
 	//TIDY: see ChordWidths, but is defined in layout project
 	private static float getNoteheadWidth(Fraction chordDuration) {
-		if (chordDuration.compareTo(_1) < 0)
+		if (chordDuration.compareTo(Companion.get_1()) < 0)
 			return 1.2f; //quarter or half notehead
 		else
 			return 2f; //whole note

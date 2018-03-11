@@ -24,7 +24,7 @@ public interface Base46b
 	
 	static List<Tuple2<MP, Barline>> getExpectedMiddleBarlines() {
 		List<Tuple2<MP, Barline>> ret = alist();
-		ret.add(t(atBeat(1, 0, unknown, fr(2, 4)), Barline.barline(BarlineStyle.Dotted)));
+		ret.add(t(atBeat(1, 0, unknown, Companion.fr(2, 4)), Barline.barline(BarlineStyle.Dotted)));
 		return ret;
 	}
 	

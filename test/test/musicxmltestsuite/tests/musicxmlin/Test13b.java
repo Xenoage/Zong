@@ -30,9 +30,9 @@ public class Test13b
 			assertNotNull("mp " + mp, key);
 			assertEquals("mp " + mp, expectedKeys[iKey].getFifths(), key.getFifths());
 			assertEquals("mp " + mp, expectedKeys[iKey].getMode(), key.getMode());
-			mp = mp.withBeat(mp.beat.add(fr(1, 4)));
-			if (mp.beat.compareTo(_1) >= 0) {
-				mp = mp.withMeasure(mp.measure + 1).withBeat(_0);
+			mp = mp.withBeat(mp.beat.add(Companion.fr(1, 4)));
+			if (mp.beat.compareTo(Companion.get_1()) >= 0) {
+				mp = mp.withMeasure(mp.measure + 1).withBeat(Companion.get_0());
 			}
 		}
 	}

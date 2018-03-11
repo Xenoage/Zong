@@ -43,20 +43,20 @@ public interface Base32b
 		int medium = 3;
 		int large = 4;
 		//font sizes are arbitrary, but large must be bigger than medium and so on
-		ret.add(t(atBeat(0, 0, 0, fr(0, 8)),
+		ret.add(t(atBeat(0, 0, 0, Companion.fr(0, 8)),
 			new Text("Normal, Medium", medium, FontStyle.normal, Color.black, Placement.Above)));
-		ret.add(t(atBeat(0, 0, 0, fr(1, 1)), //TODO: wrong duration in MusicXML file, must be 48
+		ret.add(t(atBeat(0, 0, 0, Companion.fr(1, 1)), //TODO: wrong duration in MusicXML file, must be 48
 			//bug reported: https://code.google.com/p/lilypond/issues/detail?id=4172
 			new Text("Bold, Medium", medium, fontStyle(Bold), Color.black, Placement.Below)));
-		ret.add(t(atBeat(0, 1, 0, fr(0, 4)),
+		ret.add(t(atBeat(0, 1, 0, Companion.fr(0, 4)),
 			new Text("Normal, Large", large, FontStyle.normal, Color.black, Placement.Above)));
-		ret.add(t(atBeat(0, 1, 0, fr(4, 4)),
+		ret.add(t(atBeat(0, 1, 0, Companion.fr(4, 4)),
 			new Text("Bold, Large", large, fontStyle(Bold), Color.black, Placement.Below)));
-		ret.add(t(atBeat(0, 2, 0, fr(0, 4)),
+		ret.add(t(atBeat(0, 2, 0, Companion.fr(0, 4)),
 			new Text("Normal, Small", small, FontStyle.normal, Color.black, Placement.Above)));
-		ret.add(t(atBeat(0, 2, 0, fr(4, 4)),
+		ret.add(t(atBeat(0, 2, 0, Companion.fr(4, 4)),
 			new Text("Bold, Small", small, fontStyle(Bold), Color.black, Placement.Below)));
-		ret.add(t(atBeat(0, 2, 0, fr(4, 4)),
+		ret.add(t(atBeat(0, 2, 0, Companion.fr(4, 4)),
 			new Text("Normal, Small, Colored, Below", small, FontStyle.normal, getColor("#FF8000"), Placement.Below)));
 		return ret;
 	}

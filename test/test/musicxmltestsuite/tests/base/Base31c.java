@@ -25,7 +25,7 @@ public interface Base31c
 	List<Tuple2<MP, Tempo>> expectedTempos =
 		//return only those which are supported now
 		alist(
-			t(atBeat(0, 0, 0, fr(0, 4)), new Tempo(fr(3, 8), 100))
+			t(atBeat(0, 0, 0, Companion.fr(0, 4)), new Tempo(Companion.fr(3, 8), 100))
 			//TODO: atBeat(0, 0, 0, fr(3, 4)): longa = 100
 			//TODO: atBeat(0, 1, 0, fr(0, 4)): fr(3, 8) = fr(3, 4)
 			//TODO: atBeat(0, 1, 0, fr(3, 4)): longa = fr(3, 64)

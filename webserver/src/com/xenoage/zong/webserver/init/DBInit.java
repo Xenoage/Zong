@@ -16,7 +16,7 @@ public class DBInit {
 
 	public static void initDatabase(Connection con)
 		throws SQLException {
-		log(remark("Creating database tables..."));
+		INSTANCE.log(Companion.remark("Creating database tables..."));
 		//datatype for audio formats
 		sql(con, "create domain audioformat as varchar default 'OGG' check value in('OGG',	'MP3')");
 		//table "docs": list of documents which are currently stored
@@ -54,7 +54,7 @@ public class DBInit {
 			"widthpx int not null, " + //the width of the page in px
 			"heightpx int not null, " + //the height of the page in px
 			"primary key (doc_id, page, scaling), " + "foreign key (doc_id) references docs(id))");
-		log(remark("Database tables successfully created."));
+		INSTANCE.log(Companion.remark("Database tables successfully created."));
 	}
 
 	private static void sql(Connection con, String sql)

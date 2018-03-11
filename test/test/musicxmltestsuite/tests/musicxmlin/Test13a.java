@@ -21,7 +21,7 @@ public class Test13a
 		int iKey = 0;
 		for (int i = 8; i <= 37; i++) {
 			ColumnHeader column = score.getColumnHeader(i);
-			TraditionalKey key = (TraditionalKey) column.getKeys().get(_0);
+			TraditionalKey key = (TraditionalKey) column.getKeys().get(Companion.get_0());
 			assertEquals("measure " + i, expectedKeys[iKey].getFifths(), key.getFifths());
 			assertEquals("measure " + i, expectedKeys[iKey].getMode(), key.getMode());
 			iKey++;

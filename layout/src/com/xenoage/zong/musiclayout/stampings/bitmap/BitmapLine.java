@@ -36,7 +36,7 @@ import com.xenoage.utils.math.Units;
 	public BitmapLine(float widthMm, Color color, float scaling) {
 		//width
 		float widthPxFloat = Units.mmToPx(widthMm, scaling);
-		float widthPx = MathUtils.clampMin(Math.round(widthPxFloat), 1);
+		float widthPx = MathUtils.INSTANCE.clampMin(Math.round(widthPxFloat), 1);
 		this.widthMm = Units.pxToMm(widthPx, scaling);
 		//color
 		if (widthPxFloat < 1)

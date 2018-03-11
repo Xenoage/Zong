@@ -31,7 +31,7 @@ public class Playback {
 				MidiScorePlayer.init();
 				player = MidiScorePlayer.midiScorePlayer();
 			} catch (MidiUnavailableException ex) {
-				Err.handle(Report.error("MIDI not available"));
+				Err.handle(Report.Companion.error("MIDI not available"));
 			}
 		}
 	}

@@ -123,9 +123,9 @@ public final class DurationInfo {
 	public static Fraction getDuration(Fraction baseDuration, int dots) {
 		Fraction ret = baseDuration;
 		if (dots == 1)
-			ret = ret.mult(fr(3, 2)); //+ 50%
+			ret = ret.mult(Companion.fr(3, 2)); //+ 50%
 		else if (dots == 2)
-			ret = ret.mult(fr(7, 4)); //+ 50% + 25%
+			ret = ret.mult(Companion.fr(7, 4)); //+ 50% + 25%
 		return ret;
 	}
 
@@ -139,7 +139,7 @@ public final class DurationInfo {
 		//try to find dots:
 		//find the base fraction
 		int dotDenominator = 256; //start with 256th notes
-		while (dotDenominator > 1 && duration.compareTo(fr(1, dotDenominator)) > 0) {
+		while (dotDenominator > 1 && duration.compareTo(Companion.fr(1, dotDenominator)) > 0) {
 			dotDenominator /= 2;
 		}
 		//find the dots
@@ -166,9 +166,9 @@ public final class DurationInfo {
 		Fraction ret = duration;
 		int dots = getDots(duration);
 		if (dots == 1)
-			ret = ret.mult(fr(2, 3)); //remove the added 50%
+			ret = ret.mult(Companion.fr(2, 3)); //remove the added 50%
 		else if (dots == 2)
-			ret = ret.mult(fr(4, 7)); //remove the added (50% + 25%)
+			ret = ret.mult(Companion.fr(4, 7)); //remove the added (50% + 25%)
 		return ret;
 	}
 

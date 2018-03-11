@@ -217,7 +217,7 @@ public final class Voice
 	 * If there are no elements, 0 is returned.
 	 */
 	public Fraction getLastUsedBeat(Fraction maxBeat) {
-		Fraction beat = fr(0);
+		Fraction beat = Companion.fr(0);
 		for (VoiceElement e : elements) {
 			Fraction pos = beat.add(e.getDuration());
 			if (pos.compareTo(maxBeat) > 0)
@@ -239,7 +239,7 @@ public final class Voice
 		if (beat.getNumerator() == 0)
 			return true;
 		//is there an element at this beat?
-		Fraction curBeat = fr(0);
+		Fraction curBeat = Companion.fr(0);
 		for (VoiceElement e : elements) {
 			if (beat.equals(curBeat))
 				return true;
@@ -265,7 +265,7 @@ public final class Voice
 	 * voice where the is no music element following any more.
 	 */
 	public Fraction getFilledBeats() {
-		Fraction ret = Fraction._0;
+		Fraction ret = Fraction.Companion.get_0();
 		for (VoiceElement e : elements)
 			ret = ret.add(e.getDuration());
 		return ret;
@@ -279,7 +279,7 @@ public final class Voice
 	 * If no element starts at exactly the given beat, null is returned.
 	 */
 	public VoiceElement getElementAt(Fraction beat) {
-		Fraction currentBeat = Fraction._0;
+		Fraction currentBeat = Fraction.Companion.get_0();
 		VoiceElement foundElement = null;
 		for (VoiceElement e : elements) {
 			int compare = beat.compareTo(currentBeat);
@@ -300,7 +300,7 @@ public final class Voice
 	 */
 	public SortedList<Fraction> getUsedBeats() {
 		SortedList<Fraction> ret = new SortedList<>(false);
-		Fraction currentBeat = Fraction._0;
+		Fraction currentBeat = Fraction.Companion.get_0();
 		ret.add(currentBeat);
 		for (VoiceElement e : elements) {
 			Fraction duration = e.getDuration();
@@ -321,7 +321,7 @@ public final class Voice
 	public LinkedList<VoiceElement> getElementsInRange(Fraction startBeat, Fraction endBeat) {
 		LinkedList<VoiceElement> ret = new LinkedList<>();
 		//collect elements
-		Fraction beat = Fraction._0;
+		Fraction beat = Fraction.Companion.get_0();
 		for (VoiceElement e : elements) {
 			if (beat.compareTo(endBeat) >= 0)
 				break;
@@ -343,7 +343,7 @@ public final class Voice
 	 * If the element is not in this voice, null is returned.
 	 */
 	public Fraction getBeat(MusicElement element) {
-		Fraction beat = Fraction._0;
+		Fraction beat = Fraction.Companion.get_0();
 		for (VoiceElement e : elements) {
 			if (e == element)
 				return beat;
@@ -360,7 +360,7 @@ public final class Voice
 	 * the last element is returned (or 0 if the voice is empty).
 	 */
 	public Fraction getBeat(int elementIndex) {
-		Fraction beat = Fraction._0;
+		Fraction beat = Fraction.Companion.get_0();
 		for (int i : range(elements)) {
 			if (i >= elementIndex)
 				break;
@@ -377,7 +377,7 @@ public final class Voice
 	 */
 	public int getElementIndex(Fraction beat) {
 		int posI = 0;
-		Fraction posB = Fraction._0;
+		Fraction posB = Fraction.Companion.get_0();
 		for (int i : range(elements)) {
 			Fraction newPosB = posB.add(elements.get(i).getDuration());
 			if (newPosB.compareTo(beat) > 0)

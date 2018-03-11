@@ -69,7 +69,7 @@ public class ScoreLayouter {
 			layout = createLayoutWithExceptions();
 		} catch (Exception ex) {
 			//exception during the layouting process. show error page
-			log(warning("Layouting failed", ex));
+			INSTANCE.log(Companion.warning("Layouting failed", ex));
 			layout = ScoreLayout.createErrorLayout(context.score, context.symbols);
 		}
 		return layout;

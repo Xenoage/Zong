@@ -241,7 +241,7 @@ public class MidiConverter<T> {
 			long startTick = startMidiTime.tick;
 			long endTick = startTick + durationToTick(duration, resolution);
 			long stopTick = endTick;
-			if (false == options.midiSettings.durationFactor.equals(_1)) {
+			if (false == options.midiSettings.durationFactor.equals(Companion.get_1())) {
 				//custom duration factor
 				stopTick = startTick + round((endTick - startTick) *
 						options.midiSettings.durationFactor.toFloat());
@@ -337,25 +337,25 @@ public class MidiConverter<T> {
 			for (int iMeasure : range(rep.start.measure, rep.end.measure)) {
 				TimeSignature timeSig = score.getHeader().getTimeAtOrBefore(iMeasure);
 
-				Fraction startBeat = (rep.start.measure == iMeasure ? rep.start.beat : _0);
+				Fraction startBeat = (rep.start.measure == iMeasure ? rep.start.beat : Companion.get_0());
 				Fraction endBeat = (rep.end.measure == iMeasure ? rep.end.beat : score.getMeasureBeats(iMeasure));
 
 				if (timeSig != null) {
 
 					boolean[] accentuation = timeSig.getType().getBeatsAccentuation();
 					int timeDenominator = timeSig.getType().getDenominator();
-					long measureStartTick = timeMap.getByRepTime(iRep, time(iMeasure, _0)).tick;
+					long measureStartTick = timeMap.getByRepTime(iRep, time(iMeasure, Companion.get_0())).tick;
 
 					for (int beatNumerator : range(timeSig.getType().getNumerator())) {
 
 						//compute start and stop tick
-						val beat = fr(beatNumerator, timeDenominator);
+						val beat = Companion.fr(beatNumerator, timeDenominator);
 						val time = time(iMeasure, beat);
 						if (false == rep.contains(time))
 							continue;
 
-						long tickStart = measureStartTick + durationToTick(fr(beatNumerator, timeDenominator), resolution);
-						long tickStop = tickStart + durationToTick(fr(1, timeDenominator), resolution);
+						long tickStart = measureStartTick + durationToTick(Companion.fr(beatNumerator, timeDenominator), resolution);
+						long tickStop = tickStart + durationToTick(Companion.fr(1, timeDenominator), resolution);
 
 						//write metronome note
 						int note = (accentuation[beatNumerator] ? strongBeatNote : weakBeatNote);

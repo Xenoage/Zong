@@ -100,7 +100,7 @@ public final class StavesList {
 				for (Voice voice : measure.getVoices()) {
 					for (VoiceElement me : voice.getElements()) {
 						if (me.getDuration() != null) {
-							actualdivision = MathUtils.lcm(actualdivision, me.getDuration().getDenominator());
+							actualdivision = MathUtils.INSTANCE.lcm(actualdivision, me.getDuration().getDenominator());
 						}
 					}
 				}
@@ -113,7 +113,7 @@ public final class StavesList {
 	 * Gets the {@link Staff} at the given {@link MP} (only the staff index is read).
 	 */
 	public Staff getStaff(MP mp) {
-		return getStaff(mp.staff);
+		return getStaff(mp.getStaff());
 	}
 
 	/**
@@ -124,7 +124,7 @@ public final class StavesList {
 			return staves.get(staffIndex);
 		}
 		else {
-			throw new IllegalMPException(MP.atStaff(staffIndex));
+			throw new IllegalMPException(MP.Companion.atStaff(staffIndex));
 		}
 	}
 
@@ -160,7 +160,7 @@ public final class StavesList {
 		int measuresCount = staves.get(0).getMeasures().size();
 		Fraction[] ret = new Fraction[measuresCount];
 		for (int iMeasure = 0; iMeasure < measuresCount; iMeasure++) {
-			Fraction maxBeat = Fraction._0;
+			Fraction maxBeat = Fraction.Companion.get_0();
 			for (Staff staff : staves) {
 				Fraction beat = staff.getMeasures().get(iMeasure).getFilledBeats();
 				if (beat.compareTo(maxBeat) > 0)

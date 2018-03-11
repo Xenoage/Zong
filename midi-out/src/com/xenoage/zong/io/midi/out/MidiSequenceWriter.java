@@ -171,7 +171,7 @@ public abstract class MidiSequenceWriter<T> {
 				cl = 3; break;
 		}
 		if (cl != -1) {
-			byte li = (byte) clamp(clef.getLp() * 2 + 1, 1, 5); //line number from bottom
+			byte li = (byte) INSTANCE.clamp(clef.getLp() * 2 + 1, 1, 5); //line number from bottom
 			byte oc = (byte) clef.getSymbol().octaveChange;
 			byte[] data = {cl, li, oc};
 			writeMetaMessage(track, tick, typeClef, data);
@@ -248,7 +248,7 @@ public abstract class MidiSequenceWriter<T> {
 	 * 0 means x/1 time, 1 means x/2 time, 2 means x/4 time, and so on.
 	 */
 	private byte getDenominatorExponent(int denominator) {
-		return (byte) log2(denominator);
+		return (byte) INSTANCE.log2(denominator);
 	}
 
 }

@@ -84,10 +84,10 @@ public class ScoreRevolutionary {
 		ArticulationType[] accent = { ArticulationType.Accent };
 		ArticulationType[] staccato = { ArticulationType.Staccato };
 
-		Fraction f2 = fr(1, 2);
-		Fraction f4 = fr(1, 4);
-		Fraction f8 = fr(1, 8);
-		Fraction f16 = fr(1, 16);
+		Fraction f2 = Companion.fr(1, 2);
+		Fraction f4 = Companion.fr(1, 4);
+		Fraction f8 = Companion.fr(1, 8);
+		Fraction f16 = Companion.fr(1, 16);
 
 		Chord attachC, firstSlurC, lastSlurC;
 		BezierPoint firstSlurB, lastSlurB;
@@ -125,7 +125,7 @@ public class ScoreRevolutionary {
 		cresc.setPositioning(new Position(null, null, -1f, -2f));
 		cursor.write((MeasureElement) cresc);
 		cursor.openBeam();
-		cursor.write(firstSlurC = chord(fr(3, 16), accent, pi(A, -1, 4), pi(E, -1, 5), pi(F, 5), pi(A, -1, 5)));
+		cursor.write(firstSlurC = chord(Companion.fr(3, 16), accent, pi(A, -1, 4), pi(E, -1, 5), pi(F, 5), pi(A, -1, 5)));
 		cursor.write(lastSlurC = chord(f16, pi(G, 4), pi(G, 5)));
 		cursor.closeBeam();
 		cursor.write((MeasureElement) cresc.getWedgeEnd());
@@ -145,7 +145,7 @@ public class ScoreRevolutionary {
 		cresc.setPositioning(new Position(null, null, -1f, -2f));
 		cursor.write((MeasureElement) cresc);
 		cursor.openBeam();
-		cursor.write(firstSlurC = chord(fr(3, 16), accent, pi(A, -1, 4), pi(E, -1, 5), pi(F, 0, 5), pi(A, -1, 5)));
+		cursor.write(firstSlurC = chord(Companion.fr(3, 16), accent, pi(A, -1, 4), pi(E, -1, 5), pi(F, 0, 5), pi(A, -1, 5)));
 		cursor.write(lastSlurC = chord(f16, pi(G, 0, 4), pi(G, 0, 5)));
 		cursor.closeBeam();
 		cursor.write((MeasureElement) cresc.getWedgeEnd());
@@ -160,7 +160,7 @@ public class ScoreRevolutionary {
 		cursor.write(new Rest(f2));
 
 		//second staff: f-clef some notes
-		cursor = new Cursor(cursor.getScore(), mp(1, 0, 0, _0, 0), true);
+		cursor = new Cursor(cursor.getScore(), mp(1, 0, 0, Companion.get_0(), 0), true);
 		cursor.write(new Clef(ClefType.clefBass));
 
 		//measure 1

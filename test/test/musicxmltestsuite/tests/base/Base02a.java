@@ -14,10 +14,10 @@ public interface Base02a
 	
 	Fraction[] expectedDurations = {
 		//undotted
-		fr(1), fr(1), fr(1), fr(1, 2), fr(1, 4), fr(1, 8), fr(1, 16), fr(1, 32), fr(1, 64),
-		fr(1, 128), fr(1, 128),
+		Companion.fr(1), Companion.fr(1), Companion.fr(1), Companion.fr(1, 2), Companion.fr(1, 4), Companion.fr(1, 8), Companion.fr(1, 16), Companion.fr(1, 32), Companion.fr(1, 64),
+		Companion.fr(1, 128), Companion.fr(1, 128),
 		//dotted
-		fr(3, 4), fr(1, 4), fr(1, 4), fr(3, 8), fr(3, 16), fr(3, 32), fr(3, 64), fr(3, 128),
-		fr(3, 256), fr(3, 256) };
+		Companion.fr(3, 4), Companion.fr(1, 4), Companion.fr(1, 4), Companion.fr(3, 8), Companion.fr(3, 16), Companion.fr(3, 32), Companion.fr(3, 64), Companion.fr(3, 128),
+		Companion.fr(3, 256), Companion.fr(3, 256) };
 
 }

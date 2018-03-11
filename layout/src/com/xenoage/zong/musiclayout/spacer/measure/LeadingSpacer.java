@@ -53,7 +53,7 @@ public class LeadingSpacer {
 			context.settings.spacings.widthClef, 0), musicContext.getClef().getLp(), 1);
 		notations.add(clefNotation);
 		xOffset += context.settings.spacings.widthClef / 2;
-		elements.add(new SimpleSpacing(clefNotation, fr(0), xOffset));
+		elements.add(new SimpleSpacing(clefNotation, Companion.fr(0), xOffset));
 		xOffset += context.settings.spacings.widthClef / 2;
 
 		if (useKey) {
@@ -62,7 +62,7 @@ public class LeadingSpacer {
 			TraditionalKey tradKey = new TraditionalKey(tkey.getFifths(), tkey.getMode()); //it is not the same element instance, but has the same meaning
 			TraditionalKeyNotation keyNotation = traditionalKeyNotator.compute(tradKey, context);
 			notations.add(keyNotation);
-			elements.add(new SimpleSpacing(keyNotation, fr(0), xOffset));
+			elements.add(new SimpleSpacing(keyNotation, Companion.fr(0), xOffset));
 			xOffset += keyNotation.getWidth().getWidth();
 		}
 

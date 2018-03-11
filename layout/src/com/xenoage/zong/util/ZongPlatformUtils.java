@@ -26,7 +26,7 @@ public abstract class ZongPlatformUtils {
 	 */
 	@NonNull public static ZongPlatformUtils zongPlatformUtils() {
 		if (zongPlatformUtils == null) {
-			Err.handle(Report.fatal(ZongPlatformUtils.class.getName() + " not initialized"));
+			Err.handle(Report.Companion.fatal(ZongPlatformUtils.class.getName() + " not initialized"));
 			throw new IllegalStateException(ZongPlatformUtils.class.getName() + " not initialized");
 		}
 		return zongPlatformUtils;

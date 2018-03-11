@@ -42,7 +42,7 @@ class SvgSymbolReader
 	}
 	
 	private void step1_openFile() {
-		log(remark("Loading symbol \"" + id + "\", file: \"" + svgFilepath + "\" ..."));
+		INSTANCE.log(Companion.remark("Loading symbol \"" + id + "\", file: \"" + svgFilepath + "\" ..."));
 		platformUtils().openFileAsync(svgFilepath, new AsyncResult<InputStream>() {
 
 			@Override public void onSuccess(InputStream stream) {

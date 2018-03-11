@@ -57,7 +57,7 @@ import com.xenoage.utils.jse.settings.FileSettings;
 		//show the dialog
 		File file = fileChooser.showSaveDialog(ownerWindow);
 		if (file != null) {
-			log(remark("Dialog closed (OK), saving file \"" + file.getName() + "\""));
+			INSTANCE.log(Companion.remark("Dialog closed (OK), saving file \"" + file.getName() + "\""));
 			FileFormat<?> format = formats.get(fileChooser.getSelectedExtensionFilter());
 			String defaultExt = format.getDefaultExtension();
 			if (!file.getName().endsWith(defaultExt)) {
@@ -68,7 +68,7 @@ import com.xenoage.utils.jse.settings.FileSettings;
 			FileSettings.rememberDir(file);
 		}
 		else {
-			log(remark("Dialog closed (Cancel)"));
+			INSTANCE.log(Companion.remark("Dialog closed (Cancel)"));
 		}
 	}
 }

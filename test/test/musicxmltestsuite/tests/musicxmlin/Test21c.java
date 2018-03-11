@@ -24,8 +24,8 @@ public class Test21c
 			assertEquals("chord " + i, expectedChords[i].getNotes(), chord.getNotes());
 			assertEquals("chord " + i, expectedChords[i].getDuration(), chord.getDuration());
 			mp = mp.withBeat(mp.beat.add(expectedChords[i].getDuration()));
-			if (mp.beat.compareTo(_1) >= 0) {
-				mp = mp.withMeasure(mp.measure + 1).withBeat(_0);
+			if (mp.beat.compareTo(Companion.get_1()) >= 0) {
+				mp = mp.withMeasure(mp.measure + 1).withBeat(Companion.get_0());
 			}
 		}
 	}

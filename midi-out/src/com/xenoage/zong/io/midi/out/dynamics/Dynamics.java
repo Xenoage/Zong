@@ -33,7 +33,7 @@ public class Dynamics {
 	 * or the volume of {@link #defaultDynamics}, if undefined.
 	 */
 	public float getVolumeAt(MP mp, int repetition) {
-		int part = partStaves.getPartByStaff(mp.staff);
+		int part = partStaves.getPartByStaff(mp.getStaff());
 		val staves = partStaves.getStaves(part);
 		val period = periods.get(mp, repetition, staves);
 		if (period != null)

@@ -12,6 +12,6 @@ public interface Base46f
 		return "46f-IncompleteMeasures.xml";
 	}
 	
-	Fraction[] expectedMeasureFilledBeats = { fr(2,4), fr(4,4), fr(2,4), fr(4,4) };
+	Fraction[] expectedMeasureFilledBeats = { Companion.fr(2,4), Companion.fr(4,4), Companion.fr(2,4), Companion.fr(4,4) };
 
 }

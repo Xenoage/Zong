@@ -43,7 +43,7 @@ public class WavScoreFileOutput
 			MidiToWaveRenderer.render(SynthManager.getSoundbank(), sequence.getSequence(), null,
 				new JseOutputStream(stream));
 		} catch (Exception ex) {
-			log(warning(ex));
+			INSTANCE.log(Companion.warning(ex));
 			throw new IOException(ex);
 		}
 	}

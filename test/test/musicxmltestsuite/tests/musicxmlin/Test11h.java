@@ -19,7 +19,7 @@ public class Test11h
 		assertEquals(TimeType.timeSenzaMisura, score.getColumnHeader(0).getTime().getType());
 		//measure must contain 3 notes and have a length of 3/8
 		assertEquals(3, score.getVoice(mp0).getElements().size());
-		assertEquals(fr(3, 8), score.getVoice(mp0).getFilledBeats());
+		assertEquals(Companion.fr(3, 8), score.getVoice(mp0).getFilledBeats());
 	}
 
 }

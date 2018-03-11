@@ -75,7 +75,7 @@ public class AttributesReader {
 		if (mxlKey == null)
 			return null;
 		//read fifths. currently, only -7 to 7 is supported (clamp, if needed)
-		int mxlFifths = clamp(mxlKey.fifths, -7, 7);
+		int mxlFifths = INSTANCE.clamp(mxlKey.fifths, -7, 7);
 		//write to column header (TODO: attribute "number" for single staves)
 		Mode mode = getEnumValue(mxlKey.mode, Mode.values());
 		Key key = new TraditionalKey(mxlFifths, mode);

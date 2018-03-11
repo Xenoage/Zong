@@ -44,9 +44,9 @@ import com.xenoage.zong.core.music.chord.Accidental;
 	 * Gets the width of the notehead of the given duration.
 	 */
 	public float get(Fraction duration) {
-		if (duration.compareTo(_1$2) < 0)
+		if (duration.compareTo(Companion.get_1$2()) < 0)
 			return quarter;
-		else if (duration.compareTo(_1) < 0)
+		else if (duration.compareTo(Companion.get_1()) < 0)
 			return half;
 		else
 			return whole;

@@ -25,9 +25,9 @@ public class MPTest {
 			String msg = "First MP should be " + new String[]{"earlier", "equal", "later"}[test+1];
 			for (int m : range(0, 2)) { //measure
 				for (int b : range(1, 2)) { //beat
-					assertEquals(msg, test, atBeat(0, m, 0, fr(b + test, 4)).compareTimeTo(atBeat(0, m, 0, fr(b, 4))));
-					assertEquals(msg, test, atBeat(otherStaff, m, 0, fr(b + test, 4)).compareTimeTo(atBeat(0, m, 0, fr(b, 4))));
-					assertEquals(msg, test, atBeat(0, m, 0, fr(b + test, 4)).compareTimeTo(atBeat(0, m, otherVoice, fr(b, 4))));
+					assertEquals(msg, test, atBeat(0, m, 0, Companion.fr(b + test, 4)).compareTimeTo(atBeat(0, m, 0, Companion.fr(b, 4))));
+					assertEquals(msg, test, atBeat(otherStaff, m, 0, Companion.fr(b + test, 4)).compareTimeTo(atBeat(0, m, 0, Companion.fr(b, 4))));
+					assertEquals(msg, test, atBeat(0, m, 0, Companion.fr(b + test, 4)).compareTimeTo(atBeat(0, m, otherVoice, Companion.fr(b, 4))));
 				}
 			}
 			//equal time (with element index)

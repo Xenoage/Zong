@@ -48,7 +48,7 @@ public class Player
 		} catch (Throwable error) {
 			//here all uncaught exceptions and errors are caught. - TODO: really? not tested for JavaFX
 			try {
-				new BasicErrorProcessing().report(fatal("Unknown program error.", error));
+				new BasicErrorProcessing().report(Companion.fatal("Unknown program error.", error));
 			} catch (Throwable error2) {
 				//ignore (we can not do something)
 			}
@@ -99,7 +99,7 @@ public class Player
 	 * Initializes the logging interface, using {@link DesktopLogProcessing}.
 	 */
 	@Override protected void initLog() {
-		Log.init(new DesktopLogProcessing(getNameAndVersion()));
+		Log.INSTANCE.init(new DesktopLogProcessing(getNameAndVersion()));
 	}
 
 	/**

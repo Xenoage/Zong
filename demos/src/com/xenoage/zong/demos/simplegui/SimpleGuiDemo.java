@@ -52,7 +52,7 @@ public class SimpleGuiDemo
 		//initialize platform-dependent utilities, including I/O
 		JseZongPlatformUtils.init(appName);
 		//init logging and error handling
-		Log.init(new DesktopLogProcessing(appName + " " + appVersion));
+		Log.INSTANCE.init(new DesktopLogProcessing(appName + " " + appVersion));
 		Err.init(new GuiErrorProcessing());
 		//init audio engine
 		SynthManager.init(false);

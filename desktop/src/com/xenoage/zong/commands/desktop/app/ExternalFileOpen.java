@@ -27,7 +27,7 @@ public class ExternalFileOpen
 		try {
 			Desktop.getDesktop().open(io().findNormalFile(filePath));
 		} catch (Exception ex) {
-			log(warning("Could not open file: " + filePath + " (" + ex.getMessage() + ")"));
+			INSTANCE.log(Companion.warning("Could not open file: " + filePath + " (" + ex.getMessage() + ")"));
 		}
 	}
 

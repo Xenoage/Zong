@@ -92,20 +92,20 @@ public class RepetitionsFinderTest {
 
 		score = ScoreFactory.create1Staff();
 		new MeasureAdd(score, 3).execute();
-		writeMiddleForwardRepeat(1, _1$2);
+		writeMiddleForwardRepeat(1, Companion.get_1$2());
 		writeBackwardRepeat(1, 1);
-		writeMiddleBackwardRepeat(2, _1$2, 2);
-		writeMiddleForwardRepeat(3, _1$4);
-		writeMiddleBackwardRepeat(3, _3$4, 1);
+		writeMiddleBackwardRepeat(2, Companion.get_1$2(), 2);
+		writeMiddleForwardRepeat(3, Companion.get_1$4());
+		writeMiddleBackwardRepeat(3, Companion.get_3$4(), 1);
 
 		val expectedRepetitions = new Repetitions(ilist(
-			new Repetition(bp(0, _0), bp(2, _0)),
-			new Repetition(bp(1, _1$2), bp(2, _1$2)),
-			new Repetition(bp(1, _1$2), bp(2, _0)),
-			new Repetition(bp(1, _1$2), bp(2, _1$2)),
-			new Repetition(bp(1, _1$2), bp(2, _0)),
-			new Repetition(bp(1, _1$2), bp(3, _3$4)),
-			new Repetition(bp(3, _1$4), bp(4, _0))));
+			new Repetition(bp(0, Companion.get_0()), bp(2, Companion.get_0())),
+			new Repetition(bp(1, Companion.get_1$2()), bp(2, Companion.get_1$2())),
+			new Repetition(bp(1, Companion.get_1$2()), bp(2, Companion.get_0())),
+			new Repetition(bp(1, Companion.get_1$2()), bp(2, Companion.get_1$2())),
+			new Repetition(bp(1, Companion.get_1$2()), bp(2, Companion.get_0())),
+			new Repetition(bp(1, Companion.get_1$2()), bp(3, Companion.get_3$4())),
+			new Repetition(bp(3, Companion.get_1$4()), bp(4, Companion.get_0()))));
 
 		runTest(new TestCase(score, expectedRepetitions));
 	}

@@ -80,7 +80,7 @@ public class OpenAction
 		throws SQLException, IOException {
 		OpenRequest openRequest = getAs(OpenRequest.class, request);
 
-		log(remark("OpenAction started for URL " + openRequest.url));
+		INSTANCE.log(Companion.remark("OpenAction started for URL " + openRequest.url));
 		final Connection db = server.getDBConnection();
 
 		//cleanup: delete documents which were not used during a defined period
@@ -109,12 +109,12 @@ public class OpenAction
 		ResultSet resDoc = stmtDoc.executeQuery();
 		if (resDoc.next()) {
 			//the document already exists in the database
-			log(remark("Requested document is still in cache. Using it."));
+			INSTANCE.log(Companion.remark("Requested document is still in cache. Using it."));
 			doc = Doc.fromDB(db, openRequest.url);
 		}
 		else {
 			//the document is unknown. load it.
-			log(remark("Requested document is not in cache. Loading it."));
+			INSTANCE.log(Companion.remark("Requested document is not in cache. Loading it."));
 			Tuple2<ScoreDoc, Doc> t = loadDocument(openRequest.url, openRequest.requestedID);
 			scoreDoc = t.get1();
 			doc = t.get2();
@@ -194,7 +194,7 @@ public class OpenAction
 								imageData.toByteArray());
 						}
 					}
-					log(remark("Rendered " + scoreDocFinal.getLayout().getPages().size() + " pages at " +
+					INSTANCE.log(Companion.remark("Rendered " + scoreDocFinal.getLayout().getPages().size() + " pages at " +
 						scalingsToRender + " scalings"));
 				}
 
@@ -247,7 +247,7 @@ public class OpenAction
 				throws Exception {
 				//create cursor data
 				if (renderCursor) {
-					log(remark("Creating cursor data"));
+					INSTANCE.log(Companion.remark("Creating cursor data"));
 					JsonObject jsonCursor = new CursorOutput().write(scoreDocFinal);
 					insert(db, "cursors", "doc_id, cursors", docFinal.id, jsonCursor.toString());
 					System.out.println("cursors finished"); //TEST
@@ -294,7 +294,7 @@ public class OpenAction
 	private void renderAndSaveAudioFile(Connection db, Doc doc, ScoreDoc scoreDoc,
 		String audioFormatID, FileOutput<Score> scoreFileOutput)
 		throws IOException, SQLException {
-		log(remark("Rendering " + audioFormatID + " audio file"));
+		INSTANCE.log(Companion.remark("Rendering " + audioFormatID + " audio file"));
 		File tempFile = File.createTempFile(getClass().getName(), "." + audioFormatID.toLowerCase());
 		DocumentIO.write(scoreDoc.getScore(), tempFile, scoreFileOutput);
 		try (InputStream in = new FileInputStream(tempFile)) {

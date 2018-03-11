@@ -107,18 +107,18 @@ public final class Beam
 			MP mp = wp.getChord().getMP();
 
 			//check, if all chords are in the same measure column
-			if (mp.measure != measure)
+			if (mp.getMeasure() != measure)
 				throw new IllegalArgumentException("A beam may only span over one measure column");
 
 			//check, if chords are sorted by beat.
 			//for grace notes, the same beat is ok.
 			if (lastBeat != null) {
-				int compare = mp.beat.compareTo(lastBeat);
+				int compare = mp.getBeat().compareTo(lastBeat);
 				if ((false == wasLastChordGrace && compare <= 0) ||
 						(wasLastChordGrace && compare < 0))
 					throw new IllegalArgumentException("Beamed chords must be sorted by beat");
 			}
-			lastBeat = mp.beat;
+			lastBeat = mp.getBeat();
 			wasLastChordGrace = wp.getChord().isGrace();
 		}
 	}
@@ -243,9 +243,9 @@ public final class Beam
 		//check if the beam spans over a single staff or two adjacent staves or more
 		for (BeamWaypoint waypoint : waypoints) {
 			Chord chord = waypoint.getChord();
-			MP mpChord = MP.getMP(chord);
-			minStaffIndex = Math.min(minStaffIndex, mpChord.staff);
-			maxStaffIndex = max(maxStaffIndex, mpChord.staff);
+			MP mpChord = MP.Companion.getMP(chord);
+			minStaffIndex = Math.min(minStaffIndex, mpChord.getStaff());
+			maxStaffIndex = max(maxStaffIndex, mpChord.getStaff());
 		}
 		VerticalSpan verticalSpan = VerticalSpan.Other;
 		if (maxStaffIndex == minStaffIndex)
@@ -264,7 +264,7 @@ public final class Beam
 	public int getMaxLinesCount() {
 		Fraction minDuration = null;
 		for (BeamWaypoint waypoint : waypoints)
-			minDuration = min(minDuration, waypoint.getChord().getDisplayedDuration());
+			minDuration = INSTANCE.min(minDuration, waypoint.getChord().getDisplayedDuration());
 		return DurationInfo.getFlagsCount(minDuration);
 	}
 

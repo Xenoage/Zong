@@ -45,7 +45,7 @@ public class Response {
 		try {
 			response.getWriter().write(json.toString());
 		} catch (IOException ex) {
-			log(warning("Could not send response", ex));
+			INSTANCE.log(Companion.warning("Could not send response", ex));
 		}
 	}
 

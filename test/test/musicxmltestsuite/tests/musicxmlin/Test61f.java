@@ -21,7 +21,7 @@ public class Test61f
 	@Test public void test() {
 		for (int iMeasure : range(2))
 		for (int iBeat : range(4)) {
-			MP mp = MP.atBeat(0, iMeasure, 0, fr(iBeat, 4));
+			MP mp = MP.atBeat(0, iMeasure, 0, Companion.fr(iBeat, 4));
 			Chord chord = ChordTest.getChordAt(score, mp);
 			assertEqualsChordLyrics(expectedLyrics[iMeasure * 4 + iBeat], chord, mp);
 		}

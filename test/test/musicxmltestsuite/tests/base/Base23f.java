@@ -16,12 +16,12 @@ public interface Base23f
 	
 	Fraction[][] expectedDurations = {
 		{ //staff 0
-			fr(1, 4), fr(1, 4), fr(1, 6), fr(1, 6), fr(1, 6)
+			Companion.fr(1, 4), Companion.fr(1, 4), Companion.fr(1, 6), Companion.fr(1, 6), Companion.fr(1, 6)
 		},
 		{ //staff 1
-			fr(1, 8), fr(1, 8), fr(1, 12), fr(1, 12), fr(1, 12),
-			fr(1, 16), fr(1, 16), fr(1, 16), fr(1, 16),
-			fr(1, 24), fr(1, 24), fr(1, 24), fr(1, 24), fr(1, 24), fr(1, 24)
+			Companion.fr(1, 8), Companion.fr(1, 8), Companion.fr(1, 12), Companion.fr(1, 12), Companion.fr(1, 12),
+			Companion.fr(1, 16), Companion.fr(1, 16), Companion.fr(1, 16), Companion.fr(1, 16),
+			Companion.fr(1, 24), Companion.fr(1, 24), Companion.fr(1, 24), Companion.fr(1, 24), Companion.fr(1, 24), Companion.fr(1, 24)
 		}
 	};
 

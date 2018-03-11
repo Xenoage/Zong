@@ -23,16 +23,16 @@ public class Test12b
 		Score score = getScore();
 		//musical context must be 4/4, C clef and no accidentals
 		MusicContext context = score.getMusicContext(mp0, Interval.At, Interval.At);
-		assertEquals(fr(4, 4), score.getMeasureBeats(0));
+		assertEquals(Companion.fr(4, 4), score.getMeasureBeats(0));
 		assertEquals(ClefType.clefTreble, context.getClef());
 		for (int i = 0; i < 7; i++)
 			assertEquals(0, context.getKey().getAlterations()[i]);
 		//there should be a C clef in the first measure
-		assertEquals(ClefType.clefTreble, score.getMeasure(mp0).getClefs().get(_0).getType());
+		assertEquals(ClefType.clefTreble, score.getMeasure(mp0).getClefs().get(Companion.get_0()).getType());
 		//there should be a time signature and key signature in the measure column
 		ColumnHeader header = score.getHeader().getColumnHeader(0);
 		assertEquals(TimeType.time_4_4, header.getTime().getType());
-		assertNotNull(header.getKeys().get(_0));
+		assertNotNull(header.getKeys().get(Companion.get_0()));
 	}
 
 }

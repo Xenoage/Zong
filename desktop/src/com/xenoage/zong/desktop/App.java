@@ -161,7 +161,7 @@ public class App<DocType extends Document>
 	 * No logging is used by default.
 	 */
 	protected void initLog() {
-		Log.initNoLog();
+		Log.INSTANCE.initNoLog();
 	}
 
 	/**
@@ -186,7 +186,7 @@ public class App<DocType extends Document>
 			langID = LanguageInfo.getDefaultID(languages);
 			LangManager.loadLanguage(langID);
 		} catch (Exception ex) {
-			warning("Could not load language " + langID, ex);
+			Companion.warning("Could not load language " + langID, ex);
 			LangManager.loadLanguage("en");
 		}
 		//register tokens
@@ -299,7 +299,7 @@ public class App<DocType extends Document>
 	 */
 	public void close() {
 		if (getAppType() == AppType.DesktopApp) {
-			Log.close();
+			Log.INSTANCE.close();
 			Platform.exit();
 			System.exit(0); //close all open threads
 		}
@@ -320,7 +320,7 @@ public class App<DocType extends Document>
 	 * Shows a message dialog with the given information.
 	 */
 	public void showMessageDialog(final String message, final String title) {
-		log(remark("Message: " + message));
+		INSTANCE.log(Companion.remark("Message: " + message));
 		Alert dialog = dialog();
 		dialog.setContentText(message);
 		dialog.showAndWait();

@@ -29,10 +29,10 @@ public class MeasureElementIterator
 	
 	private final Score score;
 	
-	@Getter private MP mp = unknownMp;
+	@Getter private MP mp = Companion.getUnknownMp();
 	private BeatEList<MeasureElement> elements;
 	private int nextElementIndex = 0;
-	private MP nextMp = mp0;
+	private MP nextMp = Companion.getMp0();
 
 	
 	public MeasureElementIterator(Score score) {
@@ -59,19 +59,19 @@ public class MeasureElementIterator
 		while (true) {
 			if (nextElementIndex < elements.size()) {
 				//next element within measure exists
-				nextMp = atBeat(nextMp.staff, nextMp.measure, unknown,
+				nextMp = Companion.atBeat(nextMp.getStaff(), nextMp.getMeasure(), Companion.getUnknown(),
 					elements.getElements().get(nextElementIndex).beat);
 				break;
 			}
 			else {
 				nextElementIndex = 0;
-				if (nextMp.measure + 1 < score.getMeasuresCount()) {
+				if (nextMp.getMeasure() + 1 < score.getMeasuresCount()) {
 					//next measure within staff
-					nextMp = atMeasure(nextMp.staff, nextMp.measure + 1);
+					nextMp = Companion.atMeasure(nextMp.getStaff(), nextMp.getMeasure() + 1);
 				}
-				else if (nextMp.staff + 1 < score.getStavesCount()) {
+				else if (nextMp.getStaff() + 1 < score.getStavesCount()) {
 					//next staff
-					nextMp = atMeasure(nextMp.staff + 1, 0);
+					nextMp = Companion.atMeasure(nextMp.getStaff() + 1, 0);
 				}
 				else {
 					//finished

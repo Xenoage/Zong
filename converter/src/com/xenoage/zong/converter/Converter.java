@@ -49,14 +49,14 @@ public class Converter {
 		throws IOException {
 		JseZongPlatformUtils.init(filename);
 		
-		Log.init(new DesktopLogProcessing(Zong.getNameAndVersion(projectFirstName)));
+		Log.INSTANCE.init(new DesktopLogProcessing(Zong.getNameAndVersion(projectFirstName)));
 		//SymbolPoolUtils.init(new AWTSVGPathReader());
 		//SymbolPoolUtils.setDefaultSymbolPool(new SymbolPool());
 		
 		try {
 			SynthManager.init(true);
 		} catch (MidiUnavailableException ex) {
-			handle(fatal(ex));
+			handle(Companion.fatal(ex));
 		}
 
 		//do the job

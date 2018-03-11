@@ -93,7 +93,7 @@ public final class Staff {
 		if (index >= 0 && index < measures.size())
 			return measures.get(index);
 		else
-			throw new IllegalMPException(atMeasure(index));
+			throw new IllegalMPException(Companion.atMeasure(index));
 	}
 
 
@@ -103,7 +103,7 @@ public final class Staff {
 	 * Only the measure index of the given position is relevant.
 	 */
 	public Measure getMeasure(MP mp) {
-		int index = mp.measure;
+		int index = mp.getMeasure();
 		if (index >= 0 && index < measures.size())
 			return measures.get(index);
 		else
@@ -132,19 +132,19 @@ public final class Staff {
 		mp.requireStaffAndMeasureAndVoiceAndElement();
 		//find the last voice element ending at or before the current beat
 		//in the given measure
-		Voice voice = getMeasure(mp.measure).getVoice(mp.voice);
-		for (int i : rangeReverse(mp.element - 1, 0)) {
+		Voice voice = getMeasure(mp.getMeasure()).getVoice(mp.getVoice());
+		for (int i : rangeReverse(mp.getElement() - 1, 0)) {
 			VoiceElement e = voice.getElement(i);
 			if (!onlyChord || (e instanceof Chord))
 				return mpE(e, mp.withElement(i));
 		}
 		//no result in this measure. loop through the preceding measures.
-		for (int iMeasure : rangeReverse(mp.measure - 1, 0)) {
-			voice = getMeasure(iMeasure).getVoice(mp.voice);
+		for (int iMeasure : rangeReverse(mp.getMeasure() - 1, 0)) {
+			voice = getMeasure(iMeasure).getVoice(mp.getVoice());
 			for (int i : rangeReverse(voice.getElements())) {
 				VoiceElement e = voice.getElement(i);
 				if (!onlyChord || (e instanceof Chord))
-					return mpE(e, MP.atElement(mp.staff, iMeasure, mp.voice, i));
+					return mpE(e, MP.Companion.atElement(mp.getStaff(), iMeasure, mp.getVoice(), i));
 			}
 		}
 		//nothing found
@@ -191,7 +191,7 @@ public final class Staff {
 		int staffIndex = parent.getStaves().indexOf(this);
 		if (staffIndex == -1)
 			return null;
-		return MP.atMeasure(staffIndex, measureIndex);
+		return MP.Companion.atMeasure(staffIndex, measureIndex);
 	}
 
 	

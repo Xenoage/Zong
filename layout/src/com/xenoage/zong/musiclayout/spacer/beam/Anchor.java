@@ -30,7 +30,7 @@ public enum Anchor {
 	public static Anchor fromLp(float stemEndLp, StemDirection stemDir) {
 		float lp = stemEndLp - (stemDir == Up ? lineHeightIs * 2 : 0);
 		int qs = round(lp * 2); //in quarter spaces
-		int modQs = mod(qs, 4);
+		int modQs = INSTANCE.mod(qs, 4);
 		switch (modQs) {
 			case 0: return Sit;
 			case 1: return WhiteSpace;

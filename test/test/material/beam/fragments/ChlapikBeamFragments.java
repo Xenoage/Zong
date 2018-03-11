@@ -21,109 +21,109 @@ public class ChlapikBeamFragments {
 
 	public Beam exampleRow1Col1() {
 		List<Chord> chords = alist();
-		chords.add(chordC(fr(1, 16)));
-		chords.add(chordC(fr(1, 8)));
-		chords.add(chordC(fr(1, 16)));
+		chords.add(chordC(Companion.fr(1, 16)));
+		chords.add(chordC(Companion.fr(1, 8)));
+		chords.add(chordC(Companion.fr(1, 16)));
 		return beamFromChordsUnchecked(chords);
 	}
 
 	public Beam exampleRow1Col2() {
 		List<Chord> chords = alist();
-		chords.add(chordF(fr(1, 16)));
-		chords.add(chordF(fr(1, 8)));
-		chords.add(chordF(fr(1, 16)));
+		chords.add(chordF(Companion.fr(1, 16)));
+		chords.add(chordF(Companion.fr(1, 8)));
+		chords.add(chordF(Companion.fr(1, 16)));
 		return beamFromChordsUnchecked(chords);
 	}
 
 	public Beam exampleRow1Col3() {
 		List<Chord> chords = alist();
-		chords.add(chordC(fr(1, 16)));
-		chords.add(chordC(fr(1, 8)));
-		chords.add(chordC(fr(1, 8)));
-		chords.add(chordC(fr(1, 16)));
+		chords.add(chordC(Companion.fr(1, 16)));
+		chords.add(chordC(Companion.fr(1, 8)));
+		chords.add(chordC(Companion.fr(1, 8)));
+		chords.add(chordC(Companion.fr(1, 16)));
 		return beamFromChordsUnchecked(chords);
 	}
 
 	public Beam exampleRow1Col4() {
 		List<Chord> chords = alist();
-		chords.add(chordF(fr(1, 16)));
-		chords.add(chordF(fr(1, 8)));
-		chords.add(chordF(fr(1, 8)));
-		chords.add(chordF(fr(1, 16)));
+		chords.add(chordF(Companion.fr(1, 16)));
+		chords.add(chordF(Companion.fr(1, 8)));
+		chords.add(chordF(Companion.fr(1, 8)));
+		chords.add(chordF(Companion.fr(1, 16)));
 		return beamFromChordsUnchecked(chords);
 	}
 
 	public Beam exampleRow2Col1() {
 		List<Chord> chords = alist();
-		chords.add(chordC(fr(3, 16)));
-		chords.add(chordC(fr(1, 16)));
+		chords.add(chordC(Companion.fr(3, 16)));
+		chords.add(chordC(Companion.fr(1, 16)));
 		return beamFromChordsUnchecked(chords);
 	}
 
 	public Beam exampleRow2Col2() {
 		List<Chord> chords = alist();
-		chords.add(chordF(fr(3, 16)));
-		chords.add(chordF(fr(1, 16)));
+		chords.add(chordF(Companion.fr(3, 16)));
+		chords.add(chordF(Companion.fr(1, 16)));
 		return beamFromChordsUnchecked(chords);
 	}
 
 	public Beam exampleRow2Col3() {
 		List<Chord> chords = alist();
-		chords.add(chordC(fr(3, 32)));
-		chords.add(chordC(fr(1, 32)));
-		chords.add(chordC(fr(3, 32)));
-		chords.add(chordC(fr(1, 32)));
+		chords.add(chordC(Companion.fr(3, 32)));
+		chords.add(chordC(Companion.fr(1, 32)));
+		chords.add(chordC(Companion.fr(3, 32)));
+		chords.add(chordC(Companion.fr(1, 32)));
 		return beamFromChordsUnchecked(chords);
 	}
 
 	public Beam exampleRow2Col4() {
 		List<Chord> chords = alist();
-		chords.add(chordF(fr(3, 32)));
-		chords.add(chordF(fr(1, 32)));
-		chords.add(chordF(fr(3, 32)));
-		chords.add(chordF(fr(1, 32)));
+		chords.add(chordF(Companion.fr(3, 32)));
+		chords.add(chordF(Companion.fr(1, 32)));
+		chords.add(chordF(Companion.fr(3, 32)));
+		chords.add(chordF(Companion.fr(1, 32)));
 		return beamFromChordsUnchecked(chords);
 	}
 
 	public Beam exampleRow2Col5() {
 		List<Chord> chords = alist();
-		chords.add(chordC(fr(1, 8)));
-		chords.add(chordC(fr(1, 32)));
-		chords.add(chordC(fr(3, 32)));
+		chords.add(chordC(Companion.fr(1, 8)));
+		chords.add(chordC(Companion.fr(1, 32)));
+		chords.add(chordC(Companion.fr(3, 32)));
 		return beamFromChordsUnchecked(chords);
 	}
 
 	public Beam exampleRow2Col6() {
 		List<Chord> chords = alist();
-		chords.add(chordF(fr(1, 8)));
-		chords.add(chordF(fr(1, 32)));
-		chords.add(chordF(fr(3, 32)));
+		chords.add(chordF(Companion.fr(1, 8)));
+		chords.add(chordF(Companion.fr(1, 32)));
+		chords.add(chordF(Companion.fr(3, 32)));
 		return beamFromChordsUnchecked(chords);
 	}
 
 	public Beam exampleRow3Col2() {
 		List<Chord> chords = alist();
-		chords.add(chordC(fr(1, 16)));
-		chords.add(chordC(fr(1, 8)));
-		chords.add(chordC(fr(1, 16)));
-		chords.add(chordC(fr(1, 8)));
+		chords.add(chordC(Companion.fr(1, 16)));
+		chords.add(chordC(Companion.fr(1, 8)));
+		chords.add(chordC(Companion.fr(1, 16)));
+		chords.add(chordC(Companion.fr(1, 8)));
 		return beamFromChordsUnchecked(chords);
 	}
 
 	public Beam exampleRow3Col4() {
 		List<Chord> chords = alist();
-		chords.add(chordC(fr(1, 8)));
-		chords.add(chordC(fr(1, 16)));
-		chords.add(chordC(fr(3, 16)));
+		chords.add(chordC(Companion.fr(1, 8)));
+		chords.add(chordC(Companion.fr(1, 16)));
+		chords.add(chordC(Companion.fr(3, 16)));
 		return beamFromChordsUnchecked(chords);
 	}
 
 	public Beam exampleRow3Col6() {
 		List<Chord> chords = alist();
-		chords.add(chordC(fr(7, 32)));
-		chords.add(chordC(fr(1, 32)));
-		chords.add(chordC(fr(3, 32)));
-		chords.add(chordC(fr(1, 32)));
+		chords.add(chordC(Companion.fr(7, 32)));
+		chords.add(chordC(Companion.fr(1, 32)));
+		chords.add(chordC(Companion.fr(3, 32)));
+		chords.add(chordC(Companion.fr(1, 32)));
 		return beamFromChordsUnchecked(chords);
 	}
 

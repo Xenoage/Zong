@@ -54,12 +54,12 @@ public class VoicesBeatOffsetterTest {
 	private final float width_1_2 = 3f;
 	private final float width_1_1 = 5f;
 
-	private final Fraction dur_1_8 = fr(1, 8);
-	private final Fraction dur_1_6 = fr(1, 6);
-	private final Fraction dur_1_4 = fr(1, 4);
-	private final Fraction dur_3_8 = fr(3, 8);
-	private final Fraction dur_1_2 = fr(1, 2);
-	private final Fraction dur_1_1 = fr(1, 1);
+	private final Fraction dur_1_8 = Companion.fr(1, 8);
+	private final Fraction dur_1_6 = Companion.fr(1, 6);
+	private final Fraction dur_1_4 = Companion.fr(1, 4);
+	private final Fraction dur_3_8 = Companion.fr(3, 8);
+	private final Fraction dur_1_2 = Companion.fr(1, 2);
+	private final Fraction dur_1_1 = Companion.fr(1, 1);
 	
 	private final float minimalBeatsOffsetIs = 0.1f;
 
@@ -69,11 +69,11 @@ public class VoicesBeatOffsetterTest {
 		List<Fraction> beats = testee.computeVoicesBeats(
 			createVoiceSpacings(createTestScore1Voice())).getLinkedList();
 		assertEquals(5, beats.size());
-		assertEquals(fr(0, 4), beats.get(0));
-		assertEquals(fr(2, 8), beats.get(1));
-		assertEquals(fr(3, 8), beats.get(2));
-		assertEquals(fr(4, 8), beats.get(3));
-		assertEquals(fr(8, 8), beats.get(4));
+		assertEquals(Companion.fr(0, 4), beats.get(0));
+		assertEquals(Companion.fr(2, 8), beats.get(1));
+		assertEquals(Companion.fr(3, 8), beats.get(2));
+		assertEquals(Companion.fr(4, 8), beats.get(3));
+		assertEquals(Companion.fr(8, 8), beats.get(4));
 	}
 
 	@Test public void computeDistanceTest() {
@@ -84,19 +84,19 @@ public class VoicesBeatOffsetterTest {
 		//not the ones of the clefs, key signatures and time signatures,
 		//so the method has to use the last occurrence of a beat.
 		//distance between beat 0 and 4: must be 6
-		float distance = testee.computeMinimalDistance(fr(0), fr(4, 4), false, voice, spacings,
+		float distance = testee.computeMinimalDistance(Companion.fr(0), Companion.fr(4, 4), false, voice, spacings,
 			emptyList, 1);
 		assertEquals(6, distance, Delta.DELTA_FLOAT);
 		//distance between beat 0 and 5: must be 0 (beat 5 isn't used)
-		distance = testee.computeMinimalDistance(fr(0), fr(5, 4), false, voice, spacings, emptyList,
+		distance = testee.computeMinimalDistance(Companion.fr(0), Companion.fr(5, 4), false, voice, spacings, emptyList,
 			1);
 		assertEquals(0, distance, Delta.DELTA_FLOAT);
 		//distance between beat 0 and 2: must be 2
-		distance = testee.computeMinimalDistance(fr(0), fr(2, 4), false, voice, spacings, emptyList,
+		distance = testee.computeMinimalDistance(Companion.fr(0), Companion.fr(2, 4), false, voice, spacings, emptyList,
 			1);
 		assertEquals(2, distance, Delta.DELTA_FLOAT);
 		//distance between beat 5 and 8: must be 0 (beat 5 isn't used)
-		distance = testee.computeMinimalDistance(fr(5), fr(8, 4), false, voice, spacings, emptyList,
+		distance = testee.computeMinimalDistance(Companion.fr(5), Companion.fr(8, 4), false, voice, spacings, emptyList,
 			1);
 		assertEquals(0, distance, Delta.DELTA_FLOAT);
 	}
@@ -108,7 +108,7 @@ public class VoicesBeatOffsetterTest {
 		Score score = createTestScore3Voices();
 
 		BeatOffset[] beatOffsets = testee.compute(
-			createVoiceSpacings(score), fr(4, 4), minimalBeatsOffsetIs).toArray(new BeatOffset[0]);
+			createVoiceSpacings(score), Companion.fr(4, 4), minimalBeatsOffsetIs).toArray(new BeatOffset[0]);
 		float is = score.getFormat().getInterlineSpace();
 
 		//2: half note, 4: quarter note, 8: eighth note, 3: quarter triplet
@@ -122,15 +122,15 @@ public class VoicesBeatOffsetterTest {
 		//used:        *  ** * **  *  *  *     *
 		//checked:     *     *     *     *     *
 		assertEquals(10, beatOffsets.length);
-		assertEquals(fr(0, 4), beatOffsets[0].getBeat());
+		assertEquals(Companion.fr(0, 4), beatOffsets[0].getBeat());
 		assertEquals((0) * is, beatOffsets[0].getOffsetMm(), df);
-		assertEquals(fr(1, 4), beatOffsets[3].getBeat());
+		assertEquals(Companion.fr(1, 4), beatOffsets[3].getBeat());
 		assertEquals((2 * width_1_8) * is, beatOffsets[3].getOffsetMm(), df);
-		assertEquals(fr(2, 4), beatOffsets[6].getBeat());
+		assertEquals(Companion.fr(2, 4), beatOffsets[6].getBeat());
 		assertEquals((4 * width_1_8) * is, beatOffsets[6].getOffsetMm(), df);
-		assertEquals(fr(3, 4), beatOffsets[8].getBeat());
+		assertEquals(Companion.fr(3, 4), beatOffsets[8].getBeat());
 		assertEquals((6 * width_1_8) * is, beatOffsets[8].getOffsetMm(), df);
-		assertEquals(fr(4, 4), beatOffsets[9].getBeat());
+		assertEquals(Companion.fr(4, 4), beatOffsets[9].getBeat());
 		assertEquals((6 * width_1_8 + width_1_4) * is, beatOffsets[9].getOffsetMm(), df);
 	}
 
@@ -141,7 +141,7 @@ public class VoicesBeatOffsetterTest {
 	@Test public void computeTest2() {
 		Score score = createTestScore3VoicesIncomplete();
 		BeatOffset[] beatOffsets = testee.compute(
-			createVoiceSpacings(score), fr(4, 4), minimalBeatsOffsetIs).toArray(new BeatOffset[0]);
+			createVoiceSpacings(score), Companion.fr(4, 4), minimalBeatsOffsetIs).toArray(new BeatOffset[0]);
 		float is = score.getFormat().getInterlineSpace();
 
 		//2: half note, 4: quarter note, 8: eighth note, 3: quarter triplet, x: missing (empty)
@@ -156,17 +156,17 @@ public class VoicesBeatOffsetterTest {
 		//checked:     *     *     *     *  *  *
 
 		assertEquals(10, beatOffsets.length);
-		assertEquals(fr(0, 4), beatOffsets[0].getBeat());
+		assertEquals(Companion.fr(0, 4), beatOffsets[0].getBeat());
 		assertEquals((0) * is, beatOffsets[0].getOffsetMm(), df);
-		assertEquals(fr(1, 4), beatOffsets[3].getBeat());
+		assertEquals(Companion.fr(1, 4), beatOffsets[3].getBeat());
 		assertEquals((2 * width_1_8) * is, beatOffsets[3].getOffsetMm(), df);
-		assertEquals(fr(2, 4), beatOffsets[6].getBeat());
+		assertEquals(Companion.fr(2, 4), beatOffsets[6].getBeat());
 		assertEquals((4 * width_1_8) * is, beatOffsets[6].getOffsetMm(), df);
-		assertEquals(fr(3, 4), beatOffsets[7].getBeat());
+		assertEquals(Companion.fr(3, 4), beatOffsets[7].getBeat());
 		assertEquals((4 * width_1_8 + width_1_4) * is, beatOffsets[7].getOffsetMm(), df);
-		assertEquals(fr(7, 8), beatOffsets[8].getBeat());
+		assertEquals(Companion.fr(7, 8), beatOffsets[8].getBeat());
 		assertEquals((4 * width_1_8 + width_1_4 + width_1_8) * is, beatOffsets[8].getOffsetMm(), df);
-		assertEquals(fr(4, 4), beatOffsets[9].getBeat());
+		assertEquals(Companion.fr(4, 4), beatOffsets[9].getBeat());
 		assertEquals((4 * width_1_8 + width_1_4 + width_1_8 + minimalBeatsOffsetIs) * is,
 			beatOffsets[9].getOffsetMm(), df);
 	}
@@ -178,7 +178,7 @@ public class VoicesBeatOffsetterTest {
 		Score score = createTestScore3VoicesGrace();
 
 		BeatOffset[] beatOffsets = testee.compute(
-			createVoiceSpacings(score), fr(4, 4), minimalBeatsOffsetIs).toArray(new BeatOffset[0]);
+			createVoiceSpacings(score), Companion.fr(4, 4), minimalBeatsOffsetIs).toArray(new BeatOffset[0]);
 		float is = score.getFormat().getInterlineSpace();
 
 		//2: half note, 4: quarter note, 8: eighth note, 3: quarter triplet
@@ -193,18 +193,18 @@ public class VoicesBeatOffsetterTest {
 		//used:      *  **    * **    *  *  *     *
 		//checked:   *        *       *     *     *
 		assertEquals(10, beatOffsets.length);
-		assertEquals(fr(0, 4), beatOffsets[0].getBeat());
+		assertEquals(Companion.fr(0, 4), beatOffsets[0].getBeat());
 		assertEquals((0) * is, beatOffsets[0].getOffsetMm(), df);
-		assertEquals(fr(1, 4), beatOffsets[3].getBeat());
+		assertEquals(Companion.fr(1, 4), beatOffsets[3].getBeat());
 		float offset1 = width_1_4 + 3 * width_grace;
 		assertEquals(offset1 * is, beatOffsets[3].getOffsetMm(), df);
-		assertEquals(fr(2, 4), beatOffsets[6].getBeat());
+		assertEquals(Companion.fr(2, 4), beatOffsets[6].getBeat());
 		float offset2 = offset1 + 2 * width_1_8 + 2 * width_grace;
 		assertEquals(offset2 * is, beatOffsets[6].getOffsetMm(), df);
-		assertEquals(fr(3, 4), beatOffsets[8].getBeat());
+		assertEquals(Companion.fr(3, 4), beatOffsets[8].getBeat());
 		float offset3 = offset2 + 2 * width_1_8;
 		assertEquals(offset3 * is, beatOffsets[8].getOffsetMm(), df);
-		assertEquals(fr(4, 4), beatOffsets[9].getBeat());
+		assertEquals(Companion.fr(4, 4), beatOffsets[9].getBeat());
 		float offset4 = offset3 + width_1_4;
 		assertEquals(offset4 * is, beatOffsets[9].getOffsetMm(), df);
 	}
@@ -217,15 +217,15 @@ public class VoicesBeatOffsetterTest {
 
 		LinkedList<VoiceSpacing> voiceSpacings = createVoiceSpacings(score);
 		BeatOffset[] beatOffsets = testee.compute(voiceSpacings,
-			fr(3, 4), minimalBeatsOffsetIs).toArray(new BeatOffset[0]);
+			Companion.fr(3, 4), minimalBeatsOffsetIs).toArray(new BeatOffset[0]);
 
 		//file must have 5 beat offsets with increasing mm offsets
 		assertEquals(5, beatOffsets.length);
-		assertEquals(fr(0, 4), beatOffsets[0].getBeat());
-		assertEquals(fr(1, 4), beatOffsets[1].getBeat());
-		assertEquals(fr(2, 4), beatOffsets[2].getBeat());
-		assertEquals(fr(5, 8), beatOffsets[3].getBeat());
-		assertEquals(fr(3, 4), beatOffsets[4].getBeat());
+		assertEquals(Companion.fr(0, 4), beatOffsets[0].getBeat());
+		assertEquals(Companion.fr(1, 4), beatOffsets[1].getBeat());
+		assertEquals(Companion.fr(2, 4), beatOffsets[2].getBeat());
+		assertEquals(Companion.fr(5, 8), beatOffsets[3].getBeat());
+		assertEquals(Companion.fr(3, 4), beatOffsets[4].getBeat());
 		for (int i = 0; i < beatOffsets.length - 1; i++) {
 			assertTrue(beatOffsets[i].getOffsetMm() < beatOffsets[i + 1].getOffsetMm());
 		}
@@ -243,16 +243,16 @@ public class VoicesBeatOffsetterTest {
 
 		LinkedList<VoiceSpacing> voiceSpacings = createVoiceSpacings(score);
 		BeatOffset[] beatOffsets = testee.compute(voiceSpacings,
-			fr(3, 4), minimalBeatsOffsetIs).toArray(new BeatOffset[0]);
+			Companion.fr(3, 4), minimalBeatsOffsetIs).toArray(new BeatOffset[0]);
 
 		//file must have 6 beat offsets with increasing mm offsets
 		assertEquals(6, beatOffsets.length);
-		assertEquals(fr(0, 4), beatOffsets[0].getBeat());
-		assertEquals(fr(1, 8), beatOffsets[1].getBeat());
-		assertEquals(fr(1, 4), beatOffsets[2].getBeat());
-		assertEquals(fr(2, 4), beatOffsets[3].getBeat());
-		assertEquals(fr(5, 8), beatOffsets[4].getBeat());
-		assertEquals(fr(3, 4), beatOffsets[5].getBeat());
+		assertEquals(Companion.fr(0, 4), beatOffsets[0].getBeat());
+		assertEquals(Companion.fr(1, 8), beatOffsets[1].getBeat());
+		assertEquals(Companion.fr(1, 4), beatOffsets[2].getBeat());
+		assertEquals(Companion.fr(2, 4), beatOffsets[3].getBeat());
+		assertEquals(Companion.fr(5, 8), beatOffsets[4].getBeat());
+		assertEquals(Companion.fr(3, 4), beatOffsets[5].getBeat());
 		for (int i = 0; i < beatOffsets.length - 1; i++) {
 			assertTrue(beatOffsets[i].getOffsetMm() < beatOffsets[i + 1].getOffsetMm());
 		}
@@ -271,20 +271,20 @@ public class VoicesBeatOffsetterTest {
 
 		LinkedList<VoiceSpacing> voiceSpacings = createVoiceSpacings(score);
 		BeatOffset[] beatOffsets = testee.compute(voiceSpacings,
-			fr(5, 4), minimalBeatsOffsetIs).toArray(new BeatOffset[0]);
+			Companion.fr(5, 4), minimalBeatsOffsetIs).toArray(new BeatOffset[0]);
 
 		//file must have 8 beat offsets with increasing mm offsets
 		//special difficulty: last eighth note must be further to the right as preceding quarter
 		//in other voice, even the distance between the whole note and the last eighth would be big enough
 		assertEquals(8, beatOffsets.length);
-		assertEquals(fr(0, 4), beatOffsets[0].getBeat());
-		assertEquals(fr(1, 8), beatOffsets[1].getBeat());
-		assertEquals(fr(1, 4), beatOffsets[2].getBeat());
-		assertEquals(fr(2, 4), beatOffsets[3].getBeat());
-		assertEquals(fr(3, 4), beatOffsets[4].getBeat());
-		assertEquals(fr(4, 4), beatOffsets[5].getBeat());
-		assertEquals(fr(9, 8), beatOffsets[6].getBeat());
-		assertEquals(fr(5, 4), beatOffsets[7].getBeat());
+		assertEquals(Companion.fr(0, 4), beatOffsets[0].getBeat());
+		assertEquals(Companion.fr(1, 8), beatOffsets[1].getBeat());
+		assertEquals(Companion.fr(1, 4), beatOffsets[2].getBeat());
+		assertEquals(Companion.fr(2, 4), beatOffsets[3].getBeat());
+		assertEquals(Companion.fr(3, 4), beatOffsets[4].getBeat());
+		assertEquals(Companion.fr(4, 4), beatOffsets[5].getBeat());
+		assertEquals(Companion.fr(9, 8), beatOffsets[6].getBeat());
+		assertEquals(Companion.fr(5, 4), beatOffsets[7].getBeat());
 		for (int i = 0; i < beatOffsets.length - 1; i++) {
 			assertTrue("beat " + (i + 1) + " wrong",
 				beatOffsets[i].getOffsetMm() < beatOffsets[i + 1].getOffsetMm());
@@ -304,7 +304,7 @@ public class VoicesBeatOffsetterTest {
 
 		LinkedList<VoiceSpacing> voiceSpacings = createVoiceSpacings(score);
 		BeatOffset[] beatOffsets = testee.compute(voiceSpacings,
-			fr(3, 4), minimalBeatsOffsetIs).toArray(new BeatOffset[0]);
+			Companion.fr(3, 4), minimalBeatsOffsetIs).toArray(new BeatOffset[0]);
 
 		//distance between beat 1/4 and 2/4 must be width_1_4
 		float is = score.getFormat().getInterlineSpace();
@@ -319,24 +319,24 @@ public class VoicesBeatOffsetterTest {
 		cursor.write((MeasureElement) new TraditionalKey(-3));
 		cursor.write(new TimeSignature(TimeType.timeType(6, 4)));
 		//beats: 0, 2, 3, 4, 8.
-		cursor.write(chord(pi(0, 0, 0), fr(1, 4)));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 8)));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 8)));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 2)));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 2)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 4)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 8)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 8)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 2)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 2)));
 		return score;
 	}
 
 	private List<ElementSpacing> createTestElementSpacings1Voice() {
 		return alist(
-			spacing(fr(0, 4), 1), //clef. width: 3
-			spacing(fr(0, 4), 4), //key. width: 2
-			spacing(fr(0, 4), 6), //time. width: 3
-			spacing(fr(0, 4), 9), //note. width: 2
-			spacing(fr(2, 4), 11), //note. width: 2
-			spacing(fr(3, 4), 13), //note. width: 2
-			spacing(fr(4, 4), 15), //note. width: 2
-			spacing(fr(8, 4), 17) //note. width: 2
+			spacing(Companion.fr(0, 4), 1), //clef. width: 3
+			spacing(Companion.fr(0, 4), 4), //key. width: 2
+			spacing(Companion.fr(0, 4), 6), //time. width: 3
+			spacing(Companion.fr(0, 4), 9), //note. width: 2
+			spacing(Companion.fr(2, 4), 11), //note. width: 2
+			spacing(Companion.fr(3, 4), 13), //note. width: 2
+			spacing(Companion.fr(4, 4), 15), //note. width: 2
+			spacing(Companion.fr(8, 4), 17) //note. width: 2
 		);
 	}
 
@@ -352,27 +352,27 @@ public class VoicesBeatOffsetterTest {
 		//voice 3: | 3   3   3   8  8  4     |   (staff 2)
 
 		//voice 1 (staff 1)
-		cursor.write(chord(pi(0, 0, 0), fr(1, 4)));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 4)));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 4)));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 4)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 4)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 4)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 4)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 4)));
 
 		//voice 2 (staff 1)
 		cursor.setMp(atElement(0, 0, 1, 0));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 8)));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 8)));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 8)));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 8)));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 2)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 8)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 8)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 8)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 8)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 2)));
 
 		//voice 3 (staff 2)
 		cursor.setMp(atElement(1, 0, 0, 0));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 6)));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 6)));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 6)));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 8)));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 8)));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 4)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 6)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 6)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 6)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 8)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 8)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 4)));
 
 		return score;
 	}
@@ -389,33 +389,33 @@ public class VoicesBeatOffsetterTest {
 		//voice 3: | 3   3      3    .8  8  4     |   (staff 2)
 
 		//voice 1 (staff 1)
-		cursor.write(chord(pi(0, 0, 0), fr(1, 4)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 4)));
 		cursor.write(graceChord(pi(0, 0, 0)));
 		cursor.write(graceChord(pi(0, 0, 0)));
 		cursor.write(graceChord(pi(0, 0, 0)));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 4)));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 4)));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 4)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 4)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 4)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 4)));
 
 		//voice 2 (staff 1)
 		cursor.setMp(atElement(0, 0, 1, 0));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 8)));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 8)));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 8)));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 8)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 8)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 8)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 8)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 8)));
 		cursor.write(graceChord(pi(0, 0, 0)));
 		cursor.write(graceChord(pi(0, 0, 0)));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 2)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 2)));
 
 		//voice 3 (staff 2)
 		cursor.setMp(atElement(1, 0, 0, 0));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 6)));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 6)));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 6)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 6)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 6)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 6)));
 		cursor.write(graceChord(pi(0, 0, 0)));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 8)));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 8)));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 4)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 8)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 8)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 4)));
 
 		return score;
 	}
@@ -432,25 +432,25 @@ public class VoicesBeatOffsetterTest {
 		//voice 3: | 3   3   3   8  xxxxxxxxx|   (staff 2)
 
 		//voice 1
-		cursor.write(chord(pi(0, 0, 0), fr(1, 4)));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 4)));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 4)));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 8)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 4)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 4)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 4)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 8)));
 
 		//voice 2
 		cursor.setMp(atElement(0, 0, 1, 0));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 8)));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 8)));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 8)));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 8)));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 4)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 8)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 8)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 8)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 8)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 4)));
 
 		//voice 3
 		cursor.setMp(atElement(0, 0, 2, 0));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 6)));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 6)));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 6)));
-		cursor.write(chord(pi(0, 0, 0), fr(1, 8)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 6)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 6)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 6)));
+		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 8)));
 
 		return score;
 	}
@@ -464,13 +464,13 @@ public class VoicesBeatOffsetterTest {
 		for (int iStaff : range(0, score.getStavesCount() - 1)) {
 			Measure measure = score.getMeasure(atMeasure(iStaff, 0));
 			for (Voice voice : measure.getVoices()) {
-				Fraction beat = fr(0);
+				Fraction beat = Companion.fr(0);
 				ArrayList<ElementSpacing> se = alist();
 				float offset = 0;
 				for (VoiceElement e : voice.getElements()) {
 					//compute width
 					float width = 0;
-					if (e.getDuration().equals(_0))
+					if (e.getDuration().equals(Companion.get_0()))
 						width = width_grace;
 					else if (e.getDuration().equals(dur_1_8))
 						width = width_1_8;

@@ -31,7 +31,7 @@ public final class PngPrinter {
 		try {
 			ImageIO.write(img, "png", out);
 		} catch (IOException ex) {
-			handle(warning("could not print to PNG file"));
+			handle(Companion.warning("could not print to PNG file"));
 		}
 	}
 

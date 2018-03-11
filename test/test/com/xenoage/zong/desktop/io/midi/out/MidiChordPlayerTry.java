@@ -28,7 +28,7 @@ public class MidiChordPlayerTry {
 		player.playNote(pitch, instrument);
 		sleep();
 
-		Chord chord = chord(new Pitch[] { pi(2, 0, 4), pi(4, 0, 4) }, fr(1));
+		Chord chord = chord(new Pitch[] { pi(2, 0, 4), pi(4, 0, 4) }, Companion.fr(1));
 		player.playChord(chord, instrument);
 
 		sleep();

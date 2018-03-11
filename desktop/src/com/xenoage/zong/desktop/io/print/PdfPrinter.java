@@ -63,7 +63,7 @@ public final class PdfPrinter {
 			PdfTemplate tp = cb.createTemplate(width, height);
 			//fill PDF page
 			Graphics2D g2d = new PdfGraphics2D(cb, width, height);
-			log(remark("Printing page " + pages.getIndex() + "..."));
+			INSTANCE.log(Companion.remark("Printing page " + pages.getIndex() + "..."));
 			LayoutRenderer.paintToCanvas(layout, pages.getIndex(), new AwtCanvas(g2d, pageSize,
 				CanvasFormat.Vector, CanvasDecoration.None, CanvasIntegrity.Perfect));
 			//finish page

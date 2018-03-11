@@ -110,7 +110,7 @@ public class ColumnSpacer {
 			//create leading spacing, if needed
 			LeadingSpacing leadingSpacing = null;
 			if (createLeading) {
-				context.mp = atBeat(iStaff, measureIndex, 0, Fraction._0);
+				context.mp = atBeat(iStaff, measureIndex, 0, Fraction.Companion.get_0());
 				leadingSpacing = leadingSpacer.compute(context, notations);
 			}
 			//create measure spacing

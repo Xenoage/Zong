@@ -154,16 +154,16 @@ public class StrategyTest
 					pitches[accIndex] = pi(acc.getStep(), accs.get(acc), acc.getOctave());
 					accIndex++;
 				}
-				Chord accsChords = ChordFactory.chord(pitches, _1$4);
+				Chord accsChords = ChordFactory.chord(pitches, Companion.get_1$4());
 				cursor.write(accsChords);
 			}
 			else {
-				cursor.write(new Rest(_1$4));
+				cursor.write(new Rest(Companion.get_1$4()));
 			}
 			//write a rest
-			cursor.write(new Rest(_1$4));
+			cursor.write(new Rest(Companion.get_1$4()));
 			//write the tested chord
-			Chord testedChord = ChordFactory.chord(example.getPitches().toArray(new Pitch[0]), _1$4);
+			Chord testedChord = ChordFactory.chord(example.getPitches().toArray(new Pitch[0]), Companion.get_1$4());
 			cursor.write(testedChord);
 		}
 		return score;

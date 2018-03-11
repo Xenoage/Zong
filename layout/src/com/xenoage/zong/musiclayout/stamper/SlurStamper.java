@@ -243,7 +243,7 @@ public class SlurStamper {
 		//slur: longer and higher curve than tie
 		float distanceX = Math.abs(p2.xMm - p1.xMm);
 		float retX = distanceX / 4;
-		float retY = MathUtils.clamp(0.3f * distanceX / staff.is, 0, 8) * side.getDir();
+		float retY = MathUtils.INSTANCE.clamp(0.3f * distanceX / staff.is, 0, 8) * side.getDir();
 		return sp(retX, retY);
 	}
 
@@ -272,7 +272,7 @@ public class SlurStamper {
 		//slur: longer and higher curve than tie
 		float distanceX = Math.abs(p2.xMm - p1.xMm);
 		float retX = 1;
-		float retY = MathUtils.clamp(0.3f * distanceX / staff.is, 0, 8) * side.getDir();
+		float retY = MathUtils.INSTANCE.clamp(0.3f * distanceX / staff.is, 0, 8) * side.getDir();
 		return sp(retX, retY);
 	}
 

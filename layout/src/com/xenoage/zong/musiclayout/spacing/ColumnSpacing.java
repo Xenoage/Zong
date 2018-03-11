@@ -131,7 +131,7 @@ public class ColumnSpacing {
 	 */
 	public ElementSpacing getElement(Notation notation) {
 		MP mp = notation.getMp();
-		VoiceSpacing voice = getVoice(mp.staff, mp.voice);
+		VoiceSpacing voice = getVoice(mp.getStaff(), mp.getVoice());
 		return voice.getElement((VoiceElement) notation.getElement());
 	}
 	
@@ -164,7 +164,7 @@ public class ColumnSpacing {
 	 * {@link #getBeatAt(float)}. 
 	 */
 	public Fraction getBeatAt(float xMm, int staff) {
-		if (staff == unknown)
+		if (staff == Companion.getUnknown())
 			return getBeatAt(xMm);
 		//find beat and return it
 		MeasureSpacing measure = measures.get(staff);

@@ -68,7 +68,7 @@ public class Content
 			loadScore(scoreDoc);
 		}
 		catch (Exception ex) {
-			Err.handle(Report.error(ex));
+			Err.handle(Report.Companion.error(ex));
 		}
 	}
 	
@@ -119,7 +119,7 @@ public class Content
 			DocumentIO.write(scoreDoc, new File(filePath), out);
 			mainWindow.showMessageDialog(filePath + " saved.");
 		} catch (Exception ex) {
-			Err.handle(Report.error(ex));
+			Err.handle(Report.Companion.error(ex));
 		}
 	}
 	

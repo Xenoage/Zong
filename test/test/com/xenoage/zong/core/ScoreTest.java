@@ -41,17 +41,17 @@ public class ScoreTest {
 	@Test public void getMeasureBeatsTest() {
 		Score score = ScoreFactory.create1Staff4Measures();
 		//first measure: no time, 1/4 used
-		score.getVoice(atVoice(0, 0, 0)).addElement(new Rest(fr(1, 4)));
+		score.getVoice(atVoice(0, 0, 0)).addElement(new Rest(Companion.fr(1, 4)));
 		//second measure: 3/4 time, 2/4 used
 		score.getColumnHeader(1).setTime(new TimeSignature(TimeType.time_3_4));
-		score.getVoice(atVoice(0, 1, 0)).addElement(new Rest(fr(1, 4)));
-		score.getVoice(atVoice(0, 1, 0)).addElement(new Rest(fr(1, 4)));
+		score.getVoice(atVoice(0, 1, 0)).addElement(new Rest(Companion.fr(1, 4)));
+		score.getVoice(atVoice(0, 1, 0)).addElement(new Rest(Companion.fr(1, 4)));
 		//third measure: still 3/4 time, 1/4 used
-		score.getVoice(atVoice(0, 2, 0)).addElement(new Rest(fr(1, 4)));
+		score.getVoice(atVoice(0, 2, 0)).addElement(new Rest(Companion.fr(1, 4)));
 		//check
-		assertEquals(fr(1, 4), score.getMeasureBeats(0));
-		assertEquals(fr(3, 4), score.getMeasureBeats(1));
-		assertEquals(fr(3, 4), score.getMeasureBeats(2));
+		assertEquals(Companion.fr(1, 4), score.getMeasureBeats(0));
+		assertEquals(Companion.fr(3, 4), score.getMeasureBeats(1));
+		assertEquals(Companion.fr(3, 4), score.getMeasureBeats(2));
 	}
 	
 	
@@ -59,33 +59,33 @@ public class ScoreTest {
 		//create a little test score, where the first measure only
 		//uses 2/4, the second 4/4, the third 0/4, the fourth 3/4.
 		Score score = ScoreFactory.create1Staff4Measures();
-		score.getVoice(atVoice(0, 0, 0)).addElement(new Rest(fr(1, 4)));
-		score.getVoice(atVoice(0, 0, 0)).addElement(new Rest(fr(1, 4)));
-		score.getVoice(atVoice(0, 1, 0)).addElement(new Rest(fr(2, 4)));
-		score.getVoice(atVoice(0, 1, 0)).addElement(new Rest(fr(2, 4)));
-		score.getVoice(atVoice(0, 3, 0)).addElement(new Rest(fr(3, 4)));
+		score.getVoice(atVoice(0, 0, 0)).addElement(new Rest(Companion.fr(1, 4)));
+		score.getVoice(atVoice(0, 0, 0)).addElement(new Rest(Companion.fr(1, 4)));
+		score.getVoice(atVoice(0, 1, 0)).addElement(new Rest(Companion.fr(2, 4)));
+		score.getVoice(atVoice(0, 1, 0)).addElement(new Rest(Companion.fr(2, 4)));
+		score.getVoice(atVoice(0, 3, 0)).addElement(new Rest(Companion.fr(3, 4)));
 		//test method
-		assertEquals(fr(2, 4), score.getMeasureFilledBeats(0));
-		assertEquals(fr(4, 4), score.getMeasureFilledBeats(1));
-		assertEquals(fr(0, 4), score.getMeasureFilledBeats(2));
-		assertEquals(fr(3, 4), score.getMeasureFilledBeats(3));
+		assertEquals(Companion.fr(2, 4), score.getMeasureFilledBeats(0));
+		assertEquals(Companion.fr(4, 4), score.getMeasureFilledBeats(1));
+		assertEquals(Companion.fr(0, 4), score.getMeasureFilledBeats(2));
+		assertEquals(Companion.fr(3, 4), score.getMeasureFilledBeats(3));
 	}
 	
 	@Test public void getKeyTest() {
 		Tuple3<Score, List<ClefType>, List<Key>> testData = createTestScoreClefsKeys();
 		Score score = testData.get1();
 		List<Key> keys = testData.get3();
-		assertTrue(keys.get(0) != score.getKey(atBeat(0, 0, 0, fr(0, 4)), Before).element);
-		assertTrue(keys.get(0) == score.getKey(atBeat(0, 0, 0, fr(0, 4)), BeforeOrAt).element);
-		assertTrue(keys.get(0) == score.getKey(atBeat(0, 0, 0, fr(1, 4)), Before).element);
-		assertTrue(keys.get(0) == score.getKey(atBeat(0, 0, 0, fr(1, 4)), BeforeOrAt).element);
-		assertTrue(keys.get(0) == score.getKey(atBeat(0, 0, 0, fr(2, 4)), Before).element);
-		assertTrue(keys.get(1) == score.getKey(atBeat(0, 0, 0, fr(2, 4)), BeforeOrAt).element);
-		assertTrue(keys.get(1) == score.getKey(atBeat(0, 0, 0, fr(3, 4)), Before).element);
-		assertTrue(keys.get(1) == score.getKey(atBeat(0, 1, 0, fr(0, 4)), BeforeOrAt).element);
-		assertTrue(keys.get(1) == score.getKey(atBeat(0, 1, 0, fr(1, 4)), Before).element);
-		assertTrue(keys.get(2) == score.getKey(atBeat(0, 1, 0, fr(1, 4)), BeforeOrAt).element);
-		assertTrue(keys.get(2) == score.getKey(atBeat(0, 1, 0, fr(2, 4)), Before).element);
+		assertTrue(keys.get(0) != score.getKey(atBeat(0, 0, 0, Companion.fr(0, 4)), Before).element);
+		assertTrue(keys.get(0) == score.getKey(atBeat(0, 0, 0, Companion.fr(0, 4)), BeforeOrAt).element);
+		assertTrue(keys.get(0) == score.getKey(atBeat(0, 0, 0, Companion.fr(1, 4)), Before).element);
+		assertTrue(keys.get(0) == score.getKey(atBeat(0, 0, 0, Companion.fr(1, 4)), BeforeOrAt).element);
+		assertTrue(keys.get(0) == score.getKey(atBeat(0, 0, 0, Companion.fr(2, 4)), Before).element);
+		assertTrue(keys.get(1) == score.getKey(atBeat(0, 0, 0, Companion.fr(2, 4)), BeforeOrAt).element);
+		assertTrue(keys.get(1) == score.getKey(atBeat(0, 0, 0, Companion.fr(3, 4)), Before).element);
+		assertTrue(keys.get(1) == score.getKey(atBeat(0, 1, 0, Companion.fr(0, 4)), BeforeOrAt).element);
+		assertTrue(keys.get(1) == score.getKey(atBeat(0, 1, 0, Companion.fr(1, 4)), Before).element);
+		assertTrue(keys.get(2) == score.getKey(atBeat(0, 1, 0, Companion.fr(1, 4)), BeforeOrAt).element);
+		assertTrue(keys.get(2) == score.getKey(atBeat(0, 1, 0, Companion.fr(2, 4)), Before).element);
 	}
 	
 	
@@ -109,26 +109,26 @@ public class ScoreTest {
 		Measure measure = score.getMeasure(atMeasure(0, 0));
 		new Clef(ClefType.clefTreble);
 		clefs.add(c = ClefType.clefTreble);
-    new MeasureElementWrite(new Clef(c), measure, fr(0, 4)).execute();
+    new MeasureElementWrite(new Clef(c), measure, Companion.fr(0, 4)).execute();
     keys.add(k = new TraditionalKey(1, Mode.Major));
-    new MeasureElementWrite(k, measure, fr(0, 4)).execute();
-    new VoiceElementWrite(measure.getVoice(0), atElement(0, 0, 0, 0), chord(pi(0, 1, 4), fr(1, 4)), null).execute();
+    new MeasureElementWrite(k, measure, Companion.fr(0, 4)).execute();
+    new VoiceElementWrite(measure.getVoice(0), atElement(0, 0, 0, 0), chord(pi(0, 1, 4), Companion.fr(1, 4)), null).execute();
     clefs.add(c = ClefType.clefBass);
-    new MeasureElementWrite(new Clef(c), measure, fr(1, 4)).execute();
-    new VoiceElementWrite(measure.getVoice(0), atElement(0, 0, 0, 1), chord(pi(1, -1, 4), fr(1, 4)), null).execute();
+    new MeasureElementWrite(new Clef(c), measure, Companion.fr(1, 4)).execute();
+    new VoiceElementWrite(measure.getVoice(0), atElement(0, 0, 0, 1), chord(pi(1, -1, 4), Companion.fr(1, 4)), null).execute();
     clefs.add(c = ClefType.clefTreble);
-    new MeasureElementWrite(new Clef(c), measure, fr(2, 4)).execute();
+    new MeasureElementWrite(new Clef(c), measure, Companion.fr(2, 4)).execute();
     keys.add(k = new TraditionalKey(-1, Mode.Major));
-    new MeasureElementWrite(k, measure, fr(2, 4)).execute();
-    new VoiceElementWrite(measure.getVoice(0), atElement(0, 0, 0, 2), chord(pi(0, 0, 4), fr(1, 4)), null).execute();
+    new MeasureElementWrite(k, measure, Companion.fr(2, 4)).execute();
+    new VoiceElementWrite(measure.getVoice(0), atElement(0, 0, 0, 2), chord(pi(0, 0, 4), Companion.fr(1, 4)), null).execute();
     //measure 1
     measure = score.getMeasure(atMeasure(0, 1));
-    new VoiceElementWrite(measure.getVoice(0), atElement(0, 1, 0, 0), chord(pi(0, 1, 4), fr(1, 4)), null).execute();
+    new VoiceElementWrite(measure.getVoice(0), atElement(0, 1, 0, 0), chord(pi(0, 1, 4), Companion.fr(1, 4)), null).execute();
     keys.add(k = new TraditionalKey(0, Mode.Major));
-    new MeasureElementWrite(k, measure, fr(1, 4)).execute();
+    new MeasureElementWrite(k, measure, Companion.fr(1, 4)).execute();
     clefs.add(c = ClefType.clefBass);
-    new MeasureElementWrite(new Clef(c), measure, fr(1, 4)).execute();
-    new VoiceElementWrite(measure.getVoice(0), atElement(0, 1, 0, 1), chord(pi(0, 0, 4), fr(2, 4)), null).execute();
+    new MeasureElementWrite(new Clef(c), measure, Companion.fr(1, 4)).execute();
+    new VoiceElementWrite(measure.getVoice(0), atElement(0, 1, 0, 1), chord(pi(0, 0, 4), Companion.fr(2, 4)), null).execute();
     return t3(score, clefs, keys);
 	}
 	
@@ -137,24 +137,24 @@ public class ScoreTest {
 		Score score = createTestScoreAccidentals();
 		Map<Pitch, Integer> acc;
 		//measure 0
-		acc = score.getAccidentals(atBeat(0, 0, 0, fr(0, 4)), Before);
+		acc = score.getAccidentals(atBeat(0, 0, 0, Companion.fr(0, 4)), Before);
 		assertEquals(0, acc.size());
-		acc = score.getAccidentals(atBeat(0, 0, 0, fr(0, 4)), BeforeOrAt);
+		acc = score.getAccidentals(atBeat(0, 0, 0, Companion.fr(0, 4)), BeforeOrAt);
 		assertEquals(1, acc.size());
 		assertEquals((Integer) 0, acc.get(pi(3, 0, 4)));
-		acc = score.getAccidentals(atBeat(0, 0, 0, fr(1, 4)), Before);
+		acc = score.getAccidentals(atBeat(0, 0, 0, Companion.fr(1, 4)), Before);
 		assertEquals(1, acc.size());
-		acc = score.getAccidentals(atBeat(0, 0, 0, fr(1, 4)), BeforeOrAt);
+		acc = score.getAccidentals(atBeat(0, 0, 0, Companion.fr(1, 4)), BeforeOrAt);
 		assertEquals(1, acc.size());
 		//measure 1
-		acc = score.getAccidentals(atBeat(0, 1, 0, fr(0, 4)), Before);
+		acc = score.getAccidentals(atBeat(0, 1, 0, Companion.fr(0, 4)), Before);
 		assertEquals(0, acc.size());
-		acc = score.getAccidentals(atBeat(0, 1, 0, fr(0, 4)), BeforeOrAt);
+		acc = score.getAccidentals(atBeat(0, 1, 0, Companion.fr(0, 4)), BeforeOrAt);
 		assertEquals(1, acc.size());
 		assertEquals((Integer) 1, acc.get(pi(3, 0, 4)));
-		acc = score.getAccidentals(atBeat(0, 1, 0, fr(1, 4)), Before);
+		acc = score.getAccidentals(atBeat(0, 1, 0, Companion.fr(1, 4)), Before);
 		assertEquals(0, acc.size()); //0, because key changed
-		acc = score.getAccidentals(atBeat(0, 1, 0, fr(1, 4)), BeforeOrAt);
+		acc = score.getAccidentals(atBeat(0, 1, 0, Companion.fr(1, 4)), BeforeOrAt);
 		assertEquals(2, acc.size());
 		assertEquals((Integer) 1,  acc.get(pi(3, 0, 4)));
 		assertEquals((Integer) (-1), acc.get(pi(6, 0, 4)));
@@ -178,25 +178,25 @@ public class ScoreTest {
 		new VoiceAdd(score.getMeasure(atMeasure(0, 0)), 1).execute();
 		new VoiceAdd(score.getMeasure(atMeasure(0, 1)), 1).execute();
 		//keys
-		new ColumnElementWrite(new TraditionalKey(1, Mode.Major), score.getColumnHeader(0), fr(0, 4), null).execute();
-		new MeasureElementWrite(new TraditionalKey(-1, Mode.Major), score.getMeasure(atMeasure(0, 1)), fr(0, 4)).execute();
-		new ColumnElementWrite(new TraditionalKey(0, Mode.Major), score.getColumnHeader(1), fr(1, 4), null).execute();
+		new ColumnElementWrite(new TraditionalKey(1, Mode.Major), score.getColumnHeader(0), Companion.fr(0, 4), null).execute();
+		new MeasureElementWrite(new TraditionalKey(-1, Mode.Major), score.getMeasure(atMeasure(0, 1)), Companion.fr(0, 4)).execute();
+		new ColumnElementWrite(new TraditionalKey(0, Mode.Major), score.getColumnHeader(1), Companion.fr(1, 4), null).execute();
 		//measure 0, voice 0
 		Voice voice = score.getVoice(MP.atVoice(0, 0, 0));
-		voice.addElement(chord(pi(0, 0, 4), fr(2, 4)));
+		voice.addElement(chord(pi(0, 0, 4), Companion.fr(2, 4)));
 		//measure 1, voice 0
 		voice = score.getVoice(MP.atVoice(0, 1, 0));
-		voice.addElement(chord(pi(3, 1, 4), fr(1, 4)));
-		voice.addElement(chord(pi(6, -1, 4), fr(1, 8)));
-		voice.addElement(chord(pi(6, -1, 4), fr(1, 8)));
+		voice.addElement(chord(pi(3, 1, 4), Companion.fr(1, 4)));
+		voice.addElement(chord(pi(6, -1, 4), Companion.fr(1, 8)));
+		voice.addElement(chord(pi(6, -1, 4), Companion.fr(1, 8)));
 		//measure 0, voice 1
 		voice = score.getVoice(MP.atVoice(0, 0, 1));
-		voice.addElement(chord(pi(3, 0, 4), fr(2, 4)));
+		voice.addElement(chord(pi(3, 0, 4), Companion.fr(2, 4)));
 		//measure 1, voice 1
 		voice = score.getVoice(MP.atVoice(0, 1, 1));
-		voice.addElement(chord(pi(6, -1, 4), fr(1, 4)));
-		voice.addElement(chord(pi(3, 1, 4), fr(1, 8)));
-		voice.addElement(chord(pi(3, 1, 4), fr(1, 8)));
+		voice.addElement(chord(pi(6, -1, 4), Companion.fr(1, 4)));
+		voice.addElement(chord(pi(3, 1, 4), Companion.fr(1, 8)));
+		voice.addElement(chord(pi(3, 1, 4), Companion.fr(1, 8)));
 		return score;
 	}
 	
@@ -205,16 +205,16 @@ public class ScoreTest {
 		Tuple3<Score, List<ClefType>, List<Key>> testData = createTestScoreClefsKeys();
 		Score score = testData.get1();
 		List<ClefType> clefs = testData.get2();
-		assertTrue(clefs.get(0) == score.getClef(atBeat(0, 0, 0, fr(0, 4)), BeforeOrAt));
-		assertTrue(clefs.get(0) == score.getClef(atBeat(0, 0, 0, fr(1, 4)), Before));
-		assertTrue(clefs.get(1) == score.getClef(atBeat(0, 0, 0, fr(1, 4)), BeforeOrAt));
-		assertTrue(clefs.get(1) == score.getClef(atBeat(0, 0, 0, fr(2, 4)), Before));
-		assertTrue(clefs.get(2) == score.getClef(atBeat(0, 0, 0, fr(2, 4)), BeforeOrAt));
-		assertTrue(clefs.get(2) == score.getClef(atBeat(0, 0, 0, fr(3, 4)), Before));
-		assertTrue(clefs.get(2) == score.getClef(atBeat(0, 1, 0, fr(0, 4)), BeforeOrAt));
-		assertTrue(clefs.get(2) == score.getClef(atBeat(0, 1, 0, fr(1, 4)), Before));
-		assertTrue(clefs.get(3) == score.getClef(atBeat(0, 1, 0, fr(1, 4)), BeforeOrAt));
-		assertTrue(clefs.get(3) == score.getClef(atBeat(0, 1, 0, fr(2, 4)), Before));
+		assertTrue(clefs.get(0) == score.getClef(atBeat(0, 0, 0, Companion.fr(0, 4)), BeforeOrAt));
+		assertTrue(clefs.get(0) == score.getClef(atBeat(0, 0, 0, Companion.fr(1, 4)), Before));
+		assertTrue(clefs.get(1) == score.getClef(atBeat(0, 0, 0, Companion.fr(1, 4)), BeforeOrAt));
+		assertTrue(clefs.get(1) == score.getClef(atBeat(0, 0, 0, Companion.fr(2, 4)), Before));
+		assertTrue(clefs.get(2) == score.getClef(atBeat(0, 0, 0, Companion.fr(2, 4)), BeforeOrAt));
+		assertTrue(clefs.get(2) == score.getClef(atBeat(0, 0, 0, Companion.fr(3, 4)), Before));
+		assertTrue(clefs.get(2) == score.getClef(atBeat(0, 1, 0, Companion.fr(0, 4)), BeforeOrAt));
+		assertTrue(clefs.get(2) == score.getClef(atBeat(0, 1, 0, Companion.fr(1, 4)), Before));
+		assertTrue(clefs.get(3) == score.getClef(atBeat(0, 1, 0, Companion.fr(1, 4)), BeforeOrAt));
+		assertTrue(clefs.get(3) == score.getClef(atBeat(0, 1, 0, Companion.fr(2, 4)), Before));
 	}
 	
 	
@@ -224,16 +224,16 @@ public class ScoreTest {
 		List<ClefType> clefs = testData.get2();
 		List<Key> keys = testData.get3();
 		//measure 1: before 0/4: no accidentals
-		MusicContext musicContext = score.getMusicContext(atBeat(0, 1, 0, fr(0, 4)), BeforeOrAt, Before);
+		MusicContext musicContext = score.getMusicContext(atBeat(0, 1, 0, Companion.fr(0, 4)), BeforeOrAt, Before);
 		assertEquals(0, musicContext.getAccidentals().size());
 		//measure 1: at 1/8: G clef, F key and C#4 accidental
-		musicContext = score.getMusicContext(atBeat(0, 1, 0, fr(1, 8)), BeforeOrAt, Before);
+		musicContext = score.getMusicContext(atBeat(0, 1, 0, Companion.fr(1, 8)), BeforeOrAt, Before);
 		Assert.assertEquals(clefs.get(2), musicContext.getClef());
 		Assert.assertEquals(keys.get(1), musicContext.getKey());
 		assertEquals(1, musicContext.getAccidentals().size());
 		assertEquals(1, (int) musicContext.getAccidentals().get(pi(0, 0, 4)));
 		//measure 1: at 1/4: F clef, C key and no accidentals
-		musicContext = score.getMusicContext(atBeat(0, 1, 0, fr(1, 4)), BeforeOrAt, Before);
+		musicContext = score.getMusicContext(atBeat(0, 1, 0, Companion.fr(1, 4)), BeforeOrAt, Before);
 		Assert.assertEquals(clefs.get(3), musicContext.getClef());
 		Assert.assertEquals(keys.get(2), musicContext.getKey());
 		assertEquals(0, musicContext.getAccidentals().size());
@@ -248,35 +248,35 @@ public class ScoreTest {
 		//first measure (filled only with 7/8)
 		//  voice 0: 1/4, 1/4, 1/4  (1/4 is missing)
 		//  voice 1: 3/4, 1/8       (1/8 is missing)
-		score.getVoice(atVoice(0, 0, 0)).addElement(e[0] = new Rest(fr(1, 4)));
-		score.getVoice(atVoice(0, 0, 0)).addElement(e[1] = new Rest(fr(1, 4)));
-		score.getVoice(atVoice(0, 0, 0)).addElement(e[2] = new Rest(fr(1, 4)));
+		score.getVoice(atVoice(0, 0, 0)).addElement(e[0] = new Rest(Companion.fr(1, 4)));
+		score.getVoice(atVoice(0, 0, 0)).addElement(e[1] = new Rest(Companion.fr(1, 4)));
+		score.getVoice(atVoice(0, 0, 0)).addElement(e[2] = new Rest(Companion.fr(1, 4)));
 		new VoiceAdd(score.getMeasure(atMeasure(0, 0)), 1).execute();
-		score.getVoice(atVoice(0, 0, 1)).addElement(new Rest(fr(3, 4)));
-		score.getVoice(atVoice(0, 0, 1)).addElement(new Rest(fr(1, 8)));
+		score.getVoice(atVoice(0, 0, 1)).addElement(new Rest(Companion.fr(3, 4)));
+		score.getVoice(atVoice(0, 0, 1)).addElement(new Rest(Companion.fr(1, 8)));
 		//second measure: 1/4, 3/4
-		score.getVoice(atVoice(0, 1, 0)).addElement(e[3] = new Rest(fr(1, 4)));
-		score.getVoice(atVoice(0, 1, 0)).addElement(e[4] = new Rest(fr(3, 4)));
+		score.getVoice(atVoice(0, 1, 0)).addElement(e[3] = new Rest(Companion.fr(1, 4)));
+		score.getVoice(atVoice(0, 1, 0)).addElement(e[4] = new Rest(Companion.fr(3, 4)));
 		//third measure: 4/4
-		score.getVoice(atVoice(0, 1, 0)).addElement(e[5] = new Rest(fr(4, 4)));
+		score.getVoice(atVoice(0, 1, 0)).addElement(e[5] = new Rest(Companion.fr(4, 4)));
 		//test gaps between adjacent elements
-		assertEquals(_0, score.getGapBetween(e[0], e[1]));
-		assertEquals(_0, score.getGapBetween(e[1], e[2]));
-		assertEquals(fr(1, 8), score.getGapBetween(e[2], e[3])); //1/8 from second voice
-		assertEquals(_0, score.getGapBetween(e[3], e[4]));
-		assertEquals(_0, score.getGapBetween(e[4], e[5]));
+		assertEquals(Companion.get_0(), score.getGapBetween(e[0], e[1]));
+		assertEquals(Companion.get_0(), score.getGapBetween(e[1], e[2]));
+		assertEquals(Companion.fr(1, 8), score.getGapBetween(e[2], e[3])); //1/8 from second voice
+		assertEquals(Companion.get_0(), score.getGapBetween(e[3], e[4]));
+		assertEquals(Companion.get_0(), score.getGapBetween(e[4], e[5]));
 		//test some gaps between non-adjacent elements
-		assertEquals(fr(1, 4), score.getGapBetween(e[0], e[2]));
-		assertEquals(fr(3, 8), score.getGapBetween(e[1], e[3])); //includes 1/8 from second voice
-		assertEquals(fr(3, 8), score.getGapBetween(e[2], e[4])); //includes 1/8 from second voice
-		assertEquals(fr(5, 8).add(fr(4, 4)), score.getGapBetween(e[0], e[5])); //includes 1/8 from second voice
-		assertEquals(fr(3, 8).add(fr(4, 4)), score.getGapBetween(e[1], e[5])); //includes 1/8 from second voice
+		assertEquals(Companion.fr(1, 4), score.getGapBetween(e[0], e[2]));
+		assertEquals(Companion.fr(3, 8), score.getGapBetween(e[1], e[3])); //includes 1/8 from second voice
+		assertEquals(Companion.fr(3, 8), score.getGapBetween(e[2], e[4])); //includes 1/8 from second voice
+		assertEquals(Companion.fr(5, 8).add(Companion.fr(4, 4)), score.getGapBetween(e[0], e[5])); //includes 1/8 from second voice
+		assertEquals(Companion.fr(3, 8).add(Companion.fr(4, 4)), score.getGapBetween(e[1], e[5])); //includes 1/8 from second voice
 		//test in reverse direction
-		assertEquals(fr(-2, 4), score.getGapBetween(e[1], e[0]));
-		assertEquals(fr(-2, 4), score.getGapBetween(e[2], e[1]));
-		assertEquals(fr(-5, 8), score.getGapBetween(e[3], e[2])); //includes 1/8 from second voice
-		assertEquals(fr(-23, 8), score.getGapBetween(e[5], e[0])); //includes 1/8 from second voice
-		assertEquals(fr(-21, 8), score.getGapBetween(e[5], e[1])); //includes 1/8 from second voice
+		assertEquals(Companion.fr(-2, 4), score.getGapBetween(e[1], e[0]));
+		assertEquals(Companion.fr(-2, 4), score.getGapBetween(e[2], e[1]));
+		assertEquals(Companion.fr(-5, 8), score.getGapBetween(e[3], e[2])); //includes 1/8 from second voice
+		assertEquals(Companion.fr(-23, 8), score.getGapBetween(e[5], e[0])); //includes 1/8 from second voice
+		assertEquals(Companion.fr(-21, 8), score.getGapBetween(e[5], e[1])); //includes 1/8 from second voice
 	}
 
 }

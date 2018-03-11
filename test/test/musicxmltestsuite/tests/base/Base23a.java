@@ -12,8 +12,8 @@ public interface Base23a
 		return "23a-Tuplets.xml";
 	}
 
-	Fraction[] expectedDurations = { fr(1, 6), fr(1, 6), fr(1, 6), fr(1, 6), fr(1, 6), fr(1, 6),
-		fr(1, 6), fr(1, 6), fr(1, 6), fr(1, 8), fr(1, 8), fr(1, 8), fr(1, 8), fr(1, 16), fr(1, 16),
-		fr(1, 16), fr(1, 16), fr(3, 28), fr(3, 28), fr(3, 28), fr(3, 28), fr(3, 28), fr(3, 28),
-		fr(3, 28), fr(1, 12), fr(1, 12), fr(1, 12), fr(1, 12), fr(1, 12), fr(1, 12) };
+	Fraction[] expectedDurations = { Companion.fr(1, 6), Companion.fr(1, 6), Companion.fr(1, 6), Companion.fr(1, 6), Companion.fr(1, 6), Companion.fr(1, 6),
+		Companion.fr(1, 6), Companion.fr(1, 6), Companion.fr(1, 6), Companion.fr(1, 8), Companion.fr(1, 8), Companion.fr(1, 8), Companion.fr(1, 8), Companion.fr(1, 16), Companion.fr(1, 16),
+		Companion.fr(1, 16), Companion.fr(1, 16), Companion.fr(3, 28), Companion.fr(3, 28), Companion.fr(3, 28), Companion.fr(3, 28), Companion.fr(3, 28), Companion.fr(3, 28),
+		Companion.fr(3, 28), Companion.fr(1, 12), Companion.fr(1, 12), Companion.fr(1, 12), Companion.fr(1, 12), Companion.fr(1, 12), Companion.fr(1, 12) };
 }

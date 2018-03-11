@@ -66,7 +66,7 @@ public class MeasureElementsSpacer {
 															 List<VoiceSpacing> voiceSpacings, int staff, Notations notations, LayoutSettings layoutSettings) {
 		
 		Key key0 = null;
-		if (keys.size() > 0 && keys.getFirst().beat.equals(_0))
+		if (keys.size() > 0 && keys.getFirst().beat.equals(Companion.get_0()))
 			key0 = keys.getFirst().element;
 		if (key0 == null && time == null && (clefs == null || clefs.size() == 0)) {
 			//nothing to do
@@ -87,7 +87,7 @@ public class MeasureElementsSpacer {
 			//***
 			if (isKey) {
 				Notation keyNotation = notations.get(key0, staff);
-				ret.add(new SimpleSpacing(keyNotation, _0, startOffset));
+				ret.add(new SimpleSpacing(keyNotation, Companion.get_0(), startOffset));
 				currentOffset += keyNotation.getWidth().getUsedWidth();
 			}
 
@@ -95,7 +95,7 @@ public class MeasureElementsSpacer {
 			//****
 			if (time != null) {
 				Notation timeNotation = notations.get(time, staff);
-				ret.add(new SimpleSpacing(timeNotation, _0, currentOffset +
+				ret.add(new SimpleSpacing(timeNotation, Companion.get_0(), currentOffset +
 					timeNotation.getWidth().symbolWidth / 2));
 				currentOffset += timeNotation.getWidth().getUsedWidth();
 			}

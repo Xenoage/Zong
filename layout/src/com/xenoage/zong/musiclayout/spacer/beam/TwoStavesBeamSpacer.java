@@ -40,12 +40,12 @@ public class TwoStavesBeamSpacer {
 
 		//adjust the stem lengths by interpolating
 		//the end LPs of the stems have then to be relative to the beam's staff (the staff of the first chord)
-		int beamStaffIndex = beam.mp.staff;
+		int beamStaffIndex = beam.mp.getStaff();
 		float leftEndYMm = system.getYMm(placement.leftSlp);
 		float rightEndYMm = system.getYMm(placement.rightSlp);
 		float beamRightEndLp = 0; //may be on different staff, so this is not always equal to placement.rightSlp.lp
 		for (int iChord : range(stems)) {
-			float yMm = interpolateLinear(leftEndYMm, rightEndYMm, stems.leftXIs, stems.rightXIs, stems.get(iChord).xIs);
+			float yMm = INSTANCE.interpolateLinear(leftEndYMm, rightEndYMm, stems.leftXIs, stems.rightXIs, stems.get(iChord).xIs);
 			float lp = system.getLp(beamStaffIndex, yMm);
 			if (iChord == stems.getCount() - 1)
 				beamRightEndLp = lp;

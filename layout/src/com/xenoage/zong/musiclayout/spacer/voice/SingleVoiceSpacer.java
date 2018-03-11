@@ -53,7 +53,7 @@ public class SingleVoiceSpacer {
 		//special case: no elements in the measure.
 		if (voice.getElements().size() == 0) {
 			return new VoiceSpacing(voice, interlineSpace, alist((ElementSpacing)
-				new BorderSpacing(Fraction._0, 0), new BorderSpacing(measureBeats,
+				new BorderSpacing(Fraction.Companion.get_0(), 0), new BorderSpacing(measureBeats,
 					layoutSettings.spacings.widthMeasureEmpty)));
 		}
 

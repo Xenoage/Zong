@@ -42,7 +42,7 @@ public class VoiceTest {
 		//Beats:       0        1     2           3     4
 		//Elements     |g1|-----a-----|g2|g3|--b--|--c--|g4|
 		//Checked:     x  x           x  x  x     x     x  x
-		Rest n = null, a = new Rest(fr(2)), b = new Rest(fr(1)), c = new Rest(fr(1));
+		Rest n = null, a = new Rest(Companion.fr(2)), b = new Rest(Companion.fr(1)), c = new Rest(Companion.fr(1));
 		Chord g1 = grace(1), g2 = grace(2), g3 = grace(3), g4 = grace(4);
 		VoiceElement[] elementsPool = { a, b, c, g1, g2, g3, g4 };
 		Voice voice = new Voice(ilist(g1, a, g2, g3, b, c, g4));
@@ -112,15 +112,15 @@ public class VoiceTest {
 		//Elements     |g1|-----a-----|g2|g3|--b--|--c--|g4|
 		//Indices      0  1           2  3  4     5     6  7
 		//Checked:     x        x     x           x     x    x
-		Rest a = new Rest(fr(2)), b = new Rest(fr(1)), c = new Rest(fr(1));
+		Rest a = new Rest(Companion.fr(2)), b = new Rest(Companion.fr(1)), c = new Rest(Companion.fr(1));
 		Chord g1 = grace(1), g2 = grace(2), g3 = grace(3), g4 = grace(4);
 		Voice voice = new Voice(ilist(g1, a, g2, g3, b, c, g4));
-		assertEquals(1, voice.getElementIndex(fr(0)));
-		assertEquals(1, voice.getElementIndex(fr(1)));
-		assertEquals(4, voice.getElementIndex(fr(2)));
-		assertEquals(5, voice.getElementIndex(fr(3)));
-		assertEquals(7, voice.getElementIndex(fr(4)));
-		assertEquals(7, voice.getElementIndex(fr(5)));
+		assertEquals(1, voice.getElementIndex(Companion.fr(0)));
+		assertEquals(1, voice.getElementIndex(Companion.fr(1)));
+		assertEquals(4, voice.getElementIndex(Companion.fr(2)));
+		assertEquals(5, voice.getElementIndex(Companion.fr(3)));
+		assertEquals(7, voice.getElementIndex(Companion.fr(4)));
+		assertEquals(7, voice.getElementIndex(Companion.fr(5)));
 	}
 
 
@@ -164,20 +164,20 @@ public class VoiceTest {
 		//Beats:       0        1     2           3     4
 		//Elements     |g1|-----a-----|g2|g3|--b--|--c--|g4|
 		//Checked:     x  x           x  x  x     x     x  x
-		Rest a = new Rest(fr(2)), b = new Rest(fr(1)), c = new Rest(fr(1));
+		Rest a = new Rest(Companion.fr(2)), b = new Rest(Companion.fr(1)), c = new Rest(Companion.fr(1));
 		Chord g1 = grace(1), g2 = grace(2), g3 = grace(3), g4 = grace(4);
 		Voice voice = new Voice(ilist(g1, a, g2, g3, b, c, g4));
 		//test
-		assertEquals(a, voice.getElementAt(fr(0)));
-		assertEquals(null, voice.getElementAt(fr(1)));
-		assertEquals(b, voice.getElementAt(fr(2)));
-		assertEquals(c, voice.getElementAt(fr(3)));
-		assertEquals(g4, voice.getElementAt(fr(4)));
+		assertEquals(a, voice.getElementAt(Companion.fr(0)));
+		assertEquals(null, voice.getElementAt(Companion.fr(1)));
+		assertEquals(b, voice.getElementAt(Companion.fr(2)));
+		assertEquals(c, voice.getElementAt(Companion.fr(3)));
+		assertEquals(g4, voice.getElementAt(Companion.fr(4)));
 	}
 
 	public static Chord grace(int step) {
-		Chord chord = new Chord(new Note(pi(step, 0)), fr(0, 4));
-		chord.setGrace(new Grace(true, fr(1, 16)));
+		Chord chord = new Chord(new Note(pi(step, 0)), Companion.fr(0, 4));
+		chord.setGrace(new Grace(true, Companion.fr(1, 16)));
 		return chord;
 	}
 

@@ -132,7 +132,7 @@ public class StemNotatorTest {
 		NotesNotation chordNotesAlignment;
 		StemNotation chordStemAlignment;
 
-		Fraction fraction = fr(1, 1);
+		Fraction fraction = Companion.fr(1, 1);
 		chord = ChordFactory.chord(pitches, fraction);
 		ChordLps linepositions = new ChordLps(chord, context);
 		StemDirection stemDirection = singleStemDirector.compute(linepositions, 5);

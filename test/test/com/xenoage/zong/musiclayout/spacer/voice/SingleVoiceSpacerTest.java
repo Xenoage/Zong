@@ -41,10 +41,10 @@ public class SingleVoiceSpacerTest {
 
 	@Before public void setUp()
 		throws IOException {
-		r1 = new Rest(fr(1, 4));
-		r2 = new Rest(fr(1, 8));
-		r3 = new Rest(fr(1, 8));
-		r4 = new Rest(fr(1, 2));
+		r1 = new Rest(Companion.fr(1, 4));
+		r2 = new Rest(Companion.fr(1, 8));
+		r3 = new Rest(Companion.fr(1, 8));
+		r4 = new Rest(Companion.fr(1, 2));
 		g1 = VoiceTest.grace(1);
 		g2 = VoiceTest.grace(1);
 		layoutSettings = LayoutSettingsTest.loadTestSettings();
@@ -66,7 +66,7 @@ public class SingleVoiceSpacerTest {
 		notations.add(new RestNotation(r3, new ElementWidth(2, 2, 3), null));
 		notations.add(new RestNotation(r4, new ElementWidth(5, 2, 3), null));
 		//compute spacing
-		VoiceSpacing vs = testee.compute(voice, 200f, fr(4, 4), 5, notations, layoutSettings);
+		VoiceSpacing vs = testee.compute(voice, 200f, Companion.fr(4, 4), 5, notations, layoutSettings);
 		//check spacing
 		ElementSpacing[] ses = vs.elements.toArray(new ElementSpacing[0]);
 		float s = layoutSettings.offsetMeasureStart;
@@ -78,11 +78,11 @@ public class SingleVoiceSpacerTest {
 		assertEquals(s + 19 + 2 * d, ses[3].xIs, DELTA_FLOAT);
 		assertEquals(s + 24 + 2 * d, ses[4].xIs, DELTA_FLOAT);
 		//check beats
-		assertEquals(fr(0, 8), ses[0].beat);
-		assertEquals(fr(2, 8), ses[1].beat);
-		assertEquals(fr(3, 8), ses[2].beat);
-		assertEquals(fr(4, 8), ses[3].beat);
-		assertEquals(fr(8, 8), ses[4].beat);
+		assertEquals(Companion.fr(0, 8), ses[0].beat);
+		assertEquals(Companion.fr(2, 8), ses[1].beat);
+		assertEquals(Companion.fr(3, 8), ses[2].beat);
+		assertEquals(Companion.fr(4, 8), ses[3].beat);
+		assertEquals(Companion.fr(8, 8), ses[4].beat);
 	}
 
 	/**
@@ -103,7 +103,7 @@ public class SingleVoiceSpacerTest {
 		notations.add(new ChordNotation(g2, new ElementWidth(1, 2, 1)));
 		notations.add(new RestNotation(r4, new ElementWidth(3, 2, 3), null));
 		//compute spacing
-		VoiceSpacing vs = testee.compute(voice, 300f, fr(4, 4), 5, notations, layoutSettings);
+		VoiceSpacing vs = testee.compute(voice, 300f, Companion.fr(4, 4), 5, notations, layoutSettings);
 		//check spacing
 		ElementSpacing[] ses = vs.elements.toArray(new ElementSpacing[0]);;
 		float s = layoutSettings.offsetMeasureStart;
@@ -114,11 +114,11 @@ public class SingleVoiceSpacerTest {
 		assertEquals(s + 17, ses[3].xIs, DELTA_FLOAT);
 		assertEquals(s + 22, ses[4].xIs, DELTA_FLOAT);
 		//check beats
-		assertEquals(fr(0, 8), ses[0].beat);
-		assertEquals(fr(2, 8), ses[1].beat);
-		assertEquals(fr(2, 8), ses[2].beat);
-		assertEquals(fr(2, 8), ses[3].beat);
-		assertEquals(fr(6, 8), ses[4].beat);
+		assertEquals(Companion.fr(0, 8), ses[0].beat);
+		assertEquals(Companion.fr(2, 8), ses[1].beat);
+		assertEquals(Companion.fr(2, 8), ses[2].beat);
+		assertEquals(Companion.fr(2, 8), ses[3].beat);
+		assertEquals(Companion.fr(6, 8), ses[4].beat);
 	}
 
 	/**
@@ -139,7 +139,7 @@ public class SingleVoiceSpacerTest {
 		notations.add(new ChordNotation(g2, new ElementWidth(1, 2, 1)));
 		notations.add(new RestNotation(r4, new ElementWidth(3, 2, 3), null));
 		//compute spacing
-		VoiceSpacing vs = testee.compute(voice, 400f, fr(4, 4), 5, notations, layoutSettings);
+		VoiceSpacing vs = testee.compute(voice, 400f, Companion.fr(4, 4), 5, notations, layoutSettings);
 		//check spacing
 		ElementSpacing[] ses = vs.elements.toArray(new ElementSpacing[0]);;
 		float s = layoutSettings.offsetMeasureStart;
@@ -151,11 +151,11 @@ public class SingleVoiceSpacerTest {
 		assertEquals(s + 13 + d, ses[3].xIs, DELTA_FLOAT);
 		assertEquals(s + 18 + d, ses[4].xIs, DELTA_FLOAT);
 		//check beats
-		assertEquals(fr(0, 8), ses[0].beat);
-		assertEquals(fr(2, 8), ses[1].beat);
-		assertEquals(fr(2, 8), ses[2].beat);
-		assertEquals(fr(2, 8), ses[3].beat);
-		assertEquals(fr(6, 8), ses[4].beat);
+		assertEquals(Companion.fr(0, 8), ses[0].beat);
+		assertEquals(Companion.fr(2, 8), ses[1].beat);
+		assertEquals(Companion.fr(2, 8), ses[2].beat);
+		assertEquals(Companion.fr(2, 8), ses[3].beat);
+		assertEquals(Companion.fr(6, 8), ses[4].beat);
 	}
 
 	/**
@@ -176,7 +176,7 @@ public class SingleVoiceSpacerTest {
 		notations.add(new ChordNotation(g2, new ElementWidth(1, 2, 1)));
 		notations.add(new RestNotation(r4, new ElementWidth(3, 2, 3), null));
 		//compute spacing
-		VoiceSpacing vs = testee.compute(voice, 400f, fr(4, 4), 5, notations, layoutSettings);
+		VoiceSpacing vs = testee.compute(voice, 400f, Companion.fr(4, 4), 5, notations, layoutSettings);
 		//check spacing
 		ElementSpacing[] ses = vs.elements.toArray(new ElementSpacing[0]);;
 		float s = layoutSettings.offsetMeasureStart;
@@ -188,11 +188,11 @@ public class SingleVoiceSpacerTest {
 		assertEquals(s + 13 + d, ses[3].xIs, DELTA_FLOAT);
 		assertEquals(s + 18 + d, ses[4].xIs, DELTA_FLOAT);
 		//check beats
-		assertEquals(fr(0, 8), ses[0].beat);
-		assertEquals(fr(2, 8), ses[1].beat);
-		assertEquals(fr(2, 8), ses[2].beat);
-		assertEquals(fr(2, 8), ses[3].beat);
-		assertEquals(fr(6, 8), ses[4].beat);
+		assertEquals(Companion.fr(0, 8), ses[0].beat);
+		assertEquals(Companion.fr(2, 8), ses[1].beat);
+		assertEquals(Companion.fr(2, 8), ses[2].beat);
+		assertEquals(Companion.fr(2, 8), ses[3].beat);
+		assertEquals(Companion.fr(6, 8), ses[4].beat);
 	}
 
 }

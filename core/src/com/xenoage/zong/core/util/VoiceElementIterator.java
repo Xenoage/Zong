@@ -27,10 +27,10 @@ public class VoiceElementIterator
 	
 	private final Score score;
 	
-	@Getter private MP mp = unknownMp;
+	@Getter private MP mp = Companion.getUnknownMp();
 	
 	private List<VoiceElement> elements;
-	private MP nextMp = mp0;
+	private MP nextMp = Companion.getMp0();
 
 	
 	public VoiceElementIterator(Score score) {
@@ -47,31 +47,31 @@ public class VoiceElementIterator
 		if (!hasNext())
 			throw new NoSuchElementException();
 		mp = nextMp;
-		VoiceElement element = elements.get(nextMp.element);
-		nextMp = nextMp.withElement(nextMp.element + 1);
-		nextMp = nextMp.withBeat(nextMp.beat.add(element.getDuration()));
+		VoiceElement element = elements.get(nextMp.getElement());
+		nextMp = nextMp.withElement(nextMp.getElement() + 1);
+		nextMp = nextMp.withBeat(nextMp.getBeat().add(element.getDuration()));
 		findNext();
 		return element;
 	}
 	
 	private void findNext() {
 		while (true) {
-			if (nextMp.element < elements.size()) {
+			if (nextMp.getElement() < elements.size()) {
 				//next element within voice exists
 				break;
 			}
 			else {
-				if (nextMp.voice + 1 < score.getMeasure(nextMp).getVoices().size()) {
+				if (nextMp.getVoice() + 1 < score.getMeasure(nextMp).getVoices().size()) {
 					//next measure within staff
-					nextMp = mp(nextMp.staff, nextMp.measure, nextMp.voice + 1, _0, 0);
+					nextMp = Companion.mp(nextMp.getStaff(), nextMp.getMeasure(), nextMp.getVoice() + 1, Companion.get_0(), 0);
 				}
-				else if (nextMp.measure + 1 < score.getMeasuresCount()) {
+				else if (nextMp.getMeasure() + 1 < score.getMeasuresCount()) {
 					//next measure within staff
-					nextMp = mp(nextMp.staff, nextMp.measure + 1, 0, _0, 0);
+					nextMp = Companion.mp(nextMp.getStaff(), nextMp.getMeasure() + 1, 0, Companion.get_0(), 0);
 				}
-				else if (nextMp.staff + 1 < score.getStavesCount()) {
+				else if (nextMp.getStaff() + 1 < score.getStavesCount()) {
 					//next staff
-					nextMp = mp(nextMp.staff + 1, 0, 0, _0, 0);
+					nextMp = Companion.mp(nextMp.getStaff() + 1, 0, 0, Companion.get_0(), 0);
 				}
 				else {
 					//finished

@@ -200,7 +200,7 @@ public class InstrumentsReader {
 
 			//midi-program is 1-based in MusicXML but 0-based in MIDI
 			int midiProgram = notNull(info.midiProgram, 1) - 1; //TODO: find value that matches instrument name
-			midiProgram = MathUtils.clamp(midiProgram, 0, 127);
+			midiProgram = MathUtils.INSTANCE.clamp(midiProgram, 0, 127);
 
 			PitchedInstrument pitchedInstrument;
 			instrument = pitchedInstrument = new PitchedInstrument(info.id, midiProgram);

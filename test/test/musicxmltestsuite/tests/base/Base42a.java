@@ -37,24 +37,24 @@ public interface Base42a
 		Cursor cursor = new Cursor(score, mp0, true);
 		cursor.write(new TimeSignature(TimeType.time_4_4));
 		//measure 0, voice 0
-		cursor.write(addLyric(chord(pi('E', 0, 5), fr(1, 2)), "This"));
-		cursor.write(addLyric(chord(pi('D', 0, 5), fr(1, 4)), "is"));
-		cursor.write(addLyric(chord(pi('B', 0, 4), fr(1, 4)), "the"));
+		cursor.write(addLyric(chord(pi('E', 0, 5), Companion.fr(1, 2)), "This"));
+		cursor.write(addLyric(chord(pi('D', 0, 5), Companion.fr(1, 4)), "is"));
+		cursor.write(addLyric(chord(pi('B', 0, 4), Companion.fr(1, 4)), "the"));
 		//measure 1, voice 0
-		cursor.write(new Rest(fr(1, 4)));
-		cursor.write(addLyric(chord(pi('D', 0, 5), fr(1, 4)), "lyrics"));
-		cursor.write(addLyric(chord(pi('B', 0, 3), fr(3, 8)), "of"));
-		cursor.write(addLyric(chord(pi('C', 0, 5), fr(1, 8)), "Voice1"));
+		cursor.write(new Rest(Companion.fr(1, 4)));
+		cursor.write(addLyric(chord(pi('D', 0, 5), Companion.fr(1, 4)), "lyrics"));
+		cursor.write(addLyric(chord(pi('B', 0, 3), Companion.fr(3, 8)), "of"));
+		cursor.write(addLyric(chord(pi('C', 0, 5), Companion.fr(1, 8)), "Voice1"));
 		//measure 0, voice 1
 		cursor.setMp(atElement(0, 0, 1, 0));
-		cursor.write(addLyric(chord(pi('C', 0, 5), fr(1, 2)), "This"));
-		cursor.write(addLyric(chord(pi('B', 0, 4), fr(1, 4)), "is"));
-		cursor.write(addLyric(chord(pi('G', 0, 4), fr(1, 4)), "the"));
+		cursor.write(addLyric(chord(pi('C', 0, 5), Companion.fr(1, 2)), "This"));
+		cursor.write(addLyric(chord(pi('B', 0, 4), Companion.fr(1, 4)), "is"));
+		cursor.write(addLyric(chord(pi('G', 0, 4), Companion.fr(1, 4)), "the"));
 		//measure 1, voice 1
-		cursor.write(new Rest(fr(1, 4)));
-		cursor.write(addLyric(chord(pi('B', 0, 4), fr(1, 4)), "lyrics"));
-		cursor.write(addLyric(chord(pi('G', 0, 3), fr(3, 8)), "of"));
-		cursor.write(addLyric(chord(pi('A', 0, 4), fr(1, 8)), "Voice2"));
+		cursor.write(new Rest(Companion.fr(1, 4)));
+		cursor.write(addLyric(chord(pi('B', 0, 4), Companion.fr(1, 4)), "lyrics"));
+		cursor.write(addLyric(chord(pi('G', 0, 3), Companion.fr(3, 8)), "of"));
+		cursor.write(addLyric(chord(pi('A', 0, 4), Companion.fr(1, 8)), "Voice2"));
 		return score.getStaff(0);
 	}
 	

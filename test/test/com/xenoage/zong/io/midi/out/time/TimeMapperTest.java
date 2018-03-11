@@ -94,7 +94,7 @@ public class TimeMapperTest {
 		cursor.write(e(1));
 		cursor.write(e(1));
 		new MeasureElementWrite(new Dynamic(DynamicValue.f),
-				score.getMeasure(atMeasure(0, 3)), _1$2).execute();
+				score.getMeasure(atMeasure(0, 3)), Companion.get_1$2()).execute();
 		//staff 1, voice 0
 		cursor.setMp(atElement(1, 0, 0, 0));
 		cursor.write(e(2));
@@ -173,16 +173,16 @@ public class TimeMapperTest {
 		int internalMeasure = measure - playRangeStartMeasure;
 		if (isAlsoLastBeatInPreviosMeasure)
 			timeMap.addTimeNoMs(resolution * ((playRangeMeasureOffset + internalMeasure - 1) * 4 + 4),
-					new RepTime(repetition, time(measure - 1, _1)));
+					new RepTime(repetition, time(measure - 1, Companion.get_1())));
 		timeMap.addTimeNoMs(resolution * ((playRangeMeasureOffset + internalMeasure) * 4 + quarterBeat),
-				new RepTime(repetition, time(measure, fr(quarterBeat, 4))));
+				new RepTime(repetition, time(measure, Companion.fr(quarterBeat, 4))));
 	}
 
 	/**
 	 * Creates a note. 4 = quarter, 2 = half, 1 = whole
 	 */
 	private VoiceElement e(int note) {
-		return new Rest(fr(1, note));
+		return new Rest(Companion.fr(1, note));
 	}
 
 }

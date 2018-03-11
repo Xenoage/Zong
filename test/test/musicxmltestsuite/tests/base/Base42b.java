@@ -45,41 +45,41 @@ public interface Base42b
 		Cursor cursor = new Cursor(score, mp0, true);
 		cursor.write(new TimeSignature(TimeType.time_6_8));
 		//staff 1, measure 0
-		cursor.write(chord(pi('F', 0, 4), fr(1, 8)));
-		cursor.write(chord(pi('D', 0, 4), fr(1, 8)));
-		cursor.write(chord(pi('B', 0, 3), fr(1, 8)));
-		cursor.write(chord(pi('G', 0, 3), fr(1, 8)));
-		cursor.write(chord(pi('F', 0, 3), fr(1, 4)));
+		cursor.write(chord(pi('F', 0, 4), Companion.fr(1, 8)));
+		cursor.write(chord(pi('D', 0, 4), Companion.fr(1, 8)));
+		cursor.write(chord(pi('B', 0, 3), Companion.fr(1, 8)));
+		cursor.write(chord(pi('G', 0, 3), Companion.fr(1, 8)));
+		cursor.write(chord(pi('F', 0, 3), Companion.fr(1, 4)));
 		//staff 1, measure 1
-		cursor.write(chord(pi('E', 0, 5), fr(1, 8)));
-		cursor.write(chord(pi('C', 0, 5), fr(1, 8)));
-		cursor.write(chord(pi('G', 0, 4), fr(1, 8)));
-		cursor.write(chord(pi('G', 0, 4), fr(1, 8)));
-		cursor.write(chord(pi('F', 0, 4), fr(1, 4)));
+		cursor.write(chord(pi('E', 0, 5), Companion.fr(1, 8)));
+		cursor.write(chord(pi('C', 0, 5), Companion.fr(1, 8)));
+		cursor.write(chord(pi('G', 0, 4), Companion.fr(1, 8)));
+		cursor.write(chord(pi('G', 0, 4), Companion.fr(1, 8)));
+		cursor.write(chord(pi('F', 0, 4), Companion.fr(1, 4)));
 		//staff 1, measure 0
 		cursor.setMp(atElement(1, 0, 0, 0));
-		cursor.write(new Rest(fr(1, 8)));
-		cursor.write(chord(pi('G', 0, 2), fr(1, 8)));
-		cursor.write(chord(pi('G', 0, 2), fr(1, 8)));
-		cursor.write(chord(pi('G', 0, 2), fr(1, 8)));
-		cursor.write(chord(pi('A', 0, 2), fr(1, 16)));
-		cursor.write(chord(pi('G', 0, 2), fr(1, 16)));
-		cursor.write(chord(pi('F', 1, 2), fr(1, 16)));
-		cursor.write(chord(pi('G', 0, 2), fr(1, 16)));
+		cursor.write(new Rest(Companion.fr(1, 8)));
+		cursor.write(chord(pi('G', 0, 2), Companion.fr(1, 8)));
+		cursor.write(chord(pi('G', 0, 2), Companion.fr(1, 8)));
+		cursor.write(chord(pi('G', 0, 2), Companion.fr(1, 8)));
+		cursor.write(chord(pi('A', 0, 2), Companion.fr(1, 16)));
+		cursor.write(chord(pi('G', 0, 2), Companion.fr(1, 16)));
+		cursor.write(chord(pi('F', 1, 2), Companion.fr(1, 16)));
+		cursor.write(chord(pi('G', 0, 2), Companion.fr(1, 16)));
 		//staff 1, measure 1
-		cursor.write(chord(new Pitch[]{pi('C', 0, 3), pi('E', 0, 3), pi('G', 0, 3), pi('C', 0, 4)}, fr(1, 4)));
-		cursor.write(new Rest(fr(1, 8)));
-		cursor.write(new Rest(fr(1, 4)));
-		cursor.write(chord(pi('G', 0, 3), fr(1, 8)));
+		cursor.write(chord(new Pitch[]{pi('C', 0, 3), pi('E', 0, 3), pi('G', 0, 3), pi('C', 0, 4)}, Companion.fr(1, 4)));
+		cursor.write(new Rest(Companion.fr(1, 8)));
+		cursor.write(new Rest(Companion.fr(1, 4)));
+		cursor.write(chord(pi('G', 0, 3), Companion.fr(1, 8)));
 		return new Staff[]{score.getStaff(0), score.getStaff(1)};
 	}
 	
 	static List<Tuple2<MP, Clef>> getExpectedClefs() {
 		List<Tuple2<MP, Clef>> clefs = alist();
-		clefs.add(t(atBeat(0, 0, unknown, fr(0, 8)), new Clef(ClefType.clefTreble)));
-		clefs.add(t(atBeat(0, 0, unknown, fr(3, 8)), new Clef(ClefType.clefBass)));
-		clefs.add(t(atBeat(0, 1, unknown, fr(0, 8)), new Clef(ClefType.clefTreble)));
-		clefs.add(t(atBeat(1, 0, unknown, fr(0, 8)), new Clef(ClefType.clefBass)));
+		clefs.add(t(atBeat(0, 0, unknown, Companion.fr(0, 8)), new Clef(ClefType.clefTreble)));
+		clefs.add(t(atBeat(0, 0, unknown, Companion.fr(3, 8)), new Clef(ClefType.clefBass)));
+		clefs.add(t(atBeat(0, 1, unknown, Companion.fr(0, 8)), new Clef(ClefType.clefTreble)));
+		clefs.add(t(atBeat(1, 0, unknown, Companion.fr(0, 8)), new Clef(ClefType.clefBass)));
 		return clefs;
 	}
 

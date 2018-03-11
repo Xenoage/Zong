@@ -36,14 +36,14 @@ public class BarlinesBeatOffsetterTest {
 		float is = 1.5f; //interline space
 		//create original offsets
 		List<BeatOffset> baseOffsets = alist(
-			new BeatOffset(fr(0, 4), 0 * d), new BeatOffset(fr(1, 4), 1 * d),
-			new BeatOffset(fr(2, 4), 2 * d), new BeatOffset(fr(3, 4), 3 * d),
-			new BeatOffset(fr(4, 4), 4 * d));
+			new BeatOffset(Companion.fr(0, 4), 0 * d), new BeatOffset(Companion.fr(1, 4), 1 * d),
+			new BeatOffset(Companion.fr(2, 4), 2 * d), new BeatOffset(Companion.fr(3, 4), 3 * d),
+			new BeatOffset(Companion.fr(4, 4), 4 * d));
 		//create barlines
 		ColumnHeader ch = new ColumnHeader(null, 0);
 		ch.setStartBarline(barlineForwardRepeat(HeavyLight));
-		ch.setMiddleBarline(barlineMiddleBothRepeat(LightLight, 1), fr(2, 4));
-		ch.setMiddleBarline(barlineRegular(), fr(3, 4));
+		ch.setMiddleBarline(barlineMiddleBothRepeat(LightLight, 1), Companion.fr(2, 4));
+		ch.setMiddleBarline(barlineRegular(), Companion.fr(3, 4));
 		ch.setEndBarline(barlineBackwardRepeat(LightHeavy, 1));
 		//compute new offsets and check results
 		BarlinesBeatOffsetter.Result result = testee.compute(baseOffsets, ch, is);
@@ -52,18 +52,18 @@ public class BarlinesBeatOffsetterTest {
 		//note offsets
 		List<BeatOffset> vo = result.voiceElementOffsets;
 		assertEquals(5, vo.size());
-		assertEquals(new BeatOffset(fr(0, 4), 0 * d + 1 * dRep), vo.get(0));
-		assertEquals(new BeatOffset(fr(1, 4), 1 * d + 1 * dRep), vo.get(1));
-		assertEquals(new BeatOffset(fr(2, 4), 2 * d + 3 * dRep + 1 * dMid), vo.get(2));
-		assertEquals(new BeatOffset(fr(3, 4), 3 * d + 3 * dRep + 2 * dMid), vo.get(3));
-		assertEquals(new BeatOffset(fr(4, 4), 4 * d + 3 * dRep + 2 * dMid), vo.get(4));
+		assertEquals(new BeatOffset(Companion.fr(0, 4), 0 * d + 1 * dRep), vo.get(0));
+		assertEquals(new BeatOffset(Companion.fr(1, 4), 1 * d + 1 * dRep), vo.get(1));
+		assertEquals(new BeatOffset(Companion.fr(2, 4), 2 * d + 3 * dRep + 1 * dMid), vo.get(2));
+		assertEquals(new BeatOffset(Companion.fr(3, 4), 3 * d + 3 * dRep + 2 * dMid), vo.get(3));
+		assertEquals(new BeatOffset(Companion.fr(4, 4), 4 * d + 3 * dRep + 2 * dMid), vo.get(4));
 		//barline offsets
 		List<BeatOffset> bo = result.barlineOffsets;
 		assertEquals(4, bo.size());
-		assertEquals(new BeatOffset(fr(0, 4), 0 * d + 0 * dRep), bo.get(0));
-		assertEquals(new BeatOffset(fr(2, 4), 2 * d + 2 * dRep), bo.get(1));
-		assertEquals(new BeatOffset(fr(3, 4), 3 * d + 3 * dRep + 1 * dMid), bo.get(2));
-		assertEquals(new BeatOffset(fr(4, 4), 4 * d + 4 * dRep + 2 * dMid), bo.get(3));
+		assertEquals(new BeatOffset(Companion.fr(0, 4), 0 * d + 0 * dRep), bo.get(0));
+		assertEquals(new BeatOffset(Companion.fr(2, 4), 2 * d + 2 * dRep), bo.get(1));
+		assertEquals(new BeatOffset(Companion.fr(3, 4), 3 * d + 3 * dRep + 1 * dMid), bo.get(2));
+		assertEquals(new BeatOffset(Companion.fr(4, 4), 4 * d + 4 * dRep + 2 * dMid), bo.get(3));
 	}
 
 }

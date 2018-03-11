@@ -32,8 +32,8 @@ public class Test43a
 	}
 
 	private void testStaff(int staff, ClefType clefType, Pitch pitch) {
-		assertEquals(clefType, score.getMeasure(atMeasure(staff, 0)).getClefs().get(_0).getType());
-		assertEquals(pitch, getChordAt(score, atBeat(staff, 0, 0, _0)).getNotes().get(0).getPitch());
+		assertEquals(clefType, score.getMeasure(atMeasure(staff, 0)).getClefs().get(Companion.get_0()).getType());
+		assertEquals(pitch, getChordAt(score, atBeat(staff, 0, 0, Companion.get_0())).getNotes().get(0).getPitch());
 	}
 	
 }

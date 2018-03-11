@@ -119,13 +119,13 @@ public class ChordNotator
 		//compute length of the stem (if any)
 		float scaling = grace ? context.settings.scalingGrace : 1;
 		StemNotation stem = stemNotator.compute(chord.getStem(), notes.getLps(),
-			stemDirection, context.mp.staff, staffLines(mc.getLinesCount()), scaling);
+			stemDirection, context.mp.getStaff(), staffLines(mc.getLinesCount()), scaling);
 
 		//compute articulations
 		ArticulationsNotation arts = articulationsNotator.compute(chord, stemDirection, notes, mc.getLinesCount());
 
 		return new ChordNotation(chord, chord.getMP(), new ElementWidth(frontGap, symbolWidth, rearGap, lyricWidth),
-				context.mp.staff, notes, stemDirection, stem, accs, arts);
+				context.mp.getStaff(), notes, stemDirection, stem, accs, arts);
 	}
 
 }

@@ -113,7 +113,7 @@ public class MusicXmlScoreFileInput
 	
 			//when errors were collected, log them and save them as metadata
 			if (mxlErrorHandling.getErrorMessages().size() > 0) {
-				log(warning("The file could be loaded, but the following error(s) were reported: " +
+				INSTANCE.log(Companion.warning("The file could be loaded, but the following error(s) were reported: " +
 					mxlErrorHandling.getErrorMessages()));
 				score.setMetaData("mxlerrors", mxlErrorHandling.getErrorMessages());
 			}

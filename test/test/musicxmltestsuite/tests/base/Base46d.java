@@ -13,5 +13,5 @@ public interface Base46d
 		return "46d-PickupMeasure-ImplicitMeasures.xml";
 	}
 	
-	Fraction[] expectedMeasureBeats = { fr(3,8), fr(2,4), fr(2,4), fr(3,4) };
+	Fraction[] expectedMeasureBeats = { Companion.fr(3,8), Companion.fr(2,4), Companion.fr(2,4), Companion.fr(3,4) };
 }

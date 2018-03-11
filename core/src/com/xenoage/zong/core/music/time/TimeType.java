@@ -83,7 +83,7 @@ import com.xenoage.utils.math.Fraction;
 	public Fraction getMeasureBeats() {
 		if (numerator == 0 || denominator == 0)
 			return null;
-		return fr(numerator, denominator);
+		return Companion.fr(numerator, denominator);
 	}
 
 }

@@ -42,7 +42,7 @@ public class MeasureBeats {
 	 */
 	public Fraction getLength(int measure) {
 		if (measure == measureLengths.size())
-			return _0;
+			return Companion.get_0();
 		return measureLengths.get(measure);
 	}
 

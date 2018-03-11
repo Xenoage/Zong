@@ -47,32 +47,32 @@ public class CursorTest {
 	@Test public void write_MeasureElement_Test() {
 		Score score = ScoreFactory.create1Staff();
 		Cursor cursor = new Cursor(score, mpe0, true);
-		cursor.write(new Rest(fr(1, 4)));
-		cursor.write(new Rest(fr(1, 4)));
-		cursor.write(new Rest(fr(1, 4)));
+		cursor.write(new Rest(Companion.fr(1, 4)));
+		cursor.write(new Rest(Companion.fr(1, 4)));
+		cursor.write(new Rest(Companion.fr(1, 4)));
 		//write clef at 1/4
 		Clef clef1 = new Clef(ClefType.clefBass);
 		cursor.setMp(atElement(0, 0, 0, 1));
 		cursor.write(clef1);
 		BeatEList<Clef> clefs = score.getMeasure(atMeasure(0, 0)).getClefs();
 		assertEquals(1, clefs.size());
-		assertEquals(beatE(clef1, fr(1, 4)), clefs.getFirst());
+		assertEquals(beatE(clef1, Companion.fr(1, 4)), clefs.getFirst());
 		//write clef at 2/4
 		Clef clef2 = new Clef(ClefType.clefTreble);
 		cursor.setMp(atElement(0, 0, 0, 2));
 		cursor.write(clef2);
 		clefs = score.getMeasure(atMeasure(0, 0)).getClefs();
 		assertEquals(2, clefs.size());
-		assertEquals(beatE(clef1, fr(1, 4)), clefs.getFirst());
-		assertEquals(beatE(clef2, fr(2, 4)), clefs.getElements().get(1));
+		assertEquals(beatE(clef1, Companion.fr(1, 4)), clefs.getFirst());
+		assertEquals(beatE(clef2, Companion.fr(2, 4)), clefs.getElements().get(1));
 		//overwrite clef at 1/4
 		Clef clef3 = new Clef(ClefType.clefTreble);
 		cursor.setMp(atElement(0, 0, 0, 1));
 		cursor.write(clef3);
 		clefs = score.getMeasure(atMeasure(0, 0)).getClefs();
 		assertEquals(2, clefs.size());
-		assertEquals(beatE(clef3, fr(1, 4)), clefs.getFirst());
-		assertEquals(beatE(clef2, fr(2, 4)), clefs.getElements().get(1));
+		assertEquals(beatE(clef3, Companion.fr(1, 4)), clefs.getFirst());
+		assertEquals(beatE(clef2, Companion.fr(2, 4)), clefs.getElements().get(1));
 		//write key at 1/4
 		Key key = new TraditionalKey(5, Mode.Major);
 		cursor.setMp(atElement(0, 0, 0, 1));

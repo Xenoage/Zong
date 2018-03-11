@@ -507,7 +507,7 @@ public final class ColumnHeader
 			return null;
 		//elements at the beginning of the measure
 		if (time == element || startBarline == element || volta == element)
-			return atColumnBeat(parentMeasureIndex, _0);
+			return atColumnBeat(parentMeasureIndex, Companion.get_0());
 		//elements at the end of the measure
 		else if (endBarline == element || measureBreak == element)
 			return atColumnBeat(parentMeasureIndex, parentScore.getMeasureBeats(parentMeasureIndex));

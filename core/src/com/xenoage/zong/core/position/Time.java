@@ -22,7 +22,7 @@ import static com.xenoage.utils.math.Fraction._0;
 	@Wither public final Fraction beat;
 
 	/** Musical position with all values set to 0. */
-	public static final Time time0 = new Time(0, _0);
+	public static final Time time0 = new Time(0, Companion.get_0());
 
 
 	/**

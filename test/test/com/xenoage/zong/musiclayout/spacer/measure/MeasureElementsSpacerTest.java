@@ -64,18 +64,18 @@ public class MeasureElementsSpacerTest {
 	@Test public void testEnoughExistingSpace() {
 		Rest[] ve = ve();
 		List<VoiceSpacing> originalVs = alist(
-			new VoiceSpacing(null, 1, alist(spacing(ve[0], fr(1, 2), 4), spacing(ve[1], fr(6), 15))),
-			new VoiceSpacing(null, 1, alist(spacing(ve[2], fr(1), 5), spacing(ve[3], fr(17, 2), 20))));
+			new VoiceSpacing(null, 1, alist(spacing(ve[0], Companion.fr(1, 2), 4), spacing(ve[1], Companion.fr(6), 15))),
+			new VoiceSpacing(null, 1, alist(spacing(ve[2], Companion.fr(1), 5), spacing(ve[3], Companion.fr(17, 2), 20))));
 		List<VoiceSpacing> vs = alist(originalVs);
 		Clef innerClef = new Clef(ClefType.clefTreble);
 		BeatEList<Clef> innerClefs = beatEList();
-		innerClefs.add(beatE(innerClef, fr(6)));
+		innerClefs.add(beatE(innerClef, Companion.fr(6)));
 		List<ElementSpacing> res = testee.compute(
 			innerClefs, beatEList(), null, false, vs, 0, notations(ve, innerClef), ls);
 		//clef must be at offset 15 - padding - clefwidth/2
 		ElementSpacing[] mes = res.toArray(new ElementSpacing[0]);
 		assertEquals(1, mes.length);
-		assertEquals(fr(6), mes[0].beat);
+		assertEquals(Companion.fr(6), mes[0].beat);
 		assertEquals(15 - paddingWidth - clefWidth / 2, mes[0].xIs, Delta.DELTA_FLOAT);
 		//voice spacings must be unchanged
 		assertEquals(originalVs, vs);
@@ -104,23 +104,23 @@ public class MeasureElementsSpacerTest {
 	@Test public void testNeedAdditionalSpace() {
 		Rest[] ve = ve();
 		List<VoiceSpacing> vs = alist(
-			new VoiceSpacing(null, 1, alist(spacing(ve[0], fr(1, 2), 4), spacing(ve[1], fr(4), 11))),
-			new VoiceSpacing(null, 1, alist(spacing(ve[2], fr(1), 5), spacing(ve[3], fr(13, 2), 16))));
+			new VoiceSpacing(null, 1, alist(spacing(ve[0], Companion.fr(1, 2), 4), spacing(ve[1], Companion.fr(4), 11))),
+			new VoiceSpacing(null, 1, alist(spacing(ve[2], Companion.fr(1), 5), spacing(ve[3], Companion.fr(13, 2), 16))));
 		Clef innerClef = new Clef(ClefType.clefTreble);
 		BeatEList<Clef> innerClefs = beatEList();
-		innerClefs.add(beatE(innerClef, fr(4)));
+		innerClefs.add(beatE(innerClef, Companion.fr(4)));
 		List<ElementSpacing> mes = testee.compute(
 			innerClefs, beatEList(), null, false, vs, 0, notations(ve, innerClef), ls);
 		//voice spacings
 		assertEquals(2, vs.size());
-		assertEqualsSpacings(ilist(spacing(ve[0], fr(1, 2), 4), spacing(ve[1], fr(4), 13)),
+		assertEqualsSpacings(ilist(spacing(ve[0], Companion.fr(1, 2), 4), spacing(ve[1], Companion.fr(4), 13)),
 			vs.get(0).elements);
-		assertEqualsSpacings(ilist(spacing(ve[2], fr(1), 5), spacing(ve[3], fr(13, 2), 18)),
+		assertEqualsSpacings(ilist(spacing(ve[2], Companion.fr(1), 5), spacing(ve[3], Companion.fr(13, 2), 18)),
 			vs.get(1).elements);
 		//clef must be at offset 13 - padding - clefwidth/2
 		ElementSpacing[] se = mes.toArray(new ElementSpacing[0]);
 		assertEquals(1, se.length);
-		assertEquals(fr(4), se[0].beat);
+		assertEquals(Companion.fr(4), se[0].beat);
 		assertEquals(13 - paddingWidth - clefWidth / 2, se[0].xIs, Delta.DELTA_FLOAT);
 	}
 	
@@ -134,7 +134,7 @@ public class MeasureElementsSpacerTest {
 	}
 
 	private Rest[] ve() {
-		return new Rest[] { new Rest(fr(1)), new Rest(fr(1)), new Rest(fr(1)), new Rest(fr(1)) };
+		return new Rest[] { new Rest(Companion.fr(1)), new Rest(Companion.fr(1)), new Rest(Companion.fr(1)), new Rest(Companion.fr(1)) };
 	}
 
 	private ElementSpacing spacing(Rest rest, Fraction beat, float offset) {

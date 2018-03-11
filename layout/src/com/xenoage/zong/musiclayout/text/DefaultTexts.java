@@ -48,11 +48,11 @@ public class DefaultTexts {
 			//show meaning, e.g. "♩ = 120"
 			CList<FormattedTextElement> elements = clist();
 			Fraction beat = tempo.getBaseBeat();
-			if (beat.equals(fr(1, 4))) {
+			if (beat.equals(Companion.fr(1, 4))) {
 				elements.add(new FormattedTextSymbol(symbolPool.getSymbol(CommonSymbol.TextNoteQuarter),
 				/* TODO staffStamping.is * FONT_SIZE_IN_IS */12, FormattedTextStyle.defaultColor));
 			}
-			else if (beat.equals(fr(1, 2))) {
+			else if (beat.equals(Companion.fr(1, 2))) {
 				elements.add(new FormattedTextSymbol(symbolPool.getSymbol(CommonSymbol.TextNoteHalf),
 				/* staffStamping.is * FONT_SIZE_IN_IS */12, FormattedTextStyle.defaultColor));
 			}

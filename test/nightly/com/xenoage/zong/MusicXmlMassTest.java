@@ -58,7 +58,7 @@ public class MusicXmlMassTest {
 	@Before public void setUp() {
 		//Logging
 		JseZongPlatformUtils.init(getClass().getSimpleName());
-		Log.init(new DesktopLogProcessing(getClass().getSimpleName()));
+		Log.INSTANCE.init(new DesktopLogProcessing(getClass().getSimpleName()));
 	}
 
 

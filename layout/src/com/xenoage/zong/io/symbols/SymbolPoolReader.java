@@ -113,7 +113,7 @@ public final class SymbolPoolReader
 	private void checkFinished() {
 		if (symbols.size() + symbolsWithErrors.size() == symbolsCount) {
 			if (symbolsWithErrors.size() > 0) {
-				handle(createReport(Warning, true, Voc.CouldNotLoadSymbolPool, null, null,
+				handle(Companion.createReport(Warning, true, Voc.CouldNotLoadSymbolPool, null, null,
 					symbolsWithErrors));
 			}
 			result.onSuccess(new SymbolPool(id, symbols));

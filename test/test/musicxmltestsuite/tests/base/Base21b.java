@@ -15,6 +15,6 @@ public interface Base21b
 	}
 	
 	int expectedChordsCount = 8;
-	Chord expectedChord = ch(fr(1, 4), pi('F', 0, 4), pi('A', 0, 4));
+	Chord expectedChord = ch(Companion.fr(1, 4), pi('F', 0, 4), pi('A', 0, 4));
 	
 }

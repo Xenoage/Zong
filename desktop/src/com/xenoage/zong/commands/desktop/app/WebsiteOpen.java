@@ -30,7 +30,7 @@ public class WebsiteOpen
 				uri = "http://" + uri;
 			Desktop.getDesktop().browse(new URI(uri));
 		} catch (Exception ex) {
-			log(warning("Could not open URI: " + uri + " (" + ex.getMessage() + ")"));
+			INSTANCE.log(Companion.warning("Could not open URI: " + uri + " (" + ex.getMessage() + ")"));
 		}
 	}
 

@@ -28,9 +28,9 @@ public class ChordSpacingsReader {
 		while (r.openNextChildElement()) {
 			if (r.getElementName().equals("chord")) {
 				//duration format: x/y, e.g. "1/4"
-				Fraction duration = Fraction.fromString(r.getAttributeNotNull("duration"));
+				Fraction duration = Fraction.Companion.fromString(r.getAttributeNotNull("duration"));
 				//width format: x+y/z, eg. "3+1/2"
-				float width = Fraction.fromString(r.getAttributeNotNull("width")).toFloat();
+				float width = Fraction.Companion.fromString(r.getAttributeNotNull("width")).toFloat();
 				durationWidths.put(duration, width);
 			}
 			r.closeElement();

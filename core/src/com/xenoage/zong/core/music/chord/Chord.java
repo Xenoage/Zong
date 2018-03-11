@@ -118,7 +118,7 @@ public class Chord
 		if (false == grace.getGraceDuration().isGreater0())
 			throw new InconsistentScoreException("Grace duration must be greater than 0");
 		this.notes = notes;
-		this.duration = _0;
+		this.duration = Companion.get_0();
 		this.grace = grace;
 	}
 

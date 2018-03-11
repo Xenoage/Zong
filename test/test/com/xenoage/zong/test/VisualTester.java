@@ -29,7 +29,7 @@ public class VisualTester {
 	public static void start(VisualTest test) {
 		try {
 			JseZongPlatformUtils.init(test.getClass().getSimpleName());
-			Log.init(new DesktopLogProcessing(test.getClass().getSimpleName()));
+			Log.INSTANCE.init(new DesktopLogProcessing(test.getClass().getSimpleName()));
 			ScoreDoc scoreDoc = createScoreDoc(test);
 			SimpleGuiDemo.start(scoreDoc);
 		} catch (Exception ex) {

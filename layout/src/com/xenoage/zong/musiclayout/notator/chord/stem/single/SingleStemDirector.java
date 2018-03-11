@@ -69,7 +69,7 @@ public final class SingleStemDirector {
 
 	private boolean isStemNeeded(Chord chord) {
 		//all chords shorter than 1/1 need a stem
-		return chord.getDuration().isLessThan(_1);
+		return chord.getDuration().isLessThan(Companion.get_1());
 	}
 
 	private int getDistanceToMidline(int lp, int staffLinesCount) {

@@ -32,8 +32,8 @@ public class VoiceElementIteratorTest {
 						for (int element : range(4)) {
 							assertTrue(it.hasNext());
 							VoiceElement e = it.next();
-							assertEquals(mp(staff, measure, voice, fr(element, 4), element), it.getMp());
-							assertEquals(fr(1, 4), e.getDuration());
+							assertEquals(mp(staff, measure, voice, Companion.fr(element, 4), element), it.getMp());
+							assertEquals(Companion.fr(1, 4), e.getDuration());
 						}
 					}
 				}
@@ -41,8 +41,8 @@ public class VoiceElementIteratorTest {
 					//expect a full rest
 					assertTrue(it.hasNext());
 					VoiceElement e = it.next();
-					assertEquals(mp(staff, measure, 0, _0, 0), it.getMp());
-					assertEquals(fr(1), e.getDuration());
+					assertEquals(mp(staff, measure, 0, Companion.get_0(), 0), it.getMp());
+					assertEquals(Companion.fr(1), e.getDuration());
 				}
 			} 
 		}
@@ -64,13 +64,13 @@ public class VoiceElementIteratorTest {
 					for (int voice : range(2)) {
 						cursor.setMp(atElement(staff, measure, voice, 0));
 						for (int i = 0; i < 4; i++)
-							cursor.write(new Rest(fr(1, 4)));
+							cursor.write(new Rest(Companion.fr(1, 4)));
 					}
 				}
 				else {
 					//full rest
 					cursor.setMp(atElement(staff, measure, 0, 0));
-					cursor.write(new Rest(fr(1)));
+					cursor.write(new Rest(Companion.fr(1)));
 				}
 			}
 		}

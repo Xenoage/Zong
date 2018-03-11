@@ -60,14 +60,14 @@ public class Webserver {
 		try {
 			instance.join();
 		} catch (InterruptedException ex) {
-			Log.log(remark("Server interrupted."));
+			Log.INSTANCE.log(Companion.remark("Server interrupted."));
 		}
 	}
 
 	public Webserver() {
 		//init IO and logging
 		JseZongPlatformUtils.init(filename);
-		Log.init(new DesktopLogProcessing(Zong.getNameAndVersion(projectName)));
+		Log.INSTANCE.init(new DesktopLogProcessing(Zong.getNameAndVersion(projectName)));
 		Err.init(new BasicErrorProcessing());
 
 		//load settings
@@ -81,14 +81,14 @@ public class Webserver {
 		try {
 			openDBConnection();
 		} catch (Exception ex) {
-			handle(fatal("Could not open DB connection", ex));
+			handle(Companion.fatal("Could not open DB connection", ex));
 		}
 
 		//init audio engine
 		try {
 			SynthManager.init(true);
 		} catch (MidiUnavailableException ex) {
-			handle(fatal("Could not init audio engine", ex));
+			handle(Companion.fatal("Could not init audio engine", ex));
 		}
 
 		//server
@@ -118,9 +118,9 @@ public class Webserver {
 			server.start();
 			String log = "Server started. Listening on port " + port + ".";
 			System.out.println(log);
-			log(remark(log));
+			INSTANCE.log(Companion.remark(log));
 		} catch (Exception ex) {
-			handle(fatal(ex));
+			handle(Companion.fatal(ex));
 		}
 	}
 
@@ -140,7 +140,7 @@ public class Webserver {
 			server.stop();
 
 		} catch (Exception ex) {
-			handle(fatal(ex));
+			handle(Companion.fatal(ex));
 		}
 	}
 
@@ -167,19 +167,19 @@ public class Webserver {
 			//new database?
 			boolean newDB = !(new File("data/db/" + getSetting("dbdatabase") + ".h2.db").exists());
 			//open database
-			Log.log(remark("Open connection to database..."));
+			Log.INSTANCE.log(Companion.remark("Open connection to database..."));
 			Class.forName("org.h2.Driver");
 			dbConnection = DriverManager.getConnection("jdbc:h2:data/db/" + getSetting("dbdatabase"),
 				getSetting("dbuser"), getSetting("dbpassword"));
-			Log.log(remark("Connection established"));
+			Log.INSTANCE.log(Companion.remark("Connection established"));
 			//init
 			if (newDB)
 				DBInit.initDatabase(dbConnection);
 		} catch (ClassNotFoundException ex) {
-			handle(fatal("Could not find JDBC driver for MySQL", ex));
+			handle(Companion.fatal("Could not find JDBC driver for MySQL", ex));
 			throw new ServletException("See log file");
 		} catch (SQLException ex) {
-			handle(fatal("SQLException: " + ex.getMessage(), ex));
+			handle(Companion.fatal("SQLException: " + ex.getMessage(), ex));
 			throw new ServletException("See log file");
 		}
 	}
@@ -190,11 +190,11 @@ public class Webserver {
 	public Connection getDBConnection() {
 		try {
 			if (dbConnection.isClosed()) {
-				Log.log(remark("Database connection is closed. Trying to reopen the connection..."));
+				Log.INSTANCE.log(Companion.remark("Database connection is closed. Trying to reopen the connection..."));
 				openDBConnection();
 			}
 		} catch (Exception ex) {
-			handle(fatal("Exception: " + ex.getMessage(), ex));
+			handle(Companion.fatal("Exception: " + ex.getMessage(), ex));
 			throw new RuntimeException(ex);
 		}
 		return dbConnection;

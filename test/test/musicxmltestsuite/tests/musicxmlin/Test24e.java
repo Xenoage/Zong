@@ -25,7 +25,7 @@ public class Test24e
 		Fraction[][] startBeats = expectedStavesBeats;
 		assertEquals(startBeats[0][0], MP.getMP(score.getVoice(mp0).getElement(0)).getBeat());
 		assertEquals(startBeats[0][1], MP.getMP(score.getVoice(mp0).getElement(1)).getBeat());
-		assertEquals(fr(2, 4), score.getVoice(mp0.withStaff(1)).getElement(0).getDuration()); //half rest
+		assertEquals(Companion.fr(2, 4), score.getVoice(mp0.withStaff(1)).getElement(0).getDuration()); //half rest
 		assertEquals(startBeats[1][0], MP.getMP(score.getVoice(mp0.withStaff(1)).getElement(1)).getBeat());
 		assertEquals(startBeats[1][1], MP.getMP(score.getVoice(mp0.withStaff(1)).getElement(2)).getBeat());
 	}

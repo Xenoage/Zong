@@ -25,20 +25,20 @@ public interface Base24e
 	static Chord[][] getExpectedStavesChords() {
 		Chord[][] ret = {
 			{ //staff 0
-				ch(fr(2, 4), pi('E', 0, 5)),
-				ch(fr(2, 4), pi('E', 0, 5))
+				ch(Companion.fr(2, 4), pi('E', 0, 5)),
+				ch(Companion.fr(2, 4), pi('E', 0, 5))
 			},
 			{ //staff 1
-				gr(fr(1, 16), false, pi('G', 0, 5)),
-				gr(fr(1, 16), false, pi('A', 0, 5))
+				gr(Companion.fr(1, 16), false, pi('G', 0, 5)),
+				gr(Companion.fr(1, 16), false, pi('A', 0, 5))
 			}};
 		new BeamAdd(beamFromChordsUnchecked(alist(ret[0][0], ret[0][1]))).execute();
 		return ret;
 	}
 	
 	Fraction[][] expectedStavesBeats = {
-		{ _0, fr(2, 4) }, //staff 0
-		{ fr(2, 4), fr(2, 4) }, //staff 1
+		{Companion.get_0(), Companion.fr(2, 4) }, //staff 0
+		{ Companion.fr(2, 4), Companion.fr(2, 4) }, //staff 1
 	};
 
 }

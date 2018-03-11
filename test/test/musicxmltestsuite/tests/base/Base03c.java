@@ -13,5 +13,5 @@ public interface Base03c
 	}
 	
 	Fraction[] expectedDurations = new Fraction[] {
-		fr(1, 4), fr(1, 4), fr(1, 4), fr(1, 4), fr(1, 2), fr(1, 2) };
+		Companion.fr(1, 4), Companion.fr(1, 4), Companion.fr(1, 4), Companion.fr(1, 4), Companion.fr(1, 2), Companion.fr(1, 2) };
 }

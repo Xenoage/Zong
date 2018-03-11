@@ -30,18 +30,18 @@ public class ColumnElementWriteTest {
 		Barline b2 = Barline.barlineRegular();
 		Barline b3 = Barline.barline(BarlineStyle.LightHeavy);
 		cmd.execute(new ColumnElementWrite(b1, column2, null, MeasureSide.Left));
-		cmd.execute(new ColumnElementWrite(b2, column2, fr(1, 4), null));
+		cmd.execute(new ColumnElementWrite(b2, column2, Companion.fr(1, 4), null));
 		cmd.execute(new ColumnElementWrite(b3, column2, null, MeasureSide.Right));
 		assertEquals(b1, column2.getStartBarline());
-		assertEquals(b2, column2.getMiddleBarlines().get(fr(1, 4)));
+		assertEquals(b2, column2.getMiddleBarlines().get(Companion.fr(1, 4)));
 		assertEquals(b3, column2.getEndBarline());
 		//overwrite middle barline
 		Barline b4 = Barline.barlineRegular();
-		cmd.execute(new ColumnElementWrite(b4, column2, fr(1, 4), null));
-		assertEquals(b4, column2.getMiddleBarlines().get(fr(1, 4)));
+		cmd.execute(new ColumnElementWrite(b4, column2, Companion.fr(1, 4), null));
+		assertEquals(b4, column2.getMiddleBarlines().get(Companion.fr(1, 4)));
 		//undo. b2 should be here again
 		cmd.undo();
-		assertEquals(b2, column2.getMiddleBarlines().get(fr(1, 4)));
+		assertEquals(b2, column2.getMiddleBarlines().get(Companion.fr(1, 4)));
 		//undo all steps. the middle barline should not exist any more
 		cmd.undoMultipleSteps(3);
 		assertEquals(0, column2.getMiddleBarlines().size());

@@ -75,7 +75,7 @@ public final class LayoutSettingsReader {
 			}
 			r.close();
 		} catch (Exception ex) {
-			log(error("Could not read the input stream", ex));
+			INSTANCE.log(Companion.error("Could not read the input stream", ex));
 			throw new IOException(ex);
 			/*
 			//default values

@@ -57,7 +57,7 @@ import static com.xenoage.zong.player.Player.pApp;
 		//show the dialog
 		File file = fileChooser.showOpenDialog(ownerWindow);
 		if (file != null) {
-			log(remark("Dialog closed (OK), converting file \"" + file.getName() + "\""));
+			INSTANCE.log(Companion.remark("Dialog closed (OK), converting file \"" + file.getName() + "\""));
 			//save document directory
 			FileSettings.rememberDir(file);
 			//convert - TODO: show progress
@@ -87,7 +87,7 @@ import static com.xenoage.zong.player.Player.pApp;
 			}
 		}
 		else {
-			log(remark("Dialog closed (Cancel)"));
+			INSTANCE.log(Companion.remark("Dialog closed (Cancel)"));
 		}
 	}
 

@@ -134,7 +134,7 @@ public final class ChordReader {
 		MxlFullNoteContentType mxlFNCType = mxlFirstFullNote.getContent().getFullNoteContentType();
 
 		//duration. here, the first duration is the duration of the whole chord.
-		Fraction duration = _0;
+		Fraction duration = Companion.get_0();
 		if (mxlFirstNormalNote != null) {
 			duration = readDuration(mxlFirstNormalNote.getDuration(), context.getDivisions());
 		}
@@ -159,7 +159,7 @@ public final class ChordReader {
 			Grace grace = null;
 			if (mxlFirstGraceNote != null) {
 				//read grace duration from note-type ("eighth", "16th", ...)
-				Fraction graceDuration = fr(1, 8);
+				Fraction graceDuration = Companion.fr(1, 8);
 				if (mxlFirstNote.getNoteType() != null)
 					graceDuration = mxlFirstNote.getNoteType().getDuration();
 				boolean slash = mxlFirstGraceNote.getSlash() == MxlYesNo.Yes;

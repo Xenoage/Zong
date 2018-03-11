@@ -38,7 +38,7 @@ public class NotesNotatorTest {
 	 * Tests a C5, 1/4. Stem: left, down. Width: 1x quarter.
 	 */
 	@Test public void testSingleNoteC5() {
-		Chord chord = chord(pi(0, 0, 5), fr(1, 4));
+		Chord chord = chord(pi(0, 0, 5), Companion.fr(1, 4));
 		NotesNotation notes = testee.compute(chord, StemDirection.Down, cw, context);
 		assertEquals(0, notes.stemOffsetIs, Df);
 		assertEquals(n, notes.widthIs, Df);
@@ -52,7 +52,7 @@ public class NotesNotatorTest {
 	 * Tests a F4, 1/2. Stem: right, up. Width: 1x half.
 	 */
 	@Test public void testSingleNoteF4() {
-		Chord chord = chord(pi(3, 0, 4), fr(1, 2));
+		Chord chord = chord(pi(3, 0, 4), Companion.fr(1, 2));
 		NotesNotation notes = testee.compute(chord, StemDirection.Up, cw, context);
 		assertEquals(n, notes.stemOffsetIs, Df);
 		assertEquals(n, notes.widthIs, Df);
@@ -66,7 +66,7 @@ public class NotesNotatorTest {
 	 * Tests a C5/D5, 1/4. Stem: left, down. Width: 1x quarter.
 	 */
 	@Test public void testChordC5D5() {
-		Chord chord = chord(new Pitch[] { pi(0, 0, 5), pi(1, 0, 5) }, fr(1, 4));
+		Chord chord = chord(new Pitch[] { pi(0, 0, 5), pi(1, 0, 5) }, Companion.fr(1, 4));
 		NotesNotation notes = testee.compute(chord, StemDirection.Down, cw, context);
 		assertEquals(n, notes.stemOffsetIs, Df);
 		assertEquals(2 * n, notes.widthIs, Df);
@@ -85,7 +85,7 @@ public class NotesNotatorTest {
 	 */
 	@Test public void testChordC4E4G4() {
 		Chord chord = chord(new Pitch[] { pi(0, 0, 4), pi(2, 0, 4), pi(4, 0, 4) },
-			fr(3, 4));
+			Companion.fr(3, 4));
 		NotesNotation notes = testee.compute(chord, StemDirection.Up, cw, context);
 		assertEquals(n, notes.stemOffsetIs, Df);
 		assertEquals(n + dg, notes.widthIs, Df);
@@ -102,7 +102,7 @@ public class NotesNotatorTest {
 	 */
 	@Test public void testChordA4C5D5() {
 		Chord chord = chord(new Pitch[] { pi(5, 0, 4), pi(0, 0, 5), pi(1, 0, 5) },
-			fr(1, 4));
+			Companion.fr(1, 4));
 		NotesNotation notes = testee.compute(chord, StemDirection.Down, cw, context);
 		;
 		assertEquals(n, notes.stemOffsetIs, Df);
@@ -119,7 +119,7 @@ public class NotesNotatorTest {
 	 * Tests a G4-B5, 1/4. Stem: left, down. Width: 1x quarter.
 	 */
 	@Test public void testChordG4B5() {
-		Chord chord = chord(new Pitch[] { pi(4, 0, 4), pi(6, 0, 5) }, fr(1, 4));
+		Chord chord = chord(new Pitch[] { pi(4, 0, 4), pi(6, 0, 5) }, Companion.fr(1, 4));
 		NotesNotation notes = testee.compute(chord, StemDirection.Down, cw, context);
 		assertEquals(0, notes.stemOffsetIs, Df);
 		assertEquals(n, notes.widthIs, Df);
@@ -134,43 +134,43 @@ public class NotesNotatorTest {
 	 */
 	@Test public void testDotPositions() {
 		//C5: position 6
-		Chord chord = chord(pi(0, 0, 5), fr(3, 4));
+		Chord chord = chord(pi(0, 0, 5), Companion.fr(3, 4));
 		NotesNotation notes = testee.compute(chord, StemDirection.Down, cw, context);
 		assertEquals(1, notes.getDotsPerNoteCount());
 		assertEquals(1, notes.dotsLp.length);
 		assertEquals(5, notes.dotsLp[0]);
 		//B4: position 6
-		chord = chord(pi(6, 0, 4), fr(7, 8));
+		chord = chord(pi(6, 0, 4), Companion.fr(7, 8));
 		notes = testee.compute(chord, StemDirection.Down, cw, context);
 		assertEquals(2, notes.getDotsPerNoteCount());
 		assertEquals(1, notes.dotsLp.length);
 		assertEquals(5, notes.dotsLp[0]);
 		//D4: position -1
-		chord = chord(pi(1, 0, 4), fr(3, 4));
+		chord = chord(pi(1, 0, 4), Companion.fr(3, 4));
 		notes = testee.compute(chord, StemDirection.Up, cw, context);
 		assertEquals(1, notes.getDotsPerNoteCount());
 		assertEquals(1, notes.dotsLp.length);
 		assertEquals(-1, notes.dotsLp[0]);
 		//C4: position -1
-		chord = chord(pi(0, 0, 4), fr(3, 4));
+		chord = chord(pi(0, 0, 4), Companion.fr(3, 4));
 		notes = testee.compute(chord, StemDirection.Up, cw, context);
 		assertEquals(1, notes.getDotsPerNoteCount());
 		assertEquals(1, notes.dotsLp.length);
 		assertEquals(-1, notes.dotsLp[0]);
 		//B3: position -3
-		chord = chord(pi(6, 0, 3), fr(3, 4));
+		chord = chord(pi(6, 0, 3), Companion.fr(3, 4));
 		notes = testee.compute(chord, StemDirection.Up, cw, context);
 		assertEquals(1, notes.getDotsPerNoteCount());
 		assertEquals(1, notes.dotsLp.length);
 		assertEquals(-3, notes.dotsLp[0]);
 		//F4, F4: position 1
-		chord = chord(new Pitch[] { pi(3, 0, 4), pi(3, 0, 4) }, fr(7, 16));
+		chord = chord(new Pitch[] { pi(3, 0, 4), pi(3, 0, 4) }, Companion.fr(7, 16));
 		notes = testee.compute(chord, StemDirection.Down, cw, context);
 		assertEquals(2, notes.getDotsPerNoteCount());
 		assertEquals(1, notes.dotsLp.length);
 		assertEquals(1, notes.dotsLp[0]);
 		//F5, A5, B5: positions 7, 9, 11
-		chord = chord(new Pitch[] { pi(3, 0, 5), pi(5, 0, 5), pi(6, 0, 5) }, fr(3, 2));
+		chord = chord(new Pitch[] { pi(3, 0, 5), pi(5, 0, 5), pi(6, 0, 5) }, Companion.fr(3, 2));
 		notes = testee.compute(chord, StemDirection.Down, cw, context);
 		assertEquals(1, notes.getDotsPerNoteCount());
 		assertEquals(3, notes.dotsLp.length);
@@ -183,7 +183,7 @@ public class NotesNotatorTest {
 	 * Tests a C5/C5 (unison) chord, 1/4. Stem: left, down. Width: 2x quarter.
 	 */
 	@Test public void testChordC5C5() {
-		Chord chord = chord(new Pitch[] { pi(0, 0, 5), pi(0, 0, 5) }, fr(1, 4));
+		Chord chord = chord(new Pitch[] { pi(0, 0, 5), pi(0, 0, 5) }, Companion.fr(1, 4));
 		NotesNotation notes = testee.compute(chord, StemDirection.Down, cw, context);
 		assertEquals(n, notes.stemOffsetIs, Df);
 		assertEquals(2 * n, notes.widthIs, Df);

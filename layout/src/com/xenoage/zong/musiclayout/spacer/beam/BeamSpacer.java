@@ -36,14 +36,14 @@ public class BeamSpacer {
 		else {
 			//beam within a single measure, or an even more complicated beam, for which
 			//we have no special strategy
-			int staff = beam.getMp().staff;
+			int staff = beam.getMp().getStaff();
 			int staffLinesCount = score.getStaff(staff).getLinesCount();
 			return singleStaffBeamSpacer.compute(beam, systemSpacing, staffLinesCount);
 		}
 	}
 
 	List<ChordSpacing> getBeamChordSpacings(BeamNotation beam, SystemSpacing systemSpacing) {
-		val column = systemSpacing.getColumn(beam.mp.measure);
+		val column = systemSpacing.getColumn(beam.mp.getMeasure());
 		List<ChordSpacing> chords = alist(beam.element.size());
 		for (val chord : beam.chords)
 			chords.add((ChordSpacing) column.getElement(chord));

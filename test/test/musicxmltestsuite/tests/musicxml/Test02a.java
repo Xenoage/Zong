@@ -34,7 +34,7 @@ public class Test02a
 					assertEquals(MxlFullNoteContentType.Rest, note.getFullNote().getContent()
 						.getFullNoteContentType());
 					assertEquals("rest " + iDuration, expectedDurations[iDuration++],
-						fr(note.getDuration(), divisions * 4));
+						Companion.fr(note.getDuration(), divisions * 4));
 				}
 			}
 		}

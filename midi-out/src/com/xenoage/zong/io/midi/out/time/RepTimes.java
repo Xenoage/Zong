@@ -49,19 +49,19 @@ public final class RepTimes {
 		CList<Time> times = clist(timeMap.size());
 		long minTick = MAX_VALUE;
 		long maxTick = MIN_VALUE;
-		Time minTime = time(Integer.MAX_VALUE, _0);
-		Time maxTime = time(-1, _0);
+		Time minTime = time(Integer.MAX_VALUE, Companion.get_0());
+		Time maxTime = time(-1, Companion.get_0());
 		long minMs = MAX_VALUE;
 		long maxMs = MIN_VALUE;
 		for (val tick : timeMap.getKeys1()) {
 			val time = timeMap.getBy1(tick);
 			times.add(time.get2());
-			minTick = min(minTick, time.get1());
-			maxTick = max(maxTick, time.get1());
-			minTime = min(minTime, time.get2());
-			maxTime = max(maxTime, time.get2());
-			minMs = min(minMs, time.get3());
-			maxMs = max(maxMs, time.get3());
+			minTick = INSTANCE.min(minTick, time.get1());
+			maxTick = INSTANCE.max(maxTick, time.get1());
+			minTime = INSTANCE.min(minTime, time.get2());
+			maxTime = INSTANCE.max(maxTime, time.get2());
+			minMs = INSTANCE.min(minMs, time.get3());
+			maxMs = INSTANCE.max(maxMs, time.get3());
 		}
 		Collections.sort(times);
 		this.timesSorted = times.close();

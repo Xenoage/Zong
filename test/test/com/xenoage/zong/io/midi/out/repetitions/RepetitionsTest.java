@@ -35,7 +35,7 @@ public class RepetitionsTest {
 	}
 
 	public static Repetition repetition(int startMeasure, int endMeasure) {
-		return new Repetition(time(startMeasure, _0), time(endMeasure, _0));
+		return new Repetition(time(startMeasure, Companion.get_0()), time(endMeasure, Companion.get_0()));
 	}
 
 }

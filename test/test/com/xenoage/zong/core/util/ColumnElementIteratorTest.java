@@ -39,7 +39,7 @@ public class ColumnElementIteratorTest {
 			//middle barline is reported first (known beat)
 			assertTrue(it.hasNext());
 			ColumnElement e = it.next();
-			assertEquals(atBeat(unknown, measure, unknown, fr(1, 4)), it.getMp());
+			assertEquals(atBeat(unknown, measure, unknown, Companion.fr(1, 4)), it.getMp());
 			assertEquals(Regular, ((Barline) e).getStyle());
 			//time signature
 			assertTrue(it.hasNext());
@@ -63,9 +63,9 @@ public class ColumnElementIteratorTest {
 		Score score = new Score();
 		Cursor cursor = new Cursor(score, MP.mp0, true);
 		for (int measure : new int[]{1, 3}) {
-			cursor.setMp(mp(unknown, measure, 0, _0, 0));
+			cursor.setMp(mp(unknown, measure, 0, Companion.get_0(), 0));
 			cursor.write(new TimeSignature(time_4_4));
-			cursor.setMp(mp(unknown, measure, unknown, fr(1, 4), 0));
+			cursor.setMp(mp(unknown, measure, unknown, Companion.fr(1, 4), 0));
 			cursor.write(barlineRegular());
 			ColumnHeader column = score.getColumnHeader(measure);
 			column.setEndBarline(barline(LightLight));

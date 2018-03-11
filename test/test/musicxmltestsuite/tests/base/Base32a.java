@@ -36,37 +36,37 @@ public interface Base32a
 	static List<Tuple2<MP, ?>> getExpectedAnnotations() {
 		//TODO: not all notations are supported yet. return only those which are supported now
 		return alist(
-			t(atBeat(0, 0, 0, fr(0, 4)), fermata(Placement.Above)),
-			t(atBeat(0, 0, 0, fr(1, 4)), new Fermata()),
+			t(atBeat(0, 0, 0, Companion.fr(0, 4)), fermata(Placement.Above)),
+			t(atBeat(0, 0, 0, Companion.fr(1, 4)), new Fermata()),
 			//TODO: angled fermata
 			//TODO: square fermata
 			//t(atBeat(0, 1, 0, fr(0, 4)), fermata(Placement.Below)),
 			//TODO: arp.
 			//TODO: non.arp.
 			//TODO: acc.mark
-			t(atBeat(0, 2, 0, fr(0, 4)), new Articulation(ArticulationType.Accent)),
-			t(atBeat(0, 2, 0, fr(1, 4)), new Articulation(ArticulationType.Marcato)),
-			t(atBeat(0, 2, 0, fr(2, 4)), new Articulation(ArticulationType.Staccato)),
-			t(atBeat(0, 2, 0, fr(3, 4)), new Articulation(ArticulationType.Tenuto)),
+			t(atBeat(0, 2, 0, Companion.fr(0, 4)), new Articulation(ArticulationType.Accent)),
+			t(atBeat(0, 2, 0, Companion.fr(1, 4)), new Articulation(ArticulationType.Marcato)),
+			t(atBeat(0, 2, 0, Companion.fr(2, 4)), new Articulation(ArticulationType.Staccato)),
+			t(atBeat(0, 2, 0, Companion.fr(3, 4)), new Articulation(ArticulationType.Tenuto)),
 			//TODO: det.-leg.
-			t(atBeat(0, 3, 0, fr(1, 4)), new Articulation(ArticulationType.Staccatissimo)),
+			t(atBeat(0, 3, 0, Companion.fr(1, 4)), new Articulation(ArticulationType.Staccatissimo)),
 			//TODO: ... more notations ...
-			t(atBeat(0, 6, 0, fr(0, 4)), new Ornament(OrnamentType.Trill)),
-			t(atBeat(0, 6, 0, fr(1, 4)), new Ornament(OrnamentType.Turn)),
+			t(atBeat(0, 6, 0, Companion.fr(0, 4)), new Ornament(OrnamentType.Trill)),
+			t(atBeat(0, 6, 0, Companion.fr(1, 4)), new Ornament(OrnamentType.Turn)),
 			//TODO: del.turn
-			t(atBeat(0, 6, 0, fr(3, 4)), new Ornament(OrnamentType.InvertedTurn)),
+			t(atBeat(0, 6, 0, Companion.fr(3, 4)), new Ornament(OrnamentType.InvertedTurn)),
 			//TODO: ... more notations ...
-			t(atBeat(0, 8, 0, fr(0, 4)), new Ornament(OrnamentType.Mordent)),
-			t(atBeat(0, 8, 0, fr(1, 4)), new Ornament(OrnamentType.InvertedMordent)),
+			t(atBeat(0, 8, 0, Companion.fr(0, 4)), new Ornament(OrnamentType.Mordent)),
+			t(atBeat(0, 8, 0, Companion.fr(1, 4)), new Ornament(OrnamentType.InvertedMordent)),
 			//TODO: ... more notations ...
-			t(atBeat(0, 21, 0, fr(0, 4)), new Dynamic(DynamicValue.f)),
-			t(atBeat(0, 21, 0, fr(1, 4)), new Dynamic(DynamicValue.ppp)),
-			t(atBeat(0, 21, 0, fr(2, 4)), new Dynamic(DynamicValue.sfp)),
+			t(atBeat(0, 21, 0, Companion.fr(0, 4)), new Dynamic(DynamicValue.f)),
+			t(atBeat(0, 21, 0, Companion.fr(1, 4)), new Dynamic(DynamicValue.ppp)),
+			t(atBeat(0, 21, 0, Companion.fr(2, 4)), new Dynamic(DynamicValue.sfp)),
 			//TODO: other dynamic "sfffz"
-			t(atBeat(0, 22, 0, fr(0, 4)), alist(
+			t(atBeat(0, 22, 0, Companion.fr(0, 4)), alist(
 				articulation(ArticulationType.Staccato, Placement.Above),
 				articulation(ArticulationType.Marcato, Placement.Above))),
-			t(atBeat(0, 22, 0, fr(1, 4)), alist(
+			t(atBeat(0, 22, 0, Companion.fr(1, 4)), alist(
 				articulation(ArticulationType.Staccato, Placement.Above),
 				articulation(ArticulationType.Accent, Placement.Below),
 				articulation(ArticulationType.Tenuto, Placement.Below))));

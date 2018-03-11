@@ -41,8 +41,8 @@ public class BeamTest {
 	
 	@Test public void getMaxLinesCountTest_Grace() {
 		List<Chord> chords = alist();
-		chords.add(graceChord(pi(0, 4), fr(1, 32)));
-		chords.add(graceChord(pi(0, 4), fr(1, 32)));
+		chords.add(graceChord(pi(0, 4), Companion.fr(1, 32)));
+		chords.add(graceChord(pi(0, 4), Companion.fr(1, 32)));
 		Beam beam = beamFromChordsUnchecked(chords);
 		assertEquals(3, beam.getMaxLinesCount());
 	}

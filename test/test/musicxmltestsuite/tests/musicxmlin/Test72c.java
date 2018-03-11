@@ -37,7 +37,7 @@ public class Test72c
 		PitchedInstrument instrument = (PitchedInstrument) part.getFirstInstrument();
 		assertEquals(expectedTransposes[0], instrument.getTranspose());
 		//instrument change in measure 1
-		InstrumentChange instrChange = score.getMeasure(MP.atMeasure(0, 1)).getInstrumentChanges().get(_0);
+		InstrumentChange instrChange = score.getMeasure(MP.atMeasure(0, 1)).getInstrumentChanges().get(Companion.get_0());
 		instrument = (PitchedInstrument) instrChange.getInstrument();
 		assertEquals(expectedTransposes[1], instrument.getTranspose());
 	}

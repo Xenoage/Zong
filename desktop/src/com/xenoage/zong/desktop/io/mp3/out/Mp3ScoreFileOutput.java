@@ -46,7 +46,7 @@ public class Mp3ScoreFileOutput
 		try {
 			Runtime.getRuntime().exec("lame");
 		} catch (Exception ex) {
-			handle(warning(Lang.get(Voc.CouldNotFindLAME, Zong.website + "/lame")));
+			handle(Companion.warning(Lang.get(Voc.CouldNotFindLAME, Zong.website + "/lame")));
 		}
 		//save temporary WAVE file first
 		File tempWAVFile = File.createTempFile(Mp3ScoreFileOutput.class.getName(), ".wav");

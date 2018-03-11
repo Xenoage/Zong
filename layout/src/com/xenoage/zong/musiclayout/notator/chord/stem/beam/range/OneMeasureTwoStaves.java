@@ -33,7 +33,7 @@ public class OneMeasureTwoStaves
 		StemDirection[] dirs = new StemDirection[beam.size()];
 		int upperStaffIndex = beam.getUpperStaffIndex();
 		for (int iChord : range(dirs)) {
-			int staffIndex = MP.getMP(beam.getChord(iChord)).staff;
+			int staffIndex = MP.getMP(beam.getChord(iChord)).getStaff();
 			dirs[iChord] = (staffIndex == upperStaffIndex ? Down : Up);
 		}
 		return dirs;

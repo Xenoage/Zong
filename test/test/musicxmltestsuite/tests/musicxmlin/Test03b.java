@@ -26,19 +26,19 @@ public class Test03b
 		Voice voice = measure.getVoice(0);
 		assertEquals(2, voice.getElements().size());
 		assertEquals(pi(0, 0, 4), ((Chord) voice.getElement(0)).getNotes().get(0).getPitch());
-		assertEquals(fr(1, 4), voice.getElement(0).getDuration());
+		assertEquals(Companion.fr(1, 4), voice.getElement(0).getDuration());
 		assertEquals(pi(0, 0, 4), ((Chord) voice.getElement(1)).getNotes().get(0).getPitch());
-		assertEquals(fr(1, 4), voice.getElement(1).getDuration());
+		assertEquals(Companion.fr(1, 4), voice.getElement(1).getDuration());
 		//check second voice
 		//in Zong!, there is no "empty" space in voices. Instead, an invisible rest is used
 		voice = measure.getVoice(1);
 		assertTrue(voice.getElement(0) instanceof Rest);
 		assertTrue(((Rest) voice.getElement(0)).isHidden());
-		assertEquals(fr(1, 4), voice.getElement(0).getDuration());
+		assertEquals(Companion.fr(1, 4), voice.getElement(0).getDuration());
 		assertEquals(pi(5, 0, 3), ((Chord) voice.getElement(1)).getNotes().get(0).getPitch());
-		assertEquals(fr(1, 4), voice.getElement(1).getDuration());
+		assertEquals(Companion.fr(1, 4), voice.getElement(1).getDuration());
 		assertEquals(pi(5, 0, 3), ((Chord) voice.getElement(2)).getNotes().get(0).getPitch());
-		assertEquals(fr(1, 4), voice.getElement(2).getDuration());
+		assertEquals(Companion.fr(1, 4), voice.getElement(2).getDuration());
 	}
 
 }

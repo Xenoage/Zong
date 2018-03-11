@@ -58,10 +58,10 @@ public final class PrintProcess
 		pj.setPrintable(this);
 		pj.setPageable(this);
 		try {
-			log(remark("Opening print dialog..."));
+			INSTANCE.log(Companion.remark("Opening print dialog..."));
 			pj.setCopies(1);
 			if (pj.printDialog()) {
-				log(remark("Starting print..."));
+				INSTANCE.log(Companion.remark("Starting print..."));
 				pj.print();
 			}
 		} catch (PrinterException ex) {
@@ -101,7 +101,7 @@ public final class PrintProcess
 		}
 
 		//print page
-		log(remark("Printing page " + pageIndex + "..."));
+		INSTANCE.log(Companion.remark("Printing page " + pageIndex + "..."));
 		Graphics2D g2d = (Graphics2D) g;
 		Size2f pageSize = layout.getPages().get(pageIndex).getFormat().getSize();
 		LayoutRenderer.paintToCanvas(layout, pageIndex, new AwtCanvas(g2d, pageSize, CanvasFormat.Vector,

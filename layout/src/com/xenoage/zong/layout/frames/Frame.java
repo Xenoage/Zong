@@ -65,7 +65,7 @@ import com.xenoage.zong.layout.Page;
 	public final Point2f getAbsolutePosition() {
 		Point2f ret = position;
 		if (parent != null) {
-			ret = MathUtils.rotate(ret, parent.getAbsoluteRotation());
+			ret = MathUtils.INSTANCE.rotate(ret, parent.getAbsoluteRotation());
 			ret = ret.add(parent.getAbsolutePosition());
 		}
 		return ret;
@@ -130,7 +130,7 @@ import com.xenoage.zong.layout.Page;
 			if (force || (distanceSq <= radius * radius)) {
 				//the given point could be within the frame. rotate the
 				//point and check again.
-				pRel = MathUtils.rotate(pRel, -rot);
+				pRel = MathUtils.INSTANCE.rotate(pRel, -rot);
 				if (force || (pRel.x >= -hw && pRel.x <= +hw && pRel.y >= -hh && pRel.y <= +hh)) {
 					return new FP(this, new Point2f(pRel.x, pRel.y));
 				}
@@ -150,7 +150,7 @@ import com.xenoage.zong.layout.Page;
 		Frame frame = this;
 		if (parent != null) {
 			if (frame.rotation != 0f)
-				ret = MathUtils.rotate(ret, frame.rotation);
+				ret = MathUtils.INSTANCE.rotate(ret, frame.rotation);
 			ret = ret.add(frame.position);
 		}
 		return parent.getPagePosition(p);

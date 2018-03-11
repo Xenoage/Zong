@@ -46,13 +46,13 @@ import com.xenoage.zong.commands.desktop.app.DocumentOpen;
 		//show the dialog
 		File file = fileChooser.showOpenDialog(ownerWindow);
 		if (file != null) {
-			log(remark("Dialog closed (OK), opening file \"" + file.getName() + "\""));
+			INSTANCE.log(Companion.remark("Dialog closed (OK), opening file \"" + file.getName() + "\""));
 			new DocumentOpen(file.getAbsolutePath()).execute();
 			//save document directory
 			FileSettings.rememberDir(file);
 		}
 		else {
-			log(remark("Dialog closed (Cancel)"));
+			INSTANCE.log(Companion.remark("Dialog closed (Cancel)"));
 		}
 	}
 

@@ -50,7 +50,7 @@ import static com.xenoage.zong.io.musicxml.in.util.CommandPerformer.execute;
 public final class Context {
 
 	private Score score;
-	private MP mp = MP.mp0;
+	private MP mp = MP.Companion.getMp0();
 	private int divisions = 1;
 
 	//current system and page index. only valid if system breaks and page breaks
@@ -86,11 +86,11 @@ public final class Context {
 	 * Moves the current beat within the current part and measure.
 	 */
 	public void moveCurrentBeat(Fraction beat) {
-		Fraction newBeat = this.mp.beat.add(beat);
+		Fraction newBeat = this.mp.getBeat().add(beat);
 		//never step back behind 0
 		if (newBeat.getNumerator() < 0) {
 			reportError("Step back behind beat 0");
-			newBeat = _0;
+			newBeat = Companion.get_0();
 		}
 		this.mp = this.mp.withBeat(newBeat);
 	}
@@ -139,7 +139,7 @@ public final class Context {
 	 */
 	public StavesRange getPartStaffIndices() {
 		StavesList stavesList = getScore().getStavesList();
-		Part part = stavesList.getPartByStaffIndex(mp.staff);
+		Part part = stavesList.getPartByStaffIndex(mp.getStaff());
 		return stavesList.getPartStaffIndices(part);
 	}
 
@@ -157,7 +157,7 @@ public final class Context {
 	 */
 	public Part beginNewPart(int partIndex) {
 		Part part = score.getStavesList().getParts().get(partIndex);
-		this.mp = atBeat(score.getStavesList().getPartStaffIndices(part).getStart(), 0, 0, _0);
+		this.mp = Companion.atBeat(score.getStavesList().getPartStaffIndices(part).getStart(), 0, 0, Companion.get_0());
 		List<List<String>> voiceMappings = alist();
 		for (int i = 0; i < part.getStavesCount(); i++)
 			voiceMappings.add(new ArrayList<>());
@@ -171,7 +171,7 @@ public final class Context {
 	 * Call this method when a new measure begins.
 	 */
 	public void beginNewMeasure(int measureIndex) {
-		this.mp = atBeat(this.mp.staff, measureIndex, 0, _0);
+		this.mp = Companion.atBeat(this.mp.getStaff(), measureIndex, 0, Companion.get_0());
 	}
 
 	
@@ -238,12 +238,12 @@ public final class Context {
 		}
 		if (slur.type == SlurType.Slur) {
 			//slur must end after the start chord
-			return gap.compareTo(_0) >= 0;
+			return gap.compareTo(Companion.get_0()) >= 0;
 		}
 		else if (slur.type == SlurType.Tie) {
 			//tie must end directly after the start chord (no gap), since
 			//it is played as a single note without a break inbetween
-			return gap.compareTo(_0) == 0;
+			return gap.compareTo(Companion.get_0()) == 0;
 		}
 		return false;
 	}
@@ -359,7 +359,7 @@ public final class Context {
 	 * Writes the given {@link ColumnElement} at the given measure.
 	 */
 	public void writeColumnElement(ColumnElement element, int measure) {
-		new ColumnElementWrite(element, score.getColumnHeader(measure), MP.unknownBeat, null).execute();
+		new ColumnElementWrite(element, score.getColumnHeader(measure), MP.Companion.getUnknownBeat(), null).execute();
 	}
 	
 	/**
@@ -367,8 +367,8 @@ public final class Context {
 	 * @param side     the side of the measure. If null, the current beat is used.
 	 */
 	public void writeColumnElement(ColumnElement element, MeasureSide side) {
-		Fraction beat = (side == null ? mp.beat : MP.unknownBeat);
-		new ColumnElementWrite(element, score.getColumnHeader(mp.measure), beat, side).execute();
+		Fraction beat = (side == null ? mp.getBeat() : MP.Companion.getUnknownBeat());
+		new ColumnElementWrite(element, score.getColumnHeader(mp.getMeasure()), beat, side).execute();
 	}
 
 	/**
@@ -405,7 +405,7 @@ public final class Context {
 	 * Moves the cursor forward by one index.
 	 */
 	public void moveCursorForward(Fraction duration) {
-		this.mp = this.mp.withBeat(this.mp.beat.add(duration));
+		this.mp = this.mp.withBeat(this.mp.getBeat().add(duration));
 	}
 
 	/**
@@ -439,7 +439,7 @@ public final class Context {
 	 */
 	public void writeInstrumentChange(String instrumentID) {
 		//find instrument
-		Part part = getScore().getStavesList().getPartByStaffIndex(mp.staff);
+		Part part = getScore().getStavesList().getPartByStaffIndex(mp.getStaff());
 		Instrument newInstrument = null;
 		for (Instrument instr : it(part.getInstruments())) {
 			if (instr.getId().equals(instrumentID)) {
@@ -452,12 +452,12 @@ public final class Context {
 			reportError("Unknown instrument: \"" + instrumentID + "\"");
 		}
 		//apply instrument change
-		new MeasureElementWrite(new InstrumentChange(newInstrument), score.getMeasure(this.mp), mp.beat).execute();
+		new MeasureElementWrite(new InstrumentChange(newInstrument), score.getMeasure(this.mp), mp.getBeat()).execute();
 	}
 
 	public void openVolta(Range numbers, String caption) {
 		if (openElements.getOpenVolta() == null)
-			openElements.setOpenVolta(new OpenVolta(mp.measure, numbers, caption));
+			openElements.setOpenVolta(new OpenVolta(mp.getMeasure(), numbers, caption));
 	}
 
 	public ClosedVolta closeVolta(boolean rightHook) {
@@ -466,7 +466,7 @@ public final class Context {
 			reportError("No volta open");
 			return null;
 		}
-		int length = mp.measure - openVolta.startMeasure + 1;
+		int length = mp.getMeasure() - openVolta.startMeasure + 1;
 		if (length < 1) {
 			reportError("Invalid volta");
 			return null;
