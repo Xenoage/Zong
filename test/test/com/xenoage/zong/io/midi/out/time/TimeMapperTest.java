@@ -173,9 +173,9 @@ public class TimeMapperTest {
 		int internalMeasure = measure - playRangeStartMeasure;
 		if (isAlsoLastBeatInPreviosMeasure)
 			timeMap.addTimeNoMs(resolution * ((playRangeMeasureOffset + internalMeasure - 1) * 4 + 4),
-					new RepTime(repetition, time(measure - 1, Companion.get_1())));
+					new RepTime(repetition, Companion.time(measure - 1, Companion.get_1())));
 		timeMap.addTimeNoMs(resolution * ((playRangeMeasureOffset + internalMeasure) * 4 + quarterBeat),
-				new RepTime(repetition, time(measure, Companion.fr(quarterBeat, 4))));
+				new RepTime(repetition, Companion.time(measure, Companion.fr(quarterBeat, 4))));
 	}
 
 	/**

@@ -49,8 +49,8 @@ public final class RepTimes {
 		CList<Time> times = clist(timeMap.size());
 		long minTick = MAX_VALUE;
 		long maxTick = MIN_VALUE;
-		Time minTime = time(Integer.MAX_VALUE, Companion.get_0());
-		Time maxTime = time(-1, Companion.get_0());
+		Time minTime = Companion.time(Integer.MAX_VALUE, Companion.get_0());
+		Time maxTime = Companion.time(-1, Companion.get_0());
 		long minMs = MAX_VALUE;
 		long maxMs = MIN_VALUE;
 		for (val tick : timeMap.getKeys1()) {

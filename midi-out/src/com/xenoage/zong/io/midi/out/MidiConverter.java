@@ -160,7 +160,7 @@ public class MidiConverter<T> {
 
 				val rep = repetitions.get(iRepetition);
 				int transpose = 0; //TODO
-				for (int iMeasure : range(rep.start.measure, rep.end.measure)) {
+				for (int iMeasure : range(rep.start.getMeasure(), rep.end.getMeasure())) {
 
 					if (iMeasure == score.getMeasuresCount())
 						continue;
@@ -233,11 +233,11 @@ public class MidiConverter<T> {
 			Fraction duration = chord.getDuration();
 			val startBeat = voice.getBeat(chord);
 			val rep = repetitions.get(repetition);
-			if (false == rep.contains(time(voiceMp.measure, startBeat)))
+			if (false == rep.contains(Companion.time(voiceMp.measure, startBeat)))
 				continue; //start beat out of range: ignore element
 
 			//MIDI ticks
-			val startMidiTime = timeMap.getByRepTime(repetition, time(voiceMp.measure, startBeat));
+			val startMidiTime = timeMap.getByRepTime(repetition, Companion.time(voiceMp.measure, startBeat));
 			long startTick = startMidiTime.tick;
 			long endTick = startTick + durationToTick(duration, resolution);
 			long stopTick = endTick;
@@ -334,23 +334,23 @@ public class MidiConverter<T> {
 
 		for (int iRep : range(repetitions)) {
 			val rep = repetitions.get(iRep);
-			for (int iMeasure : range(rep.start.measure, rep.end.measure)) {
+			for (int iMeasure : range(rep.start.getMeasure(), rep.end.getMeasure())) {
 				TimeSignature timeSig = score.getHeader().getTimeAtOrBefore(iMeasure);
 
-				Fraction startBeat = (rep.start.measure == iMeasure ? rep.start.beat : Companion.get_0());
-				Fraction endBeat = (rep.end.measure == iMeasure ? rep.end.beat : score.getMeasureBeats(iMeasure));
+				Fraction startBeat = (rep.start.getMeasure() == iMeasure ? rep.start.getBeat() : Companion.get_0());
+				Fraction endBeat = (rep.end.getMeasure() == iMeasure ? rep.end.getBeat() : score.getMeasureBeats(iMeasure));
 
 				if (timeSig != null) {
 
 					boolean[] accentuation = timeSig.getType().getBeatsAccentuation();
 					int timeDenominator = timeSig.getType().getDenominator();
-					long measureStartTick = timeMap.getByRepTime(iRep, time(iMeasure, Companion.get_0())).tick;
+					long measureStartTick = timeMap.getByRepTime(iRep, Companion.time(iMeasure, Companion.get_0())).tick;
 
 					for (int beatNumerator : range(timeSig.getType().getNumerator())) {
 
 						//compute start and stop tick
 						val beat = Companion.fr(beatNumerator, timeDenominator);
-						val time = time(iMeasure, beat);
+						val time = Companion.time(iMeasure, beat);
 						if (false == rep.contains(time))
 							continue;
 

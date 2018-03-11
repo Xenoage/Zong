@@ -341,7 +341,7 @@ public class RepetitionsFinderTest {
 	}
 
 	private Time bp(int measure, Fraction beat) {
-		return Time.time(measure, beat);
+		return Time.Companion.time(measure, beat);
 	}
 
 }

@@ -113,32 +113,32 @@ public class DynamicsFinderTest {
 		val d = new DynamicsPeriodsBuilder();
 		//staff 0
 		d.addPeriodToStaff(new DynamicsPeriod(
-				time(0, Companion.get_0()), time(2, Companion.get_0()), new FixedDynamics(mp)), 0, 0);
+				Companion.time(0, Companion.get_0()), Companion.time(2, Companion.get_0()), new FixedDynamics(mp)), 0, 0);
 		d.addPeriodToStaff(new DynamicsPeriod(
-				time(2, Companion.get_0()), time(3, Companion.get_0()), new FixedDynamics(pp)), 0, 0);
+				Companion.time(2, Companion.get_0()), Companion.time(3, Companion.get_0()), new FixedDynamics(pp)), 0, 0);
 		d.addPeriodToStaff(new DynamicsPeriod(
-				time(1, Companion.get_0()), time(3, Companion.get_1$2()), new FixedDynamics(pp)), 0, 1);
+				Companion.time(1, Companion.get_0()), Companion.time(3, Companion.get_1$2()), new FixedDynamics(pp)), 0, 1);
 		d.addPeriodToStaff(new DynamicsPeriod(
-				time(3, Companion.get_1$2()), time(3, Companion.get_3$4()), new FixedDynamics(f)), 0, 1);
+				Companion.time(3, Companion.get_1$2()), Companion.time(3, Companion.get_3$4()), new FixedDynamics(f)), 0, 1);
 		d.addPeriodToStaff(new DynamicsPeriod(
-				time(3, Companion.get_3$4()), time(4, Companion.get_1$4()), new GradientDynamics(f, ff)), 0, 1); //ff: implicit target after f-cresc
+				Companion.time(3, Companion.get_3$4()), Companion.time(4, Companion.get_1$4()), new GradientDynamics(f, ff)), 0, 1); //ff: implicit target after f-cresc
 		d.addPeriodToStaff(new DynamicsPeriod(
-				time(4, Companion.get_1$4()), time(4, Companion.get_1$2()), new FixedDynamics(ff)), 0, 1);
+				Companion.time(4, Companion.get_1$4()), Companion.time(4, Companion.get_1$2()), new FixedDynamics(ff)), 0, 1);
 		d.addPeriodToStaff(new DynamicsPeriod(
-				time(4, Companion.get_1$2()), time(5, Companion.get_0()), new FixedDynamics(pp)), 0, 1);
+				Companion.time(4, Companion.get_1$2()), Companion.time(5, Companion.get_0()), new FixedDynamics(pp)), 0, 1);
 		/* TODO: ZONG-100
 		//voice 1 in staff 0
 		d.addPeriodToVoice(new DynamicsPeriod(
 				time(0, _1$2), time(3, _0), new FixedDynamics(mf)), 0, 1, 0); */ //only 1st time; we do not see the mf again
 		//staff 1
 		d.addPeriodToStaff(new DynamicsPeriod(
-				time(0, Companion.get_0()), time(2, Companion.get_0()), new GradientDynamics(ff, mp)), 1, 0);
+				Companion.time(0, Companion.get_0()), Companion.time(2, Companion.get_0()), new GradientDynamics(ff, mp)), 1, 0);
 		d.addPeriodToStaff(new DynamicsPeriod(
-				time(2, Companion.get_0()), time(3, Companion.get_0()), new FixedDynamics(mp)), 1, 0);
+				Companion.time(2, Companion.get_0()), Companion.time(3, Companion.get_0()), new FixedDynamics(mp)), 1, 0);
 		d.addPeriodToStaff(new DynamicsPeriod( // f remains, we do not jump in the middle of a cresc
-				time(1, Companion.get_0()), time(3, Companion.get_0()), new FixedDynamics(mp)), 1, 1);
+				Companion.time(1, Companion.get_0()), Companion.time(3, Companion.get_0()), new FixedDynamics(mp)), 1, 1);
 		d.addPeriodToStaff(new DynamicsPeriod(
-				time(3, Companion.get_0()), time(5, Companion.get_0()), new FixedDynamics(p)), 1, 1);
+				Companion.time(3, Companion.get_0()), Companion.time(5, Companion.get_0()), new FixedDynamics(p)), 1, 1);
 		return d.build();
 	}
 

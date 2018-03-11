@@ -94,18 +94,18 @@ public class SystemSpacingTest {
 		int lastMeasure = system.getEndMeasure();
 		//beat before first beat in measure 0 must return first beat
 		bo = getFirst(system.getColumn(0).beatOffsets);
-		xMm = system.getXMmAt(time(0, bo.beat.sub(Companion.fr(1, 4))));
+		xMm = system.getXMmAt(Companion.time(0, bo.beat.sub(Companion.fr(1, 4))));
 		expectedXMm = system.getMeasureStartMm(0) + bo.offsetMm;
 		assertEquals(expectedXMm, xMm, df);
 		//beat after last beat in last measure must return last beat
 		bo = getLast(system.getColumn(lastMeasure).beatOffsets);
-		xMm = system.getXMmAt(time(lastMeasure, bo.beat.add(Companion.fr(1, 4))));
+		xMm = system.getXMmAt(Companion.time(lastMeasure, bo.beat.add(Companion.fr(1, 4))));
 		expectedXMm = system.getMeasureStartMm(lastMeasure) + bo.offsetMm;
 		assertEquals(expectedXMm, xMm, df);
 		//i-th beat must return coordinate at i-th x-position
 		for (int iMeasure : range(lastMeasure + 1)) {
 			for (BeatOffset bo2 : system.getColumn(iMeasure).beatOffsets) {
-				xMm = system.getXMmAt(time(iMeasure, bo2.beat));
+				xMm = system.getXMmAt(Companion.time(iMeasure, bo2.beat));
 				expectedXMm = system.getMeasureStartMm(iMeasure) + bo2.offsetMm;
 				assertEquals(expectedXMm, xMm, df);
 			}

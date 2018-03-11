@@ -29,11 +29,11 @@ public final class Repetition {
 	 * this {@link Repetition} and before its end time.
 	 */
 	public boolean contains(Time time) {
-		if (time.measure > start.measure && time.measure < end.measure)
+		if (time.getMeasure() > start.getMeasure() && time.getMeasure() < end.getMeasure())
 			return true; //somewhere in the middle
-		else if (time.measure == start.measure && time.beat.compareTo(start.beat) >= 0)
+		else if (time.getMeasure() == start.getMeasure() && time.getBeat().compareTo(start.getBeat()) >= 0)
 			return true; //in the first measure, at or after the start beat
-		else if (time.measure == end.measure && time.beat.compareTo(end.beat) < 0)
+		else if (time.getMeasure() == end.getMeasure() && time.getBeat().compareTo(end.getBeat()) < 0)
 			return true; //in the last measure, before the start beat
 		else
 			return false; //outside the range
@@ -41,7 +41,7 @@ public final class Repetition {
 
 
 	@Override public String toString() {
-		return String.format("[%d;%s to %d;%s]", start.measure, start.beat, end.measure, end.beat);
+		return String.format("[%d;%s to %d;%s]", start.getMeasure(), start.getBeat(), end.getMeasure(), end.getBeat());
 	}
 
 }

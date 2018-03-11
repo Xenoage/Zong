@@ -85,8 +85,8 @@ public class RepetitionsFinder {
 
 		this.voltaGroups = new VoltaGroupFinder(score).findAllVoltaGroups();
 
-		Time start = time(0, Companion.get_0());
-		Time end = time(score.getMeasuresCount(), Companion.get_0());
+		Time start = Companion.time(0, Companion.get_0());
+		Time end = Companion.time(score.getMeasuresCount(), Companion.get_0());
 
 		collectJumps();
 
@@ -135,7 +135,7 @@ public class RepetitionsFinder {
 			if (isWithRepeats) {
 				for (val e : getInnerBarlines()) {
 					val innerBarline = e.element;
-					val eTime = time(currentMeasureIndex, e.beat);
+					val eTime = Companion.time(currentMeasureIndex, e.beat);
 					if (innerBarline.getRepeat().isBackward())
 						if (processBackwardRepeat(innerBarline, eTime))
 							continue nextMeasure;
@@ -144,7 +144,7 @@ public class RepetitionsFinder {
 
 			//backward repeat at measure end
 			val endBarline = measure.getEndBarline();
-			val endTime = time(currentMeasureIndex + 1, Companion.get_0());
+			val endTime = Companion.time(currentMeasureIndex + 1, Companion.get_0());
 			if (isWithRepeats && endBarline != null) {
 				if (endBarline.getRepeat().isBackward()) {
 					//ignore it at the end of the final volta of a volta group, otherwise we are stuck in an endless loop
@@ -219,7 +219,7 @@ public class RepetitionsFinder {
 			playedNavigationSigns.add(daCapo);
 			isWithRepeats = daCapo.isWithRepeats();
 			isWithinJumpRepeat = true;
-			addJump(time(currentMeasureIndex + 1, Companion.get_0()), time0);
+			addJump(Companion.time(currentMeasureIndex + 1, Companion.get_0()), Companion.getTime0());
 			return true;
 		}
 		else {
@@ -242,7 +242,7 @@ public class RepetitionsFinder {
 			playedNavigationSigns.add(segno);
 			isWithRepeats = segno.isWithRepeats();
 			isWithinJumpRepeat = true;
-			addJump(time(currentMeasureIndex + 1, Companion.get_0()), time(findSegnoTargetMeasure(), Companion.get_0()));
+			addJump(Companion.time(currentMeasureIndex + 1, Companion.get_0()), Companion.time(findSegnoTargetMeasure(), Companion.get_0()));
 			return true;
 		}
 		else {
@@ -272,7 +272,7 @@ public class RepetitionsFinder {
 					playedNavigationSigns.add(coda);
 					isWithRepeats = true; //after coda jump, always con repetizione
 					isWithinJumpRepeat = false;
-					addJump(time(currentMeasureIndex + 1, Companion.get_0()), time(nextCodaMeasure, Companion.get_0()));
+					addJump(Companion.time(currentMeasureIndex + 1, Companion.get_0()), Companion.time(nextCodaMeasure, Companion.get_0()));
 					return true;
 				}
 			}
@@ -313,14 +313,14 @@ public class RepetitionsFinder {
 			}
 			else {
 				//create jump into right volta
-				addJump(time(currentMeasureIndex, Companion.get_0()), time(targetVolta.startMeasure, Companion.get_0()));
+				addJump(Companion.time(currentMeasureIndex, Companion.get_0()), Companion.time(targetVolta.startMeasure, Companion.get_0()));
 				return true;
 			}
 		}
 		else {
 			//no suitable volta found. jump to the end of the volta group
 			voltaGroupsCounter.remove(voltaGroup);
-			addJump(time(currentMeasureIndex, Companion.get_0()), time(voltaGroup.endMeasure + 1, Companion.get_0()));
+			addJump(Companion.time(currentMeasureIndex, Companion.get_0()), Companion.time(voltaGroup.endMeasure + 1, Companion.get_0()));
 			return true;
 		}
 	}
@@ -331,8 +331,8 @@ public class RepetitionsFinder {
 	 */
 	private void addJump(Time from, Time to) {
 		jumps.add(new Jump(from, to));
-		currentMeasureIndex = to.measure;
-		currentMeasureStartBeat = to.beat;
+		currentMeasureIndex = to.getMeasure();
+		currentMeasureStartBeat = to.getBeat();
 	}
 
 	/**
@@ -362,12 +362,12 @@ public class RepetitionsFinder {
 
 		//if we are at the end of a volta, find last forward repeat before the volta group
 		if (isVoltaEndAt(from)) {
-			val voltaState = voltaGroups.getStateAt(from.measure - 1);
-			from = time(voltaState.group.startMeasure, Companion.get_0());
+			val voltaState = voltaGroups.getStateAt(from.getMeasure() - 1);
+			from = Companion.time(voltaState.group.startMeasure, Companion.get_0());
 		}
 
 		//iterate through measures in reverse order
-		int fromMeasure = min(from.measure, score.getMeasuresCount() - 1); //from.measure could be 1 measure after score
+		int fromMeasure = min(from.getMeasure(), score.getMeasuresCount() - 1); //from.measure could be 1 measure after score
 		for (int iMeasure : rangeReverse(fromMeasure, 0)) {
 			val measure = score.getColumnHeader(iMeasure);
 
@@ -380,21 +380,21 @@ public class RepetitionsFinder {
 			//barline within the measure?
 			val innerBarlines = measure.getMiddleBarlines();
 			//if starting in this measure, only before the given beat
-			val innerStartBeat = (iMeasure == from.measure ? from.beat : null);
+			val innerStartBeat = (iMeasure == from.getMeasure() ? from.getBeat() : null);
 			for (val innerBarline : innerBarlines.reverseIt()) {
 				if ((innerStartBeat == null || innerBarline.beat.compareTo(innerStartBeat) < 0) &&
 						innerBarline.getElement().getRepeat().isForward())
-					return time(iMeasure, innerBarline.beat);
+					return Companion.time(iMeasure, innerBarline.beat);
 			}
 
 			//forward repeat at the beginning of the measure? (but not when we started at beat 0 of this measure)
-			if (false == time(iMeasure, Companion.get_0()).equals(from))
+			if (false == Companion.time(iMeasure, Companion.get_0()).equals(from))
 				if (measure.getStartBarline() != null && measure.getStartBarline().getRepeat().isForward())
-					return time(iMeasure, Companion.get_0());
+					return Companion.time(iMeasure, Companion.get_0());
 		}
 
 		//nothing was found, so return the beginning of the score
-		return time0;
+		return Companion.getTime0();
 	}
 
 	/**
@@ -431,8 +431,8 @@ public class RepetitionsFinder {
 	 * Returns true, if the given time is the end of a volta.
 	 */
 	private boolean isVoltaEndAt(Time time) {
-		val volta = voltaGroups.getStateAt(time.measure - 1);
-		return volta != null && volta.voltaEndMeasure == time.measure - 1 && time.beat.equals(Companion.get_0());
+		val volta = voltaGroups.getStateAt(time.getMeasure() - 1);
+		return volta != null && volta.voltaEndMeasure == time.getMeasure() - 1 && time.getBeat().equals(Companion.get_0());
 	}
 
 	/**

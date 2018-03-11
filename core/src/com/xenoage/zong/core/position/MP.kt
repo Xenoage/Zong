@@ -1,16 +1,10 @@
 package com.xenoage.zong.core.position
 
-import lombok.AllArgsConstructor
-import lombok.Data
-import lombok.experimental.Wither
-
 import com.xenoage.utils.math.Fraction
 import com.xenoage.zong.core.Score
 import com.xenoage.zong.core.music.MusicElement
-import com.xenoage.zong.core.music.Voice
-
-import com.xenoage.utils.math.Fraction._0
-import com.xenoage.zong.core.position.Time.time
+import com.xenoage.zong.core.position.MP.Companion.unknown
+import com.xenoage.zong.core.position.MP.Companion.unknownBeat
 
 
 /**
@@ -23,16 +17,15 @@ import com.xenoage.zong.core.position.Time.time
  */
 data class MP(
 	/** The staff index, or [unknown] */
-	val staff: Int = 0,
+	val staff: Int = unknown,
 	/** The measure index, or [unknown] */
-	val measure: Int = 0,
+	val measure: Int = unknown,
 	/** The voice index, or [unknown] */
-	val voice: Int = 0,
-	/** The beat, or [unknownBeat].  */
-	val beat: Fraction? = null,
-	/** The element index within the voice, or [.unknown].  */
-	@Wither
-	val element: Int = 0) : Comparable<MP> {
+	val voice: Int = unknown,
+	/** The beat, or [unknownBeat] */
+	val beat: Fraction? = unknownBeat,
+	/** The element index within the voice, or [unknown] */
+	val element: Int = unknown) : Comparable<MP> {
 
 
 	val isMeasureUnknown: Boolean
@@ -54,11 +47,10 @@ data class MP(
 	val isStaffOrMeasureOrVoiceOrElementUnknown: Boolean
 		get() = staff == unknown || measure == unknown || voice == unknown || element == unknown
 
-	/**
-	 * Returns the measure and beat of this [MP] as a [Time].
-	 */
+
+	/** The measure and beat of this [MP] as a [Time]. */
 	val time: Time
-		get() = time(measure, beat)
+		get() = time(measure, beat ?: throw IllegalStateException("unknown beat"))
 
 
 	fun requireStaffAndMeasureAndVoiceAndElement() {
@@ -67,12 +59,10 @@ data class MP(
 	}
 
 
-	override fun toString(): String {
-		return "[" + (if (staff != unknown) "Staff = $staff, " else "") +
-				(if (measure != unknown) "Measure = $measure, " else "") + (if (voice != unknown) "Voice = $voice, " else "") +
-				(if (beat !== unknownBeat) "Beat = " + beat!!.getNumerator() + "/" + beat!!.getDenominator() + ", " else "") +
-				(if (element != unknown) "Element = $element" else "") + "]"
-	}
+	override fun toString() = "[" + (if (staff != unknown) "Staff = $staff, " else "") +
+			(if (measure != unknown) "Measure = $measure, " else "") + (if (voice != unknown) "Voice = $voice, " else "") +
+			(if (beat != null) "Beat = " + beat.numerator + "/" + beat.denominator + ", " else "") +
+			(if (element != unknown) "Element = $element" else "") + "]"
 
 
 	/**
@@ -83,34 +73,20 @@ data class MP(
 	 * None of the other values should be unknown, otherwise the result is undefined.
 	 */
 	override fun compareTo(mp: MP): Int {
-		//staff
-		return if (staff < mp.staff)
-			-1
-		else if (staff > mp.staff)
-			1
-		else {
-			//measure
-			if (measure < mp.measure)
-				-1
-			else if (measure > mp.measure)
-				1
-			else {
-				//voice
-				if (voice < mp.voice)
-					-1
-				else if (voice > mp.voice)
-					1
-				else if (beat != null && mp.beat != null) {
-					//beat
-					beat!!.compareTo(mp.beat)
-				} else {
-					//element index
-					if (element < mp.element)
-						-1
-					else if (element > mp.element)
-						1
-					else
-						0
+		return when { //staff
+			staff < mp.staff -> -1
+			staff > mp.staff -> +1
+			else -> when { //measure
+				measure < mp.measure -> -1
+				measure > mp.measure -> +1
+				else -> when { //voice
+					voice < mp.voice -> -1
+					voice > mp.voice -> +1
+					else -> if (beat != null && mp.beat != null) { //beat
+						beat.compareTo(mp.beat)
+					} else { //element
+						element.compareTo(mp.element)
+					}
 				}
 			}
 		}
@@ -124,36 +100,26 @@ data class MP(
 	 * only the element indices are compared.
 	 */
 	fun compareTimeTo(mp: MP): Int {
-		//measure
-		return if (measure < mp.measure)
-			-1
-		else if (measure > mp.measure)
-			1
-		else {
-			if (beat != null && mp.beat != null) {
-				//beat
-				beat!!.compareTo(mp.beat)
-			} else {
-				//element index
-				if (element < mp.element)
-					-1
-				else if (element > mp.element)
-					1
-				else
-					0
+		return when { //measure
+			measure < mp.measure -> -1
+			measure > mp.measure -> +1
+			else -> if (beat != null && mp.beat != null) { //beat
+				beat.compareTo(mp.beat)
+			} else { //element
+				element.compareTo(mp.element)
 			}
 		}
 	}
 
 
 	/**
-	 * Returns this [MP] but also with the [.beat] field.
-	 * For this, the [.element] index must be known and the score must be given.
+	 * Returns this [MP] but also with the [beat] field.
+	 * For this, the [element] index must be known and the score must be given.
 	 */
 	fun getWithBeat(score: Score): MP {
 		val voice = score.getVoice(this)
 		val beat = voice.getBeat(element)
-		return withBeat(beat)
+		return copy(beat = beat)
 	}
 
 	companion object {

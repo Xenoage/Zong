@@ -87,12 +87,11 @@ class Fraction : Comparable<Fraction> {
 	 */
 	override fun compareTo(fraction: Fraction): Int {
 		val compare = this.sub(fraction)
-		return if (compare.numerator < 0)
-			-1
-		else if (compare.numerator == 0)
-			0
-		else
-			1
+		return when {
+			compare.numerator < 0 -> -1
+			compare.numerator == 0 -> 0
+			else -> 1
+		}
 	}
 
 	/**
@@ -137,17 +136,6 @@ class Fraction : Comparable<Fraction> {
 
 	companion object {
 
-		val `0/` = fr(0)
-		val `1/` = fr(1)
-		val `1/2` = fr(1, 2)
-		val `1/4` = fr(1, 4)
-		val `1/8` = fr(1, 8)
-		val `1/16` = fr(1, 16)
-		val `1/32` = fr(1, 32)
-		val `1/64` = fr(1, 64)
-
-		val `3/4` = fr(3, 4)
-
 		/**
 		 * Gets a comparator for fractions.
 		 */
@@ -173,6 +161,17 @@ class Fraction : Comparable<Fraction> {
 	}
 
 }
+
+val `0/` = fr(0)
+val `1/` = fr(1)
+val `1/2` = fr(1, 2)
+val `1/4` = fr(1, 4)
+val `1/8` = fr(1, 8)
+val `1/16` = fr(1, 16)
+val `1/32` = fr(1, 32)
+val `1/64` = fr(1, 64)
+
+val `3/4` = fr(3, 4)
 
 /**
  * Creates a new fraction with the given numerator

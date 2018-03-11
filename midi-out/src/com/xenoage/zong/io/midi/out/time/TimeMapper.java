@@ -38,7 +38,7 @@ public class TimeMapper {
 		val timeMap = new TimeMapBuilder();
 		for (int iRep : range(repetitions)) {
 			val range = repetitions.get(iRep);
-			for (int iMeasure : range(range.start.measure, range.end.measure)) {
+			for (int iMeasure : range(range.start.getMeasure(), range.end.getMeasure())) {
 				val usedBeats = getUsedBeats(iMeasure, range);
 				Fraction lastBeat = null;
 				for (int iBeat : range(usedBeats)) {
@@ -47,7 +47,7 @@ public class TimeMapper {
 					if (lastBeat != null)
 						tick += beat.sub(lastBeat).mult(resolution * 4).getNumerator();
 					//add time
-					timeMap.addTimeNoMs(tick, new RepTime(iRep, time(iMeasure, beat)));
+					timeMap.addTimeNoMs(tick, new RepTime(iRep, Companion.time(iMeasure, beat)));
 					lastBeat = beat;
 				}
 			}
@@ -67,12 +67,12 @@ public class TimeMapper {
 		usedBeats.add(score.getMeasureFilledBeats(iMeasure)); //last beat (where last elements ends)
 		List<Fraction> ret = alist(usedBeats.getSize());
 		for (val beat : usedBeats) {
-			if (iMeasure == range.start.measure) {
-				if (beat.compareTo(range.start.beat) >= 0)
+			if (iMeasure == range.start.getMeasure()) {
+				if (beat.compareTo(range.start.getBeat()) >= 0)
 					ret.add(beat);
 			}
-			else if (iMeasure == range.end.measure) {
-				if (beat.compareTo(range.end.beat) <= 0)
+			else if (iMeasure == range.end.getMeasure()) {
+				if (beat.compareTo(range.end.getBeat()) <= 0)
 					ret.add(beat);
 			}
 			else {

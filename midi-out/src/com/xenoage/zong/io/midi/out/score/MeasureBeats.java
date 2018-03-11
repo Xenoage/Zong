@@ -53,18 +53,18 @@ public class MeasureBeats {
 		if (startTime.compareTo(endTime) > 0) {
 			throw new IllegalArgumentException("startTime > endTime");
 		}
-		else if (startTime.measure == endTime.measure) {
+		else if (startTime.getMeasure() == endTime.getMeasure()) {
 			//simple case: same measure
-			return endTime.beat.sub(startTime.beat);
+			return endTime.getBeat().sub(startTime.getBeat());
 		}
 		else {
 			//first measure
-			Fraction ret = getLength(startTime.measure).sub(startTime.beat);
+			Fraction ret = getLength(startTime.getMeasure()).sub(startTime.getBeat());
 			//measures inbetween
-			for (int iMeasure : range(startTime.measure + 1, endTime.measure - 1))
+			for (int iMeasure : range(startTime.getMeasure() + 1, endTime.getMeasure() - 1))
 				ret = ret.add(getLength(iMeasure));
 			//last measure
-			ret = ret.add(endTime.beat);
+			ret = ret.add(endTime.getBeat());
 			return ret;
 		}
 	}

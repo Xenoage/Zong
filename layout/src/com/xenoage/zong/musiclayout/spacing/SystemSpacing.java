@@ -184,8 +184,8 @@ public class SystemSpacing {
 	 * If the given beat is after the last beat, the offset of the last beat is returned.
 	 */
 	public float getXMmAt(Time time) {
-		float measureXMm = getMeasureStartMm(time.measure);
-		float elementXMm = columns.get(time.measure - getStartMeasure()).getXMmAt(time.beat);
+		float measureXMm = getMeasureStartMm(time.getMeasure());
+		float elementXMm = columns.get(time.getMeasure() - getStartMeasure()).getXMmAt(time.getBeat());
 		return measureXMm + elementXMm;
 	}
 

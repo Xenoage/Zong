@@ -5,8 +5,6 @@ import com.xenoage.zong.core.music.MusicElement
 
 /**
  * Interface for all musical elements, for which an [MP] can be retrieved.
- *
- * @author Andreas Wenger
  */
 interface MPElement : MusicElement {
 

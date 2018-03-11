@@ -39,7 +39,7 @@ import com.xenoage.zong.musiclayout.stampings.SystemCursorStamping;
 		SystemCursorStamping cursor = createCursorAt(time);
 		//find frame
 		if (cursor != null) {
-			ScoreFrameLayout frame = scoreLayout.getScoreFrameLayout(time.measure);
+			ScoreFrameLayout frame = scoreLayout.getScoreFrameLayout(time.getMeasure());
 			frame.setPlaybackStampings(ilist(cursor));
 		}
 	}
@@ -49,11 +49,11 @@ import com.xenoage.zong.musiclayout.stampings.SystemCursorStamping;
 	 * representing the current playback position, or null if there is none.
 	 */
 	public SystemCursorStamping createCursorAt(Time time) {
-		ScoreFrameLayout frame = scoreLayout.getScoreFrameLayout(time.measure);
+		ScoreFrameLayout frame = scoreLayout.getScoreFrameLayout(time.getMeasure());
 		if (frame != null) {
-			StaffStamping topStaff = frame.getStaffStamping(0, time.measure);
+			StaffStamping topStaff = frame.getStaffStamping(0, time.getMeasure());
 			StaffStamping bottomStaff = frame.getStaffStamping(scoreLayout.score.getStavesCount() - 1,
-					time.measure);
+					time.getMeasure());
 			if (topStaff != null && bottomStaff != null)
 				return new SystemCursorStamping(topStaff, bottomStaff, frame.getPositionX(time));
 		}

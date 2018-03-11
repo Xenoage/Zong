@@ -85,12 +85,12 @@ public class DynamicsFinder {
 		//walk through the measures
 		Time currentStartTime = rep.start;
 		DynamicsType currentDynamic = new FixedDynamics(startDynamics);
-		for (int iMeasure : range(rep.start.measure, rep.end.measure)) {
+		for (int iMeasure : range(rep.start.getMeasure(), rep.end.getMeasure())) {
 			if (iMeasure >= score.getMeasuresCount())
 				break;
 			val measure = score.getMeasure(atMeasure(staff, iMeasure));
 			for (val beat : measure.getDirections().getBeats()) {
-				val newTime = time(iMeasure, beat);
+				val newTime = Companion.time(iMeasure, beat);
 				DynamicsType newDynamic = null;
 
 				//if beat is out of the repetition range, ignore it
@@ -134,11 +134,11 @@ public class DynamicsFinder {
 	 * or null, if nothing starts here.
 	 */
 	@MaybeNull private DynamicsType getStaffDynamicStartAt(int staff, Time time, DynamicValue currentDynamicValue) {
-		val measure = score.getMeasure(atMeasure(staff, time.measure));
+		val measure = score.getMeasure(atMeasure(staff, time.getMeasure()));
 		//when there is a Wedge (possible with a Dynamic as the start volume), create
 		//a gradient dynamic, when there is only a Dynamic, create a fixed dynamic
-		val foundDynamic = (Dynamic) measure.getDirections().get(time.beat, MusicElementType.Dynamic);
-		val foundWedge = (Wedge) measure.getDirections().get(time.beat, MusicElementType.Wedge);
+		val foundDynamic = (Dynamic) measure.getDirections().get(time.getBeat(), MusicElementType.Dynamic);
+		val foundWedge = (Wedge) measure.getDirections().get(time.getBeat(), MusicElementType.Wedge);
 		if (foundWedge != null) {
 			//gradient
 			val startDynamicValue = (foundDynamic != null ? foundDynamic.getValue() : currentDynamicValue);
@@ -157,9 +157,9 @@ public class DynamicsFinder {
 	 * If yes, the given open wedge is closed and returned.
 	 */
 	@MaybeNull private GradientDynamics getWedgeEndAt(int staff, Time time, GradientDynamics openWedge) {
-		val measure = score.getMeasure(atMeasure(staff, time.measure));
-		val foundDynamic = (Dynamic) measure.getDirections().get(time.beat, MusicElementType.Dynamic);
-		val foundWedgeEnd = (WedgeEnd) measure.getDirections().get(time.beat, MusicElementType.WedgeEnd);
+		val measure = score.getMeasure(atMeasure(staff, time.getMeasure()));
+		val foundDynamic = (Dynamic) measure.getDirections().get(time.getBeat(), MusicElementType.Dynamic);
+		val foundWedgeEnd = (WedgeEnd) measure.getDirections().get(time.getBeat(), MusicElementType.WedgeEnd);
 		if (foundWedgeEnd != null) {
 			val endDynamicValue = (foundDynamic != null ? foundDynamic.getValue() : openWedge.end);
 			return new GradientDynamics(openWedge.start, endDynamicValue);

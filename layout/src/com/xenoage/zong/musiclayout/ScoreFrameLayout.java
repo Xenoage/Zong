@@ -204,7 +204,7 @@ public final class ScoreFrameLayout {
 	public float getPositionX(Time time) {
 		//search all systems for the given musical position, beginning at the top staff
 		for (SystemSpacing system : frameSpacing.systems)
-			if (system.containsMeasure(time.measure))
+			if (system.containsMeasure(time.getMeasure()))
 				return system.getXMmAt(time);
 		return 0;
 	}
