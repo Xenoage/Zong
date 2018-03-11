@@ -60,8 +60,8 @@ public class InstrumentsReaderTest {
 
 	private static InstrumentChange getInstrumentChangeAtBeat0(Measure measure) {
 		for (BeatE<InstrumentChange> ic : measure.getInstrumentChanges()) {
-			if (ic.beat.equals(Companion.get_0()))
-				return ic.element;
+			if (ic.getBeat().equals(Companion.get_0()))
+				return ic.getElement();
 		}
 		fail("Instrument change not found");
 		return null;

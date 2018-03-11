@@ -104,8 +104,8 @@ public class BarlinesStamper {
 				
 				//middle barlines
 				for (BeatE<Barline> middleBarline : columnHeader.getMiddleBarlines()) {
-					ret.add(new BarlineStamping(middleBarline.element, groupStaves, xLeft +
-						system.columns.get(iMeasure).getBarlineOffsetMm(middleBarline.beat),
+					ret.add(new BarlineStamping(middleBarline.getElement(), groupStaves, xLeft +
+						system.columns.get(iMeasure).getBarlineOffsetMm(middleBarline.getBeat()),
 						barlineGroupStyle));
 				}
 				

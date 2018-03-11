@@ -49,7 +49,7 @@ public class MeasureElementIterator
 		if (!hasNext())
 			throw new NoSuchElementException();
 		mp = nextMp;
-		MeasureElement element = elements.getElements().get(nextElementIndex).element;
+		MeasureElement element = elements.getElements().get(nextElementIndex).getElement();
 		nextElementIndex++;
 		findNext();
 		return element;
@@ -60,7 +60,7 @@ public class MeasureElementIterator
 			if (nextElementIndex < elements.size()) {
 				//next element within measure exists
 				nextMp = Companion.atBeat(nextMp.getStaff(), nextMp.getMeasure(), Companion.getUnknown(),
-					elements.getElements().get(nextElementIndex).beat);
+						elements.getElements().get(nextElementIndex).getBeat());
 				break;
 			}
 			else {

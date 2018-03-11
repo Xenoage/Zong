@@ -239,7 +239,7 @@ public final class Score
 		//add column beats
 		if (withMeasureAndColumnElements) {
 			for (val beatE : getColumnHeader(measureIndex).getColumnElementsWithBeats())
-				columnBeats.add(beatE.beat);
+				columnBeats.add(beatE.getBeat());
 		}
 		return columnBeats;
 	}
@@ -262,18 +262,18 @@ public final class Score
 		BeatE<Key> measureKey = null;
 		if (getMeasure(mp).getPrivateKeys() != null)
 			measureKey = getMeasure(mp).getPrivateKeys().getLastBefore(interval, mp.getBeat());
-		BeatE<Key> ret = selectLatest(columnKey, measureKey);
+		BeatE<Key> ret = Companion.selectLatest(columnKey, measureKey);
 		if (ret != null)
-			return mpE(ret.element, mp.withBeat(ret.beat));
+			return mpE(ret.getElement(), mp.withBeat(ret.getBeat()));
 		if (interval != At) {
 			//search in the preceding measures
 			for (int iMeasure = mp.getMeasure() - 1; iMeasure >= 0; iMeasure--) {
 				columnKey = header.getColumnHeader(iMeasure).getKeys().getLast();
 				BeatEList<Key> privateKeys = getMeasure(Companion.atMeasure(mp.getStaff(), iMeasure)).getPrivateKeys();
 				measureKey = (privateKeys != null ? privateKeys.getLast() : null);
-				ret = selectLatest(columnKey, measureKey);
+				ret = Companion.selectLatest(columnKey, measureKey);
 				if (ret != null)
-					return mpE(ret.element, mp.withMeasure(iMeasure).withBeat(ret.beat));
+					return mpE(ret.getElement(), mp.withMeasure(iMeasure).withBeat(ret.getBeat()));
 			}
 		}
 		//no key found. return default key.
@@ -315,7 +315,7 @@ public final class Score
 		if (measure.getClefs() != null) {
 			ret = measure.getClefs().getLastBefore(interval, mp.getBeat());
 			if (ret != null)
-				return ret.element.getType();
+				return ret.getElement().getType();
 		}
 		if (interval != At) {
 			//search in the preceding measures
@@ -324,7 +324,7 @@ public final class Score
 				if (measure.getClefs() != null) {
 					ret = measure.getClefs().getLast();
 					if (ret != null)
-						return ret.element.getType();
+						return ret.getElement().getType();
 				}
 			}
 		}

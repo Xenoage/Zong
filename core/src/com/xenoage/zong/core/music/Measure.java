@@ -94,7 +94,7 @@ public class Measure
 			//add clef to list. create list if needed
 			clef.setParent(this);
 			if (clefs == null)
-				clefs = beatEList();
+				clefs = Companion.beatEList();
 			return clefs.set(clef, beat);
 		}
 		else if (clefs != null) {
@@ -117,7 +117,7 @@ public class Measure
 			//add key to list. create list if needed
 			key.setParent(this);
 			if (privateKeys == null)
-				privateKeys = beatEList();
+				privateKeys = Companion.beatEList();
 			return privateKeys.set(key, beat);
 		}
 		else if (privateKeys != null) {
@@ -138,7 +138,7 @@ public class Measure
 	@Untested public void addDirection(Direction direction, Fraction beat) {
 		direction.setParent(this);
 		if (directions == null)
-			directions = beatEList();
+			directions = Companion.beatEList();
 		directions.add(direction, beat);
 	}
 
@@ -152,7 +152,7 @@ public class Measure
 			//add instrumentChange to list. create list if needed
 			instrumentChange.setParent(this);
 			if (instrumentChanges == null)
-				instrumentChanges = beatEList();
+				instrumentChanges = Companion.beatEList();
 			return instrumentChanges.set(instrumentChange, beat);
 		}
 		else if (instrumentChanges != null) {
@@ -308,7 +308,7 @@ public class Measure
 		//beats of directions
 		if (withMeasureElements) {
 			for (val dir : getMeasureElements())
-				ret.add(dir.beat);
+				ret.add(dir.getBeat());
 		}
 		return ret;
 	}
@@ -376,7 +376,7 @@ public class Measure
 	 * and within beat sorted by clef, key, directions, instrument change.
 	 */
 	public BeatEList<MeasureElement> getMeasureElements() {
-		BeatEList<MeasureElement> ret = beatEList();
+		BeatEList<MeasureElement> ret = Companion.beatEList();
 		ret.addAll(clefs);
 		ret.addAll(privateKeys);
 		ret.addAll(directions);
@@ -447,7 +447,7 @@ public class Measure
 	 */
 	public BeatEList<Direction> getDirections() {
 		if (directions == null)
-			return emptyBeatEList();
+			return Companion.emptyBeatEList();
 		return directions;
 	}
 	

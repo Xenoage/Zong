@@ -66,8 +66,8 @@ public class MeasureElementsSpacer {
 															 List<VoiceSpacing> voiceSpacings, int staff, Notations notations, LayoutSettings layoutSettings) {
 		
 		Key key0 = null;
-		if (keys.size() > 0 && keys.getFirst().beat.equals(Companion.get_0()))
-			key0 = keys.getFirst().element;
+		if (keys.size() > 0 && keys.getFirst().getBeat().equals(Companion.get_0()))
+			key0 = keys.getFirst().getElement();
 		if (key0 == null && time == null && (clefs == null || clefs.size() == 0)) {
 			//nothing to do
 			return empty;
@@ -144,8 +144,8 @@ public class MeasureElementsSpacer {
 		//voice 2:       1             o
 		if (clefs != null) {
 			for (BeatE<Clef> ME : clefs) {
-				Fraction MEb = ME.beat;
-				Notation MEnotation = notations.get(ME.element);
+				Fraction MEb = ME.getBeat();
+				Notation MEnotation = notations.get(ME.getElement());
 				float MEwidth = MEnotation.getWidth().getWidth();
 	
 				//if there is a leading spacing, ignore elements at beat 0
@@ -174,7 +174,7 @@ public class MeasureElementsSpacer {
 	
 				//add measure element
 				float MEx = VE2x - layoutSettings.spacings.widthDistanceMin - MEwidth / 2;
-				ret.add(new SimpleSpacing(MEnotation, ME.beat, MEx));
+				ret.add(new SimpleSpacing(MEnotation, ME.getBeat(), MEx));
 	
 			}
 		}

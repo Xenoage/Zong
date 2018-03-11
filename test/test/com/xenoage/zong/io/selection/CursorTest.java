@@ -56,23 +56,23 @@ public class CursorTest {
 		cursor.write(clef1);
 		BeatEList<Clef> clefs = score.getMeasure(atMeasure(0, 0)).getClefs();
 		assertEquals(1, clefs.size());
-		assertEquals(beatE(clef1, Companion.fr(1, 4)), clefs.getFirst());
+		assertEquals(Companion.beatE(clef1, Companion.fr(1, 4)), clefs.getFirst());
 		//write clef at 2/4
 		Clef clef2 = new Clef(ClefType.clefTreble);
 		cursor.setMp(atElement(0, 0, 0, 2));
 		cursor.write(clef2);
 		clefs = score.getMeasure(atMeasure(0, 0)).getClefs();
 		assertEquals(2, clefs.size());
-		assertEquals(beatE(clef1, Companion.fr(1, 4)), clefs.getFirst());
-		assertEquals(beatE(clef2, Companion.fr(2, 4)), clefs.getElements().get(1));
+		assertEquals(Companion.beatE(clef1, Companion.fr(1, 4)), clefs.getFirst());
+		assertEquals(Companion.beatE(clef2, Companion.fr(2, 4)), clefs.getElements().get(1));
 		//overwrite clef at 1/4
 		Clef clef3 = new Clef(ClefType.clefTreble);
 		cursor.setMp(atElement(0, 0, 0, 1));
 		cursor.write(clef3);
 		clefs = score.getMeasure(atMeasure(0, 0)).getClefs();
 		assertEquals(2, clefs.size());
-		assertEquals(beatE(clef3, Companion.fr(1, 4)), clefs.getFirst());
-		assertEquals(beatE(clef2, Companion.fr(2, 4)), clefs.getElements().get(1));
+		assertEquals(Companion.beatE(clef3, Companion.fr(1, 4)), clefs.getFirst());
+		assertEquals(Companion.beatE(clef2, Companion.fr(2, 4)), clefs.getElements().get(1));
 		//write key at 1/4
 		Key key = new TraditionalKey(5, Mode.Major);
 		cursor.setMp(atElement(0, 0, 0, 1));
@@ -104,12 +104,12 @@ public class CursorTest {
 		//check all added elements
 		BeatEList<MeasureElement> all = score.getMeasure(atMeasure(0, 0)).getMeasureElements();
 		assertEquals(6, all.size());
-		assertEquals(clef3, all.getElements().get(0).element);
-		assertEquals(key, all.getElements().get(1).element);
-		assertEquals(direction1, all.getElements().get(2).element);
-		assertEquals(direction2, all.getElements().get(3).element);
-		assertEquals(instrChange, all.getElements().get(4).element);
-		assertEquals(clef2, all.getElements().get(5).element);
+		assertEquals(clef3, all.getElements().get(0).getElement());
+		assertEquals(key, all.getElements().get(1).getElement());
+		assertEquals(direction1, all.getElements().get(2).getElement());
+		assertEquals(direction2, all.getElements().get(3).getElement());
+		assertEquals(instrChange, all.getElements().get(4).getElement());
+		assertEquals(clef2, all.getElements().get(5).getElement());
 	}
 
 }

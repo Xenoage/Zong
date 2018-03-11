@@ -309,7 +309,7 @@ public class RepetitionsFinderTest {
 	}
 
 	private void writeMiddleForwardRepeat(int measure, Fraction beat) {
-		score.getColumnHeader(measure).getMiddleBarlines().add(beatE(
+		score.getColumnHeader(measure).getMiddleBarlines().add(Companion.beatE(
 				Barline.barlineForwardRepeat(BarlineStyle.Dashed), beat));
 	}
 
@@ -318,7 +318,7 @@ public class RepetitionsFinderTest {
 	}
 
 	private void writeMiddleBackwardRepeat(int measure, Fraction beat, int repeatTimes) {
-		score.getColumnHeader(measure).getMiddleBarlines().add(beatE(
+		score.getColumnHeader(measure).getMiddleBarlines().add(Companion.beatE(
 				Barline.barlineBackwardRepeat(BarlineStyle.Dashed, repeatTimes), beat));
 	}
 

@@ -143,7 +143,7 @@ import static com.xenoage.utils.kernel.Range.rangeReverse;
 				return column.getTime();
 		}
 		//no key found. return default time.
-		return TimeSignature.implicitSenzaMisura;
+		return TimeSignature.Companion.getImplicitSenzaMisura();
 	}
 
 

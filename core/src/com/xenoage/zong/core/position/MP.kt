@@ -237,17 +237,7 @@ data class MP(
 		 * Gets the [MP] of the given element, or null if it is unknown.
 		 */
 		fun getMP(element: MPElement?): MP? {
-			return element?.getMP()
-		}
-
-
-		/**
-		 * Gets the [MP] of the given element by querying its parent, or null if it is unknown.
-		 * TODO: When Java 8 can be used for the whole project, use this method as the default
-		 * implementation for MPElement.getMP().
-		 */
-		fun getMPFromParent(element: MPElement?): MP? {
-			return if (element == null || element.parent == null) null else element.parent.getChildMP(element)
+			return element?.mp
 		}
 
 

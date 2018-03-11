@@ -134,8 +134,8 @@ public class RepetitionsFinder {
 			//inner backward repeat barlines
 			if (isWithRepeats) {
 				for (val e : getInnerBarlines()) {
-					val innerBarline = e.element;
-					val eTime = Companion.time(currentMeasureIndex, e.beat);
+					val innerBarline = e.getElement();
+					val eTime = Companion.time(currentMeasureIndex, e.getBeat());
 					if (innerBarline.getRepeat().isBackward())
 						if (processBackwardRepeat(innerBarline, eTime))
 							continue nextMeasure;
@@ -382,9 +382,9 @@ public class RepetitionsFinder {
 			//if starting in this measure, only before the given beat
 			val innerStartBeat = (iMeasure == from.getMeasure() ? from.getBeat() : null);
 			for (val innerBarline : innerBarlines.reverseIt()) {
-				if ((innerStartBeat == null || innerBarline.beat.compareTo(innerStartBeat) < 0) &&
+				if ((innerStartBeat == null || innerBarline.getBeat().compareTo(innerStartBeat) < 0) &&
 						innerBarline.getElement().getRepeat().isForward())
-					return Companion.time(iMeasure, innerBarline.beat);
+					return Companion.time(iMeasure, innerBarline.getBeat());
 			}
 
 			//forward repeat at the beginning of the measure? (but not when we started at beat 0 of this measure)

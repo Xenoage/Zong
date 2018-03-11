@@ -57,12 +57,12 @@ public class BarlinesBeatOffsetter {
 		//mid-measure barlines
 		for (BeatE<Barline> midBarline : columnHeader.getMiddleBarlines()) {
 			//get beat of barline, find it in the note offsets and move the following ones
-			Fraction beat = midBarline.beat;
+			Fraction beat = midBarline.getBeat();
 			int i = 0;
 			float move = 0;
 			for (; i < retNotes.size(); i++) {
 				if (retNotes.get(i).getBeat().compareTo(beat) >= 0) {
-					BarlineRepeat repeat = midBarline.element.getRepeat();
+					BarlineRepeat repeat = midBarline.getElement().getRepeat();
 					if (repeat == BarlineRepeat.Backward) {
 						//backward repeat: additional space before barline
 						move += repeatSpace * maxInterlineSpace;

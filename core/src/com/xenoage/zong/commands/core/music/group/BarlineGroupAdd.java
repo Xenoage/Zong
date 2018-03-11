@@ -81,7 +81,7 @@ public class BarlineGroupAdd
 	@Override public void undo() {
 		stavesList.getBarlineGroups().remove(group);
 		if (backupCmds != null) {
-			for (Command cmd : reverseIt(backupCmds))
+			for (Command cmd : Companion.reverseIt(backupCmds))
 				cmd.undo();
 		}
 	}

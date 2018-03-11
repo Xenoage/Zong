@@ -78,7 +78,7 @@ import static com.xenoage.utils.kernel.Range.rangeReverse;
 		voice.addElement(elementIndex, element);
 		//restore slurs, beam and tuplet
 		if (backupCmds != null) {
-			for (Command cmd : reverseIt(backupCmds))
+			for (Command cmd : Companion.reverseIt(backupCmds))
 				cmd.undo();
 		}
 	}

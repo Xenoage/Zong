@@ -28,7 +28,7 @@ public class ScoreHeaderTest {
 		TimeSignature time2 = new TimeSignature(TimeType.time_4_4);
 		header.getColumnHeader(3).setTime(time2);
 		//test method
-		assertEquals(TimeSignature.implicitSenzaMisura, header.getTimeAtOrBefore(0));
+		assertEquals(TimeSignature.Companion.getImplicitSenzaMisura(), header.getTimeAtOrBefore(0));
 		assertEquals(time1, header.getTimeAtOrBefore(1));
 		assertEquals(time1, header.getTimeAtOrBefore(2));
 		assertEquals(time2, header.getTimeAtOrBefore(3));

@@ -58,8 +58,8 @@ public class ColumnElementIterator
 		Fraction beat = unknownBeat;
 		if (nextList == 0) {
 			BeatE<ColumnElement> e = elementsWithBeats.getElements().get(nextElement);
-			element = e.element;
-			beat = e.beat;
+			element = e.getElement();
+			beat = e.getBeat();
 		}
 		else {
 			element = elementsWithoutBeats.get(nextElement);

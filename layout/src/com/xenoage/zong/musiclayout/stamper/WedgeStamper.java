@@ -49,13 +49,13 @@ public class WedgeStamper {
 			for (int iMeasure : system.getMeasures()) {
 				Measure measure = staff.getMeasure(iMeasure);
 				for (BeatE<Direction> dir : measure.getDirections()) {
-					if (dir.element instanceof Wedge) {
-						Wedge wedge = (Wedge) dir.element;
+					if (dir.getElement() instanceof Wedge) {
+						Wedge wedge = (Wedge) dir.getElement();
 						//it should not happen in a consistent score, but it could be possible
 						//that a wedge is missing its end element. we only stamp it,
 						//if the position of the end element is known
 						if (wedge.getWedgeEnd().getMP() != null)
-							openWedges.wedges.add(new ContinuedWedge((Wedge) dir.element));
+							openWedges.wedges.add(new ContinuedWedge((Wedge) dir.getElement()));
 					}
 				}
 			}

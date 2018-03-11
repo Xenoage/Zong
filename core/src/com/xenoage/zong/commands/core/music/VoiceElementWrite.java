@@ -154,7 +154,7 @@ public class VoiceElementWrite
 	@Override public void undo() {
 		voice.removeElement(element);
 		if (backupCmds != null) {
-			for (Command cmd : reverseIt(backupCmds))
+			for (Command cmd : Companion.reverseIt(backupCmds))
 				cmd.undo();
 		}
 	}

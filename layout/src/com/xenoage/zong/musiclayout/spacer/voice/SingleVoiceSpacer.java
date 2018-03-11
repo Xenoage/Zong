@@ -80,7 +80,7 @@ public class SingleVoiceSpacer {
 		ret.addFirst(new BorderSpacing(curBeat, lastFrontGapOffset));
 
 		//iterate through the elements in reverse order
-		for (VoiceElement element : reverseIt(voice.getElements())) {
+		for (VoiceElement element : Companion.reverseIt(voice.getElements())) {
 			//get the notation
 			Notation notation = notations.get(element);
 			if (notation == null)

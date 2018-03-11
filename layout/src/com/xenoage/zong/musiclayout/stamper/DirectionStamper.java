@@ -58,7 +58,7 @@ public class DirectionStamper {
 			directionsWithBeats.addAll(context.getCurrentColumnHeader().getTempos());
 		}
 		for (BeatE<Direction> elementWithBeat : directionsWithBeats) {
-			Direction element = elementWithBeat.element;
+			Direction element = elementWithBeat.getElement();
 			Stamping stamping = null;
 			if (MusicElementType.Tempo.is(element))
 				stamping = directionStamper.createTempo((Tempo) element, context);
