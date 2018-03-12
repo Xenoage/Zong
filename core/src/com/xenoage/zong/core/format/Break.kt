@@ -18,15 +18,11 @@ data class Break(
 		val systemBreak: SystemBreak? = null
 ) : ColumnElement {
 
-	/** Back reference: the parent measure column, or null if not part of a score.  */
+	/** Back reference: the parent measure column, or null if not part of a score */
 	override var parent: ColumnHeader? = null
 
-	override val musicElementType = MusicElementType.Break
+	override val elementType = MusicElementType.Break
 
 	override fun toString() = "Break ($pageBreak, $systemBreak)"
-
-	override fun getMP(): MP {
-		return MP.getMPFromParent(this)
-	}
 
 }

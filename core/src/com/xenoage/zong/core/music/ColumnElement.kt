@@ -1,6 +1,7 @@
 package com.xenoage.zong.core.music
 
 import com.xenoage.zong.core.format.Break
+import com.xenoage.zong.core.header.ColumnHeader
 import com.xenoage.zong.core.music.barline.Barline
 import com.xenoage.zong.core.music.direction.Tempo
 import com.xenoage.zong.core.music.key.Key
@@ -16,4 +17,4 @@ import com.xenoage.zong.core.position.MPElement
  * This is the case for [TimeSignature], [Barline], [Volta],
  * [Key], [Tempo] and [Break].
  */
-interface ColumnElement : MPElement
+interface ColumnElement : MPElement<ColumnHeader>

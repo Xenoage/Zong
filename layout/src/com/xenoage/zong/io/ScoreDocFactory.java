@@ -44,7 +44,7 @@ public class ScoreDocFactory {
             throws InvalidFormatException, IOException {
 
         //page format
-        LayoutFormat layoutFormat = defaultLayoutFormat;
+        LayoutFormat layoutFormat = Companion.getDefaultLayoutFormat();
         Object oLayoutFormat = score.getMetaData().get("layoutformat");
         if (oLayoutFormat instanceof LayoutFormat) {
             layoutFormat = (LayoutFormat) oLayoutFormat;

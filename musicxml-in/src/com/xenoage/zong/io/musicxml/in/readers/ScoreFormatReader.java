@@ -53,7 +53,7 @@ public class ScoreFormatReader {
 			tenthsMm = interlineSpace / 10;	
 		}
 		else {
-			tenthsMm = ScoreFormat.defaultInterlineSpace / 10;
+			tenthsMm = ScoreFormat.Companion.getDefaultInterlineSpace() / 10;
 		}
 	}
 	

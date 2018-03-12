@@ -29,7 +29,7 @@ public class LayoutFormatReader {
 
 
 	@NonNull public LayoutFormat read() {
-		layoutFormat = defaultLayoutFormat;
+		layoutFormat = Companion.getDefaultLayoutFormat();
 		if (mxlLayout != null)
 			readPageLayout();
 		return layoutFormat;
@@ -40,7 +40,7 @@ public class LayoutFormatReader {
 		if (mxlPageLayout == null)
 			return;
 		
-		Size2f size = PageFormat.defaultValue.getSize();
+		Size2f size = PageFormat.Companion.getDefaultValue().getSize();
 
 		//page-width and page-height
 		Size2f mxlPageSize = mxlPageLayout.getPageSize();
@@ -48,8 +48,8 @@ public class LayoutFormatReader {
 			size = new Size2f(tenthsMm * mxlPageSize.width, tenthsMm * mxlPageSize.height);
 
 		//page-margins
-		PageMargins pageMarginsLeft = PageMargins.defaultValue;
-		PageMargins pageMarginsRight = PageMargins.defaultValue;
+		PageMargins pageMarginsLeft = PageMargins.Companion.getDefaultValue();
+		PageMargins pageMarginsRight = PageMargins.Companion.getDefaultValue();
 		for (MxlPageMargins mxlMargins : mxlPageLayout.getPageMargins()) {
 			PageMargins pageMargins = new PageMargins(
 				tenthsMm * mxlMargins.getLeftMargin(),

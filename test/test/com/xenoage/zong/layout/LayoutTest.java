@@ -74,12 +74,12 @@ public class LayoutTest {
 		//[page 3 [frame 3_1]]
 		layout = new Layout(null);
 		//page 1
-		page_1 = new Page(PageFormat.defaultValue);
+		page_1 = new Page(PageFormat.Companion.getDefaultValue());
 		layout.addPage(page_1);
 		frame_1_1 = new TestFrame();
 		page_1.addFrame(frame_1_1);
 		//page 2
-		page_2 = new Page(PageFormat.defaultValue);
+		page_2 = new Page(PageFormat.Companion.getDefaultValue());
 		layout.addPage(page_2);
 		frame_2_1 = new TestFrame();
 		page_2.addFrame(frame_2_1);
@@ -94,7 +94,7 @@ public class LayoutTest {
 		frame_2_2_2 = new TestFrame();
 		group_2_2.addChildFrame(frame_2_2_2);
 		//page 3
-		page_3 = new Page(PageFormat.defaultValue);
+		page_3 = new Page(PageFormat.Companion.getDefaultValue());
 		layout.addPage(page_3);
 		frame_3_1 = new TestFrame();
 		page_3.addFrame(frame_3_1);

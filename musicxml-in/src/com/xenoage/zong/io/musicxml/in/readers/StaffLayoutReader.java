@@ -28,7 +28,7 @@ public class StaffLayoutReader {
 	
 	
 	public StaffLayout read() {
-		staffLayout = StaffLayout.defaultValue;
+		staffLayout = StaffLayout.Companion.getDefaultValue();
 
 		//staff-distance
 		Float mxlStaffDistance = mxlStaffLayout.getStaffDistance();

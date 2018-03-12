@@ -1,6 +1,8 @@
 package com.xenoage.zong.core.header
 
+import com.xenoage.utils.annotations.Untested
 import com.xenoage.utils.math.Fraction
+import com.xenoage.utils.math.`0/`
 import com.xenoage.utils.mutableListOfNotNull
 import com.xenoage.zong.core.Score
 import com.xenoage.zong.core.format.Break
@@ -14,14 +16,11 @@ import com.xenoage.zong.core.music.key.Key
 import com.xenoage.zong.core.music.time.TimeSignature
 import com.xenoage.zong.core.music.util.BeatE
 import com.xenoage.zong.core.music.util.BeatEList
-import com.xenoage.zong.core.music.util.BeatEList.beatEList
-import com.xenoage.zong.core.music.util.BeatEList.emptyList
 import com.xenoage.zong.core.music.volta.Volta
 import com.xenoage.zong.core.position.MP
 import com.xenoage.zong.core.position.MP.Companion.atColumnBeat
 import com.xenoage.zong.core.position.MPContainer
 import com.xenoage.zong.core.position.MPElement
-import lombok.NonNull
 
 /**
  * A [ColumnHeader] stores information that
@@ -193,7 +192,7 @@ class ColumnHeader : DirectionContainer, MPContainer {
 	 * For a [NavigationSign], use [setNavigationTarget] or [setNavigationOrigin] instead.
 	 */
 	fun addOtherDirection(direction: Direction, beat: Fraction) {
-		if (containsRef(middleNotAllowedDirections, direction.musicElementType))
+		if (direction.elementType in middleNotAllowedDirections)
 			throw IllegalArgumentException("direction type not allowed at this position")
 		direction.setParent(this)
 		otherDirections.add(direction, beat)
@@ -234,8 +233,7 @@ class ColumnHeader : DirectionContainer, MPContainer {
 	 * Sets the given [ColumnElement] at the given beat.
 	 *
 	 * If there is already another element of this type, it is replaced and returned (otherwise null),
-	 * except for [Direction]s (except [Tempo]), where multiple elements on a single beat
-	 * are allowed.
+	 * except for [Direction]s (except [Tempo]).
 	 *
 	 * @param element  the element to set
 	 * @param beat     the beat where to add the element. Only needed for
@@ -296,6 +294,7 @@ class ColumnHeader : DirectionContainer, MPContainer {
 	 */
 	@Untested
 	fun removeColumnElement(element: ColumnElement) {
+		element.parent = null
 		if (element is Barline) {
 			//left or right barline
 			if (element === startBarline)
@@ -303,7 +302,7 @@ class ColumnHeader : DirectionContainer, MPContainer {
 			else if (element === endBarline)
 				endBarline = null
 			else
-				middleBarlines.remove(element)//middle barline
+				middleBarlines.remove(element) //middle barline
 		} else if (element is Break) {
 			measureBreak = null
 		} else if (element is Key) {
@@ -317,7 +316,7 @@ class ColumnHeader : DirectionContainer, MPContainer {
 		} else if (element is Direction) {
 			otherDirections.remove(element)
 		} else {
-			throw UnsupportedClassException(element)
+			throw IllegalStateException()
 		}
 	}
 
@@ -366,7 +365,7 @@ class ColumnHeader : DirectionContainer, MPContainer {
 		} else if (newElement is Volta) {
 			setVolta(newElement as Volta)
 		} else {
-			throw UnsupportedClassException(newElement)
+			throw IllegalStateException()
 		}
 	}
 
@@ -374,21 +373,24 @@ class ColumnHeader : DirectionContainer, MPContainer {
 	 * Gets the [MP] of the given [ColumnElement], or null if it is not part
 	 * of this column or this column is not part of a score.
 	 */
-	override fun getChildMP(element: MPElement): MP? {
-		if (parentScore == null || parentMeasureIndex == null)
+	override fun getChildMP(element: MPElement<*>): MP? {
+		val score = parentScore
+		val measureIndex = parentMeasureIndex
+		if (score === null || measureIndex === null)
 			return null
 		//elements at the beginning of the measure
-		if (time === element || startBarline == element || volta == element)
-			return atColumnBeat(parentMeasureIndex, Companion.get_0())
-		else if (endBarline == element || measureBreak === element)
-			return atColumnBeat(parentMeasureIndex, parentScore.getMeasureBeats(parentMeasureIndex))
+		if (time === element || startBarline === element || volta === element)
+			return atColumnBeat(measureIndex, `0/`)
+		//elements at the end of the measure
+		else if (endBarline === element || measureBreak === element)
+			return atColumnBeat(measureIndex, score.getMeasureBeats(measureIndex))
+		//elements in the middle of the measure
 		else if (element is Barline)
 			return getMPIn(element, middleBarlines)
 		else if (element is Key)
 			return getMPIn(element, keys)
 		else if (element is Tempo)
-			return getMPIn(element, tempos)//elements in the middle of the measure
-		//elements at the end of the measure
+			return getMPIn(element, tempos)
 		return null
 	}
 
@@ -396,26 +398,18 @@ class ColumnHeader : DirectionContainer, MPContainer {
 	 * Gets the [MP] of the given element within the given list of elements,
 	 * or null if the list of elements is null or the element could not be found.
 	 */
-	private fun getMPIn(element: MPElement, elements: BeatEList<*>?): MP? {
-		if (elements == null)
-			return null
-		for (e in elements)
-			if (e.element === element)
-				return atColumnBeat(parentMeasureIndex, e.beat)
-		return null
-	}
+	private fun getMPIn(element: MPElement<*>, elements: BeatEList<*>?): MP? =
+			parentMeasureIndex?.let { measure ->
+				elements?.find { it.element === element }?.let { atColumnBeat(measure, it.beat) } }
 
 	/**
 	 * Gets the [MeasureSide] of the given element in this column. This applies only to
 	 * start and end barlines. For all other elements, null is returned.
 	 */
-	fun getSide(element: ColumnElement): MeasureSide? {
-		return if (element === startBarline)
-			MeasureSide.Left
-		else if (element === endBarline)
-			MeasureSide.Right
-		else
-			null
+	fun getSide(element: ColumnElement) = when {
+		element === startBarline ->	MeasureSide.Left
+		element === endBarline -> MeasureSide.Right
+		else ->	null
 	}
 
 	/**
@@ -442,7 +436,8 @@ class ColumnHeader : DirectionContainer, MPContainer {
 	}
 
 	companion object {
-		private val middleNotAllowedDirections = arrayOf(MusicElementType.Tempo, MusicElementType.Coda, MusicElementType.DaCapo, MusicElementType.Segno)
+		private val middleNotAllowedDirections = hashSetOf(
+				MusicElementType.Tempo, MusicElementType.Coda, MusicElementType.DaCapo, MusicElementType.Segno)
 	}
 
 }

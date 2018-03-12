@@ -24,7 +24,7 @@ public class FrameTest {
 	@Test public void getAbsolutePosition() {
 		double u = Math.PI / 180d;
 		Layout layout = new Layout(null);
-		Page page = new Page(PageFormat.defaultValue);
+		Page page = new Page(PageFormat.Companion.getDefaultValue());
 		layout.addPage(page);
 		GroupFrame frame = createFrameWithChildren();
 		page.addFrame(frame);
