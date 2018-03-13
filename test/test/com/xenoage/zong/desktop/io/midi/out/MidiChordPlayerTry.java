@@ -21,7 +21,7 @@ public class MidiChordPlayerTry {
 		SynthManager.init(false);
 
 		MidiChordPlayer player = new MidiChordPlayer();
-		Instrument instrument = Instrument.defaultInstrument;
+		Instrument instrument = Instrument.Companion.getDefaultInstrument();
 
 		Pitch pitch = pi(2, 0, 4);
 

@@ -1,5 +1,7 @@
 package com.xenoage.utils.lang
 
+import kotlin.coroutines.experimental.EmptyCoroutineContext.get
+
 /**
  * This interface must be implemented by all enums that contain
  * vocabulary IDs.
@@ -19,3 +21,16 @@ interface VocID {
 	val defaultValue: String
 
 }
+
+/**
+ * Vocabulary ID as a string.
+ */
+class VocByString(
+		override val id: String
+) : VocID {
+
+	override val defaultValue: String
+		get() = id
+}
+
+fun voc(id: String) = VocByString(id)

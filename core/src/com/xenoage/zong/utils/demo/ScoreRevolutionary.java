@@ -76,7 +76,7 @@ public class ScoreRevolutionary {
 	public static Score createScore() {
 		Score score = new Score();
 		
-		Instrument instr = Instrument.defaultInstrument;
+		Instrument instr = Instrument.Companion.getDefaultInstrument();
 		float is = score.getFormat().getInterlineSpace();
 		StaffLayout staffLayout = new StaffLayout(is * 9);
 		score.getFormat().setStaffLayoutOther(staffLayout);

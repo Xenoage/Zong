@@ -16,7 +16,7 @@ public interface Base72a
 	Transpose[] expectedTransposes = {
 		new Transpose(-2, -1, 0, false),
 		new Transpose(-9, -5, 0, false),
-		Transpose.noTranspose
+			Transpose.Companion.getNoTranspose()
 	};
 	
 	Pitch[] expectedSoundPitches = {

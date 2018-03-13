@@ -21,10 +21,10 @@ public interface Base72b
 		new Transpose(-9, -5, 0, false),
 		new Transpose(9, 5, 0, false),
 		new Transpose(-2, -1, 0, false),
-		Transpose.noTranspose,
+			Transpose.Companion.getNoTranspose(),
 		new Transpose(2, 1, 0, false),
 		new Transpose(6, 3, 3, false),
-		Transpose.noTranspose,
+			Transpose.Companion.getNoTranspose(),
 	};
 	
 	Pitch expectedSoundPitch = pi('C', 0, 5);

@@ -49,7 +49,7 @@ public class InstrumentsReader {
 		String id;
 		String name;
 		String abbreviation;
-		Transpose transpose = Transpose.noTranspose;
+		Transpose transpose = Transpose.Companion.getNoTranspose();
 		Integer midiProgram;
 		Integer midiChannel;
 		Float volume;
@@ -57,7 +57,7 @@ public class InstrumentsReader {
 	}
 	
 	private HashMap<String, Info> infos = map();
-	private Transpose partTranspose = Transpose.noTranspose;
+	private Transpose partTranspose = Transpose.Companion.getNoTranspose();
 	
 	
 	/**
@@ -124,7 +124,7 @@ public class InstrumentsReader {
 				}
 			}
 		}
-		return Transpose.noTranspose;
+		return Transpose.Companion.getNoTranspose();
 	}
 
 	/**
@@ -147,7 +147,7 @@ public class InstrumentsReader {
 				}
 			}
 		}
-		return Transpose.noTranspose;
+		return Transpose.Companion.getNoTranspose();
 	}
 	
 	private void readMidiInstruments() {
@@ -181,7 +181,7 @@ public class InstrumentsReader {
 		}
 		//when no instrument was created, but a transposition was found, create
 		//a default instrument with this transposition
-		if (ret.size() == 0 && partTranspose != Transpose.noTranspose) {
+		if (ret.size() == 0 && partTranspose != Transpose.Companion.getNoTranspose()) {
 			PitchedInstrument instrument = new PitchedInstrument(mxlPart.getId(), 0);
 			instrument.setTranspose(partTranspose);
 			ret.add(instrument);

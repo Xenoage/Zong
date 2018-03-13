@@ -18,7 +18,7 @@ public class TransposeReader {
 	
 	public Transpose read() {
 		if (mxlTranspose == null)
-			return Transpose.noTranspose;
+			return Transpose.Companion.getNoTranspose();
 		return new Transpose(mxlTranspose.getChromatic(), mxlTranspose.getDiatonic(),
 			notNull(mxlTranspose.getOctaveChange(), 0), mxlTranspose.isDoubleValue());
 	}

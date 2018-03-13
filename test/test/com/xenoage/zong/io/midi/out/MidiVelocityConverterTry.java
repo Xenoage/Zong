@@ -96,7 +96,7 @@ public class MidiVelocityConverterTry {
 
 	public static Score createTestScore() {
 		Score ret = new Score();
-		Instrument instr = Instrument.defaultInstrument;
+		Instrument instr = Instrument.Companion.getDefaultInstrument();
 		Part pianoPart = new Part("Test", "T", 1, ilist(instr));
 		new PartAdd(ret, pianoPart, 0, null).execute();
 
