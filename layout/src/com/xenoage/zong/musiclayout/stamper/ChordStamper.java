@@ -13,7 +13,7 @@ import com.xenoage.zong.core.music.lyric.SyllableType;
 import com.xenoage.zong.core.music.slur.Slur;
 import com.xenoage.zong.core.music.slur.SlurWaypoint;
 import com.xenoage.zong.core.music.tuplet.Tuplet;
-import com.xenoage.zong.core.music.util.DurationInfo;
+import com.xenoage.zong.core.music.util.Duration;
 import com.xenoage.zong.core.text.FormattedTextStyle;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenLyricsCache;
 import com.xenoage.zong.musiclayout.layouter.cache.OpenSlursCache;
@@ -188,10 +188,10 @@ public class ChordStamper {
 		
 		//type of notehead
 		CommonSymbol noteheadSymbol = CommonSymbol.NoteWhole;
-		DurationInfo.Type symbolType = DurationInfo.getNoteheadSymbolType(element.getDisplayedDuration());
-		if (symbolType == DurationInfo.Type.Half)
+		Duration.Type symbolType = Duration.INSTANCE.getNoteheadSymbolType(element.getDisplayedDuration());
+		if (symbolType == Duration.INSTANCE.Type.Half)
 			noteheadSymbol = CommonSymbol.NoteHalf;
-		else if (symbolType == DurationInfo.Type.Quarter)
+		else if (symbolType == Duration.INSTANCE.Type.Quarter)
 			noteheadSymbol = CommonSymbol.NoteQuarter;
 
 		//noteheads
@@ -208,7 +208,7 @@ public class ChordStamper {
 		}
 
 		//flags (only drawn if there is no beam)
-		int flagsCount = DurationInfo.getFlagsCount(element.getDisplayedDuration());
+		int flagsCount = Duration.INSTANCE.getFlagsCount(element.getDisplayedDuration());
 		Beam beam = element.getBeam();
 		StemDirection stemDir = chord.stemDirection;
 		FlagsStamping flags = null;

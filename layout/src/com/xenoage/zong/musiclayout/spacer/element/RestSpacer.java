@@ -2,7 +2,7 @@ package com.xenoage.zong.musiclayout.spacer.element;
 
 import com.xenoage.utils.math.Fraction;
 import com.xenoage.zong.core.music.rest.Rest;
-import com.xenoage.zong.core.music.util.DurationInfo;
+import com.xenoage.zong.core.music.util.Duration;
 import com.xenoage.zong.musiclayout.notation.RestNotation;
 import com.xenoage.zong.musiclayout.spacing.RestSpacing;
 
@@ -28,13 +28,13 @@ public class RestSpacer {
 	 * middle line and the whole rest hangs on the
 	 * line over the middle staff.
 	 */
-	private int getRestLp(int staffLinesCount, DurationInfo.Type duration) {
-		if (duration == DurationInfo.Type.Whole) {
+	private int getRestLp(int staffLinesCount, Duration.Type duration) {
+		if (duration == Duration.INSTANCE.Type.Whole) {
 			//whole rest hangs on the line above the middle
 			//(the symbol hangs from the origin)
 			return staffLinesCount + 1;
 		}
-		else if (duration == DurationInfo.Type.Half) {
+		else if (duration == Duration.INSTANCE.Type.Half) {
 			//half rest sits on the line under the middle
 			//(the symbol sits on the origin)
 			return staffLinesCount - 1;

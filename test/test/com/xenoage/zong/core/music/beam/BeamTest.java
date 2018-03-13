@@ -43,7 +43,7 @@ public class BeamTest {
 		List<Chord> chords = alist();
 		chords.add(graceChord(pi(0, 4), Companion.fr(1, 32)));
 		chords.add(graceChord(pi(0, 4), Companion.fr(1, 32)));
-		Beam beam = beamFromChordsUnchecked(chords);
+		Beam beam = Companion.beamFromChordsUnchecked(chords);
 		assertEquals(3, beam.getMaxLinesCount());
 	}
 

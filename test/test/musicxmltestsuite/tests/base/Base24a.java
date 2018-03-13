@@ -55,8 +55,8 @@ public interface Base24a
 			ch(Companion.fr(1, 4), pi('C', 0, 5)),
 			ch(Companion.fr(1, 4), pi('C', 0, 5))
 		};
-		new BeamAdd(beamFromChordsUnchecked(alist(b1s, b1e))).execute();
-		new BeamAdd(beamFromChordsUnchecked(alist(b2s, b2e))).execute();
+		new BeamAdd(Companion.beamFromChordsUnchecked(alist(b1s, b1e))).execute();
+		new BeamAdd(Companion.beamFromChordsUnchecked(alist(b2s, b2e))).execute();
 		return expectedChords;
 	}
 

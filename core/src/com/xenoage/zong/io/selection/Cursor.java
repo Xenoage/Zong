@@ -276,7 +276,7 @@ public final class Cursor
 	public void closeBeam() {
 		if (openBeamWaypoints == null)
 			throw new IllegalStateException("No beam is open");
-		Beam beam = beam(openBeamWaypoints);
+		Beam beam = Companion.beam(openBeamWaypoints);
 		for (BeamWaypoint wp : openBeamWaypoints)
 			wp.getChord().setBeam(beam);
 		openBeamWaypoints = null;

@@ -9,7 +9,7 @@ import lombok.val;
 
 import static com.xenoage.utils.kernel.Range.range;
 import static com.xenoage.utils.math.MathUtils.interpolateLinear;
-import static com.xenoage.zong.core.music.util.DurationInfo.getFlagsCount;
+import static com.xenoage.zong.core.music.util.Duration.getFlagsCount;
 import static com.xenoage.zong.musiclayout.SLP.slp;
 import static com.xenoage.zong.musiclayout.spacer.beam.BeamSpacer.beamSpacer;
 import static com.xenoage.zong.musiclayout.spacer.beam.placement.TwoStavesBeamPlacer.twoStavesBeamPlacer;
@@ -52,7 +52,7 @@ public class TwoStavesBeamSpacer {
 			//when the note is not on the primary staff, but on the other staff, we have to lengthen the stem
 			//so that it touches each beam line
 			if (stems.get(iChord).dir != stems.primaryStemDir) {
-				int linesCountAtChord = getFlagsCount(beam.chords.get(iChord).element.getDuration());
+				int linesCountAtChord = INSTANCE.getFlagsCount(beam.chords.get(iChord).element.getDuration());
 				lp += stems.get(iChord).dir.getSign() * 2 * ((linesCountAtChord - 1) * beam.lineHeightIs +
 						linesCountAtChord * beam.gapIs);
 			}

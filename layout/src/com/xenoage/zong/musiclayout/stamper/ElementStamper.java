@@ -3,7 +3,7 @@ package com.xenoage.zong.musiclayout.stamper;
 import com.xenoage.zong.core.music.clef.ClefType;
 import com.xenoage.zong.core.music.format.SP;
 import com.xenoage.zong.core.music.time.TimeType;
-import com.xenoage.zong.core.music.util.DurationInfo;
+import com.xenoage.zong.core.music.util.Duration;
 import com.xenoage.zong.musiclayout.notation.ClefNotation;
 import com.xenoage.zong.musiclayout.notation.TimeNotation;
 import com.xenoage.zong.musiclayout.notation.TraditionalKeyNotation;
@@ -86,21 +86,21 @@ public class ElementStamper {
 	}
 	
 	
-	private static HashMap<DurationInfo.Type, CommonSymbol> durationSymbolMapping = new HashMap<>();
+	private static HashMap<Duration.Type, CommonSymbol> durationSymbolMapping = new HashMap<>();
 
 	static {
-		durationSymbolMapping.put(DurationInfo.Type.Whole, CommonSymbol.RestWhole);
-		durationSymbolMapping.put(DurationInfo.Type.Half, CommonSymbol.RestHalf);
-		durationSymbolMapping.put(DurationInfo.Type.Quarter, CommonSymbol.RestQuarter);
-		durationSymbolMapping.put(DurationInfo.Type.Eighth, CommonSymbol.RestEighth);
-		durationSymbolMapping.put(DurationInfo.Type._16th, CommonSymbol.Rest16th);
-		durationSymbolMapping.put(DurationInfo.Type._32th, CommonSymbol.Rest32th);
-		durationSymbolMapping.put(DurationInfo.Type._64th, CommonSymbol.Rest64th);
-		durationSymbolMapping.put(DurationInfo.Type._128th, CommonSymbol.Rest128th);
-		durationSymbolMapping.put(DurationInfo.Type._256th, CommonSymbol.Rest256th);
+		durationSymbolMapping.put(Duration.INSTANCE.Type.Whole, CommonSymbol.RestWhole);
+		durationSymbolMapping.put(Duration.INSTANCE.Type.Half, CommonSymbol.RestHalf);
+		durationSymbolMapping.put(Duration.INSTANCE.Type.Quarter, CommonSymbol.RestQuarter);
+		durationSymbolMapping.put(Duration.INSTANCE.Type.Eighth, CommonSymbol.RestEighth);
+		durationSymbolMapping.put(Duration.INSTANCE.Type._16th, CommonSymbol.Rest16th);
+		durationSymbolMapping.put(Duration.INSTANCE.Type._32th, CommonSymbol.Rest32th);
+		durationSymbolMapping.put(Duration.INSTANCE.Type._64th, CommonSymbol.Rest64th);
+		durationSymbolMapping.put(Duration.INSTANCE.Type._128th, CommonSymbol.Rest128th);
+		durationSymbolMapping.put(Duration.INSTANCE.Type._256th, CommonSymbol.Rest256th);
 	}
 	
-	private Symbol getRestSymbol(DurationInfo.Type duration, StamperContext context) {
+	private Symbol getRestSymbol(Duration.Type duration, StamperContext context) {
 		CommonSymbol cs = durationSymbolMapping.get(duration);
 		SymbolPool symbols = context.layouter.symbols;
 		if (cs != null)

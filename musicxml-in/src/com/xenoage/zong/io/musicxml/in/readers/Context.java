@@ -413,7 +413,7 @@ public final class Context {
 	 */
 	public void writeBeam(List<Chord> chords) {
 		try {
-			new BeamAdd(Beam.beamFromChords(chords)).execute();
+			new BeamAdd(Beam.Companion.beamFromChords(chords)).execute();
 		} catch (IllegalArgumentException ex) {
 			reportError(ex.getMessage());
 		}

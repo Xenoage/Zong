@@ -24,7 +24,7 @@ public class ChlapikBeamFragments {
 		chords.add(chordC(Companion.fr(1, 16)));
 		chords.add(chordC(Companion.fr(1, 8)));
 		chords.add(chordC(Companion.fr(1, 16)));
-		return beamFromChordsUnchecked(chords);
+		return Companion.beamFromChordsUnchecked(chords);
 	}
 
 	public Beam exampleRow1Col2() {
@@ -32,7 +32,7 @@ public class ChlapikBeamFragments {
 		chords.add(chordF(Companion.fr(1, 16)));
 		chords.add(chordF(Companion.fr(1, 8)));
 		chords.add(chordF(Companion.fr(1, 16)));
-		return beamFromChordsUnchecked(chords);
+		return Companion.beamFromChordsUnchecked(chords);
 	}
 
 	public Beam exampleRow1Col3() {
@@ -41,7 +41,7 @@ public class ChlapikBeamFragments {
 		chords.add(chordC(Companion.fr(1, 8)));
 		chords.add(chordC(Companion.fr(1, 8)));
 		chords.add(chordC(Companion.fr(1, 16)));
-		return beamFromChordsUnchecked(chords);
+		return Companion.beamFromChordsUnchecked(chords);
 	}
 
 	public Beam exampleRow1Col4() {
@@ -50,21 +50,21 @@ public class ChlapikBeamFragments {
 		chords.add(chordF(Companion.fr(1, 8)));
 		chords.add(chordF(Companion.fr(1, 8)));
 		chords.add(chordF(Companion.fr(1, 16)));
-		return beamFromChordsUnchecked(chords);
+		return Companion.beamFromChordsUnchecked(chords);
 	}
 
 	public Beam exampleRow2Col1() {
 		List<Chord> chords = alist();
 		chords.add(chordC(Companion.fr(3, 16)));
 		chords.add(chordC(Companion.fr(1, 16)));
-		return beamFromChordsUnchecked(chords);
+		return Companion.beamFromChordsUnchecked(chords);
 	}
 
 	public Beam exampleRow2Col2() {
 		List<Chord> chords = alist();
 		chords.add(chordF(Companion.fr(3, 16)));
 		chords.add(chordF(Companion.fr(1, 16)));
-		return beamFromChordsUnchecked(chords);
+		return Companion.beamFromChordsUnchecked(chords);
 	}
 
 	public Beam exampleRow2Col3() {
@@ -73,7 +73,7 @@ public class ChlapikBeamFragments {
 		chords.add(chordC(Companion.fr(1, 32)));
 		chords.add(chordC(Companion.fr(3, 32)));
 		chords.add(chordC(Companion.fr(1, 32)));
-		return beamFromChordsUnchecked(chords);
+		return Companion.beamFromChordsUnchecked(chords);
 	}
 
 	public Beam exampleRow2Col4() {
@@ -82,7 +82,7 @@ public class ChlapikBeamFragments {
 		chords.add(chordF(Companion.fr(1, 32)));
 		chords.add(chordF(Companion.fr(3, 32)));
 		chords.add(chordF(Companion.fr(1, 32)));
-		return beamFromChordsUnchecked(chords);
+		return Companion.beamFromChordsUnchecked(chords);
 	}
 
 	public Beam exampleRow2Col5() {
@@ -90,7 +90,7 @@ public class ChlapikBeamFragments {
 		chords.add(chordC(Companion.fr(1, 8)));
 		chords.add(chordC(Companion.fr(1, 32)));
 		chords.add(chordC(Companion.fr(3, 32)));
-		return beamFromChordsUnchecked(chords);
+		return Companion.beamFromChordsUnchecked(chords);
 	}
 
 	public Beam exampleRow2Col6() {
@@ -98,7 +98,7 @@ public class ChlapikBeamFragments {
 		chords.add(chordF(Companion.fr(1, 8)));
 		chords.add(chordF(Companion.fr(1, 32)));
 		chords.add(chordF(Companion.fr(3, 32)));
-		return beamFromChordsUnchecked(chords);
+		return Companion.beamFromChordsUnchecked(chords);
 	}
 
 	public Beam exampleRow3Col2() {
@@ -107,7 +107,7 @@ public class ChlapikBeamFragments {
 		chords.add(chordC(Companion.fr(1, 8)));
 		chords.add(chordC(Companion.fr(1, 16)));
 		chords.add(chordC(Companion.fr(1, 8)));
-		return beamFromChordsUnchecked(chords);
+		return Companion.beamFromChordsUnchecked(chords);
 	}
 
 	public Beam exampleRow3Col4() {
@@ -115,7 +115,7 @@ public class ChlapikBeamFragments {
 		chords.add(chordC(Companion.fr(1, 8)));
 		chords.add(chordC(Companion.fr(1, 16)));
 		chords.add(chordC(Companion.fr(3, 16)));
-		return beamFromChordsUnchecked(chords);
+		return Companion.beamFromChordsUnchecked(chords);
 	}
 
 	public Beam exampleRow3Col6() {
@@ -124,7 +124,7 @@ public class ChlapikBeamFragments {
 		chords.add(chordC(Companion.fr(1, 32)));
 		chords.add(chordC(Companion.fr(3, 32)));
 		chords.add(chordC(Companion.fr(1, 32)));
-		return beamFromChordsUnchecked(chords);
+		return Companion.beamFromChordsUnchecked(chords);
 	}
 
 	private Chord chordC(Fraction duration) {

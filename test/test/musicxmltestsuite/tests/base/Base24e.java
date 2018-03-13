@@ -32,7 +32,7 @@ public interface Base24e
 				gr(Companion.fr(1, 16), false, pi('G', 0, 5)),
 				gr(Companion.fr(1, 16), false, pi('A', 0, 5))
 			}};
-		new BeamAdd(beamFromChordsUnchecked(alist(ret[0][0], ret[0][1]))).execute();
+		new BeamAdd(Companion.beamFromChordsUnchecked(alist(ret[0][0], ret[0][1]))).execute();
 		return ret;
 	}
 	

@@ -411,7 +411,7 @@ public class VoiceElementWriteTest {
 				beamChords.add(chord);
 			}
 			//create beam
-			beamFromChords(beamChords);
+			Companion.beamFromChords(beamChords);
 		}
 		//ensure that assert method works correctly. if not, fail now
 		assertTestScoreEighthsOriginalState(score);

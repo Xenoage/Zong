@@ -2,7 +2,7 @@ package com.xenoage.zong.musiclayout.notation;
 
 import com.xenoage.utils.annotations.Const;
 import com.xenoage.zong.core.music.rest.Rest;
-import com.xenoage.zong.core.music.util.DurationInfo;
+import com.xenoage.zong.core.music.util.Duration;
 import com.xenoage.zong.core.position.MP;
 import com.xenoage.zong.musiclayout.spacing.ElementWidth;
 import lombok.AllArgsConstructor;
@@ -18,7 +18,7 @@ import lombok.Getter;
 
 	@Getter public final Rest element;
 	public final ElementWidth width;
-	public final DurationInfo.Type duration;
+	public final Duration.Type duration;
 
 	@Override public MP getMp() {
 		return element.getMP();

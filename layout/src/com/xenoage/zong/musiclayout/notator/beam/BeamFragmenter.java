@@ -9,7 +9,7 @@ import java.util.List;
 
 import static com.xenoage.utils.collections.CollectionUtils.alist;
 import static com.xenoage.utils.kernel.Range.range;
-import static com.xenoage.zong.core.music.util.DurationInfo.getFlagsCount;
+import static com.xenoage.zong.core.music.util.Duration.getFlagsCount;
 import static com.xenoage.zong.musiclayout.notation.beam.Fragment.*;
 
 /**
@@ -60,7 +60,7 @@ public class BeamFragmenter {
 			if (iChord < beam.getWaypoints().size()) {
 				//another chord within the beam
 				Chord chord = beam.getChord(iChord);
-				int flagsCount = getFlagsCount(chord.getDuration());
+				int flagsCount = INSTANCE.getFlagsCount(chord.getDuration());
 				//enough flags for the given line? (e.g. a 8th beam has no 16th line)
 				if (flagsCount >= line + 1) {
 					//yes, we need a line of the given line for this stem

@@ -24,7 +24,7 @@ public interface Base24c
 			ch(Companion.fr(2, 4), pi('E', 0, 5)),
 			gr(Companion.fr(1, 16), false, pi('G', 0, 5)),
 			gr(Companion.fr(1, 16), false, pi('A', 0, 5))};
-		new BeamAdd(beamFromChordsUnchecked(alist(ret[2], ret[3]))).execute();
+		new BeamAdd(Companion.beamFromChordsUnchecked(alist(ret[2], ret[3]))).execute();
 		return ret;
 	}
 

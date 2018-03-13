@@ -6,7 +6,7 @@ import com.xenoage.zong.core.music.ColumnElement;
 import com.xenoage.zong.core.music.direction.*;
 import com.xenoage.zong.core.music.direction.Pedal.Type;
 import com.xenoage.zong.core.music.format.Positioning;
-import com.xenoage.zong.core.music.util.DurationInfo;
+import com.xenoage.zong.core.music.util.Duration;
 import com.xenoage.zong.io.musicxml.in.util.StaffDetails;
 import com.xenoage.zong.musicxml.types.*;
 import com.xenoage.zong.musicxml.types.choice.MxlDirectionTypeContent;
@@ -130,7 +130,7 @@ public class DirectionReader {
 		
 		//compute base beat
 		Fraction baseBeat = mxlMetronome.getBeatUnit().getDuration();
-		baseBeat = DurationInfo.getDuration(baseBeat, mxlMetronome.getDotsCount());
+		baseBeat = Duration.INSTANCE.getDuration(baseBeat, mxlMetronome.getDotsCount());
 		
 		Tempo tempo = new Tempo(baseBeat, mxlMetronome.getPerMinute()); //text: TODO
 		//TODO tempo.setFont(FontInfoReader.read(currentMxlDirection, defaultFont));
