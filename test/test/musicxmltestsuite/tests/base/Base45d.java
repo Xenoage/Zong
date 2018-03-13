@@ -17,7 +17,7 @@ public interface Base45d
 
 	Barline[] expectedEndBarlines = {
 		null,
-		Barline.barlineBackwardRepeat(BarlineStyle.LightHeavy, 1),
+		Barline.Companion.barlineBackwardRepeat(BarlineStyle.LightHeavy, 1),
 		null,
 		null,
 		null,
@@ -26,8 +26,8 @@ public interface Base45d
 		null,
 		null,
 		null,
-		Barline.barlineBackwardRepeat(BarlineStyle.LightHeavy, 1),
-		Barline.barline(BarlineStyle.LightHeavy),
+		Barline.Companion.barlineBackwardRepeat(BarlineStyle.LightHeavy, 1),
+		Barline.Companion.barline(BarlineStyle.LightHeavy),
 	};
 	
 	Volta[] expectedVoltas = {

@@ -25,7 +25,7 @@ public class ColumnElementRemoveTest {
 		CommandPerformer cmd = score.getCommandPerformer();
 		ColumnHeader column2 = score.getColumnHeader(2);
 		//write middle barline
-		Barline b = Barline.barline(BarlineStyle.LightHeavy);
+		Barline b = Barline.Companion.barline(BarlineStyle.LightHeavy);
 		cmd.execute(new ColumnElementWrite(b, column2, Companion.fr(1, 4), null));
 		//remove it
 		cmd.execute(new ColumnElementRemove(column2, b));

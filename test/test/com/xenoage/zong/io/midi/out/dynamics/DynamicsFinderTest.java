@@ -70,9 +70,9 @@ public class DynamicsFinderTest {
 		//time signature and repeats
 		new ColumnElementWrite(new TimeSignature(TimeType.time_4_4),
 				score.getColumnHeader(0), null, null ).execute();
-		new ColumnElementWrite(barlineForwardRepeat(Regular),
+		new ColumnElementWrite(Companion.barlineForwardRepeat(Regular),
 				score.getColumnHeader(1), null, MeasureSide.Left).execute();
-		new ColumnElementWrite(barlineBackwardRepeat(Regular, 1),
+		new ColumnElementWrite(Companion.barlineBackwardRepeat(Regular, 1),
 				score.getColumnHeader(2), null, MeasureSide.Right).execute();
 		//staff 0
 		new MeasureElementWrite(new Dynamic(mp), score.getMeasure(atMeasure(0, 0)), Companion.get_0()).execute();

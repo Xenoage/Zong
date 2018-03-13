@@ -21,7 +21,8 @@ data class Break(
 	/** Back reference: the parent measure column, or null if not part of a score */
 	override var parent: ColumnHeader? = null
 
-	override val elementType = MusicElementType.Break
+	override val elementType: MusicElementType
+		get() = MusicElementType.Break
 
 	override fun toString() = "Break ($pageBreak, $systemBreak)"
 

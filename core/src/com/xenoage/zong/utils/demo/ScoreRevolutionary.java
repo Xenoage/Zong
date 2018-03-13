@@ -292,7 +292,7 @@ public class ScoreRevolutionary {
 		cursor.write(new Rest(f2));
 
 		//end line
-		Barline barlineEnd = Barline.barline(BarlineStyle.LightHeavy);
+		Barline barlineEnd = Barline.Companion.barline(BarlineStyle.LightHeavy);
 		new ColumnElementWrite(barlineEnd, score.getColumnHeader(4), null, MeasureSide.Right).execute();
 
 		return score;

@@ -15,17 +15,17 @@ public interface Base46a
 
 	Barline[] expectedEndBarlines = {
 		null,
-		Barline.barline(BarlineStyle.Regular),
-		Barline.barline(BarlineStyle.Dotted),
-		Barline.barline(BarlineStyle.Dashed),
-		Barline.barline(BarlineStyle.Heavy),
-		Barline.barline(BarlineStyle.LightLight),
-		Barline.barline(BarlineStyle.LightHeavy),
-		Barline.barline(BarlineStyle.HeavyLight),
-		Barline.barline(BarlineStyle.HeavyHeavy),
+		Barline.Companion.barline(BarlineStyle.Regular),
+		Barline.Companion.barline(BarlineStyle.Dotted),
+		Barline.Companion.barline(BarlineStyle.Dashed),
+		Barline.Companion.barline(BarlineStyle.Heavy),
+		Barline.Companion.barline(BarlineStyle.LightLight),
+		Barline.Companion.barline(BarlineStyle.LightHeavy),
+		Barline.Companion.barline(BarlineStyle.HeavyLight),
+		Barline.Companion.barline(BarlineStyle.HeavyHeavy),
 		null, //TODO: tick
 		null, //TODO: short
-		Barline.barline(BarlineStyle.None),
+		Barline.Companion.barline(BarlineStyle.None),
 		null,
 	};
 	

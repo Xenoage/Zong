@@ -41,10 +41,10 @@ public class BarlinesBeatOffsetterTest {
 			new BeatOffset(Companion.fr(4, 4), 4 * d));
 		//create barlines
 		ColumnHeader ch = new ColumnHeader(null, 0);
-		ch.setStartBarline(barlineForwardRepeat(HeavyLight));
-		ch.setMiddleBarline(barlineMiddleBothRepeat(LightLight, 1), Companion.fr(2, 4));
-		ch.setMiddleBarline(barlineRegular(), Companion.fr(3, 4));
-		ch.setEndBarline(barlineBackwardRepeat(LightHeavy, 1));
+		ch.setStartBarline(Companion.barlineForwardRepeat(HeavyLight));
+		ch.setMiddleBarline(Companion.barlineMiddleBothRepeat(LightLight, 1), Companion.fr(2, 4));
+		ch.setMiddleBarline(Companion.barlineRegular(), Companion.fr(3, 4));
+		ch.setEndBarline(Companion.barlineBackwardRepeat(LightHeavy, 1));
 		//compute new offsets and check results
 		BarlinesBeatOffsetter.Result result = testee.compute(baseOffsets, ch, is);
 		float dRep = BarlinesBeatOffsetter.repeatSpace * is;

@@ -53,17 +53,17 @@ public class BarlineReader {
 			//repeat barline
 			if (repeat.getDirection() == MxlBackwardForward.Forward) {
 				style = notNull(style, BarlineStyle.HeavyLight);
-				barline = barlineForwardRepeat(style);
+				barline = Companion.barlineForwardRepeat(style);
 			}
 			else if (repeat.getDirection() == MxlBackwardForward.Backward) {
 				style = notNull(style, BarlineStyle.LightHeavy);
 				int times = notNull(repeat.getTimes(), 1);
-				barline = barlineBackwardRepeat(style, times);
+				barline = Companion.barlineBackwardRepeat(style, times);
 			}
 		}
 		else if (style != null) {
 			//regular barline
-			barline = barline(style);
+			barline = Companion.barline(style);
 		}
 		if (barline != null) {
 			//side / beat

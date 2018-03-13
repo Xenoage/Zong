@@ -70,9 +70,9 @@ public class TimeMapperTest {
 		new MeasureAdd(score, 5).execute();
 		//time, barlines, voltas and signs
 		score.getColumnHeader(0).setTime(new TimeSignature(TimeType.time_4_4));
-		score.getColumnHeader(1).setStartBarline(barlineForwardRepeat(Regular));
+		score.getColumnHeader(1).setStartBarline(Companion.barlineForwardRepeat(Regular));
 		score.getColumnHeader(2).setVolta(new Volta(1, range(1, 1), "1", true));
-		score.getColumnHeader(2).setEndBarline(barlineBackwardRepeat(Regular, 1));
+		score.getColumnHeader(2).setEndBarline(Companion.barlineBackwardRepeat(Regular, 1));
 		score.getColumnHeader(3).setVolta(new Volta(1, range(2, 2), "2", true));
 		score.getColumnHeader(4).setNavigationOrigin(new DaCapo(false));
 		//staff 0, voice 0

@@ -11,8 +11,8 @@ public interface Base45a
 	}
 
 	Barline[] expectedEndBarlines = {
-		Barline.barlineBackwardRepeat(BarlineStyle.LightHeavy, 5),
-		Barline.barline(BarlineStyle.LightHeavy),
+		Barline.Companion.barlineBackwardRepeat(BarlineStyle.LightHeavy, 5),
+		Barline.Companion.barline(BarlineStyle.LightHeavy),
 	};
 	
 }

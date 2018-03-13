@@ -18,25 +18,25 @@ public interface Base45e
 		null,
 		null,
 		null,
-		Barline.barlineForwardRepeat(BarlineStyle.HeavyLight),
+		Barline.Companion.barlineForwardRepeat(BarlineStyle.HeavyLight),
 		null,
 		null,
-		Barline.barlineForwardRepeat(BarlineStyle.HeavyLight),
+		Barline.Companion.barlineForwardRepeat(BarlineStyle.HeavyLight),
 		null,
 		null
 	};
 
 	Barline[] expectedEndBarlines = {
 		null,
-		Barline.barlineBackwardRepeat(BarlineStyle.LightHeavy, 1),
+		Barline.Companion.barlineBackwardRepeat(BarlineStyle.LightHeavy, 1),
 		null,
 		null,
-		Barline.barlineBackwardRepeat(BarlineStyle.LightHeavy, 1),
+		Barline.Companion.barlineBackwardRepeat(BarlineStyle.LightHeavy, 1),
 		null,
-		Barline.barlineBackwardRepeat(BarlineStyle.LightHeavy, 1),
+		Barline.Companion.barlineBackwardRepeat(BarlineStyle.LightHeavy, 1),
 		null,
-		Barline.barlineBackwardRepeat(BarlineStyle.LightHeavy, 1),
-		Barline.barline(BarlineStyle.LightHeavy),
+		Barline.Companion.barlineBackwardRepeat(BarlineStyle.LightHeavy, 1),
+		Barline.Companion.barline(BarlineStyle.LightHeavy),
 	};
 	
 	Volta[] expectedVoltas = {

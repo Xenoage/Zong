@@ -19,8 +19,8 @@ public interface Base45f
 		null,
 		null,
 		null,
-		Barline.barlineBackwardRepeat(BarlineStyle.LightHeavy, 1),
-		Barline.barline(BarlineStyle.LightHeavy),
+		Barline.Companion.barlineBackwardRepeat(BarlineStyle.LightHeavy, 1),
+		Barline.Companion.barline(BarlineStyle.LightHeavy),
 	};
 	
 	Volta[] expectedVoltas = {

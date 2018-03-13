@@ -66,9 +66,9 @@ public class ColumnElementIteratorTest {
 			cursor.setMp(mp(unknown, measure, 0, Companion.get_0(), 0));
 			cursor.write(new TimeSignature(time_4_4));
 			cursor.setMp(mp(unknown, measure, unknown, Companion.fr(1, 4), 0));
-			cursor.write(barlineRegular());
+			cursor.write(Companion.barlineRegular());
 			ColumnHeader column = score.getColumnHeader(measure);
-			column.setEndBarline(barline(LightLight));
+			column.setEndBarline(Companion.barline(LightLight));
 		}
 		return score;
 	}

@@ -1,24 +1,22 @@
-package com.xenoage.zong.core.music.barline;
+package com.xenoage.zong.core.music.barline
 
 
 /**
  * Style of a barline, inspired by MusicXML.
- * 
+ *
  * Repeat dots are not encoded in the barline style, but in
- * the {@link Barline} element itself.
- * 
- * @author Andreas Wenger
+ * the [Barline] element itself.
  */
-public enum BarlineStyle {
-	/** Normal single barline. */
+enum class BarlineStyle {
+	/** Normal single barline */
 	Regular,
-	/** Dotted barline. */
+	/** Dotted barline */
 	Dotted,
-	/** Dashed barline. */
+	/** Dashed barline */
 	Dashed,
-	/** Thick barline. */
+	/** Thick barline */
 	Heavy,
-	/** Double barline with two thin lines. */
+	/** Double barline with two thin lines */
 	LightLight,
 	/** Double barline with a thin line followed by a thick one. Usually used as the final barline and for repeat ends. */
 	LightHeavy,
@@ -27,5 +25,5 @@ public enum BarlineStyle {
 	/** Double barline with two thick lines. */
 	HeavyHeavy,
 	/** Invisible barline. */
-	None;
+	None
 }

@@ -305,21 +305,21 @@ public class RepetitionsFinderTest {
 	Score score;
 
 	private void writeForwardRepeat(int measure) {
-		score.getColumnHeader(measure).setStartBarline(Barline.barlineForwardRepeat(BarlineStyle.HeavyLight));
+		score.getColumnHeader(measure).setStartBarline(Barline.Companion.barlineForwardRepeat(BarlineStyle.HeavyLight));
 	}
 
 	private void writeMiddleForwardRepeat(int measure, Fraction beat) {
 		score.getColumnHeader(measure).getMiddleBarlines().add(Companion.beatE(
-				Barline.barlineForwardRepeat(BarlineStyle.Dashed), beat));
+				Barline.Companion.barlineForwardRepeat(BarlineStyle.Dashed), beat));
 	}
 
 	private void writeBackwardRepeat(int measure, int repeatTimes) {
-		score.getColumnHeader(measure).setEndBarline(Barline.barlineBackwardRepeat(BarlineStyle.LightHeavy, repeatTimes));
+		score.getColumnHeader(measure).setEndBarline(Barline.Companion.barlineBackwardRepeat(BarlineStyle.LightHeavy, repeatTimes));
 	}
 
 	private void writeMiddleBackwardRepeat(int measure, Fraction beat, int repeatTimes) {
 		score.getColumnHeader(measure).getMiddleBarlines().add(Companion.beatE(
-				Barline.barlineBackwardRepeat(BarlineStyle.Dashed, repeatTimes), beat));
+				Barline.Companion.barlineBackwardRepeat(BarlineStyle.Dashed, repeatTimes), beat));
 	}
 
 	private void writeNavigationTarget(int measure, NavigationSign sign) {

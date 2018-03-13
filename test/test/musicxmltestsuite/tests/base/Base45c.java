@@ -12,7 +12,7 @@ public interface Base45c
 	
 	Barline[] expectedStartBarlines = {
 		null,
-		Barline.barlineForwardRepeat(BarlineStyle.HeavyLight),
+		Barline.Companion.barlineForwardRepeat(BarlineStyle.HeavyLight),
 		null,
 		null,
 		null,
@@ -24,12 +24,12 @@ public interface Base45c
 	Barline[] expectedEndBarlines = {
 		null,
 		null,
-		Barline.barlineBackwardRepeat(BarlineStyle.LightHeavy, 5),
+		Barline.Companion.barlineBackwardRepeat(BarlineStyle.LightHeavy, 5),
 		null,
 		null,
 		null,
-		Barline.barlineBackwardRepeat(BarlineStyle.LightHeavy, 3),
-		Barline.barline(BarlineStyle.LightHeavy),
+		Barline.Companion.barlineBackwardRepeat(BarlineStyle.LightHeavy, 3),
+		Barline.Companion.barline(BarlineStyle.LightHeavy),
 	};
 	
 }

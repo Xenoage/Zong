@@ -45,7 +45,7 @@ public class BarlinesStamper {
 		
 		//common barline at the beginning, when system has at least one measure
 		if (system.columns.size() > 0) {
-			ret.add(new BarlineStamping(Barline.barlineRegular(), systemStaves, xOffset,
+			ret.add(new BarlineStamping(Barline.Companion.barlineRegular(), systemStaves, xOffset,
 				BarlineGroup.Style.Common));
 		}
 		
@@ -99,7 +99,7 @@ public class BarlinesStamper {
 				//end barline. if none is set, use a regular one.
 				Barline endBarline = columnHeader.getEndBarline();
 				if (endBarline == null)
-					endBarline = Barline.barlineRegular();
+					endBarline = Barline.Companion.barlineRegular();
 				ret.add(new BarlineStamping(endBarline, groupStaves, xRight, barlineGroupStyle));
 				
 				//middle barlines

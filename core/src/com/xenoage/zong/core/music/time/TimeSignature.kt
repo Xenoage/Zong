@@ -19,7 +19,8 @@ class TimeSignature(
 	/** Back reference: the parent column header, or null, if not part of a score.  */
 	override var parent: ColumnHeader? = null
 
-	override val elementType = MusicElementType.Time
+	override val elementType: MusicElementType
+		get() = MusicElementType.Time
 
 }
 
