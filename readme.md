@@ -1,5 +1,7 @@
 # Zong! Music Notation Project
 
+***NB Currently we are converting the Zong! project from Java to [Kotlin](https://kotlinlang.org). We will get rid of the Lombok and GWT workarounds and will have a more modern language that targets both the Desktop (JVM) and the Web (JavaScript).***
+
 _Zong!_ is an open-source music notation software, which is currently under development. It will be available on a number of devices and systems, including Windows, Mac OS X, Linux, Android and the Web (HTML5 + JS).
 
 To build the project, call `gradlew` in the root folder. To build the Android part, call `gradlew` in the `mobile` folder.
