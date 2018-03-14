@@ -27,8 +27,8 @@ public class Test43a
 		StavesList stavesList = score.getStavesList();
 		assertEquals(1, stavesList.getParts().size());
 		assertEquals(2, stavesList.getParts().get(0).getStavesCount());
-		testStaff(0, ClefType.clefTreble, pi('F', 0, 4));
-		testStaff(1, ClefType.clefBass, pi('B', 0, 2));
+		testStaff(0, ClefType.Companion.getClefTreble(), pi('F', 0, 4));
+		testStaff(1, ClefType.Companion.getClefBass(), pi('B', 0, 2));
 	}
 
 	private void testStaff(int staff, ClefType clefType, Pitch pitch) {

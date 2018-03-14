@@ -81,7 +81,7 @@ public class Measure
 	 * Creates an empty measure.
 	 */
 	public static Measure measure() {
-		return new Measure(alist(Voice.voice()), null, null, null, null);
+		return new Measure(alist(Voice.Companion.voice()), null, null, null, null);
 	}
 
 
@@ -362,7 +362,7 @@ public class Measure
 	 */
 	public void setVoice(int index, Voice voice) {
 		while (index >= voices.size()) {
-			Voice voiceFill = voice();
+			Voice voiceFill = Companion.voice();
 			voiceFill.setParent(this);
 			voices.add(voiceFill);
 		}

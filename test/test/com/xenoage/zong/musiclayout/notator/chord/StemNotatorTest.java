@@ -138,7 +138,7 @@ public class StemNotatorTest {
 		StemDirection stemDirection = singleStemDirector.compute(linepositions, 5);
 		chordNotesAlignment = notesNotator.compute(chord, stemDirection,
 			defaultChordWidthsNormal, context);
-		chordStemAlignment = testee.compute(Stem.defaultStem, chordNotesAlignment.getLps(),
+		chordStemAlignment = testee.compute(Stem.Companion.getDefaultStem(), chordNotesAlignment.getLps(),
 			stemDirection, 0, staff5Lines, 1);
 		assertEquals(start, chordStemAlignment.startSlp.lp, Delta.DELTA_FLOAT);
 		assertEquals(end, chordStemAlignment.endSlp.lp, Delta.DELTA_FLOAT);

@@ -107,7 +107,7 @@ public class ScoreRevolutionary {
 		cursor.write(new TimeSignature(TimeType.timeCommon));
 
 		//first staff: g-clef and some notes
-		cursor.write(new Clef(ClefType.clefTreble));
+		cursor.write(new Clef(ClefType.Companion.getClefTreble()));
 
 		//measure 1
 		Tempo tempo = new Tempo(f4, 160); //, , FontInfo.defaultValue, );
@@ -161,7 +161,7 @@ public class ScoreRevolutionary {
 
 		//second staff: f-clef some notes
 		cursor = new Cursor(cursor.getScore(), mp(1, 0, 0, Companion.get_0(), 0), true);
-		cursor.write(new Clef(ClefType.clefBass));
+		cursor.write(new Clef(ClefType.Companion.getClefBass()));
 
 		//measure 1
 		cursor.openBeam();
@@ -305,7 +305,7 @@ public class ScoreRevolutionary {
 
 
 	private static Chord chord(Fraction fraction, ArticulationType[] articulations, Pitch... pitches) {
-		Chord chord = new Chord(Note.notes(pitches), fraction);
+		Chord chord = new Chord(Note.Companion.notes(pitches), fraction);
 		if (articulations != null) {
 			ArrayList<Annotation> a = alist(articulations.length);
 			for (ArticulationType at : articulations)

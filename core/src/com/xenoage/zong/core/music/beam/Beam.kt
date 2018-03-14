@@ -15,6 +15,7 @@ import com.xenoage.utils.collections.CollectionUtils.getFirst
 import com.xenoage.utils.kernel.Range.range
 import com.xenoage.utils.math.MathUtils.min
 import com.xenoage.zong.core.music.Voice
+import com.xenoage.zong.core.music.util.flagsCount
 import java.lang.Math.max
 
 
@@ -44,28 +45,25 @@ class Beam(
 	/** The maximum number of beam lines used in the this beam */
 	val maxLinesCount: Int
 		get() {
-			val minDuration = waypoints.minBy { it.chord.displayedDuration }.duration
-			return Duration.getFlagsCount(minDuration)
+			val minDuration = waypoints.asSequence().map{ it.chord.duration }.min() ?: throw IllegalStateException()
+			return minDuration.flagsCount
 		}
 
 	val musicElementType: MusicElementType
 		get() = MusicElementType.Beam
 
-
 	/**
 	 * The parent of the beam is defined as the voice of the start of the beam.
 	 */
-	override var parent: MPContainer?
-		get() = getFirst(waypoints).getChord().getParent()
-		set(value: MPContainer?) {
-			super.parent = value
-		}
+	override var parent: Voice?
+		get() = waypoints.first().chord.parent
+		set(value: Voice?) = throw UnsupportedOperationException()
 
 	/**
-	 * The MP of the beam is the same as the MP of the first chord in the beam.
+	 * The [MP] of the beam is the same as the [MP] of the first chord in the beam.
 	 */
-	val mp: MP
-		get() = getFirst(waypoints).getChord().getMP()
+	override val mp: MP?
+		get() = waypoints.first().chord.mp
 
 	/** Spread of this beam within a system.  */
 	enum class VerticalSpan {
@@ -93,9 +91,9 @@ class Beam(
 
 		var lastBeat: Fraction? = null
 		var wasLastChordGrace = false
-		val measure = getFirst(waypoints).getChord().getMP().measure
+		val measure = mp?.measure
 		for (wp in waypoints) {
-			val (_, measure1, _, beat) = wp.chord.getMP()
+			val (_, measure1, _, beat) = wp.chord.mp
 
 			//check, if all chords are in the same measure column
 			if (measure1 != measure)

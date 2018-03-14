@@ -329,7 +329,7 @@ public final class Score
 			}
 		}
 		//no clef found. return default clef.
-		return ClefType.clefTreble;
+		return ClefType.Companion.getClefTreble();
 	}
 	
 	

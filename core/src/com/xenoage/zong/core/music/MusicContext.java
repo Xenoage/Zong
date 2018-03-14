@@ -32,7 +32,7 @@ public class MusicContext {
 	public static final Map<Pitch, Integer> noAccidentals =
 		unmodifiableMap(new HashMap<Pitch, Integer>());
 
-	public static final MusicContext simpleInstance = new MusicContext(ClefType.clefTreble,
+	public static final MusicContext simpleInstance = new MusicContext(ClefType.Companion.getClefTreble(),
 		new TraditionalKey(0, Mode.Major), new Pitch[0], 5);
 
 
@@ -87,7 +87,7 @@ public class MusicContext {
 			}
 			else {
 				//we need to show the accidental
-				return Accidental.fromAlter(pitch.getAlter());
+				return Accidental.Companion.fromAlter(pitch.getAlter());
 			}
 		}
 		//look, if this alteration is already set in the key signature
@@ -97,7 +97,7 @@ public class MusicContext {
 		}
 		else {
 			//we need to show the accidental
-			return Accidental.fromAlter(pitch.getAlter());
+			return Accidental.Companion.fromAlter(pitch.getAlter());
 		}
 	}
 

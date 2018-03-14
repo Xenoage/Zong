@@ -18,7 +18,7 @@ public class ChordFactory {
 	}
 
 	public static Chord chord(Pitch[] pitches, Fraction duration) {
-		return new Chord(Note.notes(pitches), duration);
+		return new Chord(Note.Companion.notes(pitches), duration);
 	}
 
 	public static Chord graceChord(Pitch pitch) {
@@ -26,7 +26,7 @@ public class ChordFactory {
 	}
 	
 	public static Chord graceChord(Pitch pitch, Fraction displayedDuration) {
-		Chord chord = new Chord(Note.notes(pitch), new Grace(true, displayedDuration));
+		Chord chord = new Chord(Note.Companion.notes(pitch), new Grace(true, displayedDuration));
 		return chord;
 	}
 

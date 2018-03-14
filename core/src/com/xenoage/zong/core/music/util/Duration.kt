@@ -2,7 +2,6 @@ package com.xenoage.zong.core.music.util
 
 import com.xenoage.utils.math.Fraction
 
-import com.xenoage.utils.math.Fraction.fr
 import com.xenoage.utils.math.fr
 import com.xenoage.zong.core.music.util.DurationType.*
 
@@ -13,7 +12,7 @@ import com.xenoage.zong.core.music.util.DurationType.*
  * e.g. how much flags or which symbol it needs.
  */
 
-/** Duration is a fraction */
+/** Musical duration, represented by a [Fraction] */
 typealias Duration = Fraction
 
 /** Basic duration types.  */

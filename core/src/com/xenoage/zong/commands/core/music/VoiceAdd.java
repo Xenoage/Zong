@@ -39,7 +39,7 @@ public class VoiceAdd
 			throw new UselessException();
 		lastExistingVoiceIndex = measure.getVoices().size() - 1;
 		for (int i = lastExistingVoiceIndex + 1; i <= voiceIndex; i++) {
-			Voice voice = voice();
+			Voice voice = Companion.voice();
 			voice.setParent(measure);
 			measure.getVoices().add(voice);
 		}

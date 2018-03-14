@@ -39,7 +39,7 @@ public class StemReader {
 	 */
 	public Stem read(Context context, Chord chord, int staff) {
 		if (mxlStem == null)
-			return defaultStem;
+			return Companion.getDefaultStem();
 		//direction
 		StemDirection direction = readStemDirection();
 		//length

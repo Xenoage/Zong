@@ -24,7 +24,7 @@ public class LeadingSpacingMock {
 	 * that has the given width in IS.
 	 */
 	public static LeadingSpacing createGClefSpacing(float widthIs) {
-		ClefNotation notation = new ClefNotation(new Clef(ClefType.clefTreble), new ElementWidth(widthIs), 0, 1);
+		ClefNotation notation = new ClefNotation(new Clef(ClefType.Companion.getClefTreble()), new ElementWidth(widthIs), 0, 1);
 		ElementSpacing spacing = new SimpleSpacing(notation, Companion.fr(0), 0);
 		return new LeadingSpacing(alist(spacing), widthIs);
 	}

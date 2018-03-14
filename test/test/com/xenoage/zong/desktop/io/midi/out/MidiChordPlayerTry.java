@@ -48,7 +48,7 @@ public class MidiChordPlayerTry {
 	}
 
 	public static Chord chord(Pitch[] pitches, Fraction duration) {
-		return new Chord(Note.notes(pitches), duration);
+		return new Chord(Note.Companion.notes(pitches), duration);
 	}
 
 }

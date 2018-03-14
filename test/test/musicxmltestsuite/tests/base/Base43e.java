@@ -35,10 +35,10 @@ public interface Base43e
 
 	static List<Tuple2<MP, Clef>> getExpectedClefs() {
 		List<Tuple2<MP, Clef>> clefs = alist();
-		clefs.add(t(atBeat(0, 0, unknown, Companion.get_0()), new Clef(ClefType.clefTreble)));
+		clefs.add(t(atBeat(0, 0, unknown, Companion.get_0()), new Clef(ClefType.Companion.getClefTreble())));
 		clefs.add(t(atBeat(0, 2, unknown, Companion.get_0()), new Clef(new ClefType(ClefSymbol.C, 2))));
-		clefs.add(t(atBeat(1, 0, unknown, Companion.get_0()), new Clef(ClefType.clefBass)));
-		clefs.add(t(atBeat(1, 1, unknown, Companion.get_0()), new Clef(ClefType.clefTreble)));
+		clefs.add(t(atBeat(1, 0, unknown, Companion.get_0()), new Clef(ClefType.Companion.getClefBass())));
+		clefs.add(t(atBeat(1, 1, unknown, Companion.get_0()), new Clef(ClefType.Companion.getClefTreble())));
 		return clefs;
 	}
 	

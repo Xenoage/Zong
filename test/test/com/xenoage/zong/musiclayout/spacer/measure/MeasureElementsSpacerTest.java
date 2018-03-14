@@ -67,7 +67,7 @@ public class MeasureElementsSpacerTest {
 			new VoiceSpacing(null, 1, alist(spacing(ve[0], Companion.fr(1, 2), 4), spacing(ve[1], Companion.fr(6), 15))),
 			new VoiceSpacing(null, 1, alist(spacing(ve[2], Companion.fr(1), 5), spacing(ve[3], Companion.fr(17, 2), 20))));
 		List<VoiceSpacing> vs = alist(originalVs);
-		Clef innerClef = new Clef(ClefType.clefTreble);
+		Clef innerClef = new Clef(ClefType.Companion.getClefTreble());
 		BeatEList<Clef> innerClefs = Companion.beatEList();
 		innerClefs.add(Companion.beatE(innerClef, Companion.fr(6)));
 		List<ElementSpacing> res = testee.compute(
@@ -106,7 +106,7 @@ public class MeasureElementsSpacerTest {
 		List<VoiceSpacing> vs = alist(
 			new VoiceSpacing(null, 1, alist(spacing(ve[0], Companion.fr(1, 2), 4), spacing(ve[1], Companion.fr(4), 11))),
 			new VoiceSpacing(null, 1, alist(spacing(ve[2], Companion.fr(1), 5), spacing(ve[3], Companion.fr(13, 2), 16))));
-		Clef innerClef = new Clef(ClefType.clefTreble);
+		Clef innerClef = new Clef(ClefType.Companion.getClefTreble());
 		BeatEList<Clef> innerClefs = Companion.beatEList();
 		innerClefs.add(Companion.beatE(innerClef, Companion.fr(4)));
 		List<ElementSpacing> mes = testee.compute(

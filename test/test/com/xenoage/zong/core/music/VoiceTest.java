@@ -98,7 +98,7 @@ public class VoiceTest {
 			//*/
 
 			IndexE<VoiceElement> p = voice.getElement(side, border, in, i);
-			VoiceElement pe = (p != null ? p.element : null);
+			VoiceElement pe = (p != null ? p.getElement() : null);
 			Assert.assertEquals("Expected: " + getElementName(indexOf(elementsPool, expected[i])) + ", but was " +
 				getElementName(indexOf(elementsPool, pe)) + " for " + side + "/" + border + "/" + in + " at index " + i + ".",
 				expected[i], pe);

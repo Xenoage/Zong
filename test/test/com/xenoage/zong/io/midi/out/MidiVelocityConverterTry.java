@@ -105,7 +105,7 @@ public class MidiVelocityConverterTry {
 		cursor.write((ColumnElement) new TraditionalKey(-3));
 		cursor.write((ColumnElement) new TimeSignature(timeType(3, 4)));
 
-		cursor.write(new Clef(ClefType.clefTreble));
+		cursor.write(new Clef(ClefType.Companion.getClefTreble()));
 
 		Fraction f4 = Companion.fr(1, 4);
 
@@ -214,7 +214,7 @@ public class MidiVelocityConverterTry {
 	}
 
 	private static Chord chord(Fraction fraction, Pitch... pitches) {
-		return new Chord(notes(pitches), fraction);
+		return new Chord(Companion.notes(pitches), fraction);
 	}
 
 }

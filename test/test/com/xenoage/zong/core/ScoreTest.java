@@ -107,16 +107,16 @@ public class ScoreTest {
 		Key k;
 		//measure 0
 		Measure measure = score.getMeasure(atMeasure(0, 0));
-		new Clef(ClefType.clefTreble);
-		clefs.add(c = ClefType.clefTreble);
+		new Clef(ClefType.Companion.getClefTreble());
+		clefs.add(c = ClefType.Companion.getClefTreble());
     new MeasureElementWrite(new Clef(c), measure, Companion.fr(0, 4)).execute();
     keys.add(k = new TraditionalKey(1, Mode.Major));
     new MeasureElementWrite(k, measure, Companion.fr(0, 4)).execute();
     new VoiceElementWrite(measure.getVoice(0), atElement(0, 0, 0, 0), chord(pi(0, 1, 4), Companion.fr(1, 4)), null).execute();
-    clefs.add(c = ClefType.clefBass);
+    clefs.add(c = ClefType.Companion.getClefBass());
     new MeasureElementWrite(new Clef(c), measure, Companion.fr(1, 4)).execute();
     new VoiceElementWrite(measure.getVoice(0), atElement(0, 0, 0, 1), chord(pi(1, -1, 4), Companion.fr(1, 4)), null).execute();
-    clefs.add(c = ClefType.clefTreble);
+    clefs.add(c = ClefType.Companion.getClefTreble());
     new MeasureElementWrite(new Clef(c), measure, Companion.fr(2, 4)).execute();
     keys.add(k = new TraditionalKey(-1, Mode.Major));
     new MeasureElementWrite(k, measure, Companion.fr(2, 4)).execute();
@@ -126,7 +126,7 @@ public class ScoreTest {
     new VoiceElementWrite(measure.getVoice(0), atElement(0, 1, 0, 0), chord(pi(0, 1, 4), Companion.fr(1, 4)), null).execute();
     keys.add(k = new TraditionalKey(0, Mode.Major));
     new MeasureElementWrite(k, measure, Companion.fr(1, 4)).execute();
-    clefs.add(c = ClefType.clefBass);
+    clefs.add(c = ClefType.Companion.getClefBass());
     new MeasureElementWrite(new Clef(c), measure, Companion.fr(1, 4)).execute();
     new VoiceElementWrite(measure.getVoice(0), atElement(0, 1, 0, 1), chord(pi(0, 0, 4), Companion.fr(2, 4)), null).execute();
     return t3(score, clefs, keys);

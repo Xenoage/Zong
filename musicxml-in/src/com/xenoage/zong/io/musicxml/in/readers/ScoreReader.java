@@ -66,7 +66,7 @@ public class ScoreReader {
 			Part part = score.getStavesList().getParts().get(mxlParts.getIndex());
 			StavesRange stavesRange = score.getStavesList().getPartStaffIndices(part);
 			for (int staff : stavesRange.getRange()) {
-				execute(new MeasureElementWrite(new Clef(ClefType.clefTreble),
+				execute(new MeasureElementWrite(new Clef(ClefType.Companion.getClefTreble()),
 					score.getMeasure(MP.atMeasure(staff, 0)), Companion.get_0()));
 			}
 		}

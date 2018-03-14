@@ -34,7 +34,7 @@ public class TwoStavesBeamSlanter {
 		//so we expect the beam to fall. we find the musical direction by positioning all notes on a
 		//single staff (here, by imagining a g-clef staff).
 		int[] singleStaffLps = new int[beam.chords.size()];
-		val clef = ClefType.clefTreble;
+		val clef = ClefType.Companion.getClefTreble();
 		for (int i : range(singleStaffLps)) {
 			val pitch =  beam.chords.get(i).getStemSideNotePitch();
 			singleStaffLps[i] = clef.getLp(pitch);

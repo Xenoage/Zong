@@ -54,9 +54,8 @@ class Fraction : Comparable<Fraction> {
 	/**
 	 * Adds the given Fraction to this one and returns the result.
 	 */
-	fun add(fraction: Fraction?): Fraction {
-		if (fraction == null)
-			return this
+	operator fun plus(fraction: Fraction): Fraction {
+		if (fraction.numerator == 0) return this
 		val numerator = this.numerator * fraction.denominator + this.denominator * fraction.numerator
 		val denominator = this.denominator * fraction.denominator
 		return fr(numerator, denominator)
@@ -65,9 +64,8 @@ class Fraction : Comparable<Fraction> {
 	/**
 	 * Subtracts the given fraction from this one and returns the result..
 	 */
-	fun sub(fraction: Fraction?): Fraction {
-		if (fraction == null)
-			return this
+	operator fun minus(fraction: Fraction): Fraction {
+		if (fraction.numerator == 0) return this
 		val numerator = this.numerator * fraction.denominator - this.denominator * fraction.numerator
 		val denominator = this.denominator * fraction.denominator
 		return fr(numerator, denominator)
@@ -79,6 +77,11 @@ class Fraction : Comparable<Fraction> {
 	fun invert() = fr(-numerator, denominator)
 
 	/**
+	 * Inverts this fraction and returns the result.
+	 */
+	operator fun unaryMinus() = invert()
+
+	/**
 	 * Compares this fraction with the given one.
 	 * @return  the value 0 if this fraction is
 	 * equal to the given one; -1 if this fraction is numerically less
@@ -86,7 +89,7 @@ class Fraction : Comparable<Fraction> {
 	 * greater than the given one.
 	 */
 	override fun compareTo(fraction: Fraction): Int {
-		val compare = this.sub(fraction)
+		val compare = this - fraction
 		return when {
 			compare.numerator < 0 -> -1
 			compare.numerator == 0 -> 0
@@ -109,30 +112,21 @@ class Fraction : Comparable<Fraction> {
 	/**
 	 * Divides this [Fraction] by the given one.
 	 */
-	fun divideBy(fraction: Fraction) =
+	operator fun div(fraction: Fraction) =
 			fr(this.numerator * fraction.denominator, this.denominator * fraction.numerator)
 
 	/**
 	 * Multiplies this [Fraction] with the given one.
 	 */
-	fun mult(fraction: Fraction) =
+	operator fun times(fraction: Fraction) =
 			fr(this.numerator * fraction.numerator, this.denominator * fraction.denominator)
 
 	/**
 	 * Multiplies this [Fraction] with the given scalar value.
 	 */
-	fun mult(scalar: Int) =
+	operator fun times(scalar: Int) =
 			fr(this.numerator * scalar, this.denominator)
 
-	/**
-	 * Returns true, if this fraction is less than the given one.
-	 */
-	fun isLessThan(fr: Fraction): Boolean = compareTo(fr) < 0
-
-	/**
-	 * Returns true, if this fraction is greater than the given one.
-	 */
-	fun isGreaterThan(fr: Fraction): Boolean = compareTo(fr) > 0
 
 	companion object {
 
@@ -154,7 +148,7 @@ class Fraction : Comparable<Fraction> {
 				else if (div.size == 2)
 					return fr(div[0].toInt(), div[1].toInt())
 			} else if (plus.size == 2) {
-				return fr(plus[0].toInt()).add(fromString(plus[1]))
+				return fr(plus[0].toInt()) + fromString(plus[1])
 			}
 			throw IllegalArgumentException("Invalid fraction: $s")
 		}

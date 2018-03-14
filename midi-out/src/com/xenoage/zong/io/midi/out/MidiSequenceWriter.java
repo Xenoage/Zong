@@ -172,7 +172,7 @@ public abstract class MidiSequenceWriter<T> {
 		}
 		if (cl != -1) {
 			byte li = (byte) INSTANCE.clamp(clef.getLp() * 2 + 1, 1, 5); //line number from bottom
-			byte oc = (byte) clef.getSymbol().octaveChange;
+			byte oc = (byte) clef.getSymbol().getOctaveChange();
 			byte[] data = {cl, li, oc};
 			writeMetaMessage(track, tick, typeClef, data);
 		}

@@ -71,7 +71,7 @@ public class ClefReader {
 		//read line or use default position
 		Integer line = mxlClef.getLine();
 		if (line == null) {
-			clefType = ClefType.commonClefs.get(symbol);
+			clefType = ClefType.Companion.getCommonClefs().get(symbol);
 		}
 		else {
 			//convert MusicXML line number (1 based) to LP (0 based)

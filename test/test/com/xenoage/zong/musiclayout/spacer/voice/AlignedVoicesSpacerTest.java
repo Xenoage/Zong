@@ -76,7 +76,7 @@ public class AlignedVoicesSpacerTest {
 		//           | |  ⌎-- 4
 		//           | ⌎----- 2
 		//           ⌎------- 1
-		VoiceSpacing voiceSpacing = new VoiceSpacing(voice(), is, alist(
+		VoiceSpacing voiceSpacing = new VoiceSpacing(Companion.voice(), is, alist(
 			spacing(beat(2), 1f), spacing(beat(4), 2f), spacing(beat(7), 4f),
 			spacing(beat(8), 6f)));
 		//given beat offsets:
@@ -116,7 +116,7 @@ public class AlignedVoicesSpacerTest {
 		//offsets: | | 
 		//         | ⌎- 2
 		//         ⌎--- 0
-		VoiceSpacing voiceSpacing = new VoiceSpacing(voice(), is, alist(
+		VoiceSpacing voiceSpacing = new VoiceSpacing(Companion.voice(), is, alist(
 			spacing(beat(0), 0f), spacing(beat(2), 2f)));
 		//given beat offsets:
 		//beats:   0.2
@@ -147,7 +147,7 @@ public class AlignedVoicesSpacerTest {
 		//offsets: | | 
 		//         | ⌎- 2
 		//         ⌎--- 0
-		VoiceSpacing voiceSpacing = new VoiceSpacing(voice(), is, alist(
+		VoiceSpacing voiceSpacing = new VoiceSpacing(Companion.voice(), is, alist(
 			spacing(beat(0), 0f), spacing(beat(2), 2f)));
 		//given beat offsets:
 		//beats:   0.2
@@ -186,7 +186,7 @@ public class AlignedVoicesSpacerTest {
 		//         | |   ⌎--- 58 (grace note)
 		//         | ⌎------- 51
 		//         ⌎--------- 50
-		VoiceSpacing voiceSpacing = new VoiceSpacing(voice(), is, alist(
+		VoiceSpacing voiceSpacing = new VoiceSpacing(Companion.voice(), is, alist(
 			spacing(beat(0), 0f), spacing(beat(2), 1f), graceSpacing(beat(8), 8f),
 			graceSpacing(beat(8), 9f), spacing(beat(8), 10f)));
 		//given beat offsets:

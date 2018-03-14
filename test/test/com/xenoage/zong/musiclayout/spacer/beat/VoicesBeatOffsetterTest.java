@@ -315,7 +315,7 @@ public class VoicesBeatOffsetterTest {
 		Score score = new Score();
 		score.getFormat().setInterlineSpace(1);
 		Cursor cursor = new Cursor(score, mp0, true);
-		cursor.write(new Clef(ClefType.clefTreble));
+		cursor.write(new Clef(ClefType.Companion.getClefTreble()));
 		cursor.write((MeasureElement) new TraditionalKey(-3));
 		cursor.write(new TimeSignature(TimeType.timeType(6, 4)));
 		//beats: 0, 2, 3, 4, 8.
