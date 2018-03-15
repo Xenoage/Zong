@@ -27,7 +27,7 @@ public class Test01c
 				MxlNote note = (MxlNote) data;
 				MxlFullNote fullNote = note.getContent().getFullNote();
 				MxlPitch pitch = (MxlPitch) (fullNote.getContent());
-				assertEquals(pi('G', 0, 4), pitch.getPitch());
+				assertEquals(Companion.pi('G', 0, 4), pitch.getPitch());
 				//check lyric
 				assertEquals(1, note.getLyrics().size());
 				assertEquals("A", ((MxlSyllabicText) note.getLyrics().get(0).getContent()).getText()

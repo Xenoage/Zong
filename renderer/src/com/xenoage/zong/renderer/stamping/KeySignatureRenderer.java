@@ -36,7 +36,7 @@ public class KeySignatureRenderer
 		fifths = Math.abs(fifths);
 		float interlineSpace = s.parentStaff.is;
 		for (int i = 0; i < fifths; i++) {
-			int linePosition = TraditionalKey.getLinePosition(i, useSharps, s.key.c4Lp,
+			int linePosition = TraditionalKey.Companion.getLinePosition(i, useSharps, s.key.c4Lp,
 				s.key.minLp);
 			StaffSymbolRenderer.drawWith(symbol, null,
 				sp(s.xMm + i * distance * interlineSpace, linePosition), 1, s.parentStaff, false,

@@ -112,23 +112,23 @@ public class ScoreTest {
     new MeasureElementWrite(new Clef(c), measure, Companion.fr(0, 4)).execute();
     keys.add(k = new TraditionalKey(1, Mode.Major));
     new MeasureElementWrite(k, measure, Companion.fr(0, 4)).execute();
-    new VoiceElementWrite(measure.getVoice(0), atElement(0, 0, 0, 0), chord(pi(0, 1, 4), Companion.fr(1, 4)), null).execute();
+    new VoiceElementWrite(measure.getVoice(0), atElement(0, 0, 0, 0), chord(Companion.pi(0, 1, 4), Companion.fr(1, 4)), null).execute();
     clefs.add(c = ClefType.Companion.getClefBass());
     new MeasureElementWrite(new Clef(c), measure, Companion.fr(1, 4)).execute();
-    new VoiceElementWrite(measure.getVoice(0), atElement(0, 0, 0, 1), chord(pi(1, -1, 4), Companion.fr(1, 4)), null).execute();
+    new VoiceElementWrite(measure.getVoice(0), atElement(0, 0, 0, 1), chord(Companion.pi(1, -1, 4), Companion.fr(1, 4)), null).execute();
     clefs.add(c = ClefType.Companion.getClefTreble());
     new MeasureElementWrite(new Clef(c), measure, Companion.fr(2, 4)).execute();
     keys.add(k = new TraditionalKey(-1, Mode.Major));
     new MeasureElementWrite(k, measure, Companion.fr(2, 4)).execute();
-    new VoiceElementWrite(measure.getVoice(0), atElement(0, 0, 0, 2), chord(pi(0, 0, 4), Companion.fr(1, 4)), null).execute();
+    new VoiceElementWrite(measure.getVoice(0), atElement(0, 0, 0, 2), chord(Companion.pi(0, 0, 4), Companion.fr(1, 4)), null).execute();
     //measure 1
     measure = score.getMeasure(atMeasure(0, 1));
-    new VoiceElementWrite(measure.getVoice(0), atElement(0, 1, 0, 0), chord(pi(0, 1, 4), Companion.fr(1, 4)), null).execute();
+    new VoiceElementWrite(measure.getVoice(0), atElement(0, 1, 0, 0), chord(Companion.pi(0, 1, 4), Companion.fr(1, 4)), null).execute();
     keys.add(k = new TraditionalKey(0, Mode.Major));
     new MeasureElementWrite(k, measure, Companion.fr(1, 4)).execute();
     clefs.add(c = ClefType.Companion.getClefBass());
     new MeasureElementWrite(new Clef(c), measure, Companion.fr(1, 4)).execute();
-    new VoiceElementWrite(measure.getVoice(0), atElement(0, 1, 0, 1), chord(pi(0, 0, 4), Companion.fr(2, 4)), null).execute();
+    new VoiceElementWrite(measure.getVoice(0), atElement(0, 1, 0, 1), chord(Companion.pi(0, 0, 4), Companion.fr(2, 4)), null).execute();
     return t3(score, clefs, keys);
 	}
 	
@@ -141,7 +141,7 @@ public class ScoreTest {
 		assertEquals(0, acc.size());
 		acc = score.getAccidentals(atBeat(0, 0, 0, Companion.fr(0, 4)), BeforeOrAt);
 		assertEquals(1, acc.size());
-		assertEquals((Integer) 0, acc.get(pi(3, 0, 4)));
+		assertEquals((Integer) 0, acc.get(Companion.pi(3, 0, 4)));
 		acc = score.getAccidentals(atBeat(0, 0, 0, Companion.fr(1, 4)), Before);
 		assertEquals(1, acc.size());
 		acc = score.getAccidentals(atBeat(0, 0, 0, Companion.fr(1, 4)), BeforeOrAt);
@@ -151,13 +151,13 @@ public class ScoreTest {
 		assertEquals(0, acc.size());
 		acc = score.getAccidentals(atBeat(0, 1, 0, Companion.fr(0, 4)), BeforeOrAt);
 		assertEquals(1, acc.size());
-		assertEquals((Integer) 1, acc.get(pi(3, 0, 4)));
+		assertEquals((Integer) 1, acc.get(Companion.pi(3, 0, 4)));
 		acc = score.getAccidentals(atBeat(0, 1, 0, Companion.fr(1, 4)), Before);
 		assertEquals(0, acc.size()); //0, because key changed
 		acc = score.getAccidentals(atBeat(0, 1, 0, Companion.fr(1, 4)), BeforeOrAt);
 		assertEquals(2, acc.size());
-		assertEquals((Integer) 1,  acc.get(pi(3, 0, 4)));
-		assertEquals((Integer) (-1), acc.get(pi(6, 0, 4)));
+		assertEquals((Integer) 1,  acc.get(Companion.pi(3, 0, 4)));
+		assertEquals((Integer) (-1), acc.get(Companion.pi(6, 0, 4)));
 	}
 
 
@@ -183,20 +183,20 @@ public class ScoreTest {
 		new ColumnElementWrite(new TraditionalKey(0, Mode.Major), score.getColumnHeader(1), Companion.fr(1, 4), null).execute();
 		//measure 0, voice 0
 		Voice voice = score.getVoice(MP.atVoice(0, 0, 0));
-		voice.addElement(chord(pi(0, 0, 4), Companion.fr(2, 4)));
+		voice.addElement(chord(Companion.pi(0, 0, 4), Companion.fr(2, 4)));
 		//measure 1, voice 0
 		voice = score.getVoice(MP.atVoice(0, 1, 0));
-		voice.addElement(chord(pi(3, 1, 4), Companion.fr(1, 4)));
-		voice.addElement(chord(pi(6, -1, 4), Companion.fr(1, 8)));
-		voice.addElement(chord(pi(6, -1, 4), Companion.fr(1, 8)));
+		voice.addElement(chord(Companion.pi(3, 1, 4), Companion.fr(1, 4)));
+		voice.addElement(chord(Companion.pi(6, -1, 4), Companion.fr(1, 8)));
+		voice.addElement(chord(Companion.pi(6, -1, 4), Companion.fr(1, 8)));
 		//measure 0, voice 1
 		voice = score.getVoice(MP.atVoice(0, 0, 1));
-		voice.addElement(chord(pi(3, 0, 4), Companion.fr(2, 4)));
+		voice.addElement(chord(Companion.pi(3, 0, 4), Companion.fr(2, 4)));
 		//measure 1, voice 1
 		voice = score.getVoice(MP.atVoice(0, 1, 1));
-		voice.addElement(chord(pi(6, -1, 4), Companion.fr(1, 4)));
-		voice.addElement(chord(pi(3, 1, 4), Companion.fr(1, 8)));
-		voice.addElement(chord(pi(3, 1, 4), Companion.fr(1, 8)));
+		voice.addElement(chord(Companion.pi(6, -1, 4), Companion.fr(1, 4)));
+		voice.addElement(chord(Companion.pi(3, 1, 4), Companion.fr(1, 8)));
+		voice.addElement(chord(Companion.pi(3, 1, 4), Companion.fr(1, 8)));
 		return score;
 	}
 	
@@ -231,7 +231,7 @@ public class ScoreTest {
 		Assert.assertEquals(clefs.get(2), musicContext.getClef());
 		Assert.assertEquals(keys.get(1), musicContext.getKey());
 		assertEquals(1, musicContext.getAccidentals().size());
-		assertEquals(1, (int) musicContext.getAccidentals().get(pi(0, 0, 4)));
+		assertEquals(1, (int) musicContext.getAccidentals().get(Companion.pi(0, 0, 4)));
 		//measure 1: at 1/4: F clef, C key and no accidentals
 		musicContext = score.getMusicContext(atBeat(0, 1, 0, Companion.fr(1, 4)), BeforeOrAt, Before);
 		Assert.assertEquals(clefs.get(3), musicContext.getClef());

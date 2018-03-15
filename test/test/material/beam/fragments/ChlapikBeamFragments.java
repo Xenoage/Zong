@@ -128,11 +128,11 @@ public class ChlapikBeamFragments {
 	}
 
 	private Chord chordC(Fraction duration) {
-		return new Chord(new Note(pi(0, 0, 5)), duration);
+		return new Chord(new Note(Companion.pi(0, 0, 5)), duration);
 	}
 
 	private Chord chordF(Fraction duration) {
-		return new Chord(new Note(pi(3, 0, 4)), duration);
+		return new Chord(new Note(Companion.pi(3, 0, 4)), duration);
 	}
 
 }

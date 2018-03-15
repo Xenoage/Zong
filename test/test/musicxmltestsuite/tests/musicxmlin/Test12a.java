@@ -43,7 +43,7 @@ public class Test12a
 		ClefType clef = score.getMeasure(atMeasure(0, measure)).getClefs().getFirst().getElement().getType();
 		assertEquals("measure " + measure, expectedSymbol, clef.getSymbol());
 		assertEquals("measure " + measure, expectedClefLP, clef.getLp());
-		assertEquals("measure " + measure, expectedC4LP, clef.getLp(pi('C', 0, 4)));
+		assertEquals("measure " + measure, expectedC4LP, clef.getLp(Companion.pi('C', 0, 4)));
 	}
 
 }

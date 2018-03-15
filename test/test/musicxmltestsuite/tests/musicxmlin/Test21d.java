@@ -35,7 +35,7 @@ public class Test21d
 		//F4, whole, with accent and fermata
 		Chord chord = (Chord) score.getVoice(mp0).getElementAt(Companion.get_0());
 		assertEquals(1, chord.getNotes().size());
-		assertEquals(pi('F', 0, 4), chord.getNotes().get(0).getPitch());
+		assertEquals(Companion.pi('F', 0, 4), chord.getNotes().get(0).getPitch());
 		assertEquals(Companion.get_1(), chord.getDuration());
 		assertEquals(2, chord.getAnnotations().size());
 		assertEquals(articulation(ArticulationType.Accent, Placement.Below), chord
@@ -58,23 +58,23 @@ public class Test21d
 		//chords
 		Chord chord = (Chord) score.getVoice(m2).getElementAt(Companion.get_0());
 		assertEquals(2, chord.getNotes().size());
-		assertEquals(pi('F', 0, 4), chord.getNotes().get(0).getPitch());
-		assertEquals(pi('A', -1, 4), chord.getNotes().get(1).getPitch());
+		assertEquals(Companion.pi('F', 0, 4), chord.getNotes().get(0).getPitch());
+		assertEquals(Companion.pi('A', -1, 4), chord.getNotes().get(1).getPitch());
 		assertEquals(Companion.fr(3, 8), chord.getDuration());
 		chord = (Chord) score.getVoice(m2).getElementAt(Companion.fr(3, 8));
 		assertEquals(2, chord.getNotes().size());
-		assertEquals(pi('F', 0, 4), chord.getNotes().get(0).getPitch());
-		assertEquals(pi('A', -1, 4), chord.getNotes().get(1).getPitch());
+		assertEquals(Companion.pi('F', 0, 4), chord.getNotes().get(0).getPitch());
+		assertEquals(Companion.pi('A', -1, 4), chord.getNotes().get(1).getPitch());
 		assertEquals(Companion.fr(1, 8), chord.getDuration());
 		chord = (Chord) score.getVoice(m2).getElementAt(Companion.fr(2, 4));
 		assertEquals(2, chord.getNotes().size());
-		assertEquals(pi('G', 0, 4), chord.getNotes().get(0).getPitch());
-		assertEquals(pi('B', -1, 4), chord.getNotes().get(1).getPitch());
+		assertEquals(Companion.pi('G', 0, 4), chord.getNotes().get(0).getPitch());
+		assertEquals(Companion.pi('B', -1, 4), chord.getNotes().get(1).getPitch());
 		assertEquals(Companion.fr(1, 4), chord.getDuration());
 		chord = (Chord) score.getVoice(m2).getElementAt(Companion.fr(3, 4));
 		assertEquals(2, chord.getNotes().size());
-		assertEquals(pi('G', 0, 4), chord.getNotes().get(0).getPitch());
-		assertEquals(pi('B', -1, 4), chord.getNotes().get(1).getPitch());
+		assertEquals(Companion.pi('G', 0, 4), chord.getNotes().get(0).getPitch());
+		assertEquals(Companion.pi('B', -1, 4), chord.getNotes().get(1).getPitch());
 		assertEquals(Companion.fr(1, 4), chord.getDuration());
 		//dynamics "p"
 		Dynamic dynamics = (Dynamic) score.getMeasure(m2).getMeasureElements().get(Companion.get_0());

@@ -16,11 +16,11 @@ public interface Base24b
 	}
 	
 	Chord[] expectedChords = {
-		ch(Companion.fr(1, 4), pi('C', 0, 5)),
-		gr(Companion.fr(1, 8), true, pi('D', 0, 5), pi('F', 0, 5)),
-		ch(Companion.fr(1, 4), pi('C', 0, 5)),
-		gr(Companion.fr(1, 8), true, pi('B', 0, 4), pi('D', 0, 5)),
-		ch(Companion.fr(1, 4), pi('A', 0, 4), pi('C', 0, 5))
+		ch(Companion.fr(1, 4), Companion.pi('C', 0, 5)),
+		gr(Companion.fr(1, 8), true, Companion.pi('D', 0, 5), Companion.pi('F', 0, 5)),
+		ch(Companion.fr(1, 4), Companion.pi('C', 0, 5)),
+		gr(Companion.fr(1, 8), true, Companion.pi('B', 0, 4), Companion.pi('D', 0, 5)),
+		ch(Companion.fr(1, 4), Companion.pi('A', 0, 4), Companion.pi('C', 0, 5))
 	};
 
 }

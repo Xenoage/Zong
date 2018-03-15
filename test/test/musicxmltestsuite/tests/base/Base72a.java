@@ -20,18 +20,18 @@ public interface Base72a
 	};
 	
 	Pitch[] expectedSoundPitches = {
-		pi('C', 0, 4), pi('D', 0, 4), pi('E', 0, 4), pi('F', 0, 4),
-		pi('G', 0, 4), pi('A', 0, 4), pi('B', 0, 4), pi('C', 0, 5),
+		Companion.pi('C', 0, 4), Companion.pi('D', 0, 4), Companion.pi('E', 0, 4), Companion.pi('F', 0, 4),
+		Companion.pi('G', 0, 4), Companion.pi('A', 0, 4), Companion.pi('B', 0, 4), Companion.pi('C', 0, 5),
 	};
 	
 	Pitch[][] expectedNotatedPitches = {
 		{
-			pi('D', 0, 4), pi('E', 0, 4), pi('F', 1, 4), pi('G', 0, 4),
-			pi('A', 0, 4), pi('B', 0, 4), pi('C', 1, 5), pi('D', 0, 5),
+			Companion.pi('D', 0, 4), Companion.pi('E', 0, 4), Companion.pi('F', 1, 4), Companion.pi('G', 0, 4),
+			Companion.pi('A', 0, 4), Companion.pi('B', 0, 4), Companion.pi('C', 1, 5), Companion.pi('D', 0, 5),
 		},
 		{
-			pi('A', 0, 4), pi('B', 0, 4), pi('C', 1, 5), pi('D', 0, 5),
-			pi('E', 0, 5), pi('F', 1, 5), pi('G', 1, 5), pi('A', 0, 5),
+			Companion.pi('A', 0, 4), Companion.pi('B', 0, 4), Companion.pi('C', 1, 5), Companion.pi('D', 0, 5),
+			Companion.pi('E', 0, 5), Companion.pi('F', 1, 5), Companion.pi('G', 1, 5), Companion.pi('A', 0, 5),
 		},
 		expectedSoundPitches
 	};

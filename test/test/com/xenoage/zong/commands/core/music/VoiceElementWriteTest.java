@@ -404,7 +404,7 @@ public class VoiceElementWriteTest {
 			Voice voice = score.getVoice(atVoice(0, 0, iVoice));
 			List<Chord> beamChords = new ArrayList<>();
 			for (int i = 0; i < 8; i++) {
-				Chord chord = new Chord(new Note(pi(0, 0, 4)), Companion.fr(1, 8));
+				Chord chord = new Chord(new Note(Companion.pi(0, 0, 4)), Companion.fr(1, 8));
 				//add elements by hand, since the corresonding command is tested itself in this class
 				chord.setParent(voice);
 				voice.getElements().add(chord);
@@ -490,7 +490,7 @@ public class VoiceElementWriteTest {
 	
 	
 	private Chord grace(int step) {
-		Chord chord = new Chord(new Note(pi(step, 0)), Companion.fr(0, 4));
+		Chord chord = new Chord(new Note(Companion.pi(step, 0)), Companion.fr(0, 4));
 		chord.setGrace(new Grace(true, Companion.fr(1, 16)));
 		return chord;
 	}

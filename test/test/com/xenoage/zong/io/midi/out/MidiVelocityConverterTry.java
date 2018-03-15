@@ -110,13 +110,13 @@ public class MidiVelocityConverterTry {
 		Fraction f4 = Companion.fr(1, 4);
 
 		Chord attachC;
-		cursor.write(attachC = chord(f4, Pitch.pi(Pitch.G, 4)));
+		cursor.write(attachC = chord(f4, Pitch.Companion.pi(Pitch.Companion.getG(), 4)));
 		attachC.addDirection(new Dynamic(DynamicValue.pp));
 
-		cursor.write(attachC = chord(f4, Pitch.pi(Pitch.A, 4)));
+		cursor.write(attachC = chord(f4, Pitch.Companion.pi(Pitch.Companion.getA(), 4)));
 		attachC.addDirection(new Dynamic(DynamicValue.ff));
 
-		cursor.write(attachC = chord(f4, Pitch.pi(Pitch.G, 4)));
+		cursor.write(attachC = chord(f4, Pitch.Companion.pi(Pitch.Companion.getG(), 4)));
 		attachC.addDirection(new Dynamic(DynamicValue.sfp));
 
 		/*
@@ -136,7 +136,7 @@ public class MidiVelocityConverterTry {
 
 		cursor.setMp(mp0.withVoice(1));
 
-		cursor.write(attachC = chord(f4, Pitch.pi(Pitch.C, 4)));
+		cursor.write(attachC = chord(f4, Pitch.Companion.pi(Pitch.Companion.getC(), 4)));
 		attachC.addDirection(new Dynamic(DynamicValue.fff));
 
 		/*
@@ -148,18 +148,18 @@ public class MidiVelocityConverterTry {
 
 		cursor.setMp(mp0.withMeasure(1));
 
-		cursor.write(attachC = chord(f4, Pitch.pi(Pitch.G, 4)));
+		cursor.write(attachC = chord(f4, Pitch.Companion.pi(Pitch.Companion.getG(), 4)));
 		//cursor.withScore(ScoreController.attachElement(cursor.getScore(), attachC, new Dynamic(DynamicsType.pp)));
 
-		cursor.write(attachC = chord(f4, Pitch.pi(Pitch.A, 4)));
+		cursor.write(attachC = chord(f4, Pitch.Companion.pi(Pitch.Companion.getA(), 4)));
 		attachC.addDirection(new Dynamic(DynamicValue.pp));
 
-		cursor.write(attachC = chord(f4, Pitch.pi(Pitch.G, 4)));
+		cursor.write(attachC = chord(f4, Pitch.Companion.pi(Pitch.Companion.getG(), 4)));
 		attachC.addDirection(new Dynamic(DynamicValue.pp));
 
 		cursor.setMp(cursor.getMP().withElement(0).withVoice(1));
 
-		cursor.write(attachC = chord(f4, Pitch.pi(Pitch.C, 5)));
+		cursor.write(attachC = chord(f4, Pitch.Companion.pi(Pitch.Companion.getC(), 5)));
 		/*		
 		measure = staff.getMeasures().get(1);
 
@@ -179,18 +179,18 @@ public class MidiVelocityConverterTry {
 
 		cursor.setMp(mp0.withMeasure(2));
 
-		cursor.write(attachC = chord(f4, Pitch.pi(Pitch.G, 4)));
+		cursor.write(attachC = chord(f4, Pitch.Companion.pi(Pitch.Companion.getG(), 4)));
 		attachC.addDirection(new Dynamic(DynamicValue.sfz));
 
-		cursor.write(chord(f4, Pitch.pi(Pitch.A, 4)));
+		cursor.write(chord(f4, Pitch.Companion.pi(Pitch.Companion.getA(), 4)));
 		//cursor = cursor.withScore(ScoreController.attachElement(cursor.getScore(), attachC, new Dynamic(DynamicsType.pp)));
 
-		cursor.write(chord(f4, Pitch.pi(Pitch.G, 4)));
+		cursor.write(chord(f4, Pitch.Companion.pi(Pitch.Companion.getG(), 4)));
 		//cursor = cursor.withScore(ScoreController.attachElement(cursor.getScore(), attachC, new Dynamic(DynamicsType.pp)));
 
 		cursor.setMp(mp0.withMeasure(2).withVoice(2));
 
-		cursor.write(chord(f4, Pitch.pi(Pitch.C, 5)));
+		cursor.write(chord(f4, Pitch.Companion.pi(Pitch.Companion.getC(), 5)));
 		/*
 		measure = staff.getMeasures().get(2);
 

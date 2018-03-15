@@ -31,17 +31,17 @@ public interface Base46e
 		Cursor cursor = new Cursor(score, mp0, true);
 		cursor.write(new TimeSignature(TimeType.timeCommon));
 		//measure 0, voice 0
-		cursor.write(chord(pi('C', 0, 5), Companion.fr(1, 4)));
+		cursor.write(chord(Companion.pi('C', 0, 5), Companion.fr(1, 4)));
 		//measure 1, voice 0
 		cursor.setMp(atElement(0, 1, 0, 0));
-		cursor.write(chord(pi('C', 0, 5), Companion.fr(1, 4)));
-		cursor.write(chord(pi('A', 0, 4), Companion.fr(1, 4)));
-		cursor.write(chord(pi('F', 0, 4), Companion.fr(1, 4)));
-		cursor.write(chord(pi('C', 0, 5), Companion.fr(1, 4)));
+		cursor.write(chord(Companion.pi('C', 0, 5), Companion.fr(1, 4)));
+		cursor.write(chord(Companion.pi('A', 0, 4), Companion.fr(1, 4)));
+		cursor.write(chord(Companion.pi('F', 0, 4), Companion.fr(1, 4)));
+		cursor.write(chord(Companion.pi('C', 0, 5), Companion.fr(1, 4)));
 		//measure 1, voice 1
 		cursor.setMp(atElement(0, 1, 1, 0));
 		cursor.write(new Rest(Companion.fr(1, 4)));
-		cursor.write(chord(pi('C', 0, 4), Companion.fr(1, 4)));
+		cursor.write(chord(Companion.pi('C', 0, 4), Companion.fr(1, 4)));
 		return score.getStaff(0);
 	}
 

@@ -23,19 +23,19 @@ public class MidiToolsTest {
 		pitch = new Pitch[5];
 		//C8
 		midi[0] = 108;
-		pitch[0] = pi(0, 0, 8);
+		pitch[0] = Companion.pi(0, 0, 8);
 		//F#6
 		midi[1] = 90;
-		pitch[1] = pi(3, 1, 6);
+		pitch[1] = Companion.pi(3, 1, 6);
 		//C4
 		midi[2] = 60;
-		pitch[2] = pi(0, 0, 4);
+		pitch[2] = Companion.pi(0, 0, 4);
 		//Eb2
 		midi[3] = 39;
-		pitch[3] = pi(1, 1, 2);
+		pitch[3] = Companion.pi(1, 1, 2);
 		//A0
 		midi[4] = 21;
-		pitch[4] = pi(5, 0, 0);
+		pitch[4] = Companion.pi(5, 0, 0);
 	}
 
 

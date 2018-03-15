@@ -32,11 +32,11 @@ public interface Base21d
 	
 	default Chord[] getExpectedChords() {
 		Chord[] expectedChords = {
-			ch(Companion.fr(1, 1), pi('F', 0, 4), pi('A', 0, 4), pi('C', 0, 5)),
-			ch(Companion.fr(3, 8), pi('F', 0, 4), pi('A', -1, 4)),
-			ch(Companion.fr(1, 8), pi('F', 0, 4), pi('A', -1, 4)),
-			ch(Companion.fr(1, 4), pi('G', 0, 4), pi('B', -1, 4)),
-			ch(Companion.fr(1, 4), pi('G', 0, 4), pi('B', -1, 4))
+			ch(Companion.fr(1, 1), Companion.pi('F', 0, 4), Companion.pi('A', 0, 4), Companion.pi('C', 0, 5)),
+			ch(Companion.fr(3, 8), Companion.pi('F', 0, 4), Companion.pi('A', -1, 4)),
+			ch(Companion.fr(1, 8), Companion.pi('F', 0, 4), Companion.pi('A', -1, 4)),
+			ch(Companion.fr(1, 4), Companion.pi('G', 0, 4), Companion.pi('B', -1, 4)),
+			ch(Companion.fr(1, 4), Companion.pi('G', 0, 4), Companion.pi('B', -1, 4))
 		};
 		expectedChords[0].setAnnotations(alist(
 			articulation(ArticulationType.Accent, Placement.Below),

@@ -22,7 +22,7 @@ public class Test01c
 			if (e instanceof Chord) {
 				Chord chord = (Chord) e;
 				//check pitch
-				assertEquals(pi('G', 0, 4), chord.getNotes().get(0).getPitch());
+				assertEquals(Companion.pi('G', 0, 4), chord.getNotes().get(0).getPitch());
 				//check lyric
 				assertEquals(1, chord.getLyrics().size());
 				assertEquals("A", chord.getLyrics().get(0).getText().toString());

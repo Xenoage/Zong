@@ -23,12 +23,12 @@ public class MidiChordPlayerTry {
 		MidiChordPlayer player = new MidiChordPlayer();
 		Instrument instrument = Instrument.Companion.getDefaultInstrument();
 
-		Pitch pitch = pi(2, 0, 4);
+		Pitch pitch = Companion.pi(2, 0, 4);
 
 		player.playNote(pitch, instrument);
 		sleep();
 
-		Chord chord = chord(new Pitch[] { pi(2, 0, 4), pi(4, 0, 4) }, Companion.fr(1));
+		Chord chord = chord(new Pitch[] { Companion.pi(2, 0, 4), Companion.pi(4, 0, 4) }, Companion.fr(1));
 		player.playChord(chord, instrument);
 
 		sleep();

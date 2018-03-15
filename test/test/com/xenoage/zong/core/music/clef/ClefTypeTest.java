@@ -16,24 +16,24 @@ public class ClefTypeTest {
 
 	@Test public void getLpTest() {
 		//test center pitches
-		assertEquals(2, ClefType.Companion.getClefTreble().getLp(pi('G', 0, 4)));
-		assertEquals(2, ClefType.Companion.getClefTreble15vb().getLp(pi('G', 0, 2)));
-		assertEquals(2, ClefType.Companion.getClefTreble8vb().getLp(pi('G', 0, 3)));
-		assertEquals(2, ClefType.Companion.getClefTreble8va().getLp(pi('G', 0, 5)));
-		assertEquals(2, ClefType.Companion.getClefTreble15va().getLp(pi('G', 0, 6)));
-		assertEquals(6, ClefType.Companion.getClefBass().getLp(pi('F', 0, 3)));
-		assertEquals(6, ClefType.Companion.getClefBass15vb().getLp(pi('F', 0, 1)));
-		assertEquals(6, ClefType.Companion.getClefBass8vb().getLp(pi('F', 0, 2)));
-		assertEquals(6, ClefType.Companion.getClefBass8va().getLp(pi('F', 0, 4)));
-		assertEquals(6, ClefType.Companion.getClefBass15va().getLp(pi('F', 0, 5)));
-		assertEquals(4, ClefType.Companion.getClefAlto().getLp(pi('C', 0, 4)));
-		assertEquals(6, ClefType.Companion.getClefTenor().getLp(pi('C', 0, 4)));
-		assertEquals(4, ClefType.Companion.getClefTab().getLp(pi('B', 0, 4)));
-		assertEquals(4, ClefType.Companion.getClefTabSmall().getLp(pi('B', 0, 4)));
-		assertEquals(4, ClefType.Companion.getClefPercTwoRects().getLp(pi('B', 0, 4)));
-		assertEquals(4, ClefType.Companion.getClefPercEmptyRect().getLp(pi('B', 0, 4)));
+		assertEquals(2, ClefType.Companion.getClefTreble().getLp(Companion.pi('G', 0, 4)));
+		assertEquals(2, ClefType.Companion.getClefTreble15vb().getLp(Companion.pi('G', 0, 2)));
+		assertEquals(2, ClefType.Companion.getClefTreble8vb().getLp(Companion.pi('G', 0, 3)));
+		assertEquals(2, ClefType.Companion.getClefTreble8va().getLp(Companion.pi('G', 0, 5)));
+		assertEquals(2, ClefType.Companion.getClefTreble15va().getLp(Companion.pi('G', 0, 6)));
+		assertEquals(6, ClefType.Companion.getClefBass().getLp(Companion.pi('F', 0, 3)));
+		assertEquals(6, ClefType.Companion.getClefBass15vb().getLp(Companion.pi('F', 0, 1)));
+		assertEquals(6, ClefType.Companion.getClefBass8vb().getLp(Companion.pi('F', 0, 2)));
+		assertEquals(6, ClefType.Companion.getClefBass8va().getLp(Companion.pi('F', 0, 4)));
+		assertEquals(6, ClefType.Companion.getClefBass15va().getLp(Companion.pi('F', 0, 5)));
+		assertEquals(4, ClefType.Companion.getClefAlto().getLp(Companion.pi('C', 0, 4)));
+		assertEquals(6, ClefType.Companion.getClefTenor().getLp(Companion.pi('C', 0, 4)));
+		assertEquals(4, ClefType.Companion.getClefTab().getLp(Companion.pi('B', 0, 4)));
+		assertEquals(4, ClefType.Companion.getClefTabSmall().getLp(Companion.pi('B', 0, 4)));
+		assertEquals(4, ClefType.Companion.getClefPercTwoRects().getLp(Companion.pi('B', 0, 4)));
+		assertEquals(4, ClefType.Companion.getClefPercEmptyRect().getLp(Companion.pi('B', 0, 4)));
 		//test e5
-		Pitch e5 = pi('E', 0, 5);
+		Pitch e5 = Companion.pi('E', 0, 5);
 		assertEquals(7, ClefType.Companion.getClefTreble().getLp(e5));
 		assertEquals(21, ClefType.Companion.getClefTreble15vb().getLp(e5));
 		assertEquals(14, ClefType.Companion.getClefTreble8vb().getLp(e5));

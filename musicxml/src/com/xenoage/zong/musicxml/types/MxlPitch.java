@@ -47,7 +47,7 @@ public final class MxlPitch
 			}
 			reader.closeElement();
 		}
-		return new MxlPitch(pi(step, alter, octave));
+		return new MxlPitch(Companion.pi(step, alter, octave));
 	}
 
 	@Override public void write(XmlWriter writer) {

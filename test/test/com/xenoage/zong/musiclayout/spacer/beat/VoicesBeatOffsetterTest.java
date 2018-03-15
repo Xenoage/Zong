@@ -319,11 +319,11 @@ public class VoicesBeatOffsetterTest {
 		cursor.write((MeasureElement) new TraditionalKey(-3));
 		cursor.write(new TimeSignature(TimeType.timeType(6, 4)));
 		//beats: 0, 2, 3, 4, 8.
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 4)));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 8)));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 8)));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 2)));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 2)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 4)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 8)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 8)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 2)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 2)));
 		return score;
 	}
 
@@ -352,27 +352,27 @@ public class VoicesBeatOffsetterTest {
 		//voice 3: | 3   3   3   8  8  4     |   (staff 2)
 
 		//voice 1 (staff 1)
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 4)));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 4)));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 4)));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 4)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 4)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 4)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 4)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 4)));
 
 		//voice 2 (staff 1)
 		cursor.setMp(atElement(0, 0, 1, 0));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 8)));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 8)));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 8)));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 8)));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 2)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 8)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 8)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 8)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 8)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 2)));
 
 		//voice 3 (staff 2)
 		cursor.setMp(atElement(1, 0, 0, 0));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 6)));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 6)));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 6)));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 8)));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 8)));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 4)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 6)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 6)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 6)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 8)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 8)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 4)));
 
 		return score;
 	}
@@ -389,33 +389,33 @@ public class VoicesBeatOffsetterTest {
 		//voice 3: | 3   3      3    .8  8  4     |   (staff 2)
 
 		//voice 1 (staff 1)
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 4)));
-		cursor.write(graceChord(pi(0, 0, 0)));
-		cursor.write(graceChord(pi(0, 0, 0)));
-		cursor.write(graceChord(pi(0, 0, 0)));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 4)));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 4)));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 4)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 4)));
+		cursor.write(graceChord(Companion.pi(0, 0, 0)));
+		cursor.write(graceChord(Companion.pi(0, 0, 0)));
+		cursor.write(graceChord(Companion.pi(0, 0, 0)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 4)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 4)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 4)));
 
 		//voice 2 (staff 1)
 		cursor.setMp(atElement(0, 0, 1, 0));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 8)));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 8)));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 8)));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 8)));
-		cursor.write(graceChord(pi(0, 0, 0)));
-		cursor.write(graceChord(pi(0, 0, 0)));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 2)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 8)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 8)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 8)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 8)));
+		cursor.write(graceChord(Companion.pi(0, 0, 0)));
+		cursor.write(graceChord(Companion.pi(0, 0, 0)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 2)));
 
 		//voice 3 (staff 2)
 		cursor.setMp(atElement(1, 0, 0, 0));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 6)));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 6)));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 6)));
-		cursor.write(graceChord(pi(0, 0, 0)));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 8)));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 8)));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 4)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 6)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 6)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 6)));
+		cursor.write(graceChord(Companion.pi(0, 0, 0)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 8)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 8)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 4)));
 
 		return score;
 	}
@@ -432,25 +432,25 @@ public class VoicesBeatOffsetterTest {
 		//voice 3: | 3   3   3   8  xxxxxxxxx|   (staff 2)
 
 		//voice 1
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 4)));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 4)));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 4)));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 8)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 4)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 4)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 4)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 8)));
 
 		//voice 2
 		cursor.setMp(atElement(0, 0, 1, 0));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 8)));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 8)));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 8)));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 8)));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 4)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 8)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 8)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 8)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 8)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 4)));
 
 		//voice 3
 		cursor.setMp(atElement(0, 0, 2, 0));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 6)));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 6)));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 6)));
-		cursor.write(chord(pi(0, 0, 0), Companion.fr(1, 8)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 6)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 6)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 6)));
+		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 8)));
 
 		return score;
 	}

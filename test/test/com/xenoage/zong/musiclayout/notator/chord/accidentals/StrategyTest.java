@@ -118,11 +118,11 @@ public class StrategyTest
 	@Test public void getAccNoteIndexTest() {
 		//C#5
 		//must have an accidental
-		List<Pitch> pitches = alist(pi(0, 1, 5));
+		List<Pitch> pitches = alist(Companion.pi(0, 1, 5));
 		assertEquals(0, Strategy.getAccNoteIndex(pitches, 0, contextC));
 		//E4, G#4, C#5 (no accidental at bottom note)
 		//must have accidentals on note 1 and 2
-		pitches = alist(pi(2, 0, 4), pi(4, 1, 4), pi(0, 1, 5));
+		pitches = alist(Companion.pi(2, 0, 4), Companion.pi(4, 1, 4), Companion.pi(0, 1, 5));
 		assertEquals(1, Strategy.getAccNoteIndex(pitches, 0, contextC));
 		assertEquals(2, Strategy.getAccNoteIndex(pitches, 2, contextC));
 	}
@@ -151,7 +151,7 @@ public class StrategyTest
 				Pitch[] pitches = new Pitch[accs.size()];
 				int accIndex = 0;
 				for (Pitch acc : accs.keySet()) {
-					pitches[accIndex] = pi(acc.getStep(), accs.get(acc), acc.getOctave());
+					pitches[accIndex] = Companion.pi(acc.getStep(), accs.get(acc), acc.getOctave());
 					accIndex++;
 				}
 				Chord accsChords = ChordFactory.chord(pitches, Companion.get_1$4());

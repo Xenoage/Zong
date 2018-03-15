@@ -155,7 +155,7 @@ public final class ChordReader {
 			if (mxlFNCType == MxlFullNoteContentType.Pitch)
 				pitch = ((MxlPitch) mxlFirstFullNote.getContent()).getPitch();
 			else
-				pitch = Pitch.pi(0, 4); //TODO (ZONG-96): better support for unpitched notes
+				pitch = Pitch.Companion.pi(0, 4); //TODO (ZONG-96): better support for unpitched notes
 			Grace grace = null;
 			if (mxlFirstGraceNote != null) {
 				//read grace duration from note-type ("eighth", "16th", ...)

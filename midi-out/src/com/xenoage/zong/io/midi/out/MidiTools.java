@@ -38,7 +38,7 @@ public class MidiTools {
       case 10: step = 5; alter = 1; break;
       case 11: step = 6; alter = 0; break;
     }
-    return pi(step, alter, octave);
+    return Companion.pi(step, alter, octave);
   }
 
   /**

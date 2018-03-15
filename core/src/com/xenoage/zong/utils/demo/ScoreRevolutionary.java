@@ -114,7 +114,7 @@ public class ScoreRevolutionary {
 		tempo.setText(ut("Allegro con fuoco."));
 		tempo.setPositioning(new Position(null, 22f, -5f, -5f));
 		cursor.write((ColumnElement) tempo);
-		cursor.write(attachC = chord(f2, accent, pi(B, 4), pi(D, 5), pi(F, 5), pi(G, 5), pi(B, 5)));
+		cursor.write(attachC = chord(f2, accent, Companion.pi(Companion.getB(), 4), Companion.pi(Companion.getD(), 5), Companion.pi(Companion.getF(), 5), Companion.pi(Companion.getG(), 5), Companion.pi(Companion.getB(), 5)));
 		attachC.setDirections(addOrNew(attachC.getDirections(), new Dynamic(DynamicValue.f)));
 		cursor.write(new Rest(f2));
 
@@ -125,8 +125,8 @@ public class ScoreRevolutionary {
 		cresc.setPositioning(new Position(null, null, -1f, -2f));
 		cursor.write((MeasureElement) cresc);
 		cursor.openBeam();
-		cursor.write(firstSlurC = chord(Companion.fr(3, 16), accent, pi(A, -1, 4), pi(E, -1, 5), pi(F, 5), pi(A, -1, 5)));
-		cursor.write(lastSlurC = chord(f16, pi(G, 4), pi(G, 5)));
+		cursor.write(firstSlurC = chord(Companion.fr(3, 16), accent, Companion.pi(Companion.getA(), -1, 4), Companion.pi(Companion.getE(), -1, 5), Companion.pi(Companion.getF(), 5), Companion.pi(Companion.getA(), -1, 5)));
+		cursor.write(lastSlurC = chord(f16, Companion.pi(Companion.getG(), 4), Companion.pi(Companion.getG(), 5)));
 		cursor.closeBeam();
 		cursor.write((MeasureElement) cresc.getWedgeEnd());
 		firstSlurB = new BezierPoint(sp(is * 0.8f, is * 7.6f), sp(is, is * 0.8f));
@@ -134,7 +134,7 @@ public class ScoreRevolutionary {
 		new SlurAdd(new Slur(SlurType.Slur, clwp(firstSlurC, firstSlurB), clwp(lastSlurC, lastSlurB), null)).execute();
 
 		//measure 3
-		cursor.write(attachC = chord(f2, pi(D, 5), pi(F, 5), pi(G, 5), pi(D, 6)));
+		cursor.write(attachC = chord(f2, Companion.pi(Companion.getD(), 5), Companion.pi(Companion.getF(), 5), Companion.pi(Companion.getG(), 5), Companion.pi(Companion.getD(), 6)));
 		new DirectionAdd(new Dynamic(DynamicValue.f), attachC).execute();
 		cursor.write(new Rest(f2));
 
@@ -145,8 +145,8 @@ public class ScoreRevolutionary {
 		cresc.setPositioning(new Position(null, null, -1f, -2f));
 		cursor.write((MeasureElement) cresc);
 		cursor.openBeam();
-		cursor.write(firstSlurC = chord(Companion.fr(3, 16), accent, pi(A, -1, 4), pi(E, -1, 5), pi(F, 0, 5), pi(A, -1, 5)));
-		cursor.write(lastSlurC = chord(f16, pi(G, 0, 4), pi(G, 0, 5)));
+		cursor.write(firstSlurC = chord(Companion.fr(3, 16), accent, Companion.pi(Companion.getA(), -1, 4), Companion.pi(Companion.getE(), -1, 5), Companion.pi(Companion.getF(), 0, 5), Companion.pi(Companion.getA(), -1, 5)));
+		cursor.write(lastSlurC = chord(f16, Companion.pi(Companion.getG(), 0, 4), Companion.pi(Companion.getG(), 0, 5)));
 		cursor.closeBeam();
 		cursor.write((MeasureElement) cresc.getWedgeEnd());
 		firstSlurB = new BezierPoint(sp(is * 0.8f, is * 7.6f), sp(is, is * 0.8f));
@@ -154,7 +154,7 @@ public class ScoreRevolutionary {
 		new SlurAdd(new Slur(SlurType.Slur, clwp(firstSlurC, firstSlurB), clwp(lastSlurC, lastSlurB), null)).execute();
 
 		//measure 5
-		cursor.write(attachC = chord(f4, staccato, pi(F, 5), pi(G, 5), pi(D, 6), pi(F, 6)));
+		cursor.write(attachC = chord(f4, staccato, Companion.pi(Companion.getF(), 5), Companion.pi(Companion.getG(), 5), Companion.pi(Companion.getD(), 6), Companion.pi(Companion.getF(), 6)));
 		new DirectionAdd(new Dynamic(DynamicValue.f), attachC).execute();
 		cursor.write(new Rest(f4));
 		cursor.write(new Rest(f2));
@@ -166,89 +166,89 @@ public class ScoreRevolutionary {
 		//measure 1
 		cursor.openBeam();
 		cursor.write(new Rest(f8));
-		cursor.write(firstSlurC = chord(f16, pi(A, -1, 4)));
-		cursor.write(chord(f16, pi(G, 0, 4)));
+		cursor.write(firstSlurC = chord(f16, Companion.pi(Companion.getA(), -1, 4)));
+		cursor.write(chord(f16, Companion.pi(Companion.getG(), 0, 4)));
 		cursor.closeBeam();
 
 		cursor.openBeam();
-		cursor.write(chord(f16, accent, pi(F, 0, 4)));
-		cursor.write(chord(f16, pi(D, 0, 4)));
-		cursor.write(chord(f16, pi(E, -1, 4)));
-		cursor.write(chord(f16, pi(D, 0, 4)));
+		cursor.write(chord(f16, accent, Companion.pi(Companion.getF(), 0, 4)));
+		cursor.write(chord(f16, Companion.pi(Companion.getD(), 0, 4)));
+		cursor.write(chord(f16, Companion.pi(Companion.getE(), -1, 4)));
+		cursor.write(chord(f16, Companion.pi(Companion.getD(), 0, 4)));
 		cursor.closeBeam();
 
 		cursor.openBeam();
-		cursor.write(chord(f16, accent, pi(B, 0, 3)));
-		cursor.write(chord(f16, pi(G, 0, 3)));
-		cursor.write(chord(f16, pi(A, -1, 3)));
-		cursor.write(chord(f16, pi(G, 0, 3)));
+		cursor.write(chord(f16, accent, Companion.pi(Companion.getB(), 0, 3)));
+		cursor.write(chord(f16, Companion.pi(Companion.getG(), 0, 3)));
+		cursor.write(chord(f16, Companion.pi(Companion.getA(), -1, 3)));
+		cursor.write(chord(f16, Companion.pi(Companion.getG(), 0, 3)));
 		cursor.closeBeam();
 
 		cursor.openBeam();
-		cursor.write(chord(f16, accent, pi(F, 0, 3)));
-		cursor.write(chord(f16, pi(D, 0, 3)));
-		cursor.write(chord(f16, pi(E, -1, 3)));
-		cursor.write(chord(f16, pi(D, 0, 3)));
+		cursor.write(chord(f16, accent, Companion.pi(Companion.getF(), 0, 3)));
+		cursor.write(chord(f16, Companion.pi(Companion.getD(), 0, 3)));
+		cursor.write(chord(f16, Companion.pi(Companion.getE(), -1, 3)));
+		cursor.write(chord(f16, Companion.pi(Companion.getD(), 0, 3)));
 		cursor.closeBeam();
 
 		//measure 2
 		cursor.openBeam();
-		cursor.write(chord(f16, accent, pi(B, 0, 2)));
-		cursor.write(chord(f16, pi(G, 0, 2)));
-		cursor.write(chord(f16, pi(A, -1, 2)));
-		cursor.write(chord(f16, pi(G, 0, 2)));
+		cursor.write(chord(f16, accent, Companion.pi(Companion.getB(), 0, 2)));
+		cursor.write(chord(f16, Companion.pi(Companion.getG(), 0, 2)));
+		cursor.write(chord(f16, Companion.pi(Companion.getA(), -1, 2)));
+		cursor.write(chord(f16, Companion.pi(Companion.getG(), 0, 2)));
 		cursor.closeBeam();
 
 		cursor.openBeam();
-		cursor.write(chord(f16, accent, pi(F, 0, 2)));
-		cursor.write(chord(f16, pi(D, 0, 2)));
-		cursor.write(chord(f16, pi(E, -1, 2)));
-		cursor.write(chord(f16, pi(D, 0, 2)));
+		cursor.write(chord(f16, accent, Companion.pi(Companion.getF(), 0, 2)));
+		cursor.write(chord(f16, Companion.pi(Companion.getD(), 0, 2)));
+		cursor.write(chord(f16, Companion.pi(Companion.getE(), -1, 2)));
+		cursor.write(chord(f16, Companion.pi(Companion.getD(), 0, 2)));
 		cursor.closeBeam();
 
 		cursor.openBeam();
-		cursor.write(chord(f16, accent, pi(C, 0, 2)));
-		cursor.write(chord(f16, pi(G, 0, 1)));
-		cursor.write(chord(f16, pi(C, 0, 2)));
-		cursor.write(chord(f16, pi(G, 0, 1)));
+		cursor.write(chord(f16, accent, Companion.pi(Companion.getC(), 0, 2)));
+		cursor.write(chord(f16, Companion.pi(Companion.getG(), 0, 1)));
+		cursor.write(chord(f16, Companion.pi(Companion.getC(), 0, 2)));
+		cursor.write(chord(f16, Companion.pi(Companion.getG(), 0, 1)));
 		cursor.closeBeam();
 
 		cursor.openBeam();
-		cursor.write(chord(f16, accent, pi(C, 0, 2)));
-		cursor.write(chord(f16, pi(G, 0, 1)));
-		cursor.write(chord(f16, pi(C, 0, 2)));
-		cursor.write(lastSlurC = chord(f16, pi(G, 0, 1)));
+		cursor.write(chord(f16, accent, Companion.pi(Companion.getC(), 0, 2)));
+		cursor.write(chord(f16, Companion.pi(Companion.getG(), 0, 1)));
+		cursor.write(chord(f16, Companion.pi(Companion.getC(), 0, 2)));
+		cursor.write(lastSlurC = chord(f16, Companion.pi(Companion.getG(), 0, 1)));
 		cursor.closeBeam();
 		firstSlurB = new BezierPoint(sp(0, is * 1.5f), sp(15, 5));
 		lastSlurB = new BezierPoint(sp(0, is * 7.5f), sp(-is * 5, is * 2));
 		new SlurAdd(new Slur(SlurType.Slur, clwp(firstSlurC, firstSlurB), clwp(lastSlurC, lastSlurB), null)).execute();
 
 		//measure 3
-		cursor.write(chord(f8, staccato, pi(B, 0, 1)));
+		cursor.write(chord(f8, staccato, Companion.pi(Companion.getB(), 0, 1)));
 		cursor.openBeam();
-		cursor.write(firstSlurC = chord(f16, pi(A, -1, 4)));
-		cursor.write(chord(f16, pi(G, 0, 4)));
+		cursor.write(firstSlurC = chord(f16, Companion.pi(Companion.getA(), -1, 4)));
+		cursor.write(chord(f16, Companion.pi(Companion.getG(), 0, 4)));
 		cursor.closeBeam();
 
 		cursor.openBeam();
-		cursor.write(chord(f16, accent, pi(F, 0, 4)));
-		cursor.write(chord(f16, pi(D, 0, 4)));
-		cursor.write(chord(f16, pi(E, -1, 4)));
-		cursor.write(chord(f16, pi(D, 0, 4)));
+		cursor.write(chord(f16, accent, Companion.pi(Companion.getF(), 0, 4)));
+		cursor.write(chord(f16, Companion.pi(Companion.getD(), 0, 4)));
+		cursor.write(chord(f16, Companion.pi(Companion.getE(), -1, 4)));
+		cursor.write(chord(f16, Companion.pi(Companion.getD(), 0, 4)));
 		cursor.closeBeam();
 
 		cursor.openBeam();
-		cursor.write(chord(f16, accent, pi(B, 0, 3)));
-		cursor.write(chord(f16, pi(G, 0, 3)));
-		cursor.write(chord(f16, pi(A, -1, 3)));
-		cursor.write(chord(f16, pi(G, 0, 3)));
+		cursor.write(chord(f16, accent, Companion.pi(Companion.getB(), 0, 3)));
+		cursor.write(chord(f16, Companion.pi(Companion.getG(), 0, 3)));
+		cursor.write(chord(f16, Companion.pi(Companion.getA(), -1, 3)));
+		cursor.write(chord(f16, Companion.pi(Companion.getG(), 0, 3)));
 		cursor.closeBeam();
 
 		cursor.openBeam();
-		cursor.write(chord(f16, accent, pi(F, 0, 3)));
-		cursor.write(chord(f16, pi(D, 0, 3)));
-		cursor.write(chord(f16, pi(E, -1, 3)));
-		cursor.write(lastSlurC = chord(f16, pi(D, 0, 3)));
+		cursor.write(chord(f16, accent, Companion.pi(Companion.getF(), 0, 3)));
+		cursor.write(chord(f16, Companion.pi(Companion.getD(), 0, 3)));
+		cursor.write(chord(f16, Companion.pi(Companion.getE(), -1, 3)));
+		cursor.write(lastSlurC = chord(f16, Companion.pi(Companion.getD(), 0, 3)));
 		cursor.closeBeam();
 		firstSlurB = new BezierPoint(sp(0, is * 1.5f), sp(15, 3));
 		lastSlurB = new BezierPoint(sp(0, is * 5f), sp(-is * 5.5f, is * 2));
@@ -256,38 +256,38 @@ public class ScoreRevolutionary {
 
 		//measure 4
 		cursor.openBeam();
-		cursor.write(firstSlurC = chord(f16, accent, pi(B, 0, 2)));
-		cursor.write(chord(f16, pi(G, 0, 2)));
-		cursor.write(chord(f16, pi(A, -1, 2)));
-		cursor.write(chord(f16, pi(G, 0, 2)));
+		cursor.write(firstSlurC = chord(f16, accent, Companion.pi(Companion.getB(), 0, 2)));
+		cursor.write(chord(f16, Companion.pi(Companion.getG(), 0, 2)));
+		cursor.write(chord(f16, Companion.pi(Companion.getA(), -1, 2)));
+		cursor.write(chord(f16, Companion.pi(Companion.getG(), 0, 2)));
 		cursor.closeBeam();
 
 		cursor.openBeam();
-		cursor.write(chord(f16, accent, pi(F, 0, 2)));
-		cursor.write(chord(f16, pi(D, 0, 2)));
-		cursor.write(chord(f16, pi(E, -1, 2)));
-		cursor.write(chord(f16, pi(D, 0, 2)));
+		cursor.write(chord(f16, accent, Companion.pi(Companion.getF(), 0, 2)));
+		cursor.write(chord(f16, Companion.pi(Companion.getD(), 0, 2)));
+		cursor.write(chord(f16, Companion.pi(Companion.getE(), -1, 2)));
+		cursor.write(chord(f16, Companion.pi(Companion.getD(), 0, 2)));
 		cursor.closeBeam();
 
 		cursor.openBeam();
-		cursor.write(chord(f16, accent, pi(C, 0, 2)));
-		cursor.write(chord(f16, pi(G, 0, 1)));
-		cursor.write(chord(f16, pi(C, 0, 2)));
-		cursor.write(chord(f16, pi(G, 0, 1)));
+		cursor.write(chord(f16, accent, Companion.pi(Companion.getC(), 0, 2)));
+		cursor.write(chord(f16, Companion.pi(Companion.getG(), 0, 1)));
+		cursor.write(chord(f16, Companion.pi(Companion.getC(), 0, 2)));
+		cursor.write(chord(f16, Companion.pi(Companion.getG(), 0, 1)));
 		cursor.closeBeam();
 
 		cursor.openBeam();
-		cursor.write(chord(f16, accent, pi(C, 0, 2)));
-		cursor.write(chord(f16, pi(G, 0, 1)));
-		cursor.write(chord(f16, pi(C, 0, 2)));
-		cursor.write(lastSlurC = chord(f16, pi(G, 0, 1)));
+		cursor.write(chord(f16, accent, Companion.pi(Companion.getC(), 0, 2)));
+		cursor.write(chord(f16, Companion.pi(Companion.getG(), 0, 1)));
+		cursor.write(chord(f16, Companion.pi(Companion.getC(), 0, 2)));
+		cursor.write(lastSlurC = chord(f16, Companion.pi(Companion.getG(), 0, 1)));
 		cursor.closeBeam();
 		firstSlurB = new BezierPoint(sp(-is, is * 8.5f), sp(15, 4));
 		lastSlurB = new BezierPoint(sp(0, is * 7.5f), sp(-is * 5, is * 2));
 		new SlurAdd(new Slur(SlurType.Slur, clwp(firstSlurC, firstSlurB), clwp(lastSlurC, lastSlurB), null)).execute();
 
 		//measure 5
-		cursor.write(chord(f4, staccato, pi(B, 0, 1)));
+		cursor.write(chord(f4, staccato, Companion.pi(Companion.getB(), 0, 1)));
 		cursor.write(new Rest(f4));
 		cursor.write(new Rest(f2));
 

@@ -52,7 +52,7 @@ public final class KeySignatureStamping
 		fifth = Math.abs(fifth);
 		float interlineSpace = parentStaff.is;
 		for (int i = 0; i < fifth; i++) {
-			int linePosition = getLinePosition(i, useSharps, key.c4Lp, key.minLp);
+			int linePosition = Companion.getLinePosition(i, useSharps, key.c4Lp, key.minLp);
 			Rectangle2f bounds = symbol.getBoundingRect();
 			bounds = bounds.scale(interlineSpace);
 			bounds = bounds.move(xMm + i * distanceMm * interlineSpace,

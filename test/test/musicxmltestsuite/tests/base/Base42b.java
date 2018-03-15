@@ -45,32 +45,32 @@ public interface Base42b
 		Cursor cursor = new Cursor(score, mp0, true);
 		cursor.write(new TimeSignature(TimeType.time_6_8));
 		//staff 1, measure 0
-		cursor.write(chord(pi('F', 0, 4), Companion.fr(1, 8)));
-		cursor.write(chord(pi('D', 0, 4), Companion.fr(1, 8)));
-		cursor.write(chord(pi('B', 0, 3), Companion.fr(1, 8)));
-		cursor.write(chord(pi('G', 0, 3), Companion.fr(1, 8)));
-		cursor.write(chord(pi('F', 0, 3), Companion.fr(1, 4)));
+		cursor.write(chord(Companion.pi('F', 0, 4), Companion.fr(1, 8)));
+		cursor.write(chord(Companion.pi('D', 0, 4), Companion.fr(1, 8)));
+		cursor.write(chord(Companion.pi('B', 0, 3), Companion.fr(1, 8)));
+		cursor.write(chord(Companion.pi('G', 0, 3), Companion.fr(1, 8)));
+		cursor.write(chord(Companion.pi('F', 0, 3), Companion.fr(1, 4)));
 		//staff 1, measure 1
-		cursor.write(chord(pi('E', 0, 5), Companion.fr(1, 8)));
-		cursor.write(chord(pi('C', 0, 5), Companion.fr(1, 8)));
-		cursor.write(chord(pi('G', 0, 4), Companion.fr(1, 8)));
-		cursor.write(chord(pi('G', 0, 4), Companion.fr(1, 8)));
-		cursor.write(chord(pi('F', 0, 4), Companion.fr(1, 4)));
+		cursor.write(chord(Companion.pi('E', 0, 5), Companion.fr(1, 8)));
+		cursor.write(chord(Companion.pi('C', 0, 5), Companion.fr(1, 8)));
+		cursor.write(chord(Companion.pi('G', 0, 4), Companion.fr(1, 8)));
+		cursor.write(chord(Companion.pi('G', 0, 4), Companion.fr(1, 8)));
+		cursor.write(chord(Companion.pi('F', 0, 4), Companion.fr(1, 4)));
 		//staff 1, measure 0
 		cursor.setMp(atElement(1, 0, 0, 0));
 		cursor.write(new Rest(Companion.fr(1, 8)));
-		cursor.write(chord(pi('G', 0, 2), Companion.fr(1, 8)));
-		cursor.write(chord(pi('G', 0, 2), Companion.fr(1, 8)));
-		cursor.write(chord(pi('G', 0, 2), Companion.fr(1, 8)));
-		cursor.write(chord(pi('A', 0, 2), Companion.fr(1, 16)));
-		cursor.write(chord(pi('G', 0, 2), Companion.fr(1, 16)));
-		cursor.write(chord(pi('F', 1, 2), Companion.fr(1, 16)));
-		cursor.write(chord(pi('G', 0, 2), Companion.fr(1, 16)));
+		cursor.write(chord(Companion.pi('G', 0, 2), Companion.fr(1, 8)));
+		cursor.write(chord(Companion.pi('G', 0, 2), Companion.fr(1, 8)));
+		cursor.write(chord(Companion.pi('G', 0, 2), Companion.fr(1, 8)));
+		cursor.write(chord(Companion.pi('A', 0, 2), Companion.fr(1, 16)));
+		cursor.write(chord(Companion.pi('G', 0, 2), Companion.fr(1, 16)));
+		cursor.write(chord(Companion.pi('F', 1, 2), Companion.fr(1, 16)));
+		cursor.write(chord(Companion.pi('G', 0, 2), Companion.fr(1, 16)));
 		//staff 1, measure 1
-		cursor.write(chord(new Pitch[]{pi('C', 0, 3), pi('E', 0, 3), pi('G', 0, 3), pi('C', 0, 4)}, Companion.fr(1, 4)));
+		cursor.write(chord(new Pitch[]{Companion.pi('C', 0, 3), Companion.pi('E', 0, 3), Companion.pi('G', 0, 3), Companion.pi('C', 0, 4)}, Companion.fr(1, 4)));
 		cursor.write(new Rest(Companion.fr(1, 8)));
 		cursor.write(new Rest(Companion.fr(1, 4)));
-		cursor.write(chord(pi('G', 0, 3), Companion.fr(1, 8)));
+		cursor.write(chord(Companion.pi('G', 0, 3), Companion.fr(1, 8)));
 		return new Staff[]{score.getStaff(0), score.getStaff(1)};
 	}
 	

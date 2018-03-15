@@ -112,8 +112,8 @@ public class StretchMeasuresTest {
 	 */
 	public static SystemSpacing createSystemWith1Measure(float leadingWidth, float offsetBeat0,
 		float offsetBeat1, float offsetBeat2) {
-		Chord chord1 = chord(pi(0, 0, 4), Companion.fr(2, 4));
-		Chord chord2 = chord(pi(1, 0, 4), Companion.fr(2, 4));
+		Chord chord1 = chord(Companion.pi(0, 0, 4), Companion.fr(2, 4));
+		Chord chord2 = chord(Companion.pi(1, 0, 4), Companion.fr(2, 4));
 		Voice voice = new Voice(alist(chord1, chord2));
 		List<BeatOffset> beatOffsets = alist(new BeatOffset(Companion.fr(1, 4), offsetBeat0), new BeatOffset(
 			Companion.fr(3, 4), offsetBeat1), new BeatOffset(Companion.fr(5, 4), offsetBeat2));
@@ -137,10 +137,10 @@ public class StretchMeasuresTest {
 	 */
 	public static SystemSpacing createSystemWith1MeasureGrace(float offsetChord1,
 		float offsetChord2, float offsetMeasureEnd, float graceDistance) {
-		Chord chord1 = chord(pi(0, 0, 4), Companion.fr(2, 4));
-		Chord chord2grace = graceChord(pi(1, 0, 4));
-		Chord chord3grace = graceChord(pi(2, 0, 4));
-		Chord chord4 = chord(pi(3, 0, 4), Companion.fr(2, 4));
+		Chord chord1 = chord(Companion.pi(0, 0, 4), Companion.fr(2, 4));
+		Chord chord2grace = graceChord(Companion.pi(1, 0, 4));
+		Chord chord3grace = graceChord(Companion.pi(2, 0, 4));
+		Chord chord4 = chord(Companion.pi(3, 0, 4), Companion.fr(2, 4));
 		Voice voice = new Voice(alist(chord1, chord2grace, chord3grace, chord4));
 		List<BeatOffset> beatOffsets = alist(new BeatOffset(Companion.fr(0, 4), offsetChord1), new BeatOffset(
 			Companion.fr(2, 4), offsetChord2), new BeatOffset(Companion.fr(4, 4), offsetMeasureEnd));

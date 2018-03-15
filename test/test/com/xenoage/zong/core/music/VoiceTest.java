@@ -176,7 +176,7 @@ public class VoiceTest {
 	}
 
 	public static Chord grace(int step) {
-		Chord chord = new Chord(new Note(pi(step, 0)), Companion.fr(0, 4));
+		Chord chord = new Chord(new Note(Companion.pi(step, 0)), Companion.fr(0, 4));
 		chord.setGrace(new Grace(true, Companion.fr(1, 16)));
 		return chord;
 	}

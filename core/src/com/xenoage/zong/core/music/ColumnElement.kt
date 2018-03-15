@@ -17,4 +17,4 @@ import com.xenoage.zong.core.position.MPElement
  * This is the case for [TimeSignature], [Barline], [Volta],
  * [Key], [Tempo] and [Break].
  */
-interface ColumnElement : MPElement<ColumnHeader>
+interface ColumnElement : MPElement

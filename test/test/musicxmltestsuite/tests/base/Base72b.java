@@ -27,19 +27,19 @@ public interface Base72b
 			Transpose.Companion.getNoTranspose(),
 	};
 	
-	Pitch expectedSoundPitch = pi('C', 0, 5);
+	Pitch expectedSoundPitch = Companion.pi('C', 0, 5);
 	
 	Pitch[] expectedNotatedPitches = {
-		pi('A', 0, 4),
-		pi('D', 0, 5),
-		pi('E', -1, 5),
-		pi('G', 0, 5),
-		pi('A', 0, 5),
-		pi('E', -1, 4),
-		pi('D', 0, 5),
+		Companion.pi('A', 0, 4),
+		Companion.pi('D', 0, 5),
+		Companion.pi('E', -1, 5),
+		Companion.pi('G', 0, 5),
+		Companion.pi('A', 0, 5),
+		Companion.pi('E', -1, 4),
+		Companion.pi('D', 0, 5),
 		expectedSoundPitch,
-		pi('B', -1, 4),
-		pi('F', 1, 1),
+		Companion.pi('B', -1, 4),
+		Companion.pi('F', 1, 1),
 		expectedSoundPitch,
 	};
 	

@@ -15,12 +15,12 @@ public interface Base21c
 	}
 	
 	Chord[] expectedChords = {
-		ch(Companion.fr(3, 8), pi('F', 0, 4), pi('A', 0, 4), pi('C', 0, 5)),
-		ch(Companion.fr(1, 8), pi('A', 0, 4), pi('G', 0, 5)),
-		ch(Companion.fr(1, 4), pi('F', 0, 4), pi('A', 0, 4), pi('C', 0, 5)),
-		ch(Companion.fr(1, 4), pi('F', 0, 4), pi('A', 0, 4), pi('C', 0, 5)),
-		ch(Companion.fr(1, 4), pi('F', 0, 4), pi('A', 0, 4), pi('E', 0, 5)),
-		ch(Companion.fr(1, 4), pi('F', 0, 4), pi('A', 0, 4), pi('F', 0, 5)),
-		ch(Companion.fr(1, 2), pi('F', 0, 4), pi('A', 0, 4), pi('D', 0, 5))
+		ch(Companion.fr(3, 8), Companion.pi('F', 0, 4), Companion.pi('A', 0, 4), Companion.pi('C', 0, 5)),
+		ch(Companion.fr(1, 8), Companion.pi('A', 0, 4), Companion.pi('G', 0, 5)),
+		ch(Companion.fr(1, 4), Companion.pi('F', 0, 4), Companion.pi('A', 0, 4), Companion.pi('C', 0, 5)),
+		ch(Companion.fr(1, 4), Companion.pi('F', 0, 4), Companion.pi('A', 0, 4), Companion.pi('C', 0, 5)),
+		ch(Companion.fr(1, 4), Companion.pi('F', 0, 4), Companion.pi('A', 0, 4), Companion.pi('E', 0, 5)),
+		ch(Companion.fr(1, 4), Companion.pi('F', 0, 4), Companion.pi('A', 0, 4), Companion.pi('F', 0, 5)),
+		ch(Companion.fr(1, 2), Companion.pi('F', 0, 4), Companion.pi('A', 0, 4), Companion.pi('D', 0, 5))
 	};
 }

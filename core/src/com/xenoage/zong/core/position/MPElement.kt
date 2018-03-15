@@ -6,12 +6,12 @@ import com.xenoage.zong.core.music.MusicElement
 /**
  * Interface for all musical elements, for which an [MP] can be retrieved.
  */
-interface MPElement<C : MPContainer> : MusicElement {
+interface MPElement : MusicElement {
 
 	/**
 	 * The parent element, or null if not part of a score.
 	 */
-	var parent: C?
+	var parent: MPContainer?
 
 	/**
 	 * Gets the [MP] of this element by querying its parent, or null if it is unknown.

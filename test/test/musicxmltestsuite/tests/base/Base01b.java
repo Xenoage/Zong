@@ -14,8 +14,8 @@ public interface Base01b
 
 	default Pitch[] getExpectedPitches() {
 		Pitch[] expectedPitches = new Pitch[41 * 2];
-		Pitch pi1 = pi(0, 0, 5);
-		Pitch pi2 = pi(0, 0, 5);
+		Pitch pi1 = Companion.pi(0, 0, 5);
+		Pitch pi2 = Companion.pi(0, 0, 5);
 		for (int i = 0; i < expectedPitches.length / 2; i++) {
 			expectedPitches[i * 2 + 0] = pi1;
 			expectedPitches[i * 2 + 1] = pi2;
@@ -41,7 +41,7 @@ public interface Base01b
 		else {
 			alter += 1;
 		}
-		return pi(step, alter, octave);
+		return Companion.pi(step, alter, octave);
 	}
 
 	default Pitch decHalftoneWithEnharmonicChange(Pitch p) {
@@ -60,7 +60,7 @@ public interface Base01b
 		else {
 			alter -= 1;
 		}
-		return pi(step, alter, octave);
+		return Companion.pi(step, alter, octave);
 	}
 
 }

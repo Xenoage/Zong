@@ -38,7 +38,7 @@ public class TraditionalKeyNotator
 		
 		//compute LPs
 		ClefType contextClef = context.score.getClef(context.mp, Before);
-		int c4Lp = contextClef.getLp(pi(0, 0, 4));
+		int c4Lp = contextClef.getLp(Companion.pi(0, 0, 4));
 		int minLp = contextClef.getKeySignatureLowestLp(fifth);
 		
 		return new TraditionalKeyNotation(key, keyWidth, c4Lp, minLp);

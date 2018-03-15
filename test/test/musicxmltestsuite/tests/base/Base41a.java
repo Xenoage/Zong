@@ -13,6 +13,6 @@ public interface Base41a
 	}
 	
 	String[] expectedNames = { "Part 1", "Part 2", "Part 3", "Part 4" };
-	Pitch[] expectedPitches = { pi(0, 4), pi(2, 4), pi(4, 4), pi(6, 4) };
+	Pitch[] expectedPitches = { Companion.pi(0, 4), Companion.pi(2, 4), Companion.pi(4, 4), Companion.pi(6, 4) };
 	
 }

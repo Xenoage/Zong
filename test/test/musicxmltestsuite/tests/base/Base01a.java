@@ -17,7 +17,7 @@ public interface Base01a
 		Pitch[] expectedPitches = new Pitch[24 * 4 + 6];
 		int iPitch = 0;
 		for (int alter : new int[] { 0, 1, -1 }) {
-			Pitch nextPitch = pi('G', alter, 2);
+			Pitch nextPitch = Companion.pi('G', alter, 2);
 			for (int i = 0; i < 8 * 4; i++) {
 				expectedPitches[iPitch++] = nextPitch;
 				int newStep = nextPitch.getStep() + 1;
@@ -26,15 +26,15 @@ public interface Base01a
 					newStep = 0;
 					newOctave += 1;
 				}
-				nextPitch = pi(newStep, alter, newOctave);
+				nextPitch = Companion.pi(newStep, alter, newOctave);
 			}
 		}
-		expectedPitches[iPitch++] = pi(0, 2, 5);
-		expectedPitches[iPitch++] = pi(0, -2, 5);
-		expectedPitches[iPitch++] = pi(0, 1, 5);
-		expectedPitches[iPitch++] = pi(0, 1, 5);
-		expectedPitches[iPitch++] = pi(0, 1, 5);
-		expectedPitches[iPitch++] = pi(0, 1, 5);
+		expectedPitches[iPitch++] = Companion.pi(0, 2, 5);
+		expectedPitches[iPitch++] = Companion.pi(0, -2, 5);
+		expectedPitches[iPitch++] = Companion.pi(0, 1, 5);
+		expectedPitches[iPitch++] = Companion.pi(0, 1, 5);
+		expectedPitches[iPitch++] = Companion.pi(0, 1, 5);
+		expectedPitches[iPitch++] = Companion.pi(0, 1, 5);
 		return expectedPitches;
 	}
 	

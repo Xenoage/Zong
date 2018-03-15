@@ -14,6 +14,6 @@ public interface Base21a
 		return "21a-Chord-Basic.xml";
 	}
 	
-	Chord expectedChord = ch(Companion.fr(1, 4), pi('F', 0, 4), pi('A', 0, 4));
+	Chord expectedChord = ch(Companion.fr(1, 4), Companion.pi('F', 0, 4), Companion.pi('A', 0, 4));
 	
 }

@@ -58,24 +58,24 @@ public class BeamIteratorTest {
 		//first beam
 		cursor.setMp(atElement(0, 0, 1, 0));
 		cursor.openBeam();
-		cursor.write(chord(pi(C, 4), Companion.get_1$8()));
-		cursor.write(chord(pi(C, 4), Companion.get_1$8()));
-		cursor.write(chord(pi(C, 4), Companion.get_1$8()));
-		cursor.write(chord(pi(C, 4), Companion.get_1$8()));
+		cursor.write(chord(Companion.pi(Companion.getC(), 4), Companion.get_1$8()));
+		cursor.write(chord(Companion.pi(Companion.getC(), 4), Companion.get_1$8()));
+		cursor.write(chord(Companion.pi(Companion.getC(), 4), Companion.get_1$8()));
+		cursor.write(chord(Companion.pi(Companion.getC(), 4), Companion.get_1$8()));
 		cursor.closeBeam();
 		//second beam
 		cursor.setMp(atElement(0, 2, 0, 0));
 		cursor.openBeam();
-		cursor.write(chord(pi(C, 4), Companion.get_1$8()));
+		cursor.write(chord(Companion.pi(Companion.getC(), 4), Companion.get_1$8()));
 		cursor.setMp(atElement(1, 2, 0, 0));
 		cursor.write(new Rest(Companion.get_1$8()));
-		cursor.write(chord(pi(C, 4), Companion.get_1$8()));
+		cursor.write(chord(Companion.pi(Companion.getC(), 4), Companion.get_1$8()));
 		cursor.closeBeam();
 		//third beam
 		cursor.setMp(atElement(1, 3, 0, 0));
 		cursor.openBeam();
-		cursor.write(chord(pi(C, 4), Companion.get_1$8()));
-		cursor.write(chord(pi(C, 4), Companion.get_1$8()));
+		cursor.write(chord(Companion.pi(Companion.getC(), 4), Companion.get_1$8()));
+		cursor.write(chord(Companion.pi(Companion.getC(), 4), Companion.get_1$8()));
 		cursor.closeBeam();
 		return score;
 	}

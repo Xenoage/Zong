@@ -20,12 +20,12 @@ public interface Base72c
 	};
 	
 	Pitch[] expectedSoundPitches = {
-		pi('E', -1, 5),
-		pi('B', -1, 4),
-		pi('B', -1, 4),
+		Companion.pi('E', -1, 5),
+		Companion.pi('B', -1, 4),
+		Companion.pi('B', -1, 4),
 	};
 	
-	Pitch expectedNotatedPitch = pi('C', 0, 4);
+	Pitch expectedNotatedPitch = Companion.pi('C', 0, 4);
 	
 	
 

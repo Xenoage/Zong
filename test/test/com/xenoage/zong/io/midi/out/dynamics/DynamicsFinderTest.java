@@ -90,7 +90,7 @@ public class DynamicsFinderTest {
 		//voice 1
 		cursor.setMp(atElement(0, 0, 1, 0));
 		cursor.write(new Rest(Companion.get_1$2()));
-		val chord = chord(pi(0, 4), Companion.get_1$2());
+		val chord = chord(Companion.pi(0, 4), Companion.get_1$2());
 		chord.addDirection(new Dynamic(mf));
 		cursor.write(chord);
 		cursor.write(new Rest(Companion.get_1()));
