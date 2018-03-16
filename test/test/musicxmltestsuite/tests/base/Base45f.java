@@ -25,7 +25,7 @@ public interface Base45f
 	
 	Volta[] expectedVoltas = {
 		null,
-		new Volta(1, range(1, 3), "1." + Volta.dash + "3.", true),
+		new Volta(1, range(1, 3), "1." + Volta.Companion.getDash() + "3.", true),
 		new Volta(1, range(2, 2), "2.", false),
 		null,
 		null,

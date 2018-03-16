@@ -15,6 +15,9 @@ import com.xenoage.zong.core.music.Step.*
  * by the numbers 0 to 9, where 4 indicates the octave
  * started by middle C.
  * (Parts copied from the MusicXML specification)
+ *
+ * This class is optimized for performance: Nearly all possible
+ * pitches are pregenerated and reused.
  */
 @Optimized(Reason.MemorySaving)
 data class Pitch(
@@ -99,15 +102,4 @@ data class Pitch(
 
 	}
 
-}
-
-/** Musical step, like 'A' or 'G'. */
-enum class Step {
-	C,
-	D,
-	E,
-	F,
-	G,
-	A,
-	B
 }

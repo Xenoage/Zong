@@ -37,7 +37,7 @@ import com.xenoage.zong.core.music.Staff;
 		if (stavesCount < 1)
 			throw new UselessException();
 		for (int i = 0; i < stavesCount; i++) {
-			Staff staff = Staff.staffMinimal();
+			Staff staff = Staff.Companion.staffMinimal();
 			staff.setParent(score.getStavesList());
 			staff.addEmptyMeasures(score.getMeasuresCount());
 			score.getStavesList().getStaves().add(staff);

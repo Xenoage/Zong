@@ -32,19 +32,19 @@ public class StemDrawer {
 		//supports also staves with more or less than 5 lines
 		if (isStemExtendedToMiddleLine(notesLp, stemDir, staff)) {
 			if (stemDir == Down)
-				return (bottomNoteLp - staff.middleLp) / 2f;
+				return (bottomNoteLp - staff.getMiddleLp()) / 2f;
 			else
-				return (staff.middleLp - topNoteLp) / 2f;
+				return (staff.getMiddleLp() - topNoteLp) / 2f;
 		}
-		else if ((stemDir == Up && topNoteLp > staff.topLp - 4) ||
-			(stemDir == Down && bottomNoteLp <= staff.bottomLp + 2)) {
+		else if ((stemDir == Up && topNoteLp > staff.getTopLp() - 4) ||
+			(stemDir == Down && bottomNoteLp <= staff.getBottomLp() + 2)) {
 			//Ross, p. 86, row 3. Upstem notes above the third last staff line
 			//or downstem notes at or below the second staff line are shorter
 			//(generalized for staff with more than 5 lines)
 			return 2.5f;
 		}
-		else if ((stemDir == Up && topNoteLp == staff.topLp - 4) ||
-			(stemDir == Down && bottomNoteLp == staff.bottomLp + 3)) {
+		else if ((stemDir == Up && topNoteLp == staff.getTopLp() - 4) ||
+			(stemDir == Down && bottomNoteLp == staff.getBottomLp() + 3)) {
 			//Ross, p. 86, row 6. Special cases for upstem/downstem note
 			//on "3rd last line"/"2nd space"
 			//(generalized for staff with more than 5 lines)
@@ -78,8 +78,8 @@ public class StemDrawer {
 		//Ross starts this rule at the second leger line, while Chlapik starts it
 		//from the first leger line. In practice, this makes no difference, since
 		//the default length of 3.5 spaces also matches that position.
-		return (stemDir == Down && notesLp.getBottom() > staff.topLegerLp) ||
-			(stemDir == Up && notesLp.getTop() < staff.bottomLegerLp);
+		return (stemDir == Down && notesLp.getBottom() > staff.getTopLegerLp()) ||
+			(stemDir == Up && notesLp.getTop() < staff.getBottomLegerLp());
 	}
 
 }

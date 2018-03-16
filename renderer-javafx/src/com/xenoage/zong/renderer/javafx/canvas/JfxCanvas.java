@@ -105,7 +105,7 @@ public class JfxCanvas
 					FormattedTextSymbol fts = (FormattedTextSymbol) e;
 					float scaling = fts.getScaling();
 					SymbolsRenderer.draw(fts.getSymbol(), this, Color.black, new Point2f(
-						offsetX + fts.getOffsetX(), offsetY + fts.getSymbol().baselineOffset * scaling),
+						offsetX + fts.getOffsetX(), offsetY + fts.getSymbol().getBaselineOffset() * scaling),
 						new Point2f(scaling, scaling));
 				}
 				offsetX += e.getMetrics().getWidth();

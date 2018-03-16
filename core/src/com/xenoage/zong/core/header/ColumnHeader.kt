@@ -11,6 +11,7 @@ import com.xenoage.zong.core.music.MeasureSide
 import com.xenoage.zong.core.music.MusicElementType
 import com.xenoage.zong.core.music.barline.Barline
 import com.xenoage.zong.core.music.barline.BarlineRepeat
+import com.xenoage.zong.core.music.barline.BarlineRepeat.Both
 import com.xenoage.zong.core.music.direction.*
 import com.xenoage.zong.core.music.key.Key
 import com.xenoage.zong.core.music.time.TimeSignature
@@ -194,7 +195,7 @@ class ColumnHeader : DirectionContainer, MPContainer {
 	fun addOtherDirection(direction: Direction, beat: Fraction) {
 		if (direction.elementType in middleNotAllowedDirections)
 			throw IllegalArgumentException("direction type not allowed at this position")
-		direction.setParent(this)
+		direction.parent = this
 		otherDirections.add(direction, beat)
 	}
 
@@ -205,7 +206,7 @@ class ColumnHeader : DirectionContainer, MPContainer {
 	 */
 	fun removeOtherDirection(direction: Direction): Direction? {
 		val ret = otherDirections.remove(direction)
-		ret?.setParent(null)
+		ret?.parent = null
 		return ret
 	}
 
@@ -214,8 +215,8 @@ class ColumnHeader : DirectionContainer, MPContainer {
 	 */
 	private fun checkStartBarline(startBarline: Barline?): Barline? {
 		//both side repeat is not allowed
-		if (startBarline != null && startBarline.getRepeat() === BarlineRepeat.Both)
-			throw IllegalArgumentException("${BarlineRepeat.Both} is not supported for a start barline.")
+		if (startBarline != null && startBarline.repeat === Both)
+			throw IllegalArgumentException("${Both} is not supported for a start barline.")
 		return startBarline
 	}
 
@@ -224,8 +225,8 @@ class ColumnHeader : DirectionContainer, MPContainer {
 	 */
 	private fun checkEndBarline(endBarline: Barline?): Barline? {
 		//both side repeat is not allowed
-		if (endBarline != null && endBarline.getRepeat() === BarlineRepeat.Both)
-			throw IllegalArgumentException("${BarlineRepeat.Both} is not supported for an end barline.")
+		if (endBarline != null && endBarline.repeat === Both)
+			throw IllegalArgumentException("${Both} is not supported for an end barline.")
 		return endBarline
 	}
 
@@ -373,7 +374,7 @@ class ColumnHeader : DirectionContainer, MPContainer {
 	 * Gets the [MP] of the given [ColumnElement], or null if it is not part
 	 * of this column or this column is not part of a score.
 	 */
-	override fun getChildMP(element: MPElement<*>): MP? {
+	override fun getChildMP(element: MPElement): MP? {
 		val score = parentScore
 		val measureIndex = parentMeasureIndex
 		if (score === null || measureIndex === null)
@@ -398,7 +399,7 @@ class ColumnHeader : DirectionContainer, MPContainer {
 	 * Gets the [MP] of the given element within the given list of elements,
 	 * or null if the list of elements is null or the element could not be found.
 	 */
-	private fun getMPIn(element: MPElement<*>, elements: BeatEList<*>?): MP? =
+	private fun getMPIn(element: MPElement, elements: BeatEList<*>?): MP? =
 			parentMeasureIndex?.let { measure ->
 				elements?.find { it.element === element }?.let { atColumnBeat(measure, it.beat) } }
 

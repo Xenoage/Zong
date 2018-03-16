@@ -12,7 +12,7 @@ import com.xenoage.zong.desktop.utils.JseZongPlatformUtils;
 public class PlatformUtilsInit {
 	
 	public static void init() {
-		JseZongPlatformUtils.init(Zong.projectPackage + "-test");
+		JseZongPlatformUtils.init(Zong.INSTANCE.getProjectPackage() + "-test");
 	}
 
 }

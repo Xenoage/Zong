@@ -8,10 +8,8 @@ import com.xenoage.zong.core.music.MusicElement
  */
 interface MPElement : MusicElement {
 
-	/**
-	 * The parent element, or null if not part of a score.
-	 */
-	var parent: MPContainer?
+	/** The parent element, or null if not part of a score. */
+	val parent: MPContainer?
 
 	/**
 	 * Gets the [MP] of this element by querying its parent, or null if it is unknown.

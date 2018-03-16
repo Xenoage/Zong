@@ -225,21 +225,21 @@ public class App<DocType extends Document>
 	 * {@link #getAppFirstName()}.
 	 */
 	public String getAppPath() {
-		return Zong.filename + "/" + getAppFirstName() + "/";
+		return Zong.INSTANCE.getFilename() + "/" + getAppFirstName() + "/";
 	}
 
 	/**
 	 * Gets the name of the program, like "Zong! Player".
 	 */
 	@Override public String getName() {
-		return Zong.getName(getAppFirstName());
+		return Zong.INSTANCE.getName(getAppFirstName());
 	}
 
 	/**
 	 * Gets the name and version of the program as a String.
 	 */
 	public String getNameAndVersion() {
-		return Zong.getNameAndVersion(getAppFirstName());
+		return Zong.INSTANCE.getNameAndVersion(getAppFirstName());
 	}
 
 	/**
@@ -455,10 +455,10 @@ public class App<DocType extends Document>
 	 * "work in progress".
 	 */
 	public static void showWorkInProgressWarning() {
-		JOptionPane.showMessageDialog(null, "Warning: This version of " + Zong.projectFamilyName +
+		JOptionPane.showMessageDialog(null, "Warning: This version of " + Zong.INSTANCE.getProjectFamilyName() +
 			" is \"work in progress\" any may not work " + "as expected.\n" +
-			"If you need a working program, use version " + Zong.projectVersion + "." +
-			Zong.projectIterationLastWorking, Zong.projectFamilyName + " " + Zong.projectVersionLong,
+			"If you need a working program, use version " + Zong.INSTANCE.getProjectVersion() + "." +
+						Zong.INSTANCE.getProjectIterationLastWorking(), Zong.INSTANCE.getProjectFamilyName() + " " + Zong.INSTANCE.getProjectVersionLong(),
 			JOptionPane.WARNING_MESSAGE);
 	}
 	

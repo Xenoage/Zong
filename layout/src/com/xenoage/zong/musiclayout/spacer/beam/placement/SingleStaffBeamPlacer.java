@@ -227,7 +227,7 @@ public class SingleStaffBeamPlacer {
 													float beamHeightIs, StaffLines staffLines) {
 		float minDistanceIs = 0.45f; //at least about an half space
 		//beam lines above the staff?
-		float minLp = staffLines.topLp + minDistanceIs * 2 +
+		float minLp = staffLines.getTopLp() + minDistanceIs * 2 +
 				(stemDir == Up ? beamHeightIs * 2 : 0);
 		if (candidate.leftEndLp >= minLp && candidate.rightEndLp >= minLp)
 			return false;

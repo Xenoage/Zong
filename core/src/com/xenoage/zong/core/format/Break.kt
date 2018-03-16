@@ -6,6 +6,7 @@ import com.xenoage.zong.core.music.MusicElementType
 import com.xenoage.zong.core.music.layout.PageBreak
 import com.xenoage.zong.core.music.layout.SystemBreak
 import com.xenoage.zong.core.position.MP
+import com.xenoage.zong.core.position.MPContainer
 
 
 /**
@@ -18,8 +19,8 @@ data class Break(
 		val systemBreak: SystemBreak? = null
 ) : ColumnElement {
 
-	/** Back reference: the parent measure column, or null if not part of a score */
-	override var parent: ColumnHeader? = null
+	/** Back reference: the parent column header, or null if not part of a score */
+	override var parent: MPContainer? = null
 
 	override val elementType: MusicElementType
 		get() = MusicElementType.Break

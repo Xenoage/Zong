@@ -66,7 +66,7 @@ public class VocabularyTry {
 
 	public static void main(String... args)
 		throws Exception {
-		JseZongPlatformUtils.init(Zong.filename + "/" + VocabularyTry.class.getName());
+		JseZongPlatformUtils.init(Zong.INSTANCE.getFilename() + "/" + VocabularyTry.class.getName());
 		VocabularyTry test = new VocabularyTry();
 		test.setUp();
 		test.testAllVocWordsUsed();

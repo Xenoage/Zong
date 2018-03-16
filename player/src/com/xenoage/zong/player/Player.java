@@ -53,7 +53,7 @@ public class Player
 				//ignore (we can not do something)
 			}
 			if (JOptionPane.showConfirmDialog(null, "Unknown program error!\nShow stack trace?",
-				Zong.projectFamilyName, JOptionPane.YES_NO_CANCEL_OPTION) == JOptionPane.YES_OPTION) {
+					Zong.INSTANCE.getProjectFamilyName(), JOptionPane.YES_NO_CANCEL_OPTION) == JOptionPane.YES_OPTION) {
 				String stackTrace = platformUtils().getStackTraceString(error);
 				if (stackTrace.length() > 2000)
 					stackTrace = stackTrace.substring(0, 2000) + "...";

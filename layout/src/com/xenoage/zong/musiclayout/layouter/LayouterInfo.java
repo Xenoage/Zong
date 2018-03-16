@@ -20,8 +20,8 @@ public class LayouterInfo {
 	@Unneeded //maybe later, when GUI is provided
 	public static String getStrategyName(Class<?> strategyClass) {
 		String className = strategyClass.getName();
-		if (className.startsWith(Zong.projectPackage + "."))
-			className = className.substring((Zong.projectPackage + ".").length());
+		if (className.startsWith(Zong.INSTANCE.getProjectPackage() + "."))
+			className = className.substring((Zong.INSTANCE.getProjectPackage() + ".").length());
 		return Lang.get(voc(className));
 	}
 

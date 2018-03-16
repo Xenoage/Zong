@@ -13,4 +13,10 @@ interface MusicElement {
 	@Optimized(Performance)
 	val elementType: MusicElementType
 
+	/**
+	 * Returns true, if this [MusicElement] is not null and of the given type.
+	 */
+	infix fun of(type: MusicElementType): Boolean =
+		this != null && elementType == type
+
 }

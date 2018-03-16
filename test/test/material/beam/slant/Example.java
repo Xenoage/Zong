@@ -141,7 +141,7 @@ public class Example
 			else if (i == notesLp.length - 1)
 				stemLengthIs = rightStemLengthIs;
 			else
-				stemLengthIs = stemDrawer.getPreferredStemLengthIs(new ChordLps(notesLp[i]), stemDir, staff5Lines);
+				stemLengthIs = stemDrawer.getPreferredStemLengthIs(new ChordLps(notesLp[i]), stemDir, Companion.getStaff5Lines());
 			float stemEndLp = notesLp[i] + stemDir.getSign() * stemLengthIs * 2;
 			stems.add(new BeamedStem(stemXIs, stemDir, slp(0, notesLp[i]), slp(0, stemEndLp)));
 		}

@@ -300,11 +300,11 @@ public class PlayerFrame
 	}
 	
 	@FXML void onWebsite(ActionEvent event) {
-		app().execute(new WebsiteOpen(Zong.website));
+		app().execute(new WebsiteOpen(Zong.INSTANCE.getWebsite()));
 	}
 	
 	@FXML void onBlog(ActionEvent event) {
-		app().execute(new WebsiteOpen(Zong.blog));
+		app().execute(new WebsiteOpen(Zong.INSTANCE.getBlog()));
 	}
 
 	@FXML void onAbout(ActionEvent event) {

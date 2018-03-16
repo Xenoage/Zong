@@ -15,7 +15,7 @@ public class AboutDialog
 
 	@Override public void execute() {
 		app().showMessageDialog(
-			app().getNameAndVersion() + " (" + Zong.projectIterationName + ")\n\n" + Zong.copyright);
+			app().getNameAndVersion() + " (" + Zong.INSTANCE.getProjectIterationName() + ")\n\n" + Zong.INSTANCE.getCopyright());
 	}
 
 }

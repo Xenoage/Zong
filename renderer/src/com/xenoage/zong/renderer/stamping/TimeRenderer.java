@@ -36,7 +36,7 @@ public class TimeRenderer
 			int d = num.charAt(i) - '0';
 			Symbol symbol = symbolPool.getSymbol(CommonSymbol.getDigit(d));
 			if (symbol != null) {
-				float symbolWidth = symbol.boundingRect.size.width;
+				float symbolWidth = symbol.getBoundingRect().size.width;
 				StaffSymbolRenderer.drawWith(symbol, null,
 					sp(s.xMm + offsetX, linesCount + 1), 1, s.parentStaff, false, canvas, args);
 				offsetX += (symbolWidth + s.digitGapIs) * interlineSpace;
@@ -50,7 +50,7 @@ public class TimeRenderer
 			int d = den.charAt(i) - '0';
 			Symbol symbol = symbolPool.getSymbol(CommonSymbol.getDigit(d));
 			if (symbol != null) {
-				float symbolWidth = symbol.boundingRect.size.width;
+				float symbolWidth = symbol.getBoundingRect().size.width;
 				StaffSymbolRenderer.drawWith(symbol, null,
 					sp(s.xMm + offsetX, linesCount - 3), 1, s.parentStaff, false, canvas, args);
 				offsetX += (symbolWidth + s.digitGapIs) * interlineSpace;

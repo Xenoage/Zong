@@ -39,7 +39,7 @@ public final class PathSymbolGraphicAttribute
 	 * Returns the distance from the origin to the top bounds of the symbol.
 	 */
 	@Override public float getAscent() {
-		return symbol.ascentHeight * scaling;
+		return symbol.getAscentHeight() * scaling;
 	}
 
 	/**
@@ -61,13 +61,13 @@ public final class PathSymbolGraphicAttribute
 		AffineTransform oldTransform = g.getTransform();
 		g.translate(x, y);
 		g.scale(scaling, scaling);
-		g.translate(-1 * symbol.getLeftBorder(), symbol.baselineOffset);
+		g.translate(-1 * symbol.getLeftBorder(), symbol.getBaselineOffset());
 		g.fill(AwtPath.createShape(symbol.getPath()));
 		g.setTransform(oldTransform);
 	}
 
 	@Override public Rectangle2D getBounds() {
-		Rectangle2f f = symbol.boundingRect;
+		Rectangle2f f = symbol.getBoundingRect();
 		f.scale(scaling);
 		return new Rectangle2D.Float(f.x1(), f.y1(), f.width(), f.height());
 	}

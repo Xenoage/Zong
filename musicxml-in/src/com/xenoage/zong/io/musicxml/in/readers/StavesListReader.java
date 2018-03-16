@@ -223,7 +223,7 @@ public class StavesListReader {
 		for (Part part : parts) {
 			ret.getParts().add(part);
 			for (int i = 0; i < part.getStavesCount(); i++) {
-				Staff staff = Staff.staffMinimal();
+				Staff staff = Staff.Companion.staffMinimal();
 				staff.setParent(ret);
 				ret.getStaves().add(staff);
 			}

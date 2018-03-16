@@ -40,7 +40,7 @@ import com.xenoage.zong.symbols.Symbol;
 		//compute scaling
 		this.scaling = computeScaling(symbol, sizePt);
 		//compute ascent and width
-		float ascent = symbol.ascentHeight * this.scaling; //TODO: right?
+		float ascent = symbol.getAscentHeight() * this.scaling; //TODO: right?
 		float width = (symbol.getRightBorder() - symbol.getLeftBorder()) * this.scaling;
 		this.metrics = new TextMetrics(ascent, 0, 0, width);
 		//horizontal offset: align symbol to the left side
@@ -64,11 +64,11 @@ import com.xenoage.zong.symbols.Symbol;
 	 */
 	public static float computeScaling(Symbol symbol, float sizePt) {
 		//TODO: 0.65f is a constant that defines that the ascent has 65% of the complete hight
-		return sizePt * Units.pxToMm_1_1 / symbol.ascentHeight * 0.65f;
+		return sizePt * Units.pxToMm_1_1 / symbol.getAscentHeight() * 0.65f;
 	}
 
 	@Override public String toString() {
-		return "[symbol " + symbol.id + "]";
+		return "[symbol " + symbol.getId() + "]";
 	}
 
 }

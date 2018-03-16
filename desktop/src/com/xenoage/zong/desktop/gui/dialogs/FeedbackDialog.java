@@ -76,7 +76,7 @@ public class FeedbackDialog
 	}
 
 	@FXML void onBugtracker(ActionEvent event) {
-		app().execute(new WebsiteOpen(Zong.bugtracker));
+		app().execute(new WebsiteOpen(Zong.INSTANCE.getBugtracker()));
 	}
 
 	@FXML void onShowLog(ActionEvent event) {

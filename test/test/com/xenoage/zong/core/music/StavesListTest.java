@@ -33,7 +33,7 @@ public class StavesListTest {
 		List<Staff> staves = new ArrayList<>();
 		for (int i : range(5)) {
 			parts.add(new Part("Part " + i, "", 1, null));
-			staves.add(Staff.staffMinimal());
+			staves.add(Staff.Companion.staffMinimal());
 		}
 		stavesList.setParts(parts);
 		stavesList.setStaves(staves);

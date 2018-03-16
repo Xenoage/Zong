@@ -1,19 +1,18 @@
-package com.xenoage.zong;
+package com.xenoage.zong
 
-import com.xenoage.utils.lang.VocID;
+import com.xenoage.utils.lang.VocID
 
 /**
  * An index of all vocabulary of the standard Zong! components
  * together with a default english translation.
- * 
+ *
  * Additional Zong! modules, which may not be able to extend this
- * class, can simply implement the {@link VocID} interface to
+ * class, can simply implement the [VocID] interface to
  * create additional words.
- * 
- * @author Andreas Wenger
  */
-public enum Voc
-	implements VocID {
+enum class Voc(
+		override val defaultValue: String
+) : VocID {
 
 	About("About"),
 	AllPictures("All pictures"),
@@ -34,7 +33,7 @@ public enum Voc
 	CommandFailed("Could not perform the action."),
 	CouldNotCreateBitmaps("Could not create the bitmaps."),
 	CouldNotFindLAME(
-		"Zong! supports saving scores in MP3 format, but requires the installation of the LAME encoder, which is not included in Zong! for legal reasons.\nPlease take 5 minutes to read &lt;a href=&quot;{1}&quot;&gt;how to install LAME&lt;/a&gt;."),
+			"Zong! supports saving scores in MP3 format, but requires the installation of the LAME encoder, which is not included in Zong! for legal reasons.\nPlease take 5 minutes to read &lt;a href=&quot;{1}&quot;&gt;how to install LAME&lt;/a&gt;."),
 	CouldNotLoadImages("Could not load the images."),
 	CouldNotLoadSymbolPool("Could not load the music symbols."),
 	CouldNotSaveDocument("An error occurred while saving the document."),
@@ -56,7 +55,7 @@ public enum Voc
 	EditFrameSettings("Change frame settings"),
 	Error("Error"),
 	ErrorMessage(
-		"Please click on &quot;{voc:Buttons_ReportError}&quot; to inform the developer team about the error. This allows the developers to remove the error in future versions."),
+			"Please click on &quot;{voc:Buttons_ReportError}&quot; to inform the developer team about the error. This allows the developers to remove the error in future versions."),
 	ErrorReportOrFeatureRequest("Error report or feature request"),
 	ErrorSavingFile("Error while saving the file."),
 	ErrorWhilePrinting("Error while printing."),
@@ -64,7 +63,7 @@ public enum Voc
 	Exit("Exit"),
 	FatalError("Fatal Error"),
 	FatalErrorMessage(
-		"The program must be closed down. Please click on &quot;{voc:Buttons_ReportError}&quot; to inform the developer team about the error. This allows the developers to remove the error in future versions. Sorry for the inconvenience!"),
+			"The program must be closed down. Please click on &quot;{voc:Buttons_ReportError}&quot; to inform the developer team about the error. This allows the developers to remove the error in future versions. Sorry for the inconvenience!"),
 	FeedbackDescription("Did you find an error or do you miss a specific feature? Please tell us."),
 	FeedbackTitle("Feedback"),
 	FileToMidi("File to Midi"),
@@ -94,7 +93,7 @@ public enum Voc
 	Open("Open"),
 	OpenDocument("Open document"),
 	OpenFileInvalidFormat(
-		"Could not open the document, since its format is not supported by {app.name}."),
+			"Could not open the document, since its format is not supported by {app.name}."),
 	OpenFileIOError("Could not open the document, since the file could not be read."),
 	OpenFileNotFound("Could not open the document, since the file does not exist."),
 	PageFormat("Page format"),
@@ -102,7 +101,7 @@ public enum Voc
 	PageSettings("Page settings"),
 	Parts("Parts"),
 	PlayerDescription(
-		"This program plays MusicXML files and converts them into different audio formats."),
+			"This program plays MusicXML files and converts them into different audio formats."),
 	Point("Point"),
 	Position("Position"),
 	Print("Print"),
@@ -123,7 +122,7 @@ public enum Voc
 	SelectDocument("Please select a document"),
 	Send("Submit"),
 	SendFailed(
-		"The feedback form could not be submitted.\nEither the server is offline or you have no internet connection."),
+			"The feedback form could not be submitted.\nEither the server is offline or you have no internet connection."),
 	SendOK("The feedback form was sent.\nThank you for your support."),
 	Settings("Settings"),
 	ShowInfo("Show information"),
@@ -145,19 +144,7 @@ public enum Voc
 	WorkNumber("Work number"),
 	WorkTitle("Work title");
 
-	private final String defaultValue;
-
-
-	private Voc(String defaultValue) {
-		this.defaultValue = defaultValue;
-	}
-
-	@Override public String getDefaultValue() {
-		return defaultValue;
-	}
-
-	@Override public String getID() {
-		return this.toString();
-	}
+	override val id: String
+		get() = this.toString()
 
 }

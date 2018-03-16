@@ -28,7 +28,7 @@ public class Example
 	public StemDirection stemDir;
 	public float stemLengthIs;
 	public boolean isLengthenedToMiddleLine = false;
-	public final StaffLines staffLines = staff5Lines;
+	public final StaffLines staffLines = Companion.getStaff5Lines();
 	
 	
 	public static Example example(String name, int noteLp,

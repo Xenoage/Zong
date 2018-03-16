@@ -9,8 +9,12 @@ import com.xenoage.zong.core.music.Pitch
  */
 data class Note(
 	val pitch: Pitch
-) {
+) : Comparable<Note> {
+
 	override fun toString() = "note($pitch)"
+
+	override fun compareTo(other: Note) = pitch.compareTo(other.pitch)
+
 }
 
 /**

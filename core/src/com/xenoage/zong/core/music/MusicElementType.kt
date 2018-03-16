@@ -34,10 +34,3 @@ enum class MusicElementType {
 	WedgeEnd,
 	Words
 }
-
-/**
- * Returns true, if this [MusicElement] is not null and of the given type.
- */
-infix fun MusicElement?.of(type: MusicElementType): Boolean {
-	return this != null && this.musicElementType == type
-}

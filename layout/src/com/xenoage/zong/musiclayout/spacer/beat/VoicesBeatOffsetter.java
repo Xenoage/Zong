@@ -120,7 +120,7 @@ public class VoicesBeatOffsetter {
 	 * There are no duplicate beats. The ending beats of the voices are not added.
 	 */
 	SortedList<Fraction> computeVoicesBeats(List<VoiceSpacing> voiceSpacings) {
-		SortedList<Fraction> beats = sortedListNoDuplicates();
+		SortedList<Fraction> beats = Companion.sortedListNoDuplicates();
 		Fraction beat;
 		for (VoiceSpacing voiceSpacing : voiceSpacings) {
 			beat = Fraction.Companion.get_0();

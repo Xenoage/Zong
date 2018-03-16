@@ -26,10 +26,10 @@ data class ClefType(
 	 *  * -2: note is on the first lower leger line
 	 *  * 5: note is between the 3rd and 4th line from below
 	 */
-	fun getLP(pitch: Pitch): Int {
+	fun getLP(pitch: Pitch): LP {
 		val clefPitch = this.symbol.pitch
-		var ret = pitch.step + 7 * pitch.octave
-		ret -= clefPitch.step + 7 * clefPitch.octave
+		var ret = pitch.step.ordinal + 7 * pitch.octave
+		ret -= clefPitch.step.ordinal + 7 * clefPitch.octave
 		ret += lp
 		return ret
 	}

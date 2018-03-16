@@ -32,11 +32,11 @@ public class POCreator {
 		throws IOException {
 		PrintStream out = new PrintStream(filename, "UTF-8");
 		//header
-		out.println("# " + Zong.getNameAndVersion("Vocabulary"));
-		out.println("# " + Zong.copyright);
+		out.println("# " + Zong.INSTANCE.getNameAndVersion("Vocabulary"));
+		out.println("# " + Zong.INSTANCE.getCopyright());
 		out.println("msgid \"\"");
 		out.println("msgstr \"\"");
-		out.println("\"Project-Id-Version: " + Zong.getNameAndVersion("Vocabulary") + "\\n\"");
+		out.println("\"Project-Id-Version: " + Zong.INSTANCE.getNameAndVersion("Vocabulary") + "\\n\"");
 		out.println("\"POT-Creation-Date: \\n\"");
 		out.println("\"PO-Revision-Date: \\n\"");
 		out.println("\"Last-Translator: Andreas Wenger <andi@xenoage.com>\\n\"");

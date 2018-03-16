@@ -78,7 +78,7 @@ public final class SymbolPool {
 			char d = s.charAt(i);
 			Symbol symbol = getSymbol("digit-" + d);
 			if (symbol != null) {
-				ret += symbol.boundingRect.size.width;
+				ret += symbol.getBoundingRect().size.width;
 				if (i < len - 1)
 					ret += gap;
 			}

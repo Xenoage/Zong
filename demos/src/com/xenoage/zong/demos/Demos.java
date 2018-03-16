@@ -58,7 +58,7 @@ public class Demos
                 choices.add(d.description);
 
             ChoiceDialog<String> dialog = new ChoiceDialog<>(choices.get(Demo.defaultDemo), choices);
-            dialog.setTitle(Zong.projectFamilyName + " Demos");
+            dialog.setTitle(Zong.INSTANCE.getProjectFamilyName() + " Demos");
             dialog.setHeaderText("Please select a demo to run.");
             dialog.setContentText("Demo:");
 

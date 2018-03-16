@@ -26,7 +26,7 @@ public class TouchExample
 	public Placement placement;
 	public StemDirection stemDir;
 	public float beamHeightIs;
-	public StaffLines staffLines = staff5Lines;
+	public StaffLines staffLines = Companion.getStaff5Lines();
 	public boolean touch = false;
 	
 	public TouchExample touch() {

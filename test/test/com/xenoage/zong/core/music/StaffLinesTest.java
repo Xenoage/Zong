@@ -13,23 +13,23 @@ import org.junit.Test;
 public class StaffLinesTest {
 	
 	@Test public void test5Lines() {
-		StaffLines testee = StaffLines.staff5Lines;
-		assertEquals(5, testee.count);
-		assertEquals(0, testee.bottomLp);
-		assertEquals(4, testee.middleLp);
-		assertEquals(8, testee.topLp);
-		assertEquals(-2, testee.bottomLegerLp);
-		assertEquals(10, testee.topLegerLp);
+		StaffLines testee = StaffLines.Companion.getStaff5Lines();
+		assertEquals(5, testee.getCount());
+		assertEquals(0, testee.getBottomLp());
+		assertEquals(4, testee.getMiddleLp());
+		assertEquals(8, testee.getTopLp());
+		assertEquals(-2, testee.getBottomLegerLp());
+		assertEquals(10, testee.getTopLegerLp());
 	}
 	
 	@Test public void test6Lines() {
-		StaffLines testee = staffLines(6);
-		assertEquals(6, testee.count);
-		assertEquals(0, testee.bottomLp);
-		assertEquals(5, testee.middleLp);
-		assertEquals(10, testee.topLp);
-		assertEquals(-2, testee.bottomLegerLp);
-		assertEquals(12, testee.topLegerLp);
+		StaffLines testee = Companion.staffLines(6);
+		assertEquals(6, testee.getCount());
+		assertEquals(0, testee.getBottomLp());
+		assertEquals(5, testee.getMiddleLp());
+		assertEquals(10, testee.getTopLp());
+		assertEquals(-2, testee.getBottomLegerLp());
+		assertEquals(12, testee.getTopLegerLp());
 	}
 
 }

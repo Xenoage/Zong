@@ -40,7 +40,7 @@ import com.xenoage.zong.io.ConverterSupportedFormats;
 public class Converter {
 
 	public static final String projectFirstName = "Converter";
-	public static final String filename = Zong.filename + "/converter/";
+	public static final String filename = Zong.INSTANCE.getFilename() + "/converter/";
 
 	private static ConverterSupportedFormats supportedFormats = new ConverterSupportedFormats();
 
@@ -49,7 +49,7 @@ public class Converter {
 		throws IOException {
 		JseZongPlatformUtils.init(filename);
 		
-		Log.INSTANCE.init(new DesktopLogProcessing(Zong.getNameAndVersion(projectFirstName)));
+		Log.INSTANCE.init(new DesktopLogProcessing(Zong.INSTANCE.getNameAndVersion(projectFirstName)));
 		//SymbolPoolUtils.init(new AWTSVGPathReader());
 		//SymbolPoolUtils.setDefaultSymbolPool(new SymbolPool());
 		

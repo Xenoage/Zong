@@ -9,8 +9,7 @@ data class LayoutFormat(
 ) {
 
 	/**
-	 * Gets the format of the given page.
-	 * @param pageIndex  the 0-based index of the page
+	 * Gets the format of the page with the given [pageIndex].
 	 */
 	fun getPageFormat(pageIndex: Int) = if (pageIndex % 2 == 0) rightPageFormat else leftPageFormat
 

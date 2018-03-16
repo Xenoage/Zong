@@ -215,7 +215,7 @@ fun sign(v: Float) =
  * If all elements are null or if no element is given, null is returned.
  * If more then one element qualifies, the first one is returned.
  */
-fun <T : Comparable<T>> min(vararg ts: T): T? {
+fun <T : Comparable<T>> min_OBSOLETE(vararg ts: T): T? {
 	var ret: T? = null
 	for (t in ts)
 		if (ret == null || t != null && t.compareTo(ret) < 0)
@@ -228,7 +228,7 @@ fun <T : Comparable<T>> min(vararg ts: T): T? {
  * If all elements are null or if no element is given, null is returned.
  * If more then one element qualifies, the first one is returned.
  */
-fun <T : Comparable<T>> max(vararg ts: T): T? {
+fun <T : Comparable<T>> max_OBSOLETE(vararg ts: T): T? {
 	var ret: T? = null
 	for (t in ts)
 		if (ret == null || t != null && t.compareTo(ret) > 0)

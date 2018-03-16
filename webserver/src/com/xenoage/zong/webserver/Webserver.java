@@ -42,7 +42,7 @@ import static com.xenoage.utils.log.Report.remark;
 public class Webserver {
 
 	public static final String projectName = "Webserver";
-	public static final String filename = Zong.filename + "/" + projectName.toLowerCase() + "/";
+	public static final String filename = Zong.INSTANCE.getFilename() + "/" + projectName.toLowerCase() + "/";
 	public static final String webPath = "data/web/";
 
 	public static Webserver instance = null;
@@ -67,7 +67,7 @@ public class Webserver {
 	public Webserver() {
 		//init IO and logging
 		JseZongPlatformUtils.init(filename);
-		Log.INSTANCE.init(new DesktopLogProcessing(Zong.getNameAndVersion(projectName)));
+		Log.INSTANCE.init(new DesktopLogProcessing(Zong.INSTANCE.getNameAndVersion(projectName)));
 		Err.init(new BasicErrorProcessing());
 
 		//load settings

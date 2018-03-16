@@ -58,7 +58,7 @@ import static com.xenoage.zong.core.music.Staff.staff;
 			//staves are not given. create them with default settings
 			staves = new ArrayList<>(part.getStavesCount());
 			for (int i = 0; i < part.getStavesCount(); i++) {
-				Staff staff = staff(5, null);
+				Staff staff = Companion.staff(5, null);
 				staff.setParent(score.getStavesList());
 				staff.addEmptyMeasures(measuresCount); //fill with empty measures
 				this.staves.add(staff);

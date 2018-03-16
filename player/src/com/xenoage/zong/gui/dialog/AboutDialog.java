@@ -25,10 +25,10 @@ public class AboutDialog
 	
 	public void initialize() {
 		lblAppName.setText(app().getName());
-		lblVersionValue.setText(Zong.projectVersionLong);
-		lblCopyrightValue.setText(Zong.copyright);
-		lblWebsiteValue.setText("[" + Zong.website + "]");
-		lblWebsiteValue.setOnAction(e -> app().execute(new WebsiteOpen(Zong.website)));
+		lblVersionValue.setText(Zong.INSTANCE.getProjectVersionLong());
+		lblCopyrightValue.setText(Zong.INSTANCE.getCopyright());
+		lblWebsiteValue.setText("[" + Zong.INSTANCE.getWebsite() + "]");
+		lblWebsiteValue.setOnAction(e -> app().execute(new WebsiteOpen(Zong.INSTANCE.getWebsite())));
 	}
 	
 	@FXML public void onOK(ActionEvent event) {

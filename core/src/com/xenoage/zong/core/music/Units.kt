@@ -1,9 +1,11 @@
 package com.xenoage.zong.core.music
 
+import com.xenoage.utils.Mm
+
 /**
  * TODO: doc from wiki
  */
-typealias IS = Float
+typealias IS = Mm
 
 /**
  * TODO: doc from wiki

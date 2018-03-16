@@ -1,6 +1,8 @@
 package com.xenoage.zong.core.music.chord
 
 import com.xenoage.utils.annotations.Optimized
+import com.xenoage.utils.collections.SortedList
+import com.xenoage.utils.collections.sortedListOf
 import com.xenoage.utils.math.Fraction
 import com.xenoage.zong.core.Score
 import com.xenoage.zong.core.music.MusicElementType
@@ -16,6 +18,7 @@ import com.xenoage.zong.core.music.slur.Slur
 import com.xenoage.zong.core.music.tuplet.Tuplet
 import com.xenoage.zong.core.music.util.Duration
 import com.xenoage.zong.core.position.MP
+import com.xenoage.zong.core.position.MPContainer
 import com.xenoage.zong.core.position.MPElement
 import com.xenoage.zong.core.util.InconsistentScoreException
 import lombok.NonNull
@@ -35,16 +38,11 @@ import lombok.NonNull
  * and one or more lyrics and directions can be attached to it.
  */
 class Chord(
-		/** The notes within this chord, sorted ascending (begin with lowest notated pitch) */
-		notes: List<Note>,
+		/** The notes within this chord, sorted ascending (begin with lowest notated pitch). */
+		val notes: SortedList<Note>,
 		/** The duration of this chord. For a grace chord, this is 0. */
 		override var duration: Duration
 ) : VoiceElement, DirectionContainer {
-
-	var notes: List<Note>
-		set(notes) {
-			field = notes
-		}
 
 	/** The stem of this chord */
 	var stem: Stem = defaultStem
@@ -75,7 +73,7 @@ class Chord(
 	var directions: List<Direction> = emptyList()
 
 	/** Back reference: the parent voice, or null if not part of a score. */
-	override var parent: Voice? = null
+	override var parent: MPContainer? = null
 
 	/**
 	 * Collects and returns all pitches of this chord.
@@ -103,90 +101,37 @@ class Chord(
 	 * or null, if this chord is not part of a score.
 	 */
 	val score: Score?
-		get() = parent?.score
+		get() = (parent as Voice?)?.score
 
 	override val elementType: MusicElementType
 		get() = MusicElementType.Chord
 
-	/**
-	 * Adds a pitch this chord.
-	 */
+	/** Adds a pitch to this chord. */
 	fun addPitch(pitch: Pitch) {
 		addNote(Note(pitch))
 	}
 
-	/**
-	 * Adds a note this chord.
-	 */
+	/** Adds a note this chord. */
 	fun addNote(note: Note) {
-		//insert at right position
-		var i = 0
-		while (i < notes!!.size) {
-			if (notes!![i].pitch.compareToNotation(note.pitch) > 0)
-				break
-			i++
-		}
-		notes!!.add(i, note)
-	}
-
-	private fun checkNotesOrder(notes: ArrayList<Note>) {
-		var currentPitch: Pitch? = null
-		var lastPitch = notes[0].pitch
-		for (i in range(1, notes.size - 1)) {
-			currentPitch = notes[i].pitch
-			//pitches must be sorted ascending
-			if (currentPitch.compareToNotation(lastPitch) < 0)
-				throw IllegalArgumentException("Pitches must be sorted ascending (notation order)!")
-			lastPitch = currentPitch
-		}
+		notes.add(note)
 	}
 
 	fun addDirection(direction: Direction) {
-		directions = addOrNew(directions, direction)
+		directions = directions.plus(direction)
 	}
 
-	override fun toString(): String {
-		return "chord(" + notes!![0].toString() + (if (notes!!.size > 1) ",..." else "") +
-				(if (duration!!.isGreater0) ";dur:" + duration!! else ";grace") + ")"
-	}
-
-	override fun getChildMP(child: MPElement<*>): MP {
+	override fun getChildMP(child: MPElement): MP? {
 		//all children have the same musical position as this chord
-		return MP.getMP(this)
+		return mp
 	}
+
+	override fun toString(): String =
+		"chord(" + notes!![0].toString() + (if (notes!!.size > 1) ",..." else "") +
+				(if (duration!!.isGreater0) ";dur:" + duration!! else ";grace") + ")"
 
 }
-
-/**
- * Creates a chord with the given note and duration.
- */
-fun chord(note: Note, duration: Fraction) = Chord(listOf(note), duration)
 
 /**
  * Creates a chord with the given notes and duration.
- * The pitches must be sorted ascending (begin with the lowest notated pitch,
- * end with the highest notated pitch), otherwise an [IllegalArgumentException] is thrown.
  */
-constructor(notes: ArrayList<Note>, duration: Fraction) {
-	checkArgsNotNull(notes, duration)
-	checkNotesOrder(notes)
-	if (false == duration.isGreater0)
-		throw InconsistentScoreException("Only grace chords may not have 0 duration")
-	this.notes = notes
-	this.duration = duration
-}
-
-/**
- * Creates a grace chord with the given notes.
- * The pitches must be sorted ascending (begin with the lowest notated pitch,
- * end with the highest notated pitch), otherwise an [IllegalArgumentException] is thrown.
- */
-constructor(notes: ArrayList<Note>, grace: Grace) {
-	checkArgsNotNull(notes, grace)
-	checkNotesOrder(notes)
-	if (false == grace.graceDuration!!.isGreater0)
-		throw InconsistentScoreException("Grace duration must be greater than 0")
-	this.notes = notes
-	this.duration = Companion.get_0()
-	this.grace = grace
-}
+fun chord(duration: Duration, vararg notes: Note) = Chord(sortedListOf(*notes), duration)

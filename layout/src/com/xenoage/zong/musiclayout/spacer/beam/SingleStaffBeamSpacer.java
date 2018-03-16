@@ -35,7 +35,7 @@ public class SingleStaffBeamSpacer {
 		val slant = singleStaffBeamSlanter.compute(stems, staffLinesCount);
 
 		//compute the ends of the first and last stem
-		val placement = singleStaffBeamPlacer.compute(slant, stems, 1, staffLines(staffLinesCount));
+		val placement = singleStaffBeamPlacer.compute(slant, stems, 1, Companion.staffLines(staffLinesCount));
 
 		//adjust the stem lengths by interpolating the other values
 		for (int i : range(size)) {

@@ -143,31 +143,31 @@ public class SingleStaffBeamPlacerTest {
 		Placement old = new Placement(5f, 5f);
 		BeamedStems stems = new BeamedStems(ilist(
 				beamedStem(5, -2, Up), beamedStem(10, -2, Up)));
-		Placement shortened = testee.shorten(old, Up, stems, 1, staff5Lines);
+		Placement shortened = testee.shorten(old, Up, stems, 1, Companion.getStaff5Lines());
 		assertEquals(new Placement(4.5f, 4.5f), shortened);
 		//p104 r6 c1: could be 3.75/straddle and 3.5/hang, but is 3.5/sit and 3.25/straddle
 		old = new Placement(-2.5f, -3f);
 		stems = new BeamedStems(ilist(
 				beamedStem(10, 5, Down), beamedStem(15, 4, Down)));
-		shortened = testee.shorten(old, Down, stems, 1, staff5Lines);
+		shortened = testee.shorten(old, Down, stems, 1, Companion.getStaff5Lines());
 		assertEquals(new Placement(-2f, -2.5f), shortened);
 		//p104 r7 c1: is not shortened, since then a stem would be shorter than 3 spaces
 		old = new Placement(-1f, -0.5f);
 		stems = new BeamedStems(ilist(
 				beamedStem(0, 5, Down), beamedStem(5, 6, Down)));
-		shortened = testee.shorten(old, Down, stems, 1, staff5Lines);
+		shortened = testee.shorten(old, Down, stems, 1, Companion.getStaff5Lines());
 		assertEquals(old, shortened);
 		//p105 r1 c1: not shortened, because beam line would be within white space
 		old = new Placement(6f, 6f);
 		stems = new BeamedStems(ilist(
 				beamedStem(0, -1, Up), beamedStem(8, -1, Up)));
-		shortened = testee.shorten(old, Up, stems, 1, staff5Lines);
+		shortened = testee.shorten(old, Up, stems, 1, Companion.getStaff5Lines());
 		assertEquals(old, shortened);
 		//p105 r1 c2: could be 3.5/hang, but is 3.25/staddle
 		old = new Placement(-1f, -1f);
 		stems = new BeamedStems(ilist(
 				beamedStem(10, 6, Down), beamedStem(15, 6, Down)));
-		shortened = testee.shorten(old, Down, stems, 1, staff5Lines);
+		shortened = testee.shorten(old, Down, stems, 1, Companion.getStaff5Lines());
 		assertEquals(new Placement(-0.5f, -0.5f), shortened);
 	}
 	
@@ -183,7 +183,7 @@ public class SingleStaffBeamPlacerTest {
 			BeamedStems stems = example.getStems();
 			Slant slant = singleStaffBeamSlanter.compute(stems, 5);
 			//run test
-			Placement offset = testee.compute(slant, stems, 1, StaffLines.staff5Lines);
+			Placement offset = testee.compute(slant, stems, 1, StaffLines.Companion.getStaff5Lines());
 			//check result
 			ExampleResult result = check(offset, example);
 			results.add(result);
@@ -280,7 +280,7 @@ public class SingleStaffBeamPlacerTest {
 			return false;
 		//when beam touches staff line, anchors must be correct
 		if (singleStaffBeamPlacer.isTouchingStaff( //method is tested, so we can use it here
-			actual, stemDir, lineHeightIs, staff5Lines)) {
+			actual, stemDir, lineHeightIs, Companion.getStaff5Lines())) {
 			Anchor leftAnchor = fromLp(actual.leftEndLp, stemDir);
 			Anchor rightAnchor = fromLp(actual.rightEndLp, stemDir);
 			if (false == singleStaffBeamPlacer.isAnchor8thCorrect( //method is tested, so we can use it here
