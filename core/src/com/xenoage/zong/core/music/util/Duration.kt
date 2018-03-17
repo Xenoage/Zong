@@ -1,8 +1,7 @@
 package com.xenoage.zong.core.music.util
 
 import com.xenoage.utils.math.Fraction
-
-import com.xenoage.utils.math.fr
+import com.xenoage.utils.math.Fraction.Companion.fr
 import com.xenoage.zong.core.music.util.DurationType.*
 
 
@@ -103,9 +102,9 @@ val Duration.flagsCount: Int
 fun Duration.prolong(dots: Int): Duration {
 	var ret = this
 	if (dots == 1)
-		ret *= fr(3, 2) //+ 50%
+		ret *= _3_2 //+ 50%
 	else if (dots == 2)
-		ret *= fr(7, 4) //+ 50% + 25%
+		ret *= _7_4 //+ 50% + 25%
 	return ret
 }
 
@@ -136,7 +135,13 @@ val Duration.dots: Int
  */
 val Duration.baseDuration: Duration
 	get() = when(dots) {
-		1 -> this * fr(2, 3) //remove the added 50%
-		2 -> this * fr(4, 7) //remove the added (50% + 25%)
+		1 -> this * _2_3 //remove the added 50%
+		2 -> this * _4_7 //remove the added (50% + 25%)
 		else -> this
 	}
+
+/** More common durations */
+val _3_2 = fr(3, 2)
+val _2_3 = fr(2, 3)
+val _7_4 = fr(7, 4)
+val _4_7 = fr(4, 7)

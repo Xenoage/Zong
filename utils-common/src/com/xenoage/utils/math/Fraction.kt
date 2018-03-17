@@ -1,5 +1,9 @@
 package com.xenoage.utils.math
 
+import com.xenoage.utils.annotations.Optimized
+import com.xenoage.utils.annotations.Reason
+import com.xenoage.utils.annotations.Reason.MemorySaving
+import com.xenoage.utils.math.Fraction.Companion.fr
 import kotlin.math.abs
 
 /**
@@ -8,10 +12,10 @@ import kotlin.math.abs
  * It can for example be used to represent durations.
  * When possible, the fraction is cancelled automatically.
  */
-class Fraction : Comparable<Fraction> {
-
-	val numerator: Int
-	val denominator: Int
+class Fraction(
+		val numerator: Int,
+		val denominator: Int
+) : Comparable<Fraction> {
 
 	/** True, if this fraction is 0 */
 	val is0: Boolean
@@ -20,36 +24,6 @@ class Fraction : Comparable<Fraction> {
 	/** True, if this fraction is greater than 0 */
 	val isGreater0: Boolean
 		get() = numerator > 0
-
-	/**
-	 * Creates a new fraction with the given numerator.
-	 * The denominator is 1.
-	 */
-	constructor(number: Int) {
-		this.numerator = number
-		this.denominator = 1
-	}
-
-	/**
-	 * Creates a new fraction with the given numerator
-	 * and denominator.
-	 */
-	constructor(numerator: Int, denominator: Int) {
-		var numerator = numerator
-		var denominator = denominator
-		if (denominator == 0)
-			throw IllegalArgumentException("Denominator may not be 0")
-		//if fraction is negative, always the numerator is negative
-		val absNum = abs(numerator)
-		val absDen = abs(denominator)
-		if (numerator < 0 || denominator < 0) {
-			numerator = if (numerator < 0 && denominator < 0) absNum else -1 * absNum
-			denominator = absDen
-		}
-		val gcd = clampMin(gcd(absNum, absDen), 1)
-		this.numerator = numerator / gcd
-		this.denominator = denominator / gcd
-	}
 
 	/**
 	 * Adds the given Fraction to this one and returns the result.
@@ -131,9 +105,77 @@ class Fraction : Comparable<Fraction> {
 	companion object {
 
 		/**
-		 * Gets a comparator for fractions.
+		 * Creates a new fraction with the given numerator and denominator.
+		 * For the most common fractions like 1, 1/2 or 1/4, shared instances are used.
 		 */
-		var comparator = Comparator<Fraction> { obj, fraction -> obj.compareTo(fraction) }
+		@Optimized(MemorySaving)
+		fun fr(numerator: Int, denominator: Int): Fraction {
+
+			//check values
+			var num = numerator
+			var den = denominator
+			if (den == 0)
+				throw IllegalArgumentException("Denominator may not be 0")
+			if (num == 0)
+				return _0
+
+			//if fraction is negative, always the numerator is negative
+			val absNum = abs(num)
+			val absDen = abs(den)
+			if (num < 0 || den < 0) {
+				num = if (numerator < 0 && denominator < 0) absNum else -1 * absNum
+				den = absDen
+			}
+
+			//shorten fraction
+			val gcd = clampMin(gcd(absNum, absDen), 1)
+			num /= gcd
+			den /= gcd
+
+			//reuse shared instances for common fractions
+			when (den) {
+				1 -> when (num) {
+					1 -> return _1
+				}
+				2 -> when (num) {
+					1 -> return _1_2
+				}
+				3 -> when (num) {
+					3 -> return _1_3
+				}
+				4 -> when (num) {
+					1 -> return _1_4
+					3 -> return _3_4
+				}
+				8 -> when (num) {
+					1 -> return _1_8
+					3 -> return _3_8
+				}
+				16 -> when (num) {
+					1 -> return _1_16
+					3 -> return _3_16
+				}
+				32 -> when (num) {
+					1 -> return _1_32
+					3 -> return _3_32
+				}
+				64 -> when (num) {
+					1 -> return _1_64
+					3 -> return _1_64
+				}
+			}
+
+			return Fraction(num, den)
+		}
+
+		/**
+		 * Creates a new fraction with the given numerator.
+		 * The denominator is 1.
+		 */
+		fun fr(number: Int) = fr(number, 1)
+
+		/** The comparator for fractions. */
+		val comparator = Comparator<Fraction> { obj, fraction -> obj.compareTo(fraction) }
 
 		/**
 		 * Creates a new fraction from the given string, which must have the format
@@ -156,25 +198,25 @@ class Fraction : Comparable<Fraction> {
 
 }
 
-val `0/` = fr(0)
-val `1/` = fr(1)
-val `1/2` = fr(1, 2)
-val `1/4` = fr(1, 4)
-val `1/8` = fr(1, 8)
-val `1/16` = fr(1, 16)
-val `1/32` = fr(1, 32)
-val `1/64` = fr(1, 64)
+val _0 = fr(0)
 
-val `3/4` = fr(3, 4)
+val _1 = fr(1)
 
-/**
- * Creates a new fraction with the given numerator
- * and denominator.
- */
-fun fr(numerator: Int, denominator: Int) = Fraction(numerator, denominator)
+val _1_2 = fr(1, 2)
 
-/**
- * Creates a new fraction with the given numerator.
- * The denominator is 1.
- */
-fun fr(number: Int) = Fraction(number)
+val _1_3 = fr(1, 2)
+
+val _1_4 = fr(1, 4)
+val _3_4 = fr(3, 4)
+
+val _1_8 = fr(1, 8)
+val _3_8 = fr(3, 8)
+
+val _1_16 = fr(1, 16)
+val _3_16 = fr(3, 16)
+
+val _1_32 = fr(1, 32)
+val _3_32 = fr(1, 32)
+
+val _1_64 = fr(1, 64)
+val _3_64 = fr(1, 64)

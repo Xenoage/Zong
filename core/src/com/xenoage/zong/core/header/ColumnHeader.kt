@@ -2,7 +2,7 @@ package com.xenoage.zong.core.header
 
 import com.xenoage.utils.annotations.Untested
 import com.xenoage.utils.math.Fraction
-import com.xenoage.utils.math.`0/`
+import com.xenoage.utils.math._0
 import com.xenoage.utils.mutableListOfNotNull
 import com.xenoage.zong.core.Score
 import com.xenoage.zong.core.format.Break
@@ -10,12 +10,10 @@ import com.xenoage.zong.core.music.ColumnElement
 import com.xenoage.zong.core.music.MeasureSide
 import com.xenoage.zong.core.music.MusicElementType
 import com.xenoage.zong.core.music.barline.Barline
-import com.xenoage.zong.core.music.barline.BarlineRepeat
 import com.xenoage.zong.core.music.barline.BarlineRepeat.Both
 import com.xenoage.zong.core.music.direction.*
 import com.xenoage.zong.core.music.key.Key
 import com.xenoage.zong.core.music.time.TimeSignature
-import com.xenoage.zong.core.music.util.BeatE
 import com.xenoage.zong.core.music.util.BeatEList
 import com.xenoage.zong.core.music.volta.Volta
 import com.xenoage.zong.core.position.MP
@@ -381,7 +379,7 @@ class ColumnHeader : DirectionContainer, MPContainer {
 			return null
 		//elements at the beginning of the measure
 		if (time === element || startBarline === element || volta === element)
-			return atColumnBeat(measureIndex, `0/`)
+			return atColumnBeat(measureIndex, _0)
 		//elements at the end of the measure
 		else if (endBarline === element || measureBreak === element)
 			return atColumnBeat(measureIndex, score.getMeasureBeats(measureIndex))

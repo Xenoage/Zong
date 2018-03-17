@@ -1,8 +1,7 @@
 package com.xenoage.zong.core.music
 
 import com.xenoage.utils.math.Fraction
-import com.xenoage.utils.math.`0/`
-import com.xenoage.utils.math.fr
+import com.xenoage.utils.math._0
 import com.xenoage.zong.core.Score
 import com.xenoage.zong.core.music.util.*
 import com.xenoage.zong.core.music.util.FirstOrLast.*
@@ -14,9 +13,6 @@ import com.xenoage.zong.core.position.MP.Companion.atVoice
 import com.xenoage.zong.core.position.MPContainer
 import com.xenoage.zong.core.position.MPElement
 import com.xenoage.zong.utils.exceptions.IllegalMPException
-import javafx.collections.transformation.SortedList
-import jdk.nashorn.internal.objects.NativeArray.reduce
-import java.util.*
 
 /**
  * Voice in a single measure within a single staff.
@@ -39,7 +35,7 @@ class Voice(
 	 * voice where the is no music element following any more.
 	 */
 	val filledBeats: Duration
-		get() = elements.fold(`0/`, { acc, e -> acc + e.duration })
+		get() = elements.fold(_0, { acc, e -> acc + e.duration })
 
 	/**
 	 * Gets a list of all beats used in this voice, that means
@@ -49,7 +45,7 @@ class Voice(
 	val usedBeats: List<Fraction>
 		get() {
 			val ret = mutableListOf<Fraction>()
-			var currentBeat = `0/`
+			var currentBeat = _0
 			ret.add(currentBeat)
 			for (e in elements) {
 				if (e.duration.isGreater0) {
@@ -182,7 +178,7 @@ class Voice(
 	 * If there are no elements, 0 is returned.
 	 */
 	fun getLastUsedBeat(maxBeat: Beat): Beat {
-		var beat = `0/`
+		var beat = _0
 		for (e in elements) {
 			val pos = beat + e.duration
 			if (pos > maxBeat)
@@ -203,7 +199,7 @@ class Voice(
 		if (beat.is0)
 			return true
 		//is there an element at this beat?
-		var curBeat = `0/`
+		var curBeat = _0
 		for (e in elements) {
 			if (beat == curBeat)
 				return true
@@ -220,7 +216,7 @@ class Voice(
 	 * If no element starts at exactly the given beat, null is returned.
 	 */
 	fun getElementAt(beat: Beat): VoiceElement? {
-		var currentBeat = `0/`
+		var currentBeat = _0
 		var foundElement: VoiceElement? = null
 		for (e in elements) {
 			val compare = beat.compareTo(currentBeat)
@@ -242,7 +238,7 @@ class Voice(
 	fun getElementsInRange(startBeat: Beat, endBeat: Beat): List<VoiceElement> {
 		val ret = mutableListOf<VoiceElement>()
 		//collect elements
-		var beat = `0/`
+		var beat = _0
 		for (e in elements) {
 			if (beat >= endBeat)
 				break
@@ -260,7 +256,7 @@ class Voice(
 	 * If the element is not in this voice, null is returned.
 	 */
 	fun getBeat(element: MusicElement): Beat? {
-		var beat = `0/`
+		var beat = _0
 		for (e in elements) {
 			if (e === element)
 				return beat
@@ -277,7 +273,7 @@ class Voice(
 	 * the last element is returned (or 0 if the voice is empty).
 	 */
 	fun getBeat(elementIndex: Int): Beat {
-		var beat = `0/`
+		var beat = _0
 		for (i in elements.indices) {
 			if (i >= elementIndex)
 				break
@@ -294,7 +290,7 @@ class Voice(
 	 */
 	fun getElementIndex(beat: Beat): Int {
 		var posI = 0
-		var posB = `0/`
+		var posB = _0
 		for (i in elements.indices) {
 			val newPosB = posB + elements[i].duration
 			if (newPosB > beat)

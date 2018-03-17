@@ -1,7 +1,7 @@
 package com.xenoage.zong.core.position
 
 import com.xenoage.utils.math.Fraction
-import com.xenoage.utils.math.`0/`
+import com.xenoage.utils.math._0
 
 /**
  * Time in a score.
@@ -34,4 +34,4 @@ data class Time(
 fun time(measure: Int, beat: Fraction) = Time(measure, beat)
 
 /** Musical position with all values set to 0.  */
-val time0 = Time(0, `0/`)
+val time0 = Time(0, _0)
