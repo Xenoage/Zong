@@ -104,7 +104,7 @@ public class ScoreRevolutionary {
 
 		//C minor, C (4/4) time
 		cursor.write((ColumnElement) new TraditionalKey(-3, Mode.Minor));
-		cursor.write(new TimeSignature(TimeType.timeCommon));
+		cursor.write(new TimeSignature(TimeType.Companion.getTimeCommon()));
 
 		//first staff: g-clef and some notes
 		cursor.write(new Clef(ClefType.Companion.getClefTreble()));

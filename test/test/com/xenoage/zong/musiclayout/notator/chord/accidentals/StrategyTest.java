@@ -135,7 +135,7 @@ public class StrategyTest
 		//one chord in each measure
 		Score score = ScoreFactory.create1Staff();
 		Cursor cursor = new Cursor(score, mp0, true);
-		cursor.write(new TimeSignature(TimeType.time_3_4));
+		cursor.write(new TimeSignature(TimeType.Companion.getTime_3_4()));
 		for (int i : range(examples)) {
 			Example example = examples.get(i);
 			cursor.setMp(atElement(0, i, 0, 0));

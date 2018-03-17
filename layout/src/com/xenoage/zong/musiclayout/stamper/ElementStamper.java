@@ -75,7 +75,7 @@ public class ElementStamper {
 	 */
 	public Stamping createTimeStamping(TimeNotation time, float xMm, StamperContext context) {
 		val staff = context.getCurrentStaffStamping();
-		if (time.element.getType() == TimeType.timeCommon) {
+		if (time.element.getType() == TimeType.Companion.getTimeCommon()) {
 			return new StaffSymbolStamping(time, staff, context.getSymbol(CommonSymbol.TimeCommon),
 				null, sp(xMm, staff.linesCount - 1), 1f, false);
 		}

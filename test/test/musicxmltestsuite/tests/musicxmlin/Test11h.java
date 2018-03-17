@@ -16,7 +16,7 @@ public class Test11h
 	@Test public void test() {
 		Score score = getScore();
 		//time signature must be senza misura
-		assertEquals(TimeType.timeSenzaMisura, score.getColumnHeader(0).getTime().getType());
+		assertEquals(TimeType.Companion.getTimeSenzaMisura(), score.getColumnHeader(0).getTime().getType());
 		//measure must contain 3 notes and have a length of 3/8
 		assertEquals(3, score.getVoice(mp0).getElements().size());
 		assertEquals(Companion.fr(3, 8), score.getVoice(mp0).getFilledBeats());

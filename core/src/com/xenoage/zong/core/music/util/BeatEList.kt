@@ -1,11 +1,10 @@
 package com.xenoage.zong.core.music.util
 
 import com.xenoage.utils.iterators.reverseIt
-import com.xenoage.utils.math.Fraction
 import com.xenoage.zong.core.music.MusicElement
 import com.xenoage.zong.core.music.MusicElementType
-import com.xenoage.zong.core.music.of
 import com.xenoage.zong.core.music.util.Interval.Result.True
+import com.xenoage.zong.core.position.Beat
 
 /**
  * This is a wrapper class to combine a list of objects with
@@ -17,10 +16,10 @@ class BeatEList<T>(
 ) : Iterable<BeatE<out T>> {
 
 	/** All used beats (each beat only one time) */
-	val beats: List<Fraction>
+	val beats: List<Beat>
 		get() {
-			val ret = mutableListOf<Fraction>()
-			var lastBeat: Fraction? = null
+			val ret = mutableListOf<Beat>()
+			var lastBeat: Beat? = null
 			for ((_, beat) in elements) {
 				if (false == beat.equals(lastBeat)) {
 					ret.add(beat)
@@ -45,20 +44,20 @@ class BeatEList<T>(
 	/**
 	 * Gets the first element at the given beat, or null if there is none.
 	 */
-	operator fun get(beat: Fraction): T? =
+	operator fun get(beat: Beat): T? =
 			elements.find { it.beat == beat }?.element
 
 	/**
 	 * Gets the first element at the given beat with the given type, or null if there is none.
 	 * Works only for [MusicElement] items.
 	 */
-	operator fun get(beat: Fraction, type: MusicElementType): T? =
+	operator fun get(beat: Beat, type: MusicElementType): T? =
 			elements.find { it.beat == beat && (it.element as MusicElement) of type }?.element
 
 	/**
 	 * Gets all elements at the given beat in a new list, or an empty list if there are none.
 	 */
-	fun getAll(beat: Fraction): List<T> =
+	fun getAll(beat: Beat): List<T> =
 			elements.filter { it.beat == beat }.map { it.element }
 
 	/**
@@ -79,7 +78,7 @@ class BeatEList<T>(
 	 * If there are already elements at this beat, it is added
 	 * after the existing ones, but nothing is removed.
 	 */
-	fun add(element: T, beat: Fraction) =
+	fun add(element: T, beat: Beat) =
 		add(BeatE(element, beat))
 
 	/**
@@ -95,7 +94,7 @@ class BeatEList<T>(
 	 * a element, it is replaced by the given one and returned (otherwise null).
 	 */
 	fun set(element: BeatE<T>): T? {
-		for (i in 0..elements.size-1) {
+		for (i in 0 until elements.size) {
 			val (e, b) = elements[i]
 			val compare = element.beat.compareTo(b)
 			if (compare == 0) { //element at beat found; replace it
@@ -114,7 +113,7 @@ class BeatEList<T>(
 	 * Adds the given element at the given beat. If there is already
 	 * a element, it is replaced by the given one and returned (otherwise null).
 	 */
-	operator fun set(element: T, beat: Fraction): T? =
+	operator fun set(element: T, beat: Beat): T? =
 		set(BeatE(element, beat))
 
 	/**
@@ -133,7 +132,7 @@ class BeatEList<T>(
 	 * Removes and returns the first element at the given beat (if there is any).
 	 * If not found, null is returned.
 	 */
-	fun remove(beat: Fraction): T? {
+	fun remove(beat: Beat): T? {
 		val index = elements.indexOfFirst { it.beat == beat }
 		return when {
 			index > -1 -> elements.removeAt(index).element
@@ -145,7 +144,7 @@ class BeatEList<T>(
 	 * Returns the last element at or before the given beat.
 	 * If there is none, null is returned.
 	 */
-	fun getLastBefore(endpoint: Interval, beat: Fraction): BeatE<out T>? {
+	fun getLastBefore(endpoint: Interval, beat: Beat): BeatE<out T>? {
 		val index = elements.indexOfLast { endpoint.isInInterval(it.beat, beat) === True }
 		return elements.getOrNull(index)
 	}
@@ -164,7 +163,7 @@ class BeatEList<T>(
 	 * Returns a new [BeatEList] with only the elements which appear in the
 	 * given interval relative to the given beat.
 	 */
-	fun filter(interval: Interval, beat: Fraction) =
+	fun filter(interval: Interval, beat: Beat) =
 			BeatEList(elements.filter { interval.isInInterval(it.beat, beat) === True }.toMutableList())
 
 }

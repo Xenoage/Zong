@@ -43,7 +43,7 @@ public class ScoreTest {
 		//first measure: no time, 1/4 used
 		score.getVoice(atVoice(0, 0, 0)).addElement(new Rest(Companion.fr(1, 4)));
 		//second measure: 3/4 time, 2/4 used
-		score.getColumnHeader(1).setTime(new TimeSignature(TimeType.time_3_4));
+		score.getColumnHeader(1).setTime(new TimeSignature(TimeType.Companion.getTime_3_4()));
 		score.getVoice(atVoice(0, 1, 0)).addElement(new Rest(Companion.fr(1, 4)));
 		score.getVoice(atVoice(0, 1, 0)).addElement(new Rest(Companion.fr(1, 4)));
 		//third measure: still 3/4 time, 1/4 used
@@ -75,17 +75,17 @@ public class ScoreTest {
 		Tuple3<Score, List<ClefType>, List<Key>> testData = createTestScoreClefsKeys();
 		Score score = testData.get1();
 		List<Key> keys = testData.get3();
-		assertTrue(keys.get(0) != score.getKey(atBeat(0, 0, 0, Companion.fr(0, 4)), Before).element);
-		assertTrue(keys.get(0) == score.getKey(atBeat(0, 0, 0, Companion.fr(0, 4)), BeforeOrAt).element);
-		assertTrue(keys.get(0) == score.getKey(atBeat(0, 0, 0, Companion.fr(1, 4)), Before).element);
-		assertTrue(keys.get(0) == score.getKey(atBeat(0, 0, 0, Companion.fr(1, 4)), BeforeOrAt).element);
-		assertTrue(keys.get(0) == score.getKey(atBeat(0, 0, 0, Companion.fr(2, 4)), Before).element);
-		assertTrue(keys.get(1) == score.getKey(atBeat(0, 0, 0, Companion.fr(2, 4)), BeforeOrAt).element);
-		assertTrue(keys.get(1) == score.getKey(atBeat(0, 0, 0, Companion.fr(3, 4)), Before).element);
-		assertTrue(keys.get(1) == score.getKey(atBeat(0, 1, 0, Companion.fr(0, 4)), BeforeOrAt).element);
-		assertTrue(keys.get(1) == score.getKey(atBeat(0, 1, 0, Companion.fr(1, 4)), Before).element);
-		assertTrue(keys.get(2) == score.getKey(atBeat(0, 1, 0, Companion.fr(1, 4)), BeforeOrAt).element);
-		assertTrue(keys.get(2) == score.getKey(atBeat(0, 1, 0, Companion.fr(2, 4)), Before).element);
+		assertTrue(keys.get(0) != score.getKey(atBeat(0, 0, 0, Companion.fr(0, 4)), Before).getElement());
+		assertTrue(keys.get(0) == score.getKey(atBeat(0, 0, 0, Companion.fr(0, 4)), BeforeOrAt).getElement());
+		assertTrue(keys.get(0) == score.getKey(atBeat(0, 0, 0, Companion.fr(1, 4)), Before).getElement());
+		assertTrue(keys.get(0) == score.getKey(atBeat(0, 0, 0, Companion.fr(1, 4)), BeforeOrAt).getElement());
+		assertTrue(keys.get(0) == score.getKey(atBeat(0, 0, 0, Companion.fr(2, 4)), Before).getElement());
+		assertTrue(keys.get(1) == score.getKey(atBeat(0, 0, 0, Companion.fr(2, 4)), BeforeOrAt).getElement());
+		assertTrue(keys.get(1) == score.getKey(atBeat(0, 0, 0, Companion.fr(3, 4)), Before).getElement());
+		assertTrue(keys.get(1) == score.getKey(atBeat(0, 1, 0, Companion.fr(0, 4)), BeforeOrAt).getElement());
+		assertTrue(keys.get(1) == score.getKey(atBeat(0, 1, 0, Companion.fr(1, 4)), Before).getElement());
+		assertTrue(keys.get(2) == score.getKey(atBeat(0, 1, 0, Companion.fr(1, 4)), BeforeOrAt).getElement());
+		assertTrue(keys.get(2) == score.getKey(atBeat(0, 1, 0, Companion.fr(2, 4)), Before).getElement());
 	}
 	
 	
@@ -244,7 +244,7 @@ public class ScoreTest {
 		Score score = ScoreFactory.create1Staff4Measures();
 		VoiceElement[] e = new VoiceElement[6];
 		//4/4 measure
-		score.getColumnHeader(0).setTime(new TimeSignature(TimeType.time_4_4));
+		score.getColumnHeader(0).setTime(new TimeSignature(TimeType.Companion.getTime_4_4()));
 		//first measure (filled only with 7/8)
 		//  voice 0: 1/4, 1/4, 1/4  (1/4 is missing)
 		//  voice 1: 3/4, 1/8       (1/8 is missing)

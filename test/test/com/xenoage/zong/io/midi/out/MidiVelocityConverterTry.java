@@ -103,7 +103,7 @@ public class MidiVelocityConverterTry {
 		Cursor cursor = new Cursor(ret, mp0, true);
 
 		cursor.write((ColumnElement) new TraditionalKey(-3));
-		cursor.write((ColumnElement) new TimeSignature(timeType(3, 4)));
+		cursor.write((ColumnElement) new TimeSignature(Companion.timeType(3, 4)));
 
 		cursor.write(new Clef(ClefType.Companion.getClefTreble()));
 

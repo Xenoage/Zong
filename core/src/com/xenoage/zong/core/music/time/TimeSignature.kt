@@ -12,18 +12,21 @@ import lombok.RequiredArgsConstructor
  * A time signature.
  */
 class TimeSignature(
-		/** The time signature type */
+		/** The time signature type. */
 		val type: TimeType
 ) : ColumnElement {
 
-	/** Back reference: the parent column header, or null, if not part of a score.  */
+	/** Back reference: the parent column header, or null, if not part of a score. */
 	override var parent: ColumnHeader? = null
 
 	override val elementType: MusicElementType
 		get() = MusicElementType.Time
 
-}
 
-/** Implicit senza misura object. Do not use it within a score,
- * but only as a return value to indicate that there is no time signature.  */
-val implicitSenzaMisura = TimeSignature(TimeType.timeSenzaMisura)
+	companion object {
+		/** Implicit senza misura object. Do not use it within a score,
+		 * but only as a return value to indicate that there is no time signature.  */
+		val implicitSenzaMisura = TimeSignature(TimeType.timeSenzaMisura)
+	}
+
+}

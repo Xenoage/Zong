@@ -174,8 +174,8 @@ public final class Cursor
 		MPE<VoiceElement> ive = score.getStaff(mp.getStaff()).getVoiceElementBefore(mp, false);
 
 		//if the target element is a chord, add the given pitches to it - TODO: use command
-		if (ive != null && ive.element instanceof Chord) {
-			Chord chord = (Chord) ive.element;
+		if (ive != null && ive.getElement() instanceof Chord) {
+			Chord chord = (Chord) ive.getElement();
 			for (Pitch pitch : pitches)
 				chord.addNote(new Note(pitch));
 		}

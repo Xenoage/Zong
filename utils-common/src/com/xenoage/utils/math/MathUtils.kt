@@ -212,6 +212,21 @@ fun sign(v: Float) =
 
 /**
  * Returns the minimum element of the given [Comparable]s.
+ * If any element is null or if no element is given, null is returned.
+ * If more then one element qualifies, the first one is returned.
+ */
+fun <T : Comparable<T>> minOrNull(vararg ts: T?): T? {
+	var ret: T? = null
+	for (t in ts)
+		if (t == null)
+			return null
+		else if (ret == null || t < ret)
+			ret = t
+	return ret
+}
+
+/**
+ * Returns the minimum element of the given [Comparable]s.
  * If all elements are null or if no element is given, null is returned.
  * If more then one element qualifies, the first one is returned.
  */

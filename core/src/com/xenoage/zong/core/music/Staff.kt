@@ -1,21 +1,13 @@
 package com.xenoage.zong.core.music
 
 import com.xenoage.zong.core.Score
-import com.xenoage.zong.core.music.chord.Chord
-import com.xenoage.zong.core.music.util.MPE
-import com.xenoage.zong.core.position.MP
-import com.xenoage.zong.utils.exceptions.IllegalMPException
-import lombok.Getter
-import lombok.Setter
-
-import java.util.ArrayList
-
-import com.xenoage.utils.kernel.Range.rangeReverse
 import com.xenoage.zong.core.music.Measure.measure
+import com.xenoage.zong.core.music.util.MPE
 import com.xenoage.zong.core.music.util.MPE.mpE
+import com.xenoage.zong.core.position.MP
 import com.xenoage.zong.core.position.MP.Companion.atMeasure
-import com.xenoage.zong.core.position.MP.atMeasure
-import java.lang.Math.max
+import com.xenoage.zong.core.position.MP.Companion.unknown
+import com.xenoage.zong.utils.exceptions.IllegalMPException
 
 
 /**
@@ -28,9 +20,9 @@ import java.lang.Math.max
  */
 class Staff (
 		/** The measures from the beginning to the ending of the score (even the invisible ones).  */
-		val measures: MutableList<Measure>,
+		val measures: MutableList<Measure> = mutableListOf(),
 		/** The number of lines in this staff.  */
-		var linesCount: Int,
+		var linesCount: Int = 5,
 		/** Distance between the lines in this staff, or null for default.  */
 		val interlineSpace: IS?) {
 
@@ -97,24 +89,19 @@ class Staff (
 		//find the last voice element ending at or before the current beat
 		//in the given measure
 		var voice = getVoice(mp)
-		for (i in  rangeReverse(mp.element - 1, 0)) {
-			val e = voice.getElement(i)
-			if (!onlyChord || e is Chord)
-				return mpE(e, mp.withElement(i))
-		}
+		var i = voice.elements.indexOfLast { !onlyChord || it.isChord }
+		if (i != unknown)
+			return mpE(voice.elements[i], mp.copy(element = i))
 		//no result in this measure. loop through the preceding measures.
-		for (iMeasure in rangeReverse(mp.measure - 1, 0)) {
+		for (iMeasure in mp.measure-1 downTo 0) {
 			voice = getMeasure(iMeasure).getVoice(mp.voice)
-			for (i in rangeReverse(voice.elements)) {
-				val e = voice.getElement(i)
-				if (!onlyChord || e is Chord)
-					return mpE(e, MP.atElement(mp.staff, iMeasure, mp.voice, i))
-			}
+			i = voice.elements.indexOfLast { !onlyChord || it.isChord }
+			if (i != unknown)
+				return mpE(voice.elements[i], MP.atElement(mp.staff, iMeasure, mp.voice, i))
 		}
 		//nothing found
 		return null
 	}
-
 
 	/**
 	 * Sets the measure with the given index.
@@ -126,10 +113,10 @@ class Staff (
 			m.parent = this
 			measures.add(m)
 		}
+		measures[index].parent = null
 		measure.parent = this
 		measures[index] = measure
 	}
-
 
 	/**
 	 * Gets the [MP] of the given measure, or null if this staff is not
@@ -137,30 +124,11 @@ class Staff (
 	 */
 	fun getMP(measure: Measure): MP? {
 		val measureIndex = measures.indexOf(measure)
-		if (this.parent == null || measureIndex == -1)
+		val parent = this.parent
+		if (parent == null || measureIndex == unknown)
 			return null
-		val staffIndex = this.parent!!.staves.indexOf(this)
-		return if (staffIndex == -1) null else atMeasure(staffIndex, measureIndex)
-	}
-
-	companion object {
-
-
-		/**
-		 * Creates a new [Staff].
-		 */
-		fun staff(linesCount: Int, interlineSpace: Float?): Staff {
-			val measures = ArrayList<Measure>()
-			return Staff(measures, linesCount, interlineSpace)
-		}
-
-
-		/**
-		 * Creates a minimal staff with no content.
-		 */
-		fun staffMinimal(): Staff {
-			return staff(5, null)
-		}
+		val staffIndex = parent.staves.indexOf(this)
+		return if (staffIndex == unknown) null else atMeasure(staffIndex, measureIndex)
 	}
 
 }

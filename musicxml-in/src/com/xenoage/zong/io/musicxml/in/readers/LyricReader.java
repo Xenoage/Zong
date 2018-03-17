@@ -50,7 +50,7 @@ public class LyricReader {
 				}
 				else if (mxlLCType == MxlLyricContentType.Extend) {
 					//extend - TODO: extension to next chord!
-					ret.add(Lyric.lyricExtend(verse));
+					ret.add(Lyric.Companion.lyricExtend(verse));
 				}
 			}
 		}

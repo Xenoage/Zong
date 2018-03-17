@@ -1,20 +1,18 @@
 package com.xenoage.zong.core.music.util
 
-import com.xenoage.utils.math.Fraction
-import lombok.Data
-import lombok.NonNull
+import com.xenoage.zong.core.position.Beat
 
 /**
  * Element at a beat.
  *
  * This is a wrapper class to combine any object with
- * the beat (represented as a [Fraction]) it belongs to.
+ * the beat it belongs to.
  */
 data class BeatE<T>(
 	/** The element at the beat  */
 	val element: T,
 	/** The beat where the element can be found  */
-	val beat: Fraction
+	val beat: Beat
 ) {
 
 	override fun toString() = "$element at beat $beat"

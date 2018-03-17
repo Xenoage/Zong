@@ -45,7 +45,7 @@ public class ColumnElementIteratorTest {
 			assertTrue(it.hasNext());
 			e = it.next();
 			assertEquals(atMeasure(unknown, measure), it.getMp());
-			assertEquals(time_4_4, ((TimeSignature) e).getType());
+			assertEquals(Companion.getTime_4_4(), ((TimeSignature) e).getType());
 			//end barline
 			assertTrue(it.hasNext());
 			e = it.next();
@@ -64,7 +64,7 @@ public class ColumnElementIteratorTest {
 		Cursor cursor = new Cursor(score, MP.mp0, true);
 		for (int measure : new int[]{1, 3}) {
 			cursor.setMp(mp(unknown, measure, 0, Companion.get_0(), 0));
-			cursor.write(new TimeSignature(time_4_4));
+			cursor.write(new TimeSignature(Companion.getTime_4_4()));
 			cursor.setMp(mp(unknown, measure, unknown, Companion.fr(1, 4), 0));
 			cursor.write(Companion.barlineRegular());
 			ColumnHeader column = score.getColumnHeader(measure);

@@ -19,4 +19,7 @@ interface MusicElement {
 	infix fun of(type: MusicElementType): Boolean =
 		this != null && elementType == type
 
+	val isChord get() = of(MusicElementType.Chord)
+	val isRest get() = of(MusicElementType.Rest)
+
 }

@@ -264,7 +264,7 @@ public final class Score
 			measureKey = getMeasure(mp).getPrivateKeys().getLastBefore(interval, mp.getBeat());
 		BeatE<Key> ret = Companion.selectLatest(columnKey, measureKey);
 		if (ret != null)
-			return mpE(ret.getElement(), mp.withBeat(ret.getBeat()));
+			return Companion.mpE(ret.getElement(), mp.withBeat(ret.getBeat()));
 		if (interval != At) {
 			//search in the preceding measures
 			for (int iMeasure = mp.getMeasure() - 1; iMeasure >= 0; iMeasure--) {
@@ -273,11 +273,11 @@ public final class Score
 				measureKey = (privateKeys != null ? privateKeys.getLast() : null);
 				ret = Companion.selectLatest(columnKey, measureKey);
 				if (ret != null)
-					return mpE(ret.getElement(), mp.withMeasure(iMeasure).withBeat(ret.getBeat()));
+					return Companion.mpE(ret.getElement(), mp.withMeasure(iMeasure).withBeat(ret.getBeat()));
 			}
 		}
 		//no key found. return default key.
-		return mpE(new TraditionalKey(0, Mode.Major), Companion.getMpb0());
+		return Companion.mpE(new TraditionalKey(0, Mode.Major), Companion.getMpb0());
 	}
 	
 	
@@ -292,9 +292,9 @@ public final class Score
 		//start key of the measure always counts
 		MPE<? extends Key> key = getKey(mp, BeforeOrAt);
 		//if key change is in same measure, start at that beat. otherwise start at beat 0.
-		Fraction keyBeat = (key.mp.getMeasure() == mp.getMeasure() ? key.mp.getBeat() : Companion.get_0());
+		Fraction keyBeat = (key.getMp().getMeasure() == mp.getMeasure() ? key.getMp().getBeat() : Companion.get_0());
 		Measure measure = getMeasure(mp);
-		return measure.getAccidentals(mp.getBeat(), interval, keyBeat, key.element);
+		return measure.getAccidentals(mp.getBeat(), interval, keyBeat, key.getElement());
 	}
 	
 	
@@ -355,7 +355,7 @@ public final class Score
 		if (clefAndKeyInterval == At)
 			clefAndKeyInterval = BeforeOrAt; //At and BeforeOrAt mean the same in this context
 		ClefType clef = getClef(mp, clefAndKeyInterval);
-		Key key = getKey(mp, clefAndKeyInterval).element;
+		Key key = getKey(mp, clefAndKeyInterval).getElement();
 		Map<Pitch, Integer> accidentals = noAccidentals;
 		if (accidentalsInterval != null)
 			accidentals = getAccidentals(mp, accidentalsInterval);

@@ -374,7 +374,7 @@ public class VoiceElementWriteTest {
 	 */
 	@Test public void testTimeAware() {
 		Score score = ScoreFactory.create1Staff4Measures();
-		score.getHeader().getColumnHeaders().get(1).setTime(new TimeSignature(TimeType.time_3_4));
+		score.getHeader().getColumnHeaders().get(1).setTime(new TimeSignature(TimeType.Companion.getTime_3_4()));
 		//create options
 		VoiceElementWrite.Options options = new VoiceElementWrite.Options();
 		options.checkTimeSignature = true;

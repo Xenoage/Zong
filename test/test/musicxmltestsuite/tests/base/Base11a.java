@@ -11,7 +11,7 @@ public interface Base11a
 	}
 
 	TimeType[] expectedTimes = {
-		TimeType.timeAllaBreve, TimeType.timeCommon, TimeType.time_2_2,
-		TimeType.timeType(3, 2), TimeType.time_2_4, TimeType.time_3_4, TimeType.time_4_4,
-		TimeType.timeType(5, 4), TimeType.timeType(3, 8), TimeType.time_6_8, TimeType.timeType(12, 8) };
+			TimeType.Companion.getTimeAllaBreve(), TimeType.Companion.getTimeCommon(), TimeType.Companion.getTime_2_2(),
+		TimeType.Companion.timeType(3, 2), TimeType.Companion.getTime_2_4(), TimeType.Companion.getTime_3_4(), TimeType.Companion.getTime_4_4(),
+		TimeType.Companion.timeType(5, 4), TimeType.Companion.timeType(3, 8), TimeType.Companion.getTime_6_8(), TimeType.Companion.timeType(12, 8) };
 }

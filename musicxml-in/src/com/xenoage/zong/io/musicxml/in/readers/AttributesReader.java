@@ -89,18 +89,18 @@ public class AttributesReader {
 		MxlTimeContentType type = mxlTime.getContent().getTimeContentType();
 		if (type == MxlTimeContentType.SenzaMisura) {
 			//senza misura
-			time = new TimeSignature(timeSenzaMisura);
+			time = new TimeSignature(Companion.getTimeSenzaMisura());
 		}
 		else if (type == MxlTimeContentType.NormalTime) {
 			//normal time
 			MxlNormalTime mxlNormalTime = (MxlNormalTime) mxlTime.getContent();
 			//common, cut or fractional?
 			if (mxlTime.getSymbol() == MxlTimeSymbol.Cut)
-				time = new TimeSignature(TimeType.timeAllaBreve);
+				time = new TimeSignature(TimeType.Companion.getTimeAllaBreve());
 			else if (mxlTime.getSymbol() == MxlTimeSymbol.Common)
-				time = new TimeSignature(TimeType.timeCommon);
+				time = new TimeSignature(TimeType.Companion.getTimeCommon());
 			else //otherwise, we currently support only normal fractional time signatures
-				time = new TimeSignature(timeType(mxlNormalTime.getBeats(), mxlNormalTime.getBeatType()));
+				time = new TimeSignature(Companion.timeType(mxlNormalTime.getBeats(), mxlNormalTime.getBeatType()));
 		}
 		return time;
 	}

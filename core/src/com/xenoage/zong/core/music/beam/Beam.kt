@@ -29,7 +29,7 @@ import java.lang.Math.max
 class Beam(
 		/** The waypoints in this beam */
 		val waypoints: List<BeamWaypoint>
-) : MPElement<Voice> {
+) : MPElement {
 
 	//cache
 	private var verticalSpan: VerticalSpan? = null

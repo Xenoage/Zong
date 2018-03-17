@@ -72,7 +72,7 @@ public class ScoreReader {
 		}
 		
 		//write a 4/4 measure and C key signature in the first measure
-		execute(new ColumnElementWrite(new TimeSignature(TimeType.time_4_4), score.getColumnHeader(0), Companion.get_0(), null));
+		execute(new ColumnElementWrite(new TimeSignature(TimeType.Companion.getTime_4_4()), score.getColumnHeader(0), Companion.get_0(), null));
 		execute(new ColumnElementWrite(new TraditionalKey(0), score.getColumnHeader(0), Companion.get_0(), null));
 			
 		//read the parts

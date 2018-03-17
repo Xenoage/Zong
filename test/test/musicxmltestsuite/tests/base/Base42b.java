@@ -43,7 +43,7 @@ public interface Base42b
 	static Staff[] getExpectedStaves() {
 		Score score = ScoreFactory.create1Staff();
 		Cursor cursor = new Cursor(score, mp0, true);
-		cursor.write(new TimeSignature(TimeType.time_6_8));
+		cursor.write(new TimeSignature(TimeType.Companion.getTime_6_8()));
 		//staff 1, measure 0
 		cursor.write(chord(Companion.pi('F', 0, 4), Companion.fr(1, 8)));
 		cursor.write(chord(Companion.pi('D', 0, 4), Companion.fr(1, 8)));

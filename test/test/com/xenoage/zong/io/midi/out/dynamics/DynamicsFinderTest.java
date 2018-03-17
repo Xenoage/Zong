@@ -68,7 +68,7 @@ public class DynamicsFinderTest {
 		new PartAdd(score, new Part("", null, 2, null), 0, null).execute();
 		new MeasureAdd(score, 5).execute();
 		//time signature and repeats
-		new ColumnElementWrite(new TimeSignature(TimeType.time_4_4),
+		new ColumnElementWrite(new TimeSignature(TimeType.Companion.getTime_4_4()),
 				score.getColumnHeader(0), null, null ).execute();
 		new ColumnElementWrite(Companion.barlineForwardRepeat(Regular),
 				score.getColumnHeader(1), null, MeasureSide.Left).execute();

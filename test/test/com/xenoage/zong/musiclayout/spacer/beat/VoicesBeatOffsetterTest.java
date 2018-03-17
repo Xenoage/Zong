@@ -317,7 +317,7 @@ public class VoicesBeatOffsetterTest {
 		Cursor cursor = new Cursor(score, mp0, true);
 		cursor.write(new Clef(ClefType.Companion.getClefTreble()));
 		cursor.write((MeasureElement) new TraditionalKey(-3));
-		cursor.write(new TimeSignature(TimeType.timeType(6, 4)));
+		cursor.write(new TimeSignature(TimeType.Companion.timeType(6, 4)));
 		//beats: 0, 2, 3, 4, 8.
 		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 4)));
 		cursor.write(chord(Companion.pi(0, 0, 0), Companion.fr(1, 8)));
@@ -344,7 +344,7 @@ public class VoicesBeatOffsetterTest {
 		Score score = new Score();
 		score.getFormat().setInterlineSpace(10);
 		Cursor cursor = new Cursor(score, mp0, true);
-		cursor.write(new TimeSignature(time_4_4));
+		cursor.write(new TimeSignature(Companion.getTime_4_4()));
 
 		//2: half note, 4: quarter note, 8: eighth note, 3: quarter triplet
 		//voice 1: | 4     4     4     4     |   (staff 1)
@@ -381,7 +381,7 @@ public class VoicesBeatOffsetterTest {
 		Score score = new Score();
 		score.getFormat().setInterlineSpace(10);
 		Cursor cursor = new Cursor(score, mp0, true);
-		cursor.write(new TimeSignature(time_4_4));
+		cursor.write(new TimeSignature(Companion.getTime_4_4()));
 
 		//2: half note, 4: quarter note, 8: eighth note, 3: quarter triplet, .: grace note
 		//voice 1: | 4     ...4       4     4     |   (staff 1)
@@ -424,7 +424,7 @@ public class VoicesBeatOffsetterTest {
 		Score score = new Score();
 		score.getFormat().setInterlineSpace(2);
 		Cursor cursor = new Cursor(score, mp0, true);
-		cursor.write(new TimeSignature(time_4_4));
+		cursor.write(new TimeSignature(Companion.getTime_4_4()));
 
 		//2: half note, 4: quarter note, 8: eighth note, 3: quarter triplet, x: missing (empty)
 		//voice 1: | 4     4     4     8  xxx|   (staff 1)

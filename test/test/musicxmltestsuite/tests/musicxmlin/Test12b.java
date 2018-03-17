@@ -31,7 +31,7 @@ public class Test12b
 		assertEquals(ClefType.Companion.getClefTreble(), score.getMeasure(mp0).getClefs().get(Companion.get_0()).getType());
 		//there should be a time signature and key signature in the measure column
 		ColumnHeader header = score.getHeader().getColumnHeader(0);
-		assertEquals(TimeType.time_4_4, header.getTime().getType());
+		assertEquals(TimeType.Companion.getTime_4_4(), header.getTime().getType());
 		assertNotNull(header.getKeys().get(Companion.get_0()));
 	}
 

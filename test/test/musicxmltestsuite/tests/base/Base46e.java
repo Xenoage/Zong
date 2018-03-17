@@ -29,7 +29,7 @@ public interface Base46e
 	static Staff getExpectedStaff() {
 		Score score = ScoreFactory.create1Staff();
 		Cursor cursor = new Cursor(score, mp0, true);
-		cursor.write(new TimeSignature(TimeType.timeCommon));
+		cursor.write(new TimeSignature(TimeType.Companion.getTimeCommon()));
 		//measure 0, voice 0
 		cursor.write(chord(Companion.pi('C', 0, 5), Companion.fr(1, 4)));
 		//measure 1, voice 0

@@ -23,9 +23,9 @@ public class ScoreHeaderTest {
 		//and a 4/4 in the fourth one
 		Score score = ScoreFactory.create1Staff4Measures();
 		ScoreHeader header = score.getHeader();
-		TimeSignature time1 = new TimeSignature(TimeType.time_3_4);
+		TimeSignature time1 = new TimeSignature(TimeType.Companion.getTime_3_4());
 		header.getColumnHeader(1).setTime(time1);
-		TimeSignature time2 = new TimeSignature(TimeType.time_4_4);
+		TimeSignature time2 = new TimeSignature(TimeType.Companion.getTime_4_4());
 		header.getColumnHeader(3).setTime(time2);
 		//test method
 		assertEquals(TimeSignature.Companion.getImplicitSenzaMisura(), header.getTimeAtOrBefore(0));

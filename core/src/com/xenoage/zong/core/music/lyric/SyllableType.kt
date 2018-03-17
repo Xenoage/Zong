@@ -1,12 +1,10 @@
-package com.xenoage.zong.core.music.lyric;
+package com.xenoage.zong.core.music.lyric
 
 
 /**
  * Position of a syllable within lyrics.
- * 
- * @author Andreas Wenger
  */
-public enum SyllableType {
+enum class SyllableType {
 	/** Single syllable like "Auf" or "dem". */
 	Single,
 	/** First syllable of a word, like "Hü" in "Hügel". */
@@ -17,4 +15,4 @@ public enum SyllableType {
 	End,
 	/** Melisma line (underscore line) for a syllable which spreads over multiple notes. */
 	Extend
-};
+}

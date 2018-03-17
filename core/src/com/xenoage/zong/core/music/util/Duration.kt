@@ -103,9 +103,9 @@ val Duration.flagsCount: Int
 fun Duration.prolong(dots: Int): Duration {
 	var ret = this
 	if (dots == 1)
-		ret = ret.mult(fr(3, 2)) //+ 50%
+		ret *= fr(3, 2) //+ 50%
 	else if (dots == 2)
-		ret = ret.mult(fr(7, 4)) //+ 50% + 25%
+		ret *= fr(7, 4) //+ 50% + 25%
 	return ret
 }
 
@@ -136,7 +136,7 @@ val Duration.dots: Int
  */
 val Duration.baseDuration: Duration
 	get() = when(dots) {
-		1 -> mult(fr(2, 3)) //remove the added 50%
-		2 -> mult(fr(4, 7)) //remove the added (50% + 25%)
+		1 -> this * fr(2, 3) //remove the added 50%
+		2 -> this * fr(4, 7) //remove the added (50% + 25%)
 		else -> this
 	}
