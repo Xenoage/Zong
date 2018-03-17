@@ -2,8 +2,8 @@ package com.xenoage.zong.core.music
 
 import com.xenoage.zong.core.Score
 import com.xenoage.zong.core.music.Measure.measure
+import com.xenoage.zong.core.music.chord.Chord
 import com.xenoage.zong.core.music.util.MPE
-import com.xenoage.zong.core.music.util.MPE.mpE
 import com.xenoage.zong.core.position.MP
 import com.xenoage.zong.core.position.MP.Companion.atMeasure
 import com.xenoage.zong.core.position.MP.Companion.unknown
@@ -89,15 +89,15 @@ class Staff (
 		//find the last voice element ending at or before the current beat
 		//in the given measure
 		var voice = getVoice(mp)
-		var i = voice.elements.indexOfLast { !onlyChord || it.isChord }
+		var i = voice.elements.indexOfLast { !onlyChord || it is Chord }
 		if (i != unknown)
-			return mpE(voice.elements[i], mp.copy(element = i))
+			return MPE(voice.elements[i], mp.copy(element = i))
 		//no result in this measure. loop through the preceding measures.
 		for (iMeasure in mp.measure-1 downTo 0) {
 			voice = getMeasure(iMeasure).getVoice(mp.voice)
-			i = voice.elements.indexOfLast { !onlyChord || it.isChord }
+			i = voice.elements.indexOfLast { !onlyChord || it is Chord }
 			if (i != unknown)
-				return mpE(voice.elements[i], MP.atElement(mp.staff, iMeasure, mp.voice, i))
+				return MPE(voice.elements[i], MP.atElement(mp.staff, iMeasure, mp.voice, i))
 		}
 		//nothing found
 		return null

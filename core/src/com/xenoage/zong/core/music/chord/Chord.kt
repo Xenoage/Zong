@@ -3,7 +3,6 @@ package com.xenoage.zong.core.music.chord
 import com.xenoage.utils.collections.SortedList
 import com.xenoage.utils.collections.sortedListOf
 import com.xenoage.zong.core.Score
-import com.xenoage.zong.core.music.MusicElementType
 import com.xenoage.zong.core.music.Pitch
 import com.xenoage.zong.core.music.Voice
 import com.xenoage.zong.core.music.VoiceElement
@@ -96,9 +95,6 @@ class Chord(
 	 */
 	val score: Score?
 		get() = (parent as Voice?)?.score
-
-	override val elementType: MusicElementType
-		get() = MusicElementType.Chord
 
 	/** Adds a pitch to this chord. */
 	fun addPitch(pitch: Pitch) {

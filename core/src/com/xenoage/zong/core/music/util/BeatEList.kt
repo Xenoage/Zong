@@ -2,9 +2,9 @@ package com.xenoage.zong.core.music.util
 
 import com.xenoage.utils.iterators.reverseIt
 import com.xenoage.zong.core.music.MusicElement
-import com.xenoage.zong.core.music.MusicElementType
 import com.xenoage.zong.core.music.util.Interval.Result.True
 import com.xenoage.zong.core.position.Beat
+import kotlin.reflect.KClass
 
 /**
  * This is a wrapper class to combine a list of objects with
@@ -46,13 +46,6 @@ class BeatEList<T>(
 	 */
 	operator fun get(beat: Beat): T? =
 			elements.find { it.beat == beat }?.element
-
-	/**
-	 * Gets the first element at the given beat with the given type, or null if there is none.
-	 * Works only for [MusicElement] items.
-	 */
-	operator fun get(beat: Beat, type: MusicElementType): T? =
-			elements.find { it.beat == beat && (it.element as MusicElement) of type }?.element
 
 	/**
 	 * Gets all elements at the given beat in a new list, or an empty list if there are none.

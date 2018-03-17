@@ -1,6 +1,7 @@
 package com.xenoage.zong.core.music.key
 
 import com.xenoage.utils.math.modMin
+import com.xenoage.zong.core.header.ColumnHeader
 import com.xenoage.zong.core.music.*
 import com.xenoage.zong.core.music.Pitch.Companion.pi
 import com.xenoage.zong.core.music.Step.*
@@ -18,11 +19,7 @@ class TraditionalKey(
 		val mode: Mode = Mode.Unknown
 ) : Key {
 
-	/** Back reference: the parent element, or null, if not part of a score.  */
-	override var parent: MPContainer? = null
-
-	override val elementType: MusicElementType
-		get() = MusicElementType.TraditionalKey
+	override var parent: ColumnHeader? = null
 
 	/** Major, minor and other modes.  */
 	enum class Mode {

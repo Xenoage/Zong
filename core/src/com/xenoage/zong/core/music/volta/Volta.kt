@@ -2,8 +2,6 @@ package com.xenoage.zong.core.music.volta
 
 import com.xenoage.zong.core.header.ColumnHeader
 import com.xenoage.zong.core.music.ColumnElement
-import com.xenoage.zong.core.music.MusicElementType
-import com.xenoage.zong.core.position.MP
 
 /**
  * Class for a volta (also called "ending" in MusicMXL, and informally called "Haus" in German).
@@ -60,9 +58,6 @@ class Volta(
 	 */
 	val isDefault: Boolean
 		get() = numbers == null
-
-	override val elementType: MusicElementType
-		get() = MusicElementType.Volta
 
 	/**
 	 * The index of the measure, where this volta ends (inclusive).

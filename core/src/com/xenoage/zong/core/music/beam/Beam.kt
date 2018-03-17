@@ -1,21 +1,12 @@
 package com.xenoage.zong.core.music.beam
 
-import com.xenoage.utils.annotations.NonNull
 import com.xenoage.utils.math.Fraction
-import com.xenoage.zong.core.music.MusicElementType
+import com.xenoage.zong.core.music.Voice
 import com.xenoage.zong.core.music.WaypointPosition
 import com.xenoage.zong.core.music.chord.Chord
-import com.xenoage.zong.core.music.util.Duration
-import com.xenoage.zong.core.position.MP
-import com.xenoage.zong.core.position.MPContainer
-import com.xenoage.zong.core.position.MPElement
-
-import com.xenoage.utils.collections.CollectionUtils.alist
-import com.xenoage.utils.collections.CollectionUtils.getFirst
-import com.xenoage.utils.kernel.Range.range
-import com.xenoage.utils.math.MathUtils.min
-import com.xenoage.zong.core.music.Voice
 import com.xenoage.zong.core.music.util.flagsCount
+import com.xenoage.zong.core.position.MP
+import com.xenoage.zong.core.position.MPElement
 import java.lang.Math.max
 
 
@@ -48,9 +39,6 @@ class Beam(
 			val minDuration = waypoints.asSequence().map{ it.chord.duration }.min() ?: throw IllegalStateException()
 			return minDuration.flagsCount
 		}
-
-	val musicElementType: MusicElementType
-		get() = MusicElementType.Beam
 
 	/**
 	 * The parent of the beam is defined as the voice of the start of the beam.

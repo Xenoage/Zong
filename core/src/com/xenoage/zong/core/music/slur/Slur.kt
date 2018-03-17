@@ -4,7 +4,6 @@ import com.xenoage.utils.math.VSide
 import com.xenoage.utils.math.minOrNull
 import com.xenoage.utils.throwEx
 import com.xenoage.zong.core.music.MusicElement
-import com.xenoage.zong.core.music.MusicElementType
 import com.xenoage.zong.core.music.WaypointPosition
 import com.xenoage.zong.core.music.chord.Chord
 
@@ -36,9 +35,6 @@ class Slur(
 
 	val stop: SlurWaypoint
 		get() = waypoints.last()
-
-	override val elementType: MusicElementType
-		get() = MusicElementType.Slur
 
 	/**
 	 * Creates a new [Slur] with the given [start] (left end point)

@@ -4,18 +4,21 @@ import com.xenoage.utils.annotations.Untested
 import com.xenoage.utils.math.Fraction
 import com.xenoage.utils.math._0
 import com.xenoage.utils.mutableListOfNotNull
+import com.xenoage.utils.throwEx
 import com.xenoage.zong.core.Score
 import com.xenoage.zong.core.format.Break
 import com.xenoage.zong.core.music.ColumnElement
 import com.xenoage.zong.core.music.MeasureSide
-import com.xenoage.zong.core.music.MusicElementType
 import com.xenoage.zong.core.music.barline.Barline
 import com.xenoage.zong.core.music.barline.BarlineRepeat.Both
-import com.xenoage.zong.core.music.direction.*
+import com.xenoage.zong.core.music.direction.DaCapo
+import com.xenoage.zong.core.music.direction.NavigationSign
+import com.xenoage.zong.core.music.direction.Tempo
 import com.xenoage.zong.core.music.key.Key
 import com.xenoage.zong.core.music.time.TimeSignature
 import com.xenoage.zong.core.music.util.BeatEList
 import com.xenoage.zong.core.music.volta.Volta
+import com.xenoage.zong.core.position.Beat
 import com.xenoage.zong.core.position.MP
 import com.xenoage.zong.core.position.MP.Companion.atColumnBeat
 import com.xenoage.zong.core.position.MPContainer
@@ -36,7 +39,7 @@ import com.xenoage.zong.core.position.MPElement
 class ColumnHeader(
 		/** Back reference to the parent score.  */
 		val parentScore: Score
-) : DirectionContainer, MPContainer {
+) : MPContainer {
 
 	/** The time signature at the beginning of this measure */
 	var time: TimeSignature? = null; private set
@@ -63,13 +66,10 @@ class ColumnHeader(
 	var measureBreak: Break? = null
 
 	/** The [NavigationSign] at the beginning of this measure, or null */
-	var navigationTarget: Direction? = null
+	var navigationTarget: NavigationSign? = null
 
 	/** The [NavigationSign] at the end of this measure, or null.  */
-	var navigationOrigin: Direction? = null
-
-	/** The other [Direction]s in this measure  */
-	var otherDirections: BeatEList<Direction> = BeatEList()
+	var navigationOrigin: NavigationSign? = null
 
 	/** Back reference: measure index, or -1 if not part of a score.  */
 	val parentMeasureIndex: Int =
@@ -172,10 +172,10 @@ class ColumnHeader(
 	 * If there is already one, it is replaced and returned (otherwise null).
 	 * Setting a "capo" is not possible here.
 	 */
-	fun setNavigationTarget(sign: NavigationSign?): Direction? {
+	fun setNavigationTarget(sign: NavigationSign?): NavigationSign? {
 		if (sign is DaCapo)
 			throw IllegalArgumentException("DaCapo can not be a navigation target")
-		return replace({ this.navigationTarget = it}, this.navigationTarget, sign as Direction?)
+		return replace({ this.navigationTarget = it}, this.navigationTarget, sign)
 	}
 
 	/**
@@ -184,30 +184,7 @@ class ColumnHeader(
 	 * If there is already one, it is replaced and returned (otherwise null).
 	 */
 	fun setNavigationOrigin(sign: NavigationSign?) =
-			replace({ this.navigationOrigin = it}, this.navigationOrigin, sign as Direction?)
-
-	/**
-	 * Adds the given [Direction] to this measure.
-	 * For a [Tempo], use [setTempo] instead.
-	 * For a [NavigationSign], use [setNavigationTarget] or [setNavigationOrigin] instead.
-	 */
-	fun addOtherDirection(direction: Direction, beat: Fraction) {
-		if (direction.elementType in middleNotAllowedDirections)
-			throw IllegalArgumentException("direction type not allowed at this position")
-		direction.parent = this
-		otherDirections.add(direction, beat)
-	}
-
-	/**
-	 * Removes the given [Direction] from this measure.
-	 * If found, it is returned (otherwise null).
-	 * For a [Tempo], use [setTempo] with a null value instead.
-	 */
-	fun removeOtherDirection(direction: Direction): Direction? {
-		val ret = otherDirections.remove(direction)
-		ret?.parent = null
-		return ret
-	}
+			replace({ this.navigationOrigin = it}, this.navigationOrigin, sign)
 
 	/**
 	 * Checks the given start barline.
@@ -232,60 +209,41 @@ class ColumnHeader(
 	/**
 	 * Sets the given [ColumnElement] at the given beat.
 	 *
-	 * If there is already another element of this type, it is replaced and returned (otherwise null),
-	 * except for [Direction]s (except [Tempo]).
+	 * If there is already another element of this type,
+	 * it is replaced and returned (otherwise null).
 	 *
 	 * @param element  the element to set
 	 * @param beat     the beat where to add the element. Only needed for
-	 *                 key, tempo, middle barlines and other directions
+	 *                 key, tempo, middle barlines and navigation signs
 	 * @param side     Only needed for barlines
 	 */
 	@Untested
 	fun setColumnElement(element: ColumnElement, beat: Fraction? = null,
 	                     side: MeasureSide? = null): ColumnElement? {
-		return when (element.elementType) {
-			MusicElementType.Barline -> {
-				val barline = element as Barline
+		return when (element) {
+			is Barline -> {
 				//left or right barline
 				if (side == MeasureSide.Left)
-					setStartBarline(barline)
+					setStartBarline(element)
 				else if (side == MeasureSide.Right)
-					setEndBarline(barline)
+					setEndBarline(element)
 				else //middle barline
-					setMiddleBarline(barline, checkNotNull(beat))
+					setMiddleBarline(element, checkNotNull(beat))
 			}
-			MusicElementType.Break -> {
-				setBreak(element as Break)
-			}
-			MusicElementType.TraditionalKey -> {
-				setKey(element as Key, checkNotNull(beat))
-			}
-			MusicElementType.Tempo -> {
-				setTempo(element as Tempo, checkNotNull(beat))
-			}
-			MusicElementType.Time -> {
-				setTime(element as TimeSignature)
-			}
-			MusicElementType.Volta -> {
-				setVolta(element as Volta)
-			}
-			MusicElementType.Coda, MusicElementType.DaCapo, MusicElementType.Segno -> {
+			is Break -> setBreak(element)
+			is Key -> setKey(element, checkNotNull(beat))
+			is Tempo -> setTempo(element, checkNotNull(beat))
+			is TimeSignature -> setTime(element)
+			is Volta -> setVolta(element)
+			is NavigationSign -> {
 				//write at beginning of measure (jump target), when beat is 0,
 				//otherwise write to end of measure (jump origin)
 				if (checkNotNull(beat).is0)
-					setNavigationTarget(element as NavigationSign)
+					setNavigationTarget(element)
 				else
-					setNavigationOrigin(element as NavigationSign)
+					setNavigationOrigin(element)
 			}
-			else -> {
-				if (element is Direction) {
-					addOtherDirection(element, checkNotNull(beat))
-					return null
-				}
-				else {
-					throw IllegalArgumentException("Unknown element class for $element")
-				}
-			}
+			else -> throwEx()
 		}
 	}
 
@@ -295,28 +253,22 @@ class ColumnHeader(
 	@Untested
 	fun removeColumnElement(element: ColumnElement) {
 		element.parent = null
-		if (element is Barline) {
-			//left or right barline
-			if (element === startBarline)
-				startBarline = null
-			else if (element === endBarline)
-				endBarline = null
-			else
-				middleBarlines.remove(element) //middle barline
-		} else if (element is Break) {
-			measureBreak = null
-		} else if (element is Key) {
-			keys.remove(element)
-		} else if (element is Tempo) {
-			tempos.remove(element)
-		} else if (element is TimeSignature) {
-			time = null
-		} else if (element is Volta) {
-			volta = null
-		} else if (element is Direction) {
-			otherDirections.remove(element)
-		} else {
-			throw IllegalStateException()
+		when (element) {
+			is Barline -> {
+				//left or right barline
+				if (element === startBarline)
+					startBarline = null
+				else if (element === endBarline)
+					endBarline = null
+				else
+					middleBarlines.remove(element) //middle barline
+			}
+			is Break -> measureBreak = null
+			is Key -> keys.remove(element)
+			is Tempo -> tempos.remove(element)
+			is TimeSignature -> time = null
+			is Volta -> volta = null
+			else -> throwEx()
 		}
 	}
 
@@ -325,47 +277,46 @@ class ColumnHeader(
 	 */
 	@Untested
 	fun <T : ColumnElement> replaceColumnElement(oldElement: T, newElement: T) {
-		if (newElement is Barline) {
-			val newBarline = newElement as Barline
-			//left or right barline
-			if (oldElement === startBarline)
-				setStartBarline(newBarline)
-			else if (oldElement === endBarline)
-				setEndBarline(newBarline)
-			else {
-				//middle barline
-				for (middleBarline in middleBarlines) {
-					if (middleBarline.element === oldElement) {
-						setMiddleBarline(newBarline, middleBarline.beat)
+		when (newElement) {
+			is Barline -> {
+				//left or right barline
+				if (oldElement === startBarline)
+					setStartBarline(newElement)
+				else if (oldElement === endBarline)
+					setEndBarline(newElement)
+				else {
+					//middle barline
+					for (middleBarline in middleBarlines) {
+						if (middleBarline.element === oldElement) {
+							setMiddleBarline(newElement, middleBarline.beat)
+							return
+						}
+					}
+					throwEx("Old barline not part of this column")
+				}
+			}
+			is Break -> setBreak(newElement)
+			is Key -> {
+				for (key in keys) {
+					if (key.element === oldElement) {
+						setKey(newElement, key.beat)
 						return
 					}
 				}
-				throw IllegalArgumentException("Old barline not part of this column")
+				throwEx("Old key not part of this column")
 			}
-		} else if (newElement is Break) {
-			setBreak(newElement as Break)
-		} else if (newElement is Key) {
-			for (key in keys) {
-				if (key.element === oldElement) {
-					setKey(newElement as Key, key.beat)
-					return
+			is Tempo -> {
+				for (tempo in tempos) {
+					if (tempo.element === oldElement) {
+						setTempo(newElement as Tempo, tempo.beat)
+						return
+					}
 				}
+				throwEx("Old tempo not part of this column")
 			}
-			throw IllegalArgumentException("Old key not part of this column")
-		} else if (newElement is Tempo) {
-			for (tempo in tempos) {
-				if (tempo.element === oldElement) {
-					setTempo(newElement as Tempo, tempo.beat)
-					return
-				}
-			}
-			throw IllegalArgumentException("Old tempo not part of this column")
-		} else if (newElement is TimeSignature) {
-			setTime(newElement as TimeSignature)
-		} else if (newElement is Volta) {
-			setVolta(newElement as Volta)
-		} else {
-			throw IllegalStateException()
+			is TimeSignature -> setTime(newElement)
+			is Volta -> setVolta(newElement)
+			else -> throwEx()
 		}
 	}
 
@@ -428,16 +379,11 @@ class ColumnHeader(
 	 * the given new value (or removes it if the new value is null) and sets the parent of the old value to null.
 	 * The parent of the new value is set to this instance. The old value is returned.
 	 */
-	private fun <T : ColumnElement> replace(list: BeatEList<T>, beat: Fraction, newValue: T?): T? {
+	private fun <T : ColumnElement> replace(list: BeatEList<T>, beat: Beat, newValue: T?): T? {
 		var oldValue: T? = if (newValue != null) list.set(newValue, beat) else list.remove(beat)
 		newValue?.parent = this
 		oldValue?.parent = null
 		return oldValue
-	}
-
-	companion object {
-		private val middleNotAllowedDirections = hashSetOf(
-				MusicElementType.Tempo, MusicElementType.Coda, MusicElementType.DaCapo, MusicElementType.Segno)
 	}
 
 }

@@ -1,6 +1,5 @@
 package com.xenoage.zong.core.music.lyric
 
-import com.xenoage.zong.core.music.MusicElementType
 import com.xenoage.zong.core.music.TextElement
 import com.xenoage.zong.core.music.VoiceElement
 import com.xenoage.zong.core.music.lyric.SyllableType.Extend
@@ -19,11 +18,8 @@ class Lyric(
 		val verse: Int = 0
 ) : TextElement {
 
-	/** Back reference: The parent element, or null, if not attached to an element.  */
+	/** Back reference: The parent element, or null, if not attached to an element. */
 	var parent: VoiceElement? = null
-
-	override val elementType: MusicElementType
-		get() = MusicElementType.Lyric
 
 	override fun toString() = "Lyric (${if (text != null) "\"$text\"" else "extend"})"
 

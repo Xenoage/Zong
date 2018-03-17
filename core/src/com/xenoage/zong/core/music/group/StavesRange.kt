@@ -8,9 +8,9 @@ import kotlin.math.min
  */
 class StavesRange (
 		/** The index of the first staff of the range.  */
-		private var start: Int,
+		var start: Int,
 		/** The index of the last staff of the range.  */
-		private var stop: Int
+		var stop: Int
 ) {
 
 	init {
@@ -43,10 +43,9 @@ class StavesRange (
 	/**
 	 * Adds the given staves to this range.
 	 */
-	fun merge(staves: StavesRange): StavesRange {
-		val mergedStart = min(staves.start, start)
-		val mergedStop = max(staves.stop, stop)
-		return StavesRange(mergedStart, mergedStop)
+	fun extendBy(staves: StavesRange) {
+		start = min(staves.start, start)
+		stop = max(staves.stop, stop)
 	}
 
 	/**

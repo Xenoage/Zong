@@ -1,6 +1,7 @@
 package com.xenoage.zong.core.position
 
 import com.xenoage.utils.math.Fraction
+import com.xenoage.utils.math._0
 import com.xenoage.zong.core.Score
 import com.xenoage.zong.core.music.MusicElement
 import com.xenoage.zong.core.position.MP.Companion.unknown
@@ -247,7 +248,7 @@ data class MP(
 		 */
 		fun getMP(element: MusicElement): MP? {
 			return if (element is MPElement)
-				getMP(element)
+				getMP(element as MPElement?)
 			else
 				null
 		}

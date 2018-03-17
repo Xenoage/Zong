@@ -3,7 +3,7 @@ package com.xenoage.zong.core.music.time
 import com.xenoage.utils.annotations.Optimized
 import com.xenoage.utils.annotations.Reason.MemorySaving
 import com.xenoage.utils.math.Fraction
-import com.xenoage.utils.math.fr
+import com.xenoage.utils.math.Fraction.Companion.fr
 
 
 /**

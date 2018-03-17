@@ -3,7 +3,6 @@ package com.xenoage.zong.core.music.direction
 import com.xenoage.utils.math.Fraction
 import com.xenoage.zong.core.header.ColumnHeader
 import com.xenoage.zong.core.music.ColumnElement
-import com.xenoage.zong.core.music.MusicElementType
 import com.xenoage.zong.core.music.TextElement
 import com.xenoage.zong.core.music.format.Positioning
 import com.xenoage.zong.core.text.Text
@@ -32,8 +31,5 @@ class Tempo(
 	var positioning: Positioning? = null
 
 	override var parent: ColumnHeader? = null
-
-	override val elementType: MusicElementType
-		get() = MusicElementType.Tempo
 
 }
