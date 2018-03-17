@@ -1,7 +1,8 @@
 package com.xenoage.zong.core.instrument
 
 import com.xenoage.utils.lang.translate
-import com.xenoage.zong.core.music.Pitch.pi
+import com.xenoage.zong.core.music.Pitch.Companion.pi
+import com.xenoage.zong.core.music.Step
 
 /**
  * Base class for an instrument.
@@ -11,7 +12,7 @@ import com.xenoage.zong.core.music.Pitch.pi
  */
 abstract class Instrument(
 		/** The ID of the instrument (e.g. "instrument_piano") */
-		var id: String
+		val id: String
 ) {
 
 	/** The international name of this instrument */
@@ -69,8 +70,8 @@ abstract class Instrument(
 			ret.midiProgram = 0
 			ret.name = "Piano"
 			ret.abbreviation = "Pno"
-			ret.bottomPitch = pi(6, 0, 1)
-			ret.topPitch = pi(0, 0, 8)
+			ret.bottomPitch = pi(Step.A, 0, 0)
+			ret.topPitch = pi(Step.C, 0, 8)
 			return ret
 		}
 	}

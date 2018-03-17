@@ -62,8 +62,8 @@ class Fraction(
 	 * than the given one; 1 if this fraction is numerically
 	 * greater than the given one.
 	 */
-	override fun compareTo(fraction: Fraction): Int {
-		val compare = this - fraction
+	override fun compareTo(other: Fraction): Int {
+		val compare = this - other
 		return when {
 			compare.numerator < 0 -> -1
 			compare.numerator == 0 -> 0

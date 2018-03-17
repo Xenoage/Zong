@@ -301,10 +301,11 @@ class Voice(
 		return posI
 	}
 
-	override fun getChildMP(element: MPElement<*>): MP? {
+	override fun getChildMP(element: MPElement): MP? {
 		var mp = parent?.getMP(this) ?: return null
 		val beat = getBeat(element) ?: return null
-		return mp.copy(beat = beat)
+		val index = elements.indexOf(element)
+		return mp.copy(beat = beat, element = index)
 	}
 
 }

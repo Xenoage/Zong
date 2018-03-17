@@ -20,7 +20,6 @@ import com.xenoage.zong.core.position.MPElement
 interface ColumnElement : MPElement {
 
 	/** Back reference: The parent column, or null if not part of a measure column. */
-	val parentColumn: ColumnHeader?
-		get() = parent as? ColumnHeader?
+	override var parent: ColumnHeader?
 
 }

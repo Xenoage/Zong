@@ -7,12 +7,12 @@ import kotlin.properties.Delegates.notNull
  * Mutable sorted list.
  * The list may contain duplicate entries or not.
  */
-class SortedList<T : Comparable<T>>(
+class SortedList<T : Comparable<T>> private constructor(
+		val list: MutableList<T> = mutableListOf(),
 		/** True, when this list may contain duplicates. When false,
 		 *  duplicate entries are removed. */
 		val duplicates: Boolean = true
-) : List<T> by ArrayList<T>() {
-
+) : List<T> by list {
 
 	/**
 	 * Creates a new sorted list from presorted elements.
@@ -99,22 +99,29 @@ class SortedList<T : Comparable<T>>(
 		for (i in indices) {
 			if (this[i] < entry) {
 				//add before this entry
-				(this as ArrayList<T>).add(i, entry)
+				list.add(i, entry)
 				return
 			}
 			else if (this[i] == entry) {
 				if (replace)
-					(this as ArrayList<T>)[i] = entry
+					list[i] = entry
 				return
 			}
 		}
 		add(entry)
 	}
 
+	companion object {
+
+		operator fun <T : Comparable<T>> invoke(duplicates: Boolean = true) =
+				SortedList<T>(mutableListOf<T>(), duplicates = duplicates)
+
+	}
+
 }
 
 fun <T : Comparable<T>> sortedListOf(vararg items: T): SortedList<T> {
 	val ret = SortedList<T>()
-	items.forEach { ret::add }
+	items.forEach { ret.add(it) }
 	return ret;
 }

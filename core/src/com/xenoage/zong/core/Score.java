@@ -54,7 +54,7 @@ public final class Score
 	/** The default formats of the score. */
 	@Getter @Setter @NonNull private ScoreFormat format = new ScoreFormat();
 	/** The list of elements that are normally used in all staves, like time signatures and key signatures. */
-	@Getter @Setter @NonNull private ScoreHeader header = scoreHeader(this);
+	@Getter @Setter @NonNull private ScoreHeader header = Companion.scoreHeader(this);
 	/** The list of staves, parts and groups. */
 	@Getter @Setter @NonNull private StavesList stavesList = new StavesList();
 	/** Additional meta information. This other application-dependend meta-information

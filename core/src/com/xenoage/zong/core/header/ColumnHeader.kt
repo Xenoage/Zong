@@ -33,7 +33,10 @@ import com.xenoage.zong.core.position.MPElement
  * There is also a list of tempo directions for this
  * measure and layout break information.
  */
-class ColumnHeader : DirectionContainer, MPContainer {
+class ColumnHeader(
+		/** Back reference to the parent score.  */
+		val parentScore: Score
+) : DirectionContainer, MPContainer {
 
 	/** The time signature at the beginning of this measure */
 	var time: TimeSignature? = null; private set
@@ -68,11 +71,9 @@ class ColumnHeader : DirectionContainer, MPContainer {
 	/** The other [Direction]s in this measure  */
 	var otherDirections: BeatEList<Direction> = BeatEList()
 
-	/** Back reference: parent score, or null if not part of a score.  */
-	var parentScore: Score? = null
-
-	/** Back reference: measure index, or null if not part of a score.  */
-	var parentMeasureIndex: Int? = null
+	/** Back reference: measure index, or -1 if not part of a score.  */
+	val parentMeasureIndex: Int =
+			parentScore.header.columnHeaders.indexOf(this)
 
 	/**
 	 * Gets a list of all [ColumnElement]s in this column, which

@@ -55,9 +55,8 @@ class Beam(
 	/**
 	 * The parent of the beam is defined as the voice of the start of the beam.
 	 */
-	override var parent: Voice?
+	override val parent: Voice?
 		get() = waypoints.first().chord.parent
-		set(value: Voice?) = throw UnsupportedOperationException()
 
 	/**
 	 * The [MP] of the beam is the same as the [MP] of the first chord in the beam.

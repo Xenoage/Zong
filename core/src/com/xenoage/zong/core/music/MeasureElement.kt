@@ -13,7 +13,6 @@ import com.xenoage.zong.core.position.MPElement
 interface MeasureElement : MPElement {
 
 	/** Back reference: The parent measure, or null if not part of a measure. */
-	val parentMeasure: Measure?
-			get() = parent as? Measure?
+	override val parent: Measure?
 
 }

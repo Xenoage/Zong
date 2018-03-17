@@ -1,18 +1,14 @@
 package com.xenoage.zong.core.music.chord
 
-import com.xenoage.utils.annotations.Optimized
 import com.xenoage.utils.collections.SortedList
 import com.xenoage.utils.collections.sortedListOf
-import com.xenoage.utils.math.Fraction
 import com.xenoage.zong.core.Score
 import com.xenoage.zong.core.music.MusicElementType
 import com.xenoage.zong.core.music.Pitch
 import com.xenoage.zong.core.music.Voice
 import com.xenoage.zong.core.music.VoiceElement
-import com.xenoage.zong.core.music.annotation.Articulation
 import com.xenoage.zong.core.music.beam.Beam
 import com.xenoage.zong.core.music.direction.Direction
-import com.xenoage.zong.core.music.direction.DirectionContainer
 import com.xenoage.zong.core.music.lyric.Lyric
 import com.xenoage.zong.core.music.slur.Slur
 import com.xenoage.zong.core.music.tuplet.Tuplet
@@ -20,8 +16,6 @@ import com.xenoage.zong.core.music.util.Duration
 import com.xenoage.zong.core.position.MP
 import com.xenoage.zong.core.position.MPContainer
 import com.xenoage.zong.core.position.MPElement
-import com.xenoage.zong.core.util.InconsistentScoreException
-import lombok.NonNull
 
 /**
  * Class for a chord.
@@ -42,7 +36,7 @@ class Chord(
 		val notes: SortedList<Note>,
 		/** The duration of this chord. For a grace chord, this is 0. */
 		override var duration: Duration
-) : VoiceElement, DirectionContainer {
+) : VoiceElement, MPContainer {
 
 	/** The stem of this chord */
 	var stem: Stem = defaultStem
@@ -73,7 +67,7 @@ class Chord(
 	var directions: List<Direction> = emptyList()
 
 	/** Back reference: the parent voice, or null if not part of a score. */
-	override var parent: MPContainer? = null
+	override var parent: Voice? = null
 
 	/**
 	 * Collects and returns all pitches of this chord.

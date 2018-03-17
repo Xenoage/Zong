@@ -19,7 +19,6 @@ interface VoiceElement : MPElement {
 	var duration: Duration
 
 	/** Back reference: The parent voice, or null if not part of a voice. */
-	val parentVoice: Voice?
-		get() = parent as? Voice?
+	override var parent: Voice?
 
 }
