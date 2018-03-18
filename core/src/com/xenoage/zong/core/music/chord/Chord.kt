@@ -110,11 +110,6 @@ class Chord(
 		directions = directions.plus(direction)
 	}
 
-	override fun getChildMP(child: MPElement): MP? {
-		//all children have the same musical position as this chord
-		return mp
-	}
-
 	override fun toString(): String =
 		"chord(" + notes!![0].toString() + (if (notes!!.size > 1) ",..." else "") +
 				(if (duration!!.isGreater0) ";dur:" + duration!! else ";grace") + ")"

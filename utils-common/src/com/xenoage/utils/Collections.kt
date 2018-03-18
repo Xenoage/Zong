@@ -28,3 +28,10 @@ fun <T> MutableList<T>.setExtend(index: Int, element: T, fillElement: T) {
 		add(fillElement)
 	this[index] = element
 }
+
+
+fun <C, T: Comparable<T>> Collection<C>.max(project: (C) -> T, defaultValue: T): T {
+	var ret = defaultValue
+	forEach { ret = maxOf(ret, project(it)) }
+	return ret
+}
