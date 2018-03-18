@@ -11,9 +11,6 @@ import com.xenoage.zong.core.music.clef.Clef
 import com.xenoage.zong.core.music.direction.Direction
 import com.xenoage.zong.core.music.direction.DirectionContainer
 import com.xenoage.zong.core.music.key.Key
-import com.xenoage.zong.core.music.util.BeatE
-import com.xenoage.zong.core.music.util.BeatEList
-import com.xenoage.zong.core.music.util.Interval
 import com.xenoage.zong.core.position.MP
 import com.xenoage.zong.core.position.MPContainer
 import com.xenoage.zong.core.position.MPElement
@@ -29,6 +26,7 @@ import com.xenoage.utils.collections.CollectionUtils.alist
 import com.xenoage.utils.math._0
 import com.xenoage.utils.max
 import com.xenoage.zong.core.music.Voice.voice
+import com.xenoage.zong.core.music.util.*
 import com.xenoage.zong.core.music.util.BeatEList.beatEList
 import com.xenoage.zong.core.music.util.BeatEList.emptyBeatEList
 import com.xenoage.zong.core.music.util.Interval.*
@@ -41,10 +39,10 @@ import com.xenoage.zong.core.position.MP.atVoice
  *
  * A measure consists of one or more voices and a list of clefs, directions and and instrument changes.
  */
-class Measure(
-		/** The list of voices (at least one).  */
-		val voices: MutableList<Voice>
-) : MPContainer, DirectionContainer {
+class Measure() : MPContainer, DirectionContainer {
+
+	/** The list of voices (at least one).  */
+	val voices = mutableListOf(Voice())
 
 	/** The list of clefs, or null.  */
 	var clefs: BeatEList<Clef>? = null
@@ -67,94 +65,52 @@ class Measure(
 
 
 	/**
-	 * Gets a list of all [MeasureElement],s sorted by beat,
-	 * and within beat sorted by clef, key, directions, instrument change.
+	 * Gets a list of all clefs, directions and instrument changes, sorted by beat,
+	 * and within beat sorted by clef, direction, and instrument change.
 	 */
-	val measureElements: BeatEList<MeasureElement>
+	/* OBSOLETE val measureElements: BeatEList<MusicElement>
 		get() {
-			val ret = Companion.beatEList()
+			val ret = BeatEList<MusicElement>()
 			ret.addAll(clefs!!)
-			ret.addAll(privateKeys!!)
 			ret.addAll(directions!!)
 			ret.addAll(instrumentChanges!!)
 			return ret
-		}
+		}*/
 
-
-	/**
-	 * Convenience method. Gets the parent score of this voice,
-	 * or null, if this element is not part of a score.
-	 */
+	/** The parent score of this measure, or null, if this measure is not part of a score. */
 	val score: Score?
-		get() = if (this.parent != null) this.parent!!.score else null
-
-
-	init {
-		checkArgsNotNull(voices)
-		if (voices.size == 0)
-			throw IllegalArgumentException("A measure must have at least one voice")
-		for (voice in voices)
-			voice.parent = this
-		this.clefs = clefs
-		this.privateKeys = privateKeys
-		this.instrumentChanges = instrumentChanges
-	}
-
+		get() = parent?.score
 
 	/**
 	 * Adds a clef at the given beat or removes it, when null is given.
 	 * If there is already one, it is replaced and returned (otherwise null).
 	 */
-	fun setClef(clef: Clef?, beat: Fraction): Clef? {
+	fun setClef(clef: Clef?, beat: Beat): Clef? {
 		if (clef != null) {
 			//add clef to list. create list if needed
 			clef.parent = this
-			if (clefs == null)
-				clefs = Companion.beatEList()
-			return clefs!!.set(clef, beat)
+			var (clefs, oldClef) = clefs.set(clef, beat)
+			//oldClef?.parent = null
+			//return oldClef
 		} else if (clefs != null) {
 			//remove clef from list. delete list if not needed any more.
-			val ret = clefs!!.remove(beat)
-			if (clefs!!.size() === 0)
+			val oldClef = clefs!!.remove(beat)
+			if (clefs!!.size == 0)
 				clefs = null
-			return ret
+			oldClef?.parent = null
+			return oldClef
 		}
 		return null
 	}
-
-
-	/**
-	 * Adds a key at the given beat. If there is already one, it is replaced
-	 * and returned (otherwise null).
-	 */
-	@Untested
-	fun setKey(key: Key?, beat: Fraction): Key? {
-		if (key != null) {
-			//add key to list. create list if needed
-			key.parent = this
-			if (privateKeys == null)
-				privateKeys = Companion.beatEList()
-			return privateKeys!!.set(key, beat)
-		} else if (privateKeys != null) {
-			//remove key from list. delete list if not needed any more.
-			val ret = privateKeys!!.remove(beat)
-			if (privateKeys!!.size() === 0)
-				privateKeys = null
-			return ret
-		}
-		return null
-	}
-
 
 	/**
 	 * Adds a direction at the given beat. If there is already one, it is not
 	 * replaced, since there may be many directions belonging to a single beat.
 	 */
-	@Untested
-	fun addDirection(direction: Direction, beat: Fraction) {
+	fun addDirection(direction: Direction, beat: Beat) {
 		direction.parent = this
 		if (directions == null)
-			directions = Companion.beatEList()
+			directions = BeatEList<Direction>()
 		directions!!.add(direction, beat)
 	}
 
@@ -163,96 +119,38 @@ class Measure(
 	 * Adds an instrument change at the given beat.
 	 * If there is already one, it is replaced and returned (otherwise null).
 	 */
-	@Untested
-	fun setInstrumentChange(instrumentChange: InstrumentChange?, beat: Fraction): InstrumentChange? {
+	fun setInstrumentChange(instrumentChange: InstrumentChange?, beat: Beat): InstrumentChange? {
 		if (instrumentChange != null) {
 			//add instrumentChange to list. create list if needed
-			instrumentChange.setParent(this)
+			instrumentChange.parent = this
 			if (instrumentChanges == null)
-				instrumentChanges = Companion.beatEList()
-			return instrumentChanges!!.set(instrumentChange, beat)
+				instrumentChanges = BeatEList<InstrumentChange>()
+			val oldChange = instrumentChanges!!.set(instrumentChange, beat)
+			oldChange?.parent = null
+			return oldChange
 		} else if (instrumentChanges != null) {
 			//remove instrumentChange from list. delete list if not needed any more.
-			val ret = instrumentChanges!!.remove(beat)
-			if (instrumentChanges!!.size() === 0)
+			val oldChange = instrumentChanges!!.remove(beat)
+			if (instrumentChanges!!.size == 0)
 				instrumentChanges = null
-			return ret
+			oldChange?.parent = null
+			return oldChange
 		}
 		return null
 	}
-
-
-	/**
-	 * Adds the given [MeasureElement] at the given beat. Dependent on its type,
-	 * it may replace elements of the same type, which is then returned (otherwise null).
-	 * See the documentation for the methods working with specific [MeasureElement]s.
-	 */
-	@Untested
-	fun addMeasureElement(element: MeasureElement, beat: Fraction): MeasureElement? {
-		if (element is Clef)
-			return setClef(element, beat)
-		else if (element is Key)
-			return setKey(element as Key, beat)
-		else if (element is Direction) {
-			addDirection(element as Direction, beat)
-			return null
-		} else return if (element is InstrumentChange)
-			setInstrumentChange(element, beat)
-		else
-			throw IllegalArgumentException("Unknown MeasureElement subclass: " + element.javaClass.name)
-	}
-
-
-	/**
-	 * Removes the given [MeasureElement].
-	 */
-	@Untested
-	fun removeMeasureElement(element: MeasureElement) {
-		if (element is Clef)
-			clefs!!.remove(element)
-		else if (element is Key)
-			privateKeys!!.remove(element as Key)
-		else if (element is Direction)
-			directions!!.remove(element as Direction)
-		else if (element is InstrumentChange)
-			instrumentChanges!!.remove(element)
-		else
-			throw IllegalArgumentException("Unknown MeasureElement subclass: " + element.javaClass.name)
-	}
-
-
-	/**
-	 * Replaces the given [MeasureElement] at the given beat with the other given one.
-	 */
-	@Untested
-	fun <T : MeasureElement> replaceMeasureElement(oldElement: T, newElement: T, beat: Fraction) {
-		if (oldElement is Direction) {
-			directions!!.remove(oldElement as Direction)
-			directions!!.add(newElement as Direction, beat)
-		} else {
-			//all other cases are like addMeasureElement
-			addMeasureElement(newElement, beat)
-		}
-	}
-
 
 	/**
 	 * Collect the accidentals within this measure (backwards),
 	 * beginning at the given start beat where the given key is valid, ending before or at
 	 * the given beat (depending on the given interval), looking at all voices.
-	 * The private keys of this measure are ignored. They must be queried before and
-	 * used for the last two parameters.
 	 *
-	 * @param beat       the maximum beat (inclusive if exclusive, depending on the interval)
-	 * @param interval   where to stop looking ([Interval.Before] or
-	 * [Interval.BeforeOrAt]). [Interval.At] is
-	 * handled like [Interval.BeforeOrAt].
-	 * @param startBeat  the beat where to start collecting accidentals (if there are
-	 * no private keys in this measure before the given beat, this
-	 * is always 0).
+	 * @param beat       the maximum beat (inclusive or exclusive, depending on the interval)
+	 * @param interval   where to stop looking ([Before] or [BeforeOrAt]). [At] is handled like [BeforeOrAt].
 	 * @param startBeatKey  the key that is valid at the given start beat
 	 * @return a map with the pitches that have accidentals (without alter)
 	 * as keys and their corresponding alter values as values.
+	 *
+	 * GOON
 	 */
 	@Untested
 	fun getAccidentals(beat: Fraction, interval: Interval, startBeat: Fraction, startBeatKey: Key): Map<Pitch, Int> {
