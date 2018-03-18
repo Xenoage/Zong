@@ -13,7 +13,7 @@ import com.xenoage.zong.core.position.MPElement
 interface Direction : MPElement {
 
 	/** Parent measure or voice element, or null if not attached. */
-	override var parent: DirectionContainer?
+	override val parent: DirectionContainer?
 
 	/** Custom position, or null for the default position.  */
 	var positioning: Positioning?

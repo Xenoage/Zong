@@ -11,9 +11,6 @@ import com.xenoage.zong.core.music.clef.Clef
 import com.xenoage.zong.core.music.direction.Direction
 import com.xenoage.zong.core.music.direction.DirectionContainer
 import com.xenoage.zong.core.music.key.Key
-import com.xenoage.zong.core.position.MP
-import com.xenoage.zong.core.position.MPContainer
-import com.xenoage.zong.core.position.MPElement
 import com.xenoage.zong.utils.exceptions.IllegalMPException
 import lombok.Getter
 import lombok.Setter
@@ -30,7 +27,7 @@ import com.xenoage.zong.core.music.util.*
 import com.xenoage.zong.core.music.util.BeatEList.beatEList
 import com.xenoage.zong.core.music.util.BeatEList.emptyBeatEList
 import com.xenoage.zong.core.music.util.Interval.*
-import com.xenoage.zong.core.position.Beat
+import com.xenoage.zong.core.position.*
 import com.xenoage.zong.core.position.MP.atVoice
 
 
@@ -44,14 +41,14 @@ class Measure() : MPContainer, DirectionContainer {
 	/** The list of voices (at least one).  */
 	val voices = mutableListOf(Voice())
 
-	/** The list of clefs, or null.  */
-	var clefs: BeatEList<Clef>? = null
+	/** The list of clefs.  */
+	val clefs = BeatEList<Clef>()
 
 	/** The list of directions, or null. */
-	var directions: BeatEList<Direction>? = null
+	val directions = BeatEList<Direction>()
 
 	/** The list of instrument changes, or null.  */
-	var instrumentChanges: BeatEList<InstrumentChange>? = null
+	val instrumentChanges = BeatEList<InstrumentChange>()
 
 	/** Back reference: the parent staff, or null if not part of a staff. */
 	var parent: Staff? = null
@@ -85,59 +82,29 @@ class Measure() : MPContainer, DirectionContainer {
 	 * Adds a clef at the given beat or removes it, when null is given.
 	 * If there is already one, it is replaced and returned (otherwise null).
 	 */
-	fun setClef(clef: Clef?, beat: Beat): Clef? {
-		if (clef != null) {
-			//add clef to list. create list if needed
-			clef.parent = this
-			var (clefs, oldClef) = clefs.set(clef, beat)
-			//oldClef?.parent = null
-			//return oldClef
-		} else if (clefs != null) {
-			//remove clef from list. delete list if not needed any more.
-			val oldClef = clefs!!.remove(beat)
-			if (clefs!!.size == 0)
-				clefs = null
-			oldClef?.parent = null
-			return oldClef
-		}
-		return null
-	}
+	fun setClef(clef: Clef?, beat: Beat): Clef? =
+		if (clef != null)
+			clefs.set(clef.setParent(this), beat).unsetParent()
+		else
+			clefs.remove(beat).unsetParent()
 
 	/**
 	 * Adds a direction at the given beat. If there is already one, it is not
 	 * replaced, since there may be many directions belonging to a single beat.
 	 */
 	fun addDirection(direction: Direction, beat: Beat) {
-		direction.parent = this
-		if (directions == null)
-			directions = BeatEList<Direction>()
-		directions!!.add(direction, beat)
+		directions.add(direction.setParent(this), beat)
 	}
-
 
 	/**
 	 * Adds an instrument change at the given beat.
 	 * If there is already one, it is replaced and returned (otherwise null).
 	 */
-	fun setInstrumentChange(instrumentChange: InstrumentChange?, beat: Beat): InstrumentChange? {
-		if (instrumentChange != null) {
-			//add instrumentChange to list. create list if needed
-			instrumentChange.parent = this
-			if (instrumentChanges == null)
-				instrumentChanges = BeatEList<InstrumentChange>()
-			val oldChange = instrumentChanges!!.set(instrumentChange, beat)
-			oldChange?.parent = null
-			return oldChange
-		} else if (instrumentChanges != null) {
-			//remove instrumentChange from list. delete list if not needed any more.
-			val oldChange = instrumentChanges!!.remove(beat)
-			if (instrumentChanges!!.size == 0)
-				instrumentChanges = null
-			oldChange?.parent = null
-			return oldChange
-		}
-		return null
-	}
+	fun setInstrumentChange(instrumentChange: InstrumentChange?, beat: Beat): InstrumentChange? =
+		if (instrumentChange != null)
+			instrumentChanges.set(instrumentChange.setParent(this), beat).unsetParent()
+		else
+			instrumentChanges.remove(beat).unsetParent()
 
 	/**
 	 * Collect the accidentals within this measure (backwards),

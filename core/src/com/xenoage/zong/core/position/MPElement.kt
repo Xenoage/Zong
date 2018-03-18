@@ -18,3 +18,15 @@ interface MPElement : MusicElement {
 		get() = this.parent?.getChildMP(this)
 
 }
+
+/** Sets the parent of this given element to the given container and returns it. */
+fun <T: MPElement> T.setParent(container: MPContainer?): T {
+	if (this != null) parent = container
+	return this
+}
+
+/** Sets the parent of this given element (if any) to null and returns it. */
+fun <T: MPElement> T?.unsetParent(): T? {
+	if (this != null) parent = null
+	return this
+}

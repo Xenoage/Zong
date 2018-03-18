@@ -2,6 +2,7 @@ package com.xenoage.zong.core.music.clef
 
 import com.xenoage.zong.core.music.Measure
 import com.xenoage.zong.core.music.MeasureElement
+import com.xenoage.zong.core.position.MPElement
 
 
 /**
