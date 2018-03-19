@@ -1,13 +1,19 @@
 package com.xenoage.zong.core.music.beam
 
+import com.xenoage.utils.checkIndex
 import com.xenoage.utils.math.Fraction
+import com.xenoage.utils.throwEx
 import com.xenoage.zong.core.music.Voice
 import com.xenoage.zong.core.music.WaypointPosition
+import com.xenoage.zong.core.music.WaypointPosition.*
+import com.xenoage.zong.core.music.beam.Beam.VerticalSpan.Other
 import com.xenoage.zong.core.music.chord.Chord
 import com.xenoage.zong.core.music.util.flagsCount
 import com.xenoage.zong.core.position.MP
+import com.xenoage.zong.core.position.MP.Companion.unknown
 import com.xenoage.zong.core.position.MPElement
-import java.lang.Math.max
+import kotlin.math.max
+import kotlin.math.min
 
 
 /**
@@ -23,9 +29,9 @@ class Beam(
 ) : MPElement {
 
 	//cache
-	private var verticalSpan: VerticalSpan? = null
-	private var upperStaffIndex = -1
-	private var lowerStaffIndex = -1
+	private var _verticalSpan: VerticalSpan? = null
+	private var _upperStaffIndex = -1
+	private var _lowerStaffIndex = -1
 
 	val start: BeamWaypoint
 		get() = waypoints.first()
@@ -78,18 +84,19 @@ class Beam(
 
 		var lastBeat: Fraction? = null
 		var wasLastChordGrace = false
-		val measure = mp?.measure
+		val startMeasure = mp?.measure
 		for (wp in waypoints) {
-			val (_, measure1, _, beat) = wp.chord.mp
+			val chordMP = wp.chord.mp ?: continue //if unknown MP, this waypoint can not be checked
+			val (_, wpMeasure, _, beat) = chordMP
 
 			//check, if all chords are in the same measure column
-			if (measure1 != measure)
+			if (wpMeasure != startMeasure)
 				throw IllegalArgumentException("A beam may only span over one measure column")
 
 			//check, if chords are sorted by beat.
 			//for grace notes, the same beat is ok.
-			if (lastBeat != null) {
-				val compare = beat!!.compareTo(lastBeat)
+			if (lastBeat != null && beat != null) {
+				val compare = beat.compareTo(lastBeat)
 				if (false == wasLastChordGrace && compare <= 0 || wasLastChordGrace && compare < 0)
 					throw IllegalArgumentException("Beamed chords must be sorted by beat")
 			}
@@ -98,109 +105,77 @@ class Beam(
 		}
 	}
 
+	/** The number of chords in this beam. */
+	val size: Int = waypoints.size
 
-	fun size(): Int {
-		return waypoints.size
-	}
+	/** Gets the position of the given waypoint. */
+	fun getWaypointPosition(wp: BeamWaypoint): WaypointPosition =
+		getWaypointPosition(wp.chord)
 
-
-	/**
-	 * Gets the position of the given waypoint.
-	 */
-	fun getWaypointPosition(wp: BeamWaypoint): WaypointPosition {
-		return getWaypointPosition(wp.chord)
-	}
-
-
-	/**
-	 * Gets the position of the given chord: Start, Stop or Continue.
-	 */
+	/** Gets the position of the given chord. */
 	fun getWaypointPosition(chord: Chord): WaypointPosition {
-		val index = getWaypointIndex(chord)
-		return if (index == 0)
-			WaypointPosition.Start
-		else if (index == waypoints.size - 1)
-			WaypointPosition.Stop
-		else
-			WaypointPosition.Continue
+		return when (getWaypointIndex(chord)) {
+			0 -> Start
+			waypoints.size - 1 -> Stop
+			else -> Continue
+		}
 	}
 
-	/**
-	 * Gets the index of the given chord within the beam.
-	 */
-	fun getWaypointIndex(chord: Chord): Int {
-		for (i in range(waypoints))
-			if (chord === waypoints[i].chord)
-				return i
-		throw IllegalArgumentException("Given chord is not part of this beam.")
-	}
+	/** Gets the index of the given chord within the beam. */
+	fun getWaypointIndex(chord: Chord): Int =
+			waypoints.indexOfFirst { it.chord === chord }.checkIndex { "Given chord is not part of this beam." }
+
+	/** The vertical spanning of this beam. */
+	val verticalSpan: VerticalSpan
+			get() {
+				if (_verticalSpan == null)
+					computeSpan()
+				return _verticalSpan!!
+			}
+
+	/** The index of the topmost staff this beam belongs to. */
+	val getUpperStaffIndex: Int
+		get() {
+			if (_upperStaffIndex == -1)
+				computeSpan()
+			return _upperStaffIndex
+		}
 
 
-	/**
-	 * Gets the vertical spanning of this beam.
-	 */
-	fun getVerticalSpan(): VerticalSpan? {
-		if (verticalSpan == null)
-			computeSpan()
-		return verticalSpan
-	}
+	/** The index of the bottommost staff this beam belongs to. */
+	val getLowerStaffIndex: Int
+		get() {
+			if (_lowerStaffIndex == -1)
+				computeSpan()
+			return _lowerStaffIndex
+		}
 
-
-	/**
-	 * Gets the index of the topmost staff this beam belongs to.
-	 */
-	fun getUpperStaffIndex(): Int {
-		if (upperStaffIndex == -1)
-			computeSpan()
-		return upperStaffIndex
-	}
-
-
-	/**
-	 * Gets the index of the bottommost staff this beam belongs to.
-	 */
-	fun getLowerStaffIndex(): Int {
-		if (lowerStaffIndex == -1)
-			computeSpan()
-		return lowerStaffIndex
-	}
-
-
-	/**
-	 * Replaces the given old chord with the given new one.
-	 */
+	/** Replaces the given old chord with the given new one. */
 	fun replaceChord(oldChord: Chord, newChord: Chord) {
-		for (i in range(waypoints)) {
+		for (i in waypoints.indices) {
 			if (waypoints[i].chord === oldChord) {
-				waypoints[i].setChord(newChord)
+				oldChord.beam = null
+				waypoints[i].chord = newChord
+				newChord.beam = this
 				computeSpan()
 				return
 			}
 		}
-		throw IllegalArgumentException("Given chord is not part of this beam")
+		throwEx("Given chord is not part of this beam")
 	}
-
 
 	/**
 	 * Returns true, if a beam lines subdivision ends at the chord
 	 * with the given index.
 	 */
-	fun isEndOfSubdivision(chordIndex: Int): Boolean {
-		return waypoints[chordIndex].isSubdivision()
-	}
+	fun isEndOfSubdivision(chordIndex: Int): Boolean =
+		waypoints[chordIndex].subdivision
 
+	/** Gets the chord with the given index. */
+	fun getChord(chordIndex: Int): Chord =
+		waypoints[chordIndex].chord
 
-	/**
-	 * Gets the chord with the given index.
-	 */
-	fun getChord(chordIndex: Int): Chord {
-		return waypoints[chordIndex].chord
-	}
-
-
-	/**
-	 * Computes the vertical span of this beam.
-	 */
+	/** Computes the vertical span of this beam. */
 	private fun computeSpan() {
 		var minStaffIndex = Integer.MAX_VALUE
 		var maxStaffIndex = Integer.MIN_VALUE
@@ -208,36 +183,32 @@ class Beam(
 		//check if the beam spans over a single staff or two adjacent staves or more
 		for (waypoint in waypoints) {
 			val chord = waypoint.chord
-			val mpChord = MP.getMP(chord)
-			minStaffIndex = Math.min(minStaffIndex, mpChord!!.staff)
-			maxStaffIndex = max(maxStaffIndex, mpChord!!.staff)
+			val mpChord = chord.mp
+			if (mpChord == null || mpChord.staff == unknown) { //unknown MP? then we can not compute this beam
+				_verticalSpan = Other
+				_upperStaffIndex = unknown
+				_lowerStaffIndex = unknown
+				return
+			}
+			minStaffIndex = min(minStaffIndex, mpChord.staff)
+			maxStaffIndex = max(maxStaffIndex, mpChord.staff)
 		}
-		var verticalSpan = VerticalSpan.Other
+		var verticalSpan = Other
 		if (maxStaffIndex == minStaffIndex)
 			verticalSpan = VerticalSpan.SingleStaff
 		else if (maxStaffIndex - minStaffIndex == 1)
 			verticalSpan = VerticalSpan.CrossStaff
 
-		this.verticalSpan = verticalSpan
-		this.upperStaffIndex = minStaffIndex
-		this.lowerStaffIndex = maxStaffIndex
+		_verticalSpan = verticalSpan
+		_upperStaffIndex = minStaffIndex
+		_lowerStaffIndex = maxStaffIndex
 	}
 
 	companion object {
 
-
-		/**
-		 * Creates a new beam consisting of the given waypoints.
-		 * All waypoints must be in the same measure column and must be sorted by beat.
-		 */
-		fun beam(waypoints: List<BeamWaypoint>): Beam {
-			val beam = Beam(waypoints)
-			beam.check()
-			return beam
-		}
-
 		/**
 		 * Creates a new beam consisting of the given chords with no subdivisions.
+		 * OBSOLETE
 		 */
 		fun beamFromChords(chords: List<Chord>): Beam {
 			val ret = beamFromChordsUnchecked(chords)
@@ -248,14 +219,11 @@ class Beam(
 		/**
 		 * Creates a new beam consisting of the given chords with no subdivisions.
 		 * For testing: No parameter checks!
+		 * OBSOLETE
 		 */
-		fun beamFromChordsUnchecked(chords: List<Chord>): Beam {
-			val waypoints = alist(chords.size)
-			for (chord in chords) {
-				waypoints.add(BeamWaypoint(chord, false))
-			}
-			return Beam(waypoints)
-		}
+		fun beamFromChordsUnchecked(chords: List<Chord>): Beam =
+				Beam(chords.map { BeamWaypoint(it) })
+
 	}
 
 }

@@ -49,3 +49,6 @@ fun <C, T: Comparable<T>> Collection<C>.max(project: (C) -> T, defaultValue: T):
 
 fun <T> Int.ifIndexFound(project: (Int) -> T): T? =
 	if (this > -1) project(this) else null
+
+fun Int.checkIndex(errorMesssage: () -> String): Int =
+		if (this == -1) throwEx(errorMesssage()) else this

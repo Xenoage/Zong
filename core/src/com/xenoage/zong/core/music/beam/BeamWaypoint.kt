@@ -17,10 +17,11 @@ import com.xenoage.zong.core.music.chord.Chord
  */
 class BeamWaypoint(
 		/** The chord belonging to this waypoint.  */
-		val chord: Chord,
+		var chord: Chord,
 		/** True, if the beam has a subdivision ending at this point. This means, that only a single beam line
 		 * connects this chord to the next chord within the beam (and is such only applicable for 16th notes or shorter).  */
-		val subdivision: Boolean = false) {
+		var subdivision: Boolean = false
+) {
 
 	/** Back reference: The beam this waypoint belongs to.  */
 	var parentBeam: Beam? = null
