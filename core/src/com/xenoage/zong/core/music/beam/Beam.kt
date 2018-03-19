@@ -28,6 +28,8 @@ class Beam(
 		val waypoints: List<BeamWaypoint>
 ) : MPElement {
 
+	init { check() }
+
 	//cache
 	private var _verticalSpan: VerticalSpan? = null
 	private var _upperStaffIndex = -1
@@ -75,33 +77,32 @@ class Beam(
 	 * and the chords must be sorted by beat.
 	 */
 	private fun check() {
+		check(maxLinesCount > 0, { "A beam must have at least one line" })
+		check(waypoints.size >=2, { "At least two chords are needed to create a beam!" })
 
-		if (maxLinesCount == 0)
-			throw IllegalArgumentException("A beam must have at least one line")
-
-		if (waypoints.size < 2)
-			throw IllegalArgumentException("At least two chords are needed to create a beam!")
-
+		//check single column and beat order
 		var lastBeat: Fraction? = null
 		var wasLastChordGrace = false
 		val startMeasure = mp?.measure
-		for (wp in waypoints) {
-			val chordMP = wp.chord.mp ?: continue //if unknown MP, this waypoint can not be checked
-			val (_, wpMeasure, _, beat) = chordMP
+		if (startMeasure != unknown) {
+			for (wp in waypoints) {
+				val chordMP = wp.chord.mp ?: continue //if unknown MP, this waypoint can not be checked
+				val (_, wpMeasure, _, beat) = chordMP
 
-			//check, if all chords are in the same measure column
-			if (wpMeasure != startMeasure)
-				throw IllegalArgumentException("A beam may only span over one measure column")
+				//check, if all chords are in the same measure column
+				if (wpMeasure != startMeasure)
+					throw IllegalArgumentException("A beam may only span over one measure column")
 
-			//check, if chords are sorted by beat.
-			//for grace notes, the same beat is ok.
-			if (lastBeat != null && beat != null) {
-				val compare = beat.compareTo(lastBeat)
-				if (false == wasLastChordGrace && compare <= 0 || wasLastChordGrace && compare < 0)
-					throw IllegalArgumentException("Beamed chords must be sorted by beat")
+				//check, if chords are sorted by beat.
+				//for grace notes, the same beat is ok.
+				if (lastBeat != null && beat != null) {
+					val compare = beat.compareTo(lastBeat)
+					if (false == wasLastChordGrace && compare <= 0 || wasLastChordGrace && compare < 0)
+						throw IllegalArgumentException("Beamed chords must be sorted by beat")
+				}
+				lastBeat = beat
+				wasLastChordGrace = wp.chord.isGrace
 			}
-			lastBeat = beat
-			wasLastChordGrace = wp.chord.isGrace
 		}
 	}
 
@@ -202,28 +203,6 @@ class Beam(
 		_verticalSpan = verticalSpan
 		_upperStaffIndex = minStaffIndex
 		_lowerStaffIndex = maxStaffIndex
-	}
-
-	companion object {
-
-		/**
-		 * Creates a new beam consisting of the given chords with no subdivisions.
-		 * OBSOLETE
-		 */
-		fun beamFromChords(chords: List<Chord>): Beam {
-			val ret = beamFromChordsUnchecked(chords)
-			ret.check()
-			return ret
-		}
-
-		/**
-		 * Creates a new beam consisting of the given chords with no subdivisions.
-		 * For testing: No parameter checks!
-		 * OBSOLETE
-		 */
-		fun beamFromChordsUnchecked(chords: List<Chord>): Beam =
-				Beam(chords.map { BeamWaypoint(it) })
-
 	}
 
 }

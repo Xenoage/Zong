@@ -40,7 +40,7 @@ import com.xenoage.utils.math.Units;
 		this.widthMm = Units.pxToMm(widthPx, scaling);
 		//color
 		if (widthPxFloat < 1)
-			this.color = color(color.r, color.g, color.b, (int) (color.a * widthPxFloat));
+			this.color = Companion.color(color.getR(), color.getG(), color.getB(), (int) (color.getA() * widthPxFloat));
 		else
 			this.color = color;
 	}

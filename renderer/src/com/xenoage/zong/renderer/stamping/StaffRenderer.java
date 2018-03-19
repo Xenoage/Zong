@@ -35,7 +35,7 @@ public class StaffRenderer
 
 		float length = staff.lengthMm;
 
-		Color color = Color.black;
+		Color color = Color.Companion.getBlack();
 
 		if (canvas.getFormat() == CanvasFormat.Raster) {
 			//render on screen
@@ -45,7 +45,7 @@ public class StaffRenderer
 			if (ss.isSimplifiedStaff) {
 				//simplified staff (fill rectangle)
 				color = screenLine.color;
-				color = color(color.r, color.g, color.b, (int) (0.7f * color.a));
+				color = Companion.color(color.getR(), color.getG(), color.getB(), (int) (0.7f * color.getA()));
 
 				//don't forget the line heights, they belong into the rectangle
 				position = position.add(0, -1 * ss.lineHeightMm / 2);

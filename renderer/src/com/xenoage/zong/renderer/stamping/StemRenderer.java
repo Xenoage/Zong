@@ -31,7 +31,7 @@ public class StemRenderer
 		float lineWidthMm = stem.noteStaff.getLineWidthMm(); //TODO: stem is thinner
 		Point2f p1Mm = new Point2f(stem.xMm - lineWidthMm / 2, stem.noteStaff.positionMm.y);
 		Point2f p2Mm = new Point2f(stem.xMm + lineWidthMm / 2, stem.endStaff.positionMm.y);
-		Color color = Color.black;
+		Color color = Color.Companion.getBlack();
 
 		//shorten stem a little bit at the notehead - TODO: looks good. is code ok?
 		float noteLp = stem.noteLp + 0.2f * (stem.endLp > stem.noteLp ? 1 : -1);

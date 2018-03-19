@@ -39,7 +39,7 @@ public class BeamRenderer
 		float x1Mm = staff.positionMm.x + beam.sp1.xMm - stemWidthMm / 2f;
 		float x2Mm = staff.positionMm.x + beam.sp2.xMm + stemWidthMm / 2f;
 
-		Color color = Color.black;
+		Color color = Color.Companion.getBlack();
 
 		float leftYStart, rightYStart, beamHeightMm;
 		if (canvas.getFormat() == CanvasFormat.Raster) {

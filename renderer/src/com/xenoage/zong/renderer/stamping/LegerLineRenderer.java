@@ -39,7 +39,7 @@ public class LegerLineRenderer
 		float p1xMm = legerLine.sp.xMm - width / 2;
 		float p2xMm = p1xMm + width;
 		float lineWidthMm = parentStaff.getLineWidthMm();
-		Color color = Color.black;
+		Color color = Color.Companion.getBlack();
 
 		float yMm = 0;
 		if (canvas.getFormat() == CanvasFormat.Raster) {

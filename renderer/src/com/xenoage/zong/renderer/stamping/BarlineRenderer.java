@@ -95,7 +95,7 @@ public class BarlineRenderer
 	 */
 	private static float paintBarline(Canvas canvas, RendererArgs args, StaffStamping staff1,
 		float staff1LP, StaffStamping staff2, float staff2LP, float xPosition, BarlineStyle style) {
-		Color col = Color.black;
+		Color col = Color.Companion.getBlack();
 		float lightMm = staff1.getLineWidthMm() * 1.5f; //barline a little bit thicker than staff line
 		float heavyMm = lightMm * 3f;
 		float gapMm = lightMm * 1.5f;
@@ -254,7 +254,7 @@ public class BarlineRenderer
 	private static void paintRepeatDot(Canvas canvas, RendererArgs args, StaffStamping staff,
 		SP position) {
 		Symbol dotSymbol = args.symbolPool.getSymbol(CommonSymbol.NoteDot);
-		StaffSymbolRenderer.drawWith(dotSymbol, Color.black, position, 1, staff, false,
+		StaffSymbolRenderer.drawWith(dotSymbol, Color.Companion.getBlack(), position, 1, staff, false,
 			canvas, args);
 	}
 

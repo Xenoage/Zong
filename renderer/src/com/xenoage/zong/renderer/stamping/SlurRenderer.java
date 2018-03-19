@@ -59,7 +59,7 @@ public class SlurRenderer
 		Point2f c1 = new Point2f(c1xMm, c1yMm);
 		Point2f c2 = new Point2f(c2xMm, c2yMm);
 
-		Color color = Color.black;
+		Color color = Color.Companion.getBlack();
 
 		/* //TEST
 		Point2i lastPoint = new Point2i(MathTools.bezier(p1, p2, c1, c2, 0));

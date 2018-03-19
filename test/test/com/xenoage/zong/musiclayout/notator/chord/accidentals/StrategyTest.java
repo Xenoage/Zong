@@ -131,7 +131,7 @@ public class StrategyTest
 		//collect test material
 		List<Example> examples = getAllExamples();
 		//text style
-		FormattedTextStyle style = defaultStyle.withFont(new FontInfo("Arial", 6f, FontStyle.normal));
+		FormattedTextStyle style = Companion.getDefaultStyle().withFont(new FontInfo("Arial", 6f, FontStyle.normal));
 		//one chord in each measure
 		Score score = ScoreFactory.create1Staff();
 		Cursor cursor = new Cursor(score, mp0, true);

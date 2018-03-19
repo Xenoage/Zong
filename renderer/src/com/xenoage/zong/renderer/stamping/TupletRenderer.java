@@ -39,7 +39,7 @@ public class TupletRenderer
 		float hookHeightPx = Units.mmToPx(parentStaff.is, scaling);
 
 		//width and color of the line
-		Color color = Color.black;
+		Color color = Color.Companion.getBlack();
 		float width = parentStaff.getLineWidthMm() * 1.5f; //a little bit thicker than staff line
 		float paintWidth;
 

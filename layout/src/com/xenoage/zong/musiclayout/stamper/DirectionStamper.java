@@ -122,7 +122,7 @@ public class DirectionStamper {
 		for (CommonSymbol s : CommonSymbol.getDynamics(dynamics.getValue())) {
 			Symbol symbol = symbolPool.getSymbol(s);
 			elements.add(new FormattedTextSymbol(symbol, staff.is * FONT_SIZE_IN_IS,
-				FormattedTextStyle.defaultColor));
+					FormattedTextStyle.Companion.getDefaultColor()));
 		}
 		elements.close();
 		FormattedTextParagraph paragraph = new FormattedTextParagraph(elements, Alignment.Center);
@@ -150,7 +150,7 @@ public class DirectionStamper {
 		for (CommonSymbol s : CommonSymbol.getDynamics(dynamics.getValue())) {
 			Symbol symbol = context.getSymbol(s);
 			elements.add(new FormattedTextSymbol(symbol, staff.is * FONT_SIZE_IN_IS,
-				FormattedTextStyle.defaultColor));
+					FormattedTextStyle.Companion.getDefaultColor()));
 		}
 		elements.close();
 		FormattedTextParagraph paragraph = new FormattedTextParagraph(elements, Alignment.Center);
@@ -198,7 +198,7 @@ public class DirectionStamper {
 			defaultLPBelow);
 
 		//create text
-		FormattedTextStyle style = FormattedTextStyle.defaultStyle; //TODO: FormattedTextStyle(words.getFontInfo());
+		FormattedTextStyle style = FormattedTextStyle.Companion.getDefaultStyle(); //TODO: FormattedTextStyle(words.getFontInfo());
 		FormattedText text = styleText(words.getText(), style);
 
 		//create stamping

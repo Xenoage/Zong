@@ -1,6 +1,5 @@
 package com.xenoage.utils.math
 
-import com.xenoage.utils.math.Point2f.Companion.p
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -9,38 +8,25 @@ import kotlin.math.sqrt
 /** PI in float precision.  */
 val pi = PI.toFloat()
 
-/**
- * Returns max, if x > max, min, if x < min, else x.
- */
-fun clamp(x: Int, min: Int, max: Int): Int {
-	return if (x < min)
-		min
-	else if (x > max)
-		max
-	else
-		x
+/** Returns max, if this > max, min, if this < min, else this. */
+fun Int.clamp(min: Int, max: Int): Int = when {
+	this < min -> min
+	this > max -> max
+	else -> this
 }
 
 /**
- * Returns min, if x < min, else x.
+ * Returns this, if this < min, else this.
  */
-fun clampMin(x: Int, min: Int): Int {
-	return if (x < min)
-		min
-	else
-		x
+fun Int.clampMin(min: Int): Int = when {
+	this < min -> min
+	else -> this
 }
 
-/**
- * Returns max, if x > max, min, if x < min, else x.
- */
-fun clamp(x: Float, min: Float, max: Float): Float {
-	return if (x < min)
-		min
-	else if (x > max)
-		max
-	else
-		x
+/** Returns max, if this > max, min, if this < min, else this. */
+fun Int.clampMax(max: Int): Int = when {
+	this > max -> max
+	else -> this
 }
 
 /**

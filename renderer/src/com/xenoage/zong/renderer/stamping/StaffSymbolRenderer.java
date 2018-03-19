@@ -62,7 +62,7 @@ public class StaffSymbolRenderer
 		}
 		Point2f correctedPosition = new Point2f(position.xMm, yPosition);
 
-		SymbolsRenderer.draw(symbol, canvas, (color != null ? color : Color.black), correctedPosition,
+		SymbolsRenderer.draw(symbol, canvas, (color != null ? color : Color.Companion.getBlack()), correctedPosition,
 			new Point2f(symbolScaling, (mirrorV ? -1 : 1) * symbolScaling));
 	}
 

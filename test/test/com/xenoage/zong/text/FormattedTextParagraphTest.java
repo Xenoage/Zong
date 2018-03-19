@@ -31,13 +31,13 @@ public class FormattedTextParagraphTest {
 
 	@Test public void testSimpleTextParagraph() {
 		FormattedTextParagraph paragraph = fPara(fString("This is a simple text.",
-			FormattedTextStyle.defaultStyle));
+				FormattedTextStyle.Companion.getDefaultStyle()));
 		assertEquals("This is a simple text.", paragraph.getText());
 	}
 
 	@Test public void testFormattedTextParagraph() {
 		FormattedTextStyle style = new FormattedTextStyle(new FontInfo((String) null, null,
-			fontStyle(FontStyle.Bold)), Color.red, Superscript.Super);
+			fontStyle(FontStyle.Bold)), Color.Companion.getRed(), Superscript.Super);
 		FormattedTextParagraph paragraph = fPara(fString("This is a formatted text.", style));
 		assertEquals("This is a formatted text.", paragraph.getText());
 		style = ((FormattedTextString) paragraph.getElements().getFirst()).getStyle();
@@ -45,7 +45,7 @@ public class FormattedTextParagraphTest {
 		assertEquals(false, style.getFont().getStyle().isSet(FontStyle.Italic));
 		assertEquals(false, style.getFont().getStyle().isSet(FontStyle.Underline));
 		assertEquals(false, style.getFont().getStyle().isSet(FontStyle.Strikethrough));
-		assertEquals(Color.red, style.getColor());
+		assertEquals(Color.Companion.getRed(), style.getColor());
 		assertEquals(Superscript.Super, style.getSuperscript());
 	}
 
@@ -60,7 +60,7 @@ public class FormattedTextParagraphTest {
 		style = ((FormattedTextString) elements.get(1)).getStyle();
 		assertEquals(true, style.getFont().getStyle().isSet(FontStyle.Bold));
 		assertEquals(true, style.getFont().getStyle().isSet(FontStyle.Strikethrough));
-		assertEquals(Color.green, style.getColor());
+		assertEquals(Color.Companion.getGreen(), style.getColor());
 	}
 
 	public static FormattedTextParagraph getMixedStyleTextParagraph() {
@@ -68,7 +68,7 @@ public class FormattedTextParagraphTest {
 			.getName(), 14f, fontStyle(FontStyle.Italic, FontStyle.Underline)));
 		FormattedTextStyle style2 = new FormattedTextStyle(new FontInfo(new JLabel().getFont()
 			.getName(), 14f, fontStyle(FontStyle.Bold, FontStyle.Italic, FontStyle.Underline,
-			FontStyle.Strikethrough)), Color.green, null);
+			FontStyle.Strikethrough)), Color.Companion.getGreen(), null);
 		FormattedTextParagraph paragraph = new FormattedTextParagraph(
 			CList.<FormattedTextElement>ilist(new FormattedTextString("This is ", style1),
 				new FormattedTextString("a mixed styled text!", style2)),

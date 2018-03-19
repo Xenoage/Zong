@@ -46,7 +46,7 @@ public class StaffCursorRenderer
 		}
 		x = parentStaff.positionMm.x + cursor.xMm + cursor.offsetIs * parentStaff.is;
 
-		canvas.drawLine(new Point2f(x, y1), new Point2f(x, y2), color(30, 200, 30),
+		canvas.drawLine(new Point2f(x, y1), new Point2f(x, y2), Companion.color(30, 200, 30),
 			getCursorWidth(viewScaling));
 	}
 

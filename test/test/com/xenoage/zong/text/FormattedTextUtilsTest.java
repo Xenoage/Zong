@@ -154,7 +154,7 @@ public class FormattedTextUtilsTest {
 		//create a formatted text with one paragraph and three adjacent strings
 		//with the same style: "Hallo "{style1}, "An"{style2}, "dr"{style2}"ea"{style2}
 		FormattedTextStyle style1 = new FormattedTextStyle(12);
-		FormattedTextStyle style2 = new FormattedTextStyle(14, Color.blue);
+		FormattedTextStyle style2 = new FormattedTextStyle(14, Color.Companion.getBlue());
 		return fText(fPara(CList.<FormattedTextElement>ilist(new FormattedTextString("Hallo ", style1),
 			new FormattedTextString("An", style2), new FormattedTextString("dr", style2),
 			new FormattedTextString("ea", style2)), Alignment.Left));
@@ -167,7 +167,7 @@ public class FormattedTextUtilsTest {
 		//"Second Line and"
 		//"a }{Third}{ Line}"
 		FormattedTextStyle style1 = new FormattedTextStyle(12);
-		FormattedTextStyle style2 = new FormattedTextStyle(14, Color.blue);
+		FormattedTextStyle style2 = new FormattedTextStyle(14, Color.Companion.getBlue());
 		return fText(ilist(
 			fPara(CList.<FormattedTextElement>ilist(new FormattedTextString("First ", style1),
 				new FormattedTextString("Line", style2)), Alignment.Left),

@@ -39,7 +39,7 @@ public class DefaultTexts {
 	}
 
 	public static FormattedText getTempoTextNotNull(Tempo tempo, SymbolPool symbolPool) {
-		FormattedTextStyle style = FormattedTextStyle.defaultStyle;
+		FormattedTextStyle style = FormattedTextStyle.Companion.getDefaultStyle();
 		if (tempo.getText() != null) {
 			//use custom text
 			return styleText(tempo.getText(), style);
@@ -50,11 +50,11 @@ public class DefaultTexts {
 			Fraction beat = tempo.getBaseBeat();
 			if (beat.equals(Companion.fr(1, 4))) {
 				elements.add(new FormattedTextSymbol(symbolPool.getSymbol(CommonSymbol.TextNoteQuarter),
-				/* TODO staffStamping.is * FONT_SIZE_IN_IS */12, FormattedTextStyle.defaultColor));
+				/* TODO staffStamping.is * FONT_SIZE_IN_IS */12, FormattedTextStyle.Companion.getDefaultColor()));
 			}
 			else if (beat.equals(Companion.fr(1, 2))) {
 				elements.add(new FormattedTextSymbol(symbolPool.getSymbol(CommonSymbol.TextNoteHalf),
-				/* staffStamping.is * FONT_SIZE_IN_IS */12, FormattedTextStyle.defaultColor));
+				/* staffStamping.is * FONT_SIZE_IN_IS */12, FormattedTextStyle.Companion.getDefaultColor()));
 			}
 			else {
 				elements.add(new FormattedTextString(beat.toString(), style));

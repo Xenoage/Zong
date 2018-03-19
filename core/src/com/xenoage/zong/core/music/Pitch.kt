@@ -1,5 +1,7 @@
 package com.xenoage.zong.core.music
 
+import com.xenoage.utils.Cache
+import com.xenoage.utils.Cache.Companion.unlimitedSize
 import com.xenoage.utils.annotations.Optimized
 import com.xenoage.utils.annotations.Reason
 import com.xenoage.zong.core.music.Step.*
@@ -80,25 +82,13 @@ data class Pitch(
 
 	companion object {
 
-		fun pi(step: Step, alter: Int, octave: Int): Pitch {
-			return if (alter in -2..2 && octave in 0..8)
-				_pitches[step.ordinal][alter][octave] //use cached pitch
-			else
-				Pitch(step, alter, octave) //create new pitch
-		}
+		private val cache = Cache<Int, Pitch>(unlimitedSize)
+
+		fun pi(step: Step, alter: Int, octave: Int): Pitch =
+				cache[octave * 10000 + step.ordinal * 100 + alter, { Pitch(step, alter, octave) }]
 
 		fun pi(step: Int, alter: Int, octave: Int): Pitch =
 			pi(Step.values()[step], alter, octave)
-
-		//cache for reuse: (nearly) all possible pitch values
-		private val _pitches: Array<Array<Array<Pitch>>> =
-				Step.values().map { step ->
-					(-2..2).map { alter ->
-						(0..8).map { octave ->
-							Pitch(step, alter, octave)
-						}.toTypedArray()
-					}.toTypedArray()
-				}.toTypedArray()
 
 	}
 

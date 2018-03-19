@@ -203,7 +203,7 @@ public class ChordStamper {
 			float noteXMm = getNoteheadXMm(leftNoteXMm + note.xIs * staff.is,
 				scaling, staff, noteSymbol);
 			NoteheadStamping noteSt = new NoteheadStamping(chord,	iNote, noteSymbol,
-				Color.black, staff, sp(noteXMm, note.lp), scaling);
+					Color.Companion.getBlack(), staff, sp(noteXMm, note.lp), scaling);
 			noteheads[iNote] = noteSt;
 		}
 

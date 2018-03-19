@@ -36,7 +36,7 @@ public class FormattedTextReader
 	}
 	
 	@NonNull public Color readColor(MxlPrintStyle printStyle) {
-		return notNull(printStyle.getColor().getValue(), FormattedTextStyle.defaultColor);
+		return notNull(printStyle.getColor().getValue(), FormattedTextStyle.Companion.getDefaultColor());
 	}
 	
 	public Alignment readAlignment(MxlFormattedText mxlText) {

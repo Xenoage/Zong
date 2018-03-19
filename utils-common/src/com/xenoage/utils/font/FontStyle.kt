@@ -1,54 +1,38 @@
 package com.xenoage.utils.font
 
+import com.xenoage.utils.Cache
+import com.xenoage.utils.annotations.Optimized
+import com.xenoage.utils.annotations.Reason
+import com.xenoage.utils.annotations.Reason.MemorySaving
+
 /**
  * Enumeration of different font styles like bold or italic.
- * For performance reasons, the style is stored in an Int value.
  */
-data class FontStyle(private val style: Int) {
-
-	/**
-	 * Sets the given flag, like Bold, to true or the given value.
-	 */
-	fun with(flag: Int, value: Boolean = true): FontStyle {
-		var style = this.style
-		if (value)
-			style = style or flag
-		else
-			style = style and flag.inv()
-		return FontStyle(style)
-	}
-
-	/**
-	 * Returns true, when the given flag is set.
-	 */
-	fun isSet(flag: Int): Boolean {
-		return style and flag > 0
-	}
+data class FontStyle private constructor(
+		val bold: Boolean,
+		val italic: Boolean,
+		val underline: Boolean,
+		val strikethrough: Boolean
+) {
 
 	override fun toString(): String {
-		return (if (isSet(Bold)) "B" else "b") + (if (isSet(Italic)) "I" else "i") +
-				(if (isSet(Underline)) "U" else "u") + if (isSet(Strikethrough)) "S" else "s"
+		return (if (bold) "B" else "b") + (if (italic) "I" else "i") +
+				(if (underline) "U" else "u") + if (strikethrough) "S" else "s"
 	}
 
 	companion object {
 
-		val Bold = 1 shl 0
-		val Italic = 1 shl 1
-		val Underline = 1 shl 2
-		val Strikethrough = 1 shl 3
+		val normal = FontStyle(false, false, false, false)
 
-		val normal = FontStyle(0)
+		var cache = Cache<Int, FontStyle>(16) //16 possibilities
 
-
-		fun fontStyle(vararg flags: Int): FontStyle {
-			var style = 0
-			for (flag in flags)
-				style = style or flag
-			return if (style == 0)
-				normal
-			else
-				FontStyle(style)
+		@Optimized(MemorySaving)
+		operator fun invoke(bold: Boolean = false, italic: Boolean = false,
+		                    underline: Boolean = false, strikethrough: Boolean = false): FontStyle {
+			val id = if (bold) 8 else 0 + if (italic) 4 else 0 + if (underline) 2 else 0 + if (strikethrough) 1 else 0
+			return cache[id, { FontStyle(bold, italic, underline, strikethrough) }]
 		}
+
 	}
 
 }

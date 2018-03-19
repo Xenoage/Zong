@@ -48,7 +48,7 @@ public class SystemCursorRenderer
 			y2 = bottomStaff.computeYMm(-2);
 		}
 
-		canvas.drawLine(new Point2f(x, y1), new Point2f(x, y2), color(50, 50, 230),
+		canvas.drawLine(new Point2f(x, y1), new Point2f(x, y2), Companion.color(50, 50, 230),
 			getCursorWidth(viewScaling));
 
 	}

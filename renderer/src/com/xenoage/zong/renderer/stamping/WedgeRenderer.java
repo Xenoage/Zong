@@ -38,7 +38,7 @@ public class WedgeRenderer
 		float d2Mm = wedge.rightDistanceIs * parentStaff.is;
 
 		//width and color of the line
-		Color color = Color.black;
+		Color color = Color.Companion.getBlack();
 		float width = parentStaff.getLineWidthMm(); //like staff line
 		float paintWidth;
 

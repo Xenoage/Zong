@@ -56,7 +56,7 @@ public class BracketRenderer
 		Symbol braceSymbol = args.symbolPool.getSymbol(CommonSymbol.BracketBrace);
 		float symbolScaling = (y2 - y1) / braceSymbol.getBoundingRect().size.height;
 		
-		SymbolsRenderer.draw(braceSymbol, canvas, Color.black, pCenter,
+		SymbolsRenderer.draw(braceSymbol, canvas, Color.Companion.getBlack(), pCenter,
 			new Point2f(interlineSpace * 1.2f, symbolScaling));
 	}
 
@@ -76,12 +76,12 @@ public class BracketRenderer
 		float lineYCorrection = bracketEndSymbol.getBoundingRect().size.height / 2; //to avoid gaps
 		float lineYScaling = (y2 - y1 + lineYCorrection) / bracketLineSymbol.getBoundingRect().size.height;
 
-		SymbolsRenderer.draw(bracketLineSymbol, canvas, Color.black, p(p1Mm.x, p1Mm.y - lineYCorrection / 2),
+		SymbolsRenderer.draw(bracketLineSymbol, canvas, Color.Companion.getBlack(), p(p1Mm.x, p1Mm.y - lineYCorrection / 2),
 			new Point2f(interlineSpace, lineYScaling));
-		SymbolsRenderer.draw(bracketEndSymbol, canvas, Color.black, p1Mm, new Point2f(interlineSpace,
+		SymbolsRenderer.draw(bracketEndSymbol, canvas, Color.Companion.getBlack(), p1Mm, new Point2f(interlineSpace,
 			-interlineSpace));
 		p1Mm = new Point2f(p1Mm.x, y2);
-		SymbolsRenderer.draw(bracketEndSymbol, canvas, Color.black, p1Mm, new Point2f(interlineSpace,
+		SymbolsRenderer.draw(bracketEndSymbol, canvas, Color.Companion.getBlack(), p1Mm, new Point2f(interlineSpace,
 			interlineSpace));
 
 	}
