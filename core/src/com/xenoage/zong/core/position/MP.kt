@@ -4,6 +4,7 @@ import com.xenoage.utils.math.Fraction
 import com.xenoage.utils.math._0
 import com.xenoage.zong.core.Score
 import com.xenoage.zong.core.music.MusicElement
+import com.xenoage.zong.core.position.MP.Companion.atVoice
 import com.xenoage.zong.core.position.MP.Companion.unknown
 import com.xenoage.zong.core.position.MP.Companion.unknownBeat
 
@@ -256,3 +257,6 @@ data class MP(
 
 
 }
+
+fun MP?.withVoice(voice: Int) =
+		if (this != null) this.copy(voice = voice) else atVoice(voice)

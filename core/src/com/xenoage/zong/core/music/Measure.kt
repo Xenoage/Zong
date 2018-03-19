@@ -22,12 +22,15 @@ import com.xenoage.utils.CheckUtils.checkArgsNotNull
 import com.xenoage.utils.collections.CollectionUtils.alist
 import com.xenoage.utils.math._0
 import com.xenoage.utils.max
+import com.xenoage.utils.setExtend
+import com.xenoage.utils.setExtendBy
 import com.xenoage.zong.core.music.Voice.voice
 import com.xenoage.zong.core.music.util.*
 import com.xenoage.zong.core.music.util.BeatEList.beatEList
 import com.xenoage.zong.core.music.util.BeatEList.emptyBeatEList
 import com.xenoage.zong.core.music.util.Interval.*
 import com.xenoage.zong.core.position.*
+import com.xenoage.zong.core.position.MP.Companion.atVoice
 import com.xenoage.zong.core.position.MP.atVoice
 
 
@@ -36,7 +39,7 @@ import com.xenoage.zong.core.position.MP.atVoice
  *
  * A measure consists of one or more voices and a list of clefs, directions and and instrument changes.
  */
-class Measure() : MPContainer, DirectionContainer {
+class Measure() : MPElement, MPContainer, DirectionContainer {
 
 	/** The list of voices (at least one).  */
 	val voices = mutableListOf(Voice())
@@ -111,33 +114,28 @@ class Measure() : MPContainer, DirectionContainer {
 	 * beginning at the given start beat where the given key is valid, ending before or at
 	 * the given beat (depending on the given interval), looking at all voices.
 	 *
-	 * @param beat       the maximum beat (inclusive or exclusive, depending on the interval)
-	 * @param interval   where to stop looking ([Before] or [BeforeOrAt]). [At] is handled like [BeforeOrAt].
+	 * @param beat          the maximum beat (inclusive or exclusive, depending on the interval)
+	 * @param interval      where to stop looking ([Before] or [BeforeOrAt]). [At] is handled like [BeforeOrAt].
+	 * @param startBeat     the start beat where the key is known
 	 * @param startBeatKey  the key that is valid at the given start beat
-	 * @return a map with the pitches that have accidentals (without alter)
-	 * as keys and their corresponding alter values as values.
-	 *
-	 * GOON
+	 * @return a map with the pitches that have accidentals (without alter) (as key) and
+	 *         their corresponding alter values (as value).
 	 */
 	@Untested
 	fun getAccidentals(beat: Fraction, interval: Interval, startBeat: Fraction, startBeatKey: Key): Map<Pitch, Int> {
+		check(interval == Before || interval == BeforeOrAt || interval == At, { "Unsupported interval" })
 		var interval = interval
-		if (!(interval === Before || interval === BeforeOrAt || interval === At)) {
-			throw IllegalArgumentException("Illegal interval for this method: $interval")
-		}
-		if (interval === At) {
-			interval = BeforeOrAt
-		}
+		if (interval == At) interval = BeforeOrAt
 		val ret = HashMap<Pitch, Int>()
 		val retBeats = HashMap<Pitch, Fraction>()
 		for (voice in voices) {
 			var pos = startBeat
 			for (e in voice.elements) {
-				if (pos.compareTo(startBeat) < 0) {
-					pos = pos.add(e.duration)
+				if (pos < startBeat) {
+					pos += e.duration
 					continue
 				}
-				if (interval.isInInterval(pos, beat) !== Interval.Result.True) {
+				if (interval.isInInterval(pos, beat) != Interval.Result.True) {
 					break
 				}
 				if (e is Chord) {
@@ -149,13 +147,13 @@ class Measure() : MPContainer, DirectionContainer {
 							//there is already an accidental. only replace it if alter changed
 							//and if it is at a later position than the already found one
 							val existingBeat = retBeats[pitch]
-							if (pitch.alter != oldAccAlter && pos.compareTo(existingBeat) > 0) {
+							if (pitch.alter != oldAccAlter && (existingBeat == null || pos > existingBeat)) {
 								ret[pitchUnaltered] = pitch.alter
 								retBeats[pitchUnaltered] = pos
 							}
 						} else {
 							//accidental not neccessary because of key?
-							if (startBeatKey.alterations[pitch.step] === pitch.alter) {
+							if (startBeatKey.alterations[pitch.step.ordinal] == pitch.alter) {
 								//ok, we need no accidental here.
 							} else {
 								//add accidental
@@ -165,7 +163,7 @@ class Measure() : MPContainer, DirectionContainer {
 						}
 					}
 				}
-				pos = pos.add(e.duration)
+				pos += e.duration
 			}
 		}
 		return ret
@@ -178,13 +176,10 @@ class Measure() : MPContainer, DirectionContainer {
 	 * Beat 0 is always used.
 	 * @param withMeasureElements  true, iff also the beats of the measure elements should be used
 	 */
-	fun getUsedBeats(withMeasureElements: Boolean): SortedList<Fraction> {
-		var ret: SortedList<Fraction> = SortedList<T>(false)
+	fun getUsedBeats(withMeasureElements: Boolean): SortedList<Beat> {
+		var ret = SortedList<Beat>(false)
 		//voice element beats
-		for (voice in voices) {
-			val voiceBeats = voice.usedBeats
-			ret = ret.merge(voiceBeats, false)
-		}
+		voices.forEach { it.usedBeats.forEach { ret.add(it) } }
 		//beats of directions
 		if (withMeasureElements) {
 			for ((_, beat) in measureElements)
@@ -194,86 +189,36 @@ class Measure() : MPContainer, DirectionContainer {
 	}
 
 
-	/**
-	 * Gets the voice with the given index, or throws an
-	 * [IllegalMPException] if there is none.
-	 */
-	fun getVoice(index: Int): Voice {
-		return if (index >= 0 && index <= voices.size)
-			voices[index]
-		else
-			throw IllegalMPException(atVoice(index))
-	}
-
+	/** Gets the voice with the given index, or throws an [IllegalMPException] if there is none. */
+	fun getVoice(index: Int): Voice =
+			voices.getOrNull(index) ?: throw IllegalMPException(mp.withVoice(index))
 
 	/**
-	 * Gets the voice with the given index, or throws an
-	 * [IllegalMPException] if there is none.
+	 * Gets the voice with the given index, or throws an [IllegalMPException] if there is none.
 	 * Only the voice index of the given position is relevant.
 	 */
-	fun getVoice(mp: MP): Voice {
-		val index = mp.voice
-		return if (index >= 0 && index < voices.size)
-			voices[index]
-		else
-			throw IllegalMPException(mp)
-	}
+	fun getVoice(mp: MP): Voice =
+			voices.getOrNull(mp.voice) ?: throw IllegalMPException(this.mp.withVoice(mp.voice))
 
-
-	/**
-	 * Sets the voice with the given index.
-	 * If the voice does not exist yet, it is created.
-	 */
+	/** Sets the voice with the given index. If the voice does not exist yet, it is created. */
 	fun setVoice(index: Int, voice: Voice) {
-		while (index >= voices.size) {
-			val voiceFill = Companion.voice()
-			voiceFill.parent = this
-			voices.add(voiceFill)
-		}
-		voice.parent = this
-		voices[index] = voice
+		voices.setExtendBy(index, voice.setParent(this), { Voice().setParent(this) })
 	}
 
-
 	/**
-	 * Gets the MP of the given [Voice], or null if it is not part
-	 * of this measure or this measure is not part of a score.
+	 * Gets the [MP] of the given [Voice], or null if it is not part of this measure.
 	 */
 	fun getMP(voice: Voice): MP? {
 		val voiceIndex = voices.indexOf(voice)
-		if (this.parent == null || voiceIndex == -1)
-			return null
-		var mp = this.parent!!.getMP(this)
-		mp = mp!!.withVoice(voiceIndex)
-		return mp
+		if (voiceIndex == -1) return null
+		return mp.withVoice(voiceIndex)
 	}
-
-
-	/**
-	 * Gets the MP of the given [ColumnElement], or null if it is not part
-	 * of this measure or this measure is not part of a score.
-	 */
-	override fun getChildMP(element: MPElement): MP? {
-		if (this.parent == null)
-			return null
-		val mp = this.parent!!.getMP(this)
-		if (element is Clef)
-			return getMPIn(element, clefs, mp)
-		else if (element is Key)
-			return getMPIn(element, privateKeys, mp)
-		else if (element is Direction)
-			return getMPIn(element, directions, mp)
-		else if (element is InstrumentChange)
-			return getMPIn(element, instrumentChanges, mp)
-		return null
-	}
-
 
 	/**
 	 * Gets the [MP] of the given element within the given list of elements,
 	 * based on the given [MP] (staff, measure), or null if the list of elements
 	 * is null or the element could not be found.
-	 */
+	 * OBSOLETE?/
 	private fun getMPIn(element: MPElement, elements: BeatEList<*>?, baseMP: MP?): MP? {
 		if (elements == null)
 			return null
@@ -281,25 +226,6 @@ class Measure() : MPContainer, DirectionContainer {
 			if (element1 === element)
 				return MP.atBeat(baseMP!!.staff, baseMP.measure, baseMP.voice, beat)
 		return null
-	}
-
-	/**
-	 * The list of directions, maybe empty and immutable.
-	 */
-	fun getDirections(): BeatEList<Direction> {
-		return if (directions == null) Companion.emptyBeatEList() else directions
-	}
-
-	companion object {
-
-
-		/**
-		 * Creates an empty measure.
-		 */
-		fun measure(): Measure {
-			return Measure(alist(Voice.Companion.voice()), null, null, null, null)
-		}
-	}
-
+	} */
 
 }

@@ -29,6 +29,17 @@ fun <T> MutableList<T>.setExtend(index: Int, element: T, fillElement: T) {
 	this[index] = element
 }
 
+/**
+ * Sets the element at the given index in this list. If the index is out of
+ * the bounds of this list, it is extended up to this index
+ * and the gaps are filled with the elements produced by the given fillProducer.
+ */
+fun <T> MutableList<T>.setExtendBy(index: Int, element: T, fillProducer: () -> T) {
+	while (index >= size)
+		add(fillProducer())
+	this[index] = element
+}
+
 
 fun <C, T: Comparable<T>> Collection<C>.max(project: (C) -> T, defaultValue: T): T {
 	var ret = defaultValue

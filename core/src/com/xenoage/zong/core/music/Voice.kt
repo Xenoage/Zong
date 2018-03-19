@@ -1,12 +1,15 @@
 package com.xenoage.zong.core.music
 
-import com.xenoage.utils.math.Fraction
 import com.xenoage.utils.math._0
+import com.xenoage.utils.sequences.filterAndMapWithPrevious
 import com.xenoage.zong.core.Score
 import com.xenoage.zong.core.music.util.*
-import com.xenoage.zong.core.music.util.FirstOrLast.*
-import com.xenoage.zong.core.music.util.Interval.Result.*
-import com.xenoage.zong.core.music.util.StartOrStop.*
+import com.xenoage.zong.core.music.util.FirstOrLast.First
+import com.xenoage.zong.core.music.util.FirstOrLast.Last
+import com.xenoage.zong.core.music.util.Interval.Result.FalseHigh
+import com.xenoage.zong.core.music.util.Interval.Result.True
+import com.xenoage.zong.core.music.util.StartOrStop.Start
+import com.xenoage.zong.core.music.util.StartOrStop.Stop
 import com.xenoage.zong.core.position.Beat
 import com.xenoage.zong.core.position.MP
 import com.xenoage.zong.core.position.MP.Companion.atVoice
@@ -19,12 +22,16 @@ import com.xenoage.zong.utils.exceptions.IllegalMPException
  *
  * A voice contains musical elements like chords and rests.
  */
-class Voice(
-		/** The list of rests and chords, sorted by time  */
-		val elements: MutableList<VoiceElement> = mutableListOf(),
-		/** Back reference: the parent measure of this voice, or null if not part of a measure. */
-		var parent: Measure? = null
-) : MPContainer {
+class Voice : MPElement, MPContainer {
+
+	/** The list of rests and chords, sorted by time  */
+	val elements = mutableListOf<VoiceElement>()
+
+	/** Back reference: The parent measure, or null if not part of a measure. */
+	var parentMeasure: Measure?
+		get() = parent as? Measure?
+		set(value) { parent = value }
+	override var parent: MPContainer? = null
 
 	/** True, if this voice contains no elements. */
 	val isEmpty: Boolean
@@ -38,22 +45,18 @@ class Voice(
 		get() = elements.fold(_0, { acc, e -> acc + e.duration })
 
 	/**
-	 * Gets a list of all beats used in this voice, that means
+	 * Gets a sequence of all used beats in this voice, that means
 	 * all beats where at least one element with a duration greater than 0 begins
 	 * or ends. Beat 0 is always used.
 	 */
-	val usedBeats: List<Fraction>
-		get() {
-			val ret = mutableListOf<Fraction>()
-			var currentBeat = _0
-			ret.add(currentBeat)
-			for (e in elements) {
-				if (e.duration.isGreater0) {
-					currentBeat += e.duration
-					ret.add(currentBeat)
-				}
-			}
-			return ret
+	val usedBeats: Sequence<Beat>
+		get() = (sequenceOf(null) + elements.asSequence()).filterAndMapWithPrevious { e, lastBeat ->
+			if (e == null)
+				Pair(true, _0) //start with beat 0
+			else if (e.duration.isGreater0)
+				Pair(true, lastBeat!! + e.duration)
+			else
+				Pair(false, lastBeat!!)
 		}
 
 	/**
@@ -61,7 +64,7 @@ class Voice(
 	 * or null, if this voice is not part of a score.
 	 */
 	val score: Score?
-		get() = parent?.score
+		get() = parentMeasure?.score
 
 
 	/**
@@ -302,7 +305,7 @@ class Voice(
 	}
 
 	override fun getChildMP(element: MPElement): MP? {
-		var mp = parent?.getMP(this) ?: return null
+		var mp = parentMeasure?.getMP(this) ?: return null
 		val beat = getBeat(element) ?: return null
 		val index = elements.indexOf(element)
 		return mp.copy(beat = beat, element = index)
