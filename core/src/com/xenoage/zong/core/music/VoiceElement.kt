@@ -21,9 +21,7 @@ interface VoiceElement : MPElement, DirectionContainer {
 	var duration: Duration
 
 	/** Back reference: The parent voice, or null if not part of a voice. */
-	var parentVoice: Voice?
-		get() = parent as? Voice?
-		set(value) { parent = value }
+	override var parent: Voice?
 
 	/** All children have the same musical position as this element. */
 	override fun getChildMP(child: MPElement) = mp

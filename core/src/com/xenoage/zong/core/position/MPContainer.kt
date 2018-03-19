@@ -6,11 +6,7 @@ package com.xenoage.zong.core.position
  */
 interface MPContainer {
 
-	/**
-	 * Gets the [MP] of the given child, or null,
-	 * if the given child is not part of this element
-	 * or if this element is not part of a score.
-	 */
+	/** Gets the [MP] of the given child, or null, if the given child is not part of this element. */
 	fun getChildMP(child: MPElement): MP?
 
 }

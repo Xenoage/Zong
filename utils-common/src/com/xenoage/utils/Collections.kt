@@ -46,3 +46,6 @@ fun <C, T: Comparable<T>> Collection<C>.max(project: (C) -> T, defaultValue: T):
 	forEach { ret = maxOf(ret, project(it)) }
 	return ret
 }
+
+fun <T> Int.ifIndexFound(project: (Int) -> T): T? =
+	if (this > -1) project(this) else null

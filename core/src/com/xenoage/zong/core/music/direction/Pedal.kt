@@ -14,7 +14,7 @@ class Pedal(
 
 	override var positioning: Positioning? = null
 
-	override var parent: Chord? = null
+	override var parent: DirectionContainer? = null
 
 	/** Start and stop marking type. */
 	enum class Type {

@@ -22,7 +22,6 @@ data class Barline(
 		val repeatTimes: RepeatTimes = 0
 ) : ColumnElement {
 
-	/** Back reference: the parent column header, or null if not part of a score. */
 	override var parent: ColumnHeader? = null
 
 	override fun toString() = "Barline [style=$style, repeat=$repeat, repeatTimes=$repeatTimes]"

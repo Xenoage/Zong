@@ -15,6 +15,6 @@ class Words(
 
 	override var positioning: Positioning? = null
 
-	override var parent: Chord? = null
+	override var parent: DirectionContainer? = null
 
 }

@@ -13,7 +13,6 @@ class Clef(
 		val type: ClefType
 ) : MeasureElement {
 
-	/** Back reference: the parent measure, or null, if not part of a measure. */
 	override var parent: Measure? = null
 
 }

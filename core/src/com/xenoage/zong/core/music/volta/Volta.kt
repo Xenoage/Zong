@@ -41,7 +41,6 @@ class Volta(
 			throw IllegalArgumentException("Volta must span at least 1 measure")
 	}
 
-	/** The parent measure column, or null if not part of a score.  */
 	override var parent: ColumnHeader? = null
 
 	/** The caption of this volta.

@@ -65,7 +65,6 @@ class Chord(
 	/** The directions attached to this chord. */
 	var directions: List<Direction> = emptyList()
 
-	/** Back reference: the parent voice, or null if not part of a score. */
 	override var parent: Voice? = null
 
 	/**

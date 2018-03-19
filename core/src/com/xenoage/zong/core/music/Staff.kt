@@ -7,6 +7,7 @@ import com.xenoage.zong.core.music.util.MPE
 import com.xenoage.zong.core.position.MP
 import com.xenoage.zong.core.position.MP.Companion.atMeasure
 import com.xenoage.zong.core.position.MP.Companion.unknown
+import com.xenoage.zong.core.position.MPContainer
 import com.xenoage.zong.utils.exceptions.IllegalMPException
 
 
@@ -24,15 +25,19 @@ class Staff (
 		/** The number of lines in this staff.  */
 		var linesCount: Int = 5,
 		/** Distance between the lines in this staff, or null for default.  */
-		val interlineSpace: IS?) {
+		val interlineSpace: IS?
+) : MPContainer {
 
 	init {
 		for (measure in measures)
 			measure.parent = this
 	}
 
-	/** Back reference: The parent staves list, or null if not part of a score.  */
-	var parent: StavesList? = null
+	var parentScore: Score? = null
+
+	var parent: MPContainer?
+		get() = throw UnsupportedOperationException()
+		set(_) = throw UnsupportedOperationException()
 
 	/**
 	 * The number of voices in this staff.

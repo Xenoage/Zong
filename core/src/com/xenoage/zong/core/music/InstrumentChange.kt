@@ -1,6 +1,8 @@
 package com.xenoage.zong.core.music
 
 import com.xenoage.zong.core.instrument.Instrument
+import com.xenoage.zong.core.music.direction.Direction
+import com.xenoage.zong.core.music.direction.DirectionContainer
 import com.xenoage.zong.core.position.MPElement
 
 /**
@@ -10,9 +12,8 @@ import com.xenoage.zong.core.position.MPElement
 class InstrumentChange(
 		/** The instrument to switch to.  */
 		val instrument: Instrument
-) : MPElement {
+) : MeasureElement {
 
-	/** Back reference: The parent measure, or null, if not part of a measure. */
 	override var parent: Measure? = null
 
 }

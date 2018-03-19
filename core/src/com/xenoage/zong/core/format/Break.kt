@@ -4,6 +4,7 @@ import com.xenoage.zong.core.header.ColumnHeader
 import com.xenoage.zong.core.music.ColumnElement
 import com.xenoage.zong.core.music.layout.PageBreak
 import com.xenoage.zong.core.music.layout.SystemBreak
+import com.xenoage.zong.core.position.MPContainer
 
 
 /**
@@ -16,7 +17,6 @@ data class Break(
 		val systemBreak: SystemBreak? = null
 ) : ColumnElement {
 
-	/** Back reference: the parent column header, or null if not part of a column. */
 	override var parent: ColumnHeader? = null
 
 	override fun toString() = "Break ($pageBreak, $systemBreak)"

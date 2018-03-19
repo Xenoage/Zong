@@ -1,11 +1,23 @@
 package com.xenoage.zong.core.music
 
+import com.xenoage.utils.kernel.Range.range
+import com.xenoage.utils.kernel.Range.rangeReverse
+
+import java.util.ArrayList
+
+import lombok.Data
+
+import com.xenoage.utils.annotations.Unneeded
+import com.xenoage.utils.math.Fraction
+import com.xenoage.utils.math.MathUtils
 import com.xenoage.utils.math.lcm
+import com.xenoage.utils.throwEx
 import com.xenoage.zong.core.Score
 import com.xenoage.zong.core.music.group.BarlineGroup
 import com.xenoage.zong.core.music.group.BracketGroup
 import com.xenoage.zong.core.music.group.StavesRange
 import com.xenoage.zong.core.music.util.Column
+import com.xenoage.zong.core.position.Beat
 import com.xenoage.zong.core.position.MP
 import com.xenoage.zong.core.position.MP.Companion.atStaff
 import com.xenoage.zong.utils.exceptions.IllegalMPException
@@ -142,11 +154,14 @@ class StavesList(
 	 * Adds a bracket group for the given staves with the given style.
 	 */
 	fun addBracketGroup(stavesRange: StavesRange, style: BracketGroup.Style) {
-		check(stavesRange.stop < this.staves.size, { "staves out of range" })
+		check(stavesRange.stop < this.staves.size)
+			throw IllegalArgumentException("staves out of range")
 		//add new group at the right position
 		//(the bracket groups are sorted by start index)
-		var i = bracketGroups.indexOfFirst { stavesRange.start < it.staves.start }
-		if (i == -1) i == bracketGroups.size
+		var i = 0
+		while (i < bracketGroups.size && bracketGroups[i].staves.getStart() > stavesRange.getStart()) {
+			i++
+		}
 		bracketGroups.add(i, BracketGroup(stavesRange, style))
 	}
 

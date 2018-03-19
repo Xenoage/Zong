@@ -1,37 +1,25 @@
 package com.xenoage.zong.core.music
 
-import com.xenoage.utils.annotations.NonEmpty
 import com.xenoage.utils.annotations.Untested
 import com.xenoage.utils.collections.SortedList
+import com.xenoage.utils.ifIndexFound
 import com.xenoage.utils.math.Fraction
+import com.xenoage.utils.math._0
+import com.xenoage.utils.max
+import com.xenoage.utils.setExtendBy
 import com.xenoage.zong.core.Score
+import com.xenoage.zong.core.header.ColumnHeader
 import com.xenoage.zong.core.music.chord.Chord
-import com.xenoage.zong.core.music.chord.Note
 import com.xenoage.zong.core.music.clef.Clef
 import com.xenoage.zong.core.music.direction.Direction
 import com.xenoage.zong.core.music.direction.DirectionContainer
+import com.xenoage.zong.core.music.direction.setParent
 import com.xenoage.zong.core.music.key.Key
-import com.xenoage.zong.utils.exceptions.IllegalMPException
-import lombok.Getter
-import lombok.Setter
-import lombok.`val`
-
-import java.util.HashMap
-
-import com.xenoage.utils.CheckUtils.checkArgsNotNull
-import com.xenoage.utils.collections.CollectionUtils.alist
-import com.xenoage.utils.math._0
-import com.xenoage.utils.max
-import com.xenoage.utils.setExtend
-import com.xenoage.utils.setExtendBy
-import com.xenoage.zong.core.music.Voice.voice
 import com.xenoage.zong.core.music.util.*
-import com.xenoage.zong.core.music.util.BeatEList.beatEList
-import com.xenoage.zong.core.music.util.BeatEList.emptyBeatEList
 import com.xenoage.zong.core.music.util.Interval.*
 import com.xenoage.zong.core.position.*
-import com.xenoage.zong.core.position.MP.Companion.atVoice
-import com.xenoage.zong.core.position.MP.atVoice
+import com.xenoage.zong.utils.exceptions.IllegalMPException
+import java.util.*
 
 
 /**
@@ -39,7 +27,7 @@ import com.xenoage.zong.core.position.MP.atVoice
  *
  * A measure consists of one or more voices and a list of clefs, directions and and instrument changes.
  */
-class Measure() : MPElement, MPContainer, DirectionContainer {
+class Measure : MPElement, MPContainer, DirectionContainer {
 
 	/** The list of voices (at least one).  */
 	val voices = mutableListOf(Voice())
@@ -54,7 +42,7 @@ class Measure() : MPElement, MPContainer, DirectionContainer {
 	val instrumentChanges = BeatEList<InstrumentChange>()
 
 	/** Back reference: the parent staff, or null if not part of a staff. */
-	var parent: Staff? = null
+	override var parent: Staff? = null
 
 	/**
 	 * Gets the filled beats in this measure, that means, the first beat in this measure
@@ -208,13 +196,9 @@ class Measure() : MPElement, MPContainer, DirectionContainer {
 	/**
 	 * Gets the [MP] of the given [Voice], or null if it is not part of this measure.
 	 */
-	fun getMP(voice: Voice): MP? {
-		val voiceIndex = voices.indexOf(voice)
-		if (voiceIndex == -1) return null
-		return mp.withVoice(voiceIndex)
-	}
+	fun getMP(voice: Voice): MP? = getChildMP(voice)
 
-	/**
+	/*
 	 * Gets the [MP] of the given element within the given list of elements,
 	 * based on the given [MP] (staff, measure), or null if the list of elements
 	 * is null or the element could not be found.
@@ -227,5 +211,8 @@ class Measure() : MPElement, MPContainer, DirectionContainer {
 				return MP.atBeat(baseMP!!.staff, baseMP.measure, baseMP.voice, beat)
 		return null
 	} */
+
+	override fun getChildMP(child: MPElement): MP? =
+			voices.indexOfFirst { it == child }.ifIndexFound { mp.withVoice(it) }
 
 }

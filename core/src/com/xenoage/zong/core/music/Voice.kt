@@ -28,10 +28,7 @@ class Voice : MPElement, MPContainer {
 	val elements = mutableListOf<VoiceElement>()
 
 	/** Back reference: The parent measure, or null if not part of a measure. */
-	var parentMeasure: Measure?
-		get() = parent as? Measure?
-		set(value) { parent = value }
-	override var parent: MPContainer? = null
+	override var parent: Measure? = null
 
 	/** True, if this voice contains no elements. */
 	val isEmpty: Boolean

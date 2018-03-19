@@ -17,6 +17,8 @@ import com.xenoage.zong.core.music.direction.Tempo
 import com.xenoage.zong.core.music.key.Key
 import com.xenoage.zong.core.music.time.TimeSignature
 import com.xenoage.zong.core.music.util.BeatEList
+import com.xenoage.zong.core.music.util.addAll
+import com.xenoage.zong.core.music.util.set
 import com.xenoage.zong.core.music.volta.Volta
 import com.xenoage.zong.core.position.Beat
 import com.xenoage.zong.core.position.MP

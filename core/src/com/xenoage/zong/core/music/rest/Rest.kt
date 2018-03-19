@@ -18,7 +18,6 @@ class Rest(
 	/** True, if this rest is not visible (e.g. because it is at the beginning of a second voice).  */
 	var isHidden: Boolean = false
 
-	/** Back reference: the parent voice, or null if not part of a score.  */
 	override var parent: Voice? = null
 
 	override fun toString() = "rest(dur:$duration)"
