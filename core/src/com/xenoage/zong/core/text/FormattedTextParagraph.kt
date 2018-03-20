@@ -1,12 +1,9 @@
 package com.xenoage.zong.core.text
 
 import com.sun.xml.internal.ws.util.StringUtils
-import com.xenoage.utils.collections.Queue
-import com.xenoage.utils.collections.removeFirst
+import com.xenoage.utils.*
+import com.xenoage.utils.collections.*
 import com.xenoage.utils.font.TextMetrics
-import com.xenoage.utils.max
-import com.xenoage.utils.sum
-import java.util.*
 import kotlin.math.max
 
 /**
@@ -65,41 +62,40 @@ class FormattedTextParagraph(
 			val queue = Queue<FormattedTextElement>(elements.size)
 			queue.addAll(elements)
 			//loop through all elements
-			while (!queue.isEmpty()) { //GOON
+			while (queue.size > 0) {
 				//create list to collect elements for current line
-				val line = mutableListOf<FormattedTextElement>()
+				val line = Queue<FormattedTextElement>()
 				var lineWidth = 0f
 				//add elements to the line until width is reached
 				do {
-					val currentElement = queue.removeAt(0)
-					line.add(currentElement)
+					val currentElement = queue.removeFirst()
+					line.addLast(currentElement)
 					lineWidth += currentElement.metrics.width
-				} while (lineWidth <= width && !queue.isEmpty())
+				} while (lineWidth <= width && queue.size > 0)
 				//line too wide?
 				if (lineWidth > width) {
 					//yes. we have to do a line break.
 					//for string elements, we can divide the text and put one part in this
 					//line and the other part into the next one. for symbols, we always begin a new line.
-					if (line.last is FormattedTextString) {
-						val lastElement = line.last as FormattedTextString
+					val last = line.last()
+					if (last is FormattedTextString) {
 						val lineWidthBeforeLineBreak = lineWidth
 						//first test if line is wide enough for at least one character (if it is a String)
 						//or the whole symbol (if it is a symbol)
-						val firstCharElement = FormattedTextString(lastElement.text
-								.substring(0, 1), lastElement.style)
+						val firstCharElement = FormattedTextString(last.text.substring(0, 1), last.style)
 						if (firstCharElement.metrics.width > width) {
 							//not enough space for even one character. return empty list.
-							return ilist()
+							return emptyList()
 						}
 						//spacing character within this line?
 						var lineBreakSuccess = false
-						if (containsLineBreakCharacter(line)) {
+						if (line.containsLineBreakCharacter()) {
 							//go back until the last spacing character.
 							//search for element to cut
 							var searchCuttedElement = line.removeLast() as FormattedTextString
 							lineWidth -= searchCuttedElement.metrics.width
 							var queuedElementsCount = 0
-							while (!StringUtils.containsLineBreakCharacter(searchCuttedElement.text)) {
+							while (false == searchCuttedElement.text.containsLineBreakCharacter()) {
 								queue.addFirst(searchCuttedElement)
 								queuedElementsCount++
 								searchCuttedElement = line.removeLast() as FormattedTextString
@@ -112,32 +108,31 @@ class FormattedTextParagraph(
 							var forThisLineTrimRight: FormattedTextString? = null
 							for (i in cuttedElement.text.length - 1 downTo 0) {
 								val c = cuttedElement.text[i]
-								if (StringUtils.isLineBreakCharacter(c)) {
+								if (c.isLineBreakCharacter) {
 									forThisLine = FormattedTextString(
 											cuttedElement.text.substring(0, i + 1), cuttedElement.style)
 									//ignore spaces at the end
-									val forThisLineTrimRightText = StringUtils.trimRight(forThisLine.text)
+									val forThisLineTrimRightText = forThisLine.text.trimRight()
 									forThisLineTrimRight = if (forThisLineTrimRightText.length > 0)
-										FormattedTextString(
-												forThisLineTrimRightText, forThisLine.style)
+										FormattedTextString(forThisLineTrimRightText, forThisLine.style)
 									else
 										null
-									if (forThisLineTrimRight == null || lineWidth + forThisLineTrimRight.metrics.width <= width) {
+									if (forThisLineTrimRight == null || lineWidth + forThisLineTrimRight.metrics.width <= width)
 										break
-									}
 								}
 							}
 							//if the left side of the cutted line is now short enough to fit into the width, we had
 							//success and apply the linebreak. otherwise we must do a linebreak in the middle of a word.
-							if (forThisLineTrimRight == null || lineWidth + forThisLineTrimRight.metrics.width <= width) {
+							if (forThisLine != null &&
+									(forThisLineTrimRight == null || lineWidth + forThisLineTrimRight.metrics.width <= width)) {
 								lineBreakSuccess = true
 								//complete this line
-								line.add(forThisLine)
-								ret.add(FormattedTextParagraph(ilist(line), alignment))
+								line.addLast(forThisLine)
+								ret.add(FormattedTextParagraph(line.toList(), alignment))
 								//begin next line
-								if (forThisLine!!.text.length < cuttedElement.text.length) {
-									val forNextLine = FormattedTextString(cuttedElement.text
-											.substring(forThisLine.text.length), cuttedElement.style)
+								if (forThisLine.text.length < cuttedElement.text.length) {
+									val forNextLine = FormattedTextString(
+											cuttedElement.text.substring(forThisLine.text.length), cuttedElement.style)
 									queue.addFirst(forNextLine)
 								}
 							} else {
@@ -163,7 +158,7 @@ class FormattedTextParagraph(
 									forThisLine = FormattedTextString(
 											cuttedElement.text.substring(0, i + 1), cuttedElement.style)
 									//ignore spaces at the end
-									val forThisLineTrimRightText = StringUtils.trimRight(forThisLine.text)
+									val forThisLineTrimRightText = forThisLine.text.trimRight()
 									val forThisLineTrimRight = if (forThisLineTrimRightText.length > 0)
 										FormattedTextString(forThisLineTrimRightText, forThisLine.style)
 									else
@@ -177,94 +172,66 @@ class FormattedTextParagraph(
 							}
 							//complete this line
 							if (forThisLine != null) {
-								line.add(forThisLine)
+								line.addLast(forThisLine)
 							}
-							ret.add(FormattedTextParagraph(ilist(line), alignment))
+							ret.add(FormattedTextParagraph(line.toList(), alignment))
 							//begin next line
 							if (forThisLine == null || forThisLine.text.length < cuttedElement.text.length) {
 								val forNextLine = FormattedTextString(
 										if (forThisLine != null)
-											cuttedElement.text.substring(
-													forThisLine.text.length)
+											cuttedElement.text.substring(forThisLine.text.length)
 										else
 											cuttedElement.text,
 										cuttedElement.style)
 								queue.addFirst(forNextLine)
 							}
 						}
-					} else if (line.last is FormattedTextSymbol) {
+					} else if (last is FormattedTextSymbol) {
 						if (line.size > 1) {
 							//at least two elements, so one can be placed in this line
 							//move symbol into next line
 							val symbol = line.removeLast()
-							ret.add(FormattedTextParagraph(ilist(line), alignment))
+							ret.add(FormattedTextParagraph(line.toList(), alignment))
 							//begin next line
 							queue.addFirst(symbol)
 						} else {
 							//not enough space for even one symbol. return empty list.
-							return ilist()
+							return emptyList()
 						}
 					}
 				} else {
 					//no. we can use exactly that line. that means, this was
 					//the last line and we are finished.
-					ret.add(FormattedTextParagraph(ilist(line), alignment))
+					ret.add(FormattedTextParagraph(line.toList(), alignment))
 					break
 				}
 			}
 		}
-		return ilist(ret.close())
+		return ret
 	}
 
 	/**
-	 * Returns true, if a line break character is found in the given list
+	 * Returns true, if a line break character is found in this list
 	 * of formatted text elements, but not at the end (trailing spaces are ignored).
 	 */
-	private fun containsLineBreakCharacter(elements: LinkedList<FormattedTextElement>): Boolean {
+	private fun List<FormattedTextElement>.containsLineBreakCharacter(): Boolean {
+		val last = elements.last()
 		for (element in elements) {
-			if (element !== elements.last) {
-				if (StringUtils.containsLineBreakCharacter(element.text))
+			if (element !== last) {
+				if (element.text.containsLineBreakCharacter())
 					return true
 			} else {
-				return StringUtils.containsLineBreakCharacter(StringUtils.trimRight(element.text))
+				return element.text.trimRight().containsLineBreakCharacter()
 			}
 		}
 		return false
 	}
 
-	override fun toString(): String {
-		val ret = StringBuilder()
-		for (element in elements) {
-			ret.append(element.toString())
-		}
-		return ret.toString()
-	}
+	override fun toString(): String =
+			elements.joinToString("")
 
 	companion object {
-
 		val defaultAlignment = Alignment.Left
-
-		/**
-		 * Creates a new [FormattedTextParagraph] with the given element.
-		 */
-		fun fPara(element: FormattedTextElement): FormattedTextParagraph {
-			return FormattedTextParagraph(ilist(element), defaultAlignment)
-		}
-
-		/**
-		 * Creates a new [FormattedTextParagraph] with the given element and alignment.
-		 */
-		fun fPara(element: FormattedTextElement, alignment: Alignment): FormattedTextParagraph {
-			return FormattedTextParagraph(ilist(element), alignment)
-		}
-
-		/**
-		 * Creates a new [FormattedTextParagraph] with the given elements and alignment.
-		 */
-		fun fPara(elements: IList<FormattedTextElement>,
-		          alignment: Alignment): FormattedTextParagraph {
-			return FormattedTextParagraph(elements, alignment)
-		}
 	}
 
 }
