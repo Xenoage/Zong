@@ -111,7 +111,7 @@ public class ScoreRevolutionary {
 
 		//measure 1
 		Tempo tempo = new Tempo(f4, 160); //, , FontInfo.defaultValue, );
-		tempo.setText(ut("Allegro con fuoco."));
+		tempo.setText(Companion.ut("Allegro con fuoco."));
 		tempo.setPositioning(new Position(null, 22f, -5f, -5f));
 		cursor.write((ColumnElement) tempo);
 		cursor.write(attachC = chord(f2, accent, Companion.pi(Companion.getB(), 4), Companion.pi(Companion.getD(), 5), Companion.pi(Companion.getF(), 5), Companion.pi(Companion.getG(), 5), Companion.pi(Companion.getB(), 5)));

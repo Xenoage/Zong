@@ -17,9 +17,9 @@ public interface Base61i
 	
 	Lyric[][] expectedLyrics = {
 		{
-			new Lyric(ut("Lyrics 1"), SyllableType.Single, 0),
-			new Lyric(ut("Lyrics 2"), SyllableType.Single, 1),
-			new Lyric(ut("Lyrics 3"), SyllableType.Single, 2),
+			new Lyric(Companion.ut("Lyrics 1"), SyllableType.Single, 0),
+			new Lyric(Companion.ut("Lyrics 2"), SyllableType.Single, 1),
+			new Lyric(Companion.ut("Lyrics 3"), SyllableType.Single, 2),
 		},
 	};
 

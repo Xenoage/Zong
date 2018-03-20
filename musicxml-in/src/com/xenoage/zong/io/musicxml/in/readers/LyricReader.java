@@ -46,7 +46,7 @@ public class LyricReader {
 					MxlSyllabicText mxlSyllabicText = (MxlSyllabicText) mxlLyric.getContent();
 					SyllableType syllableType = readSyllableType(mxlLyric);
 					//the next element must be the text element
-					ret.add(new Lyric(ut(mxlSyllabicText.getText().getValue()), syllableType, verse));
+					ret.add(new Lyric(Companion.ut(mxlSyllabicText.getText().getValue()), syllableType, verse));
 				}
 				else if (mxlLCType == MxlLyricContentType.Extend) {
 					//extend - TODO: extension to next chord!

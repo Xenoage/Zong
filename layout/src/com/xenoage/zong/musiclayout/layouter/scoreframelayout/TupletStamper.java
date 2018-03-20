@@ -109,7 +109,7 @@ public class TupletStamper {
 		if (digit < 0 || digit > 9)
 			return null; //TODO
 		CommonSymbol s = CommonSymbol.getDigit(digit);
-		FormattedTextParagraph p = fPara(new FormattedTextSymbol(symbolPool.getSymbol(s), fontSize,
+		FormattedTextParagraph p = Companion.fPara(new FormattedTextSymbol(symbolPool.getSymbol(s), fontSize,
 				FormattedTextStyle.Companion.getDefaultColor()));
 		return fText(p);
 	}

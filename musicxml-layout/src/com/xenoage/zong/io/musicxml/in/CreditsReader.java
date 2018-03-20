@@ -118,7 +118,7 @@ public final class CreditsReader {
 		CList<FormattedTextElement> elements = clist();
 		//iterate through all credit-words elements.
 		//currently we are only interested in credit-words elements on page 1.
-		Alignment alignment = FormattedTextParagraph.defaultAlignment;
+		Alignment alignment = FormattedTextParagraph.Companion.getDefaultAlignment();
 		for (MxlFormattedText mxlFormattedText : mxlCreditWords.getItems()) {
 			//read text. if empty, ignore this element
 			String textContent = mxlFormattedText.getValue();

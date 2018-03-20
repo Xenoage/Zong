@@ -14,13 +14,13 @@ public interface Base61d
 	}
 	
 	Lyric[][] expectedLyrics = {
-		{ new Lyric(ut("Me"), SyllableType.Begin, 0) },
+		{ new Lyric(Companion.ut("Me"), SyllableType.Begin, 0) },
 		{ },
 		{ },
 		{ },
-		{ new Lyric(ut("lis"), SyllableType.Middle, 0) },
+		{ new Lyric(Companion.ut("lis"), SyllableType.Middle, 0) },
 		{ },
-		{ new Lyric(ut("ma."), SyllableType.End, 0) },
+		{ new Lyric(Companion.ut("ma."), SyllableType.End, 0) },
 		{ },
 	};
 

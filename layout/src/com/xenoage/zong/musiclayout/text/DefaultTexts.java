@@ -35,7 +35,7 @@ public class DefaultTexts {
 		else if (element instanceof Tempo)
 			return getTempoTextNotNull((Tempo) element, symbolPool);
 		else
-			return ut("???");
+			return Companion.ut("???");
 	}
 
 	public static FormattedText getTempoTextNotNull(Tempo tempo, SymbolPool symbolPool) {

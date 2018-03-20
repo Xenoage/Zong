@@ -30,7 +30,7 @@ import com.xenoage.zong.core.text.Superscript;
 public class FormattedTextParagraphTest {
 
 	@Test public void testSimpleTextParagraph() {
-		FormattedTextParagraph paragraph = fPara(fString("This is a simple text.",
+		FormattedTextParagraph paragraph = Companion.fPara(Companion.fString("This is a simple text.",
 				FormattedTextStyle.Companion.getDefaultStyle()));
 		assertEquals("This is a simple text.", paragraph.getText());
 	}
@@ -38,7 +38,7 @@ public class FormattedTextParagraphTest {
 	@Test public void testFormattedTextParagraph() {
 		FormattedTextStyle style = new FormattedTextStyle(new FontInfo((String) null, null,
 			fontStyle(FontStyle.Bold)), Color.Companion.getRed(), Superscript.Super);
-		FormattedTextParagraph paragraph = fPara(fString("This is a formatted text.", style));
+		FormattedTextParagraph paragraph = Companion.fPara(Companion.fString("This is a formatted text.", style));
 		assertEquals("This is a formatted text.", paragraph.getText());
 		style = ((FormattedTextString) paragraph.getElements().getFirst()).getStyle();
 		assertEquals(true, style.getFont().getStyle().isSet(FontStyle.Bold));
@@ -72,7 +72,7 @@ public class FormattedTextParagraphTest {
 		FormattedTextParagraph paragraph = new FormattedTextParagraph(
 			CList.<FormattedTextElement>ilist(new FormattedTextString("This is ", style1),
 				new FormattedTextString("a mixed styled text!", style2)),
-			FormattedTextParagraph.defaultAlignment);
+				FormattedTextParagraph.Companion.getDefaultAlignment());
 		return paragraph;
 	}
 
@@ -85,7 +85,7 @@ public class FormattedTextParagraphTest {
 		// | : where the line break should happen
 
 		//1st test: "www|ww"
-		FormattedTextParagraph paragraph = fPara(fString("wwwww", style));
+		FormattedTextParagraph paragraph = Companion.fPara(Companion.fString("wwwww", style));
 		float width = 3.2f * widthW;
 		List<FormattedTextParagraph> lines = paragraph.lineBreak(width);
 		assertEquals(2, lines.size());
@@ -93,7 +93,7 @@ public class FormattedTextParagraphTest {
 		assertEquals("ww", lines.get(1).getText());
 
 		//2nd test: "ww-|www"
-		paragraph = fPara(fString("ww-www", style));
+		paragraph = Companion.fPara(Companion.fString("ww-www", style));
 		width = 3.2f * widthW + widthMinus;
 		lines = paragraph.lineBreak(width);
 		assertEquals(2, lines.size());
@@ -103,7 +103,7 @@ public class FormattedTextParagraphTest {
 		//3rd test: like 2nd test, but with more elements: "w"+"w-|w"+"ww"
 		paragraph = new FormattedTextParagraph(CList.<FormattedTextElement>ilist(
 			new FormattedTextString("w", style), new FormattedTextString("w-w", style),
-			new FormattedTextString("ww", style)), FormattedTextParagraph.defaultAlignment);
+			new FormattedTextString("ww", style)), FormattedTextParagraph.Companion.getDefaultAlignment());
 		width = 3.2f * widthW + widthMinus;
 		lines = paragraph.lineBreak(width);
 		assertEquals(2, lines.size());
@@ -113,7 +113,7 @@ public class FormattedTextParagraphTest {
 		assertEquals(2, lines.get(1).getElements().size());
 
 		//4th test: break at the right position: "www www |www"
-		paragraph = fPara(fString("www www www", style));
+		paragraph = Companion.fPara(Companion.fString("www www www", style));
 		width = 7.2f * widthW + 2 * widthSpace;
 		lines = paragraph.lineBreak(width);
 		assertEquals(2, lines.size());
@@ -121,7 +121,7 @@ public class FormattedTextParagraphTest {
 		assertEquals("www", lines.get(1).getText());
 
 		//5th test: "w|w"
-		paragraph = fPara(fString("ww", style));
+		paragraph = Companion.fPara(Companion.fString("ww", style));
 		width = 1.2f * widthW;
 		lines = paragraph.lineBreak(width);
 		assertEquals(2, lines.size());
@@ -129,13 +129,13 @@ public class FormattedTextParagraphTest {
 		assertEquals("w", lines.get(1).getText());
 
 		//5th test: "ww", but not even enough space for one w
-		paragraph = fPara(fString("ww", style));
+		paragraph = Companion.fPara(Companion.fString("ww", style));
 		width = 0.8f * widthW;
 		lines = paragraph.lineBreak(width);
 		assertEquals(0, lines.size());
 
 		//6th test: ". |www"
-		paragraph = fPara(fString(". www", style));
+		paragraph = Companion.fPara(Companion.fString(". www", style));
 		width = 3.1f * widthW;
 		lines = paragraph.lineBreak(width);
 		assertEquals(2, lines.size());
@@ -143,7 +143,7 @@ public class FormattedTextParagraphTest {
 		assertEquals("www", lines.get(1).getText());
 
 		//7th test: " |www|ww "
-		paragraph = fPara(fString(" wwwww ", style));
+		paragraph = Companion.fPara(Companion.fString(" wwwww ", style));
 		width = 3.05f * widthW;
 		lines = paragraph.lineBreak(width);
 		assertEquals(3, lines.size());
@@ -152,7 +152,7 @@ public class FormattedTextParagraphTest {
 		assertEquals("ww ", lines.get(2).getText());
 
 		//8th test: "ww www  w" -> "w|w |w|w|w  |w"
-		paragraph = fPara(fString("ww www  w", style));
+		paragraph = Companion.fPara(Companion.fString("ww www  w", style));
 		width = 1.1f * widthW;
 		lines = paragraph.lineBreak(width);
 		assertEquals(6, lines.size());
@@ -167,7 +167,7 @@ public class FormattedTextParagraphTest {
 		paragraph = new FormattedTextParagraph(CList.<FormattedTextElement>ilist(
 			new FormattedTextString("w", style), new FormattedTextString("w ", style),
 			new FormattedTextString("ww", style), new FormattedTextString("w  w", style)),
-			FormattedTextParagraph.defaultAlignment);
+				FormattedTextParagraph.Companion.getDefaultAlignment());
 		width = 1.1f * widthW;
 		lines = paragraph.lineBreak(width);
 		assertEquals(6, lines.size());
@@ -179,7 +179,7 @@ public class FormattedTextParagraphTest {
 		assertEquals("w", lines.get(5).getText());
 
 		//10th test: "ww |ww"
-		paragraph = fPara(fString("ww ww", style));
+		paragraph = Companion.fPara(Companion.fString("ww ww", style));
 		width = 2.1f * widthW;
 		lines = paragraph.lineBreak(width);
 		assertEquals(2, lines.size());

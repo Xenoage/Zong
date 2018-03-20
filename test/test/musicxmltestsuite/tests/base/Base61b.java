@@ -15,36 +15,36 @@ public interface Base61b
 	
 	Lyric[][] expectedLyrics = {
 		{
-			new Lyric(ut("1.Tra"), SyllableType.Begin, 0),
-			new Lyric(ut("2.tra"), SyllableType.Begin, 1),
-			new Lyric(ut("3.TRA"), SyllableType.Begin, 2),
+			new Lyric(Companion.ut("1.Tra"), SyllableType.Begin, 0),
+			new Lyric(Companion.ut("2.tra"), SyllableType.Begin, 1),
+			new Lyric(Companion.ut("3.TRA"), SyllableType.Begin, 2),
 		},
 		{
-			new Lyric(ut("la"), SyllableType.Middle, 0),
-			new Lyric(ut("la"), SyllableType.Middle, 1),
-			new Lyric(ut("LA"), SyllableType.Middle, 2),
+			new Lyric(Companion.ut("la"), SyllableType.Middle, 0),
+			new Lyric(Companion.ut("la"), SyllableType.Middle, 1),
+			new Lyric(Companion.ut("LA"), SyllableType.Middle, 2),
 		},
 		{
-			new Lyric(ut("la,"), SyllableType.End, 0),
-			new Lyric(ut("la,"), SyllableType.End, 1),
-			new Lyric(ut("LA,"), SyllableType.End, 2),
+			new Lyric(Companion.ut("la,"), SyllableType.End, 0),
+			new Lyric(Companion.ut("la,"), SyllableType.End, 1),
+			new Lyric(Companion.ut("LA,"), SyllableType.End, 2),
 		},
 		{
-			new Lyric(ut("ja!"), SyllableType.Single, 0),
-			new Lyric(ut("ja!"), SyllableType.Single, 1),
-			new Lyric(ut("JA!"), SyllableType.Single, 2),
+			new Lyric(Companion.ut("ja!"), SyllableType.Single, 0),
+			new Lyric(Companion.ut("ja!"), SyllableType.Single, 1),
+			new Lyric(Companion.ut("JA!"), SyllableType.Single, 2),
 		},
 		{	},
 		{
-			new Lyric(ut("Tra"), SyllableType.Begin, 0),
-			new Lyric(ut("Tra"), SyllableType.Begin, 1),
-			new Lyric(ut("TRA"), SyllableType.Begin, 2),
+			new Lyric(Companion.ut("Tra"), SyllableType.Begin, 0),
+			new Lyric(Companion.ut("Tra"), SyllableType.Begin, 1),
+			new Lyric(Companion.ut("TRA"), SyllableType.Begin, 2),
 		},
 		{ },
 		{
-			new Lyric(ut("ra..."), SyllableType.End, 0),
-			new Lyric(ut("ra."), SyllableType.End, 1),
-			new Lyric(ut("RA..."), SyllableType.End, 2),
+			new Lyric(Companion.ut("ra..."), SyllableType.End, 0),
+			new Lyric(Companion.ut("ra."), SyllableType.End, 1),
+			new Lyric(Companion.ut("RA..."), SyllableType.End, 2),
 		},
 	};
 

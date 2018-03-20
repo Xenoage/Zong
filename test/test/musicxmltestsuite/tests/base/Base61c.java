@@ -15,16 +15,16 @@ public interface Base61c
 	
 	Lyric[][][] expectedLyrics = {
 		{
-			{ new Lyric(ut("tra"), SyllableType.Begin, 0) },
-			{ new Lyric(ut("la"), SyllableType.Middle, 0) },
-			{ new Lyric(ut("li"), SyllableType.End, 0) },
-			{ new Lyric(ut("ja!"), SyllableType.Single, 0) },
+			{ new Lyric(Companion.ut("tra"), SyllableType.Begin, 0) },
+			{ new Lyric(Companion.ut("la"), SyllableType.Middle, 0) },
+			{ new Lyric(Companion.ut("li"), SyllableType.End, 0) },
+			{ new Lyric(Companion.ut("ja!"), SyllableType.Single, 0) },
 		},
 		{
-			{ new Lyric(ut("TRA"), SyllableType.Begin, 0) },
-			{ new Lyric(ut("LA"), SyllableType.Middle, 0) },
-			{ new Lyric(ut("LI"), SyllableType.End, 0) },
-			{ new Lyric(ut("JA!"), SyllableType.Single, 0) },
+			{ new Lyric(Companion.ut("TRA"), SyllableType.Begin, 0) },
+			{ new Lyric(Companion.ut("LA"), SyllableType.Middle, 0) },
+			{ new Lyric(Companion.ut("LI"), SyllableType.End, 0) },
+			{ new Lyric(Companion.ut("JA!"), SyllableType.Single, 0) },
 		}};
 
 }

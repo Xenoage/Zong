@@ -30,7 +30,7 @@ public class FormattedTextUtilsTest {
 
 	@Test public void cleanTest() {
 		FormattedText text = createText1Para();
-		FormattedText textCleaned = FormattedTextUtils.clean(text);
+		FormattedText textCleaned = FormattedTextUtils.INSTANCE.clean(text);
 		assertEquals(1, textCleaned.getParagraphs().size());
 		assertEquals(2, textCleaned.getParagraphs().getFirst().getElements().size());
 		assertEquals(new FormattedTextString("Hallo ", text.getParagraphs().getFirst().getElements().get(0)

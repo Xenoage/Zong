@@ -47,6 +47,14 @@ fun <C, T: Comparable<T>> Collection<C>.max(project: (C) -> T, defaultValue: T):
 	return ret
 }
 
+
+fun <C> Collection<C>.sum(project: (C) -> Float): Float {
+	var ret = 0f
+	forEach { ret += project(it) }
+	return ret
+}
+
+
 fun <T> Int.ifIndexFound(project: (Int) -> T): T? =
 	if (this > -1) project(this) else null
 

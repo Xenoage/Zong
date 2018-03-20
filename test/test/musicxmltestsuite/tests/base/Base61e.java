@@ -16,10 +16,10 @@ public interface Base61e
 	int[] expectedChordNotesCount = { 2, 2, 2, 2 };
 	
 	Lyric[][] expectedLyrics = {
-		{ new Lyric(ut("Ly"), SyllableType.Begin, 0) },
-		{ new Lyric(ut("rics"), SyllableType.End, 0) },
-		{ new Lyric(ut("on"), SyllableType.Single, 0) },
-		{ new Lyric(ut("chords"), SyllableType.Single, 0) },
+		{ new Lyric(Companion.ut("Ly"), SyllableType.Begin, 0) },
+		{ new Lyric(Companion.ut("rics"), SyllableType.End, 0) },
+		{ new Lyric(Companion.ut("on"), SyllableType.Single, 0) },
+		{ new Lyric(Companion.ut("chords"), SyllableType.Single, 0) },
 	};
 
 }
