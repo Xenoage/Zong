@@ -108,7 +108,7 @@ public class VoltaStamper {
 		//caption
 		FormattedText caption = null;
 		if (drawCaption && volta.getCaption().length() > 0) {
-			caption = fText(volta.getCaption(), textStyle, Alignment.Left);
+			caption = Companion.fText(volta.getCaption(), textStyle, Alignment.Left);
 		}
 		//create stamping
 		return new VoltaStamping(volta, lp, x1, x2, caption, drawLeftHook, drawRightHook, staff);

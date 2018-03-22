@@ -52,7 +52,7 @@ public class LyricStamper {
 	 */
 	public StaffTextStamping createHyphenStamping(StaffTextStamping syllableLeft,
 		StaffTextStamping syllableRight, FormattedTextStyle style) {
-		FormattedText text = fText("-", style, Alignment.Center);
+		FormattedText text = Companion.fText("-", style, Alignment.Center);
 		float positionX;
 		float widthLeft = syllableLeft.getText().getFirstParagraph().getMetrics().getWidth();
 		if (syllableLeft.parentStaff == syllableRight.parentStaff) {
@@ -92,7 +92,7 @@ public class LyricStamper {
 			throw new IllegalArgumentException("Left syllable must be given");
 		CList<StaffTextStamping> ret = clist();
 		//measure width of "_"
-		float widthU = fText("_", style, Alignment.Center).getFirstParagraph().getMetrics().getWidth();
+		float widthU = Companion.fText("_", style, Alignment.Center).getFirstParagraph().getMetrics().getWidth();
 		//compute the horizontal start position, base line and element
 		float widthLeft = syllableLeft.getText().getFirstParagraph().getMetrics().getWidth();
 		float startX = syllableLeft.position.xMm + widthLeft / 2 + widthU / 4; //widthU / 4: just some distance
@@ -165,7 +165,7 @@ public class LyricStamper {
 		//compute number of needed "_"
 		int countU = Math.max((int) ((endX - startX) / widthUnderscore) + 1, 1);
 		//create text
-		FormattedText text = fText(StringUtils.repeat("_", countU), style, Alignment.Left);
+		FormattedText text = Companion.fText(StringUtils.repeat("_", countU), style, Alignment.Left);
 		return new StaffTextStamping(text, sp(startX, baseLine), staff, element);
 	}
 

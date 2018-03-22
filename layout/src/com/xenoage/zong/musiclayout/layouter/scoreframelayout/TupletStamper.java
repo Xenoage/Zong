@@ -111,7 +111,7 @@ public class TupletStamper {
 		CommonSymbol s = CommonSymbol.getDigit(digit);
 		FormattedTextParagraph p = Companion.fPara(new FormattedTextSymbol(symbolPool.getSymbol(s), fontSize,
 				FormattedTextStyle.Companion.getDefaultColor()));
-		return fText(p);
+		return Companion.fText(p);
 	}
 
 }

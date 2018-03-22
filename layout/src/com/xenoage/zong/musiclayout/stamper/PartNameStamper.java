@@ -39,7 +39,7 @@ public class PartNameStamper {
 		//in the middle of the staves
 		float top = firstStaff.positionMm.y;
 		float bottom = lastStaff.positionMm.y + (lastStaff.linesCount - 1) * lastStaff.is;
-		FormattedText text = fText(name, new FormattedTextStyle(firstStaff.is * 2.5f * 2.67f), //TODO
+		FormattedText text = Companion.fText(name, new FormattedTextStyle(firstStaff.is * 2.5f * 2.67f), //TODO
 			Alignment.Right);
 		if (text.getParagraphs().size() == 0)
 			return null;

@@ -61,7 +61,7 @@ public class DefaultTexts {
 			}
 			elements.add(new FormattedTextString(" = " + tempo.getBeatsPerMinute(), style));
 			FormattedTextParagraph paragraph = new FormattedTextParagraph(elements, Alignment.Left);
-			return fText(paragraph);
+			return Companion.fText(paragraph);
 		}
 	}
 

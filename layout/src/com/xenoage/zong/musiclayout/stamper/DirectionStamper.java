@@ -126,7 +126,7 @@ public class DirectionStamper {
 		}
 		elements.close();
 		FormattedTextParagraph paragraph = new FormattedTextParagraph(elements, Alignment.Center);
-		FormattedText text = fText(paragraph);
+		FormattedText text = Companion.fText(paragraph);
 		//create stamping
 		return new StaffTextStamping(text, sp, staff, dynamics);
 	}
@@ -154,7 +154,7 @@ public class DirectionStamper {
 		}
 		elements.close();
 		FormattedTextParagraph paragraph = new FormattedTextParagraph(elements, Alignment.Center);
-		FormattedText text = fText(paragraph);
+		FormattedText text = Companion.fText(paragraph);
 		//create stamping
 		return new StaffTextStamping(text, sp, staff, dynamics);
 	}

@@ -24,7 +24,7 @@ class FormattedTextParagraph(
 		val ascent = elements.max({ it.metrics.ascent }, 0f)
 		val descent = elements.max({ it.metrics.descent }, 0f)
 		val leading = elements.max({ it.metrics.leading }, 0f)
-		val width = elements.sum { it.metrics.width }
+		val width = elements.sumFloat { it.metrics.width }
 		this.metrics = TextMetrics(ascent, descent, leading, width)
 	}
 

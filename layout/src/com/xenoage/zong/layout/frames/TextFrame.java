@@ -29,7 +29,7 @@ public class TextFrame
 	};
 	
 	/** The text content of this frame. */
-	@Getter private FormattedText text = FormattedText.empty;
+	@Getter private FormattedText text = FormattedText.Companion.getEmpty();
 	/** Line break style in this frame. */
 	@Getter private LineBreakStyle lineBreakStyle = LineBreakStyle.Manual;
 	

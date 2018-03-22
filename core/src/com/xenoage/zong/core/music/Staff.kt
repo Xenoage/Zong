@@ -1,5 +1,6 @@
 package com.xenoage.zong.core.music
 
+import com.xenoage.utils.throwEx
 import com.xenoage.zong.core.Score
 import com.xenoage.zong.core.music.Measure.measure
 import com.xenoage.zong.core.music.chord.Chord
@@ -25,7 +26,7 @@ class Staff (
 		/** The number of lines in this staff.  */
 		var linesCount: Int = 5,
 		/** Distance between the lines in this staff, or null for default.  */
-		val interlineSpace: IS?
+		val interlineSpaceOrNull: IS?
 ) : MPContainer {
 
 	init {
@@ -38,6 +39,11 @@ class Staff (
 	var parent: MPContainer?
 		get() = throw UnsupportedOperationException()
 		set(_) = throw UnsupportedOperationException()
+
+	/** The custom interline space of this staff, or the default one of the score,
+	 *  if unset (parent score required). */
+	val interlineSpace: IS
+		get() = interlineSpaceOrNull ?: parentScore?.format?.interlineSpace ?: throwEx("unknown score")
 
 	/**
 	 * The number of voices in this staff.

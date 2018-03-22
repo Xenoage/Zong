@@ -66,7 +66,7 @@ public class BarlinesStamper {
 				showMeasureNumber = (globalMeasureIndex > 0);
 			}
 			if (showMeasureNumber) {
-				FormattedText text = fText("" + (globalMeasureIndex + 1),
+				FormattedText text = Companion.fText("" + (globalMeasureIndex + 1),
 					new FormattedTextStyle(8), Alignment.Left);
 				ret.add(new StaffTextStamping(text, sp(xLeft, firstStaff.linesCount * 2),
 					firstStaff, null));

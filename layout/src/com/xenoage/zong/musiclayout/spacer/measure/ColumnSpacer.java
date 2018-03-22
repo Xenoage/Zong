@@ -87,7 +87,7 @@ public class ColumnSpacer {
 
 		//recompute beat offsets with respect to barlines
 		BarlinesBeatOffsetter.Result offsets = barlinesBeatOffsetter.compute(
-			beatOffsets, columnHeader, context.score.getMaxInterlineSpace());
+			beatOffsets, columnHeader, context.score.getMaxIS());
 		beatOffsets = offsets.voiceElementOffsets;
 		List<BeatOffset> barlineOffsets = offsets.barlineOffsets;
 

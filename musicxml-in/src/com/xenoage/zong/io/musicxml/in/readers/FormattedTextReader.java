@@ -25,7 +25,7 @@ public class FormattedTextReader
 		String text = mxlText.getValue().trim();
 		FormattedTextStyle style = readStyle(mxlText);
 		Alignment alignment = readAlignment(mxlText);
-		return FormattedText.fText(text, style, alignment);
+		return FormattedText.Companion.fText(text, style, alignment);
 	}
 	
 	@NonNull public FormattedTextStyle readStyle(MxlFormattedText mxlText) {
