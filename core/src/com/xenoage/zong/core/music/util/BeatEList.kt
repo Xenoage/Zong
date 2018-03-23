@@ -38,7 +38,7 @@ fun <T> BeatEList<T>.getAll(beat: Beat): Sequence<T> =
  * Returns the last element at or before the given beat.
  * If there is none, null is returned.
  */
-fun <T> BeatEList<T>.getLastBefore(endpoint: Interval, beat: Beat): BeatE<out T>? =
+fun <T> BeatEList<T>.getLastBefore(endpoint: Interval, beat: Beat): BeatE<T>? =
 		getOrNull(indexOfLast { endpoint.isInInterval(it.beat, beat) === True })
 
 /**

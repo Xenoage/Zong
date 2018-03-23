@@ -29,7 +29,7 @@ public class NotesNotatorTest {
 
 	private NotesNotator testee = notesNotator;
 	
-	private MusicContext context = MusicContext.simpleInstance;
+	private MusicContext context = MusicContext.Companion.getSimpleInstance();
 	private ChordWidths cw = defaultChordWidthsNormal;
 	private float n = cw.quarter;
 	private float dg = cw.dotGap;

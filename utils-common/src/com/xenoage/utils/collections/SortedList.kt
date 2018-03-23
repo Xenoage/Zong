@@ -69,6 +69,11 @@ class SortedList<T : Comparable<T>> private constructor(
 		return ret
 	} */
 
+	/** Merges the given list into this list. */
+	fun addAll(sortedList: SortedList<T>) {
+		sortedList.forEach { add(it) }
+	}
+
 	/**
 	 * Adds the given entry at the correct position.
 	 * If duplicates are not allowed but the given entry is a duplicate,
@@ -115,6 +120,12 @@ class SortedList<T : Comparable<T>> private constructor(
 
 		operator fun <T : Comparable<T>> invoke(duplicates: Boolean = true) =
 				SortedList<T>(mutableListOf<T>(), duplicates = duplicates)
+
+		operator fun <T : Comparable<T>> invoke(duplicates: Boolean = true, vararg initialValues: T): SortedList<T> {
+			val ret = SortedList<T>(duplicates = duplicates)
+			initialValues.forEach { ret.add(it) }
+			return ret
+		}
 
 	}
 

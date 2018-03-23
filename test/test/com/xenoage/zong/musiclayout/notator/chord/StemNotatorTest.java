@@ -127,7 +127,7 @@ public class StemNotatorTest {
 	}
 
 	private void testPitch(Pitch[] pitches, float start, float end) {
-		MusicContext context = MusicContext.simpleInstance;
+		MusicContext context = MusicContext.Companion.getSimpleInstance();
 		Chord chord;
 		NotesNotation chordNotesAlignment;
 		StemNotation chordStemAlignment;

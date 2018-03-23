@@ -61,7 +61,7 @@ class Voice : MPElement, MPContainer {
 	 * or null, if this voice is not part of a score.
 	 */
 	val score: Score?
-		get() = parentMeasure?.score
+		get() = parent?.score
 
 
 	/**
@@ -301,8 +301,13 @@ class Voice : MPElement, MPContainer {
 		return posI
 	}
 
+	fun setParent(measure: Measure?): Voice {
+		parent = measure
+		return this
+	}
+
 	override fun getChildMP(element: MPElement): MP? {
-		var mp = parentMeasure?.getMP(this) ?: return null
+		var mp = parent?.getMP(this) ?: return null
 		val beat = getBeat(element) ?: return null
 		val index = elements.indexOf(element)
 		return mp.copy(beat = beat, element = index)

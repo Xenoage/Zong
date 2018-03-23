@@ -30,13 +30,18 @@ import com.xenoage.utils.kernel.Range.range
 import com.xenoage.utils.kernel.Range.rangeReverse
 import com.xenoage.utils.math.Fraction._0
 import com.xenoage.utils.math.Fraction.fr
+import com.xenoage.utils.math._0
+import com.xenoage.utils.math.lcm
 import com.xenoage.utils.max
 import com.xenoage.zong.core.header.ScoreHeader.scoreHeader
 import com.xenoage.zong.core.music.MusicContext.noAccidentals
+import com.xenoage.zong.core.music.clef.clefTreble
 import com.xenoage.zong.core.music.util.BeatE.selectLatest
 import com.xenoage.zong.core.music.util.Interval.At
 import com.xenoage.zong.core.music.util.Interval.BeforeOrAt
 import com.xenoage.zong.core.music.util.MPE.mpE
+import com.xenoage.zong.core.position.Beat
+import com.xenoage.zong.core.position.MP.Companion.atMeasure
 import com.xenoage.zong.core.position.MP.atMeasure
 import com.xenoage.zong.core.position.MP.Companion.mpb0
 
@@ -69,120 +74,67 @@ class Score : Document {
 	/** Supported formats for reading scores from files and writing them to files. */
 	override var supportedFormats: SupportedFormats<Score>? = null
 
-
 	/** The number of staves. */
 	val stavesCount: Int
-		get() = this.stavesList.staves.size
-
+		get() = stavesList.staves.size
 
 	/** The number of measures. */
 	val measuresCount: Int
 		get() = this.header.columnHeaders.size
 
 	/** The biggest interline space of the score. */
-	val maxIS: IS
+	val maxInterlineSpace: IS
 		get() = stavesList.staves.max({ it.interlineSpace }, 0f)
 
-	/**
-	 * Returns the number of divisions of a quarter note within the whole score.
-	 * This is e.g. needed for Midi and MusicXML Export.
-	 */
-	val divisions: Int
-		get() {
-			var actualdivision = 4
-			for (staff in this.stavesList.staves) {
-				for (measure in staff.measures) {
-					for (voice in measure.voices) {
-						for (e in voice.elements) {
-							actualdivision = MathUtils.INSTANCE.lcm(actualdivision, e.duration.denominator)
-						}
-					}
-				}
-			}
-			return actualdivision / 4
-		}
+	/** The number of divisions of a quarter note within the whole score.
+	 *  This is e.g. needed for Midi and MusicXML Export. */
+	fun computeDivisions(): Int =
+			stavesList.computeDivisions()
 
-	init {
-		this.stavesList.setScore(this)
-	}
-
-
-	/**
-	 * Sets the given meta-data information.
-	 */
+	/** Sets the given meta-data information. */
 	fun setMetaData(key: String, value: Any) {
 		metaData[key] = value
 	}
 
+	/** Gets the measure column header at the given measure. */
+	fun getColumnHeader(measureIndex: Int): ColumnHeader =
+		header.getColumnHeader(measureIndex)
 
-	/**
-	 * Gets the measure column header at the given measure.
-	 */
-	fun getColumnHeader(measureIndex: Int): ColumnHeader {
-		return this.header.getColumnHeader(measureIndex)
-	}
+	/** Gets the measure at the given [MP]. */
+	fun getMeasure(mp: MP): Measure =
+			stavesList.getMeasure(mp)
 
+	/** Gets the staff with the given index. */
+	fun getStaff(staffIndex: Int): Staff =
+			stavesList.getStaff(staffIndex)
 
-	/**
-	 * Gets the measure at the given [BMP].
-	 */
-	fun getMeasure(mp: MP): Measure {
-		return this.stavesList.getMeasure(mp)
-	}
+	/** Gets the staff at the given [MP]. */
+	fun getStaff(mp: MP): Staff =
+		stavesList.getStaff(mp)
 
+	/** The voice at the given [MP]. */
+	fun getVoice(mp: MP): Voice =
+			stavesList.getVoice(mp)
 
-	/**
-	 * Gets the staff with the given index.
-	 */
-	fun getStaff(staffIndex: Int): Staff {
-		return this.stavesList.getStaff(staffIndex)
-	}
-
-
-	/**
-	 * Gets the staff at the given [MP].
-	 */
-	fun getStaff(mp: MP): Staff {
-		return this.stavesList.getStaff(mp)
-	}
-
-
-	/**
-	 * Gets the voice at the given [MP].
-	 */
-	fun getVoice(mp: MP): Voice {
-		return this.stavesList.getVoice(mp)
-	}
-
-
-	/**
-	 * Gets the interline space for the staff with the given index.
+	/** The interline space for the staff with the given index.
 	 * If unknown, the default value is returned.
 	 */
-	fun getInterlineSpace(staffIndex: Int): Float {
-		val `is` = getStaff(staffIndex).interlineSpace
-		return `is` ?: this.format.interlineSpace
-	}
+	fun getInterlineSpace(staffIndex: Int): IS =
+			getStaff(staffIndex).interlineSpace
 
-
-	/**
-	 * Returns true, if the given [MP] is in a valid range, otherwise false.
-	 */
+	/** Returns true, if the given [MP] is in a valid range, otherwise false. */
 	fun isMPExisting(mp: MP): Boolean {
-		try {
-			if (mp.staff < 0 || mp.staff >= stavesCount || mp.measure < 0 || mp.measure >= measuresCount ||
-					mp.voice < 0 || mp.voice >= getMeasure(mp).voices.size)
-				return false
-			val voice = getVoice(mp)
-			if (mp.element != MP.unknown && voice.elements.size <= mp.element)
-				return false
-			return if (mp.beat != MP.unknownBeat && (mp.beat!!.compareTo(Companion.get_0()) < 0 || mp.beat.compareTo(voice.parent!!.filledBeats) > 0)) false else true
-		} catch (ex: IllegalMPException) {
+		if (false == (mp.staff in 0 until stavesCount && mp.measure in 0 until measuresCount &&
+				mp.voice in getMeasure(mp).voices.indices))
 			return false
-		}
-
+		val measure = getMeasure(mp)
+		val voice = getVoice(mp)
+		if (mp.element != MP.unknown && mp.element >= voice.elements.size)
+			return false
+		if (mp.beat != MP.unknownBeat && (mp.beat!! < _0 || measure.filledBeats < mp.beat))
+			return false
+		return true
 	}
-
 
 	/**
 	 * Gets the number of beats in the given measure column.
@@ -190,11 +142,10 @@ class Score : Document {
 	 * If the time signature is unknown (senza-misura), the beats of the
 	 * voice with the most beats are returned.
 	 */
-	fun getMeasureBeats(measureIndex: Int): Fraction {
+	fun getMeasureBeats(measureIndex: Int): Beat {
 		val ret = this.header.getTimeAtOrBefore(measureIndex).type.measureBeats
 		return ret ?: getMeasureFilledBeats(measureIndex)
 	}
-
 
 	/**
 	 * Gets the filled beats for the given measure column, that
@@ -203,37 +154,28 @@ class Score : Document {
 	 * The given measure may be one measure after the last measure. There, only beat 0
 	 * exists to mark the ending of the score.
 	 */
-	fun getMeasureFilledBeats(measureIndex: Int): Fraction {
-		if (measureIndex == measuresCount)
-			return Companion.get_0()
-		var maxBeat = Fraction.get_0()
-		for (staff in this.stavesList.staves) {
-			val beat = staff.measures[measureIndex].filledBeats
-			if (beat.compareTo(maxBeat) > 0)
-				maxBeat = beat
-		}
-		return maxBeat
-	}
-
+	fun getMeasureFilledBeats(measureIndex: Int): Beat =
+		if (measureIndex == measuresCount) _0 else
+			stavesList.staves.max({ it.measures[measureIndex].filledBeats }, _0)
 
 	/**
 	 * Gets the used beats within the given measure column.
 	 * The given measure may be one measure after the last measure. There, only beat 0
 	 * exists to mark the ending of the score.
 	 * @param measureIndex                  the index of the measure column
-	 * @param withMeasureAndColumnElements  true, iff also the beats of column elements and
+	 * @param withMeasureAndColumnElements  true, iff also the beats of column elements an
 	 * measure elements should be used
 	 */
-	fun getMeasureUsedBeats(measureIndex: Int, withMeasureAndColumnElements: Boolean): SortedList<Fraction> {
+	fun getMeasureUsedBeats(measureIndex: Int, withMeasureAndColumnElements: Boolean): SortedList<Beat> {
 		//last measure?
 		if (measureIndex == measuresCount)
-			return SortedList<T>(arrayOf<Fraction>(Companion.get_0()), false)
+			return SortedList<Beat>(false, _0)
 		//add measure beats
-		var columnBeats: SortedList<Fraction> = SortedList<T>(false)
-		for (iStaff in range(stavesCount)) {
-			val measure = getMeasure(Companion.atMeasure(iStaff, measureIndex))
+		val columnBeats = SortedList<Beat>(false)
+		for (iStaff in stavesList.staves.indices) {
+			val measure = getMeasure(atMeasure(iStaff, measureIndex))
 			val beats = measure.getUsedBeats(withMeasureAndColumnElements)
-			columnBeats = columnBeats.merge(beats, false)
+			columnBeats.addAll(beats)
 		}
 		//add column beats
 		if (withMeasureAndColumnElements) {
@@ -243,41 +185,27 @@ class Score : Document {
 		return columnBeats
 	}
 
-
 	/**
-	 * Gets the last [Key] that is defined before (or at,
-	 * dependent on the given [Interval]) the given
-	 * [MP], also over measure boundaries. If there is
-	 * none, a default C major time signature is returned.
-	 * Private keys (in measure) override public keys (in measure column header).
+	 * Gets the last [Key] that is defined before (or at, dependent on the given [Interval]) the given
+	 * [MP], also over measure boundaries. If there is none, a default C major time signature is returned.
 	 */
 	fun getKey(mp: MP, interval: Interval): MPE<out Key> {
-		if (!interval.isPrecedingOrAt) {
-			throw IllegalArgumentException("Illegal interval for this method")
-		}
-		//begin with the given measure. if there is one, return it.
-		var columnKey = this.header.getColumnHeader(mp.measure).keys.getLastBefore(interval, mp.beat)
-		var measureKey: BeatE<Key>? = null
-		if (getMeasure(mp).getPrivateKeys() != null)
-			measureKey = getMeasure(mp).getPrivateKeys().getLastBefore(interval, mp.beat)
-		var ret = Companion.selectLatest(columnKey, measureKey)
-		if (ret != null)
-			return Companion.mpE(ret!!.element, mp.withBeat(ret!!.beat))
+		check(interval.isPrecedingOrAt, { "Illegal interval for this method" })
+		check(mp.beat != null, { "Beat must be known" })
+		var columnKey = this.header.getColumnHeader(mp.measure).keys.getLastBefore(interval, mp.beat!!)
+		if (columnKey != null)
+			return MPE(columnKey.element, mp.copy(beat = columnKey.beat))
 		if (interval !== At) {
 			//search in the preceding measures
 			for (iMeasure in mp.measure - 1 downTo 0) {
-				columnKey = this.header.getColumnHeader(iMeasure).keys.getLast()
-				val privateKeys = getMeasure(Companion.atMeasure(mp.staff, iMeasure)).getPrivateKeys()
-				measureKey = if (privateKeys != null) privateKeys!!.getLast() else null
-				ret = Companion.selectLatest(columnKey, measureKey)
-				if (ret != null)
-					return Companion.mpE(ret!!.element, mp.withMeasure(iMeasure).withBeat(ret!!.beat))
+				columnKey = this.header.getColumnHeader(iMeasure).keys.lastOrNull()
+				if (columnKey != null)
+					return MPE(columnKey.element, mp.copy(measure = iMeasure, beat = columnKey.beat))
 			}
 		}
 		//no key found. return default key.
-		return Companion.mpE(TraditionalKey(0, Mode.Major), Companion.getMpb0())
+		return MPE(TraditionalKey(0, Mode.Major), mpb0)
 	}
-
 
 	/**
 	 * Gets the accidentals at the given [MP] that are
@@ -285,51 +213,42 @@ class Score : Document {
 	 * looking at all voices. The beat in the [MP] is required.
 	 */
 	fun getAccidentals(mp: MP, interval: Interval): Map<Pitch, Int> {
-		if (mp.beat == MP.unknownBeat)
-			throw IllegalArgumentException("beat is required")
+		check(mp.beat != MP.unknownBeat, { "beat is required" })
 		//start key of the measure always counts
 		val key = getKey(mp, BeforeOrAt)
 		//if key change is in same measure, start at that beat. otherwise start at beat 0.
-		val keyBeat = if (key.mp.measure == mp.measure) key.mp.beat else Companion.get_0()
-		val measure = getMeasure(mp)
-		return measure.getAccidentals(mp.beat!!, interval, keyBeat!!, key.element)
+		val keyBeat = if (key.mp.measure == mp.measure) key.mp.beat else _0
+		return getMeasure(mp).getAccidentals(mp.beat!!, interval, keyBeat!!, key.element)
 	}
 
-
 	/**
-	 * Gets the last [Clef] that is defined before (or at,
-	 * dependent on the given [Interval]) the given
-	 * [MP], also over measure boundaries. If there is
-	 * none, a default g clef is returned. The beat in the [MP] is required.
+	 * Gets the last [Clef] that is defined before (or at, dependent on the given [Interval]) the given
+	 * [MP], also over measure boundaries. If there is none, a default g clef is returned. The beat in the [MP] is required.
 	 */
 	fun getClef(mp: MP, interval: Interval): ClefType {
-		if (!interval.isPrecedingOrAt)
-			throw IllegalArgumentException("Illegal interval for this method")
-		if (mp.beat == MP.unknownBeat)
-			throw IllegalArgumentException("beat is required")
+		check(interval.isPrecedingOrAt, { "illegal interval for this method" })
+		check(mp.beat == MP.unknownBeat, { "beat is required" })
 		//begin with the given measure. if there is one, return it.
 		var measure = getMeasure(mp)
-		var ret: BeatE<Clef>? = null
 		if (measure.clefs != null) {
-			ret = measure.clefs.getLastBefore(interval, mp.beat)
+			val ret = measure.clefs.getLastBefore(interval, mp.beat!!)
 			if (ret != null)
 				return ret.element.type
 		}
 		if (interval !== At) {
 			//search in the preceding measures
-			for (iMeasure in rangeReverse(mp.measure - 1, 0)) {
-				measure = getMeasure(Companion.atMeasure(mp.staff, iMeasure))
+			for (iMeasure in mp.measure - 1 downTo 0) {
+				measure = getMeasure(atMeasure(mp.staff, iMeasure))
 				if (measure.clefs != null) {
-					ret = measure.clefs.getLast()
+					val ret = measure.clefs.lastOrNull()
 					if (ret != null)
 						return ret.element.type
 				}
 			}
 		}
 		//no clef found. return default clef.
-		return ClefType.Companion.getClefTreble()
+		return clefTreble
 	}
-
 
 	/**
 	 * Gets the [MusicContext] that is defined before (or at,

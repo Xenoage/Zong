@@ -31,7 +31,7 @@ public class TestData {
 
 	static {
 		ClefType clefG = ClefType.Companion.getClefTreble();
-		contextC = MusicContext.simpleInstance;
+		contextC = MusicContext.Companion.getSimpleInstance();
 		//contextEb: key = Eb major, acc = Fbb5, G##5
 		contextEb = new MusicContext(clefG, new TraditionalKey(-3), new Pitch[] {
 			Companion.pi(3, -2, 5), Companion.pi(4, 2, 5) }, 5);

@@ -51,7 +51,6 @@ class Measure : MPElement, MPContainer, DirectionContainer {
 	val filledBeats: Beat
 		get() = voices.max({ it.filledBeats }, _0)
 
-
 	/**
 	 * Gets a list of all clefs, directions and instrument changes, sorted by beat,
 	 * and within beat sorted by clef, direction, and instrument change.
@@ -68,6 +67,11 @@ class Measure : MPElement, MPContainer, DirectionContainer {
 	/** The parent score of this measure, or null, if this measure is not part of a score. */
 	val score: Score?
 		get() = parent?.score
+
+	/** The sequence of all measure elements in this measure (clefs, directions, instrument changes),
+	 *  but not sorted by beat. */
+	val measureElements: Sequence<BeatE<out MPElement>> =
+			clefs.asSequence() + directions.asSequence() + instrumentChanges.asSequence()
 
 	/**
 	 * Adds a clef at the given beat or removes it, when null is given.
