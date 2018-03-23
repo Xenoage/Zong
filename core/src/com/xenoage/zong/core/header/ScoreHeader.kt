@@ -27,7 +27,7 @@ class ScoreHeader(
 	var systemLayouts: MutableList<SystemLayout?> = mutableListOf()
 
 	/** List of column headers. Must have the same size as the number of measures in the score. */
-	var columnHeaders: MutableList<ColumnHeader?> = mutableListOf()
+	var columnHeaders: MutableList<ColumnHeader> = mutableListOf()
 
 	/**
 	 * Gets layout information for the staff with the given index
@@ -64,10 +64,10 @@ class ScoreHeader(
 			systemLayouts.setExtend(systemIndex, systemLayout, null)
 
 	/**
-	 * Gets the [ColumnHeader] at the given index, or null if there is none.
+	 * Gets the [ColumnHeader] at the given index.
 	 */
 	fun getColumnHeader(measureIndex: Int): ColumnHeader =
-			columnHeaders.getOrNull(measureIndex) ?: throw IllegalMPException(MP.atMeasure(measureIndex))
+			columnHeaders[measureIndex]
 
 	/**
 	 * Sets the [ColumnHeader] for the measure column with the given index.

@@ -16,9 +16,7 @@ import com.xenoage.zong.core.music.direction.NavigationSign
 import com.xenoage.zong.core.music.direction.Tempo
 import com.xenoage.zong.core.music.key.Key
 import com.xenoage.zong.core.music.time.TimeSignature
-import com.xenoage.zong.core.music.util.BeatEList
-import com.xenoage.zong.core.music.util.addAll
-import com.xenoage.zong.core.music.util.set
+import com.xenoage.zong.core.music.util.*
 import com.xenoage.zong.core.music.volta.Volta
 import com.xenoage.zong.core.position.Beat
 import com.xenoage.zong.core.position.MP
@@ -78,39 +76,18 @@ class ColumnHeader(
 			parentScore.header.columnHeaders.indexOf(this)
 
 	/**
-	 * Gets a list of all [ColumnElement]s in this column, which
+	 * A sequence of all [ColumnElement]s in this column, which
 	 * are assigned to a beat (middle barlines, keys and tempos).
 	 */
-	val columnElementsWithBeats: BeatEList<ColumnElement>
-		get() {
-			val ret = BeatEList<ColumnElement>()
-			ret.addAll(middleBarlines)
-			ret.addAll(keys)
-			ret.addAll(tempos)
-			return ret
-		}
+	val columnElementsWithBeats: Sequence<BeatE<out ColumnElement>>
+		get() = middleBarlines.asSequence() + keys.asSequence() + tempos.asSequence()
 
 	/**
-	 * The list of all [ColumnElement]s in this column, which
+	 * A sequence of all [ColumnElement]s in this column, which
 	 * are not assigned to a beat (time, start and end barline, volta, measure break).
 	 */
-	val columnElementsWithoutBeats: List<ColumnElement>
-		get() = listOfNotNull(time, startBarline, endBarline, volta, measureBreak)
-
-	/**
-	 * The list of all [ColumnElement]s in this column.
-	 */
-	val columnElements: List<ColumnElement>
-		get() {
-			val ret = mutableListOfNotNull(time, startBarline, endBarline, volta, measureBreak)
-			for (e in middleBarlines)
-				ret.add(e.element)
-			for (e in keys)
-				ret.add(e.element)
-			for (e in tempos)
-				ret.add(e.element)
-			return ret
-		}
+	val columnElementsWithoutBeats: Sequence<out ColumnElement>
+		get() = sequenceOf(time, startBarline, endBarline, volta, measureBreak).filterNotNull()
 
 	/**
 	 * Sets the time signature, or null if unset.

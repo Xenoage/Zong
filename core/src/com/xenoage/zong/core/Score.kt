@@ -34,6 +34,7 @@ import com.xenoage.utils.math._0
 import com.xenoage.utils.math.lcm
 import com.xenoage.utils.max
 import com.xenoage.zong.core.header.ScoreHeader.scoreHeader
+import com.xenoage.zong.core.music.MusicContext.Companion.noAccidentals
 import com.xenoage.zong.core.music.MusicContext.noAccidentals
 import com.xenoage.zong.core.music.clef.clefTreble
 import com.xenoage.zong.core.music.util.BeatE.selectLatest
@@ -41,7 +42,9 @@ import com.xenoage.zong.core.music.util.Interval.At
 import com.xenoage.zong.core.music.util.Interval.BeforeOrAt
 import com.xenoage.zong.core.music.util.MPE.mpE
 import com.xenoage.zong.core.position.Beat
+import com.xenoage.zong.core.position.MP.Companion.atColumnBeat
 import com.xenoage.zong.core.position.MP.Companion.atMeasure
+import com.xenoage.zong.core.position.MP.Companion.mp0
 import com.xenoage.zong.core.position.MP.atMeasure
 import com.xenoage.zong.core.position.MP.Companion.mpb0
 
@@ -251,83 +254,59 @@ class Score : Document {
 	}
 
 	/**
-	 * Gets the [MusicContext] that is defined before (or at,
-	 * dependent on the given [Interval]s) the given
-	 * [BMP], also over measure boundaries.
+	 * Gets the [MusicContext] that is defined before (or at, dependent on the given [Interval]s) the given
+	 * [MP], also over measure boundaries.
 	 *
 	 * Calling this method can be quite expensive, so call only when neccessary.
 	 *
 	 * @param mp                   the musical position
-	 * @param clefAndKeyInterval   where to look for the last clef and key:
-	 * [Interval.Before] ignores a clef and a key
-	 * at the given position, [Interval.BeforeOrAt]
-	 * and [Interval.At] (meaning the same here)
-	 * include it
-	 * @param accidentalsInterval  the same as for clefAndKeyInterval, but for the accidentals.
-	 * If null, no accidentals are collected.
+	 * @param clefAndKeyInterval   where to look for the last clef and key: [Before] ignores a clef and a key
+	 *                             at the given position, [BeforeOrAt] and [At] (meaning the same here) include it
+	 * @param accidentalsInterval  the same as for [clefAndKeyInterval], but for the accidentals.
+	 *                             If null, no accidentals are collected.
 	 */
-	fun getMusicContext(mp: MP,
-	                    clefAndKeyInterval: Interval, accidentalsInterval: Interval?): MusicContext {
+	fun getMusicContext(mp: MP, clefAndKeyInterval: Interval, accidentalsInterval: Interval?): MusicContext {
 		var clefAndKeyInterval = clefAndKeyInterval
 		if (clefAndKeyInterval === At)
 			clefAndKeyInterval = BeforeOrAt //At and BeforeOrAt mean the same in this context
 		val clef = getClef(mp, clefAndKeyInterval)
 		val key = getKey(mp, clefAndKeyInterval).element
-		var accidentals = noAccidentals
-		if (accidentalsInterval != null)
-			accidentals = getAccidentals(mp, accidentalsInterval)
+		val accidentals = if (accidentalsInterval != null) getAccidentals(mp, accidentalsInterval) else noAccidentals
 		return MusicContext(clef, key, accidentals, getStaff(mp).linesCount)
 	}
 
-
-	/**
-	 * Gets the measures of the column with the given index.
-	 */
-	fun getColumn(measureIndex: Int): Column {
-		val ret = Column(stavesCount)
-		for (staff in this.stavesList.staves) {
-			ret.add(staff.getMeasure(measureIndex))
-		}
-		return ret
-	}
-
+	/** Gets the measures of the column with the given index. */
+	fun getColumn(measureIndex: Int): Column =
+			stavesList.staves.map { it.getMeasure(measureIndex) }
 
 	/**
 	 * Gets the interline space of the staff with the given index.
 	 * If unspecified, the default value of the score is returned.
 	 */
-	fun getInterlineSpace(mp: MP): Float {
-		val staffIndex = mp.staff
-		if (staffIndex >= 0 && staffIndex < stavesCount) {
-			val custom = getStaff(staffIndex).interlineSpace
-			if (custom != null) {
-				return custom
-			}
-		}
-		return this.format.interlineSpace
-	}
+	fun getInterlineSpace(mp: MP): IS =
+			getStaff(mp.staff).interlineSpace
 
 	/**
 	 * Gets the gap in beats between the end of the left element and
 	 * the start of the right element. If it can not be determined, because
 	 * the musical position of one of the elements is unknown, null is returned.
 	 */
-	fun getGapBetween(left: VoiceElement, right: VoiceElement): Fraction? {
-		var mpLeft = MP.getMP(left) ?: return null
-		mpLeft = mpLeft!!.withBeat(mpLeft!!.beat!!.add(left.duration))
-		val mpRight = MP.getMP(right) ?: return null
-		if (mpRight!!.measure == mpLeft!!.measure) {
+	fun getGapBetween(left: VoiceElement, right: VoiceElement): Duration? {
+		var mpLeft = left.mp ?: return null
+		mpLeft = mpLeft.copy(beat = mpLeft.beat!! + left.duration)
+		val mpRight = right.mp ?: return null
+		if (mpRight.measure == mpLeft.measure) {
 			//simple case: same measure. just subtract beats
-			return mpRight!!.beat!!.sub(mpLeft!!.beat)
-		} else if (mpRight!!.measure > mpLeft!!.measure) {
+			return mpRight.beat!! - mpLeft.beat!!
+		} else if (mpRight.measure > mpLeft.measure) {
 			//right element is in a following measure. add the following:
 			//- beats between end of left element and its measure end
 			//- beats in the following measures (until the measure which contains the right element)
 			//- start beat of the right element in its measure
-			var gap = getMeasureFilledBeats(mpLeft!!.measure).sub(mpLeft!!.beat)
-			for (iMeasure in range(mpLeft!!.measure + 1, mpRight!!.measure - 1))
-				gap = gap.add(getMeasureFilledBeats(iMeasure))
-			gap = gap.add(mpRight!!.beat)
+			var gap = getMeasureFilledBeats(mpLeft.measure) - mpLeft.beat!!
+			for (iMeasure in (mpLeft.measure+1 .. mpRight.measure-1))
+				gap += getMeasureFilledBeats(iMeasure)
+			gap += mpRight.beat!!
 			return gap
 		} else {
 			//right element is not really at the right, but actually before the left element
@@ -335,13 +314,25 @@ class Score : Document {
 			//- betweens between the start of the right element and the end of its measure
 			//- beats in the following measures (until the measure which contains the left element)
 			//- end beat of the left element in its measure
-			var gap = getMeasureFilledBeats(mpRight!!.measure).sub(mpRight!!.beat)
-			for (iMeasure in range(mpRight!!.measure + 1, mpLeft!!.measure - 1))
-				gap = gap.add(getMeasureFilledBeats(iMeasure))
-			gap = gap.add(mpLeft!!.beat)
-			gap = gap.mult(Companion.fr(-1))
+			var gap = getMeasureFilledBeats(mpRight.measure) - mpRight.beat!!
+			for (iMeasure in (mpRight.measure+1 .. mpLeft.measure-1))
+				gap += getMeasureFilledBeats(iMeasure)
+			gap += mpLeft.beat!!
+			gap *= -1
 			return gap
 		}
 	}
+
+	/**
+	 * A sequence with all [ColumnElement]s in a score.
+	 * The elements within a column may be unsorted by beat, but first the elements with known beats are
+	 * returned, then the elements without beats.
+	 */
+	fun getAllColumnElements(): Sequence<MPE<ColumnElement>> =
+			header.columnHeaders.indices.asSequence().flatMap { columnIndex ->
+				val column = header.columnHeaders[columnIndex]
+				column.columnElementsWithBeats.map { MPE(it.element, atColumnBeat(columnIndex, it.beat)) } +
+					column.columnElementsWithoutBeats.map { MPE(it, atMeasure(columnIndex)) }
+			}
 
 }

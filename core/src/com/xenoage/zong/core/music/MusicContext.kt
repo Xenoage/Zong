@@ -6,8 +6,6 @@ import com.xenoage.zong.core.music.clef.clefTreble
 import com.xenoage.zong.core.music.key.Key
 import com.xenoage.zong.core.music.key.TraditionalKey
 import com.xenoage.zong.core.music.key.TraditionalKey.Mode
-import java.util.*
-import java.util.Collections.unmodifiableMap
 
 
 /**
