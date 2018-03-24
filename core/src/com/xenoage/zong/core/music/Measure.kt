@@ -7,6 +7,7 @@ import com.xenoage.utils.math.Fraction
 import com.xenoage.utils.math._0
 import com.xenoage.utils.max
 import com.xenoage.utils.setExtendBy
+import com.xenoage.utils.throwEx
 import com.xenoage.zong.core.Score
 import com.xenoage.zong.core.header.ColumnHeader
 import com.xenoage.zong.core.music.chord.Chord
@@ -100,6 +101,21 @@ class Measure : MPElement, MPContainer, DirectionContainer {
 			instrumentChanges.set(instrumentChange.setParent(this), beat).unsetParent()
 		else
 			instrumentChanges.remove(beat).unsetParent()
+
+	/**
+	 * Adds a [MeasureElement] or [Direction] at the given beat.
+	 * Dependent on the type, an old element at this beat may be removed, and
+	 * is returned in this case.
+	 */
+	fun addMeasureElement(measureElement: MPElement, beat: Beat): MPElement? {
+		when (measureElement) {
+			is Clef -> return setClef(measureElement, beat)
+			is InstrumentChange -> return setInstrumentChange(measureElement, beat)
+			is Direction -> addDirection(measureElement, beat)
+			else -> throwEx("Illegal measure element type")
+		}
+		return null
+	}
 
 	/**
 	 * Collect the accidentals within this measure (backwards),

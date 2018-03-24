@@ -26,7 +26,7 @@ class Staff (
 		/** The number of lines in this staff.  */
 		var linesCount: Int = 5,
 		/** Distance between the lines in this staff, or null for default.  */
-		val interlineSpaceOrNull: IS?
+		val interlineSpaceOrNull: IS? = null
 ) : MPContainer {
 
 	init {

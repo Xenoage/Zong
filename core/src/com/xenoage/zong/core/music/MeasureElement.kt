@@ -9,7 +9,7 @@ import com.xenoage.zong.core.position.MPElement
  * appear in the middle of a measure and apply to
  * all voices of the measure.
  *
- * Examples are clefs and directions and keys.
+ * [Clef]s and [InstrumentChange]s are such elements.
  */
 interface MeasureElement : MPElement {
 

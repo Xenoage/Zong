@@ -128,7 +128,7 @@ class Fraction(
 			}
 
 			//shorten fraction
-			val gcd = clampMin(gcd(absNum, absDen), 1)
+			val gcd = gcd(absNum, absDen).clampMin(1)
 			num /= gcd
 			den /= gcd
 
