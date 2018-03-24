@@ -4,7 +4,10 @@ package com.xenoage.utils.document.command
  * Base class for a [Command], which is transparent in the command history
  * (see [Undoability.Transparent]).
  */
-abstract class UndoableCommand(override val name: String) : Command {
+abstract class UndoableCommand : Command {
+
+	override val name: String =
+			this::class.simpleName ?: "Unnamed"
 
 	override val undoability: Undoability
 		get() = Undoability.Transparent

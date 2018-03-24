@@ -2,35 +2,22 @@ package com.xenoage.zong.commands.core.music.beam
 
 import com.xenoage.utils.document.command.Command
 import com.xenoage.utils.document.command.Undoability
+import com.xenoage.utils.document.command.UndoableCommand
 import com.xenoage.zong.core.music.beam.Beam
 import com.xenoage.zong.core.music.beam.BeamWaypoint
 import com.xenoage.zong.core.music.tuplet.Tuplet
 
 
 /**
- * Removes the given [Tuplet].
- *
- * @author Andreas Wenger
+ * Removes the given [Beam].
  */
-class BeamRemove(//data
-		private val beam: Beam) : Command {
+class BeamRemove(private val beam: Beam) : UndoableCommand() {
 
+	override fun execute() = assign(null)
 
-	override val undoability: Undoability
-		get() = Undoability.Undoable
+	override fun undo() = assign(beam)
 
-
-	override fun execute() {
-		for (wp in beam.waypoints) {
-			wp.chord.beam = null
-		}
-	}
-
-
-	override fun undo() {
-		for (wp in beam.waypoints) {
-			wp.chord.beam = beam
-		}
-	}
+	private fun assign(newBeam: Beam?) =
+			beam.waypoints.forEach { it.chord.beam = newBeam }
 
 }

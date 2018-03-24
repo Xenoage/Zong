@@ -19,6 +19,38 @@ fun <T> mutableListOfNotNull(vararg elements: T?): MutableList<T> {
 }
 
 /**
+ * Returns this list with the given element added at the end.
+ * If it is an empty list, a new list is created. Otherwise, the given list is reused.
+ * This method is especially useful for dealing with immutable empty lists,
+ * which are used to save memory.
+ */
+fun <T> List<T>.addOrNew(element: T): MutableList<T> {
+	if (size == 0)
+		return mutableListOf(element)
+	val list = this as MutableList
+	list.add(element)
+	return list
+}
+
+/**
+ * Returns this list with the given element removed.
+ * If it is an empty list after removal, a shared empty list is returned.
+ * Otherwise, the given list is reused.
+ * This method is especially useful for dealing with immutable empty lists,
+ * which are used to save memory.
+ */
+fun <T> List<T>.removeOrEmpty(element: T): List<T> {
+	val index = indexOf(element)
+	if (index == -1)
+		return this
+	if (size == 1)
+		return emptyList()
+	val list = this as MutableList
+	list.removeAt(index)
+	return list
+}
+
+/**
  * Sets the element at the given index in this list. If the index is out of
  * the bounds of this list, it is extended up to this index
  * and the gaps are filled with the given fillElement.

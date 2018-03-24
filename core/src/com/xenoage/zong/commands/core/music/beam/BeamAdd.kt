@@ -14,7 +14,7 @@ import com.xenoage.zong.core.music.beam.BeamWaypoint
  * If the contained chords already are beamed, those beams
  * are removed.
  */
-class BeamAdd(private val beam: Beam) : UndoableCommand("BeamAdd") {
+class BeamAdd(private val beam: Beam) : UndoableCommand() {
 
 	//backup
 	private var backupCmds = mutableListOf<Command>()
@@ -23,7 +23,7 @@ class BeamAdd(private val beam: Beam) : UndoableCommand("BeamAdd") {
 	override fun execute() {
 		//remove existing beams
 		beam.waypoints.filter { it.chord.beam != null }.forEach {
-			executeAndRemember(BeamRemove(it.chord.beam))
+			executeAndRemember(BeamRemove(it.chord.beam!!))
 		}
 		//add beam to chords
 		beam.waypoints.forEach {
