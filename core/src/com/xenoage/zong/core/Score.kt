@@ -1,55 +1,37 @@
 package com.xenoage.zong.core
 
-import com.xenoage.utils.annotations.NonNull
 import com.xenoage.utils.collections.SortedList
 import com.xenoage.utils.document.Document
 import com.xenoage.utils.document.command.CommandPerformer
 import com.xenoage.utils.document.io.SupportedFormats
-import com.xenoage.utils.math.Fraction
-import com.xenoage.utils.math.MathUtils
+import com.xenoage.utils.math._0
+import com.xenoage.utils.max
 import com.xenoage.zong.core.format.ScoreFormat
 import com.xenoage.zong.core.header.ColumnHeader
 import com.xenoage.zong.core.header.ScoreHeader
 import com.xenoage.zong.core.info.ScoreInfo
 import com.xenoage.zong.core.music.*
+import com.xenoage.zong.core.music.MusicContext.Companion.noAccidentals
+import com.xenoage.zong.core.music.beam.Beam
+import com.xenoage.zong.core.music.chord.Chord
 import com.xenoage.zong.core.music.clef.Clef
 import com.xenoage.zong.core.music.clef.ClefType
+import com.xenoage.zong.core.music.clef.clefTreble
 import com.xenoage.zong.core.music.key.Key
 import com.xenoage.zong.core.music.key.TraditionalKey
 import com.xenoage.zong.core.music.key.TraditionalKey.Mode
 import com.xenoage.zong.core.music.util.*
-import com.xenoage.zong.core.position.MP
-import com.xenoage.zong.utils.exceptions.IllegalMPException
-import lombok.Getter
-import lombok.Setter
-import lombok.`val`
-
-import java.util.HashMap
-
-import com.xenoage.utils.kernel.Range.range
-import com.xenoage.utils.kernel.Range.rangeReverse
-import com.xenoage.utils.math.Fraction._0
-import com.xenoage.utils.math.Fraction.fr
-import com.xenoage.utils.math._0
-import com.xenoage.utils.math.lcm
-import com.xenoage.utils.max
-import com.xenoage.zong.core.header.ScoreHeader.scoreHeader
-import com.xenoage.zong.core.music.MusicContext.Companion.noAccidentals
-import com.xenoage.zong.core.music.MusicContext.noAccidentals
-import com.xenoage.zong.core.music.clef.clefTreble
-import com.xenoage.zong.core.music.util.BeatE.selectLatest
 import com.xenoage.zong.core.music.util.Interval.At
 import com.xenoage.zong.core.music.util.Interval.BeforeOrAt
-import com.xenoage.zong.core.music.util.MPE.mpE
 import com.xenoage.zong.core.position.Beat
+import com.xenoage.zong.core.position.MP
 import com.xenoage.zong.core.position.MP.Companion.atBeat
 import com.xenoage.zong.core.position.MP.Companion.atColumnBeat
 import com.xenoage.zong.core.position.MP.Companion.atMeasure
-import com.xenoage.zong.core.position.MP.Companion.mp0
-import com.xenoage.zong.core.position.MP.atMeasure
 import com.xenoage.zong.core.position.MP.Companion.mpb0
 import com.xenoage.zong.core.position.MP.Companion.unknown
 import com.xenoage.zong.core.position.MPElement
+import java.util.*
 
 
 /**
@@ -366,6 +348,14 @@ class Score : Document {
 				}
 			}
 		}
-	}
+
+	/**
+	 * A sequence with all [Beam]s in a score,
+	 * by staff, measure, voice and beat (regarding the start chord).
+	 */
+	fun getAllBeams(): Sequence<MPE<Beam>> =
+			getAllVoiceElements().filter { it.element is Chord && it.element.beam != null}.map {
+				MPE((it.element as Chord).beam!!, it.mp)
+			}
 
 }

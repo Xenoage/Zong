@@ -17,6 +17,6 @@ interface Document {
 	/**
 	 * Gets the supported file formats for reading and writing documents of this type.
 	 */
-	val supportedFormats: SupportedFormats<out Document>
+	val supportedFormats: SupportedFormats<out Document>?
 
 }
