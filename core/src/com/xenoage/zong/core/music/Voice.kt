@@ -2,6 +2,7 @@ package com.xenoage.zong.core.music
 
 import com.xenoage.utils.math._0
 import com.xenoage.utils.sequences.filterAndMapWithPrevious
+import com.xenoage.utils.sequences.mapWithPrevious
 import com.xenoage.zong.core.Score
 import com.xenoage.zong.core.music.util.*
 import com.xenoage.zong.core.music.util.FirstOrLast.First
@@ -40,6 +41,15 @@ class Voice : MPElement, MPContainer {
 	 */
 	val filledBeats: Duration
 		get() = elements.fold(_0, { acc, e -> acc + e.duration })
+
+	/**
+	 * Gets a sequence of all elements in this voice, together with their start beat.
+	 */
+	val elementsWithBeats: Sequence<BeatE<VoiceElement>>
+		get() = elements.asSequence().mapWithPrevious { e, last: Pair<*, Beat>? ->
+			var beat = if (last == null) _0 else last.second
+			Pair(BeatE(e, beat), beat + e.duration)
+		}.map { it.first }
 
 	/**
 	 * Gets a sequence of all used beats in this voice, that means

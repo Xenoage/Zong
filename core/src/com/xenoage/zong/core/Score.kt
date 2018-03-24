@@ -42,11 +42,14 @@ import com.xenoage.zong.core.music.util.Interval.At
 import com.xenoage.zong.core.music.util.Interval.BeforeOrAt
 import com.xenoage.zong.core.music.util.MPE.mpE
 import com.xenoage.zong.core.position.Beat
+import com.xenoage.zong.core.position.MP.Companion.atBeat
 import com.xenoage.zong.core.position.MP.Companion.atColumnBeat
 import com.xenoage.zong.core.position.MP.Companion.atMeasure
 import com.xenoage.zong.core.position.MP.Companion.mp0
 import com.xenoage.zong.core.position.MP.atMeasure
 import com.xenoage.zong.core.position.MP.Companion.mpb0
+import com.xenoage.zong.core.position.MP.Companion.unknown
+import com.xenoage.zong.core.position.MPElement
 
 
 /**
@@ -334,5 +337,35 @@ class Score : Document {
 				column.columnElementsWithBeats.map { MPE(it.element, atColumnBeat(columnIndex, it.beat)) } +
 					column.columnElementsWithoutBeats.map { MPE(it, atMeasure(columnIndex)) }
 			}
+
+	/**
+	 * A sequence with all measure elements in a score, by staff and measure.
+	 * The elements within a measure may be unsorted by beat.
+	 */
+	fun getAllMeasureElements(): Sequence<MPE<MPElement>> =
+			stavesList.staves.indices.asSequence().flatMap { staffIndex ->
+				val staff = stavesList.staves[staffIndex]
+				staff.measures.indices.asSequence().flatMap { measureIndex ->
+					val measure = staff.measures[measureIndex]
+					measure.measureElements.map { MPE(it.element, atBeat(staffIndex, measureIndex, unknown, it.beat)) }
+				}
+			}
+
+	/**
+	 * A sequence with all [VoiceElement]s in a score,
+	 * by staff, measure, voice and beat.
+	 */
+	fun getAllVoiceElements(): Sequence<MPE<VoiceElement>> =stavesList.staves.indices.asSequence().flatMap { staffIndex ->
+		val staff = stavesList.staves[staffIndex]
+		staff.measures.indices.asSequence().flatMap { measureIndex ->
+			val measure = staff.measures[measureIndex]
+			measure.voices.indices.asSequence().flatMap { voiceIndex ->
+				val voice = measure.voices[voiceIndex]
+				voice.elementsWithBeats.mapIndexed { elementIndex, e ->
+					MPE(e.element, MP(staffIndex, measureIndex, voiceIndex, e.beat, elementIndex)) }
+				}
+			}
+		}
+	}
 
 }
