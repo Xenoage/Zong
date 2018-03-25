@@ -1,8 +1,8 @@
 rootProject.name = 'zong'
 
-//include 'core'
-//include 'core:core-js'
-//include 'core:core-jvm'
+include 'core'
+include 'core:core-js'
+include 'core:core-jvm'
 include 'utils-kotlin'
 include 'utils-kotlin:utils-kotlin-js'
 include 'utils-kotlin:utils-kotlin-jvm'

@@ -1,60 +1,136 @@
-//Quick overview over targets:
-//
-// - build (default)  compile and test Zong!
-//
-// - for building Android, call gradle in the mobile-android folder, since this build
-//   script is not able to handle both Java builds and Android builds
-// - for building the GWT webapp, currently only the IntelliJ IDEA is supported, since
-//   there were too many problems with the unofficial GWT Gradle plugins. Hopefully this
-//   will change later. For now, import the webapp folder in IntelliJ IDEA and use its
-//   own GWT support.
+// structure of Kotlin build files inspired by
+// https://github.com/mverleg/kotlin_multiplatform_gradle_demo/
 
-/*
-defaultTasks 'build'
-
-allprojects {
+buildscript {
+	ext.kotlin_version = '1.2.30'
 
 	repositories {
 		mavenCentral()
-		maven { url "http://files.xenoage.com/maven2" }
 	}
 
-	plugins.withType(JavaPlugin).whenPluginAdded {
-		compileJava.options.encoding = 'UTF-8'
-		compileTestJava.options.encoding = 'UTF-8'
+	dependencies {
+		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+	}
+}
+
+apply plugin: 'kotlin-platform-common'
+
+/* Make a list of submodules organized by platform. */
+def fmtMods = { mods -> mods.collect { it.toString().substring(8) }.join(', ') } //substring: omit "project "
+project.ext {
+	common_submods = subprojects.findAll {
+		!it.name.endsWith('-jvm') && !it.name.endsWith('-js') // && !it.name.endsWith('-native')
+	}
+	println("common submodules ${fmtMods(common_submods)}")
+	jvm_submods = subprojects.findAll {
+		it.name.endsWith('-jvm')
+	}
+	println("JVM submodules: ${fmtMods(jvm_submods)}")
+	js_submods = subprojects.findAll {
+		it.name.endsWith('-js')
+	}
+	println("javascript submodules: ${fmtMods(js_submods)}")
+}
+
+/* All the projects (including this top-level one). */
+allprojects {
+	group 'com.xenoage.zong'
+	version 'unspecified'
+
+	repositories {
+		mavenCentral()
 	}
 
+	/* Merge all the build directories into one. */
+	//buildDir = rootProject.file('build')
 }
 
-
-//TODO in subprojects:
-//additional configurations for compile classpaths (use as soon as Buildship (Gradle in Eclipse) supports it)
-//configurations { //TODO: add configuration as soon as Buildship (Gradle in Eclipse) supports it
-//	compileOnly
-//	testCompileOnly { extendsFrom compileOnly }
-//} 
-//sourceSets -> main / test:
-//	compileClasspath += configurations.compileOnly //TODO: add configuration as soon as Buildship (Gradle in Eclipse) supports it
-//	compileClasspath += configurations.compileOnly + configurations.testCompileOnly //TODO: add configuration as soon as Buildship (Gradle in Eclipse) supports it
-
-//TODO
-task distPlayer(type: Jar) {
-	
-	subprojects.each() { subproject ->
-		ext.jarDir = "${subproject.name}/build/libs/"
-		from (zipTree(ext.jarDir + subproject.name + ".jar")) { exclude 'license.txt' }
-		from (zipTree(ext.jarDir + subproject.name + ".jar")) { include 'license.txt' into("licenses/${subproject.name}/") }
-	};
-	from 'license.txt'
-	destinationDir = file("build/dist/onejar")
-	archiveName = 'utils.jar'
-	manifest.attributes 'Created-By': 'Xenoage Software'
+/* All the subprojects (but not this top-level one, which contains no code). */
+configure(subprojects) {
+//    repositories {
+//        mavenCentral()
+//    }
 }
 
-//create JavaDoc using Ant task
-ant.importBuild 'javadoc.build.xml'
-task createDoc {
-	dependsOn antZongJavadoc
+/* All the common subprojects (including this top-level one), but no platform projects. */
+configure(common_submods) {
+	apply plugin: 'kotlin-platform-common'
+
+	dependencies {
+		compile "org.jetbrains.kotlin:kotlin-stdlib-common:$kotlin_version"
+		testCompile "org.jetbrains.kotlin:kotlin-test-annotations-common:$kotlin_version"
+		testCompile "org.jetbrains.kotlin:kotlin-test-common:$kotlin_version"
+	}
+
+	sourceSets { //can not be applied to all subprojects at once, since plugin has to be applied before
+		main {
+			kotlin { srcDir 'src' }
+			resources { srcDir 'src' }
+		}
+		test {
+			kotlin { srcDir 'test' }
+			resources { srcDir 'test' }
+		}
+	}
 }
 
-*/
+/* All JVM platform subprojects. */
+configure(jvm_submods) {
+	apply plugin: 'kotlin-platform-jvm'
+
+	dependencies {
+		compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+		testCompile "junit:junit:4.12"
+		testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+		testCompile "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
+	}
+
+	sourceSets { //can not be applied to all subprojects at once, since plugin has to be applied before
+		main {
+			kotlin { srcDir 'src' }
+			resources { srcDir 'src' }
+		}
+		test {
+			kotlin { srcDir 'test' }
+			resources { srcDir 'test' }
+		}
+	}
+}
+
+/* All javascript platform subprojects. */
+configure(js_submods) {
+	apply plugin: 'kotlin-platform-js'
+
+	dependencies {
+		compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
+		testCompile "org.jetbrains.kotlin:kotlin-test-js:$kotlin_version"
+	}
+
+	compileKotlin2Js {
+		kotlinOptions {
+			outputFile = "${project.buildDir.path}/js/${project.name}.js"
+			moduleKind = "umd"
+			sourceMap = true
+			metaInfo = true
+		}
+	}
+
+	sourceSets { //can not be applied to all subprojects at once, since plugin has to be applied before
+		main {
+			kotlin { srcDir 'src' }
+			resources { srcDir 'src' }
+		}
+		test {
+			kotlin { srcDir 'test' }
+			resources { srcDir 'test' }
+		}
+	}
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '4.6'
+}
+
+dependencies {
+	compile project(":core")
+}
