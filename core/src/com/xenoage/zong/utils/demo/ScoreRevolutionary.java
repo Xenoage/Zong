@@ -129,8 +129,8 @@ public class ScoreRevolutionary {
 		cursor.write(lastSlurC = chord(f16, Companion.pi(Companion.getG(), 4), Companion.pi(Companion.getG(), 5)));
 		cursor.closeBeam();
 		cursor.write((MeasureElement) cresc.getWedgeEnd());
-		firstSlurB = new BezierPoint(sp(is * 0.8f, is * 7.6f), sp(is, is * 0.8f));
-		lastSlurB = new BezierPoint(sp(0, is * 6f), sp(-is, is));
+		firstSlurB = new BezierPoint(Companion.sp(is * 0.8f, is * 7.6f), Companion.sp(is, is * 0.8f));
+		lastSlurB = new BezierPoint(Companion.sp(0, is * 6f), Companion.sp(-is, is));
 		new SlurAdd(new Slur(SlurType.Slur, clwp(firstSlurC, firstSlurB), clwp(lastSlurC, lastSlurB), null)).execute();
 
 		//measure 3
@@ -149,8 +149,8 @@ public class ScoreRevolutionary {
 		cursor.write(lastSlurC = chord(f16, Companion.pi(Companion.getG(), 0, 4), Companion.pi(Companion.getG(), 0, 5)));
 		cursor.closeBeam();
 		cursor.write((MeasureElement) cresc.getWedgeEnd());
-		firstSlurB = new BezierPoint(sp(is * 0.8f, is * 7.6f), sp(is, is * 0.8f));
-		lastSlurB = new BezierPoint(sp(0, is * 6f), sp(-is, is));
+		firstSlurB = new BezierPoint(Companion.sp(is * 0.8f, is * 7.6f), Companion.sp(is, is * 0.8f));
+		lastSlurB = new BezierPoint(Companion.sp(0, is * 6f), Companion.sp(-is, is));
 		new SlurAdd(new Slur(SlurType.Slur, clwp(firstSlurC, firstSlurB), clwp(lastSlurC, lastSlurB), null)).execute();
 
 		//measure 5
@@ -219,8 +219,8 @@ public class ScoreRevolutionary {
 		cursor.write(chord(f16, Companion.pi(Companion.getC(), 0, 2)));
 		cursor.write(lastSlurC = chord(f16, Companion.pi(Companion.getG(), 0, 1)));
 		cursor.closeBeam();
-		firstSlurB = new BezierPoint(sp(0, is * 1.5f), sp(15, 5));
-		lastSlurB = new BezierPoint(sp(0, is * 7.5f), sp(-is * 5, is * 2));
+		firstSlurB = new BezierPoint(Companion.sp(0, is * 1.5f), Companion.sp(15, 5));
+		lastSlurB = new BezierPoint(Companion.sp(0, is * 7.5f), Companion.sp(-is * 5, is * 2));
 		new SlurAdd(new Slur(SlurType.Slur, clwp(firstSlurC, firstSlurB), clwp(lastSlurC, lastSlurB), null)).execute();
 
 		//measure 3
@@ -250,8 +250,8 @@ public class ScoreRevolutionary {
 		cursor.write(chord(f16, Companion.pi(Companion.getE(), -1, 3)));
 		cursor.write(lastSlurC = chord(f16, Companion.pi(Companion.getD(), 0, 3)));
 		cursor.closeBeam();
-		firstSlurB = new BezierPoint(sp(0, is * 1.5f), sp(15, 3));
-		lastSlurB = new BezierPoint(sp(0, is * 5f), sp(-is * 5.5f, is * 2));
+		firstSlurB = new BezierPoint(Companion.sp(0, is * 1.5f), Companion.sp(15, 3));
+		lastSlurB = new BezierPoint(Companion.sp(0, is * 5f), Companion.sp(-is * 5.5f, is * 2));
 		new SlurAdd(new Slur(SlurType.Slur, clwp(firstSlurC, firstSlurB), clwp(lastSlurC, lastSlurB), null)).execute();
 
 		//measure 4
@@ -282,8 +282,8 @@ public class ScoreRevolutionary {
 		cursor.write(chord(f16, Companion.pi(Companion.getC(), 0, 2)));
 		cursor.write(lastSlurC = chord(f16, Companion.pi(Companion.getG(), 0, 1)));
 		cursor.closeBeam();
-		firstSlurB = new BezierPoint(sp(-is, is * 8.5f), sp(15, 4));
-		lastSlurB = new BezierPoint(sp(0, is * 7.5f), sp(-is * 5, is * 2));
+		firstSlurB = new BezierPoint(Companion.sp(-is, is * 8.5f), Companion.sp(15, 4));
+		lastSlurB = new BezierPoint(Companion.sp(0, is * 7.5f), Companion.sp(-is * 5, is * 2));
 		new SlurAdd(new Slur(SlurType.Slur, clwp(firstSlurC, firstSlurB), clwp(lastSlurC, lastSlurB), null)).execute();
 
 		//measure 5

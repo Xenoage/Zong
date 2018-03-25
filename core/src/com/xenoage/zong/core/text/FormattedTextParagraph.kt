@@ -1,6 +1,5 @@
 package com.xenoage.zong.core.text
 
-import com.sun.xml.internal.ws.util.StringUtils
 import com.xenoage.utils.*
 import com.xenoage.utils.collections.*
 import com.xenoage.utils.font.TextMetrics
