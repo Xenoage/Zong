@@ -1,23 +1,11 @@
 package com.xenoage.zong.core.music
 
-import com.xenoage.utils.kernel.Range.range
-import com.xenoage.utils.kernel.Range.rangeReverse
-
-import java.util.ArrayList
-
-import lombok.Data
-
-import com.xenoage.utils.annotations.Unneeded
-import com.xenoage.utils.math.Fraction
-import com.xenoage.utils.math.MathUtils
 import com.xenoage.utils.math.lcm
-import com.xenoage.utils.throwEx
 import com.xenoage.zong.core.Score
 import com.xenoage.zong.core.music.group.BarlineGroup
 import com.xenoage.zong.core.music.group.BracketGroup
 import com.xenoage.zong.core.music.group.StavesRange
 import com.xenoage.zong.core.music.util.Column
-import com.xenoage.zong.core.position.Beat
 import com.xenoage.zong.core.position.MP
 import com.xenoage.zong.core.position.MP.Companion.atStaff
 import com.xenoage.zong.utils.exceptions.IllegalMPException
@@ -159,7 +147,7 @@ class StavesList(
 		//add new group at the right position
 		//(the bracket groups are sorted by start index)
 		var i = 0
-		while (i < bracketGroups.size && bracketGroups[i].staves.getStart() > stavesRange.getStart()) {
+		while (i < bracketGroups.size && bracketGroups[i].staves.start> stavesRange.start) {
 			i++
 		}
 		bracketGroups.add(i, BracketGroup(stavesRange, style))
