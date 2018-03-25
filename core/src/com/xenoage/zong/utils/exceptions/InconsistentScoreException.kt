@@ -1,4 +1,4 @@
-package com.xenoage.zong.core.util
+package com.xenoage.zong.utils.exceptions
 
 import com.xenoage.zong.core.Score
 

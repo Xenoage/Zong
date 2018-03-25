@@ -1,5 +1,7 @@
 package com.xenoage.zong.commands.core.music
 
+import com.xenoage.utils.document.UselessException
+import com.xenoage.utils.document.command.UndoableCommand
 import com.xenoage.zong.core.music.Measure
 import com.xenoage.zong.core.music.Voice
 
@@ -22,20 +24,18 @@ class VoiceAdd(
 	override fun execute() {
 		if (measure.voices.size > voiceIndex)
 			throw UselessException()
-		lastExistingVoiceIndex = measure.voices.size() - 1
-		for (i in lastExistingVoiceIndex + 1..voiceIndex) {
-			val voice = Companion.voice()
+		lastExistingVoiceIndex = measure.voices.size - 1
+		for (i in (lastExistingVoiceIndex+1)..voiceIndex) {
+			val voice = Voice()
 			voice.setParent(measure)
 			measure.voices.add(voice)
 		}
 	}
 
-
-	@Override
 	override fun undo() {
 		var i = voiceIndex
 		while (i > lastExistingVoiceIndex) {
-			measure.voices.remove(i)
+			measure.voices.removeAt(i)
 			i++
 		}
 	}

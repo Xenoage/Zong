@@ -1,5 +1,6 @@
 // structure of Kotlin build files inspired by
 // https://github.com/mverleg/kotlin_multiplatform_gradle_demo/
+// TODO: give thanks to the author for his useful tips
 
 buildscript {
 	ext.kotlin_version = '1.2.30'

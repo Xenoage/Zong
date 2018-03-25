@@ -202,8 +202,8 @@ public final class Cursor
 
 		//create the options
 		VoiceElementWrite.Options options = new VoiceElementWrite.Options();
-		options.checkTimeSignature = true; //always obey to time signature
-		options.fillWithHiddenRests = fillWithHiddenRests; //optionally, fill gaps with hidden rests
+		options.setCheckTimeSignature(true); //always obey to time signature
+		options.setFillWithHiddenRests(fillWithHiddenRests); //optionally, fill gaps with hidden rests
 		
 		//write the element
 		new VoiceElementWrite(score.getVoice(mp), mp, element, options).execute();
