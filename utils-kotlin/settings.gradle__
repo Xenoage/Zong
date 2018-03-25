@@ -1,0 +1,3 @@
+rootProject.name = 'utils-kotlin'
+
+include 'utils-kotlin-jvm', 'utils-kotlin-js'

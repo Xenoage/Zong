@@ -9,6 +9,7 @@
 //   will change later. For now, import the webapp folder in IntelliJ IDEA and use its
 //   own GWT support.
 
+/*
 defaultTasks 'build'
 
 allprojects {
@@ -55,3 +56,5 @@ ant.importBuild 'javadoc.build.xml'
 task createDoc {
 	dependsOn antZongJavadoc
 }
+
+*/

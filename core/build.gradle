@@ -1,19 +1,37 @@
-plugins {
-	id "org.jetbrains.kotlin.jvm" version "1.2.30"
+buildscript {
+	ext.kotlin_version = '1.2.30'
+
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+	}
 }
 
-apply plugin: 'java'
-apply plugin: "kotlin"
-sourceCompatibility = 8
+group 'com.xenoage.zong.core'
+version 'unspecified'
+
+apply plugin: 'kotlin-platform-common'
+
+repositories {
+	mavenCentral()
+}
 
 dependencies {
-	compile project(':utils-jvm')
-	compile/*compileOnly - use as soon as Buildship (Gradle in Eclipse) supports it*/ 'org.projectlombok:lombok:1.16.6'
+	compile project(":utils-kotlin")
+	compile "org.jetbrains.kotlin:kotlin-stdlib-common:$kotlin_version"
+	testCompile "org.jetbrains.kotlin:kotlin-test-annotations-common:$kotlin_version"
+	testCompile "org.jetbrains.kotlin:kotlin-test-common:$kotlin_version"
 }
 
 sourceSets {
 	main {
-		java { srcDir 'src' }
+		kotlin { srcDir 'src' }
 		resources { srcDir 'src' }
+	}
+	test {
+		kotlin { srcDir 'test' }
+		resources { srcDir 'test' }
 	}
 }
