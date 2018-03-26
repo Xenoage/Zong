@@ -99,7 +99,7 @@ class SortedList<T : Comparable<T>> private constructor(
 	 */
 	private fun add(entry: T, replace: Boolean) {
 		for (i in indices) {
-			if (this[i] < entry) {
+			if (this[i] > entry) {
 				//add before this entry
 				list.add(i, entry)
 				return
@@ -107,10 +107,12 @@ class SortedList<T : Comparable<T>> private constructor(
 			else if (this[i] == entry) {
 				if (replace)
 					list[i] = entry
+				else if (duplicates)
+					list.add(i, entry)
 				return
 			}
 		}
-		add(entry)
+		list.add(entry)
 	}
 
 	companion object {
@@ -129,12 +131,6 @@ class SortedList<T : Comparable<T>> private constructor(
 }
 
 fun <T : Comparable<T>> sortedListOf(vararg items: T): SortedList<T> {
-	val ret = SortedList<T>()
-	items.forEach { ret.add(it) }
-	return ret;
-}
-
-fun <T : Comparable<T>> sortedListOf(items: Collection<T>): SortedList<T> {
 	val ret = SortedList<T>()
 	items.forEach { ret.add(it) }
 	return ret;
