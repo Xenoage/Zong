@@ -17,7 +17,7 @@ data class Barline(
 		/** The style of the line(s) */
 		val style: BarlineStyle,
 		/** The repeat style */
-		val repeat: BarlineRepeat,
+		val repeat: BarlineRepeat = BarlineRepeat.None,
 		/** The number of repeats */
 		val repeatTimes: RepeatTimes = 0
 ) : ColumnElement {

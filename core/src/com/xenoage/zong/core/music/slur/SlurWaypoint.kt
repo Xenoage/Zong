@@ -1,6 +1,7 @@
 package com.xenoage.zong.core.music.slur
 
 import com.xenoage.zong.core.music.chord.Chord
+import com.xenoage.zong.core.music.format.BezierPoint
 
 
 /**

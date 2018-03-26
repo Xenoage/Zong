@@ -9,7 +9,6 @@ import com.xenoage.utils.max
 import com.xenoage.utils.setExtendBy
 import com.xenoage.utils.throwEx
 import com.xenoage.zong.core.Score
-import com.xenoage.zong.core.header.ColumnHeader
 import com.xenoage.zong.core.music.chord.Chord
 import com.xenoage.zong.core.music.clef.Clef
 import com.xenoage.zong.core.music.direction.Direction
@@ -20,7 +19,6 @@ import com.xenoage.zong.core.music.util.*
 import com.xenoage.zong.core.music.util.Interval.*
 import com.xenoage.zong.core.position.*
 import com.xenoage.zong.utils.exceptions.IllegalMPException
-import java.util.*
 
 
 /**

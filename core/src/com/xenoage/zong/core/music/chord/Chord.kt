@@ -6,15 +6,15 @@ import com.xenoage.zong.core.Score
 import com.xenoage.zong.core.music.Pitch
 import com.xenoage.zong.core.music.Voice
 import com.xenoage.zong.core.music.VoiceElement
+import com.xenoage.zong.core.music.annotation.Articulation
+import com.xenoage.zong.core.music.annotation.ArticulationType
 import com.xenoage.zong.core.music.beam.Beam
 import com.xenoage.zong.core.music.direction.Direction
 import com.xenoage.zong.core.music.lyric.Lyric
 import com.xenoage.zong.core.music.slur.Slur
 import com.xenoage.zong.core.music.tuplet.Tuplet
 import com.xenoage.zong.core.music.util.Duration
-import com.xenoage.zong.core.position.MP
 import com.xenoage.zong.core.position.MPContainer
-import com.xenoage.zong.core.position.MPElement
 
 /**
  * Class for a chord.
@@ -48,7 +48,7 @@ class Chord(
 
 	/** The articulation, ornament and other annotations on this chord,
 	 * sorted by ascending distance to the chord. The empty list may be immutable. */
-	var annotations: List<Annotation> = emptyList()
+	var annotations: List<out Annotation> = emptyList()
 
 	/** The beam this chord is part of, or null. */
 	var beam: Beam? = null
@@ -113,9 +113,22 @@ class Chord(
 		"chord(" + notes!![0].toString() + (if (notes!!.size > 1) ",..." else "") +
 				(if (duration!!.isGreater0) ";dur:" + duration!! else ";grace") + ")"
 
-}
+	companion object {
 
-/**
- * Creates a chord with the given notes and duration.
- */
-fun chord(duration: Duration, vararg notes: Note) = Chord(sortedListOf(*notes), duration)
+		/** Creates a chord with the given notes and duration. */
+		operator fun invoke(duration: Duration, vararg notes: Note) =
+				Chord(sortedListOf(*notes), duration)
+
+		/** Creates a chord with the given pitches and duration. */
+		operator fun invoke(duration: Duration, vararg pitches: Pitch) =
+				Chord(sortedListOf(pitches.map { Note(it) }), duration)
+
+	}
+
+	//TODO: convenience method. move to helper class
+	fun addArticulations(vararg articulations: ArticulationType): Chord {
+		this.annotations += articulations.map { Articulation(it) as Annotation }
+		return this
+	}
+
+}

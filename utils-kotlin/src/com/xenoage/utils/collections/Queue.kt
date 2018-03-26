@@ -1,6 +1,8 @@
 package com.xenoage.utils.collections
 
-@Deprecated("Workaround until Kotlin-Common supports LinkedList")
+/**
+ * Workaround until Kotlin-Common supports LinkedList.
+ */
 typealias Queue<T> = ArrayList<T>
 
 fun <T> Queue<T>.addFirst(e: T) =

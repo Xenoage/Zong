@@ -3,7 +3,6 @@ package com.xenoage.zong.commands.core.music
 import com.xenoage.utils.document.command.Command
 import com.xenoage.utils.document.command.UndoableCommand
 import com.xenoage.utils.iterators.reverseIt
-import com.xenoage.zong.commands.core.music.VoiceElementWrite.Options.Companion.defaultOptions
 import com.xenoage.zong.core.music.Voice
 import com.xenoage.zong.core.music.VoiceElement
 import com.xenoage.zong.core.music.rest.Rest
@@ -32,7 +31,7 @@ class VoiceElementWrite(
 	/** The element to write. */
 	private val element: VoiceElement,
 	/** The options for writing. */
-	private val options: Options = defaultOptions
+	private val options: Options = Options()
 ) : UndoableCommand() {
 
 	//backup
@@ -44,17 +43,13 @@ class VoiceElementWrite(
 		 * is too long for the current time signature. If this is true, the
 		 * given voice must be part of a score.
 		 */
-		val checkTimeSignature: Boolean = false,
+		var checkTimeSignature: Boolean = false,
 		/**
 		 * True, if additional rests, written before the given element,
 		 * should be set to invisible.
 		 */
-		val fillWithHiddenRests: Boolean = false
-	) {
-		companion object {
-			val defaultOptions = Options()
-		}
-	}
+		var fillWithHiddenRests: Boolean = false
+	)
 
 	override fun execute() {
 		//determine start mp and element index

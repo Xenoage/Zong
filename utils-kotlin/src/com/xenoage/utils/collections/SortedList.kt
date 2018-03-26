@@ -1,8 +1,5 @@
 package com.xenoage.utils.collections
 
-import kotlin.coroutines.experimental.EmptyCoroutineContext.get
-import kotlin.properties.Delegates.notNull
-
 /**
  * Mutable sorted list.
  * The list may contain duplicate entries or not.
@@ -132,6 +129,12 @@ class SortedList<T : Comparable<T>> private constructor(
 }
 
 fun <T : Comparable<T>> sortedListOf(vararg items: T): SortedList<T> {
+	val ret = SortedList<T>()
+	items.forEach { ret.add(it) }
+	return ret;
+}
+
+fun <T : Comparable<T>> sortedListOf(items: Collection<T>): SortedList<T> {
 	val ret = SortedList<T>()
 	items.forEach { ret.add(it) }
 	return ret;

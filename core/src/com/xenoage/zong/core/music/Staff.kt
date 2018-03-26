@@ -2,13 +2,13 @@ package com.xenoage.zong.core.music
 
 import com.xenoage.utils.throwEx
 import com.xenoage.zong.core.Score
-import com.xenoage.zong.core.music.Measure.measure
 import com.xenoage.zong.core.music.chord.Chord
 import com.xenoage.zong.core.music.util.MPE
 import com.xenoage.zong.core.position.MP
 import com.xenoage.zong.core.position.MP.Companion.atMeasure
 import com.xenoage.zong.core.position.MP.Companion.unknown
 import com.xenoage.zong.core.position.MPContainer
+import com.xenoage.zong.core.position.MPElement
 import com.xenoage.zong.utils.exceptions.IllegalMPException
 
 
@@ -34,16 +34,19 @@ class Staff (
 			measure.parent = this
 	}
 
-	var parentScore: Score? = null
+	/** The parent score of this staff, or null, if this element is not part of a score. */
+	var score: Score? = null
 
-	var parent: MPContainer?
+	var parent: MPContainer? //TODO
 		get() = throw UnsupportedOperationException()
 		set(_) = throw UnsupportedOperationException()
+
+	override fun getChildMP(child: MPElement): MP? = throw UnsupportedOperationException() //TODO
 
 	/** The custom interline space of this staff, or the default one of the score,
 	 *  if unset (parent score required). */
 	val interlineSpace: IS
-		get() = interlineSpaceOrNull ?: parentScore?.format?.interlineSpace ?: throwEx("unknown score")
+		get() = interlineSpaceOrNull ?: score?.format?.interlineSpace ?: throwEx("unknown score")
 
 	/**
 	 * The number of voices in this staff.
@@ -52,14 +55,10 @@ class Staff (
 	val voicesCount: Int
 		get() = measures.asSequence().map { it.voices.size }.max() ?: 0
 
-	/** The parent score of this staff, or null, if this element is not part of a score. */
-	val score: Score?
-		get() = this.parent?.score
-
 	/** Adds the given number of empty measures at the end of the staff. */
 	fun addEmptyMeasures(measuresCount: Int) {
 		for (i in 0 until measuresCount) {
-			val m = measure()
+			val m = Measure()
 			m.parent = this
 			measures.add(m)
 		}
@@ -120,7 +119,7 @@ class Staff (
 	 */
 	fun setMeasure(index: Int, measure: Measure) {
 		while (index >= measures.size) {
-			val m = measure()
+			val m = Measure()
 			m.parent = this
 			measures.add(m)
 		}
@@ -138,7 +137,7 @@ class Staff (
 		val parent = this.parent
 		if (parent == null || measureIndex == unknown)
 			return null
-		val staffIndex = parent.staves.indexOf(this)
+		val staffIndex = score!!.stavesList.staves.indexOf(this)
 		return if (staffIndex == unknown) null else atMeasure(staffIndex, measureIndex)
 	}
 

@@ -1,7 +1,6 @@
 package com.xenoage.zong.core.instrument
 
 import com.xenoage.zong.core.music.Pitch
-import lombok.NonNull
 
 /**
  * Pitched instrument, like piano or trumpet.

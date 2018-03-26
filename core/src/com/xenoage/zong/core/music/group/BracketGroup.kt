@@ -1,8 +1,5 @@
 package com.xenoage.zong.core.music.group
 
-import lombok.Data
-import lombok.NonNull
-
 
 /**
  * Group of staves with a common bracket.

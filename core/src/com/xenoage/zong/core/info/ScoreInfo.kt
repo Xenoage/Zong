@@ -1,8 +1,5 @@
 package com.xenoage.zong.core.info
 
-import lombok.NonNull
-import kotlin.properties.Delegates.notNull
-
 /**
  * Information about a single score,
  * like title or composer.

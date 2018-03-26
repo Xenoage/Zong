@@ -4,7 +4,6 @@ import com.xenoage.utils.document.command.UndoableCommand
 import com.xenoage.zong.core.Score
 import com.xenoage.zong.core.music.Part
 import com.xenoage.zong.core.music.Staff
-import java.util.*
 
 
 /**
@@ -37,7 +36,7 @@ class PartAdd(
 			staves = ArrayList(part.stavesCount)
 			for (i in 0 until part.stavesCount) {
 				val staff = Staff(linesCount = 5)
-				staff.parentScore = score
+				staff.score = score
 				staff.addEmptyMeasures(measuresCount) //fill with empty measures
 				this.staves!!.add(staff)
 			}

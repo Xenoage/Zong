@@ -7,14 +7,16 @@ import com.xenoage.zong.core.Score
 /**
  * A list of common file formats.
  */
-enum class ScoreFileFormats private constructor(val format: FileFormat<Score>) {
+enum class ScoreFileFormats(
+		val format: FileFormat<Score>
+) {
 
 	Midi(FileFormat<Score>("Midi", "Midi", ".mid")),
-	MP3(FileFormat<T>("MP3", "MPEG Audio Layer III", ".mp3")),
-	MusicXML(FileFormat<T>("MusicXML", "MusicXML", ".mxl", ".xml")),
-	OGG(FileFormat<T>("OGG", "Ogg Vorbis", ".ogg")),
-	PDF(FileFormat<T>("PDF", "PDF", ".pdf")),
-	PNG(FileFormat<T>("PNG", "PNG", ".png")),
-	WAV(FileFormat<T>("WAV", "Waveform Audio", ".wav"))
+	MP3(FileFormat<Score>("MP3", "MPEG Audio Layer III", ".mp3")),
+	MusicXML(FileFormat<Score>("MusicXML", "MusicXML", ".mxl", listOf(".xml"))),
+	OGG(FileFormat<Score>("OGG", "Ogg Vorbis", ".ogg")),
+	PDF(FileFormat<Score>("PDF", "PDF", ".pdf")),
+	PNG(FileFormat<Score>("PNG", "PNG", ".png")),
+	WAV(FileFormat<Score>("WAV", "Waveform Audio", ".wav"))
 
 }

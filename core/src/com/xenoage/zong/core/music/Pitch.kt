@@ -87,6 +87,9 @@ data class Pitch(
 		fun pi(step: Step, alter: Int, octave: Int): Pitch =
 				cache[octave * 10000 + step.ordinal * 100 + alter, { Pitch(step, alter, octave) }]
 
+		fun pi(step: Step, octave: Int): Pitch =
+				pi(step, 0, octave)
+
 		fun pi(step: Int, alter: Int, octave: Int): Pitch =
 			pi(Step.values()[step], alter, octave)
 

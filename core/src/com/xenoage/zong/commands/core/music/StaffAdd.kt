@@ -20,7 +20,7 @@ class StaffAdd(
 			throw UselessException()
 		repeat(stavesCount) {
 			val staff = Staff()
-			staff.parentScore = score
+			staff.score = score
 			staff.addEmptyMeasures(score.measuresCount)
 			score.stavesList.staves.add(staff)
 		}

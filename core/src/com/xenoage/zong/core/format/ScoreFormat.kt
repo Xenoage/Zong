@@ -4,8 +4,6 @@ import com.xenoage.utils.Mm
 import com.xenoage.utils.font.FontInfo
 import com.xenoage.utils.setExtend
 import com.xenoage.zong.core.format.Defaults.defaultFont
-import lombok.NonNull
-import kotlin.properties.Delegates.notNull
 
 /**
  * Default formats to be used in a score.

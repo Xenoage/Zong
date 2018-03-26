@@ -178,8 +178,8 @@ class Beam(
 
 	/** Computes the vertical span of this beam. */
 	private fun computeSpan() {
-		var minStaffIndex = Integer.MAX_VALUE
-		var maxStaffIndex = Integer.MIN_VALUE
+		var minStaffIndex = Int.MAX_VALUE
+		var maxStaffIndex = Int.MIN_VALUE
 
 		//check if the beam spans over a single staff or two adjacent staves or more
 		for (waypoint in waypoints) {
