@@ -4,22 +4,21 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.2'
+        classpath 'com.android.tools.build:gradle:3.0.0'
     }
 }
 
 apply plugin: 'com.android.application'
-defaultTasks 'build'
 
 allprojects {
-	repositories {
-		mavenCentral()
-	}
+    repositories {
+        mavenCentral()
+    }
 }
 
 android {
     compileSdkVersion 23
-    buildToolsVersion '25.0.2'
+    buildToolsVersion '26.0.2'
 
     aaptOptions {
         noCompress "pdf" //do not compress PDF, otherwise we can not read it with PdfRenderer
@@ -31,9 +30,7 @@ android {
         targetSdkVersion 21
         versionCode 1
         versionName "1.0"
-        jackOptions {
-            enabled true
-        }
+
         compileOptions {
             sourceCompatibility JavaVersion.VERSION_1_8
             targetCompatibility JavaVersion.VERSION_1_8
@@ -48,8 +45,8 @@ android {
             debuggable true
         }
     }
-		lintOptions {
-			abortOnError false
+    lintOptions {
+        abortOnError false
     }
 }
 
@@ -59,12 +56,8 @@ dependencies {
     compile 'com.android.support:support-v4:23.+'
     compile fileTree(include: ['*.jar'], dir: 'libs')
     provided 'org.projectlombok:lombok:1.16.14'
-		annotationProcessor 'org.projectlombok:lombok:1.16.14'
-    /*
-    //ZONG-120:
-    //Zong! dependencies - currently (2017-03) the delomboked sources of the modules
-    //are copied into the src-zong folder of this project, since Lombok is not yet
-    //compatible to the new Jack compiler.
+    annotationProcessor 'org.projectlombok:lombok:1.16.14'
+
     compile project(':musicxml-in')
     compile project(':musicxml-layout')
     compile project(':renderer')
@@ -75,12 +68,4 @@ dependencies {
     compile project(':utils-base')
     compile project(':utils-jsebase')
     compile project(':utils-kernel')
-    */
-}
-
-//ZONG-120: see dependencies above
-android {
-    sourceSets.main.java {
-        srcDirs += 'src-zong'
-    }
 }
