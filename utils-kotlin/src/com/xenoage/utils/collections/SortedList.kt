@@ -1,5 +1,7 @@
 package com.xenoage.utils.collections
 
+import kotlin.properties.Delegates
+
 /**
  * Mutable sorted list.
  * The list may contain duplicate entries or not.
@@ -135,3 +137,21 @@ fun <T : Comparable<T>> sortedListOf(vararg items: T): SortedList<T> {
 	items.forEach { ret.add(it) }
 	return ret;
 }
+
+fun <T : Comparable<T>> sortedListOf(items: Collection<T>): SortedList<T> {
+	val ret = SortedList<T>()
+	items.forEach { ret.add(it) }
+	return ret;
+}
+
+
+//TEST
+class Positive(value: Int) {
+	var value: Int by Delegates.vetoable(0) { prop, old, new -> new > old }
+}
+
+fun main(vararg args: String) {
+	val n = Positive(5)
+	println(n.value)
+}
+

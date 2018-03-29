@@ -3,9 +3,10 @@
 // TODO: give thanks to the author for his useful tips
 
 buildscript {
-	ext.kotlin_version = '1.2.30'
+	ext.kotlin_version = '1.2.40-eap-16'
 
 	repositories {
+		maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
 		mavenCentral()
 	}
 
@@ -39,6 +40,7 @@ allprojects {
 	version 'unspecified'
 
 	repositories {
+		maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
 		mavenCentral()
 	}
 
