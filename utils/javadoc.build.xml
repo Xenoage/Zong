@@ -1,0 +1,30 @@
+<project name="javadoc" default="antUtilsJavadoc">
+
+	<!-- create docs -->
+	<target name="antUtilsJavadoc">
+		<!-- settings -->
+		<property name="docdir" value="doc"/>
+		<!-- clean -->
+		<delete dir="${docdir}"/>
+		<!-- create javadoc -->
+		<javadoc packagenames="com.xenoage"
+				useexternalfile="true"
+				destdir="doc"
+				author="true"
+				use="true"
+				windowtitle="Xenoage Utils API"
+				doctitle="&lt;h1&gt;Xenoage Utils API&lt;/h1&gt;">
+			<!-- collect sources -->
+			<fileset dir=".">
+				<include name="utils-base/src/**/*.java"/>
+				<include name="utils-gwt/src/**/*.java"/>
+				<include name="utils-jse/src/**/*.java"/>
+				<include name="utils-jsebase/src/**/*.java"/>
+				<include name="utils-kernel/src/**/*.java"/>
+				<include name="utils-pdlib/src/**/*.java"/>
+				<include name="utils-serialize/src/**/*.java"/>
+			</fileset>
+		</javadoc>
+	</target>
+	
+</project>

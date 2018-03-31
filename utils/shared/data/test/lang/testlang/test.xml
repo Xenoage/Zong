@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vocabulary>
+	<voc key="TestVoc" value="This is a test vocabulary."/>
+	<voc key="TestVoc2" value="This ({1}) text has some {3} tokens in it {2}."/>
+</vocabulary>

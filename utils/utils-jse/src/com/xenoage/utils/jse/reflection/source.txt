@@ -1,0 +1,3 @@
+ClassInfo, ClassWriter, InterfaceInstance
+from
+https://github.com/thekid/xp-experiments/tree/master/java8/intf-inst

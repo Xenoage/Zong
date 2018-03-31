@@ -1,0 +1,13 @@
+apply plugin: 'java'
+sourceCompatibility = 8
+
+dependencies {
+	compile project(':utils-jsebase')
+}
+
+sourceSets {
+	main {
+		java { srcDir 'src' }
+		resources { srcDir 'src' }
+	}
+}

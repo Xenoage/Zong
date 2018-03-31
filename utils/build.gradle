@@ -1,0 +1,61 @@
+apply plugin: 'java'
+defaultTasks 'dist'
+
+allprojects {
+
+	repositories {
+		mavenCentral()
+	}
+
+	//use UTF-8 encoding
+	compileJava.options.encoding = 'UTF-8'
+	compileTestJava.options.encoding = 'UTF-8'
+	
+	//create jar file with author information
+	jar {
+		from 'license.txt'
+		manifest.attributes 'Created-By': 'Xenoage Software'
+	}
+
+}
+    
+//TODO in subprojects:
+//additional configurations for compile classpaths (use as soon as Buildship (Gradle in Eclipse) supports it)
+//configurations { //TODO: add configuration as soon as Buildship (Gradle in Eclipse) supports it
+//	compileOnly
+//	testCompileOnly { extendsFrom compileOnly }
+//} 
+//sourceSets -> main / test:
+//	compileClasspath += configurations.compileOnly //TODO: add configuration as soon as Buildship (Gradle in Eclipse) supports it
+//	compileClasspath += configurations.compileOnly + configurations.testCompileOnly //TODO: add configuration as soon as Buildship (Gradle in Eclipse) supports it
+
+
+//distribution in multiple jars
+task distDir(type:Copy) {
+	from subprojects.collect { it.tasks.withType(Jar) }
+	into "build/dist/split"
+}
+
+//distribution in single jar
+task singleJar(type: Jar) {
+	subprojects.each() { subproject ->
+		ext.jarDir = "${subproject.name}/build/libs/"
+		from (zipTree(ext.jarDir + subproject.name + ".jar")) { exclude 'license.txt' }
+		from (zipTree(ext.jarDir + subproject.name + ".jar")) { include 'license.txt' into("licenses/${subproject.name}/") }
+	};
+	from 'license.txt'
+	destinationDir = file("build/dist/onejar")
+	archiveName = 'utils.jar'
+	manifest.attributes 'Created-By': 'Xenoage Software'
+}
+
+//main task
+task dist {
+	dependsOn distDir, singleJar
+}
+
+//create JavaDoc using Ant task
+ant.importBuild 'javadoc.build.xml'
+task createDoc {
+	dependsOn antUtilsJavadoc
+}

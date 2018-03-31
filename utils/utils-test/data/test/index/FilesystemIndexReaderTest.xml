@@ -1,0 +1,10 @@
+<index>
+	<directory name="dir">
+		<file name="file1" size="1000"/>
+		<file name="file2" size="2000"/>
+		<directory name="subdir">
+			<directory name="deadend"/>
+		</directory>
+	</directory>
+	<directory name="dirempty"/>
+</index>
