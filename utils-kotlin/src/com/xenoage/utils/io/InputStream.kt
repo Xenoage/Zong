@@ -2,11 +2,18 @@ package com.xenoage.utils.io
 
 /**
  * System independent interface for input streams.
- * For example, there may be implementations for the JVM, Android or JavaScript.
  *
  * All methods may throw an [IoException].
  */
 interface InputStream {
+
+	/**
+	 * Reads a line of text. A line is considered to be terminated by any one of a
+	 * line feed ('\n'), a carriage return ('\r'), or a carriage return followed
+	 * immediately by a linefeed. If the end of the stream has been reached, null is returned.
+	 * Use this method only for text files.
+	 */
+	fun readLine(): String?
 
 	/**
 	 * Reads the next byte of data from the input stream.
@@ -14,6 +21,8 @@ interface InputStream {
 	 * has been reached.
 	 */
 	fun read(): Int
+
+	/* TODO: needed?
 
 	/**
 	 * Reads some number of bytes from the input stream and stores them into
@@ -29,6 +38,8 @@ interface InputStream {
 	 * The first byte read is stored into the element at index [off].
 	 */
 	fun read(b: ByteArray, off: Int, len: Int): Int
+
+	*/
 
 	/**
 	 * Closes this input stream and releases any system resources associated

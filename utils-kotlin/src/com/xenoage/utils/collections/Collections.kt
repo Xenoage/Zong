@@ -1,4 +1,6 @@
-package com.xenoage.utils
+package com.xenoage.utils.collections
+
+import com.xenoage.utils.throwEx
 
 /**
  * Like [forEach], but in reversed order.
@@ -96,3 +98,18 @@ fun <T> Int.ifIndexFound(project: (Int) -> T): T? =
 
 fun Int.checkIndex(errorMesssage: () -> String): Int =
 		if (this == -1) throwEx(errorMesssage()) else this
+
+
+/**
+ * Collects the values from the given [producer] until it returns null.
+ */
+inline fun <T> collect(producer: () -> T?): MutableList<T> {
+	val ret = mutableListOf<T>()
+	while (true) {
+		val v = producer()
+		if (v != null)
+			ret.add(v)
+		else
+			return ret
+	}
+}

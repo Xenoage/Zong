@@ -1,6 +1,6 @@
 package com.xenoage.zong.core.music.beam
 
-import com.xenoage.utils.checkIndex
+import com.xenoage.utils.collections.checkIndex
 import com.xenoage.utils.math.Fraction
 import com.xenoage.utils.throwEx
 import com.xenoage.zong.core.music.Voice

@@ -1,13 +1,11 @@
 package com.xenoage.zong.core.header
 
-import com.xenoage.utils.setExtend
+import com.xenoage.utils.collections.setExtend
 import com.xenoage.zong.core.Score
 import com.xenoage.zong.core.format.StaffLayout
 import com.xenoage.zong.core.format.SystemLayout
 import com.xenoage.zong.core.music.layout.SystemBreak
 import com.xenoage.zong.core.music.time.TimeSignature
-import com.xenoage.zong.core.position.MP
-import com.xenoage.zong.utils.exceptions.IllegalMPException
 
 
 /**

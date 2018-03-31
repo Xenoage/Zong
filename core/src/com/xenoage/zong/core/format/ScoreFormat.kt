@@ -2,7 +2,7 @@ package com.xenoage.zong.core.format
 
 import com.xenoage.utils.Mm
 import com.xenoage.utils.font.FontInfo
-import com.xenoage.utils.setExtend
+import com.xenoage.utils.collections.setExtend
 import com.xenoage.zong.core.format.Defaults.defaultFont
 
 /**

@@ -9,11 +9,18 @@ package com.xenoage.utils.io
 interface OutputStream {
 
 	/**
+	 * Writes a line of text, terminated by '\n'.
+	 * Use this method only for text files.
+	 */
+	fun writeLine(line: String)
+
+	/**
 	 * Writes the specified byte to this output stream. Only the eight low-order
 	 * bits of the given value are used.
 	 */
 	fun write(b: Int)
 
+	/* TODO: needed ?
 	/**
 	 * Writes the given bytes to this output stream.
 	 */
@@ -24,6 +31,8 @@ interface OutputStream {
 	 * offset [off] to this output stream.
 	 */
 	fun write(b: ByteArray, off: Int, len: Int)
+
+	*/
 
 	/**
 	 * Closes this input stream and releases any system resources associated

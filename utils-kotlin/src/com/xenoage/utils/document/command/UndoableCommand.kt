@@ -10,7 +10,7 @@ abstract class UndoableCommand : Command {
 			this::class.simpleName ?: "Unnamed"
 
 	override val undoability: Undoability
-		get() = Undoability.Transparent
+		get() = Undoability.Undoable
 
 	override fun undo() {
 		throw IllegalStateException("not undoable")

@@ -1,12 +1,9 @@
 package com.xenoage.zong.commands.core.music.beam
 
 import com.xenoage.utils.document.command.Command
-import com.xenoage.utils.document.command.Undoability
-import com.xenoage.utils.document.command.Undoability.Undoable
 import com.xenoage.utils.document.command.UndoableCommand
-import com.xenoage.utils.forEachReversed
+import com.xenoage.utils.collections.forEachReversed
 import com.xenoage.zong.core.music.beam.Beam
-import com.xenoage.zong.core.music.beam.BeamWaypoint
 
 /**
  * Adds the given [Beam].

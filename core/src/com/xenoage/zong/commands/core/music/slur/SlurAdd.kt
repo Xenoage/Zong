@@ -1,6 +1,6 @@
 package com.xenoage.zong.commands.core.music.slur
 
-import com.xenoage.utils.addOrNew
+import com.xenoage.utils.collections.addOrNew
 import com.xenoage.utils.document.command.UndoableCommand
 import com.xenoage.zong.core.music.slur.Slur
 

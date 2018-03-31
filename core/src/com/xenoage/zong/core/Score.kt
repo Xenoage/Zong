@@ -5,7 +5,7 @@ import com.xenoage.utils.document.Document
 import com.xenoage.utils.document.command.CommandPerformer
 import com.xenoage.utils.document.io.SupportedFormats
 import com.xenoage.utils.math._0
-import com.xenoage.utils.max
+import com.xenoage.utils.collections.max
 import com.xenoage.zong.core.format.ScoreFormat
 import com.xenoage.zong.core.header.ColumnHeader
 import com.xenoage.zong.core.header.ScoreHeader

@@ -1,6 +1,6 @@
 package com.xenoage.zong.utils.demo
 
-import com.xenoage.utils.addOrNew
+import com.xenoage.utils.collections.addOrNew
 import com.xenoage.utils.math.*
 import com.xenoage.utils.math.Fraction.Companion.fr
 import com.xenoage.zong.commands.core.music.ColumnElementWrite

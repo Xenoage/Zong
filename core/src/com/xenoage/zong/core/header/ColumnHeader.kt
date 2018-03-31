@@ -3,7 +3,6 @@ package com.xenoage.zong.core.header
 import com.xenoage.utils.annotations.Untested
 import com.xenoage.utils.math.Fraction
 import com.xenoage.utils.math._0
-import com.xenoage.utils.mutableListOfNotNull
 import com.xenoage.utils.throwEx
 import com.xenoage.zong.core.Score
 import com.xenoage.zong.core.format.Break

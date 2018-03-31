@@ -1,8 +1,8 @@
 package com.xenoage.zong.commands.core.music.lyric
 
-import com.xenoage.utils.addOrNew
+import com.xenoage.utils.collections.addOrNew
 import com.xenoage.utils.document.command.UndoableCommand
-import com.xenoage.utils.removeOrEmpty
+import com.xenoage.utils.collections.removeOrEmpty
 import com.xenoage.zong.core.music.chord.Chord
 import com.xenoage.zong.core.music.lyric.Lyric
 

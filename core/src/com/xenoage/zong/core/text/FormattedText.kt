@@ -2,9 +2,9 @@ package com.xenoage.zong.core.text
 
 import com.xenoage.utils.Mm
 import com.xenoage.utils.math.Rectangle2f
-import com.xenoage.utils.max
-import com.xenoage.utils.sumFloat
-import com.xenoage.utils.sumInt
+import com.xenoage.utils.collections.max
+import com.xenoage.utils.collections.sumFloat
+import com.xenoage.utils.collections.sumInt
 import com.xenoage.zong.core.text.Alignment.Center
 import com.xenoage.zong.core.text.Alignment.Right
 

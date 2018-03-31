@@ -1,7 +1,7 @@
 package com.xenoage.zong.commands.core.music.slur
 
 import com.xenoage.utils.document.command.UndoableCommand
-import com.xenoage.utils.removeOrEmpty
+import com.xenoage.utils.collections.removeOrEmpty
 import com.xenoage.zong.core.music.slur.Slur
 
 

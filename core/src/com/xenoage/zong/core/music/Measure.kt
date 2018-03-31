@@ -2,11 +2,11 @@ package com.xenoage.zong.core.music
 
 import com.xenoage.utils.annotations.Untested
 import com.xenoage.utils.collections.SortedList
-import com.xenoage.utils.ifIndexFound
+import com.xenoage.utils.collections.ifIndexFound
 import com.xenoage.utils.math.Fraction
 import com.xenoage.utils.math._0
-import com.xenoage.utils.max
-import com.xenoage.utils.setExtendBy
+import com.xenoage.utils.collections.max
+import com.xenoage.utils.collections.setExtendBy
 import com.xenoage.utils.throwEx
 import com.xenoage.zong.core.Score
 import com.xenoage.zong.core.music.chord.Chord
