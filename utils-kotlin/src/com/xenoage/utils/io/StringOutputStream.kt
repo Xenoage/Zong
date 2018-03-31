@@ -10,6 +10,10 @@ class StringOutputStream : OutputStream {
 
 	private val data = StringBuilder()
 
+	override fun write(text: String) {
+		data.append(text)
+	}
+
 	override fun writeLine(line: String) {
 		data.append(line)
 		data.append('\n')

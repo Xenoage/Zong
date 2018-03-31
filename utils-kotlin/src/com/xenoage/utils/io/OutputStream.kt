@@ -9,8 +9,14 @@ package com.xenoage.utils.io
 interface OutputStream {
 
 	/**
-	 * Writes a line of text, terminated by '\n'.
-	 * Use this method only for text files.
+	 * Writes the given text.
+	 * Use this method only for text streams.
+	 */
+	fun write(text: String)
+
+	/**
+	 * Writes the given line of text, terminated by '\n'.
+	 * Use this method only for text streams.
 	 */
 	fun writeLine(line: String)
 
