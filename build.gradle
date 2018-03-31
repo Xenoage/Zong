@@ -135,5 +135,5 @@ task wrapper(type: Wrapper) {
 }
 
 dependencies {
-	compile project(":core")
+	compile project("core")
 }
