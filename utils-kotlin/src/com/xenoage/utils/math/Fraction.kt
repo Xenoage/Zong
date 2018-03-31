@@ -12,7 +12,7 @@ import kotlin.math.abs
  * It can for example be used to represent durations.
  * When possible, the fraction is cancelled automatically.
  */
-class Fraction(
+data class Fraction(
 		val numerator: Int,
 		val denominator: Int
 ) : Comparable<Fraction> {
@@ -176,47 +176,48 @@ class Fraction(
 
 		/** The comparator for fractions. */
 		val comparator = Comparator<Fraction> { obj, fraction -> obj.compareTo(fraction) }
-
-		/**
-		 * Creates a new fraction from the given string, which must have the format
-		 * "x", "x/y" or "z+x/y" for x and y and z being an integer.
-		 */
-		fun fromString(s: String): Fraction {
-			val plus = s.split("\\+".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-			if (plus.size == 1) {
-				val div = s.split("/".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-				if (div.size == 1)
-					return fr(s.toInt())
-				else if (div.size == 2)
-					return fr(div[0].toInt(), div[1].toInt())
-			} else if (plus.size == 2) {
-				return fr(plus[0].toInt()) + fromString(plus[1])
-			}
-			throw IllegalArgumentException("Invalid fraction: $s")
-		}
 	}
 
 }
 
-val _0 = fr(0)
+val _0 = Fraction(0, 1)
 
-val _1 = fr(1)
+val _1 = Fraction(1, 1)
 
-val _1_2 = fr(1, 2)
+val _1_2 = Fraction(1, 2)
 
-val _1_3 = fr(1, 2)
+val _1_3 = Fraction(1, 2)
 
-val _1_4 = fr(1, 4)
-val _3_4 = fr(3, 4)
+val _1_4 = Fraction(1, 4)
+val _3_4 = Fraction(3, 4)
 
-val _1_8 = fr(1, 8)
-val _3_8 = fr(3, 8)
+val _1_8 = Fraction(1, 8)
+val _3_8 = Fraction(3, 8)
 
-val _1_16 = fr(1, 16)
-val _3_16 = fr(3, 16)
+val _1_16 = Fraction(1, 16)
+val _3_16 = Fraction(3, 16)
 
-val _1_32 = fr(1, 32)
-val _3_32 = fr(1, 32)
+val _1_32 = Fraction(1, 32)
+val _3_32 = Fraction(1, 32)
 
-val _1_64 = fr(1, 64)
-val _3_64 = fr(1, 64)
+val _1_64 = Fraction(1, 64)
+val _3_64 = Fraction(1, 64)
+
+
+/**
+ * Creates a new fraction from this string, which must have the format
+ * "x", "x/y" or "z+x/y" for x and y and z being an integer.
+ */
+fun String.toFraction(): Fraction {
+	val plus = split("\\+".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+	if (plus.size == 1) {
+		val div = split("/".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+		if (div.size == 1)
+			return fr(toInt())
+		else if (div.size == 2)
+			return fr(div[0].toInt(), div[1].toInt())
+	} else if (plus.size == 2) {
+		return fr(plus[0].toInt()) + plus[1].toFraction()
+	}
+	throw IllegalArgumentException("Invalid fraction: $this")
+}
