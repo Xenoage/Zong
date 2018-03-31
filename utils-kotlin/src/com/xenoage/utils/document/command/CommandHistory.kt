@@ -48,7 +48,7 @@ class CommandHistory {
 	/** Deletes all commands that follow the current command. */
 	fun removeFollowingCommands() {
 		val numberToRemove = history.size - historyPosition - 1
-		history.dropLast(numberToRemove)
+		repeat(numberToRemove, { history.removeAt(history.size - 1) })
 	}
 
 }
