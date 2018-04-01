@@ -27,9 +27,6 @@ data class Barline(
 	override fun toString() = "Barline [style=$style, repeat=$repeat, repeatTimes=$repeatTimes]"
 }
 
-/** Creates a barline without repeat. */
-fun barline(style: BarlineStyle) = Barline(style, BarlineRepeat.None, 0)
-
 /** Creates a regular barline. */
 fun barlineRegular() = Barline(BarlineStyle.Regular, BarlineRepeat.None, 0)
 
