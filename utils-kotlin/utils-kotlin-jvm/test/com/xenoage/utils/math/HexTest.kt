@@ -2,7 +2,7 @@ package com.xenoage.utils.math
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.fail
+import kotlin.test.assertFails
 
 /**
  * Tests for Hex.kt
@@ -17,11 +17,7 @@ class HexTest {
 		assertEquals("20", 32.toHex())
 		assertEquals("FFF", 4095.toHex())
 		assertEquals("75BCD15", 123456789.toHex())
-
-		try {
-			(-1).toHex()
-			fail("must fail for negative numbers")
-		} catch (_: Exception) { }
+		assertFails("must fail for negative numbers") { (-1).toHex() }
 	}
 
 }

@@ -4,6 +4,7 @@ import com.xenoage.utils.math.Fraction.Companion.fr
 import org.junit.Assert.*
 
 import kotlin.test.Test
+import kotlin.test.assertFails
 
 /**
  * Tests for [Fraction].
@@ -15,12 +16,9 @@ class FractionTest {
 	fun testFractions() {
 		var f1: Fraction
 		var f2: Fraction
-		//0 in the denominator must throw an IllegalArgumentException
-		try {
-			f1 = fr(5, 0)
-			fail()
-		} catch (ex: IllegalArgumentException) {
-		}
+
+		//0 in the denominator must fail
+		assertFails { fr(5, 0) }
 
 		//compare two 0 fractions
 		f1 = fr(0, 1)

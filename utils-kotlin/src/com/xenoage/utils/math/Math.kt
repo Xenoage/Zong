@@ -212,32 +212,6 @@ fun <T : Comparable<T>> minOrNull(vararg ts: T?): T? {
 }
 
 /**
- * Returns the minimum element of the given [Comparable]s.
- * If all elements are null or if no element is given, null is returned.
- * If more then one element qualifies, the first one is returned.
- */
-fun <T : Comparable<T>> min_OBSOLETE(vararg ts: T): T? {
-	var ret: T? = null
-	for (t in ts)
-		if (ret == null || t != null && t.compareTo(ret) < 0)
-			ret = t
-	return ret
-}
-
-/**
- * Returns the maximum element of the given [Comparable]s.
- * If all elements are null or if no element is given, null is returned.
- * If more then one element qualifies, the first one is returned.
- */
-fun <T : Comparable<T>> max_OBSOLETE(vararg ts: T): T? {
-	var ret: T? = null
-	for (t in ts)
-		if (ret == null || t != null && t.compareTo(ret) > 0)
-			ret = t
-	return ret
-}
-
-/**
  * For 2 ^ x = number, returns x. For example. 2 ^ x = 8 returns 3.
  * When there is no integer solution, the next smaller integer is returned,
  * for example 2 ^ x = 5 returns 2.
