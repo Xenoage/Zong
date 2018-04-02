@@ -7,9 +7,9 @@ import com.xenoage.utils.Pt
  * Cross-platform information about a font.
  */
 data class FontInfo(
+		val families: List<String>,
 		val size: Pt,
-		val style: FontStyle,
-		val families: List<String>
+		val style: FontStyle
 ) {
 
 	companion object {
@@ -23,7 +23,7 @@ data class FontInfo(
 
 		operator fun invoke(families: List<String> = defaultFamilies,
 		                    size: Pt = defaultSize, style: FontStyle = defaultFontStyle): FontInfo {
-			val fontInfo = FontInfo(size, style, families) //can be garbage collected if already in cache
+			val fontInfo = FontInfo(families, size, style) //can be garbage collected if already in cache
 			return cache[fontInfo, { fontInfo }]
 		}
 

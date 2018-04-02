@@ -33,7 +33,8 @@ class MeasureAdd(
 			score.header.columnHeaders.removeAt(measureIndex)
 			//staves
 			for (staff in score.stavesList.staves) {
-				staff.measures.removeAt(measureIndex)
+				val measure = staff.measures.removeAt(measureIndex)
+				measure.parent = null
 			}
 		}
 	}

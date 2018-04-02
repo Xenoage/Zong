@@ -1,15 +1,16 @@
 package com.xenoage.zong.core.music
 
+import com.xenoage.utils.collections.ifIndexFound
 import com.xenoage.utils.throwEx
 import com.xenoage.zong.core.Score
 import com.xenoage.zong.core.music.chord.Chord
 import com.xenoage.zong.core.music.util.MPE
-import com.xenoage.zong.core.position.MP
+import com.xenoage.zong.core.position.*
 import com.xenoage.zong.core.position.MP.Companion.atMeasure
+import com.xenoage.zong.core.position.MP.Companion.atStaff
 import com.xenoage.zong.core.position.MP.Companion.unknown
-import com.xenoage.zong.core.position.MPContainer
-import com.xenoage.zong.core.position.MPElement
 import com.xenoage.zong.utils.exceptions.IllegalMPException
+import kotlin.coroutines.experimental.EmptyCoroutineContext.get
 
 
 /**
@@ -41,7 +42,11 @@ class Staff (
 		get() = throw UnsupportedOperationException()
 		set(_) = throw UnsupportedOperationException()
 
-	override fun getChildMP(child: MPElement): MP? = throw UnsupportedOperationException() //TODO
+	val mp: MP
+		get() = atStaff(score?.stavesList?.staves?.indexOf(this) ?: unknown)
+
+	override fun getChildMP(child: MPElement): MP? =
+			measures.indexOfFirst { it == child }.ifIndexFound { mp.withMeasure(it) }
 
 	/** The custom interline space of this staff, or the default one of the score,
 	 *  if unset (parent score required). */

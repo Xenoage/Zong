@@ -94,6 +94,7 @@ class VoiceElementWrite(
 
 		//remove elements within the range
 		var posBeat = startBeat
+		val firstRemoveIndex = elementIndex
 		var lastRemoveIndex = -1
 		var i = elementIndex
 		while (i < voice.elements.size && posBeat < endBeat) {
@@ -103,7 +104,7 @@ class VoiceElementWrite(
 			lastRemoveIndex = i
 			i++
 		}
-		for (i in elementIndex downTo lastRemoveIndex)
+		for (i in lastRemoveIndex downTo firstRemoveIndex)
 			executeAndRemember(VoiceElementRemove(voice.elements[i]))
 
 		//insert new element

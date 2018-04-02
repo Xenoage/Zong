@@ -29,7 +29,7 @@ import com.xenoage.zong.utils.exceptions.IllegalMPException
 class Measure : MPElement, MPContainer, DirectionContainer {
 
 	/** The list of voices (at least one).  */
-	val voices = mutableListOf(Voice())
+	val voices = mutableListOf(Voice().setParent(this))
 
 	/** The list of clefs.  */
 	val clefs = BeatEList<Clef>()
