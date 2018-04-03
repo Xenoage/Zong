@@ -6,7 +6,7 @@ import kotlin.math.min
 /**
  * Range of adjacent staves.
  */
-class StavesRange (
+data class StavesRange (
 		/** The index of the first staff of the range.  */
 		var start: Int,
 		/** The index of the last staff of the range.  */
