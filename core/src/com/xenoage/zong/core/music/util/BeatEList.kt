@@ -42,7 +42,7 @@ fun <T> BeatEList<T>.getLastBefore(endpoint: Interval, beat: Beat): BeatE<T>? =
 		getOrNull(indexOfLast { endpoint.isInInterval(it.beat, beat) === True })
 
 /**
- * Returns a new [BeatEList] with only the elements which appear in the
+ * Returns a sequence with only the elements which appear in the
  * given interval relative to the given beat.
  */
 fun <T> BeatEList<T>.filter(interval: Interval, beat: Beat): Sequence<BeatE<out T>> =

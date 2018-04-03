@@ -141,7 +141,7 @@ data class Fraction(
 					1 -> return _1_2
 				}
 				3 -> when (num) {
-					3 -> return _1_3
+					1 -> return _1_3
 				}
 				4 -> when (num) {
 					1 -> return _1_4
@@ -161,7 +161,7 @@ data class Fraction(
 				}
 				64 -> when (num) {
 					1 -> return _1_64
-					3 -> return _1_64
+					3 -> return _3_64
 				}
 			}
 
@@ -186,7 +186,7 @@ val _1 = Fraction(1, 1)
 
 val _1_2 = Fraction(1, 2)
 
-val _1_3 = Fraction(1, 2)
+val _1_3 = Fraction(1, 3)
 
 val _1_4 = Fraction(1, 4)
 val _3_4 = Fraction(3, 4)
@@ -198,10 +198,10 @@ val _1_16 = Fraction(1, 16)
 val _3_16 = Fraction(3, 16)
 
 val _1_32 = Fraction(1, 32)
-val _3_32 = Fraction(1, 32)
+val _3_32 = Fraction(3, 32)
 
 val _1_64 = Fraction(1, 64)
-val _3_64 = Fraction(1, 64)
+val _3_64 = Fraction(3, 64)
 
 
 /**
