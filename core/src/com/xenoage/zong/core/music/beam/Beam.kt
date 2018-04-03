@@ -44,7 +44,7 @@ class Beam(
 	/** The maximum number of beam lines used in the this beam */
 	val maxLinesCount: Int
 		get() {
-			val minDuration = waypoints.asSequence().map{ it.chord.duration }.min() ?: throw IllegalStateException()
+			val minDuration = waypoints.asSequence().map{ it.chord.displayedDuration }.min() ?: throw IllegalStateException()
 			return minDuration.flagsCount
 		}
 
@@ -203,6 +203,11 @@ class Beam(
 		_verticalSpan = verticalSpan
 		_upperStaffIndex = minStaffIndex
 		_lowerStaffIndex = maxStaffIndex
+	}
+
+	companion object {
+		operator fun invoke(chords: List<Chord>) =
+				Beam(chords.map { BeamWaypoint(it) })
 	}
 
 }

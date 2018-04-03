@@ -2,6 +2,9 @@ package com.xenoage.zong.core.music.chord
 
 import com.xenoage.utils.collections.SortedList
 import com.xenoage.utils.collections.sortedListOf
+import com.xenoage.utils.math.Fraction
+import com.xenoage.utils.math._0
+import com.xenoage.utils.math._1_8
 import com.xenoage.zong.core.Score
 import com.xenoage.zong.core.music.Pitch
 import com.xenoage.zong.core.music.Voice
@@ -15,6 +18,7 @@ import com.xenoage.zong.core.music.slur.Slur
 import com.xenoage.zong.core.music.tuplet.Tuplet
 import com.xenoage.zong.core.music.util.Duration
 import com.xenoage.zong.core.position.MPContainer
+
 
 /**
  * Class for a chord.
@@ -122,6 +126,13 @@ class Chord(
 		/** Creates a chord with the given pitches and duration. */
 		operator fun invoke(duration: Duration, vararg pitches: Pitch) =
 				Chord(sortedListOf(pitches.map { Note(it) }), duration)
+
+		/** Creates a grace chord with the given pitch and displayed duration. */
+		fun graceChord(pitch: Pitch, displayedDuration: Fraction = _1_8): Chord {
+			val chord = invoke(_0, pitch)
+			chord.grace = Grace(true, displayedDuration)
+			return chord
+		}
 
 	}
 
