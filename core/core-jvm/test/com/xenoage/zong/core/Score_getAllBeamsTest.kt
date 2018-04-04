@@ -1,21 +1,23 @@
 package com.xenoage.zong.core
 
+import com.xenoage.utils.math._0
 import com.xenoage.utils.math._1_8
-import com.xenoage.zong.core.music.Pitch
 import com.xenoage.zong.core.music.Pitch.Companion.pi
-import com.xenoage.zong.core.music.Step.*
+import com.xenoage.zong.core.music.Step.C
 import com.xenoage.zong.core.music.chord.Chord
 import com.xenoage.zong.core.music.rest.Rest
 import com.xenoage.zong.core.position.MP
-import com.xenoage.zong.core.position.MP.Companion.atBeat
 import com.xenoage.zong.core.position.MP.Companion.atElement
 import com.xenoage.zong.io.selection.Cursor
 import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 /**
- * Tests for [BeamIterator].
+ * Tests for [Score.getAllBeams].
  */
-class BeamIteratorTest {
+class Score_getAllBeamsTest {
 
 	@Test
 	fun test() {
@@ -23,17 +25,17 @@ class BeamIteratorTest {
 		//first beam
 		assertTrue(it.hasNext())
 		var beam = it.next()
-		assertEquals(atBeat(0, 0, 1, get_0()), beam.getMP())
+		assertEquals(MP(0, 0, 1, _0, 0), beam.mp)
 		//second beam (two staves)
 		assertTrue(it.hasNext())
 		beam = it.next()
-		assertEquals(atBeat(0, 2, 0, get_0()), beam.getMP())
-		assertEquals(atBeat(0, 2, 0, get_0()), beam.getChord(0).getMP())
-		assertEquals(atBeat(1, 2, 0, `get_1$8`()), beam.getChord(1).getMP())
+		assertEquals(MP(0, 2, 0, _0, 0), beam.mp)
+		assertEquals(MP(0, 2, 0, _0, 0), beam.element[0].chord.mp)
+		assertEquals(MP(1, 2, 0, _1_8, 1), beam.element[1].chord.mp)
 		//third chord
 		assertTrue(it.hasNext())
 		beam = it.next()
-		assertEquals(atBeat(1, 3, 0, get_0()), beam.getMP())
+		assertEquals(MP(1, 3, 0, _0, 0), beam.mp)
 		//finished
 		assertFalse(it.hasNext())
 	}

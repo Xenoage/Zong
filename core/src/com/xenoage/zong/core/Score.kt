@@ -1,11 +1,11 @@
 package com.xenoage.zong.core
 
 import com.xenoage.utils.collections.SortedList
+import com.xenoage.utils.collections.max
 import com.xenoage.utils.document.Document
 import com.xenoage.utils.document.command.CommandPerformer
 import com.xenoage.utils.document.io.SupportedFormats
 import com.xenoage.utils.math._0
-import com.xenoage.utils.collections.max
 import com.xenoage.zong.core.format.ScoreFormat
 import com.xenoage.zong.core.header.ColumnHeader
 import com.xenoage.zong.core.header.ScoreHeader
@@ -336,24 +336,28 @@ class Score : Document {
 	 * A sequence with all [VoiceElement]s in a score,
 	 * by staff, measure, voice and beat.
 	 */
-	fun getAllVoiceElements(): Sequence<MPE<VoiceElement>> =stavesList.staves.indices.asSequence().flatMap { staffIndex ->
-		val staff = stavesList.staves[staffIndex]
-		staff.measures.indices.asSequence().flatMap { measureIndex ->
-			val measure = staff.measures[measureIndex]
-			measure.voices.indices.asSequence().flatMap { voiceIndex ->
-				val voice = measure.voices[voiceIndex]
-				voice.elementsWithBeats.mapIndexed { elementIndex, e ->
-					MPE(e.element, MP(staffIndex, measureIndex, voiceIndex, e.beat, elementIndex)) }
+	fun getAllVoiceElements(): Sequence<MPE<VoiceElement>> =
+			stavesList.staves.indices.asSequence().flatMap { staffIndex ->
+				val staff = stavesList.staves[staffIndex]
+				staff.measures.indices.asSequence().flatMap { measureIndex ->
+					val measure = staff.measures[measureIndex]
+					measure.voices.indices.asSequence().flatMap { voiceIndex ->
+						val voice = measure.voices[voiceIndex]
+						voice.elementsWithBeats.mapIndexed { elementIndex, e ->
+							MPE(e.element, MP(staffIndex, measureIndex, voiceIndex, e.beat, elementIndex))
+						}
+					}
 				}
 			}
-		}
 
 	/**
 	 * A sequence with all [Beam]s in a score,
 	 * by staff, measure, voice and beat (regarding the start chord).
 	 */
 	fun getAllBeams(): Sequence<MPE<Beam>> =
-			getAllVoiceElements().filter { it.element is Chord && it.element.beam != null}.map {
+			getAllVoiceElements().filter {
+				it.element is Chord && it.element.beam != null &&
+						it.element.beam!!.start.chord === it.element}.map {
 				MPE((it.element as Chord).beam!!, it.mp)
 			}
 

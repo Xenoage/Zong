@@ -70,8 +70,8 @@ class Cursor(
 	var fillWithHiddenRests = false
 
 
-	private var openBeamWaypoints = mutableListOf<BeamWaypoint>()
-	private var openSlurWaypoints = mutableListOf<SlurWaypoint>()
+	private var openBeamWaypoints: MutableList<BeamWaypoint>? = null
+	private var openSlurWaypoints: MutableList<SlurWaypoint>? = null
 	private var openSlurType: SlurType = SlurType.Slur
 
 
@@ -172,34 +172,36 @@ class Cursor(
 
 	/** Opens a beam. All following chords will be added to it. */
 	fun openBeam() {
-		if (openBeamWaypoints.size > 0)
+		if (openBeamWaypoints != null)
 			throw IllegalStateException("Beam is already open")
+		openBeamWaypoints = mutableListOf()
 	}
 
 	/** Closes a beam and adds it to the score. */
 	fun closeBeam() {
-		if (openBeamWaypoints.size == 0)
+		if (openBeamWaypoints == null)
 			throw IllegalStateException("No beam is open")
-		val beam = Beam(openBeamWaypoints)
-		openBeamWaypoints.forEach { it.chord.beam = beam }
-		openBeamWaypoints.clear()
+		val beam = Beam(openBeamWaypoints!!)
+		openBeamWaypoints!!.forEach { it.chord.beam = beam }
+		openBeamWaypoints = null
 	}
 
 	/** Opens a slur of the given type. All following chords will be added to it. */
 	fun openSlur(type: SlurType) {
-		if (openSlurWaypoints.size > 0)
+		if (openSlurWaypoints == null)
 			throw IllegalStateException("Slur is already open")
 		openSlurType = type
+		openSlurWaypoints = mutableListOf()
 	}
 
 	/** Closes a slur and adds it to the score. */
 	@Deprecated("Does not work yet. Slur waypoints are not collected in this class.")
 	fun closeSlur() {
-		if (openSlurWaypoints.size == 0)
+		if (openSlurWaypoints == null)
 			throw IllegalStateException("No curved line is open")
-		val slur = Slur(openSlurType, openSlurWaypoints)
+		val slur = Slur(openSlurType, openSlurWaypoints!!)
 		SlurAdd(slur).execute()
-		openSlurWaypoints.clear()
+		openSlurWaypoints = null
 	}
 
 	/** Ensures, that the given given staff exists. If not, it is created. */

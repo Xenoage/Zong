@@ -70,6 +70,10 @@ class Beam(
 		Other
 	}
 
+	/** Gets the waypoint at the given index. */
+	operator fun get(waypointIndex: Int): BeamWaypoint =
+			waypoints[waypointIndex]
+
 	/**
 	 * Checks the correctness of the beam:
 	 * The beam must have at least one line
