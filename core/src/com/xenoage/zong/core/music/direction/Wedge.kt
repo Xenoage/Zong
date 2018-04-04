@@ -1,8 +1,6 @@
 package com.xenoage.zong.core.music.direction
 
 import com.xenoage.zong.core.music.IS
-import com.xenoage.zong.core.music.chord.Chord
-import com.xenoage.zong.core.music.format.Positioning
 
 
 /**
@@ -16,16 +14,12 @@ import com.xenoage.zong.core.music.format.Positioning
 class Wedge(
 		/** Crescendo or diminuendo. */
 		val type: WedgeType
-) : Direction {
+) : Direction() {
 
 	/** End marker of this wedge.  */
 	val wedgeEnd = WedgeEnd(this)
 
 	/** Height of the opening, or null for default. */
 	var spread: IS? = null
-
-	override var positioning: Positioning? = null
-
-	override var parent: DirectionContainer? = null
 
 }

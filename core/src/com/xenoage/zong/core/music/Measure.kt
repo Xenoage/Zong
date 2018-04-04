@@ -3,17 +3,15 @@ package com.xenoage.zong.core.music
 import com.xenoage.utils.annotations.Untested
 import com.xenoage.utils.collections.SortedList
 import com.xenoage.utils.collections.ifIndexFound
-import com.xenoage.utils.math.Fraction
-import com.xenoage.utils.math._0
 import com.xenoage.utils.collections.max
 import com.xenoage.utils.collections.setExtendBy
+import com.xenoage.utils.math.Fraction
+import com.xenoage.utils.math._0
 import com.xenoage.utils.throwEx
 import com.xenoage.zong.core.Score
 import com.xenoage.zong.core.music.chord.Chord
 import com.xenoage.zong.core.music.clef.Clef
 import com.xenoage.zong.core.music.direction.Direction
-import com.xenoage.zong.core.music.direction.DirectionContainer
-import com.xenoage.zong.core.music.direction.setParent
 import com.xenoage.zong.core.music.key.Key
 import com.xenoage.zong.core.music.util.*
 import com.xenoage.zong.core.music.util.Interval.*
@@ -26,7 +24,7 @@ import com.xenoage.zong.utils.exceptions.IllegalMPException
  *
  * A measure consists of one or more voices and a list of clefs, directions and and instrument changes.
  */
-class Measure : MPElement, MPContainer, DirectionContainer {
+class Measure : MPElement, MPContainer {
 
 	/** The list of voices (at least one).  */
 	val voices = mutableListOf(Voice().setParent(this))

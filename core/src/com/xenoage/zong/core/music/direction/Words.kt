@@ -1,8 +1,6 @@
 package com.xenoage.zong.core.music.direction
 
 import com.xenoage.zong.core.music.TextElement
-import com.xenoage.zong.core.music.chord.Chord
-import com.xenoage.zong.core.music.format.Positioning
 import com.xenoage.zong.core.text.Text
 
 
@@ -11,10 +9,4 @@ import com.xenoage.zong.core.text.Text
  */
 class Words(
 		override var text: Text
-) : Direction, TextElement {
-
-	override var positioning: Positioning? = null
-
-	override var parent: DirectionContainer? = null
-
-}
+) : Direction(), TextElement

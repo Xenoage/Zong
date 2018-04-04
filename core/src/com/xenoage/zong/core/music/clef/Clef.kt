@@ -2,7 +2,6 @@ package com.xenoage.zong.core.music.clef
 
 import com.xenoage.zong.core.music.Measure
 import com.xenoage.zong.core.music.MeasureElement
-import com.xenoage.zong.core.position.MPElement
 
 
 /**
@@ -13,6 +12,6 @@ class Clef(
 		val type: ClefType
 ) : MeasureElement {
 
-	override var parent: Measure? = null
+	override var parentMeasure: Measure? = null
 
 }
