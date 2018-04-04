@@ -13,6 +13,7 @@ import com.xenoage.zong.core.music.chord.Chord
 import com.xenoage.zong.core.music.clef.Clef
 import com.xenoage.zong.core.music.direction.Direction
 import com.xenoage.zong.core.music.key.Key
+import com.xenoage.zong.core.music.key.TraditionalKey
 import com.xenoage.zong.core.music.util.*
 import com.xenoage.zong.core.music.util.Interval.*
 import com.xenoage.zong.core.position.*
@@ -22,14 +23,15 @@ import com.xenoage.zong.utils.exceptions.IllegalMPException
 /**
  * Measure within a single staff.
  *
- * A measure consists of one or more voices and a list of clefs, directions and and instrument changes.
+ * A measure consists of one or more voices and a list of clefs, keys,
+ * directions and and instrument changes.
  */
 class Measure : MPElement, MPContainer {
 
 	/** The list of voices (at least one).  */
 	val voices = mutableListOf(Voice().setParent(this))
 
-	/** The list of clefs.  */
+	/** The list of clefs. */
 	val clefs = BeatEList<Clef>()
 
 	/** The list of directions, or null. */
@@ -103,7 +105,7 @@ class Measure : MPElement, MPContainer {
 	 * Dependent on the type, an old element at this beat may be removed, and
 	 * is returned in this case.
 	 */
-	fun addMeasureElement(measureElement: MPElement, beat: Beat): MPElement? {
+	fun addMeasureElement(measureElement: MeasureElement, beat: Beat): MeasureElement? {
 		when (measureElement) {
 			is Clef -> return setClef(measureElement, beat)
 			is InstrumentChange -> return setInstrumentChange(measureElement, beat)

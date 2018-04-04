@@ -137,6 +137,10 @@ class Voice : MPElement, MPContainer {
 	}
 
 	/** Adds the given element at the end of this voice. */
+	operator fun plusAssign(element: VoiceElement) =
+		addElement(element)
+
+	/** Adds the given element at the end of this voice. */
 	fun addElement(element: VoiceElement) {
 		element.parent = this
 		elements.add(element)

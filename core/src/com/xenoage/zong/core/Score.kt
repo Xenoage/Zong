@@ -214,7 +214,7 @@ class Score : Document {
 	 */
 	fun getClef(mp: MP, interval: Interval): ClefType {
 		check(interval.isPrecedingOrAt, { "illegal interval for this method" })
-		check(mp.beat == MP.unknownBeat, { "beat is required" })
+		check(mp.beat != MP.unknownBeat, { "beat is required" })
 		//begin with the given measure. if there is one, return it.
 		var measure = getMeasure(mp)
 		if (measure.clefs != null) {

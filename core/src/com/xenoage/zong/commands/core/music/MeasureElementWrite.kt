@@ -1,12 +1,9 @@
 package com.xenoage.zong.commands.core.music
 
-import com.xenoage.utils.document.command.Command
-import com.xenoage.utils.document.command.Undoability
 import com.xenoage.utils.document.command.UndoableCommand
 import com.xenoage.utils.math.Fraction
 import com.xenoage.zong.core.music.Measure
 import com.xenoage.zong.core.music.MeasureElement
-import com.xenoage.zong.core.position.MPElement
 
 
 /**
@@ -15,13 +12,13 @@ import com.xenoage.zong.core.position.MPElement
  * Dependent on its type, it may replace elements of the same type.
  */
 class MeasureElementWrite(
-		private val element: MPElement,
+		private val element: MeasureElement,
 		private val measure: Measure,
 		private val beat: Fraction
 ) : UndoableCommand() {
 
 	//backup data
-	private var replacedElement: MPElement? = null
+	private var replacedElement: MeasureElement? = null
 
 	override fun execute() {
 		replacedElement = measure.addMeasureElement(element, beat)
