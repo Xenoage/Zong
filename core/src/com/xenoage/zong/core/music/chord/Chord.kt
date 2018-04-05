@@ -9,6 +9,7 @@ import com.xenoage.zong.core.Score
 import com.xenoage.zong.core.music.Pitch
 import com.xenoage.zong.core.music.Voice
 import com.xenoage.zong.core.music.VoiceElement
+import com.xenoage.zong.core.music.annotation.Annotation
 import com.xenoage.zong.core.music.annotation.Articulation
 import com.xenoage.zong.core.music.annotation.ArticulationType
 import com.xenoage.zong.core.music.beam.Beam
@@ -52,7 +53,7 @@ class Chord(
 
 	/** The articulation, ornament and other annotations on this chord,
 	 * sorted by ascending distance to the chord. The empty list may be immutable. */
-	var annotations: List<out Annotation> = emptyList()
+	var annotations: List<Annotation> = emptyList()
 
 	/** The beam this chord is part of, or null. */
 	var beam: Beam? = null
@@ -138,7 +139,7 @@ class Chord(
 
 	//TODO: convenience method. move to helper class
 	fun addArticulations(vararg articulations: ArticulationType): Chord {
-		this.annotations += articulations.map { Articulation(it) as Annotation }
+		this.annotations += articulations.map { Articulation(it) }
 		return this
 	}
 
