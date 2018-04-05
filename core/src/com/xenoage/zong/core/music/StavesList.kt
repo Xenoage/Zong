@@ -133,8 +133,10 @@ class StavesList(
 		//add new group at the right position
 		//(the barline groups are sorted by start index)
 		var i = barlineGroups.indexOfFirst { stavesRange.start < it.staves.start }
-		if (i == -1) i == barlineGroups.size
-		barlineGroups.add(i, BarlineGroup(stavesRange, style))
+		if (i == -1)
+			barlineGroups.add(BarlineGroup(stavesRange, style))
+		else
+			barlineGroups.add(i, BarlineGroup(stavesRange, style))
 	}
 
 

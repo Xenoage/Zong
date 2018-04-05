@@ -4,7 +4,7 @@ package com.xenoage.zong.core.music.group
 /**
  * Group of staves with a common barline.
  */
-class BarlineGroup(
+data class BarlineGroup(
 	/** The range of staves. */
 	var staves: StavesRange,
 	/** The visual style of this group. */

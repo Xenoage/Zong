@@ -16,6 +16,10 @@ class StaffLines private constructor(
 		val count: Int
 ) {
 
+	/** [LP] of the bottom line. This is always 0 by definition. */
+	val bottomLp: LP
+		get() = 0
+
 	/** [LP] of the middle line. For an even number of staff lines, this will
 	 * return the [LP] of the middle space. */
 	val middleLp: LP
@@ -25,17 +29,15 @@ class StaffLines private constructor(
 	val topLp: LP
 		get() = (count - 1) * 2
 
+	/** [LP] of the first bottom leger line. This is always -2 by definition. */
+	val bottomLegerLp: LP
+		get() = -2
+
 	/** [LP] of the first bottom leger line [LP]. */
 	val topLegerLp: LP
 		get() = count * 2
 
 	companion object {
-
-		/** LP of the bottom line. This is always 0 by definition. */
-		val bottomLp = 0
-
-		/** LP of the first bottom leger line LP. This is always -2 by definition. */
-		val bottomLegerLp = -2
 
 		/** Normal 5-line staff.  */
 		val staff5Lines = StaffLines(5)
